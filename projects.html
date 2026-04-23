@@ -8,122 +8,165 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <nav class="navbar"><div class="container"><a href="index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="index.html">Home</a><a href="projects.html">Projects</a><a href="tutorials.html">Tutorials</a><a href="notes.html">Notes</a><a href="blog.html">Blog</a><a href="contact.html">Contact</a></div><a href="contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <nav class="navbar"><div class="container"><a href="index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="index.html">Home</a><a href="projects.html">Projects</a><a href="tutorials.html">Tutorials</a><a href="notes.html">Notes</a><a href="blog.html">Blog</a><a href="contact.html">Contact</a></div><div class="nav-right"><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-moon"></i></button><a href="contact.html" class="nav-cta">Let's Connect →</a></div><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
   <div class="mobile-nav" id="mobileNav"><a href="index.html">Home</a><a href="projects.html">Projects</a><a href="tutorials.html">Tutorials</a><a href="notes.html">Notes</a><a href="blog.html">Blog</a><a href="contact.html">Contact</a></div>
 
-  <section class="page-header">
-    <div class="container">
-      <div class="section-badge">💻 Portfolio</div>
-      <h1>My <span class="gradient" style="background:var(--g);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Projects</span></h1>
-      <p>Real-world applications built with modern tech stacks — from AI-powered platforms to cross-platform mobile apps.</p>
-    </div>
-  </section>
 
+  <!-- SECTION 1: FREELANCE & STUDENT PROJECTS -->
   <section>
     <div class="container">
+      <div class="section-header center">
+        <div class="section-badge">🛒 Available for Purchase</div>
+        <h2 class="section-title">Freelance & Student Projects</h2>
+        <p class="section-desc">Ready-to-use, production-grade projects perfect for final year engineering submissions, freelance clients, and portfolio building. Complete source code, documentation & setup guide included.</p>
+      </div>
       <div class="filter-bar">
         <button class="filter-btn active" data-filter="all">All Projects</button>
         <button class="filter-btn" data-filter="fullstack">Full-Stack</button>
-        <button class="filter-btn" data-filter="mobile">Mobile</button>
-        <button class="filter-btn" data-filter="ai">AI / ML</button>
         <button class="filter-btn" data-filter="web">Web App</button>
       </div>
-
       <div class="cards-grid-3">
-        <div class="project-card card reveal" data-category="fullstack">
-          <div class="project-thumb" style="padding:0;background:none;">
-            <img src="assets/images/hospital-management.png" alt="Hospital Management System" style="width:100%;height:100%;object-fit:cover;">
-            <div class="overlay"><a href="https://hospital-management-system-web-one.vercel.app/" target="_blank" class="btn-live">Live Demo</a></div>
-          </div>
-          <div class="project-body">
-            <h3>Hospital Management System</h3>
-            <p>AI-powered clinical decision support platform with 4 role-based dashboards (Admin, Doctor, Receptionist, Patient), JWT auth, 151-disease prediction using BiGRU+CNN+Attention model, Gemini 2.0 Flash integration, 30+ API endpoints.</p>
-            <div class="tags"><span class="tag">Node.js</span><span class="tag">Express</span><span class="tag">Prisma</span><span class="tag">PostgreSQL</span><span class="tag">Keras</span><span class="tag">Gemini API</span><span class="tag">Docker</span></div>
-          </div>
-        </div>
         <div class="project-card card reveal" data-category="web">
           <div class="project-thumb" style="padding:0;background:none;">
             <img src="assets/images/bloodbank.png" alt="LifeFlow Blood Bank" style="width:100%;height:100%;object-fit:cover;">
-            <div class="overlay"><a href="https://lifeflow-blood-bank-eb6e2.web.app/" target="_blank" class="btn-live">Live Demo</a></div>
           </div>
           <div class="project-body">
-            <h3>Blood Bank & Donor Platform</h3>
+            <h3>Blood Bank &amp; Donor Platform</h3>
             <p>Full-stack blood donation platform with 2 role-based dashboards, smart donor search, real-time request workflow, animated UI with Framer Motion, and Firebase hosting.</p>
-            <div class="tags"><span class="tag">React</span><span class="tag">Vite</span><span class="tag">Firebase</span><span class="tag">Framer Motion</span><span class="tag">Vanilla CSS</span></div>
-          </div>
-        </div>
-        <div class="project-card card reveal" data-category="mobile">
-          <div class="project-thumb" style="padding:0;background:none;">
-            <img src="assets/images/apnaclinic.png" alt="ApnaClinic Telemedicine" style="width:100%;height:100%;object-fit:cover;">
-            <div class="overlay"><a href="https://apnaclinic-a4a61.web.app/" target="_blank" class="btn-live">Live Demo</a></div>
-          </div>
-          <div class="project-body">
-            <h3>ApnaClinic — Telemedicine App</h3>
-            <p>Cross-platform telemedicine with 3 role-based dashboards, AI symptom checker, 4-language multilingual support, WebRTC video consultations, and TensorFlow Lite on-device models.</p>
-            <div class="tags"><span class="tag">Flutter</span><span class="tag">Dart</span><span class="tag">Firebase</span><span class="tag">Google Cloud AI</span><span class="tag">TFLite</span></div>
+
+            <div class="project-price"><span class="price-old">₹3,999</span><span class="price-current">₹1,999</span><span class="price-badge">50% OFF</span></div>
+            <div class="project-actions">
+              <a href="#" class="btn-details" onclick="viewDetails('Blood Bank & Donor Platform')">👁️ View Details</a>
+              <a href="#" class="btn-buy" onclick="buyProject('Blood Bank Platform', 1999)">🛒 Buy Now</a>
+            </div>
           </div>
         </div>
         <div class="project-card card reveal" data-category="web">
           <div class="project-thumb" style="padding:0;background:none;">
             <img src="assets/images/driveease.png" alt="DriveEase Car Rental" style="width:100%;height:100%;object-fit:cover;">
-            <div class="overlay"><a href="https://driveease-bb1e3.web.app/" target="_blank" class="btn-live">Live Demo</a></div>
           </div>
           <div class="project-body">
             <h3>DriveEase — Car Rental Platform</h3>
             <p>Premium car rental service with fleet browsing, user auth, dark mode, and responsive design deployed on Firebase.</p>
-            <div class="tags"><span class="tag">React</span><span class="tag">Firebase</span><span class="tag">CSS</span><span class="tag">Responsive</span></div>
+
+            <div class="project-price"><span class="price-old">₹3,999</span><span class="price-current">₹1,999</span><span class="price-badge">50% OFF</span></div>
+            <div class="project-actions">
+              <a href="#" class="btn-details" onclick="viewDetails('DriveEase Car Rental')">👁️ View Details</a>
+              <a href="#" class="btn-buy" onclick="buyProject('DriveEase Car Rental', 1999)">🛒 Buy Now</a>
+            </div>
           </div>
         </div>
         <div class="project-card card reveal" data-category="web">
           <div class="project-thumb" style="padding:0;background:none;">
             <img src="assets/images/maharajaskitchen.png" alt="Maharaja's Kitchen" style="width:100%;height:100%;object-fit:cover;">
-            <div class="overlay"><a href="https://maharajas-kitchen.web.app/" target="_blank" class="btn-live">Live Demo</a></div>
           </div>
           <div class="project-body">
             <h3>Maharaja's Kitchen — Restaurant Website</h3>
             <p>Indian fine dining restaurant website with elegant UI, menu showcase, table reservations, and smooth animations deployed on Firebase.</p>
-            <div class="tags"><span class="tag">React</span><span class="tag">Firebase</span><span class="tag">CSS</span><span class="tag">Animations</span></div>
+
+            <div class="project-price"><span class="price-old">₹3,999</span><span class="price-current">₹1,999</span><span class="price-badge">50% OFF</span></div>
+            <div class="project-actions">
+              <a href="#" class="btn-details" onclick="viewDetails('Maharajas Kitchen')">👁️ View Details</a>
+              <a href="#" class="btn-buy" onclick="buyProject('Maharajas Kitchen', 1999)">🛒 Buy Now</a>
+            </div>
           </div>
         </div>
         <div class="project-card card reveal" data-category="fullstack">
           <div class="project-thumb" style="padding:0;background:none;">
             <img src="assets/images/hostelmanagement.png" alt="Horizon Hostel Management" style="width:100%;height:100%;object-fit:cover;">
-            <div class="overlay"><a href="https://hostelmanagementsystem-f196a.web.app/" target="_blank" class="btn-live">Live Demo</a></div>
           </div>
           <div class="project-body">
             <h3>Horizon — Hostel Management System</h3>
             <p>Student accommodation platform with login/register, facilities info, gallery, rules, fee structure, and contact — rated 4.8/5 by students.</p>
-            <div class="tags"><span class="tag">React</span><span class="tag">Firebase</span><span class="tag">CSS</span><span class="tag">Responsive</span></div>
+
+            <div class="project-price"><span class="price-old">₹3,999</span><span class="price-current">₹1,999</span><span class="price-badge">50% OFF</span></div>
+            <div class="project-actions">
+              <a href="#" class="btn-details" onclick="viewDetails('Horizon Hostel Management')">👁️ View Details</a>
+              <a href="#" class="btn-buy" onclick="buyProject('Horizon Hostel Management', 1999)">🛒 Buy Now</a>
+            </div>
           </div>
         </div>
         <div class="project-card card reveal" data-category="web">
           <div class="project-thumb" style="padding:0;background:none;">
             <img src="assets/images/fittrack.png" alt="FitTrack Fitness App" style="width:100%;height:100%;object-fit:cover;">
-            <div class="overlay"><a href="https://fitnesswebapplication-57ca7.web.app/" target="_blank" class="btn-live">Live Demo</a></div>
           </div>
           <div class="project-body">
             <h3>FitTrack — Fitness Web App</h3>
             <p>Fitness tracking platform with workout plans, progress monitoring, user authentication, and responsive design deployed on Firebase.</p>
-            <div class="tags"><span class="tag">React</span><span class="tag">Firebase</span><span class="tag">CSS</span><span class="tag">Auth</span></div>
+
+            <div class="project-price"><span class="price-old">₹3,999</span><span class="price-current">₹1,999</span><span class="price-badge">50% OFF</span></div>
+            <div class="project-actions">
+              <a href="#" class="btn-details" onclick="viewDetails('FitTrack Fitness App')">👁️ View Details</a>
+              <a href="#" class="btn-buy" onclick="buyProject('FitTrack Fitness App', 1999)">🛒 Buy Now</a>
+            </div>
           </div>
         </div>
         <div class="project-card card reveal" data-category="web">
           <div class="project-thumb" style="padding:0;background:none;">
             <img src="assets/images/habitforge.png" alt="HabitForge Habit Tracker" style="width:100%;height:100%;object-fit:cover;">
-            <div class="overlay"><a href="https://habitforge-3dc26.web.app/" target="_blank" class="btn-live">Live Demo</a></div>
           </div>
           <div class="project-body">
             <h3>HabitForge — Habit Tracker</h3>
-            <p>Build better habits & level up your life with streak tracking, gamification, analytics dashboard, and goal management.</p>
-            <div class="tags"><span class="tag">React</span><span class="tag">Firebase</span><span class="tag">CSS</span><span class="tag">Gamification</span></div>
+            <p>Build better habits &amp; level up your life with streak tracking, gamification, analytics dashboard, and goal management.</p>
+
+            <div class="project-price"><span class="price-old">₹3,999</span><span class="price-current">₹1,999</span><span class="price-badge">50% OFF</span></div>
+            <div class="project-actions">
+              <a href="#" class="btn-details" onclick="viewDetails('HabitForge Habit Tracker')">👁️ View Details</a>
+              <a href="#" class="btn-buy" onclick="buyProject('HabitForge Habit Tracker', 1999)">🛒 Buy Now</a>
+            </div>
           </div>
         </div>
-        <div class="project-card card reveal" data-category="mobile">
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 2: ADVANCED INDUSTRY-READY PROJECTS -->
+  <section>
+    <div class="container">
+      <div class="section-header center">
+        <div class="section-badge" style="background:rgba(244,63,94,0.1);border-color:rgba(244,63,94,0.3);color:#f43f5e;">🚀 Industry-Grade</div>
+        <h2 class="section-title">Advanced Projects</h2>
+        <p class="section-desc">Enterprise-level, production-ready systems built with advanced architectures — AI/ML pipelines, multi-role dashboards, and native mobile apps. These are not ordinary projects — contact for custom pricing.</p>
+      </div>
+      <div class="cards-grid-3">
+        <div class="project-card card reveal" data-category="fullstack" style="border-color:rgba(244,63,94,0.2);">
+          <div class="project-thumb" style="padding:0;background:none;">
+            <img src="assets/images/hospital-management.png" alt="Hospital Management System" style="width:100%;height:100%;object-fit:cover;">
+          </div>
+          <div class="project-body">
+            <h3>Hospital Management System</h3>
+            <p>AI-powered clinical decision support platform with 4 role-based dashboards (Admin, Doctor, Receptionist, Patient), JWT auth, 151-disease prediction using BiGRU+CNN+Attention model, Gemini 2.0 Flash integration, 30+ API endpoints.</p>
+
+            <div class="project-actions">
+              <a href="#" class="btn-details" onclick="viewDetails('Hospital Management System')">👁️ View Details</a>
+              <a href="contact.html" class="btn-buy" style="background:linear-gradient(135deg,#f43f5e,#e11d48);">💬 Contact for Price</a>
+            </div>
+          </div>
+        </div>
+        <div class="project-card card reveal" data-category="mobile" style="border-color:rgba(244,63,94,0.2);">
+          <div class="project-thumb" style="padding:0;background:none;">
+            <img src="assets/images/apnaclinic.png" alt="ApnaClinic Telemedicine" style="width:100%;height:100%;object-fit:cover;">
+          </div>
+          <div class="project-body">
+            <h3>ApnaClinic — Telemedicine App</h3>
+            <p>Cross-platform telemedicine with 3 role-based dashboards, AI symptom checker, 4-language multilingual support, WebRTC video consultations, and TensorFlow Lite on-device models.</p>
+
+            <div class="project-actions">
+              <a href="#" class="btn-details" onclick="viewDetails('ApnaClinic Telemedicine')">👁️ View Details</a>
+              <a href="contact.html" class="btn-buy" style="background:linear-gradient(135deg,#f43f5e,#e11d48);">💬 Contact for Price</a>
+            </div>
+          </div>
+        </div>
+        <div class="project-card card reveal" data-category="mobile" style="border-color:rgba(244,63,94,0.2);">
           <div class="project-thumb" style="background:linear-gradient(135deg,#0a2540,#0d4a3a);display:flex;align-items:center;justify-content:center;font-size:3rem;">📍</div>
           <div class="project-body">
             <h3>TrackEasy — Attendance Tracker</h3>
             <p>Native Android geofencing-based attendance system with 95% accuracy, biometric auth, payroll PDF generation, and shift scheduling.</p>
-            <div class="tags"><span class="tag">Java</span><span class="tag">Android SDK</span><span class="tag">Firebase</span><span class="tag">Geofencing API</span></div>
+
+            <div class="project-actions">
+              <a href="#" class="btn-details" onclick="viewDetails('TrackEasy Attendance Tracker')">👁️ View Details</a>
+              <a href="contact.html" class="btn-buy" style="background:linear-gradient(135deg,#f43f5e,#e11d48);">💬 Contact for Price</a>
+            </div>
           </div>
         </div>
       </div>

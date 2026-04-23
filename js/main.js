@@ -165,3 +165,76 @@ function initSearch(inputSelector, cardSelector, searchKey) {
     });
   });
 }
+
+// ===== BUY PROJECT MODAL =====
+function createBuyModal() {
+  if (document.querySelector('.buy-modal-overlay')) return;
+  const overlay = document.createElement('div');
+  overlay.className = 'buy-modal-overlay';
+  overlay.innerHTML = `
+    <div class="buy-modal">
+      <button class="buy-modal-close" onclick="closeBuyModal()">×</button>
+      <div class="buy-modal-icon">🛒</div>
+      <h3>Purchase Project</h3>
+      <div class="modal-project-name" id="modalProjectName"></div>
+      <div class="modal-price" id="modalPrice"></div>
+      <p>Get the complete source code, documentation, and setup guide. Contact us to purchase this project.</p>
+      <div class="modal-actions">
+        <a id="modalWhatsApp" href="#" target="_blank" class="btn-whatsapp">
+          <i class="fa-brands fa-whatsapp"></i> WhatsApp
+        </a>
+        <a id="modalEmail" href="#" class="btn-email">
+          <i class="fa-solid fa-envelope"></i> Email
+        </a>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) closeBuyModal();
+  });
+}
+
+function buyProject(name, price) {
+  event.preventDefault();
+  createBuyModal();
+  const overlay = document.querySelector('.buy-modal-overlay');
+  document.getElementById('modalProjectName').textContent = name;
+  document.getElementById('modalPrice').textContent = '₹' + price.toLocaleString('en-IN');
+
+  const whatsappMsg = encodeURIComponent(`Hi! I'm interested in buying the "${name}" project (₹${price.toLocaleString('en-IN')}). Please share the details.`);
+  document.getElementById('modalWhatsApp').href = `https://wa.me/918261074512?text=${whatsappMsg}`;
+
+  const emailSubject = encodeURIComponent(`Purchase Inquiry: ${name}`);
+  const emailBody = encodeURIComponent(`Hi Yuvraj,\n\nI'm interested in purchasing the "${name}" project (₹${price.toLocaleString('en-IN')}).\n\nPlease share the payment details and project deliverables.\n\nThank you!`);
+  document.getElementById('modalEmail').href = `mailto:yuvii9552@gmail.com?subject=${emailSubject}&body=${emailBody}`;
+
+  requestAnimationFrame(() => overlay.classList.add('active'));
+}
+
+function closeBuyModal() {
+  const overlay = document.querySelector('.buy-modal-overlay');
+  if (overlay) {
+    overlay.classList.remove('active');
+    setTimeout(() => overlay.remove(), 300);
+  }
+}
+
+function viewDetails(name) {
+  event.preventDefault();
+  const card = event.target.closest('.project-card');
+  if (card) {
+    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    card.style.borderColor = 'rgba(124,58,237,0.5)';
+    card.style.boxShadow = '0 0 30px rgba(124,58,237,0.2)';
+    setTimeout(() => {
+      card.style.borderColor = '';
+      card.style.boxShadow = '';
+    }, 2000);
+  }
+}
+
+// Close modal on Escape key
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeBuyModal();
+});
