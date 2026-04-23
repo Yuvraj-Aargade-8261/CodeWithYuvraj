@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Blog — Code With Yuvraj</title>
+  <meta name="description" content="Read tech articles, coding tips, project walkthroughs, and developer insights on web development, AI/ML, and more.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav class="navbar"><div class="container"><a href="index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="index.html">Home</a><a href="projects.html">Projects</a><a href="tutorials.html">Tutorials</a><a href="notes.html">Notes</a><a href="blog.html">Blog</a><a href="contact.html">Contact</a></div><a href="contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="index.html">Home</a><a href="projects.html">Projects</a><a href="tutorials.html">Tutorials</a><a href="notes.html">Notes</a><a href="blog.html">Blog</a><a href="contact.html">Contact</a></div>
+
+  <section class="page-header">
+    <div class="container">
+      <div class="section-badge">✍️ Articles</div>
+      <h1>Tech <span class="gradient" style="background:var(--g);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Blog</span></h1>
+      <p>Coding tips, project walkthroughs, tech insights, and developer resources.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="search-bar"><input type="text" id="blogSearch" placeholder="🔍 Search articles..."></div>
+
+      <!-- Featured Article -->
+      <div class="card reveal" style="display:grid;grid-template-columns:1fr 1fr;gap:0;padding:0;overflow:hidden;margin-bottom:48px;" id="featuredBlog">
+        <div style="background:linear-gradient(135deg,#1a0a2a,#2d1b69);display:flex;align-items:center;justify-content:center;font-size:4rem;min-height:300px;">🏥</div>
+        <div style="padding:40px;">
+          <div style="display:flex;gap:12px;margin-bottom:16px;"><span class="tag">Featured</span><span class="tag" style="background:rgba(6,182,212,0.1);color:var(--s);border-color:rgba(6,182,212,0.2);">Full-Stack</span></div>
+          <h2 style="font-size:1.5rem;font-weight:800;margin-bottom:12px;">Building an AI-Powered Hospital Management System</h2>
+          <p style="color:var(--tx2);margin-bottom:20px;">A complete walkthrough of how I built a full-stack hospital platform with 4 role-based dashboards, AI disease prediction using BiGRU+CNN model, and Gemini API integration — deployed on Vercel + Railway.</p>
+          <div style="display:flex;gap:16px;color:var(--tx3);font-size:0.8rem;margin-bottom:20px;"><span>📅 April 2026</span><span>⏱️ 15 min read</span></div>
+          <a href="#" class="btn-primary" style="font-size:0.85rem;padding:12px 24px;">Read Article →</a>
+        </div>
+      </div>
+
+      <!-- Blog Grid -->
+      <div class="cards-grid-3">
+        <div class="blog-card card reveal" data-category="webdev">
+          <div class="blog-thumb" style="background:linear-gradient(135deg,#0a2a1a,#1a4a2a);">⚛️</div>
+          <div class="blog-body">
+            <div class="blog-meta"><span>📅 Mar 2026</span><span>⏱️ 8 min</span></div>
+            <h3>React vs Angular vs Vue — Which Framework to Learn in 2026?</h3>
+            <p>A detailed comparison of the three most popular frontend frameworks with pros, cons, and use cases.</p>
+            <a href="#" class="read-more">Read More →</a>
+          </div>
+        </div>
+        <div class="blog-card card reveal" data-category="career">
+          <div class="blog-thumb" style="background:linear-gradient(135deg,#2a1a0a,#4a2a1a);">🏆</div>
+          <div class="blog-body">
+            <div class="blog-meta"><span>📅 Mar 2026</span><span>⏱️ 10 min</span></div>
+            <h3>My SIH 2024 Grand Finale Journey — Tips & Experience</h3>
+            <p>How our team made it to the Smart India Hackathon Grand Finale at NIT Srinagar and what we learned.</p>
+            <a href="#" class="read-more">Read More →</a>
+          </div>
+        </div>
+        <div class="blog-card card reveal" data-category="mobile">
+          <div class="blog-thumb" style="background:linear-gradient(135deg,#0a1a3a,#1a3a6a);">📱</div>
+          <div class="blog-body">
+            <div class="blog-meta"><span>📅 Feb 2026</span><span>⏱️ 12 min</span></div>
+            <h3>Flutter vs React Native — The Ultimate Comparison</h3>
+            <p>Choosing the right cross-platform framework in 2026 — performance, ecosystem, and developer experience.</p>
+            <a href="#" class="read-more">Read More →</a>
+          </div>
+        </div>
+        <div class="blog-card card reveal" data-category="backend">
+          <div class="blog-thumb" style="background:linear-gradient(135deg,#1a0a1a,#3a1a3a);">🔐</div>
+          <div class="blog-body">
+            <div class="blog-meta"><span>📅 Feb 2026</span><span>⏱️ 7 min</span></div>
+            <h3>JWT Authentication & RBAC — Complete Guide</h3>
+            <p>Implementing secure role-based access control with JSON Web Tokens in Node.js applications.</p>
+            <a href="#" class="read-more">Read More →</a>
+          </div>
+        </div>
+        <div class="blog-card card reveal" data-category="devops">
+          <div class="blog-thumb" style="background:linear-gradient(135deg,#0a2a2a,#1a4a4a);">🐳</div>
+          <div class="blog-body">
+            <div class="blog-meta"><span>📅 Jan 2026</span><span>⏱️ 9 min</span></div>
+            <h3>Docker for Beginners — Containerize Your Apps</h3>
+            <p>A beginner-friendly guide to Docker — images, containers, volumes, networks, and Docker Compose.</p>
+            <a href="#" class="read-more">Read More →</a>
+          </div>
+        </div>
+        <div class="blog-card card reveal" data-category="aiml">
+          <div class="blog-thumb" style="background:linear-gradient(135deg,#2a0a2a,#4a1a4a);">🧠</div>
+          <div class="blog-body">
+            <div class="blog-meta"><span>📅 Jan 2026</span><span>⏱️ 11 min</span></div>
+            <h3>Building a Disease Prediction Model with Keras</h3>
+            <p>Step-by-step guide to building a BiGRU+CNN+Attention model for multi-disease prediction in Python.</p>
+            <a href="#" class="read-more">Read More →</a>
+          </div>
+        </div>
+        <div class="blog-card card reveal" data-category="webdev">
+          <div class="blog-thumb" style="background:linear-gradient(135deg,#1a1a0a,#3a3a1a);">🌐</div>
+          <div class="blog-body">
+            <div class="blog-meta"><span>📅 Dec 2025</span><span>⏱️ 6 min</span></div>
+            <h3>Top 10 HTML & CSS Projects for Beginners</h3>
+            <p>Build your portfolio with these beginner-friendly projects — from landing pages to animated cards.</p>
+            <a href="#" class="read-more">Read More →</a>
+          </div>
+        </div>
+        <div class="blog-card card reveal" data-category="database">
+          <div class="blog-thumb" style="background:linear-gradient(135deg,#0a0a2a,#1a1a4a);">🛢️</div>
+          <div class="blog-body">
+            <div class="blog-meta"><span>📅 Dec 2025</span><span>⏱️ 8 min</span></div>
+            <h3>Prisma ORM — The Modern Database Toolkit</h3>
+            <p>Why Prisma is the best ORM for Node.js — schema-first, type-safe, and developer-friendly.</p>
+            <a href="#" class="read-more">Read More →</a>
+          </div>
+        </div>
+        <div class="blog-card card reveal" data-category="career">
+          <div class="blog-thumb" style="background:linear-gradient(135deg,#2a2a0a,#4a4a1a);">🎯</div>
+          <div class="blog-body">
+            <div class="blog-meta"><span>📅 Nov 2025</span><span>⏱️ 10 min</span></div>
+            <h3>How to Build a Strong GitHub Portfolio</h3>
+            <p>Tips on structuring repos, writing READMEs, contributing to open source, and impressing recruiters.</p>
+            <a href="#" class="read-more">Read More →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><div class="nav-logo">&lt;/&gt; CodeWithYuvraj</div><p>Free tech education platform by Yuvraj Aargade.</p><div class="footer-social"><a href="https://instagram.com/codewith.yuvraj" target="_blank"><i class="fa-brands fa-instagram"></i></a><a href="https://youtube.com/@codewith.yuvraj-p8d" target="_blank"><i class="fa-brands fa-youtube"></i></a><a href="https://t.me/codewithyuvraj" target="_blank"><i class="fa-brands fa-telegram"></i></a><a href="https://github.com/Yuvraj-Aargade-8261" target="_blank"><i class="fa-brands fa-github"></i></a><a href="https://linkedin.com/in/yuvrajaargade" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a></div></div><div class="footer-col"><h4>Quick Links</h4><a href="index.html">Home</a><a href="projects.html">Projects</a><a href="contact.html">Contact</a></div><div class="footer-col"><h4>Resources</h4><a href="tutorials.html">Tutorials</a><a href="notes.html">Notes</a><a href="blog.html">Blog</a></div><div class="footer-col"><h4>Connect</h4><a href="https://instagram.com/codewith.yuvraj" target="_blank">Instagram</a><a href="https://youtube.com/@codewith.yuvraj-p8d" target="_blank">YouTube</a><a href="https://t.me/codewithyuvraj" target="_blank">Telegram</a><a href="https://github.com/Yuvraj-Aargade-8261" target="_blank">GitHub</a></div></div><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade</p></div></div></footer>
+  <script src="js/main.js"></script>
+  <script>document.addEventListener('DOMContentLoaded',()=>{initSearch('#blogSearch','.blog-card','h3');});</script>
+</body>
+</html>

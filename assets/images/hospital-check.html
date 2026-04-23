@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Hospital Management System - A comprehensive, modern hospital management platform for administrators, doctors, receptionists, and patients.">
+    <title>Hospital Management System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link rel="stylesheet" href="src/styles/variables.css">
+    <link rel="stylesheet" href="src/styles/animations.css">
+    <link rel="stylesheet" href="src/styles/base.css">
+    <link rel="stylesheet" href="src/styles/components.css">
+    <link rel="stylesheet" href="src/styles/pages.css">
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='28' font-size='28'>🏥</text></svg>">
+</head>
+
+<body>
+    <div id="app">
+        <div id="page-container"></div>
+    </div>
+    <div id="modal-root"></div>
+    <div id="toast-container"></div>
+
+    <script type="module" src="src/data/mockData.js"></script>
+    <script type="module" src="src/utils/api.js"></script>
+    <script type="module" src="src/utils/helpers.js"></script>
+    <script type="module" src="src/router.js"></script>
+    <script type="module" src="src/components/common.js"></script>
+    <script type="module" src="src/pages/splash.js"></script>
+    <script type="module" src="src/pages/auth/roleSelection.js"></script>
+    <script type="module" src="src/pages/auth/login.js"></script>
+    <script type="module" src="src/pages/auth/register.js"></script>
+    <!-- Admin -->
+    <script type="module" src="src/pages/admin/dashboard.js"></script>
+    <script type="module" src="src/pages/admin/manage.js"></script>
+    <script type="module" src="src/pages/admin/staffManagement.js"></script>
+    <script type="module" src="src/pages/admin/addStaff.js"></script>
+    <script type="module" src="src/pages/admin/staffDetail.js"></script>
+    <script type="module" src="src/pages/admin/patientList.js"></script>
+    <script type="module" src="src/pages/admin/patientDetails.js"></script>
+    <script type="module" src="src/pages/admin/prescriptions.js"></script>
+    <script type="module" src="src/pages/admin/prescriptionDetail.js"></script>
+    <script type="module" src="src/pages/admin/profile.js"></script>
+    <!-- Doctor -->
+    <script type="module" src="src/pages/doctor/dashboard.js"></script>
+    <script type="module" src="src/pages/doctor/prescribe.js"></script>
+    <script type="module" src="src/pages/doctor/history.js"></script>
+    <script type="module" src="src/pages/doctor/patients.js"></script>
+    <script type="module" src="src/pages/doctor/prescriptionDetail.js"></script>
+    <script type="module" src="src/pages/doctor/editPrescription.js"></script>
+    <script type="module" src="src/utils/prescriptionPdf.js"></script>
+    <script type="module" src="src/pages/doctor/profile.js"></script>
+    <script type="module" src="src/pages/doctor/activity.js"></script>
+    <!-- Receptionist -->
+    <script type="module" src="src/pages/receptionist/dashboard.js"></script>
+    <script type="module" src="src/pages/receptionist/addPatient.js"></script>
+    <script type="module" src="src/pages/receptionist/patientList.js"></script>
+    <script type="module" src="src/pages/receptionist/patientDetails.js"></script>
+    <script type="module" src="src/pages/receptionist/billing.js"></script>
+    <script type="module" src="src/pages/receptionist/createBill.js"></script>
+    <script type="module" src="src/pages/receptionist/invoiceDetail.js"></script>
+    <script type="module" src="src/pages/receptionist/beds.js"></script>
+    <script type="module" src="src/pages/receptionist/allotBed.js"></script>
+    <script type="module" src="src/pages/receptionist/wardStatus.js"></script>
+    <script type="module" src="src/pages/receptionist/bedDetail.js"></script>
+    <script type="module" src="src/pages/receptionist/profile.js"></script>
+    <!-- Patient -->
+    <script type="module" src="src/pages/patient/dashboard.js"></script>
+    <script type="module" src="src/pages/patient/prescriptions.js"></script>
+    <script type="module" src="src/pages/patient/prescriptionDetail.js"></script>
+    <script type="module" src="src/pages/patient/health.js"></script>
+    <script type="module" src="src/pages/patient/profile.js"></script>
+    <script type="module" src="src/main.js"></script>
+</body>
+
+</html>
