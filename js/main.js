@@ -1,6 +1,7 @@
 // ===== MAIN.JS — CodeWithYuvraj =====
 
 document.addEventListener('DOMContentLoaded', () => {
+  initThemeToggle();
   initNavbar();
   initRevealAnimations();
   initCounters();
@@ -10,15 +11,28 @@ document.addEventListener('DOMContentLoaded', () => {
   setActiveNav();
 });
 
+// ===== THEME TOGGLE =====
+function initThemeToggle() {
+  const saved = localStorage.getItem('cwu-theme');
+  if (saved) document.documentElement.setAttribute('data-theme', saved);
+
+  document.querySelectorAll('.theme-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('cwu-theme', next);
+    });
+  });
+}
+
 // ===== NAVBAR SCROLL =====
 function initNavbar() {
   const nav = document.querySelector('.navbar');
   if (!nav) return;
   window.addEventListener('scroll', () => {
-    nav.style.borderBottomColor = window.scrollY > 50
-      ? 'rgba(124,58,237,0.2)' : 'rgba(124,58,237,0.15)';
     nav.style.background = window.scrollY > 50
-      ? 'rgba(6,6,11,0.95)' : 'rgba(6,6,11,0.8)';
+      ? 'var(--navbar-bg-scroll)' : 'var(--navbar-bg)';
   });
 }
 

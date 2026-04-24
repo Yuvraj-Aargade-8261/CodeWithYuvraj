@@ -1,18 +1,411 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Code With Yuvraj — Learn. Build. Innovate.</title>
-  <meta name="description" content="CodeWithYuvraj offers free programming tutorials, mini projects, tech notes, and resources for students and developers. Learn Web Dev, AI/ML, Flutter, and more.">
-  <meta property="og:title" content="Code With Yuvraj — Learn. Build. Innovate.">
-  <meta property="og:description" content="Free tech resources, mini projects, notes & tutorials for aspiring developers.">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>CodeWithYuvraj — Learn to Code for Free</title>
+  <meta name="description"
+    content="Master web development, programming, AI/ML with free projects, tutorials, notes, and interview prep guides by Yuvraj.">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
+  <style>
+    /* === HOMEPAGE-SPECIFIC ADVANCED STYLES === */
+    .hero h1 {
+      font-size: 3.2rem;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+    }
 
-  <!-- NAVBAR -->
+    .hero .gradient {
+      background: linear-gradient(135deg, #7c3aed 0%, #06b6d4 50%, #f43f5e 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-size: 200% auto;
+      animation: gradient 4s ease infinite;
+    }
+
+    .hero-subtitle {
+      font-size: 1.15rem;
+      color: var(--tx2);
+      line-height: 1.7;
+      max-width: 560px;
+    }
+
+    .hero-subtitle strong {
+      color: var(--tx);
+    }
+
+    .trust-row {
+      display: flex;
+      gap: 28px;
+      margin-top: 32px;
+      flex-wrap: wrap;
+    }
+
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--tx2);
+      font-size: 0.85rem;
+    }
+
+    .trust-item i {
+      color: #22c55e;
+      font-size: 0.9rem;
+    }
+
+    /* Feature Cards Grid */
+    .feature-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .feature-card {
+      background: var(--bg-s);
+      border: 1px solid var(--bd);
+      border-radius: var(--r);
+      padding: 30px 26px;
+      transition: all 0.35s cubic-bezier(.4, 0, .2, 1);
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      text-decoration: none;
+      display: block;
+    }
+
+    .feature-card:hover {
+      border-color: transparent;
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .feature-card .fc-glow {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      border-radius: var(--r) var(--r) 0 0;
+      opacity: 0;
+      transition: opacity 0.35s;
+    }
+
+    .feature-card:hover .fc-glow {
+      opacity: 1;
+    }
+
+    .feature-card .fc-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 18px;
+    }
+
+    .feature-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: var(--tx);
+    }
+
+    .feature-card p {
+      color: var(--tx2);
+      font-size: 0.82rem;
+      line-height: 1.65;
+      margin-bottom: 14px;
+    }
+
+    .feature-card .fc-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .feature-card .fc-tag {
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .feature-card .fc-arrow {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 1px solid var(--bd);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--tx2);
+      font-size: 0.75rem;
+      transition: all 0.3s;
+    }
+
+    .feature-card:hover .fc-arrow {
+      background: var(--p);
+      border-color: var(--p);
+      color: #fff;
+      transform: translateX(3px);
+    }
+
+    .feature-hero {
+      padding: 40px 32px;
+    }
+
+    .feature-hero h3 {
+      font-size: 1.25rem;
+    }
+
+    .feature-hero p {
+      font-size: 0.88rem;
+      max-width: 400px;
+    }
+
+    .feature-hero .fc-icon {
+      width: 60px;
+      height: 60px;
+      font-size: 1.8rem;
+      border-radius: 16px;
+    }
+
+    .feature-hero .fc-count {
+      font-size: 2rem;
+      font-weight: 800;
+      background: var(--g);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 4px;
+    }
+
+    @media(max-width:1024px) {
+      .feature-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media(max-width:768px) {
+
+      .feature-row,
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Marquee */
+    .tech-marquee {
+      overflow: hidden;
+      padding: 32px 0;
+      border-top: 1px solid var(--bd);
+      border-bottom: 1px solid var(--bd);
+    }
+
+    .marquee-track {
+      display: flex;
+      gap: 48px;
+      animation: marquee 25s linear infinite;
+      width: max-content;
+    }
+
+    .marquee-item {
+      font-size: 0.9rem;
+      color: var(--tx3);
+      font-weight: 500;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .marquee-item i {
+      font-size: 1.1rem;
+      color: var(--tx2);
+    }
+
+    @keyframes marquee {
+      0% {
+        transform: translateX(0)
+      }
+
+      100% {
+        transform: translateX(-50%)
+      }
+    }
+
+    /* Process Steps */
+    .process-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      counter-reset: step;
+    }
+
+    .process-step {
+      text-align: center;
+      padding: 32px 20px;
+      background: var(--bg-s);
+      border: 1px solid var(--bd);
+      border-radius: var(--r);
+      transition: var(--tr);
+      position: relative;
+    }
+
+    .process-step:hover {
+      border-color: rgba(124, 58, 237, 0.3);
+      transform: translateY(-4px);
+    }
+
+    .process-step::before {
+      counter-increment: step;
+      content: counter(step);
+      font-size: 3rem;
+      font-weight: 900;
+      background: var(--g);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      opacity: 0.15;
+      position: absolute;
+      top: 12px;
+      right: 16px;
+    }
+
+    .process-step .ps-icon {
+      font-size: 2.2rem;
+      margin-bottom: 14px;
+      display: block;
+    }
+
+    .process-step h3 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .process-step p {
+      color: var(--tx2);
+      font-size: 0.8rem;
+    }
+
+    /* Testimonial */
+    .testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .testimonial-card {
+      padding: 28px;
+      background: var(--bg-s);
+      border: 1px solid var(--bd);
+      border-radius: var(--r);
+      transition: var(--tr);
+    }
+
+    .testimonial-card:hover {
+      border-color: rgba(124, 58, 237, 0.3);
+    }
+
+    .testimonial-card .tc-stars {
+      color: #f59e0b;
+      font-size: 0.85rem;
+      margin-bottom: 12px;
+    }
+
+    .testimonial-card .tc-text {
+      color: var(--tx2);
+      font-size: 0.88rem;
+      line-height: 1.7;
+      margin-bottom: 16px;
+      font-style: italic;
+    }
+
+    .testimonial-card .tc-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .testimonial-card .tc-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--g);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .testimonial-card .tc-name {
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .testimonial-card .tc-role {
+      font-size: 0.75rem;
+      color: var(--tx3);
+    }
+
+    @media(max-width:1024px) {
+      .bento-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .bento-wide {
+        grid-column: span 1;
+      }
+
+      .process-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .testimonial-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media(max-width:768px) {
+
+      .bento-grid,
+      .process-grid,
+      .testimonial-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .bento-tall {
+        grid-row: span 1;
+      }
+
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+
+      .trust-row {
+        gap: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
   <nav class="navbar" id="navbar">
     <div class="container">
       <a href="index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a>
@@ -22,9 +415,12 @@
         <a href="tutorials.html">Tutorials</a>
         <a href="notes.html">Notes</a>
         <a href="blog.html">Blog</a>
+        <a href="resources.html">Resources</a>
         <a href="contact.html">Contact</a>
       </div>
-      <div class="nav-right"><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-moon"></i></button><a href="contact.html" class="nav-cta">Let's Connect →</a></div>
+      <button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i
+          class="fa-solid fa-moon icon-moon"></i></button>
+      <a href="contact.html" class="nav-cta">Let's Connect →</a>
       <div class="hamburger" id="hamburger">
         <span></span><span></span><span></span>
       </div>
@@ -36,10 +432,11 @@
     <a href="tutorials.html">Tutorials</a>
     <a href="notes.html">Notes</a>
     <a href="blog.html">Blog</a>
+    <a href="resources.html">Resources</a>
     <a href="contact.html">Contact</a>
   </div>
 
-  <!-- HERO -->
+  <!-- ============ HERO ============ -->
   <section class="hero" id="hero">
     <div class="hero-bg"></div>
     <div class="hero-grid"></div>
@@ -52,26 +449,32 @@
     <div class="hero-img"></div>
     <div class="container">
       <div class="hero-content">
-        <div class="hero-badge"><span class="dot"></span> Open-Source Tech Education</div>
-        <h1>Learn to Code with<br><span class="gradient">Yuvraj Aargade</span></h1>
+        <div class="hero-badge"><span class="dot"></span> 🔥 Your Free Coding Mentor — Online</div>
+        <h1>Learn to Code<br>with <span class="gradient">Yuvraj</span></h1>
         <h2 style="font-size:1.4rem;font-weight:400;color:var(--tx2);margin-bottom:16px;">
           Master <span class="hero-typed">Web Development</span>
         </h2>
-        <p>Free mini projects, comprehensive notes, step-by-step tutorials, and real-world resources to kickstart your tech career. Built by a Full-Stack Developer & Tech Educator.</p>
+        <p class="hero-subtitle">Projects you can buy. Notes you can study. Tutorials you can follow. Resources you can
+          explore. <strong>Everything you need — completely free.</strong></p>
         <div class="hero-btns">
           <a href="projects.html" class="btn-primary">🚀 Explore Projects</a>
-          <a href="notes.html" class="btn-secondary">📚 Browse Notes</a>
+          <a href="resources.html" class="btn-secondary">📚 Resources Hub</a>
+        </div>
+        <div class="trust-row">
+          <div class="trust-item"><i class="fa-solid fa-circle-check"></i> 10+ Ready Projects</div>
+          <div class="trust-item"><i class="fa-solid fa-circle-check"></i> Free Notes & Tutorials</div>
+          <div class="trust-item"><i class="fa-solid fa-circle-check"></i> Interview Prep Guides</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- STATS -->
+  <!-- ============ STATS ============ -->
   <section class="stats" id="stats">
     <div class="container">
       <div class="stat-item reveal">
         <div class="stat-num" data-count="10" data-suffix="+">0</div>
-        <div class="stat-label">Mini Projects</div>
+        <div class="stat-label">Ready Projects</div>
       </div>
       <div class="stat-item reveal">
         <div class="stat-num" data-count="15" data-suffix="+">0</div>
@@ -82,73 +485,145 @@
         <div class="stat-label">Students Helped</div>
       </div>
       <div class="stat-item reveal">
-        <div class="stat-num" data-count="4" data-suffix="">0</div>
-        <div class="stat-label">Major Projects</div>
+        <div class="stat-num" data-count="9" data-suffix="">0</div>
+        <div class="stat-label">Video Courses</div>
       </div>
     </div>
   </section>
 
-  <!-- CATEGORIES -->
-  <section id="categories">
+  <!-- ============ TECH MARQUEE ============ -->
+  <section class="tech-marquee">
+    <div class="marquee-track">
+      <div class="marquee-item"><i class="fa-brands fa-html5"></i> HTML5</div>
+      <div class="marquee-item"><i class="fa-brands fa-css3-alt"></i> CSS3</div>
+      <div class="marquee-item"><i class="fa-brands fa-js"></i> JavaScript</div>
+      <div class="marquee-item"><i class="fa-brands fa-react"></i> React.js</div>
+      <div class="marquee-item"><i class="fa-brands fa-node-js"></i> Node.js</div>
+      <div class="marquee-item"><i class="fa-brands fa-python"></i> Python</div>
+      <div class="marquee-item"><i class="fa-brands fa-java"></i> Java</div>
+      <div class="marquee-item"><i class="fa-brands fa-flutter"></i> Flutter</div>
+      <div class="marquee-item"><i class="fa-solid fa-database"></i> MongoDB</div>
+      <div class="marquee-item"><i class="fa-brands fa-docker"></i> Docker</div>
+      <div class="marquee-item"><i class="fa-brands fa-git-alt"></i> Git</div>
+      <div class="marquee-item"><i class="fa-brands fa-figma"></i> Figma</div>
+      <!-- Duplicate for seamless loop -->
+      <div class="marquee-item"><i class="fa-brands fa-html5"></i> HTML5</div>
+      <div class="marquee-item"><i class="fa-brands fa-css3-alt"></i> CSS3</div>
+      <div class="marquee-item"><i class="fa-brands fa-js"></i> JavaScript</div>
+      <div class="marquee-item"><i class="fa-brands fa-react"></i> React.js</div>
+      <div class="marquee-item"><i class="fa-brands fa-node-js"></i> Node.js</div>
+      <div class="marquee-item"><i class="fa-brands fa-python"></i> Python</div>
+      <div class="marquee-item"><i class="fa-brands fa-java"></i> Java</div>
+      <div class="marquee-item"><i class="fa-brands fa-flutter"></i> Flutter</div>
+      <div class="marquee-item"><i class="fa-solid fa-database"></i> MongoDB</div>
+      <div class="marquee-item"><i class="fa-brands fa-docker"></i> Docker</div>
+      <div class="marquee-item"><i class="fa-brands fa-git-alt"></i> Git</div>
+      <div class="marquee-item"><i class="fa-brands fa-figma"></i> Figma</div>
+    </div>
+  </section>
+
+  <!-- ============ WHAT WE OFFER ============ -->
+  <section id="explore">
     <div class="container">
       <div class="section-header center">
-        <div class="section-badge">🎯 What You'll Learn</div>
-        <h2 class="section-title">Master In-Demand Tech Skills</h2>
-        <p class="section-desc">From frontend to AI, explore curated resources designed for real-world application.</p>
+        <div class="section-badge">⚡ One Platform, Everything You Need</div>
+        <h2 class="section-title">Built for Developers, by a Developer</h2>
+        <p class="section-desc">Buy projects. Study notes. Watch tutorials. Prep for interviews — all in one place.</p>
       </div>
-      <div class="cards-grid reveal">
-        <div class="card">
-          <div class="card-icon">🌐</div>
-          <h3>Web Development</h3>
-          <p>HTML, CSS, JavaScript, React.js, Node.js, Express — build responsive, production-ready web applications.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">🤖</div>
-          <h3>AI & Machine Learning</h3>
-          <p>Python, TensorFlow, Keras, Gemini API — design intelligent systems and deep learning pipelines.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">📱</div>
-          <h3>Mobile Development</h3>
-          <p>Flutter, Dart, Firebase, Android SDK — create cross-platform and native mobile applications.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">🗃️</div>
-          <h3>Data Structures & Algorithms</h3>
-          <p>Arrays, Trees, Graphs, Dynamic Programming — crack coding interviews at top companies.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">☁️</div>
-          <h3>Cloud & DevOps</h3>
-          <p>Firebase, Supabase, Vercel, Docker, AWS, GCP — deploy and scale cloud-native applications.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">🛢️</div>
-          <h3>Databases & Backend</h3>
-          <p>PostgreSQL, MongoDB, MySQL, Prisma ORM, RESTful APIs — architect robust backend systems.</p>
-        </div>
+
+      <!-- Hero Row — 2 Featured Cards -->
+      <div class="feature-row reveal">
+        <a href="projects.html" class="feature-card feature-hero"
+          style="background:linear-gradient(135deg,rgba(124,58,237,0.07),rgba(124,58,237,0.02));">
+          <div class="fc-glow" style="background:linear-gradient(90deg,#7c3aed,#a78bfa);"></div>
+          <div class="fc-icon" style="background:rgba(124,58,237,0.12);color:#7c3aed;">🚀</div>
+          <div class="fc-count">10+</div>
+          <h3>Buy Ready-Made Projects</h3>
+          <p>Production-grade source code with docs, designed for students, freelancers & portfolios.</p>
+          <div class="fc-meta">
+            <span class="fc-tag" style="background:rgba(124,58,237,0.1);color:#7c3aed;">Most Popular</span>
+            <span class="fc-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+          </div>
+        </a>
+        <a href="resources.html" class="feature-card feature-hero"
+          style="background:linear-gradient(135deg,rgba(244,63,94,0.07),rgba(244,63,94,0.02));">
+          <div class="fc-glow" style="background:linear-gradient(90deg,#f43f5e,#fb7185);"></div>
+          <div class="fc-icon" style="background:rgba(244,63,94,0.12);color:#f43f5e;">🎯</div>
+          <div class="fc-count">6</div>
+          <h3>Interview Prep Guides</h3>
+          <p>Frontend, Backend, DSA patterns, system design — topic-wise guides to crack any interview.</p>
+          <div class="fc-meta">
+            <span class="fc-tag" style="background:rgba(244,63,94,0.1);color:#f43f5e;">New</span>
+            <span class="fc-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+          </div>
+        </a>
+      </div>
+
+      <!-- Grid — 4 Cards -->
+      <div class="feature-grid reveal">
+        <a href="notes.html" class="feature-card">
+          <div class="fc-glow" style="background:linear-gradient(90deg,#06b6d4,#22d3ee);"></div>
+          <div class="fc-icon" style="background:rgba(6,182,212,0.12);color:#06b6d4;">📝</div>
+          <h3>Free PDF Notes</h3>
+          <p>Python, Java, C, HTML/CSS, JavaScript & DSA — 40-70 pages each.</p>
+          <div class="fc-meta">
+            <span class="fc-tag" style="background:rgba(6,182,212,0.1);color:#06b6d4;">15+ Subjects</span>
+            <span class="fc-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+          </div>
+        </a>
+        <a href="tutorials.html" class="feature-card">
+          <div class="fc-glow" style="background:linear-gradient(90deg,#f59e0b,#fbbf24);"></div>
+          <div class="fc-icon" style="background:rgba(245,158,11,0.12);color:#f59e0b;">🎬</div>
+          <h3>Video Tutorials</h3>
+          <p>Step-by-step YouTube courses from beginner to advanced level.</p>
+          <div class="fc-meta">
+            <span class="fc-tag" style="background:rgba(245,158,11,0.1);color:#f59e0b;">9 Courses</span>
+            <span class="fc-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+          </div>
+        </a>
+        <a href="resources.html" class="feature-card">
+          <div class="fc-glow" style="background:linear-gradient(90deg,#10b981,#34d399);"></div>
+          <div class="fc-icon" style="background:rgba(16,185,129,0.12);color:#10b981;">🗺️</div>
+          <h3>Learning Roadmaps</h3>
+          <p>Visual career paths for Frontend, Backend, Mobile, AI/ML & DevOps.</p>
+          <div class="fc-meta">
+            <span class="fc-tag" style="background:rgba(16,185,129,0.1);color:#10b981;">6 Paths</span>
+            <span class="fc-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+          </div>
+        </a>
+        <a href="resources.html" class="feature-card">
+          <div class="fc-glow" style="background:linear-gradient(90deg,#8b5cf6,#a78bfa);"></div>
+          <div class="fc-icon" style="background:rgba(139,92,246,0.12);color:#8b5cf6;">🛠️</div>
+          <h3>Tools & Websites</h3>
+          <p>VS Code, GitHub, Firebase, Figma, Vercel & 10+ curated dev tools.</p>
+          <div class="fc-meta">
+            <span class="fc-tag" style="background:rgba(139,92,246,0.1);color:#8b5cf6;">All Free</span>
+            <span class="fc-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+          </div>
+        </a>
       </div>
     </div>
   </section>
 
-  <!-- FEATURED PROJECTS -->
+  <!-- ============ FEATURED PROJECTS ============ -->
   <section id="featured-projects" style="background:var(--bg-s);">
     <div class="container">
       <div class="section-header center">
-        <div class="section-badge">💻 Featured Projects</div>
-        <h2 class="section-title">Buy Ready-Made Projects</h2>
-        <p class="section-desc">Production-grade projects for final year engineering students, freelance clients & portfolio building.</p>
+        <div class="section-badge">💻 Top Picks</div>
+        <h2 class="section-title">Featured Projects — Buy & Deploy</h2>
+        <p class="section-desc">Production-grade projects with source code, documentation & deployment guides.</p>
       </div>
       <div class="cards-grid-3 reveal">
         <div class="project-card card">
           <div class="project-thumb" style="padding:0;background:none;">
-            <img src="assets/images/bloodbank.png" alt="LifeFlow Blood Bank" style="width:100%;height:100%;object-fit:cover;">
+            <img src="assets/images/bloodbank.png" alt="LifeFlow Blood Bank"
+              style="width:100%;height:100%;object-fit:cover;">
           </div>
           <div class="project-body">
             <h3>Blood Bank & Donor Platform</h3>
             <p>Full-stack blood donation platform with 2 dashboards, smart search & animated UI.</p>
-
-            <div class="project-price"><span class="price-old">₹3,999</span><span class="price-current">₹1,999</span><span class="price-badge">50% OFF</span></div>
+            <div class="project-price"><span class="price-old">₹3,999</span><span
+                class="price-current">₹1,999</span><span class="price-badge">50% OFF</span></div>
             <div class="project-actions">
               <a href="projects.html" class="btn-details">👁️ View Details</a>
               <a href="#" class="btn-buy" onclick="buyProject('Blood Bank Platform', 1999)">🛒 Buy Now</a>
@@ -157,13 +632,14 @@
         </div>
         <div class="project-card card">
           <div class="project-thumb" style="padding:0;background:none;">
-            <img src="assets/images/driveease.png" alt="DriveEase Car Rental" style="width:100%;height:100%;object-fit:cover;">
+            <img src="assets/images/driveease.png" alt="DriveEase Car Rental"
+              style="width:100%;height:100%;object-fit:cover;">
           </div>
           <div class="project-body">
             <h3>DriveEase — Car Rental Platform</h3>
             <p>Premium car rental with fleet browsing, user auth, dark mode & responsive design.</p>
-
-            <div class="project-price"><span class="price-old">₹3,999</span><span class="price-current">₹1,999</span><span class="price-badge">50% OFF</span></div>
+            <div class="project-price"><span class="price-old">₹3,999</span><span
+                class="price-current">₹1,999</span><span class="price-badge">50% OFF</span></div>
             <div class="project-actions">
               <a href="projects.html" class="btn-details">👁️ View Details</a>
               <a href="#" class="btn-buy" onclick="buyProject('DriveEase Car Rental', 1999)">🛒 Buy Now</a>
@@ -172,13 +648,14 @@
         </div>
         <div class="project-card card">
           <div class="project-thumb" style="padding:0;background:none;">
-            <img src="assets/images/maharajaskitchen.png" alt="Maharaja's Kitchen" style="width:100%;height:100%;object-fit:cover;">
+            <img src="assets/images/maharajaskitchen.png" alt="Maharaja's Kitchen"
+              style="width:100%;height:100%;object-fit:cover;">
           </div>
           <div class="project-body">
             <h3>Maharaja's Kitchen — Restaurant</h3>
             <p>Indian fine dining website with elegant UI, menu showcase & smooth animations.</p>
-
-            <div class="project-price"><span class="price-old">₹3,999</span><span class="price-current">₹1,999</span><span class="price-badge">50% OFF</span></div>
+            <div class="project-price"><span class="price-old">₹3,999</span><span
+                class="price-current">₹1,999</span><span class="price-badge">50% OFF</span></div>
             <div class="project-actions">
               <a href="projects.html" class="btn-details">👁️ View Details</a>
               <a href="#" class="btn-buy" onclick="buyProject('Maharajas Kitchen', 1999)">🛒 Buy Now</a>
@@ -192,64 +669,94 @@
     </div>
   </section>
 
-  <!-- NOTES PREVIEW -->
-  <section id="notes-preview">
+  <!-- ============ HOW IT WORKS ============ -->
+  <section id="process">
     <div class="container">
       <div class="section-header center">
-        <div class="section-badge">📝 Quick Access</div>
-        <h2 class="section-title">Popular Notes & Resources</h2>
-        <p class="section-desc">Download comprehensive notes, cheatsheets, and handbooks for your studies.</p>
+        <div class="section-badge">🔄 How It Works</div>
+        <h2 class="section-title">From Zero to Developer in 4 Steps</h2>
+        <p class="section-desc">A simple path to start your coding journey and build real-world projects.</p>
       </div>
-      <div class="cards-grid reveal">
-        <div class="card note-card">
-          <div class="note-icon">🐍</div>
-          <h3>Python Notes</h3>
-          <p>Complete Python programming notes covering basics to advanced concepts.</p>
-          <div class="note-meta"><span>📄 45+ Pages</span><span>⬇️ PDF Download</span></div>
+      <div class="process-grid reveal">
+        <div class="process-step">
+          <span class="ps-icon">📚</span>
+          <h3>Pick a Topic</h3>
+          <p>Choose from Web Dev, Python, Java, AI/ML, Flutter, or DSA.</p>
         </div>
-        <div class="card note-card">
-          <div class="note-icon">🌐</div>
-          <h3>HTML & CSS Notes</h3>
-          <p>Web fundamentals — tags, selectors, flexbox, grid, responsive design.</p>
-          <div class="note-meta"><span>📄 60+ Pages</span><span>⬇️ PDF Download</span></div>
+        <div class="process-step">
+          <span class="ps-icon">🎬</span>
+          <h3>Watch & Learn</h3>
+          <p>Follow free video tutorials and download comprehensive PDF notes.</p>
         </div>
-        <div class="card note-card">
-          <div class="note-icon">⚡</div>
-          <h3>JavaScript Notes</h3>
-          <p>ES6+, DOM manipulation, async/await, closures, and modern JS patterns.</p>
-          <div class="note-meta"><span>📄 50+ Pages</span><span>⬇️ PDF Download</span></div>
+        <div class="process-step">
+          <span class="ps-icon">💻</span>
+          <h3>Build Projects</h3>
+          <p>Practice with real-world projects or buy ready-made deployable ones.</p>
         </div>
-        <div class="card note-card">
-          <div class="note-icon">☕</div>
-          <h3>Java Notes</h3>
-          <p>OOP, collections, multithreading, JDBC — complete Java programming guide.</p>
-          <div class="note-meta"><span>📄 55+ Pages</span><span>⬇️ PDF Download</span></div>
+        <div class="process-step">
+          <span class="ps-icon">🏆</span>
+          <h3>Crack Interviews</h3>
+          <p>Use interview prep guides, DSA patterns, and system design resources.</p>
         </div>
-        <div class="card note-card">
-          <div class="note-icon">🔧</div>
-          <h3>C Language Notes</h3>
-          <p>Pointers, structures, file handling, memory management — from basics to mastery.</p>
-          <div class="note-meta"><span>📄 40+ Pages</span><span>⬇️ PDF Download</span></div>
-        </div>
-        <div class="card note-card">
-          <div class="note-icon">📊</div>
-          <h3>DSA Notes</h3>
-          <p>Arrays, linked lists, trees, graphs, sorting, DP — interview-ready DSA guide.</p>
-          <div class="note-meta"><span>📄 70+ Pages</span><span>⬇️ PDF Download</span></div>
-        </div>
-      </div>
-      <div style="text-align:center;margin-top:40px;">
-        <a href="notes.html" class="btn-secondary">Browse All Notes →</a>
       </div>
     </div>
   </section>
 
-  <!-- CTA -->
+  <!-- ============ TESTIMONIALS ============ -->
+  <section id="testimonials" style="background:var(--bg-s);">
+    <div class="container">
+      <div class="section-header center">
+        <div class="section-badge">💬 What Students Say</div>
+        <h2 class="section-title">Loved by 500+ Students</h2>
+        <p class="section-desc">Real feedback from learners who've leveled up their skills.</p>
+      </div>
+      <div class="testimonial-grid reveal">
+        <div class="testimonial-card">
+          <div class="tc-stars">⭐⭐⭐⭐⭐</div>
+          <p class="tc-text">"The Blood Bank project I bought was incredible — clean code, proper documentation, and I
+            deployed it in minutes. Saved me weeks of work!"</p>
+          <div class="tc-author">
+            <div class="tc-avatar">R</div>
+            <div>
+              <div class="tc-name">Rohit K.</div>
+              <div class="tc-role">B.Tech Student</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="tc-stars">⭐⭐⭐⭐⭐</div>
+          <p class="tc-text">"Best free notes I've found online. The Python and JavaScript PDFs are super detailed,
+            better than most paid courses. Thank you Yuvraj!"</p>
+          <div class="tc-author">
+            <div class="tc-avatar">S</div>
+            <div>
+              <div class="tc-name">Sneha M.</div>
+              <div class="tc-role">CS Student</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="tc-stars">⭐⭐⭐⭐⭐</div>
+          <p class="tc-text">"The interview prep guide helped me crack my first internship! DSA patterns and system
+            design basics were exactly what I needed."</p>
+          <div class="tc-author">
+            <div class="tc-avatar">A</div>
+            <div>
+              <div class="tc-name">Amit P.</div>
+              <div class="tc-role">Frontend Intern</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CTA ============ -->
   <section>
     <div class="cta-section reveal">
-      <div class="section-badge">🚀 Get Started</div>
-      <h2>Start Your Coding Journey Today</h2>
-      <p>Join hundreds of students learning to code with free resources, real projects, and hands-on tutorials.</p>
+      <div class="section-badge">🚀 Ready to Start?</div>
+      <h2>Your Coding Journey Begins Here</h2>
+      <p>Join 500+ students who are learning, building, and growing their tech careers — for free.</p>
       <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
         <a href="tutorials.html" class="btn-primary">Start Learning →</a>
         <a href="https://youtube.com/@codewith.yuvraj-p8d" target="_blank" class="btn-secondary">📺 YouTube Channel</a>
@@ -257,33 +764,39 @@
     </div>
   </section>
 
-  <!-- FOOTER -->
+  <!-- ============ FOOTER ============ -->
   <footer class="footer" id="footer">
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
           <div class="nav-logo">&lt;/&gt; CodeWithYuvraj</div>
-          <p>Free tech education platform by Yuvraj Aargade. Learn programming, build real projects, and grow your career.</p>
+          <p>Free tech education platform by Yuvraj. Learn programming, build real projects, and grow your career.</p>
           <div class="footer-social">
-            <a href="https://instagram.com/codewith.yuvraj" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
-            <a href="https://youtube.com/@codewith.yuvraj-p8d" target="_blank" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
-            <a href="https://t.me/codewithyuvraj" target="_blank" title="Telegram"><i class="fa-brands fa-telegram"></i></a>
-            <a href="https://github.com/Yuvraj-Aargade-8261" target="_blank" title="GitHub"><i class="fa-brands fa-github"></i></a>
-            <a href="https://linkedin.com/in/yuvrajaargade" target="_blank" title="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+            <a href="https://instagram.com/codewith.yuvraj" target="_blank" title="Instagram"><i
+                class="fa-brands fa-instagram"></i></a>
+            <a href="https://youtube.com/@codewith.yuvraj-p8d" target="_blank" title="YouTube"><i
+                class="fa-brands fa-youtube"></i></a>
+            <a href="https://t.me/codewithyuvraj" target="_blank" title="Telegram"><i
+                class="fa-brands fa-telegram"></i></a>
+            <a href="https://github.com/Yuvraj-Aargade-8261" target="_blank" title="GitHub"><i
+                class="fa-brands fa-github"></i></a>
+            <a href="https://linkedin.com/in/yuvrajaargade" target="_blank" title="LinkedIn"><i
+                class="fa-brands fa-linkedin-in"></i></a>
           </div>
         </div>
         <div class="footer-col">
           <h4>Quick Links</h4>
           <a href="index.html">Home</a>
           <a href="projects.html">Projects</a>
+          <a href="resources.html">Resources</a>
           <a href="contact.html">Contact</a>
         </div>
         <div class="footer-col">
-          <h4>Resources</h4>
+          <h4>Learn</h4>
           <a href="tutorials.html">Tutorials</a>
           <a href="notes.html">Notes</a>
           <a href="blog.html">Blog</a>
-          <a href="notes.html">Cheatsheets</a>
+          <a href="resources.html">Roadmaps</a>
         </div>
         <div class="footer-col">
           <h4>Connect</h4>
@@ -294,11 +807,12 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p>
+        <p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj | All rights reserved.</p>
       </div>
     </div>
   </footer>
 
   <script src="js/main.js"></script>
 </body>
+
 </html>
