@@ -25,8 +25,8 @@
         <!-- Contact Form -->
         <div class="reveal">
           <h2 style="font-size:1.5rem;font-weight:800;margin-bottom:8px;">Send a Message</h2>
-          <p style="color:var(--tx2);margin-bottom:32px;font-size:0.9rem;">Fill out the form below and I'll get back to you as soon as possible.</p>
-          <form class="contact-form" id="contactForm" onsubmit="handleSubmit(event)">
+          <p style="color:var(--tx2);margin-bottom:32px;font-size:0.9rem;">Fill out the form below for a quick demo submission. This form currently shows a frontend success state and does not send data to a backend.</p>
+          <form class="contact-form" id="contactForm">
             <div class="form-group">
               <label for="name">Full Name *</label>
               <input type="text" id="name" name="name" placeholder="Your full name" required>
@@ -114,19 +114,19 @@
     <div class="container">
       <div class="section-header center"><div class="section-badge">❓ FAQ</div><h2 class="section-title">Frequently Asked Questions</h2></div>
       <div style="max-width:700px;margin:0 auto;" class="reveal">
-        <div class="card" style="margin-bottom:16px;cursor:pointer;" onclick="this.querySelector('.faq-answer').style.display=this.querySelector('.faq-answer').style.display==='block'?'none':'block';this.querySelector('.faq-toggle').textContent=this.querySelector('.faq-answer').style.display==='block'?'−':'+';">
+        <div class="card" data-faq-item style="margin-bottom:16px;cursor:pointer;">
           <div style="display:flex;justify-content:space-between;align-items:center;"><h3 style="font-size:0.95rem;">Are all the resources free?</h3><span class="faq-toggle" style="font-size:1.3rem;color:var(--p);font-weight:700;">+</span></div>
           <p class="faq-answer" style="display:none;margin-top:12px;color:var(--tx2);font-size:0.9rem;">Yes! All notes, cheatsheets, tutorials, and project resources on CodeWithYuvraj are completely free. My mission is to make quality tech education accessible to everyone.</p>
         </div>
-        <div class="card" style="margin-bottom:16px;cursor:pointer;" onclick="this.querySelector('.faq-answer').style.display=this.querySelector('.faq-answer').style.display==='block'?'none':'block';this.querySelector('.faq-toggle').textContent=this.querySelector('.faq-answer').style.display==='block'?'−':'+';">
+        <div class="card" data-faq-item style="margin-bottom:16px;cursor:pointer;">
           <div style="display:flex;justify-content:space-between;align-items:center;"><h3 style="font-size:0.95rem;">Can I contribute to the projects?</h3><span class="faq-toggle" style="font-size:1.3rem;color:var(--p);font-weight:700;">+</span></div>
           <p class="faq-answer" style="display:none;margin-top:12px;color:var(--tx2);font-size:0.9rem;">Absolutely! All projects are open-source on GitHub. Feel free to fork, contribute via pull requests, or raise issues. Collaboration is always welcome!</p>
         </div>
-        <div class="card" style="margin-bottom:16px;cursor:pointer;" onclick="this.querySelector('.faq-answer').style.display=this.querySelector('.faq-answer').style.display==='block'?'none':'block';this.querySelector('.faq-toggle').textContent=this.querySelector('.faq-answer').style.display==='block'?'−':'+';">
+        <div class="card" data-faq-item style="margin-bottom:16px;cursor:pointer;">
           <div style="display:flex;justify-content:space-between;align-items:center;"><h3 style="font-size:0.95rem;">How can I request specific notes or tutorials?</h3><span class="faq-toggle" style="font-size:1.3rem;color:var(--p);font-weight:700;">+</span></div>
           <p class="faq-answer" style="display:none;margin-top:12px;color:var(--tx2);font-size:0.9rem;">Send me a message through the contact form above or DM me on Instagram/Telegram. I regularly take suggestions for new content.</p>
         </div>
-        <div class="card" style="cursor:pointer;" onclick="this.querySelector('.faq-answer').style.display=this.querySelector('.faq-answer').style.display==='block'?'none':'block';this.querySelector('.faq-toggle').textContent=this.querySelector('.faq-answer').style.display==='block'?'−':'+';">
+        <div class="card" data-faq-item style="cursor:pointer;">
           <div style="display:flex;justify-content:space-between;align-items:center;"><h3 style="font-size:0.95rem;">Are you available for freelance projects?</h3><span class="faq-toggle" style="font-size:1.3rem;color:var(--p);font-weight:700;">+</span></div>
           <p class="faq-answer" style="display:none;margin-top:12px;color:var(--tx2);font-size:0.9rem;">Yes, I'm open to freelance opportunities, especially in full-stack web development, mobile apps (Flutter), and AI-integrated systems. Let's discuss your project!</p>
         </div>
@@ -137,15 +137,5 @@
   <footer class="footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><div class="nav-logo">&lt;/&gt; CodeWithYuvraj</div><p>Free tech education platform by Yuvraj Aargade.</p><div class="footer-social"><a href="https://instagram.com/codewith.yuvraj" target="_blank"><i class="fa-brands fa-instagram"></i></a><a href="https://youtube.com/@codewith.yuvraj-p8d" target="_blank"><i class="fa-brands fa-youtube"></i></a><a href="https://t.me/codewithyuvraj" target="_blank"><i class="fa-brands fa-telegram"></i></a><a href="https://github.com/Yuvraj-Aargade-8261" target="_blank"><i class="fa-brands fa-github"></i></a><a href="https://linkedin.com/in/yuvrajaargade" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a></div></div><div class="footer-col"><h4>Quick Links</h4><a href="index.html">Home</a><a href="projects.html">Projects</a><a href="contact.html">Contact</a></div><div class="footer-col"><h4>Resources</h4><a href="tutorials.html">Tutorials</a><a href="notes.html">Notes</a><a href="blog.html">Blog</a></div><div class="footer-col"><h4>Connect</h4><a href="https://instagram.com/codewith.yuvraj" target="_blank">Instagram</a><a href="https://youtube.com/@codewith.yuvraj-p8d" target="_blank">YouTube</a><a href="https://t.me/codewithyuvraj" target="_blank">Telegram</a><a href="https://github.com/Yuvraj-Aargade-8261" target="_blank">GitHub</a></div></div><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade</p></div></div></footer>
 
   <script src="js/main.js"></script>
-  <script>
-    function handleSubmit(e) {
-      e.preventDefault();
-      const form = document.getElementById('contactForm');
-      const success = document.getElementById('formSuccess');
-      form.style.display = 'none';
-      success.style.display = 'block';
-      setTimeout(() => { form.reset(); form.style.display = 'flex'; success.style.display = 'none'; }, 4000);
-    }
-  </script>
 </body>
 </html>

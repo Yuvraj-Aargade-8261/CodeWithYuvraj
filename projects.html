@@ -7,13 +7,13 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="projects-page">
   <nav class="navbar"><div class="container"><a href="index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="index.html">Home</a><a href="projects.html">Projects</a><a href="tutorials.html">Tutorials</a><a href="notes.html">Notes</a><a href="blog.html">Blog</a><a href="resources.html">Resources</a><a href="contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
   <div class="mobile-nav" id="mobileNav"><a href="index.html">Home</a><a href="projects.html">Projects</a><a href="tutorials.html">Tutorials</a><a href="notes.html">Notes</a><a href="blog.html">Blog</a><a href="resources.html">Resources</a><a href="contact.html">Contact</a></div>
 
 
   <!-- SECTION 1: FREELANCE & STUDENT PROJECTS -->
-  <section>
+  <section class="page-top-space">
     <div class="container">
       <div class="section-header center">
         <div class="section-badge">🛒 Available for Purchase</div>
@@ -36,8 +36,8 @@
 
             <div class="project-price"><span class="price-old">₹3,999</span><span class="price-current">₹1,999</span><span class="price-badge">50% OFF</span></div>
             <div class="project-actions">
-              <a href="#" class="btn-details" onclick="viewDetails('Blood Bank & Donor Platform')">👁️ View Details</a>
-              <a href="#" class="btn-buy" onclick="buyProject('Blood Bank Platform', 1999)">🛒 Buy Now</a>
+              <a href="#" class="btn-details" data-view-details="Blood Bank & Donor Platform">👁️ View Details</a>
+              <a href="#" class="btn-buy" data-buy-project="Blood Bank Platform" data-project-price="1999">🛒 Buy Now</a>
             </div>
           </div>
         </div>
@@ -51,8 +51,8 @@
 
             <div class="project-price"><span class="price-old">₹3,999</span><span class="price-current">₹1,999</span><span class="price-badge">50% OFF</span></div>
             <div class="project-actions">
-              <a href="#" class="btn-details" onclick="viewDetails('DriveEase Car Rental')">👁️ View Details</a>
-              <a href="#" class="btn-buy" onclick="buyProject('DriveEase Car Rental', 1999)">🛒 Buy Now</a>
+              <a href="#" class="btn-details" data-view-details="DriveEase Car Rental">👁️ View Details</a>
+              <a href="#" class="btn-buy" data-buy-project="DriveEase Car Rental" data-project-price="1999">🛒 Buy Now</a>
             </div>
           </div>
         </div>
@@ -66,8 +66,8 @@
 
             <div class="project-price"><span class="price-old">₹3,999</span><span class="price-current">₹1,999</span><span class="price-badge">50% OFF</span></div>
             <div class="project-actions">
-              <a href="#" class="btn-details" onclick="viewDetails('Maharajas Kitchen')">👁️ View Details</a>
-              <a href="#" class="btn-buy" onclick="buyProject('Maharajas Kitchen', 1999)">🛒 Buy Now</a>
+              <a href="#" class="btn-details" data-view-details="Maharajas Kitchen">👁️ View Details</a>
+              <a href="#" class="btn-buy" data-buy-project="Maharajas Kitchen" data-project-price="1999">🛒 Buy Now</a>
             </div>
           </div>
         </div>
@@ -81,8 +81,8 @@
 
             <div class="project-price"><span class="price-old">₹3,999</span><span class="price-current">₹1,999</span><span class="price-badge">50% OFF</span></div>
             <div class="project-actions">
-              <a href="#" class="btn-details" onclick="viewDetails('Horizon Hostel Management')">👁️ View Details</a>
-              <a href="#" class="btn-buy" onclick="buyProject('Horizon Hostel Management', 1999)">🛒 Buy Now</a>
+              <a href="#" class="btn-details" data-view-details="Horizon Hostel Management">👁️ View Details</a>
+              <a href="#" class="btn-buy" data-buy-project="Horizon Hostel Management" data-project-price="1999">🛒 Buy Now</a>
             </div>
           </div>
         </div>
@@ -96,8 +96,8 @@
 
             <div class="project-price"><span class="price-old">₹3,999</span><span class="price-current">₹1,999</span><span class="price-badge">50% OFF</span></div>
             <div class="project-actions">
-              <a href="#" class="btn-details" onclick="viewDetails('FitTrack Fitness App')">👁️ View Details</a>
-              <a href="#" class="btn-buy" onclick="buyProject('FitTrack Fitness App', 1999)">🛒 Buy Now</a>
+              <a href="#" class="btn-details" data-view-details="FitTrack Fitness App">👁️ View Details</a>
+              <a href="#" class="btn-buy" data-buy-project="FitTrack Fitness App" data-project-price="1999">🛒 Buy Now</a>
             </div>
           </div>
         </div>
@@ -111,8 +111,8 @@
 
             <div class="project-price"><span class="price-old">₹3,999</span><span class="price-current">₹1,999</span><span class="price-badge">50% OFF</span></div>
             <div class="project-actions">
-              <a href="#" class="btn-details" onclick="viewDetails('HabitForge Habit Tracker')">👁️ View Details</a>
-              <a href="#" class="btn-buy" onclick="buyProject('HabitForge Habit Tracker', 1999)">🛒 Buy Now</a>
+              <a href="#" class="btn-details" data-view-details="HabitForge Habit Tracker">👁️ View Details</a>
+              <a href="#" class="btn-buy" data-buy-project="HabitForge Habit Tracker" data-project-price="1999">🛒 Buy Now</a>
             </div>
           </div>
         </div>
@@ -138,7 +138,7 @@
             <p>AI-powered clinical decision support platform with 4 role-based dashboards (Admin, Doctor, Receptionist, Patient), JWT auth, 151-disease prediction using BiGRU+CNN+Attention model, Gemini 2.0 Flash integration, 30+ API endpoints.</p>
 
             <div class="project-actions">
-              <a href="#" class="btn-details" onclick="viewDetails('Hospital Management System')">👁️ View Details</a>
+              <a href="#" class="btn-details" data-view-details="Hospital Management System">👁️ View Details</a>
               <a href="contact.html" class="btn-buy" style="background:linear-gradient(135deg,#f43f5e,#e11d48);">💬 Contact for Price</a>
             </div>
           </div>
@@ -152,7 +152,7 @@
             <p>Cross-platform telemedicine with 3 role-based dashboards, AI symptom checker, 4-language multilingual support, WebRTC video consultations, and TensorFlow Lite on-device models.</p>
 
             <div class="project-actions">
-              <a href="#" class="btn-details" onclick="viewDetails('ApnaClinic Telemedicine')">👁️ View Details</a>
+              <a href="#" class="btn-details" data-view-details="ApnaClinic Telemedicine">👁️ View Details</a>
               <a href="contact.html" class="btn-buy" style="background:linear-gradient(135deg,#f43f5e,#e11d48);">💬 Contact for Price</a>
             </div>
           </div>
@@ -164,7 +164,7 @@
             <p>Native Android geofencing-based attendance system with 95% accuracy, biometric auth, payroll PDF generation, and shift scheduling.</p>
 
             <div class="project-actions">
-              <a href="#" class="btn-details" onclick="viewDetails('TrackEasy Attendance Tracker')">👁️ View Details</a>
+              <a href="#" class="btn-details" data-view-details="TrackEasy Attendance Tracker">👁️ View Details</a>
               <a href="contact.html" class="btn-buy" style="background:linear-gradient(135deg,#f43f5e,#e11d48);">💬 Contact for Price</a>
             </div>
           </div>

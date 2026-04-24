@@ -8,6 +8,10 @@ document.addEventListener('DOMContentLoaded', () => {
   initTypingEffect();
   initFilters();
   initMobileNav();
+  initProjectActionDelegates();
+  initContactForm();
+  initFaqToggles();
+  hardenExternalLinks();
   setActiveNav();
 });
 
@@ -42,32 +46,30 @@ function initMobileNav() {
   const mobileNav = document.querySelector('.mobile-nav');
   if (!hamburger || !mobileNav) return;
   hamburger.addEventListener('click', () => {
-    mobileNav.classList.toggle('active');
-    hamburger.classList.toggle('active');
-    const spans = hamburger.querySelectorAll('span');
-    if (mobileNav.classList.contains('active')) {
-      spans[0].style.transform = 'rotate(45deg) translate(5px,5px)';
-      spans[1].style.opacity = '0';
-      spans[2].style.transform = 'rotate(-45deg) translate(5px,-5px)';
-      document.body.style.overflow = 'hidden';
-    } else {
-      spans[0].style.transform = 'none';
-      spans[1].style.opacity = '1';
-      spans[2].style.transform = 'none';
-      document.body.style.overflow = '';
-    }
+    toggleMobileMenu(mobileNav, hamburger, !mobileNav.classList.contains('active'));
   });
   mobileNav.querySelectorAll('a').forEach(a => {
     a.addEventListener('click', () => {
-      mobileNav.classList.remove('active');
-      hamburger.classList.remove('active');
-      const spans = hamburger.querySelectorAll('span');
-      spans[0].style.transform = 'none';
-      spans[1].style.opacity = '1';
-      spans[2].style.transform = 'none';
-      document.body.style.overflow = '';
+      toggleMobileMenu(mobileNav, hamburger, false);
     });
   });
+}
+
+function toggleMobileMenu(mobileNav, hamburger, shouldOpen) {
+  const spans = hamburger.querySelectorAll('span');
+  mobileNav.classList.toggle('active', shouldOpen);
+  hamburger.classList.toggle('active', shouldOpen);
+  if (shouldOpen) {
+    spans[0].style.transform = 'rotate(45deg) translate(5px,5px)';
+    spans[1].style.opacity = '0';
+    spans[2].style.transform = 'rotate(-45deg) translate(5px,-5px)';
+    document.body.style.overflow = 'hidden';
+  } else {
+    spans[0].style.transform = 'none';
+    spans[1].style.opacity = '1';
+    spans[2].style.transform = 'none';
+    document.body.style.overflow = '';
+  }
 }
 
 // ===== ACTIVE NAV LINK =====
@@ -199,7 +201,7 @@ function createBuyModal() {
       <div class="modal-price" id="modalPrice"></div>
       <p>Get the complete source code, documentation, and setup guide. Contact us to purchase this project.</p>
       <div class="modal-actions">
-        <a id="modalWhatsApp" href="#" target="_blank" class="btn-whatsapp">
+        <a id="modalWhatsApp" href="#" target="_blank" rel="noopener noreferrer" class="btn-whatsapp">
           <i class="fa-brands fa-whatsapp"></i> WhatsApp
         </a>
         <a id="modalEmail" href="#" class="btn-email">
@@ -214,8 +216,8 @@ function createBuyModal() {
   });
 }
 
-function buyProject(name, price) {
-  event.preventDefault();
+function buyProject(name, price, e) {
+  if (e) e.preventDefault();
   createBuyModal();
   const overlay = document.querySelector('.buy-modal-overlay');
   document.getElementById('modalProjectName').textContent = name;
@@ -239,9 +241,10 @@ function closeBuyModal() {
   }
 }
 
-function viewDetails(name) {
-  event.preventDefault();
-  const card = event.target.closest('.project-card');
+function viewDetails(name, e) {
+  if (e) e.preventDefault();
+  const trigger = e ? e.target : null;
+  const card = trigger ? trigger.closest('.project-card, .resource-card, .roadmap-card') : null;
   if (card) {
     card.scrollIntoView({ behavior: 'smooth', block: 'center' });
     card.style.borderColor = 'rgba(124,58,237,0.5)';
@@ -251,6 +254,55 @@ function viewDetails(name) {
       card.style.boxShadow = '';
     }, 2000);
   }
+}
+
+function initProjectActionDelegates() {
+  document.querySelectorAll('[data-buy-project]').forEach(link => {
+    link.addEventListener('click', (e) => {
+      const price = Number(link.dataset.projectPrice || 0);
+      buyProject(link.dataset.buyProject, price, e);
+    });
+  });
+
+  document.querySelectorAll('[data-view-details]').forEach(link => {
+    link.addEventListener('click', (e) => {
+      viewDetails(link.dataset.viewDetails, e);
+    });
+  });
+}
+
+function initContactForm() {
+  const form = document.getElementById('contactForm');
+  if (!form) return;
+  const successMsg = document.getElementById('formSuccess');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (successMsg) successMsg.style.display = 'block';
+    form.style.display = 'none';
+    form.reset();
+  });
+}
+
+function initFaqToggles() {
+  document.querySelectorAll('[data-faq-item]').forEach(item => {
+    item.addEventListener('click', () => {
+      const answer = item.querySelector('.faq-answer');
+      const toggle = item.querySelector('.faq-toggle');
+      if (!answer || !toggle) return;
+      const isOpen = answer.style.display === 'block';
+      answer.style.display = isOpen ? 'none' : 'block';
+      toggle.textContent = isOpen ? '+' : '−';
+    });
+  });
+}
+
+function hardenExternalLinks() {
+  document.querySelectorAll('a[target="_blank"]').forEach(link => {
+    const relValues = new Set((link.getAttribute('rel') || '').split(/\s+/).filter(Boolean));
+    relValues.add('noopener');
+    relValues.add('noreferrer');
+    link.setAttribute('rel', Array.from(relValues).join(' '));
+  });
 }
 
 // Close modal on Escape key
