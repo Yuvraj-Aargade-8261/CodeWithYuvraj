@@ -42,25 +42,30 @@ function initMobileNav() {
   const mobileNav = document.querySelector('.mobile-nav');
   if (!hamburger || !mobileNav) return;
   hamburger.addEventListener('click', () => {
-    mobileNav.classList.toggle('open');
+    mobileNav.classList.toggle('active');
+    hamburger.classList.toggle('active');
     const spans = hamburger.querySelectorAll('span');
-    if (mobileNav.classList.contains('open')) {
+    if (mobileNav.classList.contains('active')) {
       spans[0].style.transform = 'rotate(45deg) translate(5px,5px)';
       spans[1].style.opacity = '0';
       spans[2].style.transform = 'rotate(-45deg) translate(5px,-5px)';
+      document.body.style.overflow = 'hidden';
     } else {
       spans[0].style.transform = 'none';
       spans[1].style.opacity = '1';
       spans[2].style.transform = 'none';
+      document.body.style.overflow = '';
     }
   });
   mobileNav.querySelectorAll('a').forEach(a => {
     a.addEventListener('click', () => {
-      mobileNav.classList.remove('open');
+      mobileNav.classList.remove('active');
+      hamburger.classList.remove('active');
       const spans = hamburger.querySelectorAll('span');
       spans[0].style.transform = 'none';
       spans[1].style.opacity = '1';
       spans[2].style.transform = 'none';
+      document.body.style.overflow = '';
     });
   });
 }
