@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Part 7: Advanced Python — Python Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 7 of Python Handbook: decorators, generators, iterators, closures, regex, recursion, and memory concepts with bilingual explanations.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/handbook.css">
+</head>
+<body class="handbook-wrapper">
+  <nav class="navbar"><div class="container"><a href="../../../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../../../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
+
+  <div class="handbook-page">
+    <div class="hb-topbar">
+      <div class="hb-topbar-inner">
+        <div class="hb-breadcrumbs">
+          <a href="index.html">Python Handbook</a>
+          <span class="hb-muted">/</span>
+          <span>Part 7</span>
+          <span class="hb-muted">·</span>
+          <a href="#m7-1">7.1</a><a href="#m7-2">7.2</a><a href="#m7-3">7.3</a><a href="#m7-4">7.4</a><a href="#m7-5">7.5</a><a href="#m7-6">7.6</a><a href="#m7-7">7.7</a>
+        </div>
+        <div class="hb-progress" aria-label="Reading progress">
+          <div class="hb-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="hb-progress-fill"></div></div>
+          <div class="hb-progress-label">0%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chapter-header" data-chapter-num="07">
+      <div class="chapter-part-label">📖 Part 7 — Advanced Python</div>
+      <h1 class="chapter-title">Write Smarter with <span class="gradient-text">Advanced Constructs</span></h1>
+      <p class="chapter-subtitle">Level up with decorators, generators, regex, recursion, and memory-aware coding.</p>
+      <div class="chapter-meta"><span>📄 Modules 7.1 – 7.7</span><span>⏱️ 75–115 min read</span><span>💻 42+ Examples</span></div>
+    </div>
+
+    <div class="callout callout-tip"><strong>How to study Part 7:</strong> Focus on "why this concept exists" before syntax. Advanced Python becomes easy when purpose is clear.</div>
+
+    <div class="hb-mini-toc">
+      <div class="hb-mini-title">📍 Part 7 Modules</div>
+      <div class="hb-mini-links">
+        <a href="#m7-1">7.1 Decorators</a>
+        <a href="#m7-2">7.2 Generators</a>
+        <a href="#m7-3">7.3 Iterators</a>
+        <a href="#m7-4">7.4 Closures</a>
+        <a href="#m7-5">7.5 Regex</a>
+        <a href="#m7-6">7.6 Recursion</a>
+        <a href="#m7-7">7.7 Memory basics</a>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">🚀 Advanced Lens — Part 7</div>
+      <p class="explain-en">
+        Advanced Python is about abstraction power and performance mindset. Use decorators for cross-cutting concerns, generators for memory-efficient streams,
+        regex for precise text operations, and recursion only where it improves expressiveness with clear base cases.
+      </p>
+      <div class="explain-hi">
+        <span class="hi-label">Hindi mein samjho</span>
+        Part 7 me focus advanced constructs pe hai, lekin goal readable aur efficient code hi hona chahiye.
+        Har advanced feature tab use karo jab wo complexity kam kare aur design better banaye.
+      </div>
+    </div>
+
+    <div class="module-section" id="m7-1">
+      <div class="module-header"><div class="module-number">7.1</div><h2 class="module-title">Decorators — Behavior Extension Without Editing Core Function</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">What is a decorator?</h3>
+        <p class="explain-en">
+          A decorator wraps a function and adds extra behavior like logging, timing, validation, caching, or authentication.
+          Conceptually, decorators are a clean way to implement <strong>cross-cutting concerns</strong> — features that apply across many functions without duplicating code.
+          In industry, decorators power frameworks (routing, permissions), observability (timing/logging), and policy enforcement (rate limits, retries).
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Decorator ka use tab hota hai jab aap same “extra behavior” multiple functions pe apply karna chahte ho, bina har function me copy-paste ke. Real projects me logging, auth checks, caching jaise features decorators se cleanly implement hote hain.</div>
+      </div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Basic decorator pattern</h3>
+        <p class="explain-en">
+          Use a nested wrapper function and return it from the decorator. Apply using <code>@decorator_name</code>.
+          The wrapper must accept <code>*args</code> and <code>**kwargs</code> to stay compatible with many function signatures.
+          A common professional improvement is using <code>functools.wraps</code> to preserve original function metadata like name and docstring.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Decorator ke andar wrapper function hota hai jo original function ko call karta hai. Wrapper me <code>*args</code> aur <code>**kwargs</code> rakhna best practice hai. Professional code me <code>functools.wraps</code> se original function ka name/docstring preserve kiya jata hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — wraps (professional)</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">from</span> functools <span class="keyword">import</span> wraps
+
+<span class="keyword">def</span> <span class="function">log_call</span>(func):
+    @wraps(func)
+    <span class="keyword">def</span> <span class="function">wrapper</span>(*args, **kwargs):
+        <span class="builtin">print</span>(<span class="string">f"Calling: {func.__name__}"</span>)
+        <span class="keyword">return</span> func(*args, **kwargs)
+    <span class="keyword">return</span> wrapper</pre></div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> <code>@wraps</code> preserves metadata (name/docstring), which helps debugging and tools like help().</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — simple decorator</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">def</span> <span class="function">log_call</span>(func):
+    <span class="keyword">def</span> <span class="function">wrapper</span>(*args, **kwargs):
+        <span class="builtin">print</span>(<span class="string">f"Calling: {func.__name__}"</span>)
+        <span class="keyword">return</span> func(*args, **kwargs)
+    <span class="keyword">return</span> wrapper
+
+@log_call
+<span class="keyword">def</span> <span class="function">add</span>(a, b):
+    <span class="keyword">return</span> a + b
+
+<span class="builtin">print</span>(add(<span class="number">2</span>, <span class="number">3</span>))</pre></div>
+          <div class="code-output">Calling: add\n5</div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> <code>@log_call</code> injects logging before original function execution.</div>
+      </div>
+    </div>
+
+    <div class="module-section" id="m7-2">
+      <div class="module-header"><div class="module-number">7.2</div><h2 class="module-title">Generators — Lazy Data Production with <code>yield</code></h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Why generators?</h3>
+        <p class="explain-en">
+          Generators produce values one by one, saving memory compared to storing full lists.
+          They are ideal for large data streams (logs, files, API pagination) where you want to process items incrementally.
+          A generator helps you build “pipeline-style” programs: transform, filter, and consume data without loading everything at once.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Generator streaming processing ke liye best hota hai. Jab data bahut large ho (file lines, logs, paginated API results), tab generator memory efficient solution deta hai kyunki ye one-by-one values produce karta hai.</div>
+      </div>
+      <div class="concept-block">
+        <h3 class="concept-heading"><code>yield</code> based function</h3>
+        <p class="explain-en">
+          <code>yield</code> pauses function state and resumes later, making stream-style processing efficient.
+          Unlike <code>return</code>, which ends the function, <code>yield</code> produces a value and “remembers” the execution position.
+          This is why generators are the foundation behind Python’s lazy iteration patterns.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>yield</code> function ko stop nahi karta; ye ek value dekar function state ko preserve karta hai. Next call par function wahi se resume hota hai. Isi behavior ki wajah se generators lazy aur memory efficient hote hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — generator</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">def</span> <span class="function">count_up_to</span>(n):
+    i = <span class="number">1</span>
+    <span class="keyword">while</span> i &lt;= n:
+        <span class="keyword">yield</span> i
+        i += <span class="number">1</span>
+
+<span class="keyword">for</span> x <span class="keyword">in</span> count_up_to(<span class="number">4</span>):
+    <span class="builtin">print</span>(x)</pre></div>
+          <div class="code-output">1\n2\n3\n4</div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> Each iteration requests next value; full sequence is never stored at once.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Generator expressions (one-liner pipelines)</h3>
+        <p class="explain-en">
+          Generator expressions are like list comprehensions but lazy: they generate values on demand.
+          They are ideal for streaming transforms, especially when combined with <code>sum()</code>, <code>any()</code>, <code>all()</code>, and file iteration.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Generator expression list comprehension jaisa hota hai, but memory me list create nahi karta. Ye streaming pipelines ke liye best choice hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — generator expression</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre>nums = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]
+total_even_squares = <span class="builtin">sum</span>(n*n <span class="keyword">for</span> n <span class="keyword">in</span> nums <span class="keyword">if</span> n % <span class="number">2</span> == <span class="number">0</span>)
+<span class="builtin">print</span>(total_even_squares)</pre></div>
+          <div class="code-output">20</div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> Squares are generated lazily and consumed by <code>sum()</code> without creating an intermediate list.</div>
+      </div>
+    </div>
+
+    <div class="module-section" id="m7-3">
+      <div class="module-header"><div class="module-number">7.3</div><h2 class="module-title">Iterators — <code>iter()</code>, <code>next()</code>, Iteration Protocol</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Iterator fundamentals</h3>
+        <p class="explain-en">
+          An iterator is an object that yields one value at a time via <code>next()</code> until exhausted.
+          Python’s <code>for</code> loop is built on the iterator protocol: it calls <code>iter()</code> to get an iterator and then repeatedly calls <code>next()</code>.
+          Understanding this protocol makes generators, comprehensions, and many standard-library tools easier to reason about.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Iterator ek object hota hai jo sequentially values deta hai. <code>for</code> loop internally <code>iter()</code> aur <code>next()</code> hi use karta hai. Ye concept samajhne se generators aur lazy iteration deeply clear ho jati hai.</div>
+      </div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Manual iteration</h3>
+        <p class="explain-en">Use <code>iter()</code> to create iterator and <code>next()</code> to consume values manually.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>for</code> loop internally iterator use karta hai; yahan hum manually wahi process dekhte hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — iter/next</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre>nums = [<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>]
+it = <span class="builtin">iter</span>(nums)
+<span class="builtin">print</span>(<span class="builtin">next</span>(it))
+<span class="builtin">print</span>(<span class="builtin">next</span>(it))
+<span class="builtin">print</span>(<span class="builtin">next</span>(it))</pre></div>
+          <div class="code-output">10\n20\n30</div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> Iterator state advances after each <code>next()</code> call.</div>
+      </div>
+    </div>
+
+    <div class="module-section" id="m7-4">
+      <div class="module-header"><div class="module-number">7.4</div><h2 class="module-title">Closures — Capturing Outer Scope State</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Closure concept</h3>
+        <p class="explain-en">
+          A closure is an inner function that remembers variables from its enclosing scope even after the outer function finishes.
+          Closures enable configuration “baked into” functions, which is powerful for building small reusable tools without needing a full class.
+          They also power decorators internally.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Closure me inner function outer variables ko remember karta hai. Isse aap configuration-based functions bana sakte ho (factory style). Decorators ka base concept bhi closures hi hote hain.</div>
+      </div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Factory-style closure example</h3>
+        <p class="explain-en">Closures are useful for generating configured functions without creating full classes.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Closure se customizable function factory ban sakti hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — closure</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">def</span> <span class="function">make_multiplier</span>(factor):
+    <span class="keyword">def</span> <span class="function">multiply</span>(value):
+        <span class="keyword">return</span> value * factor
+    <span class="keyword">return</span> multiply
+
+double = make_multiplier(<span class="number">2</span>)
+<span class="builtin">print</span>(double(<span class="number">9</span>))</pre></div>
+          <div class="code-output">18</div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> Returned function remembers <code>factor=2</code> from outer scope.</div>
+      </div>
+    </div>
+
+    <div class="module-section" id="m7-5">
+      <div class="module-header"><div class="module-number">7.5</div><h2 class="module-title">Regular Expressions — Pattern Matching and Text Extraction</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Why regex?</h3>
+        <p class="explain-en">
+          Regex helps validate and extract structured text like emails, phone numbers, IDs, and logs.
+          In production pipelines, regex is commonly used for log parsing, input validation, data extraction, and sanitization.
+          The key skill is balancing power with readability — overly complex patterns become maintenance risks.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Regex text se patterns extract/validate karne ka powerful tool hai. Real apps me log parsing aur validation me use hota hai. Advanced rule: regex ko readable rakho, warna future maintenance hard ho jati hai.</div>
+      </div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Basic regex matching</h3>
+        <p class="explain-en">Use <code>re.findall</code>, <code>re.search</code>, and predefined character classes for common tasks.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>re</code> module se multiple matches nikalna aur specific pattern detect karna easy hota hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — regex findall</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">import</span> re
+
+text = <span class="string">"Contacts: yuvraj@gmail.com, team@codewithyuvraj.in"</span>
+emails = re.findall(<span class="string">r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"</span>, text)
+<span class="builtin">print</span>(emails)</pre></div>
+          <div class="code-output">['yuvraj@gmail.com', 'team@codewithyuvraj.in']</div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> Pattern extracts all email-like strings from raw text.</div>
+      </div>
+    </div>
+
+    <div class="module-section" id="m7-6">
+      <div class="module-header"><div class="module-number">7.6</div><h2 class="module-title">Recursion — Function Calling Itself</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Recursion mindset</h3>
+        <p class="explain-en">
+          Recursion solves a problem by reducing it into smaller subproblems until a base condition is reached.
+          It is most natural for tree-like structures (folders, JSON trees) and divide-and-conquer algorithms.
+          Always reason about: base case, progress toward base case, and maximum recursion depth.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Recursion tab best hota hai jab problem naturally “smaller same problem” me break hota ho (tree, folders). Advanced mindset: base case, progress (har call me input smaller), aur depth limit hamesha consider karo.</div>
+      </div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Factorial recursive example</h3>
+        <p class="explain-en">Always define clear base case to avoid infinite recursion and stack overflow.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Base case recursion ka brake hai; bina base case function endlessly call hota rahega.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — recursion</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">def</span> <span class="function">factorial</span>(n):
+    <span class="keyword">if</span> n == <span class="number">0</span> <span class="keyword">or</span> n == <span class="number">1</span>:
+        <span class="keyword">return</span> <span class="number">1</span>
+    <span class="keyword">return</span> n * factorial(n - <span class="number">1</span>)
+
+<span class="builtin">print</span>(factorial(<span class="number">5</span>))</pre></div>
+          <div class="code-output">120</div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> Function multiplies current <code>n</code> with factorial of smaller input until base case.</div>
+      </div>
+    </div>
+
+    <div class="module-section" id="m7-7">
+      <div class="module-header"><div class="module-number">7.7</div><h2 class="module-title">Memory and Performance Basics — References, Mutability, Optimization Mindset</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Memory model essentials</h3>
+        <p class="explain-en">
+          Python variables hold references to objects, not the objects themselves.
+          Understanding mutability prevents accidental side effects in large programs, especially when passing lists/dicts between functions.
+          When two variables reference the same mutable object, changes through one reference appear in the other.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Python me variables references hold karte hain. Mutable objects (list/dict) shared reference ke through change ho sakte hain, jisse side effects aate hain. Advanced practice: copy vs reference ka difference clearly samjho.</div>
+      </div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Simple performance habits</h3>
+        <p class="explain-en">Use appropriate data structures, avoid premature optimization, and profile before making performance changes.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Optimization tab karo jab bottleneck clear ho. Pehle correct aur readable code likho, phir measure karke optimize karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — mutability check</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre>a = [<span class="number">1</span>, <span class="number">2</span>]
+b = a
+b.append(<span class="number">3</span>)
+<span class="builtin">print</span>(a, b)</pre></div>
+          <div class="code-output">[1, 2, 3] [1, 2, 3]</div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> Both variables point to same list object, so mutation appears through both references.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Copy vs reference (practical bug prevention)</h3>
+        <p class="explain-en">
+          When sharing mutable objects, decide whether you want shared state or independent state.
+          Use <code>copy()</code> for shallow copies (top-level), and <code>copy.deepcopy()</code> for nested structures.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Mutable objects share karte waqt decide karo: shared state chahiye ya independent. Shallow copy top-level copy karta hai, deep copy nested objects bhi copy karta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — shallow vs deep copy</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">import</span> copy
+
+data = [[<span class="number">1</span>, <span class="number">2</span>], [<span class="number">3</span>, <span class="number">4</span>]]
+shallow = data.copy()
+deep = copy.deepcopy(data)
+
+data[<span class="number">0</span>].append(<span class="number">99</span>)
+<span class="builtin">print</span>(shallow)  <span class="comment"># changed</span>
+<span class="builtin">print</span>(deep)     <span class="comment"># unchanged</span></pre></div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> Shallow copy shares nested lists; deep copy creates fully independent nested objects.</div>
+      </div>
+
+      <div class="practice-box">
+        <div class="practice-title">✏️ Practice Exercises — Part 7</div>
+        <ol>
+          <li>Create a timing decorator to measure execution time of a function.</li>
+          <li>Build a generator that yields prime numbers up to N.</li>
+          <li>Write regex validators for email, phone, and PIN code.</li>
+          <li>Implement recursive functions for Fibonacci and digit sum.</li>
+          <li>Demonstrate mutable vs immutable behavior using custom examples.</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="handbook-nav">
+      <a href="part6.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Part 6: File Handling & Error Management</div></div></a>
+      <a href="part8.html" class="nav-btn next"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Part 8: Standard Library & Industry Practices →</div></div><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+  </div>
+
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
+  <script src="../../../js/main.js"></script>
+  <script>
+    (() => {
+      document.querySelectorAll('.code-block').forEach((block) => {
+        const pre = block.querySelector('.code-body pre');
+        const header = block.querySelector('.code-header');
+        if (!pre || !header) return;
+        let actions = header.querySelector('.code-actions');
+        if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); }
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'code-copy-btn';
+        btn.textContent = 'Copy';
+        btn.addEventListener('click', async () => {
+          try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; }
+          catch { btn.textContent = 'Failed'; }
+          finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); }
+        });
+        actions.prepend(btn);
+      });
+      const fill = document.querySelector('.hb-progress-fill');
+      const label = document.querySelector('.hb-progress-label');
+      if (fill && label) {
+        const update = () => {
+          const h = document.documentElement;
+          const denom = (h.scrollHeight - h.clientHeight) || 1;
+          const pct = Math.max(0, Math.min(1, h.scrollTop / denom));
+          fill.style.width = (pct * 100).toFixed(0) + '%';
+          label.textContent = (pct * 100).toFixed(0) + '%';
+        };
+        document.addEventListener('scroll', update, { passive: true });
+        update();
+      }
+    })();
+  </script>
+</body>
+</html>

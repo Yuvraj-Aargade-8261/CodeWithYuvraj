@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Part 5: Object-Oriented Programming — Python Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 5 of Python Handbook: classes, objects, encapsulation, inheritance, polymorphism, abstraction, and magic methods with bilingual explanations.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/handbook.css">
+</head>
+<body class="handbook-wrapper">
+  <nav class="navbar"><div class="container"><a href="../../../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../../../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
+
+  <div class="handbook-page">
+    <div class="hb-topbar">
+      <div class="hb-topbar-inner">
+        <div class="hb-breadcrumbs">
+          <a href="index.html">Python Handbook</a>
+          <span class="hb-muted">/</span>
+          <span>Part 5</span>
+          <span class="hb-muted">·</span>
+          <a href="#m5-1">5.1</a><a href="#m5-2">5.2</a><a href="#m5-3">5.3</a><a href="#m5-4">5.4</a><a href="#m5-5">5.5</a><a href="#m5-6">5.6</a><a href="#m5-7">5.7</a>
+        </div>
+        <div class="hb-progress" aria-label="Reading progress">
+          <div class="hb-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="hb-progress-fill"></div></div>
+          <div class="hb-progress-label">0%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chapter-header" data-chapter-num="05">
+      <div class="chapter-part-label">📖 Part 5 — Object-Oriented Programming</div>
+      <h1 class="chapter-title">Model Real Systems with <span class="gradient-text">OOP</span></h1>
+      <p class="chapter-subtitle">Design reusable software with classes, inheritance, and abstraction.</p>
+      <div class="chapter-meta"><span>📄 Modules 5.1 – 5.7</span><span>⏱️ 70–110 min read</span><span>💻 40+ Examples</span></div>
+    </div>
+
+    <div class="callout callout-tip"><strong>How to study Part 5:</strong> Build tiny real-world models (Student, BankAccount, Product, Order) to internalize OOP concepts.</div>
+
+    <div class="hb-mini-toc">
+      <div class="hb-mini-title">📍 Part 5 Modules</div>
+      <div class="hb-mini-links">
+        <a href="#m5-1">5.1 Class & Object</a>
+        <a href="#m5-2">5.2 Constructor</a>
+        <a href="#m5-3">5.3 Encapsulation</a>
+        <a href="#m5-4">5.4 Inheritance</a>
+        <a href="#m5-5">5.5 Polymorphism</a>
+        <a href="#m5-6">5.6 Abstraction</a>
+        <a href="#m5-7">5.7 Magic methods</a>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">🚀 Advanced Lens — Part 5</div>
+      <p class="explain-en">
+        OOP becomes advanced when you model domain boundaries, not just syntax. Use encapsulation for invariants, inheritance only for true "is-a" relationships,
+        and composition where flexibility is needed. Focus on maintainable architecture over over-engineering.
+      </p>
+      <div class="explain-hi">
+        <span class="hi-label">Hindi mein samjho</span>
+        OOP ka real advanced use tab hota hai jab aap business entities ko sahi tareeke se model karte ho. Har jagah inheritance use karna zaruri nahi;
+        maintainable design choose karna important hai.
+      </div>
+    </div>
+
+    <div class="module-section" id="m5-1">
+      <div class="module-header"><div class="module-number">5.1</div><h2 class="module-title">Class and Object Fundamentals</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">What are classes and objects?</h3>
+        <p class="explain-en">
+          A class is a blueprint that defines attributes (state) and methods (behavior), while an object is a concrete runtime instance of that blueprint.
+          OOP helps model real entities and business workflows in a structured way, making systems easier to extend and maintain as complexity grows.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Class ek design template hai aur object uska real runtime instance. OOP se aap real-world entities (user, order, account) ko clean structure me model kar sakte ho.</div>
+      </div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Creating first class</h3>
+        <p class="explain-en">
+          Use class syntax to define properties and methods. Object behavior is accessed through dot notation, which binds method calls to specific object state.
+          This object-method binding is what enables reusable logic with instance-specific behavior.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Class ke andar attributes aur methods define karte hain. Jab object se method call hota hai to wahi method object ke current data ke saath execute hota hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — class and object</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">class</span> <span class="function">Student</span>:
+    <span class="keyword">def</span> <span class="function">introduce</span>(self):
+        <span class="builtin">print</span>(<span class="string">"I am a student"</span>)
+
+s1 = Student()
+s1.introduce()</pre></div>
+          <div class="code-output">I am a student</div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> <code>Student</code> is blueprint; <code>s1</code> is actual object calling method.</div>
+      </div>
+    </div>
+
+    <div class="module-section" id="m5-2">
+      <div class="module-header"><div class="module-number">5.2</div><h2 class="module-title">Constructors and Instance Attributes</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Role of <code>__init__</code></h3>
+        <p class="explain-en">
+          Constructor initializes object state when object is created. It ensures each object starts with valid required values.
+          In professional design, constructors often enforce baseline invariants so invalid object states are prevented from the beginning.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>__init__</code> object creation ke time initial values set karta hai. Advanced use me constructor validation bhi karta hai taaki object invalid state me create na ho.</div>
+      </div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Parameterized object creation</h3>
+        <p class="explain-en">
+          Pass values during object creation to produce custom instances from the same class.
+          This allows one class definition to represent many domain entities with different state values.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Ek hi class se multiple objects ban sakte hain jinke values alag-alag hote hain. Isi se reusable domain modeling possible hoti hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — constructor usage</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">class</span> <span class="function">Product</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(self, name, price):
+        self.name = name
+        self.price = price
+
+p = Product(<span class="string">"Keyboard"</span>, <span class="number">1499</span>)
+<span class="builtin">print</span>(p.name, p.price)</pre></div>
+          <div class="code-output">Keyboard 1499</div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> Constructor receives values and stores them in object attributes.</div>
+      </div>
+    </div>
+
+    <div class="module-section" id="m5-3">
+      <div class="module-header"><div class="module-number">5.3</div><h2 class="module-title">Encapsulation — Data Protection and Controlled Access</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Encapsulation basics</h3>
+        <p class="explain-en">
+          Encapsulation bundles data and behavior together and restricts unsafe external state changes.
+          Sensitive attributes should be modified through controlled methods where validation, logging, and constraints can be applied.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Encapsulation ka objective hai sensitive data ko direct access se protect karna. State update methods ke through hota hai jahan rules apply kiye ja sakte hain.</div>
+      </div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Private-like attributes convention</h3>
+        <p class="explain-en">
+          Python uses naming conventions like <code>_name</code> and <code>__name</code> to indicate protected/private intent.
+          While not absolute security, these conventions communicate design boundaries and reduce accidental misuse.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Single underscore protected intent dikhata hai aur double underscore name-mangling karta hai. Ye strict security nahi hai, lekin design discipline enforce karta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — encapsulation example</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">class</span> <span class="function">BankAccount</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(self, balance):
+        self.__balance = balance
+    <span class="keyword">def</span> <span class="function">deposit</span>(self, amount):
+        <span class="keyword">if</span> amount &gt; <span class="number">0</span>:
+            self.__balance += amount
+    <span class="keyword">def</span> <span class="function">get_balance</span>(self):
+        <span class="keyword">return</span> self.__balance
+
+acc = BankAccount(<span class="number">1000</span>)
+acc.deposit(<span class="number">500</span>)
+<span class="builtin">print</span>(acc.get_balance())</pre></div>
+          <div class="code-output">1500</div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> Balance is not directly modified from outside; updates go through methods.</div>
+      </div>
+    </div>
+
+    <div class="module-section" id="m5-4">
+      <div class="module-header"><div class="module-number">5.4</div><h2 class="module-title">Inheritance — Reusing and Extending Behavior</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Why inheritance?</h3>
+        <p class="explain-en">
+          Inheritance lets child classes reuse parent functionality and add specialized behavior, reducing duplicated code.
+          It should be used where a true "is-a" relationship exists; otherwise composition is often safer and more flexible.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Inheritance tabhi use karo jab real "is-a" relation ho (jaise Car is a Vehicle). Galat use se tight coupling aur maintenance issues badh sakte hain.</div>
+      </div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Parent-child example</h3>
+        <p class="explain-en">
+          Child class inherits parent methods automatically and can override methods when required.
+          Method overriding enables specialization while preserving shared interface contracts.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Child class parent methods inherit karti hai aur zarurat par same method ka customized version likh sakti hai. Isse shared contract rehta hai lekin behavior specific ban jata hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — inheritance</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">class</span> <span class="function">Vehicle</span>:
+    <span class="keyword">def</span> <span class="function">start</span>(self):
+        <span class="builtin">print</span>(<span class="string">"Vehicle started"</span>)
+
+<span class="keyword">class</span> <span class="function">Car</span>(Vehicle):
+    <span class="keyword">def</span> <span class="function">start</span>(self):
+        <span class="builtin">print</span>(<span class="string">"Car engine started"</span>)
+
+c = Car()
+c.start()</pre></div>
+          <div class="code-output">Car engine started</div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> <code>Car</code> inherits from <code>Vehicle</code> and overrides <code>start()</code>.</div>
+      </div>
+    </div>
+
+    <div class="module-section" id="m5-5">
+      <div class="module-header"><div class="module-number">5.5</div><h2 class="module-title">Polymorphism — Same Interface, Different Behavior</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Polymorphism concept</h3>
+        <p class="explain-en">
+          Polymorphism allows writing generic code that works with different object types through a shared method interface.
+          This decouples caller logic from concrete class types and improves extensibility.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Polymorphism se caller ko object type details ki zarurat nahi padti; shared method interface enough hota hai. Isse system me naye types add karna easy hota hai.</div>
+      </div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Duck typing style</h3>
+        <p class="explain-en">
+          Python follows duck typing: if an object supports the required behavior, it can be used.
+          This favors protocol-like design where capabilities matter more than inheritance hierarchy.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Python behavior-driven language hai: agar required method present hai to object valid maana jata hai. Is approach se flexible design possible hota hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — polymorphism</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">class</span> <span class="function">Dog</span>:
+    <span class="keyword">def</span> <span class="function">speak</span>(self):
+        <span class="builtin">print</span>(<span class="string">"Woof"</span>)
+
+<span class="keyword">class</span> <span class="function">Cat</span>:
+    <span class="keyword">def</span> <span class="function">speak</span>(self):
+        <span class="builtin">print</span>(<span class="string">"Meow"</span>)
+
+<span class="keyword">for</span> animal <span class="keyword">in</span> [Dog(), Cat()]:
+    animal.speak()</pre></div>
+          <div class="code-output">Woof\nMeow</div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> Loop calls same method <code>speak()</code> but output changes by object type.</div>
+      </div>
+    </div>
+
+    <div class="module-section" id="m5-6">
+      <div class="module-header"><div class="module-number">5.6</div><h2 class="module-title">Abstraction — Expose Essentials, Hide Complexity</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Abstraction in design</h3>
+        <p class="explain-en">
+          Abstraction means exposing only necessary interface while hiding implementation details.
+          It reduces cognitive load for users of your code and allows internals to evolve without breaking external usage.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Abstraction ka fayda hai simple interface. User ko internal complexity samajhne ki zarurat nahi padti, aur implementation future me safely change ki ja sakti hai.</div>
+      </div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Abstract base class example</h3>
+        <p class="explain-en">
+          Use <code>abc</code> module to define contracts that child classes must implement.
+          This ensures consistent interfaces across implementations and catches missing methods early.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Abstract base class interface contract enforce karti hai. Agar child required method implement na kare to design error early stage me hi catch ho jata hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — abstraction</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">from</span> abc <span class="keyword">import</span> ABC, abstractmethod
+
+<span class="keyword">class</span> <span class="function">Payment</span>(ABC):
+    @abstractmethod
+    <span class="keyword">def</span> <span class="function">pay</span>(self, amount):
+        <span class="keyword">pass</span>
+
+<span class="keyword">class</span> <span class="function">UPIPayment</span>(Payment):
+    <span class="keyword">def</span> <span class="function">pay</span>(self, amount):
+        <span class="builtin">print</span>(<span class="string">f"Paid {amount} via UPI"</span>)
+
+UPIPayment().pay(<span class="number">799</span>)</pre></div>
+          <div class="code-output">Paid 799 via UPI</div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> <code>Payment</code> defines contract; <code>UPIPayment</code> provides actual implementation.</div>
+      </div>
+    </div>
+
+    <div class="module-section" id="m5-7">
+      <div class="module-header"><div class="module-number">5.7</div><h2 class="module-title">Magic Methods — <code>__str__</code>, <code>__len__</code>, Operator Behavior</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">What are magic methods?</h3>
+        <p class="explain-en">
+          Magic (dunder) methods allow custom object behavior for built-in operations like printing, length, addition, and comparisons.
+          They make custom classes feel native within Python expressions and standard APIs.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Magic methods se custom objects Python ecosystem me naturally behave karte hain. Isse class usability aur developer experience dono improve hote hain.</div>
+      </div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Custom representation and length</h3>
+        <p class="explain-en">
+          Implement <code>__str__</code> for readable output and <code>__len__</code> to support <code>len(obj)</code>.
+          These methods improve debugging clarity and allow objects to integrate with common built-in workflows.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>__str__</code> readable display deta hai aur <code>__len__</code> object ko built-in <code>len()</code> ke saath compatible banata hai. Ye debugging aur usability dono enhance karta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — magic methods</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">class</span> <span class="function">Playlist</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(self, songs):
+        self.songs = songs
+    <span class="keyword">def</span> <span class="function">__str__</span>(self):
+        <span class="keyword">return</span> <span class="string">f"Playlist with {len(self.songs)} songs"</span>
+    <span class="keyword">def</span> <span class="function">__len__</span>(self):
+        <span class="keyword">return</span> <span class="builtin">len</span>(self.songs)
+
+p = Playlist([<span class="string">"Song A"</span>, <span class="string">"Song B"</span>])
+<span class="builtin">print</span>(p)
+<span class="builtin">print</span>(<span class="builtin">len</span>(p))</pre></div>
+          <div class="code-output">Playlist with 2 songs\n2</div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> Object now behaves naturally with <code>print()</code> and <code>len()</code>.</div>
+      </div>
+
+      <div class="practice-box">
+        <div class="practice-title">✏️ Practice Exercises — Part 5</div>
+        <ol>
+          <li>Create a <code>Student</code> class with constructor, grade calculator, and custom <code>__str__</code>.</li>
+          <li>Build a <code>BankAccount</code> class with encapsulated balance and deposit/withdraw methods.</li>
+          <li>Create parent class <code>Employee</code> and child classes <code>Developer</code>, <code>Designer</code>.</li>
+          <li>Implement polymorphic <code>pay()</code> method for different payment types.</li>
+          <li>Design an abstract base class for notification systems (email, SMS, push).</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="handbook-nav">
+      <a href="part4.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Part 4: Functions & Modules</div></div></a>
+      <a href="part6.html" class="nav-btn next"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Part 6: File Handling & Error Management →</div></div><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+  </div>
+
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
+  <script src="../../../js/main.js"></script>
+  <script>
+    (() => {
+      document.querySelectorAll('.code-block').forEach((block) => {
+        const pre = block.querySelector('.code-body pre');
+        const header = block.querySelector('.code-header');
+        if (!pre || !header) return;
+        let actions = header.querySelector('.code-actions');
+        if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); }
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'code-copy-btn';
+        btn.textContent = 'Copy';
+        btn.addEventListener('click', async () => {
+          try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; }
+          catch { btn.textContent = 'Failed'; }
+          finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); }
+        });
+        actions.prepend(btn);
+      });
+      const fill = document.querySelector('.hb-progress-fill');
+      const label = document.querySelector('.hb-progress-label');
+      if (fill && label) {
+        const update = () => {
+          const h = document.documentElement;
+          const denom = (h.scrollHeight - h.clientHeight) || 1;
+          const pct = Math.max(0, Math.min(1, h.scrollTop / denom));
+          fill.style.width = (pct * 100).toFixed(0) + '%';
+          label.textContent = (pct * 100).toFixed(0) + '%';
+        };
+        document.addEventListener('scroll', update, { passive: true });
+        update();
+      }
+    })();
+  </script>
+</body>
+</html>

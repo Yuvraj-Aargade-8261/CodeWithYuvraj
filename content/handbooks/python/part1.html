@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Part 1: Python Foundations — Python Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 1 of Python Handbook: Introduction, setup, variables, data types, operators, input/output, comments and docstrings with bilingual explanations.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/handbook.css">
+</head>
+<body class="handbook-wrapper">
+  <nav class="navbar"><div class="container"><a href="../../../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../../../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
+
+  <div class="handbook-page">
+    <div class="hb-topbar">
+      <div class="hb-topbar-inner">
+        <div class="hb-breadcrumbs">
+          <a href="index.html">Python Handbook</a>
+          <span class="hb-muted">/</span>
+          <span>Part 1</span>
+          <span class="hb-muted">·</span>
+          <a href="#m1-1">1.1</a>
+          <a href="#m1-2">1.2</a>
+          <a href="#m1-3">1.3</a>
+          <a href="#m1-4">1.4</a>
+          <a href="#m1-5">1.5</a>
+          <a href="#m1-6">1.6</a>
+        </div>
+        <div class="hb-progress" aria-label="Reading progress">
+          <div class="hb-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+            <div class="hb-progress-fill"></div>
+          </div>
+          <div class="hb-progress-label">0%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chapter-header" data-chapter-num="01">
+      <div class="chapter-part-label">📖 Part 1 — Python Foundations</div>
+      <h1 class="chapter-title">Start Strong with <span class="gradient-text">Python Basics</span></h1>
+      <p class="chapter-subtitle">From zero to confident beginner with industry-style fundamentals.</p>
+      <div class="chapter-meta"><span>📄 Modules 1.1 – 1.6</span><span>⏱️ 65–100 min read</span><span>💻 40+ Examples</span></div>
+    </div>
+
+    <div class="callout callout-tip">
+      <strong>How to study Part 1:</strong> Read each concept, run each snippet, and then modify values yourself. Active practice gives permanent understanding.
+    </div>
+
+    <div class="hb-mini-toc">
+      <div class="hb-mini-title">📍 Part 1 Modules</div>
+      <div class="hb-mini-links">
+        <a href="#m1-1">1.1 Introduction</a>
+        <a href="#m1-2">1.2 Environment Setup</a>
+        <a href="#m1-3">1.3 Variables & Types</a>
+        <a href="#m1-4">1.4 Operators</a>
+        <a href="#m1-5">1.5 Input / Output</a>
+        <a href="#m1-6">1.6 Comments & Docs</a>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">🚀 Advanced Lens — Part 1</div>
+      <p class="explain-en">
+        To master foundations at an industry level, do not stop at syntax. For each topic, ask: what runtime behavior happens, what failure cases appear,
+        and how this concept scales in a real codebase. Example: with variables, think mutability and object identity; with input/output, think validation and
+        user-error handling; with comments/docstrings, think maintainability across teams.
+      </p>
+      <div class="explain-hi">
+        <span class="hi-label">Hindi mein samjho</span>
+        Part 1 ko advanced level par samajhne ke liye sirf syntax yaad mat karo. Har concept ke saath runtime behavior, edge cases, aur real project usage samjho.
+        Isi mindset se aap beginner se professional direction mein move karte ho.
+      </div>
+    </div>
+
+    <div class="module-section" id="m1-1">
+      <div class="module-header"><div class="module-number">1.1</div><h2 class="module-title">Introduction to Python — History, Features, Why Python, Python 2 vs 3</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">What is Python?</h3>
+        <p class="explain-en">
+          Python is a high-level, interpreted, general-purpose programming language designed to prioritize readability and developer productivity.
+          It allows developers to build scripts, web apps, automation tools, data pipelines, AI systems, and backend services with clear syntax and fast development speed.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Python ek readable aur powerful language hai jise beginner se lekar professional teams tak sab use karte hain. Iski syntax clean hai, isliye code samajhna aur maintain karna easy hota hai.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Quick history and growth</h3>
+        <p class="explain-en">
+          Python was created by Guido van Rossum and first released in 1991.
+          Over time, it became one of the most adopted languages due to simplicity, huge library ecosystem, and strong community support.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Python 1991 se exist karta hai, aur aaj AI, web, data, automation har jagah use hota hai. Iski popularity ka reason hai simplicity + powerful ecosystem.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Why Python in 2026?</h3>
+        <p class="explain-en">
+          Python remains relevant because of versatile use-cases and strong job demand.
+          Learning Python gives a practical base for full-stack development, data science, automation, cloud scripting, and interview preparation.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Python seekhne se aap multiple domains me switch kar sakte ho: web dev, data science, scripting, testing, AI. Career flexibility ke liye ye best language hai.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Python 2 vs Python 3</h3>
+        <p class="explain-en">
+          Python 2 is officially discontinued; modern development uses Python 3 only.
+          Python 3 brings cleaner Unicode handling, better libraries, improved syntax features, and long-term ecosystem support.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Python 2 obsolete ho chuka hai. Hamesha Python 3 use karo, kyunki wahi supported hai aur industry standard bhi wahi hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python 3 print style</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="builtin">print</span>(<span class="string">"Hello, Python 3!"</span>)</pre></div>
+          <div class="code-output">Hello, Python 3!</div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> In Python 3, <code>print</code> is a function and must use parentheses.</div>
+      </div>
+    </div>
+
+    <div class="module-section" id="m1-2">
+      <div class="module-header"><div class="module-number">1.2</div><h2 class="module-title">Environment Setup — Installation, IDE setup, first run</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Install Python correctly</h3>
+        <p class="explain-en">
+          Correct installation ensures your terminal and IDE both use the same interpreter.
+          Always verify with version commands immediately after installation.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Install ke baad verify karna mandatory hai. Agar terminal aur IDE alag interpreter use karenge to confusion aur errors aayenge.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-solid fa-terminal"></i> Verify installation</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre>python --version
+pip --version</pre></div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> If commands return version numbers, installation is successful and PATH is configured.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Choose and configure IDE</h3>
+        <p class="explain-en">
+          VS Code and PyCharm are both good options. What matters most is selecting the correct interpreter and running code consistently.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>IDE koi bhi use karo, but correct Python interpreter select karna sabse important step hai.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">First Python program</h3>
+        <p class="explain-en">
+          Your first program validates the complete setup flow: file creation, script execution, output rendering.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Pehla program run karke aap confirm karte ho ki environment properly setup hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> hello.py</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="builtin">print</span>(<span class="string">"Welcome to CodeWithYuvraj Python Handbook!"</span>)</pre></div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> Save as <code>hello.py</code> and run via terminal using <code>python hello.py</code>.</div>
+      </div>
+    </div>
+
+    <div class="module-section" id="m1-3">
+      <div class="module-header"><div class="module-number">1.3</div><h2 class="module-title">Variables & Data Types — int, float, str, bool, type(), casting</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Variables and assignment</h3>
+        <p class="explain-en">
+          A variable is a named reference to a value object in memory.
+          Clear naming and purposeful assignment are essential for maintainable code.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Variable ek label hai jo value ko hold karta hai. Meaningful names use karne se code readable banta hai.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Reference vs value (the mental model professionals use)</h3>
+        <p class="explain-en">
+          In Python, variables do not “store the value inside”; they store a <strong>reference</strong> to an object.
+          This distinction explains many real bugs: when two variables refer to the same mutable object, a change through one name is visible through the other.
+          This is why teams talk about <em>shared state</em> and <em>side effects</em>.
+        </p>
+        <div class="explain-hi">
+          <span class="hi-label">Hindi mein samjho</span>
+          Python me variable value ko “andar” store nahi karta — variable object ka reference store karta hai.
+          Agar 2 variables same mutable object ko point kar rahe hain, to ek se change karoge to dusre me bhi change dikhega.
+          Isi ko shared state / side effects bolte hain.
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — shared reference example</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre>a = [<span class="number">1</span>, <span class="number">2</span>]
+b = a
+b.append(<span class="number">3</span>)
+<span class="builtin">print</span>(a, b)</pre></div>
+          <div class="code-output">[1, 2, 3] [1, 2, 3]</div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> <code>b = a</code> copies the reference, not the list. Both names point to the same list object.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Core data types</h3>
+        <p class="explain-en">
+          Python includes numeric types (<code>int</code>, <code>float</code>), text type (<code>str</code>), and logical type (<code>bool</code>).
+          Choosing the correct type improves validation and prevents logic bugs.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Data type decide karta hai value ka behavior kya hoga. Sahi type choose karna bug prevention ka basic rule hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — basic types</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre>age = <span class="number">21</span>
+price = <span class="number">99.5</span>
+name = <span class="string">"Yuvraj"</span>
+is_active = <span class="keyword">True</span>
+<span class="builtin">print</span>(<span class="builtin">type</span>(age), <span class="builtin">type</span>(price), <span class="builtin">type</span>(name), <span class="builtin">type</span>(is_active))</pre></div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> <code>type()</code> shows the runtime data type of each variable.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Type casting</h3>
+        <p class="explain-en">
+          Type casting converts values from one type to another when required for computation or formatting.
+          Always validate values before conversion to avoid runtime errors.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Casting ka matlab type convert karna. User input string aata hai, use number banane ke liye <code>int()</code> ya <code>float()</code> use hota hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — casting</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre>raw = <span class="string">"42"</span>
+num = <span class="builtin">int</span>(raw)
+<span class="builtin">print</span>(num + <span class="number">8</span>)</pre></div>
+          <div class="code-output">50</div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> String <code>"42"</code> becomes integer <code>42</code>, so arithmetic works correctly.</div>
+      </div>
+    </div>
+
+    <div class="module-section" id="m1-4">
+      <div class="module-header"><div class="module-number">1.4</div><h2 class="module-title">Operators — Arithmetic, Comparison, Logical, Assignment, Identity, Membership</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Arithmetic and comparison operators</h3>
+        <p class="explain-en">
+          Arithmetic operators perform calculations while comparison operators produce boolean outputs for decisions.
+          Together they power scoring, billing, eligibility, and validation logic.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Arithmetic operators se calculation hota hai, comparison operators se decision ke liye True/False milta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — arithmetic + comparison</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre>a, b = <span class="number">10</span>, <span class="number">3</span>
+<span class="builtin">print</span>(a + b, a // b, a % b)
+<span class="builtin">print</span>(a &gt; b, a == b)</pre></div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> First line computes values; second line checks relationships and returns booleans.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Logical, identity, membership operators</h3>
+        <p class="explain-en">
+          Logical operators combine conditions, identity checks object reference equality, and membership checks value existence in a collection.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>and/or/not</code> conditions combine karte hain, <code>is</code> object identity check karta hai, aur <code>in</code> collection membership check karta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — logical / identity / membership</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre>age = <span class="number">22</span>
+is_verified = <span class="keyword">True</span>
+<span class="builtin">print</span>(age &gt;= <span class="number">18</span> <span class="keyword">and</span> is_verified)
+
+roles = [<span class="string">"user"</span>, <span class="string">"editor"</span>]
+<span class="builtin">print</span>(<span class="string">"admin"</span> <span class="keyword">in</span> roles)</pre></div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> First check ensures both conditions are true; second checks if value exists inside list.</div>
+      </div>
+    </div>
+
+    <div class="module-section" id="m1-5">
+      <div class="module-header"><div class="module-number">1.5</div><h2 class="module-title">Input / Output — print(), input(), f-strings, formatting</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">print() and output formatting</h3>
+        <p class="explain-en">
+          <code>print()</code> is used to show output, logs, and debug values.
+          Parameters like <code>sep</code> and <code>end</code> allow better output control.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>print()</code> sirf text dikhane ke liye nahi, debugging aur readable output formatting ke liye bhi use hota hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — print formatting</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="builtin">print</span>(<span class="string">"Python"</span>, <span class="string">"Handbook"</span>, sep=<span class="string">" | "</span>)
+<span class="builtin">print</span>(<span class="string">"Loading"</span>, end=<span class="string">"..."</span>)
+<span class="builtin">print</span>(<span class="string">"Done"</span>)</pre></div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> <code>sep</code> sets separator between values, and <code>end</code> changes line ending behavior.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">input() and parsing</h3>
+        <p class="explain-en">
+          <code>input()</code> always returns a string, so numeric operations require parsing using <code>int()</code> or <code>float()</code>.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>User se liya gaya input default string hota hai. Number calculations se pehle convert karna jaruri hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — input parsing</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre>name = <span class="builtin">input</span>(<span class="string">"Enter name: "</span>)
+age = <span class="builtin">int</span>(<span class="builtin">input</span>(<span class="string">"Enter age: "</span>))
+<span class="builtin">print</span>(<span class="string">f"Hello {name}, next year you will be {age + 1}."</span>)</pre></div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> Name stays string, but age is converted to integer for arithmetic use.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Input validation mindset (industry pattern)</h3>
+        <p class="explain-en">
+          Real applications must treat user input as unreliable. Industry-grade programs validate format, range, and business rules before using values.
+          A good pattern is: normalize → validate → convert → handle errors gracefully.
+        </p>
+        <div class="explain-hi">
+          <span class="hi-label">Hindi mein samjho</span>
+          Real apps me input ko trust nahi karte. Pehle normalize (strip/lower), phir validate (empty/range), phir convert, aur error ko gracefully handle karte hain.
+          Yehi production-ready input handling pattern hai.
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — safe input loop</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">while</span> <span class="keyword">True</span>:
+    raw = <span class="builtin">input</span>(<span class="string">"Enter age (18-99): "</span>).strip()
+    <span class="keyword">if</span> <span class="keyword">not</span> raw.isdigit():
+        <span class="builtin">print</span>(<span class="string">"Please enter a number."</span>)
+        <span class="keyword">continue</span>
+    age = <span class="builtin">int</span>(raw)
+    <span class="keyword">if</span> age &lt; <span class="number">18</span> <span class="keyword">or</span> age &gt; <span class="number">99</span>:
+        <span class="builtin">print</span>(<span class="string">"Age out of allowed range."</span>)
+        <span class="keyword">continue</span>
+    <span class="builtin">print</span>(<span class="string">"Accepted age:"</span>, age)
+    <span class="keyword">break</span></pre></div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> Program validates numeric input and range before using the value.</div>
+      </div>
+    </div>
+
+    <div class="module-section" id="m1-6">
+      <div class="module-header"><div class="module-number">1.6</div><h2 class="module-title">Comments & Documentation — single-line, block style, docstrings</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Comments for maintainability</h3>
+        <p class="explain-en">
+          Comments explain intent and context where code alone is not enough.
+          Good comments reduce onboarding time and prevent misunderstandings in team collaboration.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Comments ka use code ka logic explain karne ke liye karo, especially tricky places par. Ye team work me bahut helpful hota hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — comments</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># Calculate final amount after GST</span>
+price = <span class="number">1200</span>
+gst = <span class="number">0.18</span>
+final_amount = price + (price * gst)</pre></div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> The comment explains business purpose of the formula before code execution.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Docstrings and help()</h3>
+        <p class="explain-en">
+          Docstrings are structured documentation strings attached to modules, classes, and functions.
+          Tools and developers use them via <code>help()</code> and autogenerated documentation workflows.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Docstring professional documentation hota hai jo function/class ke purpose aur usage ko clear karta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — docstring</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">def</span> <span class="function">calculate_gst</span>(amount, rate):
+    <span class="string">"""Return total amount after GST.
+
+    Args:
+        amount (float): base amount
+        rate (float): GST rate in decimal form
+    """</span>
+    <span class="keyword">return</span> amount + amount * rate
+
+<span class="builtin">print</span>(calculate_gst(<span class="number">1000</span>, <span class="number">0.18</span>))</pre></div>
+          <div class="code-output">1180.0</div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> Function behavior is documented inside docstring, making the function easier to use and review.</div>
+      </div>
+    </div>
+
+    <div class="practice-box">
+      <div class="practice-title">✏️ Practice Exercises — Part 1</div>
+      <ol>
+        <li>Write a profile script that prints name, age, city, and one career goal using f-string.</li>
+        <li>Take 3 marks as input and print total + average with proper type conversion.</li>
+        <li>Create a simple billing snippet using arithmetic and comparison operators.</li>
+        <li>Write a function with a proper docstring and test using <code>help()</code>.</li>
+        <li>Convert messy text input into clean lowercase tags using string methods.</li>
+      </ol>
+    </div>
+
+    <div class="handbook-nav">
+      <a href="index.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Python Handbook Index</div></div></a>
+      <a href="part2.html" class="nav-btn next"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Part 2: Control Flow & Loops →</div></div><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+  </div>
+
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
+  <script src="../../../js/main.js"></script>
+  <script>
+    (() => {
+      document.querySelectorAll('.code-block').forEach((block) => {
+        const pre = block.querySelector('.code-body pre');
+        const header = block.querySelector('.code-header');
+        if (!pre || !header) return;
+        let actions = header.querySelector('.code-actions');
+        if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); }
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'code-copy-btn';
+        btn.textContent = 'Copy';
+        btn.addEventListener('click', async () => {
+          try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; }
+          catch { btn.textContent = 'Failed'; }
+          finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); }
+        });
+        actions.prepend(btn);
+      });
+      const fill = document.querySelector('.hb-progress-fill');
+      const label = document.querySelector('.hb-progress-label');
+      if (fill && label) {
+        const update = () => {
+          const h = document.documentElement;
+          const denom = (h.scrollHeight - h.clientHeight) || 1;
+          const pct = Math.max(0, Math.min(1, h.scrollTop / denom));
+          fill.style.width = (pct * 100).toFixed(0) + '%';
+          label.textContent = (pct * 100).toFixed(0) + '%';
+        };
+        document.addEventListener('scroll', update, { passive: true });
+        update();
+      }
+    })();
+  </script>
+</body>
+</html>

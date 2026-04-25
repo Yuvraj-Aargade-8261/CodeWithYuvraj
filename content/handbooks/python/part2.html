@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Part 2: Control Flow & Loops — Python Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 2 of Python Handbook: if/elif/else, ternary, for loop, while loop, loop control, and pattern programs with bilingual explanations and industry examples.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/handbook.css">
+</head>
+<body class="handbook-wrapper">
+  <nav class="navbar"><div class="container"><a href="../../../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../../../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
+
+  <div class="handbook-page">
+    <div class="hb-topbar">
+      <div class="hb-topbar-inner">
+        <div class="hb-breadcrumbs">
+          <a href="index.html">Python Handbook</a>
+          <span class="hb-muted">/</span>
+          <span>Part 2</span>
+          <span class="hb-muted">·</span>
+          <a href="#m2-1">2.1</a>
+          <a href="#m2-2">2.2</a>
+          <a href="#m2-3">2.3</a>
+          <a href="#m2-4">2.4</a>
+          <a href="#m2-5">2.5</a>
+          <a href="#m2-6">2.6</a>
+        </div>
+        <div class="hb-progress" aria-label="Reading progress">
+          <div class="hb-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+            <div class="hb-progress-fill"></div>
+          </div>
+          <div class="hb-progress-label">0%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chapter-header" data-chapter-num="02">
+      <div class="chapter-part-label">📖 Part 2 — Control Flow & Loops</div>
+      <h1 class="chapter-title">Decision Making & <span class="gradient-text">Repetition</span></h1>
+      <p class="chapter-subtitle">Faisla aur dohraan: real logic building with if/else, loops, and patterns.</p>
+      <div class="chapter-meta"><span>📄 Modules 2.1 – 2.6</span><span>⏱️ 55–85 min read</span><span>💻 35+ Examples</span></div>
+    </div>
+
+    <div class="callout callout-tip">
+      <strong>How to study Part 2:</strong> Run every code snippet yourself. Control flow is a “thinking skill”, not a memorization topic.
+    </div>
+
+    <div class="hb-mini-toc">
+      <div class="hb-mini-title">📍 Part 2 Modules</div>
+      <div class="hb-mini-links">
+        <a href="#m2-1">2.1 if/elif/else</a>
+        <a href="#m2-2">2.2 Ternary</a>
+        <a href="#m2-3">2.3 for loop</a>
+        <a href="#m2-4">2.4 while loop</a>
+        <a href="#m2-5">2.5 break/continue/pass</a>
+        <a href="#m2-6">2.6 Patterns</a>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">🚀 Advanced Lens — Part 2</div>
+      <p class="explain-en">
+        Advanced control-flow skill means designing decision trees, not just writing if-else blocks. Prioritize condition order, define fallback behavior,
+        and explicitly model invalid states. For loops, think in terms of complexity, data shape, and termination guarantees.
+      </p>
+      <div class="explain-hi">
+        <span class="hi-label">Hindi mein samjho</span>
+        Part 2 ka advanced use tab hota hai jab aap logic design karna start karte ho: kaunsi condition pehle check hogi, invalid input ka kya behavior hoga,
+        aur loop safely terminate kaise hoga. Yehi real project decision-making ka core hai.
+      </div>
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- MODULE 2.1                                             -->
+    <!-- ===================================================== -->
+    <div class="module-section" id="m2-1">
+      <div class="module-header">
+        <div class="module-number">2.1</div>
+        <h2 class="module-title">Conditional Statements — if, elif, else, nested conditions</h2>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">What is control flow?</h3>
+        <p class="explain-en">
+          <strong>Control flow</strong> is the mechanism that determines the order in which statements are executed in a program.
+          Instead of running every line unconditionally, control flow allows Python to make decisions, repeat tasks, and branch into different paths based on conditions.
+          In real-world applications, control flow drives core behavior such as authentication checks, payment status handling, inventory decisions, and user permission logic.
+        </p>
+        <div class="explain-hi">
+          <span class="hi-label">Hindi mein samjho</span>
+          Control flow ka matlab hai program ka execution flow control karna — yani kaunsi line kab chalegi aur kis condition pe chalegi.
+          Python har line ko blindly run nahi karta; conditions ke basis pe alag paths choose karta hai.
+          Real apps mein login checks, payment success/failure, role-based access, aur validation sab control flow se hi handle hote hain.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Truthiness (real-world rule that powers most if statements)</h3>
+        <p class="explain-en">
+          In Python, conditions are not limited to <code>True</code>/<code>False</code> variables. Most objects can be used directly in an <code>if</code>.
+          Python converts the object to a boolean using truthiness rules.
+          This matters in real code because you’ll often check “is there data?” or “did we get a value?” using simple conditions like <code>if items:</code> or <code>if name:</code>.
+        </p>
+        <div class="explain-hi">
+          <span class="hi-label">Hindi mein samjho</span>
+          Python mein <code>if</code> ke andar sirf True/False hi nahi aata. Almost har object truthy/falsy ho sakta hai.
+          Iska real use: “data hai ya nahi?” ko short check karna — jaise <code>if items:</code>, <code>if text:</code>.
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Falsy (treated as False)</th><th>Truthy (treated as True)</th></tr></thead>
+            <tbody>
+              <tr><td><code>0</code>, <code>0.0</code></td><td>Any non-zero number</td></tr>
+              <tr><td><code>""</code> (empty string)</td><td>Non-empty string</td></tr>
+              <tr><td><code>[]</code>, <code>()</code>, <code>{}</code>, <code>set()</code></td><td>Non-empty collections</td></tr>
+              <tr><td><code>None</code></td><td>Any non-None object</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — truthiness in practice</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre>name = "Yuvraj"
+items = []
+token = None
+
+if name:
+    print("Name is present")
+
+if not items:
+    print("No items found")
+
+if token is None:
+    print("Not authenticated")</pre></div>
+          <div class="code-output">Name is present
+No items found
+Not authenticated</div>
+        </div>
+        <div class="callout callout-note">
+          <strong>Example explained:</strong> Empty list is falsy, so <code>not items</code> becomes True. For absence checks, prefer <code>is None</code> for clarity.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Guard clauses (cleaner branching, fewer nested blocks)</h3>
+        <p class="explain-en">
+          A guard clause is an early exit that handles invalid or special cases first.
+          In real code, guard clauses reduce indentation, make the “happy path” obvious, and prevent deep nesting.
+          This is one of the simplest professional upgrades you can apply to control flow.
+        </p>
+        <div class="explain-hi">
+          <span class="hi-label">Hindi mein samjho</span>
+          Guard clause ka matlab: pehle invalid/special case handle karo aur jaldi return/stop karo.
+          Isse indentation kam hota hai aur main logic (happy path) clearly dikhai deta hai.
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — nested vs guard clause</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre>def discount_price(price, is_member):
+    # Guard clauses: reject invalid state early
+    if price is None:
+        return None
+    if price < 0:
+        return None
+
+    # Happy path becomes simple
+    if is_member:
+        return price * 0.9
+    return price</pre></div>
+        </div>
+        <div class="callout callout-note">
+          <strong>Example explained:</strong> Invalid inputs exit immediately, so the remaining logic is flatter and easier to reason about.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Validation patterns (accept-clean-validate vs validate-then-use)</h3>
+        <p class="explain-en">
+          Production code usually follows one of these patterns:
+          <strong>(1) validate-then-use</strong> (reject bad input early), or <strong>(2) accept-clean-validate</strong> (normalize first, then validate).
+          The key idea is: never assume inputs are well-formed — user input, files, environment variables, and API data can all be messy.
+        </p>
+        <div class="explain-hi">
+          <span class="hi-label">Hindi mein samjho</span>
+          Real projects mein input clean nahi hota. Common pattern: pehle normalize (strip/lower) karo, phir validate karo, phir use karo.
+          Ya phir invalid ko early reject kar do (guard clause).
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — normalize then validate</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre>raw = "  YES  "
+text = raw.strip().lower()          # normalize
+
+if text not in {"yes", "no"}:       # validate
+    print("Invalid choice")
+else:
+    print("Choice:", text)</pre></div>
+          <div class="code-output">Choice: yes</div>
+        </div>
+        <div class="callout callout-note">
+          <strong>Example explained:</strong> Normalization prevents tiny formatting differences (spaces, case) from breaking validation.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">if / elif / else basics</h3>
+        <p class="explain-en">
+          The <code>if-elif-else</code> structure is Python’s primary decision-making construct.
+          <code>if</code> evaluates the first condition, <code>elif</code> evaluates additional mutually exclusive conditions, and <code>else</code> acts as a fallback when none of the above conditions are true.
+          Python evaluates these branches from top to bottom and executes only the first matching branch, making ordering extremely important.
+        </p>
+        <div class="explain-hi">
+          <span class="hi-label">Hindi mein samjho</span>
+          <code>if-elif-else</code> Python ka main decision block hai.
+          <code>if</code> pehli condition check karta hai, <code>elif</code> alternative conditions check karta hai, aur <code>else</code> fallback block hota hai.
+          Python top-to-bottom check karta hai aur pehli true condition pe execute karke ruk jata hai.
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — grading logic</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">score</span> = <span class="number">78</span>
+
+<span class="keyword">if</span> score &gt;= <span class="number">90</span>:
+    <span class="builtin">print</span>(<span class="string">"Grade A"</span>)
+<span class="keyword">elif</span> score &gt;= <span class="number">75</span>:
+    <span class="builtin">print</span>(<span class="string">"Grade B"</span>)
+<span class="keyword">elif</span> score &gt;= <span class="number">60</span>:
+    <span class="builtin">print</span>(<span class="string">"Grade C"</span>)
+<span class="keyword">else</span>:
+    <span class="builtin">print</span>(<span class="string">"Need Improvement"</span>)</pre></div>
+          <div class="code-output">Grade B</div>
+        </div>
+        <div class="callout callout-note">
+          <strong>Example explained:</strong> Python checks from top. Since 78 is not &gt;= 90 but is &gt;= 75, it prints Grade B and stops.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Designing conditions correctly (industry logic design)</h3>
+        <p class="explain-en">
+          Writing correct conditions is not only about syntax; it is mainly about <strong>logic ordering</strong> and clarity.
+          In production systems, poorly ordered rules can silently produce wrong outputs even when code has no syntax error.
+          A best practice is to define decision rules in plain language first, prioritize them, and then map them into condition blocks.
+        </p>
+        <div class="explain-hi">
+          <span class="hi-label">Hindi mein samjho</span>
+          Condition likhne se pehle rules clear karo: pehle kaunsi condition check hogi, phir next. Real projects mein galat order se wrong behavior aata hai.
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — order matters</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">age</span> = <span class="number">70</span>
+
+<span class="comment"># Correct: specific case first</span>
+<span class="keyword">if</span> age &gt;= <span class="number">60</span>:
+    <span class="builtin">print</span>(<span class="string">"Senior category"</span>)
+<span class="keyword">elif</span> age &gt;= <span class="number">18</span>:
+    <span class="builtin">print</span>(<span class="string">"Adult category"</span>)
+<span class="keyword">else</span>:
+    <span class="builtin">print</span>(<span class="string">"Minor category"</span>)</pre></div>
+        </div>
+        <div class="callout callout-note">
+          <strong>Example explained:</strong> Rule ordering starts with highest-priority case (senior) first, then adult, then fallback. This avoids wrong classification.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Safer comparisons: <code>is</code> vs <code>==</code> (common real bug)</h3>
+        <p class="explain-en">
+          Use <code>==</code> for value equality and <code>is</code> for identity (same object).
+          A professional rule-of-thumb: only use <code>is</code> with <code>None</code> (and sometimes singletons like <code>True</code>/<code>False</code>).
+          This prevents subtle bugs and makes intent explicit when you’re checking “missing value”.
+        </p>
+        <div class="explain-hi">
+          <span class="hi-label">Hindi mein samjho</span>
+          <code>==</code> value compare karta hai, <code>is</code> same object check karta hai.
+          Missing value check ke liye <code>is None</code> best practice hai — readable aur safe.
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — None checks</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre>value = None
+
+if value is None:
+    print("No value provided")
+
+text = ""
+if text == "":
+    print("Empty string (not None)")</pre></div>
+          <div class="code-output">No value provided
+Empty string (not None)</div>
+        </div>
+        <div class="callout callout-note">
+          <strong>Example explained:</strong> Empty string and None are different states. In real validation, you often treat them differently.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Nested conditions (if inside if)</h3>
+        <p class="explain-en">
+          A nested condition means placing one <code>if</code> block inside another.
+          This pattern is useful when the second decision is meaningful only after the first decision is true.
+          For example, role checks should happen only after login is confirmed, otherwise access rules become logically invalid.
+        </p>
+        <div class="explain-hi">
+          <span class="hi-label">Hindi mein samjho</span>
+          Nested if tab use karo jab inner condition logically outer condition pe depend karti ho. Warna code unnecessarily complex ho jata hai.
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — login access example</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">is_logged_in</span> = <span class="keyword">True</span>
+<span class="keyword">role</span> = <span class="string">"admin"</span>
+
+<span class="keyword">if</span> is_logged_in:
+    <span class="keyword">if</span> role == <span class="string">"admin"</span>:
+        <span class="builtin">print</span>(<span class="string">"Access admin dashboard"</span>)
+    <span class="keyword">else</span>:
+        <span class="builtin">print</span>(<span class="string">"Access user dashboard"</span>)
+<span class="keyword">else</span>:
+    <span class="builtin">print</span>(<span class="string">"Please login first"</span>)</pre></div>
+        </div>
+        <div class="callout callout-note">
+          <strong>Example explained:</strong> Outer condition confirms login state first. Only then role-based decision is evaluated. This prevents unauthorized role checks.
+        </div>
+      </div>
+
+      <div class="diagram-box">
+        <div class="diagram-title">🔀 if-elif-else Flow</div>
+        <div class="diagram-flow">
+          <div class="diagram-node primary">Condition 1?</div>
+          <div class="diagram-arrow">→</div>
+          <div class="diagram-node secondary">Condition 2?</div>
+          <div class="diagram-arrow">→</div>
+          <div class="diagram-node accent">Condition 3?</div>
+          <div class="diagram-arrow">→</div>
+          <div class="diagram-node success">Else</div>
+        </div>
+      </div>
+
+
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- MODULE 2.2                                             -->
+    <!-- ===================================================== -->
+    <div class="module-section" id="m2-2">
+      <div class="module-header">
+        <div class="module-number">2.2</div>
+        <h2 class="module-title">Ternary Operator — One-line conditionals</h2>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Syntax and use-case</h3>
+        <p class="explain-en">
+          The <strong>ternary operator</strong> is a compact expression used to choose one of two values based on a condition:
+          <code>value_if_true if condition else value_if_false</code>.
+          It is ideal for short, readable assignments where logic is simple and binary.
+          For complex branching, standard <code>if-elif-else</code> remains the better and more maintainable approach.
+        </p>
+        <div class="explain-hi">
+          <span class="hi-label">Hindi mein samjho</span>
+          Ternary ek short expression hai jo 2 values mein se ek choose karta hai. Simple decision ke liye perfect hai, lekin complex logic ke liye normal if-else better hai.
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — ternary examples</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">age</span> = <span class="number">20</span>
+status = <span class="string">"Adult"</span> <span class="keyword">if</span> age &gt;= <span class="number">18</span> <span class="keyword">else</span> <span class="string">"Minor"</span>
+<span class="builtin">print</span>(status)
+
+<span class="keyword">num</span> = <span class="number">7</span>
+parity = <span class="string">"Even"</span> <span class="keyword">if</span> num % <span class="number">2</span> == <span class="number">0</span> <span class="keyword">else</span> <span class="string">"Odd"</span>
+<span class="builtin">print</span>(parity)</pre></div>
+          <div class="code-output">Adult
+Odd</div>
+        </div>
+        <div class="callout callout-note">
+          <strong>Example explained:</strong> Ternary returns a value immediately. Good for assigning labels (Adult/Minor, Even/Odd).
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">When NOT to use ternary</h3>
+        <p class="explain-en">
+          Ternary expressions should be avoided when decisions involve multiple branches, nested logic, or side effects such as function calls and state updates.
+          Overusing one-line expressions may reduce code length, but it often harms readability and maintainability.
+          In team projects, clarity is considered more valuable than clever one-liners.
+        </p>
+        <div class="explain-hi">
+          <span class="hi-label">Hindi mein samjho</span>
+          Har jagah one-line banana smart coding nahi hota. Complex logic ko normal if-else mein likho, taaki team easily samajh sake.
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Better style comparison</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># Good ternary (simple)</span>
+label = <span class="string">"Pass"</span> <span class="keyword">if</span> <span class="number">50</span> &gt;= <span class="number">35</span> <span class="keyword">else</span> <span class="string">"Fail"</span>
+
+<span class="comment"># Better as if-else (complex)</span>
+<span class="keyword">if</span> score &gt;= <span class="number">90</span>:
+    grade = <span class="string">"A+"</span>
+<span class="keyword">elif</span> score &gt;= <span class="number">80</span>:
+    grade = <span class="string">"A"</span>
+<span class="keyword">else</span>:
+    grade = <span class="string">"B or lower"</span></pre></div>
+        </div>
+        <div class="callout callout-note">
+          <strong>Example explained:</strong> First line is good ternary usage (single condition). Second example uses standard if-elif-else because there are multiple branches.
+        </div>
+      </div>
+
+
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- MODULE 2.3                                             -->
+    <!-- ===================================================== -->
+    <div class="module-section" id="m2-3">
+      <div class="module-header">
+        <div class="module-number">2.3</div>
+        <h2 class="module-title">for Loop — range(), enumerate(), zip(), nested loops</h2>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">for loop fundamentals</h3>
+        <p class="explain-en">
+          A <code>for</code> loop is used to iterate over iterable objects such as lists, tuples, strings, sets, dictionaries, and ranges.
+          Rather than manually controlling an index, Python directly gives each item, which reduces boilerplate and avoids common index errors.
+          This style is more readable, Pythonic, and safer for real-world data traversal.
+        </p>
+        <div class="explain-hi">
+          <span class="hi-label">Hindi mein samjho</span>
+          <code>for</code> loop sequence ke har item pe chalega. Ismein manual index manage nahi karna padta, isliye cleaner aur less error-prone hota hai.
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — basic for</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">for</span> ch <span class="keyword">in</span> <span class="string">"PY"</span>:
+    <span class="builtin">print</span>(ch)</pre></div>
+          <div class="code-output">P
+Y</div>
+        </div>
+        <div class="callout callout-note">
+          <strong>Example explained:</strong> The loop variable <code>ch</code> gets one character at a time from the string and prints it.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">range() for numeric loops</h3>
+        <p class="explain-en">
+          <code>range()</code> is used when you want to loop over numbers instead of direct collection items.
+          Its general form is <code>range(start, stop, step)</code>, where <code>start</code> is inclusive and <code>stop</code> is exclusive.
+          Understanding this inclusive-exclusive behavior is critical for preventing off-by-one errors.
+        </p>
+        <div class="explain-hi">
+          <span class="hi-label">Hindi mein samjho</span>
+          <code>range()</code> numeric sequence banata hai. Important point: stop value include nahi hoti.
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — range variants</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">for</span> i <span class="keyword">in</span> <span class="builtin">range</span>(<span class="number">5</span>):         <span class="comment"># 0..4</span>
+    <span class="builtin">print</span>(i, end=<span class="string">" "</span>)
+<span class="builtin">print</span>()
+
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="builtin">range</span>(<span class="number">2</span>, <span class="number">8</span>, <span class="number">2</span>):   <span class="comment"># 2,4,6</span>
+    <span class="builtin">print</span>(i, end=<span class="string">" "</span>)</pre></div>
+          <div class="code-output">0 1 2 3 4
+2 4 6</div>
+        </div>
+        <div class="callout callout-note">
+          <strong>Example explained:</strong> In <code>range(2, 8, 2)</code>, start=2, stop=8 (excluded), step=2, so values are 2,4,6.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">enumerate() and zip() (industry patterns)</h3>
+        <p class="explain-en">
+          <code>enumerate()</code> and <code>zip()</code> are two highly practical iteration helpers used in production-grade Python code.
+          <code>enumerate()</code> provides both index and value, which avoids manual index management.
+          <code>zip()</code> combines multiple iterables element-wise, making parallel data processing concise and expressive.
+        </p>
+        <div class="explain-hi">
+          <span class="hi-label">Hindi mein samjho</span>
+          <code>enumerate()</code> se index aur value dono milte hain. <code>zip()</code> se multiple lists ko pair karke ek saath iterate karte hain.
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — enumerate + zip</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">students</span> = [<span class="string">"Asha"</span>, <span class="string">"Ravi"</span>, <span class="string">"Meena"</span>]
+<span class="keyword">marks</span> = [<span class="number">88</span>, <span class="number">76</span>, <span class="number">91</span>]
+
+<span class="comment"># enumerate gives index + value</span>
+<span class="keyword">for</span> idx, name <span class="keyword">in</span> <span class="builtin">enumerate</span>(students, start=<span class="number">1</span>):
+    <span class="builtin">print</span>(idx, name)
+
+<span class="comment"># zip combines parallel lists</span>
+<span class="keyword">for</span> name, score <span class="keyword">in</span> <span class="builtin">zip</span>(students, marks):
+    <span class="builtin">print</span>(<span class="string">f"{name}: {score}"</span>)</pre></div>
+        </div>
+        <div class="callout callout-note">
+          <strong>Example explained:</strong> <code>enumerate()</code> avoids manual index management, and <code>zip()</code> cleanly combines two related lists.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Nested loops</h3>
+        <p class="explain-en">
+          A nested loop is a loop inside another loop.
+          The outer loop usually controls rows/groups, and the inner loop controls elements within each row/group.
+          This structure is fundamental for matrix traversal, table generation, coordinate processing, and pattern-based problems.
+        </p>
+        <div class="explain-hi">
+          <span class="hi-label">Hindi mein samjho</span>
+          Nested loop mein outer loop rows control karta hai aur inner loop columns/items per row control karta hai.
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — multiplication table 1..3</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">for</span> i <span class="keyword">in</span> <span class="builtin">range</span>(<span class="number">1</span>, <span class="number">4</span>):
+    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="builtin">range</span>(<span class="number">1</span>, <span class="number">4</span>):
+        <span class="builtin">print</span>(i * j, end=<span class="string">"\t"</span>)
+    <span class="builtin">print</span>()</pre></div>
+        </div>
+        <div class="callout callout-note">
+          <strong>Example explained:</strong> Outer loop controls rows, inner loop controls columns. This row-column thinking is core for matrices/patterns.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Loop performance mindset</h3>
+        <p class="explain-en">
+          Loop performance should be approached with a practical mindset: first ensure correctness, then optimize based on actual bottlenecks.
+          Nested loops can become expensive on large datasets, especially when time complexity grows quadratically.
+          Python offers alternative approaches like dictionaries, sets, comprehensions, and vectorized libraries for performance-sensitive workloads.
+        </p>
+        <div class="explain-hi">
+          <span class="hi-label">Hindi mein samjho</span>
+          Nested loops small input pe fine hain, lekin huge data pe slow ho sakte hain. Pehle correct logic likho, phir optimization karo.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Loop invariants + termination guarantees (engineer mindset)</h3>
+        <p class="explain-en">
+          A loop invariant is a statement that stays true every time the loop repeats.
+          Professionals use invariants to reason about correctness (especially in searches, validation scans, and two-pointer style logic).
+          Alongside correctness, you should also be able to answer: “Will this loop always terminate? What makes progress each iteration?”
+        </p>
+        <div class="explain-hi">
+          <span class="hi-label">Hindi mein samjho</span>
+          Loop invariant ka matlab: loop ke har iteration ke start/end pe kuch property true rehni chahiye.
+          Engineer isse correctness prove karta hai. Saath hi ye bhi clear hona chahiye ki loop terminate kaise hoga aur progress kya hai.
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — invariant in a validation scan</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre>numbers = [10, 0, 5, -2, 7]
+all_non_negative_so_far = True
+
+for x in numbers:
+    # Invariant idea: this stays True only if every processed number is >= 0
+    if x < 0:
+        all_non_negative_so_far = False
+        break
+
+print(all_non_negative_so_far)</pre></div>
+          <div class="code-output">False</div>
+        </div>
+        <div class="callout callout-note">
+          <strong>Example explained:</strong> The invariant (“all processed values are non-negative”) breaks at -2, so we stop early with <code>break</code>.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Complexity intuition for loops (what interviewers and teams expect)</h3>
+        <p class="explain-en">
+          You don’t need heavy math, but you should build the habit of estimating loop cost.
+          A single loop over \(n\) items is usually \(O(n)\). A nested loop over \(n\) and \(m\) is \(O(n \cdot m)\) (often \(O(n^2)\) if both sizes are similar).
+          This helps you decide when to use a <code>set</code>/<code>dict</code> for fast lookups instead of repeated scanning.
+        </p>
+        <div class="explain-hi">
+          <span class="hi-label">Hindi mein samjho</span>
+          Complexity ka basic idea: ek loop \(O(n)\) hota hai, nested loops \(O(n^2)\) jaisa expensive ho sakta hai.
+          Isi intuition se aap repeated scanning ki jagah set/dict lookup choose karte ho.
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — avoid nested scan with a set</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre>allowed = {"read", "write", "delete"}
+requests = ["read", "share", "write"]
+
+for action in requests:
+    if action in allowed:   # fast membership check
+        print("OK:", action)
+    else:
+        print("DENY:", action)</pre></div>
+          <div class="code-output">OK: read
+DENY: share
+OK: write</div>
+        </div>
+        <div class="callout callout-note">
+          <strong>Example explained:</strong> <code>action in allowed</code> is the right tool for membership validation. Avoid repeated scans of long lists when possible.
+        </div>
+      </div>
+
+
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- MODULE 2.4                                             -->
+    <!-- ===================================================== -->
+    <div class="module-section" id="m2-4">
+      <div class="module-header">
+        <div class="module-number">2.4</div>
+        <h2 class="module-title">while Loop — Infinite loops, sentinel values</h2>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">while loop basics</h3>
+        <p class="explain-en">
+          A <code>while</code> loop repeatedly executes a block as long as a condition remains true.
+          It is appropriate when the number of iterations is not known in advance and depends on runtime state.
+          Typical use-cases include user input loops, retry mechanisms, and streaming-style processing.
+        </p>
+        <div class="explain-hi">
+          <span class="hi-label">Hindi mein samjho</span>
+          <code>while</code> loop tab best hai jab repeat kitni baar hoga ye pehle se fixed na ho, balki condition pe depend ho.
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — countdown</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">n</span> = <span class="number">5</span>
+<span class="keyword">while</span> n &gt; <span class="number">0</span>:
+    <span class="builtin">print</span>(n)
+    n -= <span class="number">1</span></pre></div>
+        </div>
+        <div class="callout callout-note">
+          <strong>Example explained:</strong> Loop continues until <code>n</code> becomes 0. Without <code>n -= 1</code>, this would run forever.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Sentinel-controlled loop</h3>
+        <p class="explain-en">
+          A sentinel-controlled loop uses a special marker value to terminate repetition.
+          Instead of knowing loop count beforehand, the program continues until sentinel input is received (e.g., <code>exit</code>).
+          This pattern is widely used in command-line tools and interactive scripts.
+        </p>
+        <div class="explain-hi">
+          <span class="hi-label">Hindi mein samjho</span>
+          Sentinel ek special stop value hoti hai (jaise <code>exit</code>) jise detect karke loop end kar dete hain.
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — sentinel pattern</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">while</span> <span class="keyword">True</span>:
+    text = <span class="builtin">input</span>(<span class="string">"Type something (exit to stop): "</span>).strip().lower()
+    <span class="keyword">if</span> text == <span class="string">"exit"</span>:
+        <span class="keyword">break</span>
+    <span class="builtin">print</span>(<span class="string">"You typed:"</span>, text)</pre></div>
+        </div>
+        <div class="callout callout-note">
+          <strong>Example explained:</strong> This is common in CLI apps: keep accepting commands until user sends a stop keyword.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Safe while-loop checklist</h3>
+        <div class="explain-hi">
+          <span class="hi-label">Hindi mein samjho</span>
+          While loop safe tab hota hai jab exit condition clear ho, state har iteration mein update ho, aur input consistent format mein handle ho.
+          Agar update ya break condition miss ho gayi to infinite loop ka risk hota hai.
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Checklist item</th><th>Why it matters</th></tr></thead>
+            <tbody>
+              <tr><td>Clear exit condition</td><td>Prevents accidental infinite loops</td></tr>
+              <tr><td>State update each iteration</td><td>Moves loop toward completion</td></tr>
+              <tr><td>Input normalization</td><td>Makes user commands robust</td></tr>
+              <tr><td>Break on safety limit (if needed)</td><td>Protects program from hangs</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- MODULE 2.5                                             -->
+    <!-- ===================================================== -->
+    <div class="module-section" id="m2-5">
+      <div class="module-header">
+        <div class="module-number">2.5</div>
+        <h2 class="module-title">Loop Control — break, continue, pass, else with loops</h2>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">break vs continue vs pass</h3>
+        <p class="explain-en">
+          <code>break</code>, <code>continue</code>, and <code>pass</code> are loop-control keywords that modify normal execution flow.
+          They should be used intentionally to express logic clearly: stop loop, skip iteration, or mark placeholder behavior.
+          Correct use of these keywords improves readability and prevents deeply nested conditional blocks.
+        </p>
+        <div class="explain-hi">
+          <span class="hi-label">Hindi mein samjho</span>
+          Ye 3 keywords loop ka behavior control karte hain: <code>break</code> se loop band, <code>continue</code> se current iteration skip, <code>pass</code> placeholder.
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Keyword</th><th>Behavior</th><th>Use case</th></tr></thead>
+            <tbody>
+              <tr><td><code>break</code></td><td>Exit loop immediately</td><td>Found target value</td></tr>
+              <tr><td><code>continue</code></td><td>Skip current iteration</td><td>Ignore invalid data</td></tr>
+              <tr><td><code>pass</code></td><td>Do nothing placeholder</td><td>Stub logic for future</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — loop control</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">for</span> n <span class="keyword">in</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">-1</span>, <span class="number">3</span>, <span class="number">99</span>]:
+    <span class="keyword">if</span> n == <span class="number">99</span>:
+        <span class="keyword">break</span>          <span class="comment"># stop loop</span>
+    <span class="keyword">if</span> n &lt; <span class="number">0</span>:
+        <span class="keyword">continue</span>       <span class="comment"># skip negative values</span>
+    <span class="builtin">print</span>(n)
+
+<span class="keyword">if</span> <span class="keyword">False</span>:
+    <span class="keyword">pass</span>               <span class="comment"># placeholder</span></pre></div>
+        </div>
+        <div class="callout callout-note">
+          <strong>Example explained:</strong> Negative values are skipped via <code>continue</code>, and loop stops completely when 99 appears via <code>break</code>.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Loop else (powerful but less known)</h3>
+        <p class="explain-en">
+          In Python, loops can have an <code>else</code> clause.
+          This <code>else</code> executes only when the loop completes naturally without encountering a <code>break</code>.
+          It is especially useful in search workflows where you want a “not found” action only if no match triggered a break.
+        </p>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — search with for-else</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">target</span> = <span class="number">15</span>
+<span class="keyword">data</span> = [<span class="number">4</span>, <span class="number">8</span>, <span class="number">12</span>]
+
+<span class="keyword">for</span> item <span class="keyword">in</span> data:
+    <span class="keyword">if</span> item == target:
+        <span class="builtin">print</span>(<span class="string">"Found!"</span>)
+        <span class="keyword">break</span>
+<span class="keyword">else</span>:
+    <span class="builtin">print</span>(<span class="string">"Not found"</span>)</pre></div>
+          <div class="code-output">Not found</div>
+        </div>
+        <div class="explain-hi">
+          <span class="hi-label">Hindi mein samjho</span>
+          Loop ka <code>else</code> tabhi chalta hai jab loop normal end ho (break na ho). Search problems mein ye elegant pattern hai.
+        </div>
+        <div class="callout callout-note">
+          <strong>Example explained:</strong> Since target 15 list mein nahi मिला, loop never breaks, so loop-else executes and prints “Not found”.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Real use-case: validation scan</h3>
+        <p class="explain-en">
+          In data validation pipelines, loop-control statements are practical tools:
+          skip invalid records with <code>continue</code>, stop processing on critical failures with <code>break</code>, and continue with healthy records.
+          This style appears in ETL jobs, logs processing, and transaction filtering systems.
+        </p>
+        <div class="explain-hi">
+          <span class="hi-label">Hindi mein samjho</span>
+          Data processing mein <code>continue</code> se bad records skip karte hain aur <code>break</code> se critical error pe process stop kar dete hain.
+        </div>
+      </div>
+
+
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- MODULE 2.6                                             -->
+    <!-- ===================================================== -->
+    <div class="module-section" id="m2-6">
+      <div class="module-header">
+        <div class="module-number">2.6</div>
+        <h2 class="module-title">Pattern Programs — Star, number, alphabet patterns</h2>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Why pattern programs matter</h3>
+        <p class="explain-en">
+          Pattern programs are not only for exams; they are training exercises for structured thinking.
+          They strengthen nested-loop understanding, row-column modeling, and index-based formulas.
+          These skills directly transfer to matrix problems, grid traversal, and algorithmic interview questions.
+        </p>
+        <div class="explain-hi">
+          <span class="hi-label">Hindi mein samjho</span>
+          Pattern programs se nested loops strong hote hain. Ye logical thinking ko improve karte hain aur interviews mein kaam aate hain.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Star pyramid</h3>
+        <p class="explain-en">
+          A star pyramid is a classic centered pattern where each row is formed by combining left padding spaces and a calculated odd number of stars.
+          This teaches formula-driven output generation rather than hardcoded printing.
+          It is a strong exercise for mastering row-based mathematical thinking in loops.
+        </p>
+        <div class="explain-hi">
+          <span class="hi-label">Hindi mein samjho</span>
+          Har row mein do calculations hoti hain: kitne spaces chahiye aur kitne stars chahiye. Isse centered pyramid banti hai.
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — pyramid pattern</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">rows</span> = <span class="number">5</span>
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="builtin">range</span>(<span class="number">1</span>, rows + <span class="number">1</span>):
+    spaces = <span class="string">" "</span> * (rows - i)
+    stars = <span class="string">"*"</span> * (<span class="number">2</span> * i - <span class="number">1</span>)
+    <span class="builtin">print</span>(spaces + stars)</pre></div>
+        </div>
+        <div class="callout callout-note">
+          <strong>Example explained:</strong> Each row prints decreasing spaces and increasing stars. Formula <code>2*i-1</code> creates symmetric pyramid width.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Number triangle</h3>
+        <p class="explain-en">
+          Number triangle patterns demonstrate how output size grows with row progression.
+          They are useful for understanding boundaries in nested loops and how inner loop ranges depend on outer loop counters.
+          This dependency modeling appears in many algorithmic tasks beyond patterns.
+        </p>
+        <div class="explain-hi">
+          <span class="hi-label">Hindi mein samjho</span>
+          Number triangle mein row number ke saath printed values increase hoti hain. Isse nested loop limits strong hoti hain.
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — number pattern</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">n</span> = <span class="number">5</span>
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="builtin">range</span>(<span class="number">1</span>, n + <span class="number">1</span>):
+    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="builtin">range</span>(<span class="number">1</span>, i + <span class="number">1</span>):
+        <span class="builtin">print</span>(j, end=<span class="string">" "</span>)
+    <span class="builtin">print</span>()</pre></div>
+        </div>
+        <div class="callout callout-note">
+          <strong>Example explained:</strong> Outer loop controls row count, inner loop prints numbers from 1 up to current row.
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Alphabet pattern</h3>
+        <p class="explain-en">
+          Alphabet patterns combine iterative logic with character-code conversion using <code>ord()</code> and <code>chr()</code>.
+          This introduces a practical way to generate character sequences programmatically.
+          It also builds comfort with text-processing logic and ASCII/Unicode conversion basics.
+        </p>
+        <div class="explain-hi">
+          <span class="hi-label">Hindi mein samjho</span>
+          Alphabet pattern mein A,B,C print karne ke liye ASCII conversion use hoti hai: <code>ord()</code> aur <code>chr()</code>.
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — alphabet pattern</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">n</span> = <span class="number">5</span>
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="builtin">range</span>(n):
+    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="builtin">range</span>(i + <span class="number">1</span>):
+        <span class="builtin">print</span>(<span class="builtin">chr</span>(<span class="builtin">ord</span>(<span class="string">"A"</span>) + j), end=<span class="string">" "</span>)
+    <span class="builtin">print</span>()</pre></div>
+        </div>
+        <div class="callout callout-note">
+          <strong>Example explained:</strong> <code>ord('A')</code> gives ASCII code; adding <code>j</code> and converting via <code>chr()</code> generates A, B, C...
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Pattern building strategy (step-by-step thinking)</h3>
+        <p class="explain-en">
+          Solving any pattern becomes easier when you break it into a repeatable framework:
+          decide row count, decide what changes per row, derive a formula, and map the formula to nested loops.
+          This structured approach prevents trial-and-error coding and helps in interviews.
+        </p>
+        <div class="explain-hi">
+          <span class="hi-label">Hindi mein samjho</span>
+          Pattern solve karne ka best tareeka hai structured approach: pehle rows decide karo, phir har row mein kya change hoga wo samjho, phir formula likho aur loop mein apply karo.
+          Isse guessing kam hoti hai aur logic strong hota hai.
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Step</th><th>Question to ask</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>How many rows are needed?</td></tr>
+              <tr><td>2</td><td>What changes every row (spaces, symbols, numbers)?</td></tr>
+              <tr><td>3</td><td>How many items per row?</td></tr>
+              <tr><td>4</td><td>Which formula controls increment/decrement?</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+
+
+      <div class="practice-box">
+        <div class="practice-title">✏️ Practice Exercises — Part 2</div>
+        <ol>
+          <li>Write age eligibility checker with nested conditions (license, voting, senior benefits).</li>
+          <li>Build marks analyzer: input 5 subjects, print pass/fail and grade.</li>
+          <li>Generate multiplication table from 1 to N using nested loops.</li>
+          <li>Create a sentinel loop-based mini menu: add/subtract/quit.</li>
+          <li>Implement 3 custom patterns of your choice and explain loop logic in comments.</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="handbook-nav">
+      <a href="part1.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Part 1: Python Foundations</div></div></a>
+      <a href="part3.html" class="nav-btn next"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Part 3: Strings & Data Structures →</div></div><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+  </div>
+
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
+  <script src="../../../js/main.js"></script>
+  <script>
+    (() => {
+      document.querySelectorAll('.code-block').forEach((block) => {
+        const pre = block.querySelector('.code-body pre');
+        const header = block.querySelector('.code-header');
+        if (!pre || !header) return;
+        let actions = header.querySelector('.code-actions');
+        if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); }
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'code-copy-btn';
+        btn.textContent = 'Copy';
+        btn.addEventListener('click', async () => {
+          try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; }
+          catch { btn.textContent = 'Failed'; }
+          finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); }
+        });
+        actions.prepend(btn);
+      });
+      const fill = document.querySelector('.hb-progress-fill');
+      const label = document.querySelector('.hb-progress-label');
+      if (fill && label) {
+        const update = () => {
+          const h = document.documentElement;
+          const denom = (h.scrollHeight - h.clientHeight) || 1;
+          const pct = Math.max(0, Math.min(1, h.scrollTop / denom));
+          fill.style.width = (pct * 100).toFixed(0) + '%';
+          label.textContent = (pct * 100).toFixed(0) + '%';
+        };
+        document.addEventListener('scroll', update, { passive: true });
+        update();
+      }
+    })();
+  </script>
+</body>
+</html>
+

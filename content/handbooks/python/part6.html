@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Part 6: File Handling & Error Management — Python Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 6 of Python Handbook: file I/O, context managers, CSV, JSON, exceptions, custom errors, and logging with bilingual explanations.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/handbook.css">
+</head>
+<body class="handbook-wrapper">
+  <nav class="navbar"><div class="container"><a href="../../../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../../../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
+
+  <div class="handbook-page">
+    <div class="hb-topbar">
+      <div class="hb-topbar-inner">
+        <div class="hb-breadcrumbs">
+          <a href="index.html">Python Handbook</a>
+          <span class="hb-muted">/</span>
+          <span>Part 6</span>
+          <span class="hb-muted">·</span>
+          <a href="#m6-1">6.1</a><a href="#m6-2">6.2</a><a href="#m6-3">6.3</a><a href="#m6-4">6.4</a><a href="#m6-5">6.5</a><a href="#m6-6">6.6</a><a href="#m6-7">6.7</a>
+        </div>
+        <div class="hb-progress" aria-label="Reading progress">
+          <div class="hb-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="hb-progress-fill"></div></div>
+          <div class="hb-progress-label">0%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chapter-header" data-chapter-num="06">
+      <div class="chapter-part-label">📖 Part 6 — File Handling & Error Management</div>
+      <h1 class="chapter-title">Reliable Programs with <span class="gradient-text">I/O and Exceptions</span></h1>
+      <p class="chapter-subtitle">Read/write files safely, handle failures gracefully, and build debuggable Python systems.</p>
+      <div class="chapter-meta"><span>📄 Modules 6.1 – 6.7</span><span>⏱️ 70–105 min read</span><span>💻 38+ Examples</span></div>
+    </div>
+
+    <div class="callout callout-tip"><strong>How to study Part 6:</strong> Intentionally create error cases while testing each snippet. Error handling becomes strong only with failure-driven practice.</div>
+
+    <div class="hb-mini-toc">
+      <div class="hb-mini-title">📍 Part 6 Modules</div>
+      <div class="hb-mini-links">
+        <a href="#m6-1">6.1 File basics</a>
+        <a href="#m6-2">6.2 Context manager</a>
+        <a href="#m6-3">6.3 CSV</a>
+        <a href="#m6-4">6.4 JSON</a>
+        <a href="#m6-5">6.5 Exceptions</a>
+        <a href="#m6-6">6.6 Custom exceptions</a>
+        <a href="#m6-7">6.7 Logging</a>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">🚀 Advanced Lens — Part 6</div>
+      <p class="explain-en">
+        Reliability engineering starts here: safe I/O patterns, graceful failure handling, and observable logs.
+        Advanced Python developers treat exceptions as part of system design, define domain-specific errors, and ensure every failure path is diagnosable.
+      </p>
+      <div class="explain-hi">
+        <span class="hi-label">Hindi mein samjho</span>
+        Part 6 ka advanced goal hai robust software banana. File handling safe ho, error handling clear ho, aur logs itne useful ho ki issue trace ho sake.
+        Production apps me failure handling optional nahi hota.
+      </div>
+    </div>
+
+    <div class="module-section" id="m6-1">
+      <div class="module-header"><div class="module-number">6.1</div><h2 class="module-title">File Handling Basics — Open, Read, Write, Append</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Why file handling matters</h3>
+        <p class="explain-en">
+          File I/O allows persistence of data beyond program runtime: logs, reports, user records, exports, and configuration files.
+          In real systems, correct file strategy affects reliability, portability, and auditability of application behavior.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>File handling se runtime data durable banta hai. Production apps me logs, reports, backups aur configs sab file I/O pe depend karte hain.</div>
+      </div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Modes: <code>r</code>, <code>w</code>, <code>a</code></h3>
+        <p class="explain-en">
+          File mode controls behavior: read existing content, overwrite content, or append new content.
+          Choosing incorrect mode can cause accidental data loss, so mode selection should always match intent explicitly.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>File mode selection critical hai. Galat mode se data overwrite ya loss ho sakta hai, isliye read/write intent clear rakhna zaruri hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — write and read file</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre>f = <span class="builtin">open</span>(<span class="string">"notes.txt"</span>, <span class="string">"w"</span>, encoding=<span class="string">"utf-8"</span>)
+f.write(<span class="string">"Python handbook notes\n"</span>)
+f.close()
+
+f = <span class="builtin">open</span>(<span class="string">"notes.txt"</span>, <span class="string">"r"</span>, encoding=<span class="string">"utf-8"</span>)
+<span class="builtin">print</span>(f.read())
+f.close()</pre></div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> First block writes fresh content; second block opens same file and prints it.</div>
+      </div>
+    </div>
+
+    <div class="module-section" id="m6-2">
+      <div class="module-header"><div class="module-number">6.2</div><h2 class="module-title">Context Managers — <code>with open(...)</code> Best Practice</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Why <code>with</code> is preferred</h3>
+        <p class="explain-en">
+          Context managers guarantee automatic cleanup, even when errors occur. This prevents resource leaks and locked files.
+          The <code>with</code> pattern is an essential reliability practice and should be considered default for resource management.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>with</code> block safer pattern hai kyunki cleanup automatic hota hai. Error cases me bhi file handles properly close ho jate hain.</div>
+      </div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Safe read/write pattern</h3>
+        <p class="explain-en">
+          Use one <code>with</code> block per operation for clear flow and reliable file closure.
+          This style keeps side effects localized and simplifies exception boundaries during debugging.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>One-operation-per-<code>with</code> style se code predictable rehta hai. Debugging aur failure handling dono simpler ho jate hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — context manager</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">with</span> <span class="builtin">open</span>(<span class="string">"tasks.txt"</span>, <span class="string">"w"</span>, encoding=<span class="string">"utf-8"</span>) <span class="keyword">as</span> file:
+    file.write(<span class="string">"Learn exceptions\nPractice logging\n"</span>)
+
+<span class="keyword">with</span> <span class="builtin">open</span>(<span class="string">"tasks.txt"</span>, <span class="string">"r"</span>, encoding=<span class="string">"utf-8"</span>) <span class="keyword">as</span> file:
+    <span class="builtin">print</span>(file.read())</pre></div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> File gets closed automatically after each block; no manual cleanup required.</div>
+      </div>
+    </div>
+
+    <div class="module-section" id="m6-3">
+      <div class="module-header"><div class="module-number">6.3</div><h2 class="module-title">CSV Handling — Structured Tabular Data</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">When to use CSV</h3>
+        <p class="explain-en">
+          CSV is useful for spreadsheets, reports, and simple data exchange between systems.
+          It is human-readable and widely interoperable, making it ideal for reporting and lightweight ETL pipelines.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>CSV ka major benefit interoperability hai. Excel, BI tools, scripts sab is format ko easily handle kar lete hain.</div>
+      </div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Read and write CSV with <code>csv</code> module</h3>
+        <p class="explain-en">
+          Use <code>csv.writer</code> and <code>csv.reader</code> for reliable parsing instead of manual split logic.
+          Built-in parser handles edge cases like quoted commas and escaped values safely.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Manual split approach fragile hota hai. <code>csv</code> module quoting/comma edge cases ko robust tarike se handle karta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — csv module</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">import</span> csv
+
+<span class="keyword">with</span> <span class="builtin">open</span>(<span class="string">"students.csv"</span>, <span class="string">"w"</span>, newline=<span class="string">""</span>, encoding=<span class="string">"utf-8"</span>) <span class="keyword">as</span> f:
+    writer = csv.writer(f)
+    writer.writerow([<span class="string">"name"</span>, <span class="string">"marks"</span>])
+    writer.writerow([<span class="string">"Asha"</span>, <span class="number">88</span>])
+
+<span class="keyword">with</span> <span class="builtin">open</span>(<span class="string">"students.csv"</span>, <span class="string">"r"</span>, encoding=<span class="string">"utf-8"</span>) <span class="keyword">as</span> f:
+    reader = csv.reader(f)
+    <span class="keyword">for</span> row <span class="keyword">in</span> reader:
+        <span class="builtin">print</span>(row)</pre></div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> Rows are written as list fields and read back safely as parsed records.</div>
+      </div>
+    </div>
+
+    <div class="module-section" id="m6-4">
+      <div class="module-header"><div class="module-number">6.4</div><h2 class="module-title">JSON Handling — API-Style Data Serialization</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Why JSON is important</h3>
+        <p class="explain-en">
+          JSON is the standard data format for APIs, configuration files, and service communication.
+          Its structure maps naturally to Python dictionaries/lists, making serialization and deserialization straightforward.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>JSON modern system integration ka default format hai. Python ke dict/list mapping ki wajah se JSON handling practical aur intuitive hoti hai.</div>
+      </div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Serialize and deserialize</h3>
+        <p class="explain-en">
+          <code>json.dump</code> writes Python data to JSON file; <code>json.load</code> reads JSON back into Python objects.
+          Validate schema assumptions before consuming loaded data to avoid downstream key/type errors.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>dump</code> aur <code>load</code> basic operations hain, lekin advanced usage me data schema verify karna bhi important hota hai taaki runtime key/type issues avoid ho.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — JSON read/write</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">import</span> json
+
+data = {<span class="string">"name"</span>: <span class="string">"Yuvraj"</span>, <span class="string">"skills"</span>: [<span class="string">"Python"</span>, <span class="string">"Django"</span>]}
+<span class="keyword">with</span> <span class="builtin">open</span>(<span class="string">"profile.json"</span>, <span class="string">"w"</span>, encoding=<span class="string">"utf-8"</span>) <span class="keyword">as</span> f:
+    json.dump(data, f, indent=<span class="number">2</span>)
+
+<span class="keyword">with</span> <span class="builtin">open</span>(<span class="string">"profile.json"</span>, <span class="string">"r"</span>, encoding=<span class="string">"utf-8"</span>) <span class="keyword">as</span> f:
+    loaded = json.load(f)
+    <span class="builtin">print</span>(loaded[<span class="string">"name"</span>])</pre></div>
+          <div class="code-output">Yuvraj</div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> Python dictionary is saved in JSON format and then loaded back for normal key access.</div>
+      </div>
+    </div>
+
+    <div class="module-section" id="m6-5">
+      <div class="module-header"><div class="module-number">6.5</div><h2 class="module-title">Exception Handling — <code>try</code>, <code>except</code>, <code>else</code>, <code>finally</code></h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Why exceptions exist</h3>
+        <p class="explain-en">
+          Exceptions represent runtime failures and allow controlled recovery instead of abrupt program termination.
+          Robust exception handling is a design discipline that separates expected failure modes from truly unexpected faults.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Exceptions runtime failure contract jaisa kaam karte hain. Proper handling se app crash ke bajay controlled recovery aur meaningful feedback deta hai.</div>
+      </div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Structured try-except flow</h3>
+        <p class="explain-en">
+          Catch specific exceptions first. Use <code>finally</code> for mandatory cleanup operations.
+          Avoid broad bare-except blocks unless absolutely necessary, because they hide root causes and complicate debugging.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Specific exception catching best practice hai. Broad exception blocks debugging ko hard bana dete hain, isliye targeted handlers likhna better hota hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — exception flow</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">try</span>:
+    n = <span class="builtin">int</span>(<span class="builtin">input</span>(<span class="string">"Enter number: "</span>))
+    result = <span class="number">100</span> / n
+<span class="keyword">except</span> <span class="builtin">ValueError</span>:
+    <span class="builtin">print</span>(<span class="string">"Invalid input. Enter numeric value."</span>)
+<span class="keyword">except</span> <span class="builtin">ZeroDivisionError</span>:
+    <span class="builtin">print</span>(<span class="string">"Cannot divide by zero."</span>)
+<span class="keyword">else</span>:
+    <span class="builtin">print</span>(<span class="string">f"Result: {result}"</span>)
+<span class="keyword">finally</span>:
+    <span class="builtin">print</span>(<span class="string">"Execution complete."</span>)</pre></div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> Errors are handled by type, success path uses <code>else</code>, and <code>finally</code> runs always.</div>
+      </div>
+    </div>
+
+    <div class="module-section" id="m6-6">
+      <div class="module-header"><div class="module-number">6.6</div><h2 class="module-title">Custom Exceptions — Domain-specific Error Design</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Why custom exceptions</h3>
+        <p class="explain-en">
+          Custom exceptions make business errors explicit and easier to catch, log, and communicate.
+          They improve domain clarity by encoding business rules directly into exception taxonomy.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Custom exception se domain rules clearly represent hote hain. Error handling generic nahi rehta, balki business-level semantics ke saath readable ban jata hai.</div>
+      </div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Create and raise custom exception</h3>
+        <p class="explain-en">
+          Inherit from <code>Exception</code> and raise it where validation fails.
+          Keep exception messages actionable so callers and logs provide enough context for quick triage.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Custom exception raise karte waqt clear aur actionable message dena important hai taaki issue quickly diagnose ho sake.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — custom exception</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">class</span> <span class="function">InvalidAgeError</span>(<span class="builtin">Exception</span>):
+    <span class="keyword">pass</span>
+
+<span class="keyword">def</span> <span class="function">register_user</span>(age):
+    <span class="keyword">if</span> age &lt; <span class="number">18</span>:
+        <span class="keyword">raise</span> InvalidAgeError(<span class="string">"User must be at least 18 years old."</span>)
+    <span class="keyword">return</span> <span class="string">"Registration successful"</span>
+
+<span class="keyword">try</span>:
+    <span class="builtin">print</span>(register_user(<span class="number">16</span>))
+<span class="keyword">except</span> InvalidAgeError <span class="keyword">as</span> e:
+    <span class="builtin">print</span>(e)</pre></div>
+          <div class="code-output">User must be at least 18 years old.</div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> Domain rule violation is represented by a specific exception type.</div>
+      </div>
+    </div>
+
+    <div class="module-section" id="m6-7">
+      <div class="module-header"><div class="module-number">6.7</div><h2 class="module-title">Logging — Production-grade Debugging and Monitoring</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Why logging over print</h3>
+        <p class="explain-en">
+          Logging provides severity levels, timestamps, and structured diagnostics required in real systems.
+          Unlike print statements, logs can be centralized, filtered by level, and integrated with monitoring pipelines.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>print()</code> ad-hoc debugging ke liye theek hai, lekin production observability ke liye structured logging zaruri hota hai.</div>
+      </div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Basic logging setup</h3>
+        <p class="explain-en">
+          Configure logger once and emit logs at appropriate levels: INFO, WARNING, ERROR.
+          Consistent formatting and severity discipline make incident investigation much faster in production.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Logging setup me level discipline aur consistent format bahut important hai. Isse incident analysis aur troubleshooting significantly fast ho jati hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — logging</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">import</span> logging
+
+logging.basicConfig(
+    filename=<span class="string">"app.log"</span>,
+    level=logging.INFO,
+    format=<span class="string">"%(asctime)s - %(levelname)s - %(message)s"</span>
+)
+
+logging.info(<span class="string">"Application started"</span>)
+logging.warning(<span class="string">"Disk usage is high"</span>)
+logging.error(<span class="string">"Failed to connect database"</span>)</pre></div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> Logs are written to file with timestamp and severity metadata for production debugging.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Logging patterns: logger name, handlers, and console + file</h3>
+        <p class="explain-en">
+          In real applications, prefer named loggers per module and configure multiple handlers: one for console (dev) and one for file (audit/troubleshooting).
+          This creates clean separation between developer feedback and operational diagnostics.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Production apps me usually module-wise named loggers hote hain. Console handler dev ke liye hota hai aur file handler audit/debugging ke liye. Isse logs structured aur maintainable hote hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — logger with handlers</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">import</span> logging
+
+logger = logging.getLogger(<span class="string">"cwy.app"</span>)
+logger.setLevel(logging.INFO)
+
+fmt = logging.Formatter(<span class="string">"%(asctime)s %(levelname)s %(name)s - %(message)s"</span>)
+
+ch = logging.StreamHandler()
+ch.setFormatter(fmt)
+
+fh = logging.FileHandler(<span class="string">"app.log"</span>, encoding=<span class="string">"utf-8"</span>)
+fh.setFormatter(fmt)
+
+logger.addHandler(ch)
+logger.addHandler(fh)
+
+logger.info(<span class="string">"App started"</span>)</pre></div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> Same log entry goes to console and file with consistent formatting.</div>
+      </div>
+
+      <div class="practice-box">
+        <div class="practice-title">✏️ Practice Exercises — Part 6</div>
+        <ol>
+          <li>Build a text-file based todo manager with add/list/delete operations.</li>
+          <li>Read a CSV of students and print toppers above a threshold.</li>
+          <li>Create JSON config loader with fallback defaults.</li>
+          <li>Write a division utility with proper exception handling and logging.</li>
+          <li>Design custom exceptions for an e-commerce checkout flow.</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="handbook-nav">
+      <a href="part5.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Part 5: Object-Oriented Programming</div></div></a>
+      <a href="part7.html" class="nav-btn next"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Part 7: Advanced Python →</div></div><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+  </div>
+
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
+  <script src="../../../js/main.js"></script>
+  <script>
+    (() => {
+      document.querySelectorAll('.code-block').forEach((block) => {
+        const pre = block.querySelector('.code-body pre');
+        const header = block.querySelector('.code-header');
+        if (!pre || !header) return;
+        let actions = header.querySelector('.code-actions');
+        if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); }
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'code-copy-btn';
+        btn.textContent = 'Copy';
+        btn.addEventListener('click', async () => {
+          try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; }
+          catch { btn.textContent = 'Failed'; }
+          finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); }
+        });
+        actions.prepend(btn);
+      });
+      const fill = document.querySelector('.hb-progress-fill');
+      const label = document.querySelector('.hb-progress-label');
+      if (fill && label) {
+        const update = () => {
+          const h = document.documentElement;
+          const denom = (h.scrollHeight - h.clientHeight) || 1;
+          const pct = Math.max(0, Math.min(1, h.scrollTop / denom));
+          fill.style.width = (pct * 100).toFixed(0) + '%';
+          label.textContent = (pct * 100).toFixed(0) + '%';
+        };
+        document.addEventListener('scroll', update, { passive: true });
+        update();
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -3,6 +3,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   initThemeToggle();
   initNavbar();
+  initHandbookGlobalIndex();
   initRevealAnimations();
   initCounters();
   initTypingEffect();
@@ -81,6 +82,69 @@ function setActiveNav() {
       a.classList.add('active');
     }
   });
+}
+
+// ===== HANDBOOK GLOBAL INDEX (PART PAGES) =====
+function initHandbookGlobalIndex() {
+  const page = document.querySelector('.handbook-page');
+  if (!page) return;
+
+  const path = window.location.pathname.replace(/\\/g, '/');
+  const partMatch = path.match(/\/content\/handbooks\/python\/part([1-8])\.html$/);
+  if (!partMatch) return;
+
+  const activePart = Number(partMatch[1]);
+  const topbar = page.querySelector('.hb-topbar');
+  if (!topbar) return;
+
+  const wrap = document.createElement('aside');
+  wrap.className = 'hb-global-index';
+
+  const title = document.createElement('div');
+  title.className = 'hb-global-index-title';
+  title.textContent = 'Main Handbook Index';
+  wrap.appendChild(title);
+
+  const links = document.createElement('div');
+  links.className = 'hb-global-index-links';
+
+  const partTitles = {
+    1: 'Python Foundations',
+    2: 'Control Flow & Loops',
+    3: 'Strings & Data Structures',
+    4: 'Functions & Modules',
+    5: 'Object-Oriented Programming',
+    6: 'File Handling & Error Management',
+    7: 'Advanced Python',
+    8: 'Standard Library & Industry Practices'
+  };
+
+  const indexLink = document.createElement('a');
+  indexLink.href = 'index.html';
+  indexLink.textContent = 'Index';
+  links.appendChild(indexLink);
+
+  for (let i = 1; i <= 8; i++) {
+    const a = document.createElement('a');
+    a.href = `part${i}.html`;
+    a.textContent = `Part ${i}: ${partTitles[i]}`;
+    if (i === activePart) a.classList.add('active');
+    links.appendChild(a);
+  }
+
+  wrap.appendChild(links);
+  topbar.insertAdjacentElement('afterend', wrap);
+
+  const mainContent = document.createElement('div');
+  mainContent.className = 'hb-main-content';
+
+  Array.from(page.children).forEach((child) => {
+    if (child === topbar || child === wrap) return;
+    mainContent.appendChild(child);
+  });
+
+  page.appendChild(mainContent);
+  page.classList.add('has-global-index');
 }
 
 // ===== SCROLL REVEAL =====

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Subject Syllabus — CodeWithYuvraj</title>
+  <meta name="description" content="Subject-wise syllabus details for CodeWithYuvraj notes with pricing and buy options.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <nav class="navbar"><div class="container"><a href="../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../index.html">Home</a><a href="../projects.html">Projects</a><a href="../tutorials.html">Tutorials</a><a href="../notes.html">Notes</a><a href="../blog.html">Blog</a><a href="../resources.html">Resources</a><a href="../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../index.html">Home</a><a href="../projects.html">Projects</a><a href="../tutorials.html">Tutorials</a><a href="../notes.html">Notes</a><a href="../blog.html">Blog</a><a href="../resources.html">Resources</a><a href="../contact.html">Contact</a></div>
+
+  <section class="page-top-space">
+    <div class="container" style="max-width:900px;">
+      <div class="section-header center">
+        <div class="section-badge">📘 Subject Syllabus</div>
+        <h1 id="subjectTitle">Subject Syllabus</h1>
+        <p id="subjectSubtitle" class="section-desc">Detailed module-wise roadmap and outcomes for this subject.</p>
+      </div>
+
+      <div class="card reveal" style="padding:24px;">
+        <h3 style="margin-bottom:12px;">📚 What You Will Learn</h3>
+        <ul id="subjectTopics" style="color:var(--tx2);display:grid;gap:8px;padding-left:18px;"></ul>
+
+        <div class="project-price" style="margin-top:20px;">
+          <span class="price-old" id="subjectOldPrice">₹299</span>
+          <span class="price-current" id="subjectCurrentPrice">₹99</span>
+          <span class="price-badge">MINIMAL</span>
+        </div>
+        <div class="project-actions">
+          <a href="#" class="btn-details" id="backToNotesBtn"><i class="fa-solid fa-arrow-left"></i> Back to Notes</a>
+          <a href="#" class="btn-buy" id="subjectBuyBtn" data-buy-project="Notes Pack" data-project-price="499">🛒 Buy Now</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade</p></div></div></footer>
+  <script src="../js/main.js"></script>
+  <script>
+    (() => {
+      const params = new URLSearchParams(window.location.search);
+      const subject = params.get('subject') || 'General';
+
+      const syllabusMap = {
+        "C Language": {
+          oldPrice: 299,
+          price: 99,
+          topics: ["C syntax and program structure", "Data types, operators, and control flow", "Arrays, strings, and pointers", "Functions and storage classes", "Structures, unions, and enums", "File handling and preprocessing"]
+        },
+        "Java": {
+          oldPrice: 299,
+          price: 99,
+          topics: ["Core Java syntax and OOP", "Collections and generics", "Exception handling and file I/O", "Multithreading fundamentals", "JDBC and database integration", "Modern Java streams and lambdas"]
+        },
+        "HTML": {
+          oldPrice: 299,
+          price: 99,
+          topics: ["Semantic HTML and page structure", "Forms, tables, and media", "Accessibility best practices", "SEO-friendly markup basics", "Reusable layout patterns", "Mini projects and templates"]
+        },
+        "CSS": {
+          oldPrice: 299,
+          price: 99,
+          topics: ["Selectors and specificity", "Box model and positioning", "Flexbox and CSS Grid", "Responsive design patterns", "Animations and transitions", "Utility and component styling"]
+        },
+        "JavaScript": {
+          oldPrice: 299,
+          price: 99,
+          topics: ["Core JS and ES6+ features", "DOM and browser events", "Functions, closures, and scope", "Promises and async/await", "Error handling and debugging", "Modular JavaScript workflows"]
+        },
+        "DSA": {
+          oldPrice: 299,
+          price: 99,
+          topics: ["Complexity analysis and problem patterns", "Arrays, strings, and linked lists", "Stacks, queues, and recursion", "Trees, BSTs, and heaps", "Graphs and traversal algorithms", "Sorting, searching, and dynamic programming"]
+        },
+        "SQL": {
+          oldPrice: 299,
+          price: 99,
+          topics: ["Database fundamentals and schema design", "DDL, DML, and constraints", "Joins and subqueries", "Views, procedures, and indexes", "Normalization and transactions", "Query optimization basics"]
+        },
+        "Android Development": {
+          oldPrice: 299,
+          price: 99,
+          topics: ["Android app architecture basics", "Activities, intents, and fragments", "Layouts and RecyclerView", "Room database and local storage", "Firebase integration", "Publishing and performance basics"]
+        },
+        "General": {
+          oldPrice: 299,
+          price: 99,
+          topics: ["Core fundamentals", "Industry patterns", "Hands-on examples", "Practice exercises", "Mini projects", "Interview preparation coverage"]
+        }
+      };
+
+      const data = syllabusMap[subject] || syllabusMap.General;
+      const titleEl = document.getElementById("subjectTitle");
+      const subtitleEl = document.getElementById("subjectSubtitle");
+      const topicsEl = document.getElementById("subjectTopics");
+      const oldPriceEl = document.getElementById("subjectOldPrice");
+      const currentPriceEl = document.getElementById("subjectCurrentPrice");
+      const buyBtn = document.getElementById("subjectBuyBtn");
+
+      titleEl.textContent = subject + " Syllabus";
+      subtitleEl.textContent = "Module-wise roadmap for " + subject + " with structured outcomes and practical coverage.";
+
+      topicsEl.innerHTML = "";
+      data.topics.forEach((topic) => {
+        const li = document.createElement("li");
+        li.textContent = topic;
+        topicsEl.appendChild(li);
+      });
+
+      oldPriceEl.textContent = "₹" + data.oldPrice.toLocaleString("en-IN");
+      currentPriceEl.textContent = "₹" + data.price.toLocaleString("en-IN");
+      buyBtn.dataset.buyProject = subject + " Notes Pack";
+      buyBtn.dataset.projectPrice = String(data.price);
+
+      document.getElementById("backToNotesBtn").addEventListener("click", (e) => {
+        e.preventDefault();
+        window.location.href = "../notes.html";
+      });
+    })();
+  </script>
+</body>
+</html>
