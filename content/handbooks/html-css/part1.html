@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Part 1: HTML Foundations — HTML & CSS Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 1 of HTML & CSS Handbook: How the web works, document structure, text elements, links, images, lists, and best practices.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/handbook.css">
+</head>
+<body class="handbook-wrapper">
+  <nav class="navbar"><div class="container"><a href="../../../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../../../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
+
+  <div class="handbook-page">
+    <div class="hb-topbar">
+      <div class="hb-topbar-inner">
+        <div class="hb-breadcrumbs">
+          <a href="index.html">HTML & CSS Handbook</a>
+          <span class="hb-muted">/</span>
+          <span>Part 1</span>
+          <span class="hb-muted">·</span>
+          <a href="#m1-1">1.1</a>
+          <a href="#m1-2">1.2</a>
+          <a href="#m1-3">1.3</a>
+          <a href="#m1-4">1.4</a>
+          <a href="#m1-5">1.5</a>
+          <a href="#m1-6">1.6</a>
+          <a href="#m1-7">1.7</a>
+        </div>
+        <div class="hb-progress" aria-label="Reading progress">
+          <div class="hb-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="hb-progress-fill"></div></div>
+          <div class="hb-progress-label">0%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chapter-header" data-chapter-num="01">
+      <div class="chapter-part-label">📖 Part 1 — HTML Foundations</div>
+      <h1 class="chapter-title">Build Your First <span class="gradient-text">Web Pages</span></h1>
+      <p class="chapter-subtitle">Understand how the web works and master HTML fundamentals with industry-style thinking.</p>
+      <div class="chapter-meta"><span>📄 Modules 1.1 – 1.7</span><span>⏱️ 70–100 min read</span><span>💻 35+ Examples</span></div>
+    </div>
+
+    <div class="callout callout-tip">
+      <strong>How to study Part 1:</strong> Read each concept, type every code example yourself (don't copy-paste), and open DevTools to inspect what the browser renders. Active practice gives permanent understanding.
+    </div>
+
+    <div class="hb-mini-toc">
+      <div class="hb-mini-title">📍 Part 1 Modules</div>
+      <div class="hb-mini-links">
+        <a href="#m1-1">1.1 The Web & HTML</a>
+        <a href="#m1-2">1.2 Document Structure</a>
+        <a href="#m1-3">1.3 Text Elements</a>
+        <a href="#m1-4">1.4 Links</a>
+        <a href="#m1-5">1.5 Images & Media</a>
+        <a href="#m1-6">1.6 Lists</a>
+        <a href="#m1-7">1.7 Comments</a>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">🚀 Advanced Lens — Part 1</div>
+      <p class="explain-en">
+        To master HTML at an industry level, go beyond tags. For each element, ask: what is its semantic meaning, how does a screen reader interpret it,
+        and how does it affect SEO? Think about document outline, accessibility tree, and how your HTML forms the foundation that CSS and JavaScript build upon.
+      </p>
+      <div class="explain-hi">
+        <span class="hi-label">Hindi mein samjho</span>
+        HTML sirf tags yaad karne se nahi aata. Har element ka semantic meaning samjho, screen reader kaise interpret karega socho,
+        aur SEO pe kya impact padega ye jaano. Yahi industry-level thinking hai.
+      </div>
+    </div>
+
+    <!-- MODULE 1.1 -->
+    <div class="module-section" id="m1-1">
+      <div class="module-header"><div class="module-number">1.1</div><h2 class="module-title">Introduction to the Web & HTML — How the internet works, what is HTML</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">How the Web Works</h3>
+        <p class="explain-en">
+          When you type a URL in your browser, a <strong>request</strong> is sent over the internet using the <strong>HTTP protocol</strong> to a <strong>web server</strong>.
+          The server responds with files — primarily HTML, CSS, and JavaScript. Your browser then <strong>parses</strong> the HTML to build the page structure,
+          applies CSS for styling, and executes JavaScript for interactivity.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Jab aap browser me URL type karte ho, browser HTTP protocol se server ko request bhejta hai. Server HTML, CSS, JS files bhejta hai. Browser HTML parse karke page dikhata hai, CSS se styling lagata hai, aur JS se interactivity add hoti hai.</div>
+
+        <div class="diagram-box">
+          <div class="diagram-title">🔄 Web Request-Response Cycle</div>
+          <div class="diagram-flow">
+            <div class="diagram-node primary">Browser<br><small>Client</small></div>
+            <div class="diagram-arrow">→ HTTP Request →</div>
+            <div class="diagram-node secondary">Server<br><small>Host</small></div>
+            <div class="diagram-arrow">→ Response →</div>
+            <div class="diagram-node success">HTML + CSS + JS<br><small>Files</small></div>
+            <div class="diagram-arrow">→ Render →</div>
+            <div class="diagram-node accent">Web Page<br><small>Visual</small></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">What is HTML?</h3>
+        <p class="explain-en">
+          <strong>HTML (HyperText Markup Language)</strong> is the standard markup language for creating web pages. It defines the <strong>structure and content</strong>
+          of a web page using elements (tags). HTML is NOT a programming language — it's a markup language that tells the browser what content to display and how to organize it.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>HTML ek markup language hai jo browser ko batati hai ki page pe kya content hai aur uski structure kya hai. Ye programming language nahi hai — ye content organize karne ka tarika hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — Your first HTML</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="tag">&lt;h1&gt;</span>Hello, World!<span class="tag">&lt;/h1&gt;</span>
+<span class="tag">&lt;p&gt;</span>This is my first web page.<span class="tag">&lt;/p&gt;</span></pre></div>
+          <div class="code-output">A large heading "Hello, World!" followed by a paragraph of text.</div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> <code>&lt;h1&gt;</code> creates a top-level heading, <code>&lt;p&gt;</code> creates a paragraph. Together they define content structure.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">HTML Elements, Tags & Attributes</h3>
+        <p class="explain-en">
+          An HTML <strong>element</strong> consists of an opening tag, content, and a closing tag. Some elements are <strong>self-closing</strong> (like <code>&lt;img&gt;</code>).
+          <strong>Attributes</strong> provide additional information about elements and are written inside the opening tag.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>HTML element me opening tag, content, aur closing tag hota hai. Kuch elements self-closing hote hain (jaise img). Attributes extra information dete hain jo opening tag me likhe jaate hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — Element anatomy</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">&lt;!-- Regular element: opening tag + content + closing tag --&gt;</span>
+<span class="tag">&lt;p</span> <span class="attr">class</span>=<span class="value">"intro"</span><span class="tag">&gt;</span>Welcome to HTML!<span class="tag">&lt;/p&gt;</span>
+
+<span class="comment">&lt;!-- Self-closing element (no closing tag needed) --&gt;</span>
+<span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="value">"photo.jpg"</span> <span class="attr">alt</span>=<span class="value">"A beautiful photo"</span><span class="tag">&gt;</span>
+
+<span class="comment">&lt;!-- Nested elements --&gt;</span>
+<span class="tag">&lt;div&gt;</span>
+  <span class="tag">&lt;h2&gt;</span>Title<span class="tag">&lt;/h2&gt;</span>
+  <span class="tag">&lt;p&gt;</span>Description here.<span class="tag">&lt;/p&gt;</span>
+<span class="tag">&lt;/div&gt;</span></pre></div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> <code>class</code>, <code>src</code>, and <code>alt</code> are attributes. Elements can be nested inside other elements to create hierarchy.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">How browsers build pages (DOM + render pipeline basics)</h3>
+        <p class="explain-en">
+          Advanced frontend work starts with understanding what the browser does after receiving HTML:
+          it parses HTML into the <strong>DOM tree</strong>, parses CSS into the CSSOM tree, combines them into a render tree,
+          performs layout calculations, then paints pixels to screen. Poor HTML structure can create fragile CSS and accessibility issues.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Browser pehle HTML parse karke DOM banata hai, CSS parse karke CSSOM banata hai, phir render tree bana kar layout aur paint karta hai. Agar HTML structure weak hai to CSS bhi messy hota hai aur accessibility issues badhte hain.</div>
+        <div class="diagram-box">
+          <div class="diagram-title">🧠 Browser Rendering Flow</div>
+          <div class="diagram-flow">
+            <div class="diagram-node primary">HTML<br><small>Parse</small></div>
+            <div class="diagram-arrow">→</div>
+            <div class="diagram-node secondary">DOM</div>
+            <div class="diagram-arrow">+</div>
+            <div class="diagram-node secondary">CSSOM</div>
+            <div class="diagram-arrow">→</div>
+            <div class="diagram-node success">Render Tree</div>
+            <div class="diagram-arrow">→</div>
+            <div class="diagram-node accent">Layout + Paint</div>
+          </div>
+        </div>
+        <div class="callout callout-tip"><strong>Industry insight:</strong> Better semantic structure gives predictable styling, easier QA, better SEO, and fewer regressions in large teams.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">HTML Versions & HTML5</h3>
+        <p class="explain-en">
+          HTML has evolved through multiple versions. <strong>HTML5</strong> (the current standard) introduced semantic elements, native video/audio support,
+          form validation, and many APIs. Always use HTML5 — declare it with <code>&lt;!DOCTYPE html&gt;</code> at the top of every document.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>HTML5 current standard hai. Ye semantic elements, native video/audio, form validation aur APIs leke aaya. Har HTML file me <code>&lt;!DOCTYPE html&gt;</code> likhna mandatory hai.</div>
+
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Feature</th><th>Old HTML (4.01)</th><th>HTML5 (Modern)</th></tr></thead>
+            <tbody>
+              <tr><td>Semantic tags</td><td>❌ Only <code>&lt;div&gt;</code></td><td>✅ <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code></td></tr>
+              <tr><td>Video/Audio</td><td>❌ Needed Flash plugin</td><td>✅ Native <code>&lt;video&gt;</code> / <code>&lt;audio&gt;</code></td></tr>
+              <tr><td>Form validation</td><td>❌ JavaScript only</td><td>✅ <code>required</code>, <code>pattern</code>, types</td></tr>
+              <tr><td>DOCTYPE</td><td>Long complex string</td><td>✅ Simple <code>&lt;!DOCTYPE html&gt;</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 1.2 -->
+    <div class="module-section" id="m1-2">
+      <div class="module-header"><div class="module-number">1.2</div><h2 class="module-title">Document Structure & Boilerplate — DOCTYPE, html, head, body, meta</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">The HTML Boilerplate</h3>
+        <p class="explain-en">
+          Every HTML page starts with a standard structure called the <strong>boilerplate</strong>. It includes the DOCTYPE declaration,
+          the <code>&lt;html&gt;</code> root element, <code>&lt;head&gt;</code> for metadata, and <code>&lt;body&gt;</code> for visible content.
+          This structure tells the browser how to correctly parse and render your page.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Har HTML page ek standard structure se shuru hota hai jise boilerplate bolte hain. DOCTYPE browser ko mode batata hai, head me metadata hota hai, aur body me visible content hota hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — Complete boilerplate</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="tag">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html</span> <span class="attr">lang</span>=<span class="value">"en"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;head&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="attr">charset</span>=<span class="value">"UTF-8"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="attr">name</span>=<span class="value">"viewport"</span> <span class="attr">content</span>=<span class="value">"width=device-width, initial-scale=1.0"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;title&gt;</span>My First Page<span class="tag">&lt;/title&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+<span class="tag">&lt;body&gt;</span>
+  <span class="tag">&lt;h1&gt;</span>Welcome!<span class="tag">&lt;/h1&gt;</span>
+  <span class="tag">&lt;p&gt;</span>Content goes here.<span class="tag">&lt;/p&gt;</span>
+<span class="tag">&lt;/body&gt;</span>
+<span class="tag">&lt;/html&gt;</span></pre></div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> <code>&lt;!DOCTYPE html&gt;</code> activates standards mode. <code>lang="en"</code> declares the page language for accessibility. <code>charset="UTF-8"</code> ensures all characters render correctly.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">The &lt;head&gt; section — Metadata</h3>
+        <p class="explain-en">
+          The <code>&lt;head&gt;</code> contains metadata that is <strong>not visible</strong> on the page but critical for browsers, search engines, and social media.
+          Key elements: <code>&lt;title&gt;</code> (browser tab title + SEO), <code>&lt;meta&gt;</code> (charset, viewport, description), and <code>&lt;link&gt;</code> (external stylesheets, favicon).
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Head section me wo information hoti hai jo page pe dikhai nahi deti — jaise page title (tab me dikhta hai), character encoding, viewport setting, aur CSS file ka link.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — Head metadata</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="tag">&lt;head&gt;</span>
+  <span class="comment">&lt;!-- Character encoding (always UTF-8) --&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="attr">charset</span>=<span class="value">"UTF-8"</span><span class="tag">&gt;</span>
+
+  <span class="comment">&lt;!-- Responsive viewport --&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="attr">name</span>=<span class="value">"viewport"</span> <span class="attr">content</span>=<span class="value">"width=device-width, initial-scale=1.0"</span><span class="tag">&gt;</span>
+
+  <span class="comment">&lt;!-- Page title (shows in browser tab + Google results) --&gt;</span>
+  <span class="tag">&lt;title&gt;</span>CodeWithYuvraj — Learn Web Dev<span class="tag">&lt;/title&gt;</span>
+
+  <span class="comment">&lt;!-- SEO description --&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="attr">name</span>=<span class="value">"description"</span> <span class="attr">content</span>=<span class="value">"Learn HTML and CSS from scratch"</span><span class="tag">&gt;</span>
+
+  <span class="comment">&lt;!-- External stylesheet --&gt;</span>
+  <span class="tag">&lt;link</span> <span class="attr">rel</span>=<span class="value">"stylesheet"</span> <span class="attr">href</span>=<span class="value">"style.css"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/head&gt;</span></pre></div>
+        </div>
+        <div class="callout callout-warning"><strong>Industry rule:</strong> Always include <code>charset</code>, <code>viewport</code>, and <code>title</code> in every page. Missing viewport = broken mobile experience. Missing charset = broken characters.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">The &lt;body&gt; section — Visible content</h3>
+        <p class="explain-en">
+          Everything users see on the page goes inside <code>&lt;body&gt;</code>. This includes text, images, links, forms, and interactive elements.
+          The body is where your HTML, styled by CSS and powered by JavaScript, comes to life.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Jo bhi user ko screen pe dikhta hai — text, images, links, buttons — sab body ke andar hota hai. CSS se styling aur JS se behavior add hoti hai.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Production boilerplate checklist (real project baseline)</h3>
+        <p class="explain-en">
+          A professional page should include a consistent base: <code>lang</code>, <code>charset</code>, responsive viewport,
+          meaningful title + description, favicon, CSS link, and often social tags. This avoids common deployment bugs and improves discoverability.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Professional HTML page me ek standard baseline hona chahiye: <code>lang</code>, <code>charset</code>, viewport, title, description, favicon, stylesheet link. Isse production me bugs kam hote hain aur SEO better hota hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Item</th><th>Why required</th></tr></thead>
+            <tbody>
+              <tr><td><code>lang="en"</code> or localized value</td><td>Screen readers + accessibility</td></tr>
+              <tr><td><code>&lt;meta charset="UTF-8"&gt;</code></td><td>Correct text rendering</td></tr>
+              <tr><td><code>&lt;meta name="viewport"&gt;</code></td><td>Mobile responsiveness</td></tr>
+              <tr><td>Unique <code>&lt;title&gt;</code></td><td>SEO + tab clarity</td></tr>
+              <tr><td><code>meta description</code></td><td>Search snippet quality</td></tr>
+              <tr><td>Favicon + stylesheet links</td><td>Branding + consistent UI</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 1.3 -->
+    <div class="module-section" id="m1-3">
+      <div class="module-header"><div class="module-number">1.3</div><h2 class="module-title">Text Content Elements — Headings, paragraphs, emphasis, formatting</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Headings (h1–h6) — Content hierarchy</h3>
+        <p class="explain-en">
+          HTML provides six levels of headings: <code>&lt;h1&gt;</code> (most important) to <code>&lt;h6&gt;</code> (least important).
+          Headings create a <strong>document outline</strong> that search engines and screen readers use to understand page structure.
+          Industry rule: use only <strong>one h1 per page</strong>, and never skip levels (h1 → h3 is wrong).
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Headings page ka structure define karte hain — h1 sabse important, h6 sabse kam. Ek page me sirf ek h1 hona chahiye. Levels skip mat karo (h1 ke baad seedha h3 mat likho).</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — Heading levels</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="tag">&lt;h1&gt;</span>Main Page Title<span class="tag">&lt;/h1&gt;</span>
+<span class="tag">&lt;h2&gt;</span>Section Heading<span class="tag">&lt;/h2&gt;</span>
+<span class="tag">&lt;h3&gt;</span>Sub-section<span class="tag">&lt;/h3&gt;</span>
+<span class="tag">&lt;h4&gt;</span>Minor heading<span class="tag">&lt;/h4&gt;</span>
+<span class="tag">&lt;h5&gt;</span>Rarely used<span class="tag">&lt;/h5&gt;</span>
+<span class="tag">&lt;h6&gt;</span>Smallest heading<span class="tag">&lt;/h6&gt;</span></pre></div>
+        </div>
+        <div class="callout callout-important"><strong>SEO Impact:</strong> Google uses headings to understand page topic. A clear h1 → h2 → h3 hierarchy improves search rankings and accessibility.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Paragraphs, line breaks & horizontal rules</h3>
+        <p class="explain-en">
+          <code>&lt;p&gt;</code> creates a paragraph — the most common text container. <code>&lt;br&gt;</code> forces a line break within text (use sparingly).
+          <code>&lt;hr&gt;</code> creates a thematic break (horizontal rule) between sections.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Paragraph ke liye <code>&lt;p&gt;</code>, line break ke liye <code>&lt;br&gt;</code>, aur sections ke beech line ke liye <code>&lt;hr&gt;</code> use hota hai. <code>&lt;br&gt;</code> zyada use mat karo — CSS se spacing do.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — Paragraphs & breaks</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="tag">&lt;p&gt;</span>HTML is the backbone of the web. Every website
+you visit uses HTML for structure.<span class="tag">&lt;/p&gt;</span>
+
+<span class="tag">&lt;p&gt;</span>This is a new paragraph.<span class="tag">&lt;br&gt;</span>
+This line is in the same paragraph but on a new line.<span class="tag">&lt;/p&gt;</span>
+
+<span class="tag">&lt;hr&gt;</span>
+
+<span class="tag">&lt;p&gt;</span>A new section starts after the horizontal rule.<span class="tag">&lt;/p&gt;</span></pre></div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> Browsers collapse multiple spaces and newlines in HTML source into a single space. Use <code>&lt;p&gt;</code> for spacing, not empty lines.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Text emphasis & formatting</h3>
+        <p class="explain-en">
+          <code>&lt;strong&gt;</code> marks text as <strong>important</strong> (browsers bold it). <code>&lt;em&gt;</code> marks text for <em>emphasis</em> (browsers italicize it).
+          <code>&lt;mark&gt;</code> highlights text. <code>&lt;small&gt;</code> reduces text size. <code>&lt;span&gt;</code> is a generic inline container for styling.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>&lt;strong&gt;</code> important text ke liye (bold dikhta hai), <code>&lt;em&gt;</code> emphasis ke liye (italic dikhta hai). <code>&lt;span&gt;</code> generic inline wrapper hai — CSS styling ke liye use hota hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — Text formatting</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="tag">&lt;p&gt;</span>
+  This is <span class="tag">&lt;strong&gt;</span>very important<span class="tag">&lt;/strong&gt;</span> text.
+  This is <span class="tag">&lt;em&gt;</span>emphasized<span class="tag">&lt;/em&gt;</span> text.
+<span class="tag">&lt;/p&gt;</span>
+
+<span class="tag">&lt;p&gt;</span>
+  <span class="tag">&lt;mark&gt;</span>Highlighted text<span class="tag">&lt;/mark&gt;</span> stands out.
+  <span class="tag">&lt;small&gt;</span>Fine print goes here.<span class="tag">&lt;/small&gt;</span>
+<span class="tag">&lt;/p&gt;</span>
+
+<span class="tag">&lt;p&gt;</span>Price: <span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="value">"price"</span><span class="tag">&gt;</span>₹1,999<span class="tag">&lt;/span&gt;</span><span class="tag">&lt;/p&gt;</span></pre></div>
+        </div>
+        <div class="callout callout-tip"><strong>Industry tip:</strong> Use <code>&lt;strong&gt;</code> and <code>&lt;em&gt;</code> for meaning, not just bold/italic. Screen readers announce them differently. Use CSS for purely visual styling.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 1.4 -->
+    <div class="module-section" id="m1-4">
+      <div class="module-header"><div class="module-number">1.4</div><h2 class="module-title">Links & Navigation — Anchor tags, href, paths, targets</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">The anchor element (&lt;a&gt;)</h3>
+        <p class="explain-en">
+          The <code>&lt;a&gt;</code> (anchor) element creates hyperlinks — the core of web navigation. The <code>href</code> attribute specifies the destination URL.
+          Links can point to external websites, internal pages, sections within a page, email addresses, or phone numbers.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>&lt;a&gt;</code> element se hyperlinks bante hain — ye web navigation ka base hai. <code>href</code> attribute destination URL batata hai. Links external sites, internal pages, email, ya phone pe point kar sakte hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — Link types</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">&lt;!-- External link --&gt;</span>
+<span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="value">"https://developer.mozilla.org"</span><span class="tag">&gt;</span>MDN Web Docs<span class="tag">&lt;/a&gt;</span>
+
+<span class="comment">&lt;!-- Internal page link --&gt;</span>
+<span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="value">"about.html"</span><span class="tag">&gt;</span>About Us<span class="tag">&lt;/a&gt;</span>
+
+<span class="comment">&lt;!-- Same-page anchor link --&gt;</span>
+<span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="value">"#contact"</span><span class="tag">&gt;</span>Jump to Contact<span class="tag">&lt;/a&gt;</span>
+
+<span class="comment">&lt;!-- Email and phone links --&gt;</span>
+<span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="value">"mailto:codewithyuvraj@gmail.com"</span><span class="tag">&gt;</span>Email Me<span class="tag">&lt;/a&gt;</span>
+<span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="value">"tel:+919876543210"</span><span class="tag">&gt;</span>Call Me<span class="tag">&lt;/a&gt;</span></pre></div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> <code>#contact</code> scrolls to the element with <code>id="contact"</code> on the same page. <code>mailto:</code> opens the email client.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">target attribute & security</h3>
+        <p class="explain-en">
+          <code>target="_blank"</code> opens links in a new tab. When linking to external sites with <code>_blank</code>, always add
+          <code>rel="noopener noreferrer"</code> for security (prevents the new page from accessing your page's window object).
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>target="_blank"</code> link naye tab me kholte hai. External sites ke liye <code>rel="noopener noreferrer"</code> add karo — ye security ke liye zaroori hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — Secure external link</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">&lt;!-- ✅ Correct: secure external link --&gt;</span>
+<span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="value">"https://github.com"</span>
+   <span class="attr">target</span>=<span class="value">"_blank"</span>
+   <span class="attr">rel</span>=<span class="value">"noopener noreferrer"</span><span class="tag">&gt;</span>
+  GitHub
+<span class="tag">&lt;/a&gt;</span>
+
+<span class="comment">&lt;!-- ❌ Wrong: missing rel on external _blank link --&gt;</span>
+<span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="value">"https://github.com"</span> <span class="attr">target</span>=<span class="value">"_blank"</span><span class="tag">&gt;</span>GitHub<span class="tag">&lt;/a&gt;</span></pre></div>
+        </div>
+        <div class="callout callout-warning"><strong>Security:</strong> Without <code>rel="noopener"</code>, the linked page can access <code>window.opener</code> and potentially redirect your page. Always add it for external <code>_blank</code> links.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Relative vs absolute paths</h3>
+        <p class="explain-en">
+          <strong>Absolute paths</strong> include the full URL (<code>https://example.com/page.html</code>). <strong>Relative paths</strong> are relative to the current file location.
+          Use relative paths for internal links (they work across environments) and absolute paths for external links.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Absolute path me full URL likha jaata hai. Relative path current file se relative hota hai. Internal links ke liye relative path use karo — ye deployment me kaam aata hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Type</th><th>Example</th><th>When to use</th></tr></thead>
+            <tbody>
+              <tr><td>Absolute</td><td><code>https://example.com/page.html</code></td><td>External sites</td></tr>
+              <tr><td>Root-relative</td><td><code>/images/logo.png</code></td><td>Same domain, from root</td></tr>
+              <tr><td>Relative</td><td><code>../css/style.css</code></td><td>Internal project files</td></tr>
+              <tr><td>Fragment</td><td><code>#section-id</code></td><td>Same page scroll</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 1.5 -->
+    <div class="module-section" id="m1-5">
+      <div class="module-header"><div class="module-number">1.5</div><h2 class="module-title">Images & Media — img, alt, figure, video, audio, lazy loading</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">The &lt;img&gt; element</h3>
+        <p class="explain-en">
+          <code>&lt;img&gt;</code> embeds images in your page. It's a self-closing element with two required attributes: <code>src</code> (image path) and
+          <code>alt</code> (alternative text for accessibility and SEO). The <code>alt</code> text is read by screen readers and shown when the image fails to load.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>&lt;img&gt;</code> se images embed hoti hain. <code>src</code> me image ka path aur <code>alt</code> me description dena mandatory hai — ye accessibility aur SEO dono ke liye zaroori hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — Images</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">&lt;!-- Basic image --&gt;</span>
+<span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="value">"photo.jpg"</span> <span class="attr">alt</span>=<span class="value">"Sunset over mountains"</span><span class="tag">&gt;</span>
+
+<span class="comment">&lt;!-- Image with width/height (prevents layout shift) --&gt;</span>
+<span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="value">"logo.png"</span>
+     <span class="attr">alt</span>=<span class="value">"CodeWithYuvraj logo"</span>
+     <span class="attr">width</span>=<span class="value">"200"</span>
+     <span class="attr">height</span>=<span class="value">"60"</span><span class="tag">&gt;</span>
+
+<span class="comment">&lt;!-- Lazy loading (loads only when near viewport) --&gt;</span>
+<span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="value">"large-photo.jpg"</span>
+     <span class="attr">alt</span>=<span class="value">"High resolution landscape"</span>
+     <span class="attr">loading</span>=<span class="value">"lazy"</span><span class="tag">&gt;</span></pre></div>
+        </div>
+        <div class="callout callout-tip"><strong>Performance tip:</strong> Always specify <code>width</code> and <code>height</code> attributes to prevent Cumulative Layout Shift (CLS). Use <code>loading="lazy"</code> for below-fold images.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Responsive images with <code>srcset</code> and <code>sizes</code></h3>
+        <p class="explain-en">
+          Modern websites should serve different image sizes based on device width and pixel density.
+          <code>srcset</code> lets the browser choose the best file automatically, and <code>sizes</code> tells expected display width.
+          This reduces bandwidth and speeds up mobile loading without losing visual quality.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>srcset</code> aur <code>sizes</code> se browser device ke hisaab se sahi image choose karta hai. Isse mobile pe fast load hota hai aur unnecessary heavy image download nahi hoti.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — responsive images</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="tag">&lt;img</span>
+  <span class="attr">src</span>=<span class="value">"hero-800.jpg"</span>
+  <span class="attr">srcset</span>=<span class="value">"hero-480.jpg 480w, hero-800.jpg 800w, hero-1200.jpg 1200w"</span>
+  <span class="attr">sizes</span>=<span class="value">"(max-width: 600px) 95vw, (max-width: 1024px) 80vw, 1200px"</span>
+  <span class="attr">alt</span>=<span class="value">"Frontend dashboard preview"</span>
+  <span class="attr">loading</span>=<span class="value">"lazy"</span>
+  <span class="attr">width</span>=<span class="value">"1200"</span>
+  <span class="attr">height</span>=<span class="value">"675"</span><span class="tag">&gt;</span></pre></div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> Browser chooses 480w/800w/1200w image automatically based on viewport and DPR, improving performance.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Figure & figcaption</h3>
+        <p class="explain-en">
+          <code>&lt;figure&gt;</code> wraps self-contained content (images, diagrams, code) with an optional <code>&lt;figcaption&gt;</code> for a caption.
+          This is semantically correct — it tells browsers and screen readers that the image and caption are related.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>&lt;figure&gt;</code> se image aur uska caption ek group ban jaata hai. Ye semantic HTML hai — browser aur screen reader ko pata chalta hai ki caption us image ka hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — Figure with caption</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="tag">&lt;figure&gt;</span>
+  <span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="value">"chart.png"</span> <span class="attr">alt</span>=<span class="value">"Sales growth chart for Q1 2026"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;figcaption&gt;</span>Fig 1: Quarterly sales growth in 2026<span class="tag">&lt;/figcaption&gt;</span>
+<span class="tag">&lt;/figure&gt;</span></pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Video & audio elements</h3>
+        <p class="explain-en">
+          HTML5 provides native <code>&lt;video&gt;</code> and <code>&lt;audio&gt;</code> elements — no plugins required.
+          Use <code>controls</code> to show player controls, and provide multiple <code>&lt;source&gt;</code> formats for cross-browser compatibility.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>HTML5 me video aur audio native support hai — koi plugin nahi chahiye. <code>controls</code> attribute se play/pause buttons dikhte hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — Video & audio</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">&lt;!-- Video with controls --&gt;</span>
+<span class="tag">&lt;video</span> <span class="attr">controls</span> <span class="attr">width</span>=<span class="value">"640"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;source</span> <span class="attr">src</span>=<span class="value">"demo.mp4"</span> <span class="attr">type</span>=<span class="value">"video/mp4"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;source</span> <span class="attr">src</span>=<span class="value">"demo.webm"</span> <span class="attr">type</span>=<span class="value">"video/webm"</span><span class="tag">&gt;</span>
+  Your browser does not support video.
+<span class="tag">&lt;/video&gt;</span>
+
+<span class="comment">&lt;!-- Audio player --&gt;</span>
+<span class="tag">&lt;audio</span> <span class="attr">controls</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;source</span> <span class="attr">src</span>=<span class="value">"podcast.mp3"</span> <span class="attr">type</span>=<span class="value">"audio/mpeg"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/audio&gt;</span></pre></div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> Multiple <code>&lt;source&gt;</code> elements provide format fallbacks. The text inside is shown if the browser doesn't support the element.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 1.6 -->
+    <div class="module-section" id="m1-6">
+      <div class="module-header"><div class="module-number">1.6</div><h2 class="module-title">Lists & Basic Grouping — Ordered, unordered, nested, description lists, div</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Ordered & unordered lists</h3>
+        <p class="explain-en">
+          <code>&lt;ul&gt;</code> creates an unordered (bulleted) list, <code>&lt;ol&gt;</code> creates an ordered (numbered) list.
+          Each item uses <code>&lt;li&gt;</code>. Lists are essential for navigation menus, feature lists, steps, and any grouped content.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>&lt;ul&gt;</code> se bullet points aur <code>&lt;ol&gt;</code> se numbered list banti hai. <code>&lt;li&gt;</code> me har item likha jaata hai. Menus, features, steps — sab lists se bante hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — Lists</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">&lt;!-- Unordered list --&gt;</span>
+<span class="tag">&lt;ul&gt;</span>
+  <span class="tag">&lt;li&gt;</span>HTML<span class="tag">&lt;/li&gt;</span>
+  <span class="tag">&lt;li&gt;</span>CSS<span class="tag">&lt;/li&gt;</span>
+  <span class="tag">&lt;li&gt;</span>JavaScript<span class="tag">&lt;/li&gt;</span>
+<span class="tag">&lt;/ul&gt;</span>
+
+<span class="comment">&lt;!-- Ordered list --&gt;</span>
+<span class="tag">&lt;ol&gt;</span>
+  <span class="tag">&lt;li&gt;</span>Learn HTML structure<span class="tag">&lt;/li&gt;</span>
+  <span class="tag">&lt;li&gt;</span>Add CSS styling<span class="tag">&lt;/li&gt;</span>
+  <span class="tag">&lt;li&gt;</span>Make it responsive<span class="tag">&lt;/li&gt;</span>
+<span class="tag">&lt;/ol&gt;</span>
+
+<span class="comment">&lt;!-- Nested list --&gt;</span>
+<span class="tag">&lt;ul&gt;</span>
+  <span class="tag">&lt;li&gt;</span>Frontend
+    <span class="tag">&lt;ul&gt;</span>
+      <span class="tag">&lt;li&gt;</span>HTML<span class="tag">&lt;/li&gt;</span>
+      <span class="tag">&lt;li&gt;</span>CSS<span class="tag">&lt;/li&gt;</span>
+    <span class="tag">&lt;/ul&gt;</span>
+  <span class="tag">&lt;/li&gt;</span>
+  <span class="tag">&lt;li&gt;</span>Backend<span class="tag">&lt;/li&gt;</span>
+<span class="tag">&lt;/ul&gt;</span></pre></div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> Lists can be nested inside each other to create hierarchies. Navigation menus are typically built with <code>&lt;ul&gt;</code> inside <code>&lt;nav&gt;</code>.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Description lists & the &lt;div&gt; container</h3>
+        <p class="explain-en">
+          <code>&lt;dl&gt;</code> creates a description list with <code>&lt;dt&gt;</code> (term) and <code>&lt;dd&gt;</code> (definition) — perfect for glossaries and FAQ.
+          <code>&lt;div&gt;</code> is a generic block-level container used to group elements for styling. It has no semantic meaning.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>&lt;dl&gt;</code> se glossary ya FAQ type list banti hai. <code>&lt;div&gt;</code> ek generic container hai — CSS styling ke liye grouping karne me use hota hai, iska koi semantic meaning nahi hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — Description list & div</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">&lt;!-- Description list --&gt;</span>
+<span class="tag">&lt;dl&gt;</span>
+  <span class="tag">&lt;dt&gt;</span>HTML<span class="tag">&lt;/dt&gt;</span>
+  <span class="tag">&lt;dd&gt;</span>HyperText Markup Language — structures web content<span class="tag">&lt;/dd&gt;</span>
+  <span class="tag">&lt;dt&gt;</span>CSS<span class="tag">&lt;/dt&gt;</span>
+  <span class="tag">&lt;dd&gt;</span>Cascading Style Sheets — styles web content<span class="tag">&lt;/dd&gt;</span>
+<span class="tag">&lt;/dl&gt;</span>
+
+<span class="comment">&lt;!-- div for grouping --&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="value">"card"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;h3&gt;</span>Project Title<span class="tag">&lt;/h3&gt;</span>
+  <span class="tag">&lt;p&gt;</span>Project description here.<span class="tag">&lt;/p&gt;</span>
+<span class="tag">&lt;/div&gt;</span></pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 1.7 -->
+    <div class="module-section" id="m1-7">
+      <div class="module-header"><div class="module-number">1.7</div><h2 class="module-title">Comments & Best Practices — HTML comments, readability, naming conventions</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">HTML comments</h3>
+        <p class="explain-en">
+          Comments in HTML use <code>&lt;!-- ... --&gt;</code> syntax. They are invisible to users but visible in source code.
+          Use them to explain complex sections, mark TODOs, and organize large files. Don't over-comment obvious code.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>HTML comments user ko dikhai nahi dete, lekin source code me hote hain. Complex sections explain karne ke liye aur TODOs mark karne ke liye use karo. Obvious code pe comments mat do.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — Comments</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">&lt;!-- Navigation Section --&gt;</span>
+<span class="tag">&lt;nav&gt;</span>
+  <span class="comment">&lt;!-- Main navigation links --&gt;</span>
+  <span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="value">"/"</span><span class="tag">&gt;</span>Home<span class="tag">&lt;/a&gt;</span>
+  <span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="value">"/about"</span><span class="tag">&gt;</span>About<span class="tag">&lt;/a&gt;</span>
+<span class="tag">&lt;/nav&gt;</span>
+
+<span class="comment">&lt;!-- TODO: Add footer with social links --&gt;</span></pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">HTML best practices checklist</h3>
+        <p class="explain-en">
+          Following consistent best practices makes your code professional, maintainable, and team-ready.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>In best practices ko follow karo — ye aapka code professional aur team-ready banate hain.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Practice</th><th>Why it matters</th></tr></thead>
+            <tbody>
+              <tr><td>Use 2-space indentation consistently</td><td>Readability across team</td></tr>
+              <tr><td>Always close tags properly</td><td>Prevents parsing errors</td></tr>
+              <tr><td>Use lowercase for tag names</td><td>Industry convention</td></tr>
+              <tr><td>Always include <code>alt</code> on images</td><td>Accessibility + SEO</td></tr>
+              <tr><td>Use semantic elements over <code>&lt;div&gt;</code></td><td>Meaningful structure</td></tr>
+              <tr><td>Validate HTML (W3C validator)</td><td>Catch errors early</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Pro habit:</strong> Run your HTML through the <a href="https://validator.w3.org/" target="_blank" rel="noopener noreferrer">W3C Validator</a> regularly. Zero errors = professional code.</div>
+      </div>
+    </div>
+
+    <div class="practice-box">
+      <div class="practice-title">✏️ Practice Exercises — Part 1</div>
+      <ol>
+        <li>Create a complete HTML page with proper boilerplate, title, meta description, and viewport.</li>
+        <li>Build a personal profile page with your name (h1), bio (paragraphs), and a photo with alt text.</li>
+        <li>Create a navigation menu with 5 links — 3 internal pages, 1 external (with security), 1 email link.</li>
+        <li>Build a "My Skills" section using an unordered list with nested sub-items.</li>
+        <li>Add a video embed and an audio player with proper fallback text.</li>
+      </ol>
+    </div>
+
+    <div class="handbook-nav">
+      <a href="index.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">HTML & CSS Handbook Index</div></div></a>
+      <a href="part2.html" class="nav-btn next"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Part 2: Semantic HTML & Forms →</div></div><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+  </div>
+
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
+  <script src="../../../js/main.js"></script>
+  <script>
+    (() => {
+      document.querySelectorAll('.code-block').forEach((block) => {
+        const pre = block.querySelector('.code-body pre');
+        const header = block.querySelector('.code-header');
+        if (!pre || !header) return;
+        let actions = header.querySelector('.code-actions');
+        if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); }
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'code-copy-btn';
+        btn.textContent = 'Copy';
+        btn.addEventListener('click', async () => {
+          try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; }
+          catch { btn.textContent = 'Failed'; }
+          finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); }
+        });
+        actions.prepend(btn);
+      });
+      const fill = document.querySelector('.hb-progress-fill');
+      const label = document.querySelector('.hb-progress-label');
+      if (fill && label) {
+        const update = () => {
+          const h = document.documentElement;
+          const denom = (h.scrollHeight - h.clientHeight) || 1;
+          const pct = Math.max(0, Math.min(1, h.scrollTop / denom));
+          fill.style.width = (pct * 100).toFixed(0) + '%';
+          label.textContent = (pct * 100).toFixed(0) + '%';
+        };
+        document.addEventListener('scroll', update, { passive: true });
+        update();
+      }
+    })();
+  </script>
+</body>
+</html>

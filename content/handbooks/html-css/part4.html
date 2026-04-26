@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Part 4: CSS Layout Systems — HTML & CSS Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 4: Document flow, positioning, floats, Flexbox, CSS Grid — master every layout technique.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/handbook.css">
+</head>
+<body class="handbook-wrapper">
+  <nav class="navbar"><div class="container"><a href="../../../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../../../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
+
+  <div class="handbook-page">
+    <div class="hb-topbar">
+      <div class="hb-topbar-inner">
+        <div class="hb-breadcrumbs">
+          <a href="index.html">HTML & CSS Handbook</a><span class="hb-muted">/</span><span>Part 4</span><span class="hb-muted">·</span>
+          <a href="#m4-1">4.1</a><a href="#m4-2">4.2</a><a href="#m4-3">4.3</a><a href="#m4-4">4.4</a><a href="#m4-5">4.5</a><a href="#m4-6">4.6</a><a href="#m4-7">4.7</a>
+        </div>
+        <div class="hb-progress" aria-label="Reading progress"><div class="hb-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="hb-progress-fill"></div></div><div class="hb-progress-label">0%</div></div>
+      </div>
+    </div>
+
+    <div class="chapter-header" data-chapter-num="04">
+      <div class="chapter-part-label">📖 Part 4 — CSS Layout Systems</div>
+      <h1 class="chapter-title">Master <span class="gradient-text">Layout</span> Like a Pro</h1>
+      <p class="chapter-subtitle">Document flow, positioning, Flexbox, and CSS Grid — the four pillars of modern page layout.</p>
+      <div class="chapter-meta"><span>📄 Modules 4.1 – 4.7</span><span>⏱️ 90–130 min read</span><span>💻 50+ Examples</span></div>
+    </div>
+
+    <div class="callout callout-tip"><strong>How to study Part 4:</strong> Layout is the hardest CSS topic. Build every example yourself. Use DevTools Flexbox/Grid inspectors (they visually show lines and areas). Practice > reading.</div>
+
+    <div class="hb-mini-toc">
+      <div class="hb-mini-title">📍 Part 4 Modules</div>
+      <div class="hb-mini-links">
+        <a href="#m4-1">4.1 Document Flow</a><a href="#m4-2">4.2 Positioning</a><a href="#m4-3">4.3 Float (Legacy)</a>
+        <a href="#m4-4">4.4 Flexbox Container</a><a href="#m4-5">4.5 Flexbox Items</a><a href="#m4-6">4.6 Grid Basics</a><a href="#m4-7">4.7 Grid Advanced</a>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">🚀 Advanced Lens — Part 4</div>
+      <p class="explain-en">
+        Professional layout work is about choosing the right tool quickly and predictably: use Flexbox for alignment and one-dimensional flow,
+        Grid for two-dimensional structure, and positioning only for overlays or anchored UI. Avoid “random trial-and-error CSS” by designing the layout model first.
+      </p>
+      <div class="explain-hi">
+        <span class="hi-label">Hindi mein samjho</span>
+        Industry level layout me pehle layout model decide hota hai: Flexbox alignment/1D flow ke liye, Grid 2D structure ke liye,
+        aur positioning sirf overlays ke liye. Guesswork-based CSS se bugs badhte hain.
+      </div>
+    </div>
+
+    <!-- MODULE 4.1 -->
+    <div class="module-section" id="m4-1">
+      <div class="module-header"><div class="module-number">4.1</div><h2 class="module-title">Normal Document Flow — How browsers lay out elements by default</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Understanding normal flow</h3>
+        <p class="explain-en">
+          Before any CSS layout, the browser places elements in <strong>normal flow</strong>: block elements stack vertically (top to bottom),
+          inline elements flow horizontally (left to right). Every layout technique — positioning, Flexbox, Grid — takes elements <em>out</em> of normal flow.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>CSS layout se pehle browser elements ko normal flow me rakhta hai: block elements vertical stack hote hain (upar se neeche), inline elements horizontal flow karte hain. Har layout technique elements ko normal flow se bahar nikaalti hai.</div>
+        <div class="diagram-box">
+          <div class="diagram-title">📐 Normal Document Flow</div>
+          <div class="diagram-flow">
+            <div class="diagram-node primary">Block (div)<br><small>Full width ↔</small></div>
+            <div class="diagram-arrow">↓ stacks</div>
+            <div class="diagram-node primary">Block (p)<br><small>Full width ↔</small></div>
+            <div class="diagram-arrow">↓ stacks</div>
+            <div class="diagram-node secondary">Inline (span, a)<br><small>← flows →</small></div>
+          </div>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Block vs inline</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Block: takes full width, stacks vertically */</span>
+<span class="selector">div, p, h1, section, article</span> {
+  <span class="property">display</span>: <span class="value">block</span>;   <span class="comment">/* default */</span>
+  <span class="property">width</span>: <span class="number">100</span><span class="unit">%</span>;       <span class="comment">/* fills parent */</span>
+}
+
+<span class="comment">/* Inline: sits in text flow, no width/height */</span>
+<span class="selector">span, a, strong, em, code</span> {
+  <span class="property">display</span>: <span class="value">inline</span>;  <span class="comment">/* default */</span>
+  <span class="comment">/* width/height/margin-top/bottom IGNORED! */</span>
+}
+
+<span class="comment">/* Inline-block: inline flow + block sizing */</span>
+<span class="selector">.badge</span> {
+  <span class="property">display</span>: <span class="value">inline-block</span>;
+  <span class="property">padding</span>: <span class="number">4</span><span class="unit">px</span> <span class="number">12</span><span class="unit">px</span>;  <span class="comment">/* Works! */</span>
+}</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Display</th><th>Width</th><th>Height</th><th>Margin top/bottom</th><th>Flow</th></tr></thead>
+            <tbody>
+              <tr><td><code>block</code></td><td>✅ Full width</td><td>✅ Works</td><td>✅ Works</td><td>Stacks vertically</td></tr>
+              <tr><td><code>inline</code></td><td>❌ Content only</td><td>❌ Ignored</td><td>❌ Ignored</td><td>Flows in text</td></tr>
+              <tr><td><code>inline-block</code></td><td>✅ Works</td><td>✅ Works</td><td>✅ Works</td><td>Flows in text</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 4.2 -->
+    <div class="module-section" id="m4-2">
+      <div class="module-header"><div class="module-number">4.2</div><h2 class="module-title">Positioning — static, relative, absolute, fixed, sticky</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">The five position values</h3>
+        <p class="explain-en">
+          <code>position</code> removes elements from normal flow and places them using <code>top/right/bottom/left</code>.
+          <strong>relative</strong> shifts from original spot. <strong>absolute</strong> positions relative to nearest positioned ancestor.
+          <strong>fixed</strong> stays on screen during scroll. <strong>sticky</strong> toggles between relative and fixed.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Position se elements normal flow se nikalte hain. Relative original jagah se shift hota hai. Absolute nearest positioned parent ke relative hota hai. Fixed scroll pe bhi screen pe chipka rehta hai. Sticky dono ka mix hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Positioning</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Sticky header (sticks on scroll) */</span>
+<span class="selector">.navbar</span> {
+  <span class="property">position</span>: <span class="value">sticky</span>;
+  <span class="property">top</span>: <span class="number">0</span>;
+  <span class="property">z-index</span>: <span class="number">100</span>;
+}
+
+<span class="comment">/* Absolute badge on a card */</span>
+<span class="selector">.card</span> { <span class="property">position</span>: <span class="value">relative</span>; }
+<span class="selector">.card .badge</span> {
+  <span class="property">position</span>: <span class="value">absolute</span>;
+  <span class="property">top</span>: <span class="number">-8</span><span class="unit">px</span>;
+  <span class="property">right</span>: <span class="number">-8</span><span class="unit">px</span>;
+}
+
+<span class="comment">/* Fixed back-to-top button */</span>
+<span class="selector">.back-to-top</span> {
+  <span class="property">position</span>: <span class="value">fixed</span>;
+  <span class="property">bottom</span>: <span class="number">20</span><span class="unit">px</span>;
+  <span class="property">right</span>: <span class="number">20</span><span class="unit">px</span>;
+}</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Value</th><th>Stays in flow?</th><th>Positioned relative to</th><th>Use case</th></tr></thead>
+            <tbody>
+              <tr><td><code>static</code></td><td>✅ Yes</td><td>—</td><td>Default</td></tr>
+              <tr><td><code>relative</code></td><td>✅ Yes</td><td>Itself</td><td>Parent for absolute children</td></tr>
+              <tr><td><code>absolute</code></td><td>❌ No</td><td>Nearest positioned ancestor</td><td>Badges, tooltips, dropdowns</td></tr>
+              <tr><td><code>fixed</code></td><td>❌ No</td><td>Viewport</td><td>Sticky headers, floating buttons</td></tr>
+              <tr><td><code>sticky</code></td><td>✅ Until threshold</td><td>Scroll container</td><td>Section headers, nav</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>z-index trap:</strong> <code>z-index</code> only works on positioned elements (not static). Create stacking contexts carefully — deeply nested z-indexes cause layering bugs.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Stacking context (why overlays sometimes hide unexpectedly)</h3>
+        <p class="explain-en">
+          Many “z-index not working” bugs are actually stacking-context issues. Properties like <code>position</code> + <code>z-index</code>,
+          <code>transform</code>, <code>opacity &lt; 1</code>, and <code>filter</code> can create new stacking contexts.
+          Once created, child z-index values are compared only inside that context.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>“z-index kaam nahi kar raha” ka main reason stacking context hota hai. Kuch properties (transform, opacity, positioned + z-index) new context bana deti hain. Phir child ka z-index sirf us context ke andar compare hota hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — stacking context example</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="selector">.panel</span> {
+  <span class="property">position</span>: <span class="value">relative</span>;
+  <span class="property">z-index</span>: <span class="number">1</span>; <span class="comment">/* new stacking context */</span>
+}
+
+<span class="selector">.panel__tooltip</span> {
+  <span class="property">position</span>: <span class="value">absolute</span>;
+  <span class="property">z-index</span>: <span class="number">9999</span>; <span class="comment">/* high only inside .panel context */</span>
+}
+
+<span class="selector">.global-modal</span> {
+  <span class="property">position</span>: <span class="value">fixed</span>;
+  <span class="property">z-index</span>: <span class="number">100</span>;
+}</pre></div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> Even <code>9999</code> can appear behind another element if it is trapped inside a lower parent stacking context.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 4.3 -->
+    <div class="module-section" id="m4-3">
+      <div class="module-header"><div class="module-number">4.3</div><h2 class="module-title">Float & Clear (Legacy) — Historical layout, clearfix, when you'll see it</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Floats — a legacy technique</h3>
+        <p class="explain-en">
+          <code>float</code> was the primary layout method before Flexbox/Grid. It pulls elements to the left or right, allowing text to wrap around them.
+          You'll encounter floats in legacy codebases. For new projects, <strong>always use Flexbox or Grid instead</strong>.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Float Flexbox/Grid se pehle ka layout method tha. Ye elements ko left/right kheenchta hai. Purane codebases me milega. Naye projects me hamesha Flexbox ya Grid use karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Float (legacy)</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Legacy float layout — DON'T use for new projects */</span>
+<span class="selector">.sidebar</span> { <span class="property">float</span>: <span class="value">left</span>; <span class="property">width</span>: <span class="number">30</span><span class="unit">%</span>; }
+<span class="selector">.content</span> { <span class="property">float</span>: <span class="value">left</span>; <span class="property">width</span>: <span class="number">70</span><span class="unit">%</span>; }
+
+<span class="comment">/* Clearfix (required to contain floats) */</span>
+<span class="selector">.clearfix::after</span> {
+  <span class="property">content</span>: <span class="string">""</span>;
+  <span class="property">display</span>: <span class="value">table</span>;
+  <span class="property">clear</span>: <span class="value">both</span>;
+}</pre></div>
+        </div>
+        <div class="callout callout-note"><strong>Modern alternative:</strong> The only valid use of float today is wrapping text around images. For all layout needs, use Flexbox (1D) or Grid (2D).</div>
+      </div>
+    </div>
+
+    <!-- MODULE 4.4 -->
+    <div class="module-section" id="m4-4">
+      <div class="module-header"><div class="module-number">4.4</div><h2 class="module-title">Flexbox — Container Properties — display:flex, direction, wrap, justify, align</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Flexbox — the one-dimensional layout king</h3>
+        <p class="explain-en">
+          Flexbox handles layout in <strong>one direction</strong> — either a row or a column. Set <code>display: flex</code> on a container,
+          and its children become flex items. Use <code>justify-content</code> for main-axis alignment and <code>align-items</code> for cross-axis.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Flexbox ek direction me layout karta hai — row ya column. Parent pe <code>display: flex</code> lagao, children flex items ban jaate hain. <code>justify-content</code> main axis ke liye, <code>align-items</code> cross axis ke liye.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Flexbox container</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Navbar with Flexbox */</span>
+<span class="selector">.navbar</span> {
+  <span class="property">display</span>: <span class="value">flex</span>;
+  <span class="property">justify-content</span>: <span class="value">space-between</span>; <span class="comment">/* Logo left, links right */</span>
+  <span class="property">align-items</span>: <span class="value">center</span>;            <span class="comment">/* Vertically centered */</span>
+  <span class="property">gap</span>: <span class="number">16</span><span class="unit">px</span>;                      <span class="comment">/* Space between items */</span>
+}
+
+<span class="comment">/* Centering anything (the holy grail) */</span>
+<span class="selector">.center-me</span> {
+  <span class="property">display</span>: <span class="value">flex</span>;
+  <span class="property">justify-content</span>: <span class="value">center</span>;
+  <span class="property">align-items</span>: <span class="value">center</span>;
+  <span class="property">min-height</span>: <span class="number">100</span><span class="unit">vh</span>;
+}
+
+<span class="comment">/* Wrapping cards */</span>
+<span class="selector">.card-grid</span> {
+  <span class="property">display</span>: <span class="value">flex</span>;
+  <span class="property">flex-wrap</span>: <span class="value">wrap</span>;               <span class="comment">/* Wrap to next line */</span>
+  <span class="property">gap</span>: <span class="number">20</span><span class="unit">px</span>;
+}</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Property</th><th>Values</th><th>Controls</th></tr></thead>
+            <tbody>
+              <tr><td><code>flex-direction</code></td><td>row | column | row-reverse | column-reverse</td><td>Main axis direction</td></tr>
+              <tr><td><code>justify-content</code></td><td>flex-start | center | space-between | space-around | space-evenly</td><td>Main axis alignment</td></tr>
+              <tr><td><code>align-items</code></td><td>stretch | center | flex-start | flex-end | baseline</td><td>Cross axis alignment</td></tr>
+              <tr><td><code>flex-wrap</code></td><td>nowrap | wrap | wrap-reverse</td><td>Line wrapping</td></tr>
+              <tr><td><code>gap</code></td><td>Length value</td><td>Space between items</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Most used pattern:</strong> <code>display: flex; justify-content: center; align-items: center;</code> — this centers anything both horizontally and vertically.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Common Flexbox layout patterns</h3>
+        <p class="explain-en">These are the most common Flexbox patterns you'll use daily. Master these and you can build 80% of all web layouts.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Ye sabse common Flexbox patterns hain jo daily use hote hain. Inhe master karo aur 80% web layouts bana sakte ho.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Flexbox patterns</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* 1. Sticky footer layout */</span>
+<span class="selector">body</span> {
+  <span class="property">display</span>: <span class="value">flex</span>;
+  <span class="property">flex-direction</span>: <span class="value">column</span>;
+  <span class="property">min-height</span>: <span class="number">100</span><span class="unit">vh</span>;
+}
+<span class="selector">main</span> { <span class="property">flex</span>: <span class="number">1</span>; } <span class="comment">/* Pushes footer down */</span>
+
+<span class="comment">/* 2. Equal-height cards */</span>
+<span class="selector">.card-grid</span> { <span class="property">display</span>: <span class="value">flex</span>; <span class="property">gap</span>: <span class="number">20</span><span class="unit">px</span>; }
+<span class="selector">.card</span> {
+  <span class="property">display</span>: <span class="value">flex</span>;
+  <span class="property">flex-direction</span>: <span class="value">column</span>;
+}
+<span class="selector">.card__body</span> { <span class="property">flex</span>: <span class="number">1</span>; } <span class="comment">/* Fills remaining space */</span>
+<span class="selector">.card__footer</span> { <span class="property">margin-top</span>: <span class="value">auto</span>; } <span class="comment">/* Always at bottom */</span>
+
+<span class="comment">/* 3. Responsive nav with logo */</span>
+<span class="selector">.nav</span> {
+  <span class="property">display</span>: <span class="value">flex</span>;
+  <span class="property">justify-content</span>: <span class="value">space-between</span>;
+  <span class="property">align-items</span>: <span class="value">center</span>;
+}
+<span class="selector">.nav__links</span> {
+  <span class="property">display</span>: <span class="value">flex</span>;
+  <span class="property">gap</span>: <span class="number">24</span><span class="unit">px</span>;
+  <span class="property">list-style</span>: <span class="value">none</span>;
+}</pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Layout decision framework (Flexbox vs Grid vs Position)</h3>
+        <p class="explain-en">
+          Use this quick decision framework in real projects: if the layout is a single row/column alignment problem, start with Flexbox;
+          if rows and columns are both first-class, start with Grid; if an element must sit on top of another element, use positioning.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Quick rule: 1D alignment = Flexbox, 2D structure = Grid, overlay/anchor placement = Positioning. Is framework se layout decisions fast aur predictable ho jaate hain.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Problem</th><th>Best tool</th><th>Typical example</th></tr></thead>
+            <tbody>
+              <tr><td>Horizontal alignment of nav/buttons</td><td>Flexbox</td><td>Navbar, action row</td></tr>
+              <tr><td>Card gallery with equal tracks</td><td>Grid</td><td>Product or blog cards</td></tr>
+              <tr><td>Page shell (sidebar/main/header)</td><td>Grid</td><td>Dashboard layout</td></tr>
+              <tr><td>Badge over image, modal over content</td><td>Position</td><td>Tooltip, floating CTA</td></tr>
+              <tr><td>Vertical centering in one container</td><td>Flexbox</td><td>Login form in viewport</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 4.5 -->
+    <div class="module-section" id="m4-5">
+      <div class="module-header"><div class="module-number">4.5</div><h2 class="module-title">Flexbox — Item Properties — flex-grow, flex-shrink, flex-basis, order, align-self</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Controlling individual flex items</h3>
+        <p class="explain-en">
+          Flex items can be individually controlled. <code>flex-grow</code> defines how much an item grows to fill space.
+          <code>flex-shrink</code> controls shrinking. <code>flex-basis</code> sets the initial size. The shorthand <code>flex: 1</code> means "grow equally."
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Flex items ko individually control kar sakte ho. <code>flex-grow</code> se item kitna bada hoga, <code>flex-shrink</code> se kitna chhota, <code>flex-basis</code> se initial size set hota hai. <code>flex: 1</code> matlab "equally grow karo."</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Flex items</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Sidebar + main content layout */</span>
+<span class="selector">.layout</span> { <span class="property">display</span>: <span class="value">flex</span>; }
+<span class="selector">.sidebar</span> { <span class="property">flex</span>: <span class="number">0</span> <span class="number">0</span> <span class="number">250</span><span class="unit">px</span>; }  <span class="comment">/* Don't grow, don't shrink, 250px */</span>
+<span class="selector">.main</span>    { <span class="property">flex</span>: <span class="number">1</span>; }            <span class="comment">/* Take all remaining space */</span>
+
+<span class="comment">/* Equal-width columns */</span>
+<span class="selector">.col</span> { <span class="property">flex</span>: <span class="number">1</span>; }
+
+<span class="comment">/* Override alignment for one item */</span>
+<span class="selector">.special</span> { <span class="property">align-self</span>: <span class="value">flex-end</span>; }</pre></div>
+        </div>
+        <div class="callout callout-important"><strong>Shorthand:</strong> <code>flex: 1</code> = <code>flex-grow: 1; flex-shrink: 1; flex-basis: 0;</code>. <code>flex: 0 0 200px</code> = fixed 200px, no grow/shrink. Master this shorthand.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Flex item properties reference</h3>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Property</th><th>Default</th><th>What it does</th><th>Common values</th></tr></thead>
+            <tbody>
+              <tr><td><code>flex-grow</code></td><td>0</td><td>How much item grows</td><td>0 (no grow), 1 (fill space)</td></tr>
+              <tr><td><code>flex-shrink</code></td><td>1</td><td>How much item shrinks</td><td>0 (never shrink), 1 (allow)</td></tr>
+              <tr><td><code>flex-basis</code></td><td>auto</td><td>Initial size before grow/shrink</td><td>auto, 200px, 30%</td></tr>
+              <tr><td><code>align-self</code></td><td>auto</td><td>Override parent's align-items</td><td>center, flex-start, stretch</td></tr>
+              <tr><td><code>order</code></td><td>0</td><td>Visual order (not DOM)</td><td>-1 (first), 1 (last)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — margin: auto trick</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Push last item to the right */</span>
+<span class="selector">.nav-item:last-child</span> {
+  <span class="property">margin-left</span>: <span class="value">auto</span>; <span class="comment">/* Takes all available space */</span>
+}
+
+<span class="comment">/* Center a single item */</span>
+<span class="selector">.flex-child</span> {
+  <span class="property">margin</span>: <span class="value">auto</span>; <span class="comment">/* Centers both axes in flex */</span>
+}</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 4.6 -->
+    <div class="module-section" id="m4-6">
+      <div class="module-header"><div class="module-number">4.6</div><h2 class="module-title">CSS Grid — Fundamentals — grid-template, rows, columns, gap, fr unit</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Grid — the two-dimensional layout system</h3>
+        <p class="explain-en">
+          CSS Grid handles <strong>rows AND columns simultaneously</strong>. Use <code>grid-template-columns</code> and <code>grid-template-rows</code>
+          to define the grid structure. The <code>fr</code> unit distributes available space proportionally.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>CSS Grid rows AUR columns dono ek saath handle karta hai. <code>grid-template-columns</code> se columns aur <code>grid-template-rows</code> se rows define hoti hain. <code>fr</code> unit space proportionally distribute karta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Grid basics</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* 3-column layout */</span>
+<span class="selector">.grid</span> {
+  <span class="property">display</span>: <span class="value">grid</span>;
+  <span class="property">grid-template-columns</span>: <span class="number">1</span><span class="unit">fr</span> <span class="number">1</span><span class="unit">fr</span> <span class="number">1</span><span class="unit">fr</span>;  <span class="comment">/* 3 equal columns */</span>
+  <span class="property">gap</span>: <span class="number">20</span><span class="unit">px</span>;
+}
+
+<span class="comment">/* Sidebar + content */</span>
+<span class="selector">.page</span> {
+  <span class="property">display</span>: <span class="value">grid</span>;
+  <span class="property">grid-template-columns</span>: <span class="number">250</span><span class="unit">px</span> <span class="number">1</span><span class="unit">fr</span>;  <span class="comment">/* Fixed sidebar, fluid content */</span>
+  <span class="property">gap</span>: <span class="number">24</span><span class="unit">px</span>;
+}
+
+<span class="comment">/* Auto-fit responsive cards (no media queries!) */</span>
+<span class="selector">.cards</span> {
+  <span class="property">display</span>: <span class="value">grid</span>;
+  <span class="property">grid-template-columns</span>: <span class="value">repeat(auto-fit, minmax(280px, 1fr))</span>;
+  <span class="property">gap</span>: <span class="number">20</span><span class="unit">px</span>;
+}</pre></div>
+        </div>
+        <div class="callout callout-tip"><strong>Power pattern:</strong> <code>repeat(auto-fit, minmax(280px, 1fr))</code> creates a fully responsive grid that adapts from 1 to many columns — zero media queries needed!</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Grid properties reference</h3>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Property</th><th>Applied to</th><th>What it does</th></tr></thead>
+            <tbody>
+              <tr><td><code>grid-template-columns</code></td><td>Container</td><td>Define column tracks</td></tr>
+              <tr><td><code>grid-template-rows</code></td><td>Container</td><td>Define row tracks</td></tr>
+              <tr><td><code>grid-template-areas</code></td><td>Container</td><td>Named visual layout</td></tr>
+              <tr><td><code>gap</code> / <code>row-gap</code> / <code>column-gap</code></td><td>Container</td><td>Space between cells</td></tr>
+              <tr><td><code>grid-column</code></td><td>Item</td><td>Span across columns</td></tr>
+              <tr><td><code>grid-row</code></td><td>Item</td><td>Span across rows</td></tr>
+              <tr><td><code>grid-area</code></td><td>Item</td><td>Assign to named area</td></tr>
+              <tr><td><code>place-items</code></td><td>Container</td><td>Align all items (shorthand)</td></tr>
+              <tr><td><code>place-self</code></td><td>Item</td><td>Align single item</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Grid item spanning</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Span multiple columns/rows */</span>
+<span class="selector">.featured</span> {
+  <span class="property">grid-column</span>: <span class="value">span 2</span>;  <span class="comment">/* Takes 2 columns */</span>
+  <span class="property">grid-row</span>: <span class="value">span 2</span>;     <span class="comment">/* Takes 2 rows */</span>
+}
+
+<span class="comment">/* Place at specific position */</span>
+<span class="selector">.sidebar</span> {
+  <span class="property">grid-column</span>: <span class="number">1</span>;
+  <span class="property">grid-row</span>: <span class="number">1</span> / <span class="number">-1</span>;     <span class="comment">/* First to last row */</span>
+}
+
+<span class="comment">/* Center content in grid cell */</span>
+<span class="selector">.centered-cell</span> {
+  <span class="property">place-self</span>: <span class="value">center</span>;   <span class="comment">/* Centers both axes */</span>
+}</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 4.7 -->
+    <div class="module-section" id="m4-7">
+      <div class="module-header"><div class="module-number">4.7</div><h2 class="module-title">CSS Grid — Advanced — grid-area, named lines, template areas, auto-flow</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Grid template areas — visual layout</h3>
+        <p class="explain-en">
+          <code>grid-template-areas</code> lets you define layout visually using named areas. This is the most readable way to build complex page layouts.
+          Each child gets a <code>grid-area</code> name that maps to the template.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>grid-template-areas</code> se layout visually define hota hai — named areas se. Complex page layouts banane ka sabse readable tarika hai. Har child ko <code>grid-area</code> name dete ho.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Grid template areas</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="selector">.dashboard</span> {
+  <span class="property">display</span>: <span class="value">grid</span>;
+  <span class="property">grid-template-columns</span>: <span class="number">240</span><span class="unit">px</span> <span class="number">1</span><span class="unit">fr</span>;
+  <span class="property">grid-template-rows</span>: <span class="number">60</span><span class="unit">px</span> <span class="number">1</span><span class="unit">fr</span> <span class="number">40</span><span class="unit">px</span>;
+  <span class="property">grid-template-areas</span>:
+    <span class="string">"header  header"</span>
+    <span class="string">"sidebar main"</span>
+    <span class="string">"footer  footer"</span>;
+  <span class="property">min-height</span>: <span class="number">100</span><span class="unit">vh</span>;
+}
+
+<span class="selector">.header</span>  { <span class="property">grid-area</span>: <span class="value">header</span>; }
+<span class="selector">.sidebar</span> { <span class="property">grid-area</span>: <span class="value">sidebar</span>; }
+<span class="selector">.main</span>    { <span class="property">grid-area</span>: <span class="value">main</span>; }
+<span class="selector">.footer</span>  { <span class="property">grid-area</span>: <span class="value">footer</span>; }</pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Production responsive shell using Grid + media query</h3>
+        <p class="explain-en">
+          Real products usually use a desktop-first shell with sidebar, then collapse to a single-column flow on small screens.
+          Grid makes this refactor clear and explicit by redefining columns and template areas at breakpoints.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Production apps me desktop pe sidebar + main hota hai, mobile pe single-column flow. Grid ke saath breakpoint par template areas change karke ye transition cleanly ho jata hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — responsive app shell</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="selector">.app-shell</span> {
+  <span class="property">display</span>: <span class="value">grid</span>;
+  <span class="property">grid-template-columns</span>: <span class="number">260</span><span class="unit">px</span> <span class="number">1</span><span class="unit">fr</span>;
+  <span class="property">grid-template-areas</span>: <span class="string">"sidebar main"</span>;
+  <span class="property">min-height</span>: <span class="number">100</span><span class="unit">vh</span>;
+}
+
+<span class="selector">.sidebar</span> { <span class="property">grid-area</span>: <span class="value">sidebar</span>; }
+<span class="selector">.main</span> { <span class="property">grid-area</span>: <span class="value">main</span>; }
+
+<span class="selector">@media (max-width: 900px)</span> {
+  <span class="selector">.app-shell</span> {
+    <span class="property">grid-template-columns</span>: <span class="number">1</span><span class="unit">fr</span>;
+    <span class="property">grid-template-areas</span>:
+      <span class="string">"main"</span>;
+  }
+  <span class="selector">.sidebar</span> { <span class="property">display</span>: <span class="value">none</span>; } <span class="comment">/* mobile drawer can replace this */</span>
+}</pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Flexbox vs Grid — when to use which</h3>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Scenario</th><th>Use</th><th>Why</th></tr></thead>
+            <tbody>
+              <tr><td>Navbar, button groups</td><td><strong>Flexbox</strong></td><td>Single row, variable widths</td></tr>
+              <tr><td>Centering content</td><td><strong>Flexbox</strong></td><td>Simpler syntax</td></tr>
+              <tr><td>Card grids</td><td><strong>Grid</strong></td><td>Equal-sized 2D grid</td></tr>
+              <tr><td>Full page layout</td><td><strong>Grid</strong></td><td>Template areas, named sections</td></tr>
+              <tr><td>Unknown number of items</td><td><strong>Flexbox</strong></td><td>Wraps naturally</td></tr>
+              <tr><td>Dashboard / holy grail</td><td><strong>Grid</strong></td><td>Rows + columns at once</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>Rule of thumb:</strong> Flexbox = 1D (row OR column). Grid = 2D (rows AND columns). They complement each other — use both in the same project!</div>
+      </div>
+    </div>
+
+    <div class="practice-box">
+      <div class="practice-title">✏️ Practice Exercises — Part 4</div>
+      <ol>
+        <li>Create a sticky navbar that stays on top during scroll with proper z-index.</li>
+        <li>Build a card with an absolute-positioned "NEW" badge in the top-right corner.</li>
+        <li>Create a Flexbox navbar: logo left, nav links center, CTA button right.</li>
+        <li>Build a responsive card grid using <code>repeat(auto-fit, minmax(280px, 1fr))</code> — no media queries.</li>
+        <li>Create a full dashboard layout using <code>grid-template-areas</code>: header, sidebar, main, footer.</li>
+      </ol>
+    </div>
+
+    <div class="handbook-nav">
+      <a href="part3.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Part 3: CSS Foundations</div></div></a>
+      <a href="part5.html" class="nav-btn next"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Part 5: Responsive Design & Modern CSS →</div></div><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+  </div>
+
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
+  <script src="../../../js/main.js"></script>
+  <script>
+    (() => {
+      document.querySelectorAll('.code-block').forEach((block) => {
+        const pre = block.querySelector('.code-body pre'), header = block.querySelector('.code-header');
+        if (!pre || !header) return;
+        let actions = header.querySelector('.code-actions');
+        if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); }
+        const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'code-copy-btn'; btn.textContent = 'Copy';
+        btn.addEventListener('click', async () => { try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; } catch { btn.textContent = 'Failed'; } finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); } });
+        actions.prepend(btn);
+      });
+      const fill = document.querySelector('.hb-progress-fill'), label = document.querySelector('.hb-progress-label');
+      if (fill && label) { const update = () => { const h = document.documentElement, d = (h.scrollHeight - h.clientHeight) || 1, p = Math.max(0, Math.min(1, h.scrollTop / d)); fill.style.width = (p*100).toFixed(0)+'%'; label.textContent = (p*100).toFixed(0)+'%'; }; document.addEventListener('scroll', update, { passive: true }); update(); }
+    })();
+  </script>
+</body>
+</html>

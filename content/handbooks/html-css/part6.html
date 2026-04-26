@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Part 6: Visual Effects & Animations — HTML & CSS Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 6: Pseudo-classes, pseudo-elements, transforms, transitions, keyframe animations, filters, scroll animations.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/handbook.css">
+</head>
+<body class="handbook-wrapper">
+  <nav class="navbar"><div class="container"><a href="../../../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../../../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
+
+  <div class="handbook-page">
+    <div class="hb-topbar"><div class="hb-topbar-inner">
+      <div class="hb-breadcrumbs"><a href="index.html">HTML & CSS Handbook</a><span class="hb-muted">/</span><span>Part 6</span><span class="hb-muted">·</span><a href="#m6-1">6.1</a><a href="#m6-2">6.2</a><a href="#m6-3">6.3</a><a href="#m6-4">6.4</a><a href="#m6-5">6.5</a><a href="#m6-6">6.6</a><a href="#m6-7">6.7</a></div>
+      <div class="hb-progress" aria-label="Reading progress"><div class="hb-progress-track" role="progressbar"><div class="hb-progress-fill"></div></div><div class="hb-progress-label">0%</div></div>
+    </div></div>
+
+    <div class="chapter-header" data-chapter-num="06">
+      <div class="chapter-part-label">📖 Part 6 — Visual Effects & Animations</div>
+      <h1 class="chapter-title">Bring Your UI to <span class="gradient-text">Life</span></h1>
+      <p class="chapter-subtitle">Pseudo-elements, transforms, transitions, keyframe animations, and modern visual effects.</p>
+      <div class="chapter-meta"><span>📄 Modules 6.1 – 6.7</span><span>⏱️ 85–120 min</span><span>💻 45+ Examples</span></div>
+    </div>
+
+    <div class="callout callout-tip"><strong>How to study Part 6:</strong> Animations are best learned visually. Code every example, tweak timing values, and watch how each change affects the feel.</div>
+
+    <div class="hb-mini-toc"><div class="hb-mini-title">📍 Part 6 Modules</div><div class="hb-mini-links">
+      <a href="#m6-1">6.1 Pseudo-classes</a><a href="#m6-2">6.2 Pseudo-elements</a><a href="#m6-3">6.3 Transforms</a>
+      <a href="#m6-4">6.4 Transitions</a><a href="#m6-5">6.5 Animations</a><a href="#m6-6">6.6 Shadows & Filters</a><a href="#m6-7">6.7 Scroll Animations</a>
+    </div></div>
+
+    <div class="quick-ref">
+      <div class="qr-title">🚀 Advanced Lens — Part 6</div>
+      <p class="explain-en">
+        Great motion design is subtle, purposeful, and performant. Every animation should communicate state or guide attention.
+        Prefer transform/opacity animations, respect reduced-motion preferences, and avoid decorative motion that harms readability.
+      </p>
+      <div class="explain-hi">
+        <span class="hi-label">Hindi mein samjho</span>
+        Acchi animation ka goal sirf “cool” lagna nahi hota. Motion ka purpose hona chahiye: state samjhana ya attention guide karna.
+        Transform/opacity prefer karo, reduced-motion users ka respect karo.
+      </div>
+    </div>
+
+    <!-- MODULE 6.1 -->
+    <div class="module-section" id="m6-1">
+      <div class="module-header"><div class="module-number">6.1</div><h2 class="module-title">Pseudo-classes — :hover, :focus, :active, :nth-child, :has()</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Interactive states with pseudo-classes</h3>
+        <p class="explain-en">Pseudo-classes target elements in specific <strong>states</strong>. <code>:hover</code> for mouse over, <code>:focus</code> for keyboard navigation, <code>:active</code> for click moment. <code>:nth-child()</code> targets specific children. <code>:has()</code> is the revolutionary "parent selector."</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Pseudo-classes elements ko specific states me target karte hain. :hover mouse over ke liye, :focus keyboard ke liye, :nth-child() specific children ke liye. :has() revolutionary "parent selector" hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Pseudo-classes</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Interactive states */</span>
+<span class="selector">.btn:hover</span>  { <span class="property">background</span>: <span class="value">#6d28d9</span>; }
+<span class="selector">.btn:focus</span>  { <span class="property">outline</span>: <span class="number">2</span><span class="unit">px</span> <span class="value">solid</span> <span class="value">#7c3aed</span>; }
+<span class="selector">.btn:active</span> { <span class="property">transform</span>: <span class="value">scale(0.97)</span>; }
+
+<span class="comment">/* Structural pseudo-classes */</span>
+<span class="selector">li:first-child</span> { <span class="property">font-weight</span>: <span class="number">700</span>; }
+<span class="selector">tr:nth-child(even)</span> { <span class="property">background</span>: <span class="value">rgba(124,58,237,0.05)</span>; }
+<span class="selector">p:last-of-type</span> { <span class="property">margin-bottom</span>: <span class="number">0</span>; }
+
+<span class="comment">/* :has() — parent selector (2024+) */</span>
+<span class="selector">.card:has(img)</span> { <span class="property">padding-top</span>: <span class="number">0</span>; }
+<span class="selector">.form:has(:invalid)</span> { <span class="property">border-color</span>: <span class="value">red</span>; }</pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Complete pseudo-class reference</h3>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Category</th><th>Pseudo-class</th><th>Targets</th></tr></thead>
+            <tbody>
+              <tr><td rowspan="3">Interactive</td><td><code>:hover</code></td><td>Mouse is over element</td></tr>
+              <tr><td><code>:focus</code> / <code>:focus-visible</code></td><td>Element has keyboard focus</td></tr>
+              <tr><td><code>:active</code></td><td>Being clicked/tapped</td></tr>
+              <tr><td rowspan="4">Structural</td><td><code>:first-child</code> / <code>:last-child</code></td><td>First/last child element</td></tr>
+              <tr><td><code>:nth-child(n)</code></td><td>nth child (2n=even, odd, 3n+1)</td></tr>
+              <tr><td><code>:only-child</code></td><td>Element with no siblings</td></tr>
+              <tr><td><code>:empty</code></td><td>Element with no children</td></tr>
+              <tr><td rowspan="3">Form state</td><td><code>:checked</code></td><td>Checked checkbox/radio</td></tr>
+              <tr><td><code>:disabled</code> / <code>:enabled</code></td><td>Disabled/enabled inputs</td></tr>
+              <tr><td><code>:valid</code> / <code>:invalid</code></td><td>Passes/fails validation</td></tr>
+              <tr><td>Parent</td><td><code>:has(selector)</code></td><td>Parent that contains match</td></tr>
+              <tr><td>Negation</td><td><code>:not(selector)</code></td><td>Everything except match</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — nth-child patterns</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Every even row */</span>
+<span class="selector">tr:nth-child(even)</span> { <span class="property">background</span>: <span class="value">#f8fafc</span>; }
+
+<span class="comment">/* Every 3rd item */</span>
+<span class="selector">.item:nth-child(3n)</span> { <span class="property">margin-right</span>: <span class="number">0</span>; }
+
+<span class="comment">/* First 3 items only */</span>
+<span class="selector">.item:nth-child(-n+3)</span> { <span class="property">font-weight</span>: <span class="number">700</span>; }
+
+<span class="comment">/* Style parent when input is invalid */</span>
+<span class="selector">.field:has(:invalid)</span> {
+  <span class="property">border-color</span>: <span class="value">#ef4444</span>;
+  <span class="property">background</span>: <span class="value">#fef2f2</span>;
+}</pre></div>
+        </div>
+        <div class="callout callout-important"><strong>Always style :focus!</strong> Removing focus outlines breaks keyboard navigation. Replace default outline with a custom styled one — never <code>outline: none</code> without replacement.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 6.2 -->
+    <div class="module-section" id="m6-2">
+      <div class="module-header"><div class="module-number">6.2</div><h2 class="module-title">Pseudo-elements — ::before, ::after, ::placeholder, ::selection</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Creating UI elements without HTML</h3>
+        <p class="explain-en"><code>::before</code> and <code>::after</code> insert content before/after an element's content — no extra HTML needed. Used for decorative elements, icons, badges, and overlays. Requires <code>content</code> property.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>::before aur ::after se bina extra HTML ke content insert hota hai. Decorative elements, icons, badges ke liye use hota hai. <code>content</code> property zaroori hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Pseudo-elements</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Decorative line after heading */</span>
+<span class="selector">.heading::after</span> {
+  <span class="property">content</span>: <span class="string">""</span>;
+  <span class="property">display</span>: <span class="value">block</span>;
+  <span class="property">width</span>: <span class="number">60</span><span class="unit">px</span>;
+  <span class="property">height</span>: <span class="number">3</span><span class="unit">px</span>;
+  <span class="property">background</span>: <span class="value">var(--primary)</span>;
+  <span class="property">margin-top</span>: <span class="number">8</span><span class="unit">px</span>;
+}
+
+<span class="comment">/* Custom selection color */</span>
+<span class="selector">::selection</span> {
+  <span class="property">background</span>: <span class="value">#7c3aed</span>;
+  <span class="property">color</span>: <span class="value">#fff</span>;
+}</pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Advanced pseudo-element patterns</h3>
+        <p class="explain-en">Pseudo-elements are powerful for overlays, badges, custom bullets, and gradient borders — all without touching HTML. They are <strong>inline by default</strong>, so always set <code>display</code> or <code>position</code>.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Pseudo-elements se overlays, badges, custom bullets, gradient borders — sab bina HTML change kiye ban sakte hain. By default inline hote hain, isliye display ya position set karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Advanced pseudo-elements</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Image hover overlay */</span>
+<span class="selector">.card</span> { <span class="property">position</span>: <span class="value">relative</span>; <span class="property">overflow</span>: <span class="value">hidden</span>; }
+<span class="selector">.card::before</span> {
+  <span class="property">content</span>: <span class="string">""</span>;
+  <span class="property">position</span>: <span class="value">absolute</span>;
+  <span class="property">inset</span>: <span class="number">0</span>;
+  <span class="property">background</span>: <span class="value">linear-gradient(transparent, rgba(0,0,0,0.7))</span>;
+  <span class="property">opacity</span>: <span class="number">0</span>;
+  <span class="property">transition</span>: <span class="value">opacity 0.3s</span>;
+}
+<span class="selector">.card:hover::before</span> { <span class="property">opacity</span>: <span class="number">1</span>; }
+
+<span class="comment">/* "Required" badge */</span>
+<span class="selector">.required::after</span> {
+  <span class="property">content</span>: <span class="string">" *"</span>;
+  <span class="property">color</span>: <span class="value">#ef4444</span>;
+}
+
+<span class="comment">/* Custom placeholder */</span>
+<span class="selector">input::placeholder</span> {
+  <span class="property">color</span>: <span class="value">#94a3b8</span>;
+  <span class="property">font-style</span>: <span class="value">italic</span>;
+}</pre></div>
+        </div>
+        <div class="callout callout-note"><strong>Pseudo vs pseudo:</strong> Single colon <code>:</code> = pseudo-class (state). Double colon <code>::</code> = pseudo-element (generated content). Some browsers accept both, but always use <code>::</code> for elements.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 6.3 -->
+    <div class="module-section" id="m6-3">
+      <div class="module-header"><div class="module-number">6.3</div><h2 class="module-title">Transforms — translate, rotate, scale, skew, transform-origin</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">CSS transforms — move, rotate, scale elements</h3>
+        <p class="explain-en">Transforms change an element's visual position, rotation, or size <strong>without affecting layout</strong>. They're GPU-accelerated and perfect for animations. <code>translate</code> moves, <code>rotate</code> spins, <code>scale</code> resizes.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Transforms se element ka visual position change hota hai bina layout affect kiye. GPU-accelerated hain — animations ke liye perfect. Translate move karta hai, rotate ghumata hai, scale size change karta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Transforms</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Card hover lift effect */</span>
+<span class="selector">.card:hover</span> {
+  <span class="property">transform</span>: <span class="value">translateY(-4px) scale(1.02)</span>;
+}
+
+<span class="comment">/* Rotate icon */</span>
+<span class="selector">.icon-spin</span> {
+  <span class="property">transform</span>: <span class="value">rotate(45deg)</span>;
+  <span class="property">transform-origin</span>: <span class="value">center</span>;
+}
+
+<span class="comment">/* Skew for decorative angle */</span>
+<span class="selector">.banner</span> {
+  <span class="property">transform</span>: <span class="value">skewY(-3deg)</span>;
+}
+<span class="selector">.banner > *</span> {
+  <span class="property">transform</span>: <span class="value">skewY(3deg)</span>; <span class="comment">/* Unskew children */</span>
+}</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Function</th><th>Effect</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td><code>translateX/Y/Z</code></td><td>Move element</td><td><code>translateY(-10px)</code></td></tr>
+              <tr><td><code>rotate</code></td><td>Spin element</td><td><code>rotate(45deg)</code></td></tr>
+              <tr><td><code>scale</code></td><td>Resize element</td><td><code>scale(1.1)</code></td></tr>
+              <tr><td><code>skewX/Y</code></td><td>Slant element</td><td><code>skewX(-5deg)</code></td></tr>
+              <tr><td><code>perspective</code></td><td>3D depth</td><td><code>perspective(800px)</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Combine transforms:</strong> <code>transform: translateY(-4px) scale(1.02) rotate(1deg)</code> — multiple transforms in one property. Order matters! They apply right-to-left.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 6.4 -->
+    <div class="module-section" id="m6-4">
+      <div class="module-header"><div class="module-number">6.4</div><h2 class="module-title">Transitions — transition property, duration, timing, delay</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Smooth state changes with transitions</h3>
+        <p class="explain-en">Transitions animate property changes over time. Define <code>transition-property</code>, <code>duration</code>, <code>timing-function</code>, and optional <code>delay</code>. Apply on the base state, not on :hover.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Transitions se property changes smoothly animate hote hain. Base state pe lagao (:hover pe nahi). Duration, timing function, aur delay set karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Transitions</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="selector">.btn</span> {
+  <span class="property">background</span>: <span class="value">#7c3aed</span>;
+  <span class="property">transform</span>: <span class="value">translateY(0)</span>;
+  <span class="property">transition</span>: <span class="value">all 0.3s cubic-bezier(0.4, 0, 0.2, 1)</span>;
+}
+
+<span class="selector">.btn:hover</span> {
+  <span class="property">background</span>: <span class="value">#6d28d9</span>;
+  <span class="property">transform</span>: <span class="value">translateY(-2px)</span>;
+  <span class="property">box-shadow</span>: <span class="number">0</span> <span class="number">8</span><span class="unit">px</span> <span class="number">25</span><span class="unit">px</span> <span class="value">rgba(124,58,237,0.3)</span>;
+}</pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Timing functions — controlling the feel</h3>
+        <p class="explain-en">The timing function controls the <strong>acceleration curve</strong> of an animation. <code>ease</code> is the default, but <code>cubic-bezier()</code> gives full control. Different curves create different emotional responses.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Timing function animation ka acceleration curve control karta hai. ease default hai, lekin cubic-bezier() se full control milta hai. Alag curves alag feel dete hain.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Timing</th><th>Feel</th><th>Best for</th></tr></thead>
+            <tbody>
+              <tr><td><code>ease</code></td><td>Natural start/stop</td><td>General purpose</td></tr>
+              <tr><td><code>ease-in</code></td><td>Slow start, fast end</td><td>Exit animations</td></tr>
+              <tr><td><code>ease-out</code></td><td>Fast start, slow end</td><td>Entrance animations</td></tr>
+              <tr><td><code>ease-in-out</code></td><td>Slow both ends</td><td>Looping animations</td></tr>
+              <tr><td><code>linear</code></td><td>Constant speed</td><td>Spinners, progress bars</td></tr>
+              <tr><td><code>cubic-bezier(0.4, 0, 0.2, 1)</code></td><td>Material Design standard</td><td>UI interactions</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Performance:</strong> Only animate <code>transform</code> and <code>opacity</code> for 60fps smoothness. Animating width, height, or margin causes layout recalculation (janky).</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Motion tokens (consistent animation language)</h3>
+        <p class="explain-en">
+          Mature codebases treat animation timings like design tokens. Instead of random durations across components,
+          define shared variables for quick, normal, and slow transitions. This creates a consistent product feel.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Professional projects me animation timings bhi design tokens hote hain. Random durations ki jagah shared variables use karo, taaki poori product me consistent feel aaye.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — motion design tokens</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="selector">:root</span> {
+  <span class="property">--motion-fast</span>: <span class="number">120</span><span class="unit">ms</span>;
+  <span class="property">--motion-base</span>: <span class="number">220</span><span class="unit">ms</span>;
+  <span class="property">--motion-slow</span>: <span class="number">400</span><span class="unit">ms</span>;
+  <span class="property">--ease-standard</span>: <span class="value">cubic-bezier(0.4, 0, 0.2, 1)</span>;
+}
+
+<span class="selector">.btn</span> {
+  <span class="property">transition</span>: <span class="value">transform var(--motion-fast) var(--ease-standard),
+              background var(--motion-base) var(--ease-standard)</span>;
+}</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 6.5 -->
+    <div class="module-section" id="m6-5">
+      <div class="module-header"><div class="module-number">6.5</div><h2 class="module-title">Animations & Keyframes — @keyframes, animation properties, infinite, timing</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Complex animations with @keyframes</h3>
+        <p class="explain-en">Keyframes define multi-step animations. Unlike transitions (A→B), keyframes can animate through multiple stages (A→B→C→D). Use <code>animation</code> shorthand to apply.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Keyframes se multi-step animations bante hain. Transitions sirf A→B karte hain, keyframes A→B→C→D kar sakte hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Keyframes</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">@keyframes</span> fadeInUp {
+  <span class="selector">from</span> {
+    <span class="property">opacity</span>: <span class="number">0</span>;
+    <span class="property">transform</span>: <span class="value">translateY(20px)</span>;
+  }
+  <span class="selector">to</span> {
+    <span class="property">opacity</span>: <span class="number">1</span>;
+    <span class="property">transform</span>: <span class="value">translateY(0)</span>;
+  }
+}
+
+<span class="selector">.card</span> {
+  <span class="property">animation</span>: <span class="value">fadeInUp 0.6s ease-out forwards</span>;
+}
+
+<span class="comment">/* Infinite loading spinner */</span>
+<span class="keyword">@keyframes</span> spin {
+  <span class="selector">to</span> { <span class="property">transform</span>: <span class="value">rotate(360deg)</span>; }
+}
+<span class="selector">.spinner</span> { <span class="property">animation</span>: <span class="value">spin 1s linear infinite</span>; }</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Property</th><th>Values</th><th>What it controls</th></tr></thead>
+            <tbody>
+              <tr><td><code>animation-name</code></td><td>Keyframe name</td><td>Which @keyframes to use</td></tr>
+              <tr><td><code>animation-duration</code></td><td>0.3s, 1s, 500ms</td><td>How long one cycle takes</td></tr>
+              <tr><td><code>animation-timing-function</code></td><td>ease, linear, cubic-bezier()</td><td>Acceleration curve</td></tr>
+              <tr><td><code>animation-delay</code></td><td>0s, 0.5s, 200ms</td><td>Wait before starting</td></tr>
+              <tr><td><code>animation-iteration-count</code></td><td>1, 3, infinite</td><td>Repeat count</td></tr>
+              <tr><td><code>animation-fill-mode</code></td><td>forwards, backwards, both</td><td>Style before/after animation</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Respecting reduced motion (accessibility requirement)</h3>
+        <p class="explain-en">
+          Some users experience discomfort from motion-heavy interfaces. Use <code>prefers-reduced-motion: reduce</code> to simplify or disable non-essential animations.
+          This is a production accessibility requirement, not an optional enhancement.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Kuch users ko heavy motion se discomfort hota hai. <code>prefers-reduced-motion: reduce</code> use karke non-essential animations simplify/disable karo. Ye accessibility requirement hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — reduced motion support</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">@media</span> (<span class="property">prefers-reduced-motion</span>: <span class="value">reduce</span>) {
+  <span class="selector">*</span> {
+    <span class="property">animation-duration</span>: <span class="number">0.01</span><span class="unit">ms</span> <span class="value">!important</span>;
+    <span class="property">animation-iteration-count</span>: <span class="number">1</span> <span class="value">!important</span>;
+    <span class="property">transition-duration</span>: <span class="number">0.01</span><span class="unit">ms</span> <span class="value">!important</span>;
+    <span class="property">scroll-behavior</span>: <span class="value">auto</span> <span class="value">!important</span>;
+  }
+}</pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Staggered entrance animations</h3>
+        <p class="explain-en">Create stunning entrance effects by adding incremental <code>animation-delay</code> to each child. This creates a cascading reveal effect used by top-tier websites like Linear and Stripe.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Har child pe thoda delay add karo — cascading reveal effect banta hai jo Linear aur Stripe jaise websites use karte hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Staggered cards</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="selector">.card</span> {
+  <span class="property">opacity</span>: <span class="number">0</span>;
+  <span class="property">animation</span>: <span class="value">fadeInUp 0.5s ease-out forwards</span>;
+}
+<span class="selector">.card:nth-child(1)</span> { <span class="property">animation-delay</span>: <span class="number">0.1</span><span class="unit">s</span>; }
+<span class="selector">.card:nth-child(2)</span> { <span class="property">animation-delay</span>: <span class="number">0.2</span><span class="unit">s</span>; }
+<span class="selector">.card:nth-child(3)</span> { <span class="property">animation-delay</span>: <span class="number">0.3</span><span class="unit">s</span>; }
+<span class="selector">.card:nth-child(4)</span> { <span class="property">animation-delay</span>: <span class="number">0.4</span><span class="unit">s</span>; }</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 6.6 -->
+    <div class="module-section" id="m6-6">
+      <div class="module-header"><div class="module-number">6.6</div><h2 class="module-title">Shadows, Filters & Effects — box-shadow, text-shadow, backdrop-filter, glassmorphism</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Creating depth and visual effects</h3>
+        <p class="explain-en"><code>box-shadow</code> adds depth. <code>backdrop-filter: blur()</code> creates frosted-glass effects (glassmorphism). <code>filter</code> applies visual effects like blur, brightness, and grayscale to elements.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Box-shadow se depth aati hai. Backdrop-filter se frosted-glass (glassmorphism) effect banta hai. Filter se blur, brightness, grayscale jaise effects lagte hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Shadows & glassmorphism</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Layered shadows for realistic depth */</span>
+<span class="selector">.card</span> {
+  <span class="property">box-shadow</span>:
+    <span class="number">0</span> <span class="number">1</span><span class="unit">px</span> <span class="number">3</span><span class="unit">px</span> <span class="value">rgba(0,0,0,0.06)</span>,
+    <span class="number">0</span> <span class="number">10</span><span class="unit">px</span> <span class="number">40</span><span class="unit">px</span> <span class="value">rgba(0,0,0,0.08)</span>;
+}
+
+<span class="comment">/* Glassmorphism effect */</span>
+<span class="selector">.glass</span> {
+  <span class="property">background</span>: <span class="value">rgba(255, 255, 255, 0.1)</span>;
+  <span class="property">backdrop-filter</span>: <span class="value">blur(12px)</span>;
+  <span class="property">border</span>: <span class="number">1</span><span class="unit">px</span> <span class="value">solid</span> <span class="value">rgba(255,255,255,0.2)</span>;
+  <span class="property">border-radius</span>: <span class="number">16</span><span class="unit">px</span>;
+}</pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">CSS filters — image and element effects</h3>
+        <p class="explain-en"><code>filter</code> applies visual effects to elements. Combine multiple filters for creative results. Unlike backdrop-filter (which blurs behind), filter affects the element itself.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Filter se elements pe visual effects lagte hain. Multiple filters combine kar sakte ho. Backdrop-filter peeche blur karta hai, filter element ko khud affect karta hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Filter</th><th>Effect</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td><code>blur()</code></td><td>Gaussian blur</td><td><code>blur(4px)</code></td></tr>
+              <tr><td><code>brightness()</code></td><td>Lighten/darken</td><td><code>brightness(1.2)</code></td></tr>
+              <tr><td><code>contrast()</code></td><td>Adjust contrast</td><td><code>contrast(1.5)</code></td></tr>
+              <tr><td><code>grayscale()</code></td><td>Remove color</td><td><code>grayscale(100%)</code></td></tr>
+              <tr><td><code>saturate()</code></td><td>Boost/reduce color</td><td><code>saturate(1.5)</code></td></tr>
+              <tr><td><code>drop-shadow()</code></td><td>Shadow on shape</td><td><code>drop-shadow(2px 4px 6px rgba(0,0,0,0.3))</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Filters & text-shadow</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Grayscale on hover */</span>
+<span class="selector">img</span> { <span class="property">filter</span>: <span class="value">grayscale(100%)</span>; <span class="property">transition</span>: <span class="value">filter 0.3s</span>; }
+<span class="selector">img:hover</span> { <span class="property">filter</span>: <span class="value">grayscale(0)</span>; }
+
+<span class="comment">/* Text shadow for depth */</span>
+<span class="selector">.hero-title</span> {
+  <span class="property">text-shadow</span>: <span class="number">0</span> <span class="number">2</span><span class="unit">px</span> <span class="number">10</span><span class="unit">px</span> <span class="value">rgba(0,0,0,0.3)</span>;
+}
+
+<span class="comment">/* Neon glow effect */</span>
+<span class="selector">.neon</span> {
+  <span class="property">text-shadow</span>:
+    <span class="number">0</span> <span class="number">0</span> <span class="number">5</span><span class="unit">px</span> <span class="value">#7c3aed</span>,
+    <span class="number">0</span> <span class="number">0</span> <span class="number">20</span><span class="unit">px</span> <span class="value">#7c3aed</span>,
+    <span class="number">0</span> <span class="number">0</span> <span class="number">40</span><span class="unit">px</span> <span class="value">#7c3aed</span>;
+}</pre></div>
+        </div>
+        <div class="callout callout-warning"><strong>Performance note:</strong> <code>filter</code> and <code>backdrop-filter</code> are GPU-intensive. Use sparingly and avoid on large areas or many elements simultaneously.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 6.7 -->
+    <div class="module-section" id="m6-7">
+      <div class="module-header"><div class="module-number">6.7</div><h2 class="module-title">Scroll-Driven Animations — animation-timeline, scroll(), view()</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Animations tied to scroll position</h3>
+        <p class="explain-en">Scroll-driven animations link CSS animations to scroll progress — no JavaScript needed. Use <code>animation-timeline: scroll()</code> to animate based on page scroll or <code>view()</code> for element visibility.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Scroll-driven animations se CSS animations scroll position se linked hoti hain — JavaScript nahi chahiye. Page scroll ya element visibility ke hisaab se animate hota hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Scroll animations</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Progress bar tied to page scroll */</span>
+<span class="selector">.progress-bar</span> {
+  <span class="property">transform-origin</span>: <span class="value">left</span>;
+  <span class="property">animation</span>: <span class="value">grow-bar linear</span>;
+  <span class="property">animation-timeline</span>: <span class="value">scroll()</span>;
+}
+
+<span class="keyword">@keyframes</span> grow-bar {
+  <span class="selector">from</span> { <span class="property">transform</span>: <span class="value">scaleX(0)</span>; }
+  <span class="selector">to</span>   { <span class="property">transform</span>: <span class="value">scaleX(1)</span>; }
+}
+
+<span class="comment">/* Fade in when element enters viewport */</span>
+<span class="selector">.reveal</span> {
+  <span class="property">animation</span>: <span class="value">fadeInUp linear both</span>;
+  <span class="property">animation-timeline</span>: <span class="value">view()</span>;
+  <span class="property">animation-range</span>: <span class="value">entry 0% entry 100%</span>;
+}</pre></div>
+        </div>
+        <div class="callout callout-warning"><strong>Browser support:</strong> Scroll-driven animations are supported in Chrome/Edge 115+ and Firefox 110+. Use as progressive enhancement with fallbacks.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Fallback pattern for scroll animations</h3>
+        <p class="explain-en">
+          Ship a baseline non-animated experience first, then progressively enable scroll timelines when supported.
+          This keeps UX reliable across browsers and avoids “broken animation logic” on unsupported engines.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Pehle non-animated baseline UX do, phir supported browsers me scroll timeline enable karo. Isse unsupported browsers me bhi experience stable rehta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — progressive fallback</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Baseline: static visible content */</span>
+<span class="selector">.reveal</span> {
+  <span class="property">opacity</span>: <span class="number">1</span>;
+  <span class="property">transform</span>: <span class="value">none</span>;
+}
+
+<span class="comment">/* Enhancement only when timeline is supported */</span>
+<span class="keyword">@supports</span> (<span class="property">animation-timeline</span>: <span class="value">view()</span>) {
+  <span class="selector">.reveal</span> {
+    <span class="property">opacity</span>: <span class="number">0</span>;
+    <span class="property">transform</span>: <span class="value">translateY(24px)</span>;
+    <span class="property">animation</span>: <span class="value">fadeInUp linear both</span>;
+    <span class="property">animation-timeline</span>: <span class="value">view()</span>;
+    <span class="property">animation-range</span>: <span class="value">entry 20% entry 90%</span>;
+  }
+}</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="practice-box">
+      <div class="practice-title">✏️ Practice Exercises — Part 6</div>
+      <ol>
+        <li>Create a button with hover (color change + lift), focus (ring outline), and active (press down) states.</li>
+        <li>Build a card with a ::before gradient overlay that appears on hover with transition.</li>
+        <li>Create a fadeInUp entrance animation using @keyframes for a section of cards.</li>
+        <li>Build a glassmorphism card with backdrop-filter, subtle border, and layered shadow.</li>
+        <li>Create a scroll-driven progress bar at the top of the page.</li>
+      </ol>
+    </div>
+
+    <div class="handbook-nav">
+      <a href="part5.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Part 5: Responsive Design & Modern CSS</div></div></a>
+      <a href="part7.html" class="nav-btn next"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Part 7: Accessibility, SEO & Performance →</div></div><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+  </div>
+
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
+  <script src="../../../js/main.js"></script>
+  <script>(() => { document.querySelectorAll('.code-block').forEach((block) => { const pre = block.querySelector('.code-body pre'), header = block.querySelector('.code-header'); if (!pre || !header) return; let actions = header.querySelector('.code-actions'); if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); } const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'code-copy-btn'; btn.textContent = 'Copy'; btn.addEventListener('click', async () => { try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; } catch { btn.textContent = 'Failed'; } finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); } }); actions.prepend(btn); }); const fill = document.querySelector('.hb-progress-fill'), label = document.querySelector('.hb-progress-label'); if (fill && label) { const update = () => { const h = document.documentElement, d = (h.scrollHeight - h.clientHeight) || 1, p = Math.max(0, Math.min(1, h.scrollTop / d)); fill.style.width = (p*100).toFixed(0)+'%'; label.textContent = (p*100).toFixed(0)+'%'; }; document.addEventListener('scroll', update, { passive: true }); update(); } })();</script>
+</body>
+</html>

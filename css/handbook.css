@@ -562,6 +562,16 @@
 .code-body .output { color: #94a3b8; }
 .code-body .decorator { color: #f59e0b; }
 
+/* HTML / CSS syntax tokens */
+.code-body .tag { color: #f472b6; font-weight: 500; }
+.code-body .attr { color: #fbbf24; }
+.code-body .value { color: #34d399; }
+.code-body .property { color: #60a5fa; }
+.code-body .selector { color: #c084fc; font-weight: 500; }
+.code-body .unit { color: #fb923c; }
+.code-body .pseudo { color: #f59e0b; }
+.code-body .punctuation { color: #94a3b8; }
+
 .code-output {
   padding: 14px 20px;
   background: rgba(34,197,94,0.06);
@@ -1046,6 +1056,100 @@
   gap: 8px;
 }
 
+/* ===== HANDBOOK INDEX POLISH ===== */
+.hb-center-header { text-align: center; }
+.hb-center-label { margin: 0 auto 16px; }
+.hb-center-meta { justify-content: center; }
+.hb-header-link-wrap { margin-top: 20px; }
+.hb-subtle-link {
+  font-size: 0.82rem;
+  color: var(--hb-text3);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.hb-subtle-link:hover { color: var(--hb-text2); }
+
+.hb-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 40px;
+}
+.hb-stat-card {
+  padding: 16px;
+  background: var(--hb-surface);
+  border: 1px solid var(--hb-border);
+  border-radius: 12px;
+  text-align: center;
+  transition: var(--hb-transition);
+}
+.hb-stat-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(124,58,237,0.35);
+  background: var(--hb-surface2);
+}
+.hb-stat-icon { font-size: 1.4rem; margin-bottom: 6px; }
+.hb-stat-title { font-size: 0.78rem; font-weight: 700; }
+.hb-stat-text { font-size: 0.72rem; color: var(--hb-text3); }
+
+.hb-section-heading {
+  font-size: 1.3rem;
+  font-weight: 800;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.hb-section-heading-icon { color: var(--hb-primary); }
+
+.hb-cta-panel {
+  text-align: center;
+  margin-top: 48px;
+  padding: 40px;
+  background: linear-gradient(135deg, rgba(124,58,237,0.06), rgba(6,182,212,0.04));
+  border: 1px solid var(--hb-border);
+  border-radius: var(--hb-radius);
+}
+.hb-cta-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+.hb-cta-text {
+  color: var(--hb-text2);
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+}
+.hb-cta-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.hb-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 26px;
+  background: var(--hb-gradient);
+  color: #fff;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: var(--hb-transition);
+  border: 1px solid transparent;
+}
+.hb-cta-btn:hover { transform: translateY(-2px); box-shadow: var(--hb-shadow-sm); }
+.hb-cta-btn-secondary {
+  background: transparent;
+  color: var(--hb-text);
+  border-color: var(--hb-border);
+}
+.hb-cta-btn-secondary:hover { background: rgba(124,58,237,0.08); }
+.hb-back-link-wrap { text-align: center; margin-top: 24px; }
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .handbook-page {
@@ -1119,6 +1223,36 @@
     padding: 8px 10px;
   }
 
+  .hb-section-heading {
+    font-size: 1.12rem;
+    margin-bottom: 18px;
+  }
+
+  .hb-cta-panel {
+    margin-top: 30px;
+    padding: 22px 16px;
+  }
+
+  .hb-cta-title {
+    font-size: 1rem;
+  }
+
+  .hb-cta-text {
+    font-size: 0.84rem;
+    margin-bottom: 14px;
+  }
+
+  .hb-cta-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .hb-cta-btn {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 0.86rem;
+  }
+
   /* Mobile main index format: compact chips */
   .hb-global-index {
     margin: 14px 0 20px;
@@ -1164,5 +1298,27 @@
 
   .hb-global-index-links {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .hb-stats-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 26px;
+  }
+
+  .hb-stat-card {
+    padding: 12px 10px;
+  }
+
+  .hb-stat-icon {
+    font-size: 1.15rem;
+  }
+
+  .hb-stat-title {
+    font-size: 0.72rem;
+  }
+
+  .hb-stat-text {
+    font-size: 0.66rem;
   }
 }

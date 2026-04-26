@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Part 5: Responsive Design & Modern CSS — HTML & CSS Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 5: Mobile-first, media queries, CSS variables, clamp(), container queries, nesting.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/handbook.css">
+</head>
+<body class="handbook-wrapper">
+  <nav class="navbar"><div class="container"><a href="../../../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../../../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
+
+  <div class="handbook-page">
+    <div class="hb-topbar"><div class="hb-topbar-inner">
+      <div class="hb-breadcrumbs"><a href="index.html">HTML & CSS Handbook</a><span class="hb-muted">/</span><span>Part 5</span><span class="hb-muted">·</span><a href="#m5-1">5.1</a><a href="#m5-2">5.2</a><a href="#m5-3">5.3</a><a href="#m5-4">5.4</a><a href="#m5-5">5.5</a><a href="#m5-6">5.6</a><a href="#m5-7">5.7</a></div>
+      <div class="hb-progress" aria-label="Reading progress"><div class="hb-progress-track" role="progressbar"><div class="hb-progress-fill"></div></div><div class="hb-progress-label">0%</div></div>
+    </div></div>
+
+    <div class="chapter-header" data-chapter-num="05">
+      <div class="chapter-part-label">📖 Part 5 — Responsive Design & Modern CSS</div>
+      <h1 class="chapter-title">Build for <span class="gradient-text">Every Screen</span></h1>
+      <p class="chapter-subtitle">Mobile-first thinking, media queries, CSS variables, modern functions, and cutting-edge features.</p>
+      <div class="chapter-meta"><span>📄 Modules 5.1 – 5.7</span><span>⏱️ 80–120 min</span><span>💻 40+ Examples</span></div>
+    </div>
+
+    <div class="callout callout-tip"><strong>How to study Part 5:</strong> Resize your browser constantly while testing. Use Chrome DevTools device toolbar (Ctrl+Shift+M) to simulate phones and tablets.</div>
+
+    <div class="hb-mini-toc"><div class="hb-mini-title">📍 Part 5 Modules</div><div class="hb-mini-links">
+      <a href="#m5-1">5.1 Mobile-First</a><a href="#m5-2">5.2 Media Queries</a><a href="#m5-3">5.3 Responsive Images</a>
+      <a href="#m5-4">5.4 CSS Variables</a><a href="#m5-5">5.5 Modern Functions</a><a href="#m5-6">5.6 Container Queries</a><a href="#m5-7">5.7 Nesting & Layers</a>
+    </div></div>
+
+    <div class="quick-ref">
+      <div class="qr-title">🚀 Advanced Lens — Part 5</div>
+      <p class="explain-en">
+        Responsive CSS at industry level is not “add a few breakpoints.” It is system design: fluid scales, tokenized spacing,
+        predictable breakpoints, accessibility preferences, and component-driven responsiveness. Think in constraints, not fixed screen sizes.
+      </p>
+      <div class="explain-hi">
+        <span class="hi-label">Hindi mein samjho</span>
+        Real responsive design ka matlab sirf media query add karna nahi hai. Ye ek system hota hai: fluid sizes, design tokens, clear breakpoints,
+        accessibility preferences, aur component-level behavior. Fixed screen assumptions avoid karo.
+      </div>
+    </div>
+
+    <!-- MODULE 5.1 -->
+    <div class="module-section" id="m5-1">
+      <div class="module-header"><div class="module-number">5.1</div><h2 class="module-title">Responsive Design Principles — Mobile-first, viewport, fluid design</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">The viewport meta tag</h3>
+        <p class="explain-en">
+          Without the viewport meta tag, mobile browsers render pages at desktop width (~980px) and then scale down.
+          The <code>viewport</code> meta tag tells the browser to match the device width, enabling true responsive design.
+          <strong>This tag is mandatory on every responsive page.</strong>
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Viewport meta tag ke bina mobile browser page ko desktop width (~980px) pe render karta hai phir chhota karta hai. Ye tag browser ko bolta hai device ki width match karo — har responsive page pe zaroori hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — Viewport meta</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">&lt;!-- ✅ Required in every responsive page --&gt;</span>
+<span class="tag">&lt;meta</span> <span class="attr">name</span>=<span class="value">"viewport"</span>
+      <span class="attr">content</span>=<span class="value">"width=device-width, initial-scale=1.0"</span><span class="tag">&gt;</span></pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Mobile-first vs desktop-first</h3>
+        <p class="explain-en">
+          <strong>Mobile-first</strong> writes base styles for small screens, then uses <code>min-width</code> to add complexity for larger screens.
+          <strong>Desktop-first</strong> does the opposite with <code>max-width</code>. Industry standard is <strong>always mobile-first</strong> because
+          60%+ of web traffic is mobile, and it produces cleaner, lighter CSS.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Mobile-first me base styles chhoti screens ke liye hain, <code>min-width</code> se bade screens ke liye add karte hain. Desktop-first me ulta hota hai <code>max-width</code> se. Industry standard hamesha mobile-first hai kyunki 60%+ traffic mobile se aata hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Approach</th><th>Base styles for</th><th>Media query</th><th>Recommended?</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Mobile-first ✅</strong></td><td>Small screens</td><td><code>min-width</code> (add complexity)</td><td>Yes — industry standard</td></tr>
+              <tr><td>Desktop-first ❌</td><td>Large screens</td><td><code>max-width</code> (remove features)</td><td>No — legacy approach</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Mobile-first approach</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* BASE: Mobile styles (no media query needed) */</span>
+<span class="selector">.container</span> {
+  <span class="property">width</span>: <span class="number">100</span><span class="unit">%</span>;
+  <span class="property">padding</span>: <span class="number">0</span> <span class="number">16</span><span class="unit">px</span>;
+}
+<span class="selector">.nav-links</span> { <span class="property">display</span>: <span class="value">none</span>; }  <span class="comment">/* Hidden on mobile */</span>
+<span class="selector">.hamburger</span> { <span class="property">display</span>: <span class="value">block</span>; } <span class="comment">/* Shown on mobile */</span>
+
+<span class="comment">/* TABLET: 768px and up */</span>
+<span class="keyword">@media</span> (<span class="property">min-width</span>: <span class="number">768</span><span class="unit">px</span>) {
+  <span class="selector">.container</span> { <span class="property">max-width</span>: <span class="number">720</span><span class="unit">px</span>; <span class="property">margin</span>: <span class="number">0</span> <span class="value">auto</span>; }
+  <span class="selector">.nav-links</span> { <span class="property">display</span>: <span class="value">flex</span>; }  <span class="comment">/* Visible on tablet */</span>
+  <span class="selector">.hamburger</span> { <span class="property">display</span>: <span class="value">none</span>; }  <span class="comment">/* Hidden on tablet */</span>
+}
+
+<span class="comment">/* DESKTOP: 1024px and up */</span>
+<span class="keyword">@media</span> (<span class="property">min-width</span>: <span class="number">1024</span><span class="unit">px</span>) {
+  <span class="selector">.container</span> { <span class="property">max-width</span>: <span class="number">960</span><span class="unit">px</span>; }
+}</pre></div>
+        </div>
+        <div class="callout callout-important"><strong>Industry standard:</strong> Always start mobile-first. Write base styles for mobile → use <code>min-width</code> queries to add tablet/desktop layouts. Never use <code>max-width</code> first.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Fluid design principles</h3>
+        <p class="explain-en">
+          Fluid design uses <strong>relative units</strong> (%, vw, rem) instead of fixed pixels so elements scale naturally.
+          Combined with <code>max-width</code> constraints and <code>clamp()</code>, you get layouts that work at any screen size without breakpoints.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Fluid design me fixed pixels ki jagah relative units (%, vw, rem) use hote hain taaki elements naturally scale karein. max-width aur clamp() ke saath kisi bhi screen size pe kaam karta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Fluid design</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Fluid container */</span>
+<span class="selector">.wrapper</span> {
+  <span class="property">width</span>: <span class="number">90</span><span class="unit">%</span>;         <span class="comment">/* Fluid width */</span>
+  <span class="property">max-width</span>: <span class="number">1200</span><span class="unit">px</span>;  <span class="comment">/* Max constraint */</span>
+  <span class="property">margin</span>: <span class="number">0</span> <span class="value">auto</span>;
+}
+
+<span class="comment">/* Fluid text — scales with viewport */</span>
+<span class="selector">h1</span> {
+  <span class="property">font-size</span>: <span class="value">clamp(1.8rem, 4vw + 1rem, 3.5rem)</span>;
+}</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 5.2 -->
+    <div class="module-section" id="m5-2">
+      <div class="module-header"><div class="module-number">5.2</div><h2 class="module-title">Media Queries — Breakpoints, min-width, prefers-color-scheme</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Media queries — responsive breakpoints</h3>
+        <p class="explain-en">
+          Media queries apply styles conditionally based on screen size, orientation, or user preferences.
+          Standard breakpoints: <strong>640px</strong> (mobile), <strong>768px</strong> (tablet), <strong>1024px</strong> (desktop), <strong>1280px</strong> (wide).
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Media queries se screen size ke hisaab se alag styles lagte hain. Standard breakpoints: 640px (mobile), 768px (tablet), 1024px (desktop), 1280px (wide).</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Breakpoint</th><th>Width</th><th>Targets</th><th>Columns</th></tr></thead>
+            <tbody>
+              <tr><td>sm</td><td><code>640px</code></td><td>Large phones</td><td>1–2</td></tr>
+              <tr><td>md</td><td><code>768px</code></td><td>Tablets</td><td>2</td></tr>
+              <tr><td>lg</td><td><code>1024px</code></td><td>Laptops</td><td>3</td></tr>
+              <tr><td>xl</td><td><code>1280px</code></td><td>Desktops</td><td>4</td></tr>
+              <tr><td>2xl</td><td><code>1536px</code></td><td>Wide monitors</td><td>4–6</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Media queries</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Mobile-first: base styles for all screens */</span>
+<span class="selector">.grid</span> {
+  <span class="property">display</span>: <span class="value">grid</span>;
+  <span class="property">grid-template-columns</span>: <span class="number">1</span><span class="unit">fr</span>;   <span class="comment">/* 1 column on mobile */</span>
+  <span class="property">gap</span>: <span class="number">16</span><span class="unit">px</span>;
+}
+
+<span class="comment">/* Tablet and up */</span>
+<span class="keyword">@media</span> (<span class="property">min-width</span>: <span class="number">768</span><span class="unit">px</span>) {
+  <span class="selector">.grid</span> { <span class="property">grid-template-columns</span>: <span class="number">1</span><span class="unit">fr</span> <span class="number">1</span><span class="unit">fr</span>; }
+}
+
+<span class="comment">/* Desktop and up */</span>
+<span class="keyword">@media</span> (<span class="property">min-width</span>: <span class="number">1024</span><span class="unit">px</span>) {
+  <span class="selector">.grid</span> { <span class="property">grid-template-columns</span>: <span class="value">repeat(3, 1fr)</span>; }
+}</pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Content-driven breakpoints (professional approach)</h3>
+        <p class="explain-en">
+          Great teams do not pick breakpoints by random device names alone. They place breakpoints where the layout actually starts breaking:
+          text wraps awkwardly, cards become cramped, nav collisions happen, or reading width becomes too wide.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Professional approach me breakpoints random device names se nahi choose hote. Jahan layout tootna start hota hai (text wrap, cramped cards, nav collision), wahi breakpoint set karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — content-first breakpoints</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Base mobile styles */</span>
+<span class="selector">.feature-grid</span> { <span class="property">display</span>: <span class="value">grid</span>; <span class="property">grid-template-columns</span>: <span class="number">1</span><span class="unit">fr</span>; }
+
+<span class="comment">/* Breakpoint added exactly when cards become too narrow */</span>
+<span class="keyword">@media</span> (<span class="property">min-width</span>: <span class="number">720</span><span class="unit">px</span>) {
+  <span class="selector">.feature-grid</span> { <span class="property">grid-template-columns</span>: <span class="number">1</span><span class="unit">fr</span> <span class="number">1</span><span class="unit">fr</span>; }
+}
+
+<span class="comment">/* Next breakpoint when reading width gets too large */</span>
+<span class="keyword">@media</span> (<span class="property">min-width</span>: <span class="number">1100</span><span class="unit">px</span>) {
+  <span class="selector">.feature-grid</span> { <span class="property">grid-template-columns</span>: <span class="value">repeat(3, 1fr)</span>; }
+}</pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">User preference media queries</h3>
+        <p class="explain-en">
+          Modern CSS lets you detect user preferences: <code>prefers-color-scheme</code> for dark/light mode,
+          <code>prefers-reduced-motion</code> for animation sensitivity, <code>prefers-contrast</code> for high contrast needs.
+          These make your site more accessible and respectful of user settings.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Modern CSS se user preferences detect hoti hain: dark/light mode, motion sensitivity, high contrast. Ye aapki site ko accessible aur user-friendly banate hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — User preference queries</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Dark mode preference */</span>
+<span class="keyword">@media</span> (<span class="property">prefers-color-scheme</span>: <span class="value">dark</span>) {
+  <span class="selector">:root</span> {
+    <span class="property">--bg</span>: <span class="value">#0f0f1a</span>;
+    <span class="property">--text</span>: <span class="value">#e2e8f0</span>;
+    <span class="property">--card-bg</span>: <span class="value">#1a1a2e</span>;
+  }
+}
+
+<span class="comment">/* Reduced motion preference */</span>
+<span class="keyword">@media</span> (<span class="property">prefers-reduced-motion</span>: <span class="value">reduce</span>) {
+  <span class="selector">*</span> { <span class="property">animation-duration</span>: <span class="number">0.01</span><span class="unit">ms</span> <span class="value">!important</span>; }
+}
+
+<span class="comment">/* Print styles */</span>
+<span class="keyword">@media</span> <span class="value">print</span> {
+  <span class="selector">.navbar, .footer</span> { <span class="property">display</span>: <span class="value">none</span>; }
+  <span class="selector">body</span> { <span class="property">font-size</span>: <span class="number">12</span><span class="unit">pt</span>; }
+}</pre></div>
+        </div>
+        <div class="callout callout-tip"><strong>Pro tip:</strong> Always test with DevTools → Rendering → Emulate CSS media features. You can simulate dark mode, reduced motion, and print without changing OS settings.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 5.3 -->
+    <div class="module-section" id="m5-3">
+      <div class="module-header"><div class="module-number">5.3</div><h2 class="module-title">Responsive Images & Media — srcset, picture, object-fit, aspect-ratio</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Making images responsive</h3>
+        <p class="explain-en">
+          Images must adapt to screen size. Use <code>max-width: 100%</code> as a baseline. For performance, use <code>srcset</code> to serve different sizes,
+          <code>&lt;picture&gt;</code> for art direction, and <code>aspect-ratio</code> to prevent layout shift.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Images screen size ke hisaab se adjust honi chahiye. <code>max-width: 100%</code> base hai. Performance ke liye <code>srcset</code> se alag sizes serve karo, <code>aspect-ratio</code> se layout shift roko.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Responsive images</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Base responsive image rule */</span>
+<span class="selector">img</span> {
+  <span class="property">max-width</span>: <span class="number">100</span><span class="unit">%</span>;
+  <span class="property">height</span>: <span class="value">auto</span>;
+  <span class="property">display</span>: <span class="value">block</span>;
+}
+
+<span class="comment">/* Fixed aspect ratio container */</span>
+<span class="selector">.thumbnail</span> {
+  <span class="property">aspect-ratio</span>: <span class="number">16</span> / <span class="number">9</span>;
+  <span class="property">object-fit</span>: <span class="value">cover</span>;    <span class="comment">/* Crop to fill */</span>
+  <span class="property">border-radius</span>: <span class="number">12</span><span class="unit">px</span>;
+}</pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">srcset & picture — serve optimized images</h3>
+        <p class="explain-en">
+          <code>srcset</code> lets the browser choose the best image size based on device pixel density and viewport width.
+          <code>&lt;picture&gt;</code> enables art direction — showing different crops or formats for different screens.
+          This dramatically improves loading speed on mobile devices.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>srcset</code> se browser device ke hisaab se best image size choose karta hai. <code>&lt;picture&gt;</code> se alag screens ke liye alag images dikhaa sakte ho. Mobile pe loading speed bahut improve hoti hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — srcset & picture</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">&lt;!-- srcset: browser picks best size --&gt;</span>
+<span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="value">"hero-800.jpg"</span>
+     <span class="attr">srcset</span>=<span class="value">"hero-400.jpg 400w,
+             hero-800.jpg 800w,
+             hero-1200.jpg 1200w"</span>
+     <span class="attr">sizes</span>=<span class="value">"(max-width: 768px) 100vw, 50vw"</span>
+     <span class="attr">alt</span>=<span class="value">"Hero banner"</span><span class="tag">&gt;</span>
+
+<span class="comment">&lt;!-- picture: art direction --&gt;</span>
+<span class="tag">&lt;picture&gt;</span>
+  <span class="tag">&lt;source</span> <span class="attr">media</span>=<span class="value">"(min-width: 1024px)"</span> <span class="attr">srcset</span>=<span class="value">"hero-wide.webp"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;source</span> <span class="attr">media</span>=<span class="value">"(min-width: 640px)"</span> <span class="attr">srcset</span>=<span class="value">"hero-medium.webp"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="value">"hero-mobile.webp"</span> <span class="attr">alt</span>=<span class="value">"Hero"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/picture&gt;</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Property</th><th>What it does</th><th>Common values</th></tr></thead>
+            <tbody>
+              <tr><td><code>object-fit</code></td><td>How image fills container</td><td>cover, contain, fill, none</td></tr>
+              <tr><td><code>object-position</code></td><td>Where image is positioned</td><td>center, top, 50% 25%</td></tr>
+              <tr><td><code>aspect-ratio</code></td><td>Enforces width:height ratio</td><td>16/9, 4/3, 1/1</td></tr>
+              <tr><td><code>loading</code></td><td>Lazy load below-fold images</td><td>lazy, eager</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>Performance rule:</strong> Add <code>loading="lazy"</code> to all below-fold images. Add <code>width</code> and <code>height</code> attributes to prevent Cumulative Layout Shift (CLS).</div>
+      </div>
+    </div>
+
+    <!-- MODULE 5.4 -->
+    <div class="module-section" id="m5-4">
+      <div class="module-header"><div class="module-number">5.4</div><h2 class="module-title">CSS Custom Properties (Variables) — :root, var(), theming, dark mode</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">CSS Variables — the foundation of design systems</h3>
+        <p class="explain-en">
+          CSS custom properties (variables) let you define reusable values. Declare them on <code>:root</code> for global access.
+          They enable <strong>dark mode toggling</strong>, consistent theming, and easy updates across your entire codebase.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>CSS variables se reusable values define hote hain. <code>:root</code> pe declare karo global access ke liye. Dark mode, theming, aur consistent design systems ke liye essential hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Variables & dark mode</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Define variables */</span>
+<span class="selector">:root</span> {
+  <span class="property">--primary</span>: <span class="value">#7c3aed</span>;
+  <span class="property">--bg</span>: <span class="value">#ffffff</span>;
+  <span class="property">--text</span>: <span class="value">#1e293b</span>;
+  <span class="property">--radius</span>: <span class="number">12</span><span class="unit">px</span>;
+}
+
+<span class="comment">/* Dark mode override */</span>
+<span class="selector">[data-theme="dark"]</span> {
+  <span class="property">--bg</span>: <span class="value">#0f0f1a</span>;
+  <span class="property">--text</span>: <span class="value">#e2e8f0</span>;
+}
+
+<span class="comment">/* Use variables */</span>
+<span class="selector">.card</span> {
+  <span class="property">background</span>: <span class="value">var(--bg)</span>;
+  <span class="property">color</span>: <span class="value">var(--text)</span>;
+  <span class="property">border-radius</span>: <span class="value">var(--radius)</span>;
+  <span class="property">border</span>: <span class="number">1</span><span class="unit">px</span> <span class="value">solid</span> <span class="value">var(--primary)</span>;
+}</pre></div>
+        </div>
+        <div class="callout callout-tip"><strong>Power move:</strong> CSS variables cascade — you can override them on any element. Set <code>--gap: 8px</code> on a compact card and <code>--gap: 24px</code> on a spacious one.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Design tokens — professional variable organization</h3>
+        <p class="explain-en">Professional design systems organize CSS variables into <strong>design tokens</strong> — categorized by purpose. This makes theming, dark mode, and brand updates trivial.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Professional design systems CSS variables ko design tokens me organize karte hain. Isse theming, dark mode, aur brand updates bahut easy ho jaate hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Design tokens</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="selector">:root</span> {
+  <span class="comment">/* Colors */</span>
+  <span class="property">--clr-primary</span>: <span class="value">#7c3aed</span>;
+  <span class="property">--clr-primary-light</span>: <span class="value">#a78bfa</span>;
+  <span class="property">--clr-surface</span>: <span class="value">#ffffff</span>;
+  <span class="property">--clr-text</span>: <span class="value">#1e293b</span>;
+  <span class="property">--clr-muted</span>: <span class="value">#64748b</span>;
+
+  <span class="comment">/* Spacing (4px base) */</span>
+  <span class="property">--space-xs</span>: <span class="number">4</span><span class="unit">px</span>;
+  <span class="property">--space-sm</span>: <span class="number">8</span><span class="unit">px</span>;
+  <span class="property">--space-md</span>: <span class="number">16</span><span class="unit">px</span>;
+  <span class="property">--space-lg</span>: <span class="number">32</span><span class="unit">px</span>;
+  <span class="property">--space-xl</span>: <span class="number">64</span><span class="unit">px</span>;
+
+  <span class="comment">/* Typography */</span>
+  <span class="property">--font-body</span>: <span class="value">'Inter', system-ui, sans-serif</span>;
+  <span class="property">--font-mono</span>: <span class="value">'JetBrains Mono', monospace</span>;
+
+  <span class="comment">/* Effects */</span>
+  <span class="property">--radius-sm</span>: <span class="number">6</span><span class="unit">px</span>;
+  <span class="property">--radius-md</span>: <span class="number">12</span><span class="unit">px</span>;
+  <span class="property">--shadow</span>: <span class="number">0</span> <span class="number">4</span><span class="unit">px</span> <span class="number">20</span><span class="unit">px</span> <span class="value">rgba(0,0,0,0.08)</span>;
+}</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 5.5 -->
+    <div class="module-section" id="m5-5">
+      <div class="module-header"><div class="module-number">5.5</div><h2 class="module-title">Modern CSS Functions — clamp(), min(), max(), calc()</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Fluid typography & spacing with clamp()</h3>
+        <p class="explain-en">
+          <code>clamp(min, preferred, max)</code> creates fluid values that scale with viewport. Perfect for responsive font sizes and spacing
+          <strong>without media queries</strong>. <code>calc()</code> lets you mix units (e.g., <code>100% - 40px</code>).
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>clamp()</code> se values viewport ke saath automatically scale hoti hain — bina media queries ke. <code>calc()</code> se alag units mix kar sakte ho (jaise 100% - 40px).</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Modern functions</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Fluid typography (no media queries!) */</span>
+<span class="selector">h1</span> {
+  <span class="property">font-size</span>: <span class="value">clamp(1.8rem, 4vw, 3.5rem)</span>;
+  <span class="comment">/* min: 1.8rem, scales with 4vw, max: 3.5rem */</span>
+}
+
+<span class="comment">/* Fluid spacing */</span>
+<span class="selector">.section</span> {
+  <span class="property">padding</span>: <span class="value">clamp(1rem, 5vw, 4rem)</span>;
+}
+
+<span class="comment">/* calc() for mixed-unit math */</span>
+<span class="selector">.sidebar</span> {
+  <span class="property">width</span>: <span class="value">calc(100% - 280px)</span>;
+  <span class="property">margin-left</span>: <span class="value">calc(var(--gap) * 2)</span>;
+}</pre></div>
+        </div>
+        <div class="callout callout-important"><strong>Industry game-changer:</strong> <code>clamp()</code> eliminates the need for many media queries. Use it for font-size, padding, margin, and gap. Your CSS becomes simpler and more fluid.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">CSS math functions comparison</h3>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Function</th><th>Syntax</th><th>What it does</th><th>Use case</th></tr></thead>
+            <tbody>
+              <tr><td><code>calc()</code></td><td><code>calc(100% - 40px)</code></td><td>Math with mixed units</td><td>Dynamic widths, offsets</td></tr>
+              <tr><td><code>min()</code></td><td><code>min(50vw, 600px)</code></td><td>Smallest of values</td><td>Max constraints</td></tr>
+              <tr><td><code>max()</code></td><td><code>max(320px, 50%)</code></td><td>Largest of values</td><td>Min constraints</td></tr>
+              <tr><td><code>clamp()</code></td><td><code>clamp(1rem, 4vw, 3rem)</code></td><td>Value within range</td><td>Fluid typography/spacing</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 5.6 -->
+    <div class="module-section" id="m5-6">
+      <div class="module-header"><div class="module-number">5.6</div><h2 class="module-title">Container Queries — @container, container-type, component-level responsiveness</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Container queries — the future of responsive design</h3>
+        <p class="explain-en">
+          Container queries let components respond to their <strong>parent container's size</strong> rather than the viewport.
+          This makes truly reusable components that adapt whether they're in a sidebar or full-width area.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Container queries se components apne parent container ke size ke hisaab se change hote hain, viewport ke nahi. Iska matlab truly reusable components ban sakte hain jo kahi bhi kaam kare.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Container queries</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Define a container */</span>
+<span class="selector">.card-wrapper</span> {
+  <span class="property">container-type</span>: <span class="value">inline-size</span>;
+  <span class="property">container-name</span>: <span class="value">card</span>;
+}
+
+<span class="comment">/* Style based on container width */</span>
+<span class="keyword">@container</span> card (<span class="property">min-width</span>: <span class="number">400</span><span class="unit">px</span>) {
+  <span class="selector">.card</span> {
+    <span class="property">display</span>: <span class="value">flex</span>;
+    <span class="property">gap</span>: <span class="number">16</span><span class="unit">px</span>;
+  }
+}</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Feature</th><th>Media queries</th><th>Container queries</th></tr></thead>
+            <tbody>
+              <tr><td>Responds to</td><td>Viewport (window) size</td><td>Parent container size</td></tr>
+              <tr><td>Scope</td><td>Global (whole page)</td><td>Local (per component)</td></tr>
+              <tr><td>Reusability</td><td>Components break in new contexts</td><td>Components work anywhere</td></tr>
+              <tr><td>Browser support</td><td>All browsers</td><td>Chrome 105+, Firefox 110+, Safari 16+</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>Progressive enhancement:</strong> Container queries are newer — use them alongside media queries. Start with media queries for page layout, add container queries for component-level responsiveness.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Fallback strategy for container queries</h3>
+        <p class="explain-en">
+          Use media queries as a safe baseline, then enhance with container queries inside a feature-support guard.
+          This ensures older browsers still get a usable layout while modern browsers receive component-intelligent behavior.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Pehle media-query fallback do, phir modern browsers ke liye container query enhancement add karo. Isse old browsers me bhi layout usable rehta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — progressive enhancement</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Baseline fallback (works everywhere) */</span>
+<span class="selector">.profile-card</span> { <span class="property">display</span>: <span class="value">block</span>; }
+<span class="keyword">@media</span> (<span class="property">min-width</span>: <span class="number">900</span><span class="unit">px</span>) {
+  <span class="selector">.profile-card</span> { <span class="property">display</span>: <span class="value">grid</span>; <span class="property">grid-template-columns</span>: <span class="number">1</span><span class="unit">fr</span> <span class="number">2</span><span class="unit">fr</span>; }
+}
+
+<span class="comment">/* Enhancement for modern browsers */</span>
+<span class="keyword">@supports</span> (<span class="property">container-type</span>: <span class="value">inline-size</span>) {
+  <span class="selector">.profile-card-wrap</span> { <span class="property">container-type</span>: <span class="value">inline-size</span>; }
+  <span class="keyword">@container</span> (<span class="property">min-width</span>: <span class="number">420</span><span class="unit">px</span>) {
+    <span class="selector">.profile-card</span> { <span class="property">display</span>: <span class="value">grid</span>; <span class="property">grid-template-columns</span>: <span class="number">1</span><span class="unit">fr</span> <span class="number">2</span><span class="unit">fr</span>; }
+  }
+}</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 5.7 -->
+    <div class="module-section" id="m5-7">
+      <div class="module-header"><div class="module-number">5.7</div><h2 class="module-title">CSS Nesting & Cascade Layers — @layer, native nesting, scalable architecture</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Native CSS nesting (2024+)</h3>
+        <p class="explain-en">
+          CSS now supports native nesting — similar to Sass/SCSS but without a preprocessor. Use <code>&amp;</code> to reference the parent selector.
+          <code>@layer</code> lets you control the cascade order of your styles, preventing specificity wars.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>CSS me ab native nesting support hai — Sass jaisa lekin bina preprocessor ke. <code>&amp;</code> se parent selector refer hota hai. <code>@layer</code> se cascade order control hota hai, specificity wars nahi hote.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Nesting & layers</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Native CSS nesting */</span>
+<span class="selector">.card</span> {
+  <span class="property">padding</span>: <span class="number">20</span><span class="unit">px</span>;
+
+  <span class="selector">&amp; .title</span> {
+    <span class="property">font-weight</span>: <span class="number">700</span>;
+  }
+
+  <span class="selector">&amp;:hover</span> {
+    <span class="property">transform</span>: <span class="value">translateY(-2px)</span>;
+  }
+}
+
+<span class="comment">/* Cascade layers */</span>
+<span class="keyword">@layer</span> reset, base, components, utilities;
+
+<span class="keyword">@layer</span> base {
+  <span class="selector">body</span> { <span class="property">font-family</span>: <span class="value">system-ui</span>; }
+}
+<span class="keyword">@layer</span> components {
+  <span class="selector">.btn</span> { <span class="property">padding</span>: <span class="number">12</span><span class="unit">px</span> <span class="number">24</span><span class="unit">px</span>; }
+}</pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">@layer — controlling cascade priority</h3>
+        <p class="explain-en"><code>@layer</code> lets you group styles and define their priority order explicitly. Styles in later layers override earlier layers regardless of specificity. This eliminates <code>!important</code> wars.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>@layer</code> se styles ko group karke priority order define kar sakte ho. Later layers pehle wale ko override karte hain chahe specificity kuch bhi ho. <code>!important</code> wars khatam!</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Layer order</th><th>Purpose</th><th>Priority</th></tr></thead>
+            <tbody>
+              <tr><td><code>reset</code></td><td>CSS reset/normalize</td><td>Lowest (overridden by all)</td></tr>
+              <tr><td><code>base</code></td><td>Typography, body defaults</td><td>Low</td></tr>
+              <tr><td><code>components</code></td><td>Cards, buttons, nav</td><td>Medium</td></tr>
+              <tr><td><code>utilities</code></td><td>Helper classes (.sr-only)</td><td>Highest (overrides all)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Modern CSS is powerful:</strong> With native nesting + cascade layers + CSS variables, you may not need Sass/SCSS anymore for many projects. Native CSS covers 90% of what preprocessors offered.</div>
+      </div>
+    </div>
+
+    <div class="practice-box">
+      <div class="practice-title">✏️ Practice Exercises — Part 5</div>
+      <ol>
+        <li>Convert a desktop-first layout to mobile-first using only <code>min-width</code> media queries.</li>
+        <li>Create a design system with CSS variables: colors, spacing, radius, shadows — with dark mode toggle.</li>
+        <li>Build fluid typography using <code>clamp()</code> — headings and body text that scale smoothly.</li>
+        <li>Create a card that changes layout using container queries when placed in sidebar vs main content.</li>
+        <li>Refactor a flat CSS file to use native nesting for at least 3 component blocks.</li>
+      </ol>
+    </div>
+
+    <div class="handbook-nav">
+      <a href="part4.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Part 4: CSS Layout Systems</div></div></a>
+      <a href="part6.html" class="nav-btn next"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Part 6: Visual Effects & Animations →</div></div><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+  </div>
+
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
+  <script src="../../../js/main.js"></script>
+  <script>
+    (() => {
+      document.querySelectorAll('.code-block').forEach((block) => { const pre = block.querySelector('.code-body pre'), header = block.querySelector('.code-header'); if (!pre || !header) return; let actions = header.querySelector('.code-actions'); if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); } const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'code-copy-btn'; btn.textContent = 'Copy'; btn.addEventListener('click', async () => { try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; } catch { btn.textContent = 'Failed'; } finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); } }); actions.prepend(btn); });
+      const fill = document.querySelector('.hb-progress-fill'), label = document.querySelector('.hb-progress-label');
+      if (fill && label) { const update = () => { const h = document.documentElement, d = (h.scrollHeight - h.clientHeight) || 1, p = Math.max(0, Math.min(1, h.scrollTop / d)); fill.style.width = (p*100).toFixed(0)+'%'; label.textContent = (p*100).toFixed(0)+'%'; }; document.addEventListener('scroll', update, { passive: true }); update(); }
+    })();
+  </script>
+</body>
+</html>

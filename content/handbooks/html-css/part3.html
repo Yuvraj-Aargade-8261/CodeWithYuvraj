@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Part 3: CSS Foundations — HTML & CSS Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 3 of HTML & CSS Handbook: CSS intro, selectors, specificity, box model, colors, typography, units, display properties.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/handbook.css">
+</head>
+<body class="handbook-wrapper">
+  <nav class="navbar"><div class="container"><a href="../../../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../../../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
+
+  <div class="handbook-page">
+    <div class="hb-topbar">
+      <div class="hb-topbar-inner">
+        <div class="hb-breadcrumbs">
+          <a href="index.html">HTML & CSS Handbook</a>
+          <span class="hb-muted">/</span>
+          <span>Part 3</span>
+          <span class="hb-muted">·</span>
+          <a href="#m3-1">3.1</a><a href="#m3-2">3.2</a><a href="#m3-3">3.3</a><a href="#m3-4">3.4</a><a href="#m3-5">3.5</a><a href="#m3-6">3.6</a><a href="#m3-7">3.7</a>
+        </div>
+        <div class="hb-progress" aria-label="Reading progress">
+          <div class="hb-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="hb-progress-fill"></div></div>
+          <div class="hb-progress-label">0%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chapter-header" data-chapter-num="03">
+      <div class="chapter-part-label">📖 Part 3 — CSS Foundations</div>
+      <h1 class="chapter-title">Master the Art of <span class="gradient-text">Styling</span></h1>
+      <p class="chapter-subtitle">From raw HTML to beautiful interfaces — learn selectors, box model, colors, typography, and units.</p>
+      <div class="chapter-meta"><span>📄 Modules 3.1 – 3.7</span><span>⏱️ 80–120 min read</span><span>💻 45+ Examples</span></div>
+    </div>
+
+    <div class="callout callout-tip">
+      <strong>How to study Part 3:</strong> Open DevTools (F12) alongside every example. Inspect computed styles, toggle properties on/off, and experiment with values live. CSS is learned by doing.
+    </div>
+
+    <div class="hb-mini-toc">
+      <div class="hb-mini-title">📍 Part 3 Modules</div>
+      <div class="hb-mini-links">
+        <a href="#m3-1">3.1 CSS Intro</a>
+        <a href="#m3-2">3.2 Selectors</a>
+        <a href="#m3-3">3.3 Box Model</a>
+        <a href="#m3-4">3.4 Colors</a>
+        <a href="#m3-5">3.5 Typography</a>
+        <a href="#m3-6">3.6 Units</a>
+        <a href="#m3-7">3.7 Display</a>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">🚀 Advanced Lens — Part 3</div>
+      <p class="explain-en">
+        CSS is not just "making things pretty." At industry level, CSS is about building scalable design systems, understanding the rendering pipeline,
+        and writing maintainable styles that work across devices and team members. Every property has performance and accessibility implications.
+      </p>
+      <div class="explain-hi">
+        <span class="hi-label">Hindi mein samjho</span>
+        CSS sirf "sundar banana" nahi hai. Industry level pe CSS ka matlab hai scalable design systems banana, rendering pipeline samajhna,
+        aur maintainable styles likhna jo sab devices pe kaam kare. Har property ka performance aur accessibility pe asar hota hai.
+      </div>
+    </div>
+
+    <!-- MODULE 3.1 -->
+    <div class="module-section" id="m3-1">
+      <div class="module-header"><div class="module-number">3.1</div><h2 class="module-title">Introduction to CSS — What is CSS, syntax, how CSS connects to HTML</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">What is CSS?</h3>
+        <p class="explain-en">
+          <strong>CSS (Cascading Style Sheets)</strong> controls the visual presentation of HTML elements — colors, layout, fonts, spacing, animations.
+          Without CSS, every website would look like a plain text document. CSS separates <strong>content (HTML)</strong> from <strong>presentation (CSS)</strong>,
+          making code cleaner and easier to maintain.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>CSS se HTML elements ki visual presentation control hoti hai — colors, layout, fonts, spacing sab. CSS ke bina har website plain text jaisi dikhegi. CSS content (HTML) ko presentation se alag rakhta hai.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">CSS syntax — rules, properties, values</h3>
+        <p class="explain-en">
+          A CSS rule has three parts: a <strong>selector</strong> (what to style), a <strong>property</strong> (which aspect), and a <strong>value</strong> (how to style it).
+          Rules are wrapped in curly braces with <code>property: value;</code> pairs.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>CSS rule me selector (kya style karna hai), property (kaun si cheez), aur value (kaise) hota hai. Rules curly braces me likhe jaate hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Basic syntax</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Selector { property: value; } */</span>
+<span class="selector">h1</span> {
+  <span class="property">color</span>: <span class="value">#7c3aed</span>;
+  <span class="property">font-size</span>: <span class="number">2</span><span class="unit">rem</span>;
+  <span class="property">font-weight</span>: <span class="number">800</span>;
+}
+
+<span class="selector">p</span> {
+  <span class="property">color</span>: <span class="value">#64748b</span>;
+  <span class="property">line-height</span>: <span class="number">1.8</span>;
+  <span class="property">margin-bottom</span>: <span class="number">16</span><span class="unit">px</span>;
+}</pre></div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> <code>h1</code> is the selector. <code>color</code> and <code>font-size</code> are properties. <code>#7c3aed</code> and <code>2rem</code> are values. Each declaration ends with a semicolon.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Three ways to add CSS</h3>
+        <p class="explain-en">
+          CSS can be added via <strong>inline</strong> (style attribute), <strong>internal</strong> (&lt;style&gt; tag in head), or <strong>external</strong> (linked .css file).
+          Industry standard: always use <strong>external stylesheets</strong>. Inline styles break separation of concerns and are hard to maintain.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>CSS teen tarike se add hota hai: inline (style attribute), internal (style tag), external (.css file). Industry me hamesha external CSS use hota hai — inline styles avoid karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — Three CSS methods</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">&lt;!-- ❌ Inline (avoid in production) --&gt;</span>
+<span class="tag">&lt;p</span> <span class="attr">style</span>=<span class="value">"color: red;"</span><span class="tag">&gt;</span>Red text<span class="tag">&lt;/p&gt;</span>
+
+<span class="comment">&lt;!-- ⚠️ Internal (okay for single-page experiments) --&gt;</span>
+<span class="tag">&lt;style&gt;</span>
+  <span class="selector">p</span> { <span class="property">color</span>: <span class="value">blue</span>; }
+<span class="tag">&lt;/style&gt;</span>
+
+<span class="comment">&lt;!-- ✅ External (industry standard) --&gt;</span>
+<span class="tag">&lt;link</span> <span class="attr">rel</span>=<span class="value">"stylesheet"</span> <span class="attr">href</span>=<span class="value">"style.css"</span><span class="tag">&gt;</span></pre></div>
+        </div>
+        <div class="callout callout-warning"><strong>Industry rule:</strong> External CSS = maintainable, cacheable, reusable. One CSS file can style hundreds of pages. Inline styles should only be used for dynamic JavaScript-set values.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Cascade strategy (how large teams prevent CSS conflicts)</h3>
+        <p class="explain-en">
+          In real projects, CSS failures usually come from poor cascade control, not missing properties.
+          A professional approach is: use low-specificity class selectors, keep component styles scoped, and define a predictable layering order
+          (reset → base → components → utilities → overrides). This avoids “why is this style not applying?” chaos.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Real projects me CSS issues zyada tar cascade/specificity se aate hain. Best practice: low-specificity class selectors, scoped component styles, aur clear layer order rakho (reset → base → components → utilities → overrides).</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — layered architecture</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* 1) Reset / normalize */</span>
+<span class="selector">*, *::before, *::after</span> { <span class="property">box-sizing</span>: <span class="value">border-box</span>; }
+
+<span class="comment">/* 2) Base */</span>
+<span class="selector">body</span> { <span class="property">font-family</span>: <span class="string">'Inter'</span>, <span class="value">sans-serif</span>; <span class="property">line-height</span>: <span class="number">1.6</span>; }
+
+<span class="comment">/* 3) Components */</span>
+<span class="selector">.card</span> { <span class="property">padding</span>: <span class="number">1</span><span class="unit">rem</span>; <span class="property">border-radius</span>: <span class="number">12</span><span class="unit">px</span>; }
+
+<span class="comment">/* 4) Utilities */</span>
+<span class="selector">.mt-2</span> { <span class="property">margin-top</span>: <span class="number">0.5</span><span class="unit">rem</span>; }
+
+<span class="comment">/* 5) Rare overrides */</span>
+<span class="selector">.theme-dark .card</span> { <span class="property">background</span>: <span class="value">#111827</span>; }</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 3.2 -->
+    <div class="module-section" id="m3-2">
+      <div class="module-header"><div class="module-number">3.2</div><h2 class="module-title">Selectors & Specificity — Element, class, ID, combinators, specificity calculation</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">CSS selector types</h3>
+        <p class="explain-en">
+          Selectors target which HTML elements to style. From basic element selectors to powerful combinators,
+          choosing the right selector determines both precision and maintainability of your styles.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Selectors decide karte hain ki kaun se HTML elements pe style lagega. Sahi selector choose karna code ki precision aur maintainability dono decide karta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Selector types</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Element selector */</span>
+<span class="selector">p</span> { <span class="property">color</span>: <span class="value">#333</span>; }
+
+<span class="comment">/* Class selector (reusable — preferred) */</span>
+<span class="selector">.card</span> { <span class="property">padding</span>: <span class="number">20</span><span class="unit">px</span>; }
+
+<span class="comment">/* ID selector (unique — use sparingly) */</span>
+<span class="selector">#hero</span> { <span class="property">background</span>: <span class="value">#0f0f1a</span>; }
+
+<span class="comment">/* Attribute selector */</span>
+<span class="selector">input[type="email"]</span> { <span class="property">border-color</span>: <span class="value">#7c3aed</span>; }
+
+<span class="comment">/* Descendant combinator */</span>
+<span class="selector">.nav a</span> { <span class="property">text-decoration</span>: <span class="value">none</span>; }
+
+<span class="comment">/* Direct child combinator */</span>
+<span class="selector">.menu > li</span> { <span class="property">display</span>: <span class="value">inline-block</span>; }
+
+<span class="comment">/* Grouping selector */</span>
+<span class="selector">h1, h2, h3</span> { <span class="property">font-weight</span>: <span class="number">700</span>; }</pre></div>
+        </div>
+        <div class="callout callout-tip"><strong>Industry rule:</strong> Prefer classes over IDs for styling. Classes are reusable; IDs have high specificity that's hard to override. Use IDs for JavaScript hooks and anchor links.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Specificity — how the browser resolves conflicts</h3>
+        <p class="explain-en">
+          When multiple rules target the same element, the browser uses <strong>specificity</strong> to decide which wins.
+          Specificity is calculated as a score: <code>inline (1000) > ID (100) > class (10) > element (1)</code>.
+          Higher specificity always wins, regardless of source order.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Jab ek element pe multiple rules lage, browser specificity se decide karta hai kaun jeeta. Score: inline (1000) > ID (100) > class (10) > element (1). Zyada score hamesha jeetta hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Selector</th><th>Specificity</th><th>Score</th></tr></thead>
+            <tbody>
+              <tr><td><code>p</code></td><td>1 element</td><td>0-0-1</td></tr>
+              <tr><td><code>.card</code></td><td>1 class</td><td>0-1-0</td></tr>
+              <tr><td><code>#hero</code></td><td>1 ID</td><td>1-0-0</td></tr>
+              <tr><td><code>.card .title</code></td><td>2 classes</td><td>0-2-0</td></tr>
+              <tr><td><code>#hero .card p</code></td><td>1 ID + 1 class + 1 element</td><td>1-1-1</td></tr>
+              <tr><td><code>style="..."</code></td><td>Inline</td><td>1-0-0-0</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>Avoid <code>!important</code>!</strong> It overrides everything and creates unmaintainable CSS. If you need <code>!important</code>, your specificity architecture is broken.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Modern selector patterns: <code>:where()</code>, <code>:is()</code>, and nesting mindset</h3>
+        <p class="explain-en">
+          Modern CSS gives safer ways to compose selectors. <code>:where()</code> adds zero specificity, perfect for base styles.
+          <code>:is()</code> simplifies long selector groups. Combined with thoughtful naming, these reduce override battles in large systems.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>:where()</code> zero specificity deta hai, base styles ke liye best hai. <code>:is()</code> long selector groups ko short karta hai. Inse large projects me CSS conflict kam hota hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — modern selectors</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* :where() -> zero specificity baseline */</span>
+<span class="selector">:where(h1, h2, h3)</span> {
+  <span class="property">line-height</span>: <span class="number">1.2</span>;
+  <span class="property">margin</span>: <span class="number">0</span> <span class="number">0</span> <span class="number">0.75</span><span class="unit">rem</span>;
+}
+
+<span class="comment">/* :is() -> cleaner grouped selector */</span>
+<span class="selector">.card :is(a, button)</span> {
+  <span class="property">font-weight</span>: <span class="number">600</span>;
+}
+
+<span class="comment">/* Explicit component scope */</span>
+<span class="selector">.nav__item:hover .nav__link</span> { <span class="property">color</span>: <span class="value">#7c3aed</span>; }</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 3.3 -->
+    <div class="module-section" id="m3-3">
+      <div class="module-header"><div class="module-number">3.3</div><h2 class="module-title">The Box Model — Content, padding, border, margin, box-sizing</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Everything is a box</h3>
+        <p class="explain-en">
+          Every HTML element is rendered as a rectangular <strong>box</strong>. The box model has four layers from inside out:
+          <strong>content</strong> (your text/image), <strong>padding</strong> (space inside border), <strong>border</strong> (visible edge),
+          and <strong>margin</strong> (space outside border). Understanding this is the #1 key to mastering layout.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Har HTML element ek rectangular box hai. Box model me 4 layers hain: content (andar ka text/image), padding (border ke andar space), border (visible edge), margin (border ke bahar space). Ye samajhna layout ka #1 key hai.</div>
+
+        <div class="diagram-box">
+          <div class="diagram-title">📦 The CSS Box Model</div>
+          <div class="diagram-flow">
+            <div class="diagram-node accent">Margin<br><small>Outside space</small></div>
+            <div class="diagram-arrow">→</div>
+            <div class="diagram-node primary">Border<br><small>Visible edge</small></div>
+            <div class="diagram-arrow">→</div>
+            <div class="diagram-node secondary">Padding<br><small>Inner space</small></div>
+            <div class="diagram-arrow">→</div>
+            <div class="diagram-node success">Content<br><small>Text / Image</small></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">box-sizing: border-box (industry standard)</h3>
+        <p class="explain-en">
+          By default, <code>width</code> only applies to content — padding and border are <em>added</em> on top (content-box).
+          <code>box-sizing: border-box</code> makes width include padding and border, which is far more intuitive.
+          Every production CSS file starts with this reset.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Default me width sirf content pe lagti hai — padding aur border upar se add hoti hai. <code>border-box</code> se width me padding aur border include hoti hai. Har professional CSS file ye reset se shuru hoti hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Box model reset</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* ✅ Universal box-sizing reset (always use this) */</span>
+<span class="selector">*, *::before, *::after</span> {
+  <span class="property">box-sizing</span>: <span class="value">border-box</span>;
+}
+
+<span class="comment">/* Example: a card with predictable sizing */</span>
+<span class="selector">.card</span> {
+  <span class="property">width</span>: <span class="number">300</span><span class="unit">px</span>;       <span class="comment">/* Total width stays 300px */</span>
+  <span class="property">padding</span>: <span class="number">20</span><span class="unit">px</span>;
+  <span class="property">border</span>: <span class="number">2</span><span class="unit">px</span> <span class="value">solid</span> <span class="value">#7c3aed</span>;
+  <span class="property">margin</span>: <span class="number">16</span><span class="unit">px</span>;
+}</pre></div>
+        </div>
+        <div class="callout callout-important"><strong>Must-know:</strong> With <code>border-box</code>, a 300px card stays 300px even with padding. Without it, it becomes 300 + 40 (padding) + 4 (border) = 344px. Always use the reset.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Margin collapse</h3>
+        <p class="explain-en">
+          When two vertical margins touch, they <strong>collapse</strong> into a single margin equal to the larger one.
+          This only happens vertically, not horizontally. Understanding this prevents spacing bugs.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Jab do vertical margins milte hain, wo ek ho jaate hain (bada wala jeetta hai). Ye sirf vertically hota hai, horizontally nahi. Ye samajhna spacing bugs rokta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Margin collapse</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Both have 20px margin — but gap is 20px, NOT 40px */</span>
+<span class="selector">.box-a</span> { <span class="property">margin-bottom</span>: <span class="number">20</span><span class="unit">px</span>; }
+<span class="selector">.box-b</span> { <span class="property">margin-top</span>: <span class="number">20</span><span class="unit">px</span>; }
+
+<span class="comment">/* Fix: use padding on parent, or gap in Flexbox/Grid */</span></pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 3.4 -->
+    <div class="module-section" id="m3-4">
+      <div class="module-header"><div class="module-number">3.4</div><h2 class="module-title">Colors & Backgrounds — hex, RGB, HSL, gradients, opacity</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Color formats in CSS</h3>
+        <p class="explain-en">
+          CSS supports multiple color formats. <strong>Hex</strong> (#ff0000) is most common. <strong>RGB</strong> uses red/green/blue values.
+          <strong>HSL</strong> (hue, saturation, lightness) is the most intuitive for creating color palettes.
+          Modern CSS also supports <code>oklch()</code> for perceptually uniform colors.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>CSS me multiple color formats hain. Hex (#ff0000) sabse common hai. HSL (hue, saturation, lightness) color palettes banane ke liye sabse easy hai. Modern CSS me oklch() bhi hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Color formats</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="selector">.text</span> {
+  <span class="property">color</span>: <span class="value">#7c3aed</span>;                <span class="comment">/* Hex */</span>
+  <span class="property">color</span>: <span class="value">rgb(124, 58, 237)</span>;       <span class="comment">/* RGB */</span>
+  <span class="property">color</span>: <span class="value">rgba(124, 58, 237, 0.8)</span>;  <span class="comment">/* RGB + alpha */</span>
+  <span class="property">color</span>: <span class="value">hsl(265, 82%, 58%)</span>;      <span class="comment">/* HSL (recommended) */</span>
+  <span class="property">color</span>: <span class="value">hsla(265, 82%, 58%, 0.8)</span>; <span class="comment">/* HSL + alpha */</span>
+}</pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Backgrounds & gradients</h3>
+        <p class="explain-en">
+          CSS backgrounds can be solid colors, images, or <strong>gradients</strong>. Linear gradients flow in one direction,
+          radial gradients radiate from a center point. Gradients are pure CSS — no image files needed.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>CSS backgrounds solid colors, images, ya gradients ho sakte hain. Gradients pure CSS se bante hain — koi image file nahi chahiye. Modern UI me gradients bahut use hote hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Gradients</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="selector">.hero</span> {
+  <span class="comment">/* Linear gradient */</span>
+  <span class="property">background</span>: <span class="value">linear-gradient(135deg, #7c3aed, #06b6d4)</span>;
+
+  <span class="comment">/* Radial gradient */</span>
+  <span class="property">background</span>: <span class="value">radial-gradient(circle, #7c3aed, #0f0f1a)</span>;
+}
+
+<span class="selector">.overlay</span> {
+  <span class="comment">/* Semi-transparent overlay */</span>
+  <span class="property">background</span>: <span class="value">rgba(0, 0, 0, 0.6)</span>;
+  <span class="property">opacity</span>: <span class="number">0.9</span>;
+}</pre></div>
+        </div>
+        <div class="callout callout-tip"><strong>Design tip:</strong> Use HSL for building color palettes — keep hue same, adjust saturation/lightness for variants. Example: <code>hsl(265, 82%, 58%)</code> → lighter: <code>hsl(265, 82%, 75%)</code>.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 3.5 -->
+    <div class="module-section" id="m3-5">
+      <div class="module-header"><div class="module-number">3.5</div><h2 class="module-title">Typography & Text Styling — font-family, size, weight, line-height, Google Fonts</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Font properties</h3>
+        <p class="explain-en">
+          Typography is 90% of design. Key properties: <code>font-family</code> (typeface), <code>font-size</code> (size),
+          <code>font-weight</code> (boldness 100–900), <code>line-height</code> (spacing between lines), and <code>letter-spacing</code>.
+          Always provide a <strong>font stack</strong> with fallbacks.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Typography design ka 90% hai. Font-family se typeface, font-size se size, font-weight se boldness, line-height se lines ke beech spacing control hoti hai. Hamesha fallback fonts do.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Typography</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Font stack with fallbacks */</span>
+<span class="selector">body</span> {
+  <span class="property">font-family</span>: <span class="string">'Inter'</span>, <span class="string">'Segoe UI'</span>, <span class="value">sans-serif</span>;
+  <span class="property">font-size</span>: <span class="number">16</span><span class="unit">px</span>;       <span class="comment">/* Base size */</span>
+  <span class="property">line-height</span>: <span class="number">1.7</span>;       <span class="comment">/* 1.5–1.8 is ideal */</span>
+  <span class="property">color</span>: <span class="value">#1e293b</span>;
+}
+
+<span class="selector">h1</span> {
+  <span class="property">font-size</span>: <span class="number">2.5</span><span class="unit">rem</span>;
+  <span class="property">font-weight</span>: <span class="number">800</span>;
+  <span class="property">letter-spacing</span>: <span class="number">-0.02</span><span class="unit">em</span>; <span class="comment">/* Tighter for headings */</span>
+  <span class="property">line-height</span>: <span class="number">1.2</span>;
+}</pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Google Fonts — using custom fonts</h3>
+        <p class="explain-en">
+          Google Fonts provides hundreds of free, high-quality web fonts. Add them via <code>&lt;link&gt;</code> in your HTML head.
+          Popular choices: <strong>Inter</strong> (UI), <strong>Outfit</strong> (headings), <strong>JetBrains Mono</strong> (code).
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Google Fonts se free web fonts milte hain. HTML head me link tag se add karo. Inter, Outfit, JetBrains Mono popular choices hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — Google Fonts</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">&lt;!-- In HTML head --&gt;</span>
+<span class="tag">&lt;link</span> <span class="attr">rel</span>=<span class="value">"preconnect"</span> <span class="attr">href</span>=<span class="value">"https://fonts.googleapis.com"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;link</span> <span class="attr">href</span>=<span class="value">"https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap"</span>
+      <span class="attr">rel</span>=<span class="value">"stylesheet"</span><span class="tag">&gt;</span></pre></div>
+        </div>
+        <div class="callout callout-tip"><strong>Performance:</strong> Only load weights you actually use. Each extra weight adds ~20KB. Use <code>font-display: swap</code> to prevent invisible text during loading.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 3.6 -->
+    <div class="module-section" id="m3-6">
+      <div class="module-header"><div class="module-number">3.6</div><h2 class="module-title">Units & Values — px, em, rem, %, vw, vh, ch, choosing the right unit</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Absolute vs relative units</h3>
+        <p class="explain-en">
+          <strong>Absolute</strong> units (px) are fixed. <strong>Relative</strong> units (em, rem, %, vw, vh) scale based on context.
+          Industry standard: use <code>rem</code> for font sizes, <code>px</code> for borders/shadows, <code>%</code> or <code>vw</code> for widths.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Absolute units (px) fixed hain. Relative units (rem, %, vw) context ke hisaab se scale hote hain. Industry standard: font sizes ke liye rem, borders ke liye px, widths ke liye % ya vw.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Unit</th><th>Relative to</th><th>Best for</th></tr></thead>
+            <tbody>
+              <tr><td><code>px</code></td><td>Viewport pixel</td><td>Borders, shadows, small spacing</td></tr>
+              <tr><td><code>rem</code></td><td>Root font size (16px)</td><td>Font sizes, padding, margins</td></tr>
+              <tr><td><code>em</code></td><td>Parent font size</td><td>Contextual sizing, padding on buttons</td></tr>
+              <tr><td><code>%</code></td><td>Parent element</td><td>Widths, responsive layouts</td></tr>
+              <tr><td><code>vw / vh</code></td><td>Viewport width/height</td><td>Full-screen sections, hero banners</td></tr>
+              <tr><td><code>ch</code></td><td>Character "0" width</td><td>Limiting text line length</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Units in practice</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="selector">.hero</span> {
+  <span class="property">height</span>: <span class="number">100</span><span class="unit">vh</span>;          <span class="comment">/* Full viewport height */</span>
+  <span class="property">padding</span>: <span class="number">2</span><span class="unit">rem</span>;          <span class="comment">/* Scales with root font */</span>
+}
+
+<span class="selector">.content</span> {
+  <span class="property">max-width</span>: <span class="number">65</span><span class="unit">ch</span>;        <span class="comment">/* ~65 characters per line */</span>
+  <span class="property">font-size</span>: <span class="number">1</span><span class="unit">rem</span>;        <span class="comment">/* 16px by default */</span>
+  <span class="property">border</span>: <span class="number">1</span><span class="unit">px</span> <span class="value">solid</span> <span class="value">#e2e8f0</span>; <span class="comment">/* px for thin borders */</span>
+}</pre></div>
+        </div>
+        <div class="callout callout-important"><strong>Golden rule:</strong> <code>rem</code> for sizing, <code>px</code> for precision, <code>%</code>/<code>vw</code> for responsiveness. Never use <code>px</code> for font sizes — it breaks user zoom preferences.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 3.7 -->
+    <div class="module-section" id="m3-7">
+      <div class="module-header"><div class="module-number">3.7</div><h2 class="module-title">Display & Visibility — block, inline, inline-block, none, visibility, overflow</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Display property — controlling element behavior</h3>
+        <p class="explain-en">
+          The <code>display</code> property defines how an element participates in layout. <code>block</code> takes full width,
+          <code>inline</code> flows with text, <code>inline-block</code> combines both. <code>none</code> removes from layout entirely.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Display property se element ka layout behavior decide hota hai. Block full width leta hai, inline text ke saath flow karta hai, inline-block dono ka mix hai, none se element hatata hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Value</th><th>Behavior</th><th>Width/Height</th><th>Examples</th></tr></thead>
+            <tbody>
+              <tr><td><code>block</code></td><td>New line, full width</td><td>✅ Accepts</td><td>div, p, h1–h6, section</td></tr>
+              <tr><td><code>inline</code></td><td>Flows in text</td><td>❌ Ignored</td><td>span, a, strong, em</td></tr>
+              <tr><td><code>inline-block</code></td><td>Flows in text</td><td>✅ Accepts</td><td>buttons, badges</td></tr>
+              <tr><td><code>none</code></td><td>Removed entirely</td><td>—</td><td>Hidden elements</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Visibility & overflow</h3>
+        <p class="explain-en">
+          <code>visibility: hidden</code> hides an element but <strong>preserves its space</strong> in layout (unlike <code>display: none</code>).
+          <code>overflow</code> controls what happens when content overflows its container: <code>hidden</code> clips it, <code>scroll</code> adds scrollbars, <code>auto</code> scrolls only when needed.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>visibility: hidden</code> element chhupata hai lekin jagah reserve rakhta hai. <code>display: none</code> se jagah bhi hat jaati hai. <code>overflow</code> se control hota hai jab content container se bahar nikle.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Display, visibility, overflow</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* display: none vs visibility: hidden */</span>
+<span class="selector">.hidden-a</span> { <span class="property">display</span>: <span class="value">none</span>; }          <span class="comment">/* Gone from layout */</span>
+<span class="selector">.hidden-b</span> { <span class="property">visibility</span>: <span class="value">hidden</span>; }     <span class="comment">/* Invisible but space kept */</span>
+
+<span class="comment">/* Overflow control */</span>
+<span class="selector">.card-body</span> {
+  <span class="property">max-height</span>: <span class="number">200</span><span class="unit">px</span>;
+  <span class="property">overflow-y</span>: <span class="value">auto</span>;   <span class="comment">/* Scroll only if needed */</span>
+}
+
+<span class="selector">.avatar</span> {
+  <span class="property">width</span>: <span class="number">50</span><span class="unit">px</span>;
+  <span class="property">height</span>: <span class="number">50</span><span class="unit">px</span>;
+  <span class="property">border-radius</span>: <span class="number">50</span><span class="unit">%</span>;
+  <span class="property">overflow</span>: <span class="value">hidden</span>;   <span class="comment">/* Clip image to circle */</span>
+}</pre></div>
+        </div>
+        <div class="callout callout-note"><strong>Accessibility note:</strong> <code>display: none</code> also hides from screen readers. For visually hidden but accessible content, use the <code>.sr-only</code> pattern instead.</div>
+      </div>
+    </div>
+
+    <div class="practice-box">
+      <div class="practice-title">✏️ Practice Exercises — Part 3</div>
+      <ol>
+        <li>Style a page using only class selectors — no IDs, no element selectors. Calculate specificity for 5 selectors.</li>
+        <li>Create a card component with visible box model: colored border, padding, margin. Inspect in DevTools.</li>
+        <li>Build a hero section with a gradient background, semi-transparent overlay text, and Google Fonts.</li>
+        <li>Create a typography scale using <code>rem</code> units: h1 (2.5rem) → h6 (0.875rem) with proper line-heights.</li>
+        <li>Build a "show more/less" UI using <code>overflow: hidden</code> with <code>max-height</code> on a text container.</li>
+      </ol>
+    </div>
+
+    <div class="handbook-nav">
+      <a href="part2.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Part 2: Semantic HTML & Forms</div></div></a>
+      <a href="part4.html" class="nav-btn next"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Part 4: CSS Layout Systems →</div></div><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+  </div>
+
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
+  <script src="../../../js/main.js"></script>
+  <script>
+    (() => {
+      document.querySelectorAll('.code-block').forEach((block) => {
+        const pre = block.querySelector('.code-body pre');
+        const header = block.querySelector('.code-header');
+        if (!pre || !header) return;
+        let actions = header.querySelector('.code-actions');
+        if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); }
+        const btn = document.createElement('button');
+        btn.type = 'button'; btn.className = 'code-copy-btn'; btn.textContent = 'Copy';
+        btn.addEventListener('click', async () => {
+          try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; }
+          catch { btn.textContent = 'Failed'; }
+          finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); }
+        });
+        actions.prepend(btn);
+      });
+      const fill = document.querySelector('.hb-progress-fill');
+      const label = document.querySelector('.hb-progress-label');
+      if (fill && label) {
+        const update = () => {
+          const h = document.documentElement;
+          const denom = (h.scrollHeight - h.clientHeight) || 1;
+          const pct = Math.max(0, Math.min(1, h.scrollTop / denom));
+          fill.style.width = (pct * 100).toFixed(0) + '%';
+          label.textContent = (pct * 100).toFixed(0) + '%';
+        };
+        document.addEventListener('scroll', update, { passive: true });
+        update();
+      }
+    })();
+  </script>
+</body>
+</html>

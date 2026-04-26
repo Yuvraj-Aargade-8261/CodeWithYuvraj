@@ -90,10 +90,11 @@ function initHandbookGlobalIndex() {
   if (!page) return;
 
   const path = window.location.pathname.replace(/\\/g, '/');
-  const partMatch = path.match(/\/content\/handbooks\/python\/part([1-8])\.html$/);
+  const partMatch = path.match(/\/content\/handbooks\/(python|html-css)\/part([1-8])\.html$/);
   if (!partMatch) return;
 
-  const activePart = Number(partMatch[1]);
+  const handbookSlug = partMatch[1];
+  const activePart = Number(partMatch[2]);
   const topbar = page.querySelector('.hb-topbar');
   if (!topbar) return;
 
@@ -108,20 +109,33 @@ function initHandbookGlobalIndex() {
   const links = document.createElement('div');
   links.className = 'hb-global-index-links';
 
-  const partTitles = {
-    1: 'Python Foundations',
-    2: 'Control Flow & Loops',
-    3: 'Strings & Data Structures',
-    4: 'Functions & Modules',
-    5: 'Object-Oriented Programming',
-    6: 'File Handling & Error Management',
-    7: 'Advanced Python',
-    8: 'Standard Library & Industry Practices'
+  const partTitlesByHandbook = {
+    python: {
+      1: 'Python Foundations',
+      2: 'Control Flow & Loops',
+      3: 'Strings & Data Structures',
+      4: 'Functions & Modules',
+      5: 'Object-Oriented Programming',
+      6: 'File Handling & Error Management',
+      7: 'Advanced Python',
+      8: 'Standard Library & Industry Practices'
+    },
+    'html-css': {
+      1: 'HTML Foundations',
+      2: 'Semantic HTML & Forms',
+      3: 'CSS Foundations',
+      4: 'CSS Layout Systems',
+      5: 'Responsive Design & Modern CSS',
+      6: 'Visual Effects & Animations',
+      7: 'Accessibility, SEO & Performance',
+      8: 'Architecture & Industry Practices'
+    }
   };
+  const partTitles = partTitlesByHandbook[handbookSlug];
 
   const indexLink = document.createElement('a');
   indexLink.href = 'index.html';
-  indexLink.textContent = 'Index';
+  indexLink.textContent = handbookSlug === 'python' ? 'Python Index' : 'HTML/CSS Index';
   links.appendChild(indexLink);
 
   for (let i = 1; i <= 8; i++) {

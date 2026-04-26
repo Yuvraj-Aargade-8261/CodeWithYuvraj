@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Part 7: Accessibility, SEO & Performance — HTML & CSS Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 7: Web accessibility (A11y), ARIA, SEO optimization, Core Web Vitals, CSS performance, and best practices.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/handbook.css">
+</head>
+<body class="handbook-wrapper">
+  <nav class="navbar"><div class="container"><a href="../../../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../../../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
+
+  <div class="handbook-page">
+    <div class="hb-topbar"><div class="hb-topbar-inner">
+      <div class="hb-breadcrumbs"><a href="index.html">HTML & CSS Handbook</a><span class="hb-muted">/</span><span>Part 7</span><span class="hb-muted">·</span><a href="#m7-1">7.1</a><a href="#m7-2">7.2</a><a href="#m7-3">7.3</a><a href="#m7-4">7.4</a><a href="#m7-5">7.5</a><a href="#m7-6">7.6</a><a href="#m7-7">7.7</a></div>
+      <div class="hb-progress" aria-label="Reading progress"><div class="hb-progress-track" role="progressbar"><div class="hb-progress-fill"></div></div><div class="hb-progress-label">0%</div></div>
+    </div></div>
+
+    <div class="chapter-header" data-chapter-num="07">
+      <div class="chapter-part-label">📖 Part 7 — Accessibility, SEO & Performance</div>
+      <h1 class="chapter-title">Build for <span class="gradient-text">Everyone</span></h1>
+      <p class="chapter-subtitle">Accessible, discoverable, and lightning-fast — the three pillars of production-quality websites.</p>
+      <div class="chapter-meta"><span>📄 Modules 7.1 – 7.7</span><span>⏱️ 70–100 min</span><span>💻 35+ Examples</span></div>
+    </div>
+
+    <div class="callout callout-tip"><strong>How to study Part 7:</strong> Install Lighthouse (Chrome DevTools → Lighthouse tab). Run audits on your own projects. Use a screen reader (NVDA on Windows, VoiceOver on Mac) for 10 minutes.</div>
+
+    <div class="hb-mini-toc"><div class="hb-mini-title">📍 Part 7 Modules</div><div class="hb-mini-links">
+      <a href="#m7-1">7.1 A11y Basics</a><a href="#m7-2">7.2 ARIA</a><a href="#m7-3">7.3 Keyboard Nav</a>
+      <a href="#m7-4">7.4 Color & Contrast</a><a href="#m7-5">7.5 SEO</a><a href="#m7-6">7.6 Performance</a><a href="#m7-7">7.7 Best Practices</a>
+    </div></div>
+
+    <div class="quick-ref">
+      <div class="qr-title">🚀 Advanced Lens — Part 7</div>
+      <p class="explain-en">
+        Production quality is measurable: accessibility via keyboard/screen reader audits, SEO via crawlability/metadata,
+        and performance via Core Web Vitals. Treat these as engineering requirements, not polish after launch.
+      </p>
+      <div class="explain-hi">
+        <span class="hi-label">Hindi mein samjho</span>
+        Real production quality measure hoti hai: keyboard/screen reader audit (A11y), crawl + metadata (SEO), Core Web Vitals (performance).
+        Inhe optional polish nahi, launch requirements samjho.
+      </div>
+    </div>
+
+    <!-- MODULE 7.1 -->
+    <div class="module-section" id="m7-1">
+      <div class="module-header"><div class="module-number">7.1</div><h2 class="module-title">Web Accessibility Foundations — WCAG, semantic HTML, alt text, labels</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Why accessibility matters</h3>
+        <p class="explain-en">1 billion+ people have disabilities. Accessibility (A11y) ensures your website works for <strong>everyone</strong> — including screen reader users, keyboard-only users, and those with visual impairments. It's also a legal requirement in many countries and improves SEO.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>1 billion+ log disabilities ke saath hain. Accessibility se website sabke liye kaam karti hai — screen readers, keyboard users, aur visual impairment walon ke liye. Kai deshon me ye legal requirement bhi hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — Accessibility basics</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">&lt;!-- ✅ Always add alt text --&gt;</span>
+<span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="value">"hero.jpg"</span> <span class="attr">alt</span>=<span class="value">"Developer coding on laptop"</span><span class="tag">&gt;</span>
+
+<span class="comment">&lt;!-- ✅ Labels for all inputs --&gt;</span>
+<span class="tag">&lt;label</span> <span class="attr">for</span>=<span class="value">"email"</span><span class="tag">&gt;</span>Email:<span class="tag">&lt;/label&gt;</span>
+<span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="value">"email"</span> <span class="attr">id</span>=<span class="value">"email"</span><span class="tag">&gt;</span>
+
+<span class="comment">&lt;!-- ✅ Skip navigation link --&gt;</span>
+<span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="value">"#main"</span> <span class="attr">class</span>=<span class="value">"sr-only"</span><span class="tag">&gt;</span>Skip to main content<span class="tag">&lt;/a&gt;</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>WCAG Level</th><th>Requirement</th><th>Who needs it</th></tr></thead>
+            <tbody>
+              <tr><td><strong>A</strong></td><td>Minimum (alt text, labels)</td><td>All websites</td></tr>
+              <tr><td><strong>AA ✅</strong></td><td>Standard (contrast, keyboard nav)</td><td>Industry standard target</td></tr>
+              <tr><td><strong>AAA</strong></td><td>Enhanced (everything perfect)</td><td>Government, healthcare</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>The A11y checklist:</strong> Every page must have: alt text on images, labels on inputs, keyboard-navigable menus, 4.5:1 contrast, skip-nav link, proper heading order.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Semantic HTML landmarks</h3>
+        <p class="explain-en">Screen readers use <strong>landmarks</strong> to let users jump between page sections. Using semantic HTML elements automatically creates these landmarks — no ARIA needed.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Screen readers landmarks use karte hain taaki users page sections ke beech jump kar sakein. Semantic HTML elements automatically landmarks banate hain — ARIA ki zaroorat nahi.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — Landmark elements</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="tag">&lt;body&gt;</span>
+  <span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="value">"#main"</span> <span class="attr">class</span>=<span class="value">"sr-only"</span><span class="tag">&gt;</span>Skip to main<span class="tag">&lt;/a&gt;</span>
+
+  <span class="tag">&lt;header&gt;</span>      <span class="comment">&lt;!-- role="banner" auto --&gt;</span>
+    <span class="tag">&lt;nav&gt;</span>       <span class="comment">&lt;!-- role="navigation" auto --&gt;</span>
+    <span class="tag">&lt;/nav&gt;</span>
+  <span class="tag">&lt;/header&gt;</span>
+
+  <span class="tag">&lt;main</span> <span class="attr">id</span>=<span class="value">"main"</span><span class="tag">&gt;</span> <span class="comment">&lt;!-- role="main" auto --&gt;</span>
+    <span class="tag">&lt;section</span> <span class="attr">aria-labelledby</span>=<span class="value">"about-title"</span><span class="tag">&gt;</span>
+      <span class="tag">&lt;h2</span> <span class="attr">id</span>=<span class="value">"about-title"</span><span class="tag">&gt;</span>About<span class="tag">&lt;/h2&gt;</span>
+    <span class="tag">&lt;/section&gt;</span>
+  <span class="tag">&lt;/main&gt;</span>
+
+  <span class="tag">&lt;aside&gt;</span>      <span class="comment">&lt;!-- role="complementary" auto --&gt;</span>
+  <span class="tag">&lt;/aside&gt;</span>
+  <span class="tag">&lt;footer&gt;</span>     <span class="comment">&lt;!-- role="contentinfo" auto --&gt;</span>
+  <span class="tag">&lt;/footer&gt;</span>
+<span class="tag">&lt;/body&gt;</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>HTML Element</th><th>Auto ARIA Role</th><th>Screen Reader Behavior</th></tr></thead>
+            <tbody>
+              <tr><td><code>&lt;header&gt;</code></td><td>banner</td><td>"Banner landmark"</td></tr>
+              <tr><td><code>&lt;nav&gt;</code></td><td>navigation</td><td>"Navigation landmark"</td></tr>
+              <tr><td><code>&lt;main&gt;</code></td><td>main</td><td>"Main landmark" (only 1!)</td></tr>
+              <tr><td><code>&lt;aside&gt;</code></td><td>complementary</td><td>"Complementary landmark"</td></tr>
+              <tr><td><code>&lt;footer&gt;</code></td><td>contentinfo</td><td>"Content info landmark"</td></tr>
+              <tr><td><code>&lt;section&gt;</code></td><td>region (if labelled)</td><td>Only if aria-labelledby set</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 7.2 -->
+    <div class="module-section" id="m7-2">
+      <div class="module-header"><div class="module-number">7.2</div><h2 class="module-title">ARIA Roles & Attributes — role, aria-label, aria-hidden, live regions</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">ARIA — when HTML semantics aren't enough</h3>
+        <p class="explain-en">ARIA (Accessible Rich Internet Applications) adds meaning to custom components. <strong>First rule:</strong> Don't use ARIA if native HTML element exists. Use <code>aria-label</code> for invisible labels, <code>aria-hidden</code> for decorative elements, <code>role</code> for custom widgets.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>ARIA custom components ko meaning deta hai. Pehla rule: Agar native HTML element hai toh ARIA mat use karo. aria-label invisible labels ke liye, aria-hidden decorative elements ke liye.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — ARIA examples</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">&lt;!-- Icon button needs aria-label --&gt;</span>
+<span class="tag">&lt;button</span> <span class="attr">aria-label</span>=<span class="value">"Close menu"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;i</span> <span class="attr">class</span>=<span class="value">"fa-solid fa-xmark"</span> <span class="attr">aria-hidden</span>=<span class="value">"true"</span><span class="tag">&gt;&lt;/i&gt;</span>
+<span class="tag">&lt;/button&gt;</span>
+
+<span class="comment">&lt;!-- Live region for dynamic updates --&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">aria-live</span>=<span class="value">"polite"</span><span class="tag">&gt;</span>3 items added to cart<span class="tag">&lt;/div&gt;</span></pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Common ARIA attributes reference</h3>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Attribute</th><th>Purpose</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td><code>aria-label</code></td><td>Invisible text label</td><td>Icon-only buttons</td></tr>
+              <tr><td><code>aria-labelledby</code></td><td>Reference visible label</td><td>Dialog titles</td></tr>
+              <tr><td><code>aria-hidden="true"</code></td><td>Hide from screen readers</td><td>Decorative icons</td></tr>
+              <tr><td><code>aria-live="polite"</code></td><td>Announce dynamic updates</td><td>Toast notifications</td></tr>
+              <tr><td><code>aria-expanded</code></td><td>Toggle state</td><td>Accordions, dropdowns</td></tr>
+              <tr><td><code>role="navigation"</code></td><td>Define landmark</td><td>Non-nav element as nav</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>First rule of ARIA:</strong> Don't use ARIA if a native HTML element exists. <code>&lt;button&gt;</code> is better than <code>&lt;div role="button"&gt;</code>. Native elements have built-in keyboard/screen reader support.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Accessible modal dialog pattern</h3>
+        <p class="explain-en">Modals are one of the most common accessibility failures. The correct pattern: trap focus inside, return focus on close, announce with <code>role="dialog"</code>, and close on Escape key.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Modals sabse common accessibility failures me se ek hain. Sahi pattern: focus andar trap karo, close pe focus wapas bhejo, role="dialog" se announce karo, Escape key se close karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — Accessible modal</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">&lt;!-- Native HTML dialog (best approach) --&gt;</span>
+<span class="tag">&lt;dialog</span> <span class="attr">id</span>=<span class="value">"myModal"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;h2</span> <span class="attr">id</span>=<span class="value">"modal-title"</span><span class="tag">&gt;</span>Confirm Action<span class="tag">&lt;/h2&gt;</span>
+  <span class="tag">&lt;p&gt;</span>Are you sure?<span class="tag">&lt;/p&gt;</span>
+  <span class="tag">&lt;button</span> <span class="attr">autofocus</span><span class="tag">&gt;</span>Confirm<span class="tag">&lt;/button&gt;</span>
+  <span class="tag">&lt;button</span> <span class="attr">onclick</span>=<span class="value">"this.closest('dialog').close()"</span><span class="tag">&gt;</span>Cancel<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;/dialog&gt;</span>
+
+<span class="comment">&lt;!-- Open with JS: document.getElementById('myModal').showModal() --&gt;</span>
+<span class="comment">&lt;!-- Auto-traps focus, closes on Escape, adds backdrop --&gt;</span></pre></div>
+        </div>
+        <div class="callout callout-tip"><strong>Use &lt;dialog&gt;!</strong> The native HTML <code>&lt;dialog&gt;</code> element handles focus trapping, Escape key closing, and backdrop automatically. No JavaScript library needed.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 7.3 -->
+    <div class="module-section" id="m7-3">
+      <div class="module-header"><div class="module-number">7.3</div><h2 class="module-title">Keyboard Navigation — Tab order, focus management, focus-visible</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Everything must work without a mouse</h3>
+        <p class="explain-en">All interactive elements must be reachable by Tab key and activated by Enter/Space. Use <code>tabindex</code> to control order, <code>:focus-visible</code> for keyboard-only focus styles. Never remove focus indicators without replacement.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Sab interactive elements Tab key se reachable aur Enter/Space se activate hone chahiye. :focus-visible se sirf keyboard users ko focus ring dikhe, mouse users ko nahi.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Focus styles</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Show focus ring only for keyboard users */</span>
+<span class="selector">.btn:focus-visible</span> {
+  <span class="property">outline</span>: <span class="number">2</span><span class="unit">px</span> <span class="value">solid</span> <span class="value">#7c3aed</span>;
+  <span class="property">outline-offset</span>: <span class="number">3</span><span class="unit">px</span>;
+}
+
+<span class="comment">/* Visually hidden but accessible */</span>
+<span class="selector">.sr-only</span> {
+  <span class="property">position</span>: <span class="value">absolute</span>;
+  <span class="property">width</span>: <span class="number">1</span><span class="unit">px</span>; <span class="property">height</span>: <span class="number">1</span><span class="unit">px</span>;
+  <span class="property">padding</span>: <span class="number">0</span>; <span class="property">margin</span>: <span class="number">-1</span><span class="unit">px</span>;
+  <span class="property">overflow</span>: <span class="value">hidden</span>;
+  <span class="property">clip</span>: <span class="value">rect(0,0,0,0)</span>;
+  <span class="property">border</span>: <span class="number">0</span>;
+}</pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Keyboard audit checklist (repeatable QA workflow)</h3>
+        <p class="explain-en">
+          Use a repeatable audit on every release: Tab through page start-to-end, verify visible focus, test Escape on modals,
+          validate menus with arrow keys when needed, and ensure focus returns logically after close actions.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Har release pe keyboard audit run karo: Tab se poora page traverse, focus ring visible ho, modal Escape se close ho, close ke baad focus correct element par wapas aaye.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Step</th><th>What to test</th><th>Expected behavior</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>Tab from first focusable element</td><td>Logical reading order</td></tr>
+              <tr><td>2</td><td>Focus ring on each interactive control</td><td>Clearly visible, high contrast</td></tr>
+              <tr><td>3</td><td>Enter/Space activate controls</td><td>Equivalent to click</td></tr>
+              <tr><td>4</td><td>Escape on modal/dropdown</td><td>Closes component</td></tr>
+              <tr><td>5</td><td>Post-close focus position</td><td>Returns to trigger element</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 7.4 -->
+    <div class="module-section" id="m7-4">
+      <div class="module-header"><div class="module-number">7.4</div><h2 class="module-title">Color Contrast & Readability — WCAG contrast ratios, color blindness, prefers-reduced-motion</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Contrast ratios & motion sensitivity</h3>
+        <p class="explain-en">WCAG requires <strong>4.5:1</strong> contrast ratio for normal text and <strong>3:1</strong> for large text. Never convey information through color alone. Respect users who prefer reduced motion with <code>prefers-reduced-motion</code>.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>WCAG ke hisaab se normal text ka contrast ratio 4.5:1 hona chahiye. Sirf color se information mat dikhao. prefers-reduced-motion se animation-sensitive users ka dhyan rakho.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Text type</th><th>Min ratio (AA)</th><th>Min ratio (AAA)</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td>Normal text (&lt;18px)</td><td><strong>4.5:1</strong></td><td>7:1</td><td>#1e293b on #ffffff = 14:1 ✅</td></tr>
+              <tr><td>Large text (≥18px bold)</td><td><strong>3:1</strong></td><td>4.5:1</td><td>#64748b on #ffffff = 4.6:1 ✅</td></tr>
+              <tr><td>UI components</td><td><strong>3:1</strong></td><td>—</td><td>Borders, icons, focus rings</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Motion & contrast</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Respect reduced motion preference */</span>
+<span class="keyword">@media</span> (<span class="property">prefers-reduced-motion</span>: <span class="value">reduce</span>) {
+  <span class="selector">*, *::before, *::after</span> {
+    <span class="property">animation-duration</span>: <span class="number">0.01</span><span class="unit">ms</span> <span class="value">!important</span>;
+    <span class="property">transition-duration</span>: <span class="number">0.01</span><span class="unit">ms</span> <span class="value">!important</span>;
+  }
+}</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 7.5 -->
+    <div class="module-section" id="m7-5">
+      <div class="module-header"><div class="module-number">7.5</div><h2 class="module-title">SEO with HTML & CSS — Heading hierarchy, structured data, Open Graph, sitemap</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">SEO essentials for front-end developers</h3>
+        <p class="explain-en">SEO starts with proper HTML: one <code>&lt;h1&gt;</code> per page, logical heading hierarchy, descriptive <code>&lt;title&gt;</code> and <code>meta description</code>, Open Graph tags, and semantic elements. CSS affects SEO through layout shifts and loading performance.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>SEO sahi HTML se shuru hota hai: ek h1 per page, logical heading order, descriptive title aur meta description, Open Graph tags. CSS se SEO layout shifts aur performance se affect hota hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Factor</th><th>Implementation</th><th>Impact</th></tr></thead>
+            <tbody>
+              <tr><td>Title tag</td><td>Unique, 50-60 chars per page</td><td>🔴 Critical</td></tr>
+              <tr><td>Meta description</td><td>Compelling, 150-160 chars</td><td>🟡 High</td></tr>
+              <tr><td>Heading hierarchy</td><td>h1 → h2 → h3 (no skipping)</td><td>🟡 High</td></tr>
+              <tr><td>Alt text</td><td>Descriptive for all images</td><td>🟡 High</td></tr>
+              <tr><td>Page speed</td><td>Core Web Vitals passing</td><td>🔴 Critical</td></tr>
+              <tr><td>Mobile-friendly</td><td>Responsive design</td><td>🔴 Critical</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Open Graph & social sharing meta tags</h3>
+        <p class="explain-en">Open Graph tags control how your page looks when shared on social media (Facebook, LinkedIn, X/Twitter). Without them, shared links show generic, ugly previews.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Open Graph tags se control hota hai ki social media pe aapka page share hone pe kaisa dikhega. Bina OG tags ke links generic aur ugly dikhte hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — Open Graph</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">&lt;!-- Open Graph meta tags --&gt;</span>
+<span class="tag">&lt;meta</span> <span class="attr">property</span>=<span class="value">"og:title"</span> <span class="attr">content</span>=<span class="value">"My Portfolio"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;meta</span> <span class="attr">property</span>=<span class="value">"og:description"</span> <span class="attr">content</span>=<span class="value">"Full-stack developer"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;meta</span> <span class="attr">property</span>=<span class="value">"og:image"</span> <span class="attr">content</span>=<span class="value">"https://site.com/og.jpg"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;meta</span> <span class="attr">property</span>=<span class="value">"og:url"</span> <span class="attr">content</span>=<span class="value">"https://site.com"</span><span class="tag">&gt;</span>
+
+<span class="comment">&lt;!-- Twitter Card --&gt;</span>
+<span class="tag">&lt;meta</span> <span class="attr">name</span>=<span class="value">"twitter:card"</span> <span class="attr">content</span>=<span class="value">"summary_large_image"</span><span class="tag">&gt;</span></pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Structured data — JSON-LD for rich snippets</h3>
+        <p class="explain-en">Structured data tells search engines <strong>what your content means</strong>, not just what it says. JSON-LD is the recommended format. It enables rich snippets like star ratings, prices, and FAQ dropdowns in search results.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Structured data search engines ko batata hai ki content ka <strong>matlab kya hai</strong>. JSON-LD recommended format hai. Isse search results me rich snippets dikhte hain jaise star ratings, prices, FAQ.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — JSON-LD structured data</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="tag">&lt;script</span> <span class="attr">type</span>=<span class="value">"application/ld+json"</span><span class="tag">&gt;</span>
+{
+  <span class="string">"@context"</span>: <span class="string">"https://schema.org"</span>,
+  <span class="string">"@type"</span>: <span class="string">"Person"</span>,
+  <span class="string">"name"</span>: <span class="string">"Yuvraj Aargade"</span>,
+  <span class="string">"url"</span>: <span class="string">"https://codewithyuvraj.com"</span>,
+  <span class="string">"jobTitle"</span>: <span class="string">"Full-Stack Developer"</span>,
+  <span class="string">"sameAs"</span>: [
+    <span class="string">"https://github.com/yuvraj"</span>,
+    <span class="string">"https://linkedin.com/in/yuvraj"</span>
+  ]
+}
+<span class="tag">&lt;/script&gt;</span></pre></div>
+        </div>
+        <div class="callout callout-tip"><strong>Test your structured data:</strong> Use Google's Rich Results Test (search.google.com/test/rich-results) to validate your JSON-LD before deploying.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 7.6 -->
+    <div class="module-section" id="m7-6">
+      <div class="module-header"><div class="module-number">7.6</div><h2 class="module-title">CSS Performance — Critical CSS, render-blocking, will-change, contain</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Writing performant CSS</h3>
+        <p class="explain-en">CSS can block rendering. Optimize by inlining critical CSS, lazy-loading non-critical styles, using <code>content-visibility: auto</code> for off-screen content, and <code>will-change</code> for GPU-accelerated animations.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>CSS rendering block kar sakta hai. Critical CSS inline karo, non-critical lazy-load karo, off-screen content ke liye content-visibility use karo, animations ke liye will-change se GPU acceleration lo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Performance</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* GPU-accelerate known animations */</span>
+<span class="selector">.animated</span> {
+  <span class="property">will-change</span>: <span class="value">transform, opacity</span>;
+}
+
+<span class="comment">/* Skip rendering for off-screen content */</span>
+<span class="selector">.below-fold</span> {
+  <span class="property">content-visibility</span>: <span class="value">auto</span>;
+  <span class="property">contain-intrinsic-size</span>: <span class="number">0</span> <span class="number">500</span><span class="unit">px</span>;
+}
+
+<span class="comment">/* Prevent layout shift with aspect-ratio */</span>
+<span class="selector">img</span> { <span class="property">aspect-ratio</span>: <span class="number">16</span> / <span class="number">9</span>; }</pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Critical CSS — inline above-the-fold styles</h3>
+        <p class="explain-en">Critical CSS is the minimum CSS needed to render above-the-fold content. Inline it in <code>&lt;style&gt;</code> tags in <code>&lt;head&gt;</code> and load the rest asynchronously. This eliminates render-blocking CSS.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Critical CSS woh minimum CSS hai jo above-the-fold content render karne ke liye chahiye. &lt;head&gt; me inline karo aur baaki asynchronously load karo. Isse render-blocking khatam hota hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — Critical CSS pattern</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="tag">&lt;head&gt;</span>
+  <span class="comment">&lt;!-- Critical CSS inline --&gt;</span>
+  <span class="tag">&lt;style&gt;</span>
+    <span class="selector">body</span> { <span class="property">margin</span>: <span class="number">0</span>; <span class="property">font-family</span>: <span class="value">system-ui</span>; }
+    <span class="selector">.navbar</span> { <span class="property">height</span>: <span class="number">64</span><span class="unit">px</span>; <span class="property">display</span>: <span class="value">flex</span>; }
+    <span class="selector">.hero</span> { <span class="property">min-height</span>: <span class="number">100</span><span class="unit">vh</span>; }
+  <span class="tag">&lt;/style&gt;</span>
+
+  <span class="comment">&lt;!-- Non-critical CSS async --&gt;</span>
+  <span class="tag">&lt;link</span> <span class="attr">rel</span>=<span class="value">"preload"</span> <span class="attr">href</span>=<span class="value">"styles.css"</span>
+        <span class="attr">as</span>=<span class="value">"style"</span>
+        <span class="attr">onload</span>=<span class="value">"this.onload=null;this.rel='stylesheet'"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;noscript&gt;</span>
+    <span class="tag">&lt;link</span> <span class="attr">rel</span>=<span class="value">"stylesheet"</span> <span class="attr">href</span>=<span class="value">"styles.css"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;/noscript&gt;</span>
+<span class="tag">&lt;/head&gt;</span></pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Core Web Vitals — what Google measures</h3>
+        <p class="explain-en">Google ranks pages based on three Core Web Vitals. CSS directly impacts all three. Use Lighthouse in Chrome DevTools to measure yours.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Google teen Core Web Vitals se pages rank karta hai. CSS teeno ko directly affect karta hai. Lighthouse se apna score check karo.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Metric</th><th>What it measures</th><th>Good</th><th>CSS Impact</th></tr></thead>
+            <tbody>
+              <tr><td><strong>LCP</strong></td><td>Largest Contentful Paint</td><td>&lt; 2.5s</td><td>Render-blocking CSS, font loading</td></tr>
+              <tr><td><strong>INP</strong></td><td>Interaction to Next Paint</td><td>&lt; 200ms</td><td>Heavy animations, paint cost</td></tr>
+              <tr><td><strong>CLS</strong></td><td>Cumulative Layout Shift</td><td>&lt; 0.1</td><td>Missing dimensions, font swap</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Quick wins:</strong> 1) Add <code>width/height</code> on all images. 2) Use <code>font-display: swap</code>. 3) Inline critical CSS. 4) Lazy-load below-fold images with <code>loading="lazy"</code>.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Performance budgeting (team-level discipline)</h3>
+        <p class="explain-en">
+          High-performing teams define budgets before coding: max CSS size, max image weight, and target LCP/CLS.
+          Budgets turn performance from “best effort” into an enforceable standard in CI and code reviews.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Professional teams pehle se performance budget set karti hain: CSS size limit, image weight limit, LCP/CLS target. Isse performance optional nahi rehta — enforceable rule ban jata hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Budget item</th><th>Suggested target</th><th>Enforcement</th></tr></thead>
+            <tbody>
+              <tr><td>Total CSS (initial page)</td><td>&lt; 150KB (compressed)</td><td>Build/Lighthouse checks</td></tr>
+              <tr><td>LCP image size</td><td>&lt; 200KB (mobile)</td><td>Image optimization pipeline</td></tr>
+              <tr><td>CLS</td><td>&lt; 0.1</td><td>Layout-shift audits</td></tr>
+              <tr><td>LCP</td><td>&lt; 2.5s</td><td>CI performance report</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 7.7 -->
+    <div class="module-section" id="m7-7">
+      <div class="module-header"><div class="module-number">7.7</div><h2 class="module-title">Industry Best Practices — BEM naming, CSS architecture, code organization</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">BEM naming convention</h3>
+        <p class="explain-en"><strong>BEM (Block Element Modifier)</strong> is the industry-standard naming convention: <code>.block__element--modifier</code>. It prevents naming collisions, makes CSS predictable, and scales across large teams.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>BEM industry-standard naming convention hai: .block__element--modifier. Naming collisions prevent karta hai, CSS predictable banata hai, aur bade teams me scale karta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — BEM naming</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Block */</span>
+<span class="selector">.card</span> { <span class="property">padding</span>: <span class="number">20</span><span class="unit">px</span>; }
+
+<span class="comment">/* Element (child of block) */</span>
+<span class="selector">.card__title</span> { <span class="property">font-weight</span>: <span class="number">700</span>; }
+<span class="selector">.card__body</span>  { <span class="property">color</span>: <span class="value">#64748b</span>; }
+
+<span class="comment">/* Modifier (variation) */</span>
+<span class="selector">.card--featured</span> { <span class="property">border-color</span>: <span class="value">#7c3aed</span>; }
+<span class="selector">.card--compact</span>  { <span class="property">padding</span>: <span class="number">12</span><span class="unit">px</span>; }</pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">CSS naming conventions compared</h3>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Convention</th><th>Example</th><th>Pros</th><th>Cons</th></tr></thead>
+            <tbody>
+              <tr><td><strong>BEM</strong></td><td><code>.card__title--large</code></td><td>Predictable, scalable</td><td>Long class names</td></tr>
+              <tr><td><strong>SMACSS</strong></td><td><code>.l-sidebar</code>, <code>.is-active</code></td><td>Category prefixes</td><td>More rules to learn</td></tr>
+              <tr><td><strong>OOCSS</strong></td><td><code>.media</code>, <code>.media__body</code></td><td>Reusable patterns</td><td>Can be abstract</td></tr>
+              <tr><td><strong>Utility-first</strong></td><td><code>.flex .gap-4 .p-6</code></td><td>Fast prototyping</td><td>HTML bloat</td></tr>
+              <tr><td><strong>Atomic CSS</strong></td><td><code>.Fz(16px) .P(10px)</code></td><td>Tiny CSS output</td><td>Steep learning curve</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>Industry recommendation:</strong> Start with BEM for any project. It works with any tech stack (vanilla CSS, SCSS, React). Once comfortable, explore utility-first (Tailwind) for rapid prototyping.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">CSS file architecture — ITCSS pattern</h3>
+        <p class="explain-en">ITCSS (Inverted Triangle CSS) organizes styles from generic to specific: Settings → Tools → Generic → Elements → Objects → Components → Utilities. Each layer increases in specificity.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>ITCSS styles ko generic se specific order me organize karta hai. Har layer ki specificity badhti jaati hai. Large projects me CSS ko manageable rakhta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Architecture imports</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* main.css — ITCSS import order */</span>
+<span class="keyword">@import</span> <span class="string">"settings/variables.css"</span>;   <span class="comment">/* Design tokens */</span>
+<span class="keyword">@import</span> <span class="string">"generic/reset.css"</span>;        <span class="comment">/* CSS reset */</span>
+<span class="keyword">@import</span> <span class="string">"elements/base.css"</span>;        <span class="comment">/* body, h1-h6, p */</span>
+<span class="keyword">@import</span> <span class="string">"components/navbar.css"</span>;    <span class="comment">/* .navbar */</span>
+<span class="keyword">@import</span> <span class="string">"components/card.css"</span>;      <span class="comment">/* .card */</span>
+<span class="keyword">@import</span> <span class="string">"components/button.css"</span>;    <span class="comment">/* .btn */</span>
+<span class="keyword">@import</span> <span class="string">"utilities/helpers.css"</span>;    <span class="comment">/* .sr-only, .flex */</span></pre></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="practice-box">
+      <div class="practice-title">✏️ Practice Exercises — Part 7</div>
+      <ol>
+        <li>Run Lighthouse on your project — fix all accessibility issues until score reaches 90+.</li>
+        <li>Navigate your website using only keyboard (Tab/Shift+Tab). Fix any unreachable elements.</li>
+        <li>Add proper ARIA labels to all icon buttons and decorative elements.</li>
+        <li>Implement <code>prefers-reduced-motion</code> and <code>prefers-color-scheme</code> media queries.</li>
+        <li>Refactor a component's CSS to use BEM naming convention.</li>
+      </ol>
+    </div>
+
+    <div class="handbook-nav">
+      <a href="part6.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Part 6: Visual Effects</div></div></a>
+      <a href="part8.html" class="nav-btn next"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Part 8: Architecture & Industry Practices →</div></div><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+  </div>
+
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
+  <script src="../../../js/main.js"></script>
+  <script>(() => { document.querySelectorAll('.code-block').forEach((block) => { const pre = block.querySelector('.code-body pre'), header = block.querySelector('.code-header'); if (!pre || !header) return; let actions = header.querySelector('.code-actions'); if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); } const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'code-copy-btn'; btn.textContent = 'Copy'; btn.addEventListener('click', async () => { try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; } catch { btn.textContent = 'Failed'; } finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); } }); actions.prepend(btn); }); const fill = document.querySelector('.hb-progress-fill'), label = document.querySelector('.hb-progress-label'); if (fill && label) { const update = () => { const h = document.documentElement, d = (h.scrollHeight - h.clientHeight) || 1, p = Math.max(0, Math.min(1, h.scrollTop / d)); fill.style.width = (p*100).toFixed(0)+'%'; label.textContent = (p*100).toFixed(0)+'%'; }; document.addEventListener('scroll', update, { passive: true }); update(); } })();</script>
+</body>
+</html>

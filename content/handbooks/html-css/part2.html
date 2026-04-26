@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Part 2: Semantic HTML & Forms — HTML & CSS Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 2 of HTML & CSS Handbook: Semantic elements, tables, forms, validation, entities, and document head deep dive.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/handbook.css">
+</head>
+<body class="handbook-wrapper">
+  <nav class="navbar"><div class="container"><a href="../../../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../../../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
+
+  <div class="handbook-page">
+    <div class="hb-topbar">
+      <div class="hb-topbar-inner">
+        <div class="hb-breadcrumbs">
+          <a href="index.html">HTML & CSS Handbook</a>
+          <span class="hb-muted">/</span>
+          <span>Part 2</span>
+          <span class="hb-muted">·</span>
+          <a href="#m2-1">2.1</a><a href="#m2-2">2.2</a><a href="#m2-3">2.3</a><a href="#m2-4">2.4</a><a href="#m2-5">2.5</a><a href="#m2-6">2.6</a><a href="#m2-7">2.7</a>
+        </div>
+        <div class="hb-progress" aria-label="Reading progress">
+          <div class="hb-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="hb-progress-fill"></div></div>
+          <div class="hb-progress-label">0%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chapter-header" data-chapter-num="02">
+      <div class="chapter-part-label">📖 Part 2 — Semantic HTML & Forms</div>
+      <h1 class="chapter-title">Structure, Meaning & <span class="gradient-text">User Input</span></h1>
+      <p class="chapter-subtitle">Build meaningful, accessible pages and master HTML forms with industry-level validation.</p>
+      <div class="chapter-meta"><span>📄 Modules 2.1 – 2.7</span><span>⏱️ 75–110 min read</span><span>💻 40+ Examples</span></div>
+    </div>
+
+    <div class="callout callout-tip">
+      <strong>How to study Part 2:</strong> Semantic HTML is about choosing the RIGHT element. For every <code>&lt;div&gt;</code> you write, ask: "Is there a more meaningful element?" Forms require hands-on practice — build a real form for each concept.
+    </div>
+
+    <div class="hb-mini-toc">
+      <div class="hb-mini-title">📍 Part 2 Modules</div>
+      <div class="hb-mini-links">
+        <a href="#m2-1">2.1 Semantic HTML5</a>
+        <a href="#m2-2">2.2 Tables</a>
+        <a href="#m2-3">2.3 Forms Basics</a>
+        <a href="#m2-4">2.4 Input Types</a>
+        <a href="#m2-5">2.5 Advanced Forms</a>
+        <a href="#m2-6">2.6 Entities</a>
+        <a href="#m2-7">2.7 Head Deep Dive</a>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">🚀 Advanced Lens — Part 2</div>
+      <p class="explain-en">
+        Semantic HTML is the difference between a website that "works" and one that is accessible, SEO-optimized, and maintainable.
+        Forms are the primary way users interact with web apps — getting validation, accessibility, and UX right is critical for production quality.
+      </p>
+      <div class="explain-hi">
+        <span class="hi-label">Hindi mein samjho</span>
+        Semantic HTML se website sirf "chalne" wali nahi, balki accessible, SEO-optimized, aur maintainable banti hai.
+        Forms se users web apps ke saath interact karte hain — validation aur UX sahi karna production quality ke liye zaroori hai.
+      </div>
+    </div>
+
+    <!-- MODULE 2.1 -->
+    <div class="module-section" id="m2-1">
+      <div class="module-header"><div class="module-number">2.1</div><h2 class="module-title">Semantic HTML5 Elements — header, nav, main, section, article, aside, footer</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Why semantic HTML matters</h3>
+        <p class="explain-en">
+          Semantic elements describe the <strong>meaning</strong> of content, not just its appearance. They help search engines understand page structure,
+          enable screen readers to navigate efficiently, and make code more maintainable. Using <code>&lt;div&gt;</code> for everything is the #1 beginner mistake.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Semantic elements content ka meaning describe karte hain. Google ko page structure samajh aata hai, screen readers navigate kar paate hain, aur code readable banta hai. Har jagah <code>&lt;div&gt;</code> lagana beginner mistake hai.</div>
+
+        <div class="diagram-box">
+          <div class="diagram-title">📐 Semantic Page Structure</div>
+          <div class="diagram-flow">
+            <div class="diagram-node primary">&lt;header&gt;<br><small>Logo + Nav</small></div>
+            <div class="diagram-arrow">↓</div>
+            <div class="diagram-node secondary">&lt;main&gt;<br><small>Primary content</small></div>
+            <div class="diagram-arrow">↓</div>
+            <div class="diagram-node success">&lt;footer&gt;<br><small>Copyright + links</small></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">The core semantic elements</h3>
+        <p class="explain-en">
+          HTML5 provides specific elements for each section of a page. <code>&lt;header&gt;</code> for introductory content,
+          <code>&lt;nav&gt;</code> for navigation, <code>&lt;main&gt;</code> for primary content (only one per page),
+          <code>&lt;section&gt;</code> for thematic groups, <code>&lt;article&gt;</code> for self-contained content,
+          <code>&lt;aside&gt;</code> for sidebars, and <code>&lt;footer&gt;</code> for bottom info.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Har page section ke liye specific element hai: header (top), nav (menu), main (main content — sirf ek), section (topic group), article (independent content), aside (sidebar), footer (bottom).</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — Semantic page layout</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="tag">&lt;body&gt;</span>
+  <span class="tag">&lt;header&gt;</span>
+    <span class="tag">&lt;h1&gt;</span>CodeWithYuvraj<span class="tag">&lt;/h1&gt;</span>
+    <span class="tag">&lt;nav&gt;</span>
+      <span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="value">"/"</span><span class="tag">&gt;</span>Home<span class="tag">&lt;/a&gt;</span>
+      <span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="value">"/about"</span><span class="tag">&gt;</span>About<span class="tag">&lt;/a&gt;</span>
+      <span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="value">"/contact"</span><span class="tag">&gt;</span>Contact<span class="tag">&lt;/a&gt;</span>
+    <span class="tag">&lt;/nav&gt;</span>
+  <span class="tag">&lt;/header&gt;</span>
+
+  <span class="tag">&lt;main&gt;</span>
+    <span class="tag">&lt;section&gt;</span>
+      <span class="tag">&lt;h2&gt;</span>Latest Articles<span class="tag">&lt;/h2&gt;</span>
+      <span class="tag">&lt;article&gt;</span>
+        <span class="tag">&lt;h3&gt;</span>Getting Started with HTML<span class="tag">&lt;/h3&gt;</span>
+        <span class="tag">&lt;p&gt;</span>Learn the basics...<span class="tag">&lt;/p&gt;</span>
+      <span class="tag">&lt;/article&gt;</span>
+    <span class="tag">&lt;/section&gt;</span>
+
+    <span class="tag">&lt;aside&gt;</span>
+      <span class="tag">&lt;h3&gt;</span>Related Links<span class="tag">&lt;/h3&gt;</span>
+      <span class="tag">&lt;ul&gt;</span><span class="tag">&lt;li&gt;</span><span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="value">"#"</span><span class="tag">&gt;</span>CSS Guide<span class="tag">&lt;/a&gt;</span><span class="tag">&lt;/li&gt;</span><span class="tag">&lt;/ul&gt;</span>
+    <span class="tag">&lt;/aside&gt;</span>
+  <span class="tag">&lt;/main&gt;</span>
+
+  <span class="tag">&lt;footer&gt;</span>
+    <span class="tag">&lt;p&gt;</span>© 2026 CodeWithYuvraj<span class="tag">&lt;/p&gt;</span>
+  <span class="tag">&lt;/footer&gt;</span>
+<span class="tag">&lt;/body&gt;</span></pre></div>
+        </div>
+        <div class="callout callout-important"><strong>Key rule:</strong> Only ONE <code>&lt;main&gt;</code> per page. <code>&lt;article&gt;</code> should make sense on its own (like a blog post). <code>&lt;section&gt;</code> groups related content with a heading.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Semantic vs non-semantic comparison</h3>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>❌ Non-semantic</th><th>✅ Semantic</th><th>Why better</th></tr></thead>
+            <tbody>
+              <tr><td><code>&lt;div class="header"&gt;</code></td><td><code>&lt;header&gt;</code></td><td>Browser + screen reader know it's header</td></tr>
+              <tr><td><code>&lt;div class="nav"&gt;</code></td><td><code>&lt;nav&gt;</code></td><td>Keyboard users can jump to navigation</td></tr>
+              <tr><td><code>&lt;div class="content"&gt;</code></td><td><code>&lt;main&gt;</code></td><td>Skip-to-main-content accessibility</td></tr>
+              <tr><td><code>&lt;div class="sidebar"&gt;</code></td><td><code>&lt;aside&gt;</code></td><td>Screen readers announce as complementary</td></tr>
+              <tr><td><code>&lt;div class="footer"&gt;</code></td><td><code>&lt;footer&gt;</code></td><td>Identified as page footer automatically</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Landmarks & keyboard navigation (real accessibility behavior)</h3>
+        <p class="explain-en">
+          Semantic landmarks (<code>header</code>, <code>nav</code>, <code>main</code>, <code>footer</code>) let assistive technologies jump between major regions quickly.
+          Add a “skip to content” link so keyboard users can bypass repeated navigation.
+          This is expected in production-quality websites and is part of modern accessibility audits.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Semantic landmarks se screen reader users page ke major sections me fast jump kar sakte hain. “Skip to content” link keyboard users ko har page par nav skip karne me help karta hai — ye real accessibility requirement hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — skip link + landmarks</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="value">"#main-content"</span> <span class="attr">class</span>=<span class="value">"skip-link"</span><span class="tag">&gt;</span>Skip to main content<span class="tag">&lt;/a&gt;</span>
+
+<span class="tag">&lt;header&gt;</span>...<span class="tag">&lt;/header&gt;</span>
+<span class="tag">&lt;nav</span> <span class="attr">aria-label</span>=<span class="value">"Primary"</span><span class="tag">&gt;</span>...<span class="tag">&lt;/nav&gt;</span>
+<span class="tag">&lt;main</span> <span class="attr">id</span>=<span class="value">"main-content"</span><span class="tag">&gt;</span>...<span class="tag">&lt;/main&gt;</span>
+<span class="tag">&lt;footer&gt;</span>...<span class="tag">&lt;/footer&gt;</span></pre></div>
+        </div>
+        <div class="callout callout-tip"><strong>Audit tip:</strong> Test with keyboard only: press <code>Tab</code> on page load and verify skip link appears and works.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 2.2 -->
+    <div class="module-section" id="m2-2">
+      <div class="module-header"><div class="module-number">2.2</div><h2 class="module-title">Tables & Structured Data — thead, tbody, tfoot, colspan, rowspan</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">When to use tables</h3>
+        <p class="explain-en">
+          Tables are for <strong>tabular data only</strong> — data that belongs in rows and columns (schedules, comparisons, statistics).
+          Never use tables for page layout (that's CSS's job). A properly structured table uses <code>&lt;thead&gt;</code>, <code>&lt;tbody&gt;</code>,
+          and <code>&lt;tfoot&gt;</code> for semantic grouping.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Tables sirf tabular data ke liye hain — schedules, comparisons, statistics. Layout ke liye table kabhi use mat karo (wo CSS ka kaam hai). <code>&lt;thead&gt;</code>, <code>&lt;tbody&gt;</code>, <code>&lt;tfoot&gt;</code> se table meaningful banta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — Semantic table</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="tag">&lt;table&gt;</span>
+  <span class="tag">&lt;thead&gt;</span>
+    <span class="tag">&lt;tr&gt;</span>
+      <span class="tag">&lt;th&gt;</span>Language<span class="tag">&lt;/th&gt;</span>
+      <span class="tag">&lt;th&gt;</span>Type<span class="tag">&lt;/th&gt;</span>
+      <span class="tag">&lt;th&gt;</span>Year<span class="tag">&lt;/th&gt;</span>
+    <span class="tag">&lt;/tr&gt;</span>
+  <span class="tag">&lt;/thead&gt;</span>
+  <span class="tag">&lt;tbody&gt;</span>
+    <span class="tag">&lt;tr&gt;</span>
+      <span class="tag">&lt;td&gt;</span>HTML<span class="tag">&lt;/td&gt;</span>
+      <span class="tag">&lt;td&gt;</span>Markup<span class="tag">&lt;/td&gt;</span>
+      <span class="tag">&lt;td&gt;</span>1993<span class="tag">&lt;/td&gt;</span>
+    <span class="tag">&lt;/tr&gt;</span>
+    <span class="tag">&lt;tr&gt;</span>
+      <span class="tag">&lt;td&gt;</span>CSS<span class="tag">&lt;/td&gt;</span>
+      <span class="tag">&lt;td&gt;</span>Stylesheet<span class="tag">&lt;/td&gt;</span>
+      <span class="tag">&lt;td&gt;</span>1996<span class="tag">&lt;/td&gt;</span>
+    <span class="tag">&lt;/tr&gt;</span>
+  <span class="tag">&lt;/tbody&gt;</span>
+<span class="tag">&lt;/table&gt;</span></pre></div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> <code>&lt;th&gt;</code> defines header cells (bold + centered by default). <code>&lt;td&gt;</code> defines data cells. Screen readers announce <code>&lt;th&gt;</code> as column headers.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">colspan, rowspan & caption</h3>
+        <p class="explain-en">
+          <code>colspan</code> makes a cell span multiple columns. <code>rowspan</code> spans multiple rows.
+          <code>&lt;caption&gt;</code> provides a visible title for the table — important for accessibility.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>colspan</code> se cell multiple columns me fail jaata hai. <code>rowspan</code> se rows me. <code>&lt;caption&gt;</code> se table ko title milta hai jo accessibility ke liye important hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — colspan & caption</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="tag">&lt;table&gt;</span>
+  <span class="tag">&lt;caption&gt;</span>Student Results — Semester 1<span class="tag">&lt;/caption&gt;</span>
+  <span class="tag">&lt;thead&gt;</span>
+    <span class="tag">&lt;tr&gt;</span>
+      <span class="tag">&lt;th&gt;</span>Name<span class="tag">&lt;/th&gt;</span>
+      <span class="tag">&lt;th</span> <span class="attr">colspan</span>=<span class="value">"2"</span><span class="tag">&gt;</span>Marks<span class="tag">&lt;/th&gt;</span>
+    <span class="tag">&lt;/tr&gt;</span>
+    <span class="tag">&lt;tr&gt;</span>
+      <span class="tag">&lt;th&gt;</span><span class="tag">&lt;/th&gt;</span>
+      <span class="tag">&lt;th&gt;</span>Math<span class="tag">&lt;/th&gt;</span>
+      <span class="tag">&lt;th&gt;</span>Science<span class="tag">&lt;/th&gt;</span>
+    <span class="tag">&lt;/tr&gt;</span>
+  <span class="tag">&lt;/thead&gt;</span>
+  <span class="tag">&lt;tbody&gt;</span>
+    <span class="tag">&lt;tr&gt;</span>
+      <span class="tag">&lt;td&gt;</span>Yuvraj<span class="tag">&lt;/td&gt;</span>
+      <span class="tag">&lt;td&gt;</span>95<span class="tag">&lt;/td&gt;</span>
+      <span class="tag">&lt;td&gt;</span>89<span class="tag">&lt;/td&gt;</span>
+    <span class="tag">&lt;/tr&gt;</span>
+  <span class="tag">&lt;/tbody&gt;</span>
+<span class="tag">&lt;/table&gt;</span></pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 2.3 -->
+    <div class="module-section" id="m2-3">
+      <div class="module-header"><div class="module-number">2.3</div><h2 class="module-title">Forms — Basics — form, input, label, textarea, select, button</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">The &lt;form&gt; element</h3>
+        <p class="explain-en">
+          <code>&lt;form&gt;</code> wraps all input elements and defines how data is submitted. The <code>action</code> attribute sets the destination URL,
+          and <code>method</code> specifies HTTP method (<code>GET</code> for search/filters, <code>POST</code> for data submission).
+          Every input MUST have a <code>&lt;label&gt;</code> for accessibility.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>&lt;form&gt;</code> sab inputs ko wrap karta hai. <code>action</code> se data kahan jaayega aur <code>method</code> se kaise jaayega ye define hota hai. Har input ke saath <code>&lt;label&gt;</code> dena accessibility ke liye mandatory hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — Basic form</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="tag">&lt;form</span> <span class="attr">action</span>=<span class="value">"/submit"</span> <span class="attr">method</span>=<span class="value">"POST"</span><span class="tag">&gt;</span>
+
+  <span class="tag">&lt;label</span> <span class="attr">for</span>=<span class="value">"name"</span><span class="tag">&gt;</span>Full Name:<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="value">"text"</span> <span class="attr">id</span>=<span class="value">"name"</span> <span class="attr">name</span>=<span class="value">"name"</span> <span class="attr">required</span><span class="tag">&gt;</span>
+
+  <span class="tag">&lt;label</span> <span class="attr">for</span>=<span class="value">"email"</span><span class="tag">&gt;</span>Email:<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="value">"email"</span> <span class="attr">id</span>=<span class="value">"email"</span> <span class="attr">name</span>=<span class="value">"email"</span> <span class="attr">required</span><span class="tag">&gt;</span>
+
+  <span class="tag">&lt;label</span> <span class="attr">for</span>=<span class="value">"msg"</span><span class="tag">&gt;</span>Message:<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;textarea</span> <span class="attr">id</span>=<span class="value">"msg"</span> <span class="attr">name</span>=<span class="value">"message"</span> <span class="attr">rows</span>=<span class="value">"4"</span><span class="tag">&gt;&lt;/textarea&gt;</span>
+
+  <span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="value">"submit"</span><span class="tag">&gt;</span>Send Message<span class="tag">&lt;/button&gt;</span>
+
+<span class="tag">&lt;/form&gt;</span></pre></div>
+        </div>
+        <div class="callout callout-important"><strong>Accessibility rule:</strong> The <code>for</code> attribute on <code>&lt;label&gt;</code> must match the <code>id</code> of the input. Clicking the label focuses the input — this is critical for usability and screen readers.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Form architecture mindset (client validation + server validation)</h3>
+        <p class="explain-en">
+          Industry forms follow layered validation: browser-level checks for instant UX feedback, then server-side validation for security and integrity.
+          Never trust client input blindly, even if all HTML validations pass.
+          Design your form so error messaging is clear, field-specific, and recoverable.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Production forms me 2 layers hoti hain: browser validation (fast UX) + server validation (security). Client validation pass hone ke baad bhi input trusted nahi maana jaata. Errors clear aur field-specific honi chahiye.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Layer</th><th>Goal</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td>Client-side HTML</td><td>Instant user feedback</td><td><code>required</code>, <code>type="email"</code>, <code>pattern</code></td></tr>
+              <tr><td>Client-side JS</td><td>Rich UX rules</td><td>Password strength meter, async checks</td></tr>
+              <tr><td>Server-side validation</td><td>Security + integrity</td><td>Sanitize, normalize, reject malicious input</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Select dropdowns & buttons</h3>
+        <p class="explain-en">
+          <code>&lt;select&gt;</code> creates a dropdown menu with <code>&lt;option&gt;</code> items. Always include a placeholder option.
+          <code>&lt;button&gt;</code> is preferred over <code>&lt;input type="submit"&gt;</code> because it can contain HTML content (icons, text).
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>&lt;select&gt;</code> se dropdown menu banta hai. Pehla option placeholder rakho. <code>&lt;button&gt;</code> use karo submit ke liye — isme icons aur styled text daal sakte ho.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — Select & button</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="tag">&lt;label</span> <span class="attr">for</span>=<span class="value">"city"</span><span class="tag">&gt;</span>City:<span class="tag">&lt;/label&gt;</span>
+<span class="tag">&lt;select</span> <span class="attr">id</span>=<span class="value">"city"</span> <span class="attr">name</span>=<span class="value">"city"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;option</span> <span class="attr">value</span>=<span class="value">""</span><span class="tag">&gt;</span>-- Select city --<span class="tag">&lt;/option&gt;</span>
+  <span class="tag">&lt;option</span> <span class="attr">value</span>=<span class="value">"mumbai"</span><span class="tag">&gt;</span>Mumbai<span class="tag">&lt;/option&gt;</span>
+  <span class="tag">&lt;option</span> <span class="attr">value</span>=<span class="value">"pune"</span><span class="tag">&gt;</span>Pune<span class="tag">&lt;/option&gt;</span>
+  <span class="tag">&lt;option</span> <span class="attr">value</span>=<span class="value">"delhi"</span><span class="tag">&gt;</span>Delhi<span class="tag">&lt;/option&gt;</span>
+<span class="tag">&lt;/select&gt;</span>
+
+<span class="comment">&lt;!-- Button types --&gt;</span>
+<span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="value">"submit"</span><span class="tag">&gt;</span>✅ Submit<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="value">"reset"</span><span class="tag">&gt;</span>🔄 Reset<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="value">"button"</span><span class="tag">&gt;</span>⚡ Custom Action<span class="tag">&lt;/button&gt;</span></pre></div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> <code>type="button"</code> prevents form submission — use it for JavaScript-only actions. <code>type="submit"</code> is the default if not specified.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 2.4 -->
+    <div class="module-section" id="m2-4">
+      <div class="module-header"><div class="module-number">2.4</div><h2 class="module-title">Forms — Input Types & Validation — text, email, password, number, date, checkbox, radio</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">HTML5 input types</h3>
+        <p class="explain-en">
+          HTML5 introduced specialized input types that provide built-in validation and optimized mobile keyboards.
+          Using the correct type improves UX, reduces JavaScript validation code, and makes forms more accessible.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>HTML5 input types se browser khud validation karta hai aur mobile pe sahi keyboard dikhata hai. Sahi type use karna UX improve karta hai aur JavaScript validation kam lagta hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Type</th><th>Use case</th><th>Validation</th></tr></thead>
+            <tbody>
+              <tr><td><code>text</code></td><td>General text input</td><td>None (use pattern)</td></tr>
+              <tr><td><code>email</code></td><td>Email addresses</td><td>✅ Auto validates format</td></tr>
+              <tr><td><code>password</code></td><td>Passwords</td><td>Hides characters</td></tr>
+              <tr><td><code>number</code></td><td>Numeric values</td><td>✅ min/max/step</td></tr>
+              <tr><td><code>date</code></td><td>Date picker</td><td>✅ Date format</td></tr>
+              <tr><td><code>range</code></td><td>Slider control</td><td>min/max</td></tr>
+              <tr><td><code>color</code></td><td>Color picker</td><td>Hex value</td></tr>
+              <tr><td><code>url</code></td><td>Website URLs</td><td>✅ URL format</td></tr>
+              <tr><td><code>tel</code></td><td>Phone numbers</td><td>Mobile numpad</td></tr>
+              <tr><td><code>search</code></td><td>Search fields</td><td>Clear button on mobile</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Checkboxes & radio buttons</h3>
+        <p class="explain-en">
+          <code>checkbox</code> allows multiple selections. <code>radio</code> allows only one selection per group (same <code>name</code> attribute).
+          Always wrap in <code>&lt;label&gt;</code> for clickable text area.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Checkbox se multiple select ho sakta hai. Radio me ek group me sirf ek hi select hota hai (same <code>name</code> attribute dena zaroori hai). Label me wrap karo taaki text pe click karne se bhi select ho.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — Checkbox & radio</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">&lt;!-- Checkboxes (multiple selections) --&gt;</span>
+<span class="tag">&lt;label&gt;</span><span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="value">"checkbox"</span> <span class="attr">name</span>=<span class="value">"skills"</span> <span class="attr">value</span>=<span class="value">"html"</span><span class="tag">&gt;</span> HTML<span class="tag">&lt;/label&gt;</span>
+<span class="tag">&lt;label&gt;</span><span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="value">"checkbox"</span> <span class="attr">name</span>=<span class="value">"skills"</span> <span class="attr">value</span>=<span class="value">"css"</span><span class="tag">&gt;</span> CSS<span class="tag">&lt;/label&gt;</span>
+<span class="tag">&lt;label&gt;</span><span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="value">"checkbox"</span> <span class="attr">name</span>=<span class="value">"skills"</span> <span class="attr">value</span>=<span class="value">"js"</span><span class="tag">&gt;</span> JavaScript<span class="tag">&lt;/label&gt;</span>
+
+<span class="comment">&lt;!-- Radio buttons (single selection) --&gt;</span>
+<span class="tag">&lt;label&gt;</span><span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="value">"radio"</span> <span class="attr">name</span>=<span class="value">"level"</span> <span class="attr">value</span>=<span class="value">"beginner"</span><span class="tag">&gt;</span> Beginner<span class="tag">&lt;/label&gt;</span>
+<span class="tag">&lt;label&gt;</span><span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="value">"radio"</span> <span class="attr">name</span>=<span class="value">"level"</span> <span class="attr">value</span>=<span class="value">"advanced"</span><span class="tag">&gt;</span> Advanced<span class="tag">&lt;/label&gt;</span></pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Native validation attributes</h3>
+        <p class="explain-en">
+          HTML5 provides validation without JavaScript: <code>required</code>, <code>minlength</code>/<code>maxlength</code>,
+          <code>min</code>/<code>max</code>, <code>pattern</code> (regex), and <code>placeholder</code>.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>HTML5 bina JavaScript ke validation deta hai: <code>required</code> se empty submit nahi hoga, <code>pattern</code> se regex check hoga, <code>min/max</code> se range check hoga.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — Validation</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="value">"text"</span> <span class="attr">name</span>=<span class="value">"username"</span>
+       <span class="attr">required</span>
+       <span class="attr">minlength</span>=<span class="value">"3"</span>
+       <span class="attr">maxlength</span>=<span class="value">"20"</span>
+       <span class="attr">placeholder</span>=<span class="value">"Enter username"</span><span class="tag">&gt;</span>
+
+<span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="value">"number"</span> <span class="attr">name</span>=<span class="value">"age"</span>
+       <span class="attr">min</span>=<span class="value">"18"</span> <span class="attr">max</span>=<span class="value">"99"</span> <span class="attr">required</span><span class="tag">&gt;</span>
+
+<span class="comment">&lt;!-- Pattern: Indian phone number --&gt;</span>
+<span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="value">"tel"</span> <span class="attr">name</span>=<span class="value">"phone"</span>
+       <span class="attr">pattern</span>=<span class="value">"[6-9][0-9]{9}"</span>
+       <span class="attr">title</span>=<span class="value">"Enter 10-digit Indian mobile number"</span><span class="tag">&gt;</span></pre></div>
+        </div>
+        <div class="callout callout-warning"><strong>Never rely on client-side validation alone!</strong> Always validate on the server too. HTML validation improves UX but can be bypassed by tech-savvy users.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Error UX pattern (how professional forms guide users)</h3>
+        <p class="explain-en">
+          Good form UX does not just block submission; it tells users exactly what is wrong and how to fix it.
+          Pair input fields with hint text and error containers, and expose errors using accessible attributes like <code>aria-invalid</code> and <code>aria-describedby</code>.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Achha form UX sirf error dikhata nahi, solution bhi batata hai. Field ke saath hint + error text do, aur accessibility ke liye <code>aria-invalid</code> aur <code>aria-describedby</code> use karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — accessible error messaging</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="tag">&lt;label</span> <span class="attr">for</span>=<span class="value">"email"</span><span class="tag">&gt;</span>Email<span class="tag">&lt;/label&gt;</span>
+<span class="tag">&lt;input</span>
+  <span class="attr">id</span>=<span class="value">"email"</span>
+  <span class="attr">name</span>=<span class="value">"email"</span>
+  <span class="attr">type</span>=<span class="value">"email"</span>
+  <span class="attr">required</span>
+  <span class="attr">aria-invalid</span>=<span class="value">"true"</span>
+  <span class="attr">aria-describedby</span>=<span class="value">"email-hint email-error"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;small</span> <span class="attr">id</span>=<span class="value">"email-hint"</span><span class="tag">&gt;</span>Use your active email address.<span class="tag">&lt;/small&gt;</span>
+<span class="tag">&lt;small</span> <span class="attr">id</span>=<span class="value">"email-error"</span><span class="tag">&gt;</span>Please enter a valid email format.<span class="tag">&lt;/small&gt;</span></pre></div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> Screen readers associate both hint and error text with the input, improving error recovery for all users.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 2.5 -->
+    <div class="module-section" id="m2-5">
+      <div class="module-header"><div class="module-number">2.5</div><h2 class="module-title">Forms — Advanced — fieldset, legend, datalist, output, autocomplete</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Grouping with fieldset & legend</h3>
+        <p class="explain-en">
+          <code>&lt;fieldset&gt;</code> groups related form controls, and <code>&lt;legend&gt;</code> provides a visible label for the group.
+          This is essential for accessibility — screen readers announce the legend when entering the group.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>&lt;fieldset&gt;</code> se related inputs ek group ban jaate hain. <code>&lt;legend&gt;</code> us group ka title hota hai. Screen readers legend announce karte hain — ye accessibility ke liye important hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — Fieldset & legend</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="tag">&lt;fieldset&gt;</span>
+  <span class="tag">&lt;legend&gt;</span>Personal Information<span class="tag">&lt;/legend&gt;</span>
+  <span class="tag">&lt;label</span> <span class="attr">for</span>=<span class="value">"fname"</span><span class="tag">&gt;</span>First Name:<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="value">"text"</span> <span class="attr">id</span>=<span class="value">"fname"</span> <span class="attr">name</span>=<span class="value">"fname"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;label</span> <span class="attr">for</span>=<span class="value">"lname"</span><span class="tag">&gt;</span>Last Name:<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="value">"text"</span> <span class="attr">id</span>=<span class="value">"lname"</span> <span class="attr">name</span>=<span class="value">"lname"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/fieldset&gt;</span></pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Datalist — autocomplete suggestions</h3>
+        <p class="explain-en">
+          <code>&lt;datalist&gt;</code> provides a dropdown of suggestions for an <code>&lt;input&gt;</code> — the user can type freely or select from the list.
+          Unlike <code>&lt;select&gt;</code>, the user isn't limited to the provided options.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>&lt;datalist&gt;</code> se input field me suggestions dikhte hain — user type bhi kar sakta hai aur list se select bhi. <code>&lt;select&gt;</code> se alag, user kuch bhi type kar sakta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — Datalist</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="tag">&lt;label</span> <span class="attr">for</span>=<span class="value">"framework"</span><span class="tag">&gt;</span>Favorite Framework:<span class="tag">&lt;/label&gt;</span>
+<span class="tag">&lt;input</span> <span class="attr">list</span>=<span class="value">"frameworks"</span> <span class="attr">id</span>=<span class="value">"framework"</span> <span class="attr">name</span>=<span class="value">"framework"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;datalist</span> <span class="attr">id</span>=<span class="value">"frameworks"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;option</span> <span class="attr">value</span>=<span class="value">"React"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;option</span> <span class="attr">value</span>=<span class="value">"Vue"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;option</span> <span class="attr">value</span>=<span class="value">"Angular"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;option</span> <span class="attr">value</span>=<span class="value">"Svelte"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/datalist&gt;</span></pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 2.6 -->
+    <div class="module-section" id="m2-6">
+      <div class="module-header"><div class="module-number">2.6</div><h2 class="module-title">HTML Entities & Special Characters — &amp;amp;, &amp;lt;, &amp;gt;, &amp;nbsp;, emoji</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Why HTML entities exist</h3>
+        <p class="explain-en">
+          Some characters have special meaning in HTML (like <code>&lt;</code> and <code>&gt;</code>). To display them as text, use <strong>HTML entities</strong>.
+          Entities start with <code>&amp;</code> and end with <code>;</code>.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Kuch characters HTML me special meaning rakhte hain (jaise &lt; aur &gt;). Unhe text ke roop me dikhane ke liye HTML entities use hoti hain — <code>&amp;</code> se start aur <code>;</code> se end hoti hain.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Character</th><th>Entity</th><th>Name</th></tr></thead>
+            <tbody>
+              <tr><td>&lt;</td><td><code>&amp;lt;</code></td><td>Less than</td></tr>
+              <tr><td>&gt;</td><td><code>&amp;gt;</code></td><td>Greater than</td></tr>
+              <tr><td>&amp;</td><td><code>&amp;amp;</code></td><td>Ampersand</td></tr>
+              <tr><td>&nbsp;</td><td><code>&amp;nbsp;</code></td><td>Non-breaking space</td></tr>
+              <tr><td>©</td><td><code>&amp;copy;</code></td><td>Copyright</td></tr>
+              <tr><td>→</td><td><code>&amp;rarr;</code></td><td>Right arrow</td></tr>
+              <tr><td>₹</td><td><code>&amp;#8377;</code></td><td>Indian Rupee</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Modern approach:</strong> With UTF-8 encoding, you can use emoji directly in HTML: <code>🚀 ✅ ❤️</code>. Entities are mainly needed for reserved HTML characters.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 2.7 -->
+    <div class="module-section" id="m2-7">
+      <div class="module-header"><div class="module-number">2.7</div><h2 class="module-title">HTML Document Head Deep Dive — title, meta, OG tags, favicon, SEO</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Essential meta tags for production</h3>
+        <p class="explain-en">
+          A production-ready <code>&lt;head&gt;</code> includes SEO meta tags, Open Graph tags for social media sharing,
+          favicon for the browser tab, and preconnect hints for performance.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Production website ke head me SEO meta tags, social media ke liye Open Graph tags, browser tab ke liye favicon, aur performance ke liye preconnect hints hone chahiye.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — Production head</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="tag">&lt;head&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="attr">charset</span>=<span class="value">"UTF-8"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="attr">name</span>=<span class="value">"viewport"</span> <span class="attr">content</span>=<span class="value">"width=device-width, initial-scale=1.0"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;title&gt;</span>CodeWithYuvraj — Learn Web Dev<span class="tag">&lt;/title&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="attr">name</span>=<span class="value">"description"</span> <span class="attr">content</span>=<span class="value">"Free bilingual web dev tutorials"</span><span class="tag">&gt;</span>
+
+  <span class="comment">&lt;!-- Open Graph (social media sharing) --&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="attr">property</span>=<span class="value">"og:title"</span> <span class="attr">content</span>=<span class="value">"CodeWithYuvraj"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="attr">property</span>=<span class="value">"og:description"</span> <span class="attr">content</span>=<span class="value">"Industry-ready web tutorials"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="attr">property</span>=<span class="value">"og:image"</span> <span class="attr">content</span>=<span class="value">"https://site.com/og.jpg"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="attr">property</span>=<span class="value">"og:type"</span> <span class="attr">content</span>=<span class="value">"website"</span><span class="tag">&gt;</span>
+
+  <span class="comment">&lt;!-- Favicon --&gt;</span>
+  <span class="tag">&lt;link</span> <span class="attr">rel</span>=<span class="value">"icon"</span> <span class="attr">href</span>=<span class="value">"/favicon.ico"</span><span class="tag">&gt;</span>
+
+  <span class="comment">&lt;!-- Preconnect for performance --&gt;</span>
+  <span class="tag">&lt;link</span> <span class="attr">rel</span>=<span class="value">"preconnect"</span> <span class="attr">href</span>=<span class="value">"https://fonts.googleapis.com"</span><span class="tag">&gt;</span>
+
+  <span class="comment">&lt;!-- Stylesheets --&gt;</span>
+  <span class="tag">&lt;link</span> <span class="attr">rel</span>=<span class="value">"stylesheet"</span> <span class="attr">href</span>=<span class="value">"style.css"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/head&gt;</span></pre></div>
+        </div>
+        <div class="callout callout-important"><strong>SEO checklist:</strong> Unique <code>&lt;title&gt;</code> per page (50-60 chars), compelling <code>description</code> (150-160 chars), OG tags for social sharing, and favicon for branding.</div>
+      </div>
+    </div>
+
+    <div class="practice-box">
+      <div class="practice-title">✏️ Practice Exercises — Part 2</div>
+      <ol>
+        <li>Rebuild a page using ONLY semantic elements — zero <code>&lt;div&gt;</code> for layout.</li>
+        <li>Create a comparison table with <code>thead</code>, <code>tbody</code>, <code>caption</code>, and <code>colspan</code>.</li>
+        <li>Build a complete contact form with name, email, phone (with pattern), message, and city dropdown.</li>
+        <li>Create a registration form with fieldsets for "Personal Info" and "Account Details" with proper validation.</li>
+        <li>Write a production-ready <code>&lt;head&gt;</code> with all meta tags, OG tags, favicon, and preconnect.</li>
+      </ol>
+    </div>
+
+    <div class="handbook-nav">
+      <a href="part1.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Part 1: HTML Foundations</div></div></a>
+      <a href="part3.html" class="nav-btn next"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Part 3: CSS Foundations →</div></div><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+  </div>
+
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
+  <script src="../../../js/main.js"></script>
+  <script>
+    (() => {
+      document.querySelectorAll('.code-block').forEach((block) => {
+        const pre = block.querySelector('.code-body pre');
+        const header = block.querySelector('.code-header');
+        if (!pre || !header) return;
+        let actions = header.querySelector('.code-actions');
+        if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); }
+        const btn = document.createElement('button');
+        btn.type = 'button'; btn.className = 'code-copy-btn'; btn.textContent = 'Copy';
+        btn.addEventListener('click', async () => {
+          try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; }
+          catch { btn.textContent = 'Failed'; }
+          finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); }
+        });
+        actions.prepend(btn);
+      });
+      const fill = document.querySelector('.hb-progress-fill');
+      const label = document.querySelector('.hb-progress-label');
+      if (fill && label) {
+        const update = () => {
+          const h = document.documentElement;
+          const denom = (h.scrollHeight - h.clientHeight) || 1;
+          const pct = Math.max(0, Math.min(1, h.scrollTop / denom));
+          fill.style.width = (pct * 100).toFixed(0) + '%';
+          label.textContent = (pct * 100).toFixed(0) + '%';
+        };
+        document.addEventListener('scroll', update, { passive: true });
+        update();
+      }
+    })();
+  </script>
+</body>
+</html>
