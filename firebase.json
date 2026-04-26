@@ -1,6 +1,30 @@
 {
   "hosting": {
     "public": ".",
+    "redirects": [
+      { "source": "/content/handbooks", "destination": "/content/handbooks/python/index", "type": 301 },
+      { "source": "/content/handbooks/index", "destination": "/content/handbooks/python/index", "type": 301 },
+      { "source": "/content/handbooks/index.html", "destination": "/content/handbooks/python/index.html", "type": 301 },
+      { "source": "/content/handbooks/syllabus", "destination": "/content/handbooks/python/syllabus", "type": 301 },
+      { "source": "/content/handbooks/syllabus.html", "destination": "/content/handbooks/python/syllabus.html", "type": 301 },
+      { "source": "/content/handbooks/part1", "destination": "/content/handbooks/python/part1", "type": 301 },
+      { "source": "/content/handbooks/part1.html", "destination": "/content/handbooks/python/part1.html", "type": 301 },
+      { "source": "/content/handbooks/part2", "destination": "/content/handbooks/python/part2", "type": 301 },
+      { "source": "/content/handbooks/part2.html", "destination": "/content/handbooks/python/part2.html", "type": 301 },
+      { "source": "/content/handbooks/part3", "destination": "/content/handbooks/python/part3", "type": 301 },
+      { "source": "/content/handbooks/part3.html", "destination": "/content/handbooks/python/part3.html", "type": 301 },
+      { "source": "/content/handbooks/part4", "destination": "/content/handbooks/python/part4", "type": 301 },
+      { "source": "/content/handbooks/part4.html", "destination": "/content/handbooks/python/part4.html", "type": 301 },
+      { "source": "/content/handbooks/part5", "destination": "/content/handbooks/python/part5", "type": 301 },
+      { "source": "/content/handbooks/part5.html", "destination": "/content/handbooks/python/part5.html", "type": 301 },
+      { "source": "/content/handbooks/part6", "destination": "/content/handbooks/python/part6", "type": 301 },
+      { "source": "/content/handbooks/part6.html", "destination": "/content/handbooks/python/part6.html", "type": 301 },
+      { "source": "/content/handbooks/part7", "destination": "/content/handbooks/python/part7", "type": 301 },
+      { "source": "/content/handbooks/part7.html", "destination": "/content/handbooks/python/part7.html", "type": 301 },
+      { "source": "/content/handbooks/part8", "destination": "/content/handbooks/python/part8", "type": 301 },
+      { "source": "/content/handbooks/part8.html", "destination": "/content/handbooks/python/part8.html", "type": 301 },
+      { "source": "/content/handbooks/:file", "destination": "/content/handbooks/python/:file", "type": 301 }
+    ],
     "ignore": [
       "firebase.json",
       "**/.*",
