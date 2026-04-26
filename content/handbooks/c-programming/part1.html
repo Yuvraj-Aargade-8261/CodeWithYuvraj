@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Part 1: C Foundations — C Programming Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 1 of C Programming Handbook: History, setup, first program, compilation pipeline, data types, constants, and I/O functions.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/handbook.css">
+</head>
+<body class="handbook-wrapper">
+  <nav class="navbar"><div class="container"><a href="../../../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../../../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
+
+  <div class="handbook-page">
+    <div class="hb-topbar">
+      <div class="hb-topbar-inner">
+        <div class="hb-breadcrumbs">
+          <a href="index.html">C Programming Handbook</a>
+          <span class="hb-muted">/</span>
+          <span>Part 1</span>
+          <span class="hb-muted">·</span>
+          <a href="#m1-1">1.1</a>
+          <a href="#m1-2">1.2</a>
+          <a href="#m1-3">1.3</a>
+          <a href="#m1-4">1.4</a>
+          <a href="#m1-5">1.5</a>
+          <a href="#m1-6">1.6</a>
+          <a href="#m1-7">1.7</a>
+        </div>
+        <div class="hb-progress" aria-label="Reading progress">
+          <div class="hb-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="hb-progress-fill"></div></div>
+          <div class="hb-progress-label">0%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chapter-header" data-chapter-num="01">
+      <div class="chapter-part-label">📖 Part 1 — C Foundations</div>
+      <h1 class="chapter-title">Your First <span class="gradient-text">C Program</span></h1>
+      <p class="chapter-subtitle">Understand how C works under the hood — from compilation to execution — with industry-level thinking.</p>
+      <div class="chapter-meta"><span>📄 Modules 1.1 – 1.7</span><span>⏱️ 80–120 min read</span><span>💻 50+ Examples</span></div>
+    </div>
+
+    <div class="callout callout-tip">
+      <strong>How to study Part 1:</strong> Type every code example yourself (don't copy-paste), compile with <code>gcc</code>, and run in your terminal. Understanding the compilation process gives you a permanent mental model of how C works.
+    </div>
+
+    <div class="hb-mini-toc">
+      <div class="hb-mini-title">📍 Part 1 Modules</div>
+      <div class="hb-mini-links">
+        <a href="#m1-1">1.1 History & Why C</a>
+        <a href="#m1-2">1.2 Environment Setup</a>
+        <a href="#m1-3">1.3 Program Structure</a>
+        <a href="#m1-4">1.4 Compilation Pipeline</a>
+        <a href="#m1-5">1.5 Data Types</a>
+        <a href="#m1-6">1.6 Constants</a>
+        <a href="#m1-7">1.7 Input & Output</a>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">🚀 Advanced Lens — Part 1</div>
+      <p class="explain-en">
+        To master C at an industry level, go beyond syntax. For every program, ask: how does the compiler translate this? Where does each variable live in memory?
+        What happens at the CPU level? This systems-level thinking is what makes C programmers invaluable in embedded, OS, and performance-critical roles.
+      </p>
+      <div class="explain-hi">
+        <span class="hi-label">Hindi mein samjho</span>
+        C sirf syntax yaad karne se nahi aata. Har program ke liye socho: compiler isko kaise translate karega? Har variable memory me kahan hai?
+        CPU level pe kya hota hai? Yahi systems-level thinking C programmers ko invaluable banati hai.
+      </div>
+    </div>
+
+    <!-- MODULE 1.1 -->
+    <div class="module-section" id="m1-1">
+      <div class="module-header"><div class="module-number">1.1</div><h2 class="module-title">History & Why C Matters — C's role in OS, embedded systems, and modern computing</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">The birth of C</h3>
+        <p class="explain-en">
+          C was created by <strong>Dennis Ritchie</strong> at Bell Labs in <strong>1972</strong> to rewrite the Unix operating system.
+          Before C, OS code was written in assembly — tied to specific hardware. C provided a <strong>portable, high-level language</strong>
+          that could still access hardware directly. This made Unix — and later Linux, Windows, and macOS — possible.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>C ko Dennis Ritchie ne 1972 me Bell Labs me banaya tha Unix OS likhne ke liye. Pehle OS assembly me likha jaata tha jo specific hardware pe hi chalta tha. C ne portable, high-level language di jo hardware ko directly access bhi kar sakti thi.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Year</th><th>Milestone</th><th>Impact</th></tr></thead>
+            <tbody>
+              <tr><td>1972</td><td>C created by Dennis Ritchie</td><td>Unix rewritten in C</td></tr>
+              <tr><td>1978</td><td>"The C Programming Language" (K&R)</td><td>De facto standard</td></tr>
+              <tr><td>1989</td><td>ANSI C (C89/C90)</td><td>First official standard</td></tr>
+              <tr><td>1999</td><td>C99</td><td>Inline, VLA, // comments</td></tr>
+              <tr><td>2011</td><td>C11</td><td>Threads, atomics, _Generic</td></tr>
+              <tr><td>2018</td><td>C17</td><td>Bug fixes, clarifications</td></tr>
+              <tr><td>2024</td><td>C23</td><td>constexpr, #embed, typeof</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Why C still matters in 2026</h3>
+        <p class="explain-en">
+          C is the <strong>#2 language on the TIOBE index</strong>. It powers: <strong>Linux kernel</strong> (28M+ lines of C),
+          <strong>Windows kernel</strong>, <strong>Python interpreter</strong> (CPython is written in C), <strong>Git</strong>,
+          <strong>PostgreSQL</strong>, and virtually every embedded device (cars, medical devices, satellites).
+          Learning C means understanding how computers actually work.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>C aaj bhi TIOBE index pe #2 hai. Linux kernel, Windows kernel, Python interpreter, Git — sab C me likhe hain. Har embedded device (cars, medical, satellites) C use karta hai. C sikhna = computer samajhna.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>C is used in</th><th>Examples</th><th>Why not another language?</th></tr></thead>
+            <tbody>
+              <tr><td>Operating Systems</td><td>Linux, Windows, macOS</td><td>Direct hardware access needed</td></tr>
+              <tr><td>Embedded Systems</td><td>Arduino, ESP32, medical</td><td>Minimal memory/CPU resources</td></tr>
+              <tr><td>Databases</td><td>PostgreSQL, SQLite, Redis</td><td>Performance-critical</td></tr>
+              <tr><td>Language Runtimes</td><td>CPython, Ruby, PHP</td><td>Foundation layer speed</td></tr>
+              <tr><td>Compilers</td><td>GCC, Clang</td><td>Self-hosting requirement</td></tr>
+              <tr><td>Networking</td><td>nginx, curl</td><td>Low-latency needed</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>Career reality:</strong> Systems programmers, embedded engineers, and kernel developers earn 30–50% more than average. C mastery opens doors that other languages can't.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">C vs other languages</h3>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Feature</th><th>C</th><th>C++</th><th>Python</th><th>Java</th></tr></thead>
+            <tbody>
+              <tr><td>Speed</td><td>⚡ Fastest</td><td>⚡ Fast</td><td>🐢 Slow</td><td>🏃 Medium</td></tr>
+              <tr><td>Memory control</td><td>✅ Manual</td><td>✅ Manual + RAII</td><td>❌ Garbage collected</td><td>❌ Garbage collected</td></tr>
+              <tr><td>Level</td><td>Low-level</td><td>Mid-level</td><td>High-level</td><td>High-level</td></tr>
+              <tr><td>Use case</td><td>OS, embedded</td><td>Games, apps</td><td>Scripting, AI</td><td>Enterprise</td></tr>
+              <tr><td>Learning curve</td><td>Steep (pointers)</td><td>Very steep</td><td>Easy</td><td>Medium</td></tr>
+              <tr><td>Binary size</td><td>Tiny (KB)</td><td>Small (MB)</td><td>N/A (interpreted)</td><td>Medium (JVM)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 1.2 -->
+    <div class="module-section" id="m1-2">
+      <div class="module-header"><div class="module-number">1.2</div><h2 class="module-title">Setting Up the Environment — GCC, VS Code, and your first compile</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Installing GCC (the C compiler)</h3>
+        <p class="explain-en">
+          <strong>GCC (GNU Compiler Collection)</strong> is the most widely used C compiler. On Windows, install it via <strong>MinGW-w64</strong> or <strong>MSYS2</strong>.
+          On macOS, install <strong>Xcode Command Line Tools</strong>. On Linux, GCC is usually pre-installed. After installation, verify with <code>gcc --version</code>.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>GCC sabse popular C compiler hai. Windows pe MinGW-w64 ya MSYS2 se install karo. macOS pe Xcode Command Line Tools install karo. Linux pe pehle se installed hota hai. <code>gcc --version</code> se verify karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Terminal — Installation & verification</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># Windows (MSYS2 — recommended)</span>
+pacman -S mingw-w64-ucrt-x86_64-gcc
+
+<span class="comment"># macOS</span>
+xcode-select --install
+
+<span class="comment"># Ubuntu/Debian Linux</span>
+sudo apt update && sudo apt install build-essential
+
+<span class="comment"># Verify installation (all platforms)</span>
+gcc --version
+<span class="comment"># gcc (GCC) 13.2.0 ...</span></pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">VS Code setup for C</h3>
+        <p class="explain-en">
+          Install <strong>VS Code</strong>, then add the <strong>C/C++ extension by Microsoft</strong> (ms-vscode.cpptools).
+          This gives you IntelliSense, debugging, and error highlighting. Configure your <code>tasks.json</code> to compile with gcc on save.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>VS Code install karo, phir Microsoft ka C/C++ extension add karo. IntelliSense, debugging, aur error highlighting mil jayegi.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Tool</th><th>Purpose</th><th>Install command / action</th></tr></thead>
+            <tbody>
+              <tr><td><strong>GCC</strong></td><td>C compiler</td><td>See above per OS</td></tr>
+              <tr><td><strong>VS Code</strong></td><td>Code editor</td><td>code.visualstudio.com</td></tr>
+              <tr><td><strong>C/C++ Extension</strong></td><td>IntelliSense + debug</td><td>Extensions → search "C/C++"</td></tr>
+              <tr><td><strong>Code Runner</strong></td><td>Run with one click</td><td>Extensions → "Code Runner"</td></tr>
+              <tr><td><strong>Terminal</strong></td><td>Compile & run</td><td>Ctrl+` in VS Code</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Your first compile & run</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — hello.c</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="preprocessor">#include</span> <span class="string">&lt;stdio.h&gt;</span>
+
+<span class="type">int</span> <span class="function">main</span>(<span class="type">void</span>) {
+    <span class="function">printf</span>(<span class="string">"Hello, World!\n"</span>);
+    <span class="keyword">return</span> <span class="number">0</span>;
+}</pre></div>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Terminal — Compile & run</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># Compile</span>
+gcc hello.c -o hello
+
+<span class="comment"># Run</span>
+./hello
+<span class="comment"># Output: Hello, World!</span></pre></div>
+        </div>
+        <div class="callout callout-tip"><strong>Pro tip:</strong> Always compile with warnings enabled: <code>gcc -Wall -Wextra -Werror hello.c -o hello</code>. This catches bugs before they reach production.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 1.3 -->
+    <div class="module-section" id="m1-3">
+      <div class="module-header"><div class="module-number">1.3</div><h2 class="module-title">Structure of a C Program — #include, main(), return, comments</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Anatomy of a C program</h3>
+        <p class="explain-en">
+          Every C program has a specific structure: <strong>preprocessor directives</strong> at the top, then <strong>function declarations</strong>,
+          then the <strong>main() function</strong> which is the entry point. The <code>return 0;</code> tells the OS the program exited successfully.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Har C program ka ek structure hota hai: sabse upar preprocessor directives, phir function declarations, phir main() function jo entry point hai. <code>return 0;</code> OS ko bolta hai ki program successfully complete hua.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Complete program structure</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* ===== 1. Preprocessor Directives ===== */</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;stdio.h&gt;</span>    <span class="comment">/* Standard I/O library */</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;stdlib.h&gt;</span>   <span class="comment">/* Standard utility library */</span>
+<span class="preprocessor">#define</span> <span class="function">MAX_SIZE</span> <span class="number">100</span> <span class="comment">/* Constant macro */</span>
+
+<span class="comment">/* ===== 2. Function Declarations ===== */</span>
+<span class="type">void</span> <span class="function">greet</span>(<span class="type">void</span>);     <span class="comment">/* Forward declaration */</span>
+
+<span class="comment">/* ===== 3. Main Function (Entry Point) ===== */</span>
+<span class="type">int</span> <span class="function">main</span>(<span class="type">void</span>) {
+    <span class="function">greet</span>();
+    <span class="keyword">return</span> <span class="number">0</span>;          <span class="comment">/* 0 = success, non-zero = error */</span>
+}
+
+<span class="comment">/* ===== 4. Function Definitions ===== */</span>
+<span class="type">void</span> <span class="function">greet</span>(<span class="type">void</span>) {
+    <span class="function">printf</span>(<span class="string">"Welcome to C!\n"</span>);
+}</pre></div>
+        </div>
+        <div class="diagram-box">
+          <div class="diagram-title">📐 C Program Structure</div>
+          <div class="diagram-flow">
+            <div class="diagram-node primary">Preprocessor<br><small>#include, #define</small></div>
+            <div class="diagram-arrow">→</div>
+            <div class="diagram-node secondary">Declarations<br><small>Function prototypes</small></div>
+            <div class="diagram-arrow">→</div>
+            <div class="diagram-node success">main()<br><small>Entry point</small></div>
+            <div class="diagram-arrow">→</div>
+            <div class="diagram-node accent">Definitions<br><small>Function bodies</small></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Comments in C</h3>
+        <p class="explain-en">
+          Comments are ignored by the compiler. Use <code>/* */</code> for multi-line and <code>//</code> for single-line (C99+).
+          Good comments explain <strong>why</strong>, not <strong>what</strong>. The code should be clear enough to show what it does.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Comments compiler ignore karta hai. <code>/* */</code> multi-line ke liye aur <code>//</code> single-line ke liye (C99+). Achhe comments "why" explain karte hain, "what" nahi — code khud clear hona chahiye.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Comments</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Multi-line comment
+   Used for documentation blocks
+   and file headers */</span>
+
+<span class="comment">// Single-line comment (C99+)</span>
+
+<span class="comment">// ❌ BAD: tells you WHAT (obvious from code)</span>
+<span class="type">int</span> x = <span class="number">5</span>; <span class="comment">// set x to 5</span>
+
+<span class="comment">// ✅ GOOD: tells you WHY</span>
+<span class="type">int</span> retries = <span class="number">5</span>; <span class="comment">// Max retries before timeout (per RFC 2616)</span></pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">The main() function — entry point</h3>
+        <p class="explain-en">
+          <code>main()</code> is where execution begins. It must return <code>int</code>. Return <code>0</code> for success,
+          non-zero for error. There are two valid signatures:
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>main()</code> se execution shuru hota hai. Ye <code>int</code> return karta hai. 0 success hai, non-zero error hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Signature</th><th>When to use</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td><code>int main(void)</code></td><td>No command-line args</td><td>Simple programs</td></tr>
+              <tr><td><code>int main(int argc, char *argv[])</code></td><td>With command-line args</td><td>CLI tools</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>Never use:</strong> <code>void main()</code> — this is NOT valid C. It may compile on some systems but is undefined behavior per the C standard.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 1.4 -->
+    <div class="module-section" id="m1-4">
+      <div class="module-header"><div class="module-number">1.4</div><h2 class="module-title">Compilation Pipeline — Preprocessing, Compilation, Assembly, Linking</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">The 4 stages of C compilation</h3>
+        <p class="explain-en">
+          When you run <code>gcc hello.c -o hello</code>, four separate stages happen behind the scenes. Understanding this pipeline is
+          essential for debugging linker errors, understanding #include, and working with build systems like Make.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Jab <code>gcc hello.c -o hello</code> chalate ho, peeche 4 stages hoti hain. Ye pipeline samajhna zaroori hai — linker errors debug karne, #include samajhne, aur Make jaise build systems ke liye.</div>
+        <div class="diagram-box">
+          <div class="diagram-title">🔧 C Compilation Pipeline</div>
+          <div class="diagram-flow">
+            <div class="diagram-node primary">hello.c<br><small>Source code</small></div>
+            <div class="diagram-arrow">→ cpp →</div>
+            <div class="diagram-node secondary">hello.i<br><small>Preprocessed</small></div>
+            <div class="diagram-arrow">→ cc1 →</div>
+            <div class="diagram-node success">hello.s<br><small>Assembly</small></div>
+            <div class="diagram-arrow">→ as →</div>
+            <div class="diagram-node accent">hello.o<br><small>Object file</small></div>
+            <div class="diagram-arrow">→ ld →</div>
+            <div class="diagram-node primary">hello<br><small>Executable</small></div>
+          </div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Stage</th><th>Tool</th><th>Input → Output</th><th>What happens</th></tr></thead>
+            <tbody>
+              <tr><td><strong>1. Preprocessing</strong></td><td>cpp</td><td>.c → .i</td><td>#include expanded, #define replaced, comments removed</td></tr>
+              <tr><td><strong>2. Compilation</strong></td><td>cc1</td><td>.i → .s</td><td>C code → assembly language (human-readable)</td></tr>
+              <tr><td><strong>3. Assembly</strong></td><td>as</td><td>.s → .o</td><td>Assembly → machine code (binary object file)</td></tr>
+              <tr><td><strong>4. Linking</strong></td><td>ld</td><td>.o → executable</td><td>Object files + libraries → final binary</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Seeing each stage with gcc</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Terminal — Compilation stages</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># Stage 1: Preprocessing only (-E)</span>
+gcc -E hello.c -o hello.i
+
+<span class="comment"># Stage 2: Compile to assembly (-S)</span>
+gcc -S hello.c -o hello.s
+
+<span class="comment"># Stage 3: Assemble to object file (-c)</span>
+gcc -c hello.c -o hello.o
+
+<span class="comment"># Stage 4: Link to executable (default)</span>
+gcc hello.o -o hello
+
+<span class="comment"># All at once (most common)</span>
+gcc hello.c -o hello</pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Essential GCC flags</h3>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Flag</th><th>Purpose</th><th>When to use</th></tr></thead>
+            <tbody>
+              <tr><td><code>-o name</code></td><td>Set output filename</td><td>Always</td></tr>
+              <tr><td><code>-Wall</code></td><td>Enable all warnings</td><td>Always ✅</td></tr>
+              <tr><td><code>-Wextra</code></td><td>Extra warnings</td><td>Always ✅</td></tr>
+              <tr><td><code>-Werror</code></td><td>Treat warnings as errors</td><td>Production builds</td></tr>
+              <tr><td><code>-g</code></td><td>Debug info (for GDB)</td><td>During development</td></tr>
+              <tr><td><code>-O2</code></td><td>Optimization level 2</td><td>Release builds</td></tr>
+              <tr><td><code>-std=c17</code></td><td>Set C standard version</td><td>Modern projects</td></tr>
+              <tr><td><code>-lm</code></td><td>Link math library</td><td>When using math.h</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>Industry standard compile command:</strong> <code>gcc -Wall -Wextra -std=c17 -g main.c -o main</code> — use this for every project during development.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 1.5 -->
+    <div class="module-section" id="m1-5">
+      <div class="module-header"><div class="module-number">1.5</div><h2 class="module-title">Data Types & Variables — int, char, float, double, void, sizeof</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Primitive data types in C</h3>
+        <p class="explain-en">
+          C is a <strong>statically typed</strong> language — every variable must have a type declared before use. The type determines
+          how much <strong>memory</strong> is allocated and how the <strong>bits are interpreted</strong>. Choosing the right type affects both memory efficiency and correctness.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>C statically typed hai — har variable ka type pehle se declare karna padta hai. Type decide karta hai kitni memory lagegi aur bits ka matlab kya hoga.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Type</th><th>Size (typical)</th><th>Range</th><th>Use case</th></tr></thead>
+            <tbody>
+              <tr><td><code>char</code></td><td>1 byte</td><td>-128 to 127</td><td>Characters, small numbers</td></tr>
+              <tr><td><code>short</code></td><td>2 bytes</td><td>-32,768 to 32,767</td><td>Small integers</td></tr>
+              <tr><td><code>int</code></td><td>4 bytes</td><td>-2.1B to 2.1B</td><td>General integers ✅</td></tr>
+              <tr><td><code>long</code></td><td>4/8 bytes</td><td>Platform-dependent</td><td>Large integers</td></tr>
+              <tr><td><code>long long</code></td><td>8 bytes</td><td>±9.2 × 10¹⁸</td><td>Very large integers</td></tr>
+              <tr><td><code>float</code></td><td>4 bytes</td><td>±3.4 × 10³⁸ (6 digits)</td><td>Decimal (low precision)</td></tr>
+              <tr><td><code>double</code></td><td>8 bytes</td><td>±1.7 × 10³⁰⁸ (15 digits)</td><td>Decimal ✅ (standard)</td></tr>
+              <tr><td><code>void</code></td><td>0 bytes</td><td>N/A</td><td>No value / generic pointer</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Variable declaration & initialization</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Variables</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Declaration (allocates memory, value is garbage) */</span>
+<span class="type">int</span> age;
+<span class="type">char</span> grade;
+
+<span class="comment">/* Initialization (declaration + value) */</span>
+<span class="type">int</span> age = <span class="number">21</span>;
+<span class="type">char</span> grade = <span class="string">'A'</span>;
+<span class="type">float</span> gpa = <span class="number">3.85</span><span class="keyword">f</span>;      <span class="comment">/* 'f' suffix for float */</span>
+<span class="type">double</span> pi = <span class="number">3.14159265358979</span>;
+
+<span class="comment">/* Multiple declarations */</span>
+<span class="type">int</span> x = <span class="number">1</span>, y = <span class="number">2</span>, z = <span class="number">3</span>;
+
+<span class="comment">/* Type modifiers */</span>
+<span class="type">unsigned int</span> count = <span class="number">0</span>;     <span class="comment">/* Only positive: 0 to 4.2B */</span>
+<span class="type">signed int</span> temp = -<span class="number">15</span>;      <span class="comment">/* Positive & negative (default) */</span>
+<span class="type">long long int</span> big = <span class="number">9000000000LL</span>;</pre></div>
+        </div>
+        <div class="callout callout-warning"><strong>Common bug:</strong> Uninitialized variables contain <strong>garbage values</strong> (whatever was in that memory). Always initialize variables when declaring them.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">sizeof operator</h3>
+        <p class="explain-en">
+          <code>sizeof</code> returns the size in bytes of a type or variable. It's evaluated at <strong>compile time</strong>, not runtime — so it has zero performance cost.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>sizeof</code> type ya variable ka size bytes me batata hai. Ye compile time pe evaluate hota hai — runtime pe koi cost nahi.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — sizeof</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="preprocessor">#include</span> <span class="string">&lt;stdio.h&gt;</span>
+
+<span class="type">int</span> <span class="function">main</span>(<span class="type">void</span>) {
+    <span class="function">printf</span>(<span class="string">"char:      %zu bytes\n"</span>, <span class="keyword">sizeof</span>(<span class="type">char</span>));
+    <span class="function">printf</span>(<span class="string">"int:       %zu bytes\n"</span>, <span class="keyword">sizeof</span>(<span class="type">int</span>));
+    <span class="function">printf</span>(<span class="string">"float:     %zu bytes\n"</span>, <span class="keyword">sizeof</span>(<span class="type">float</span>));
+    <span class="function">printf</span>(<span class="string">"double:    %zu bytes\n"</span>, <span class="keyword">sizeof</span>(<span class="type">double</span>));
+    <span class="function">printf</span>(<span class="string">"long long: %zu bytes\n"</span>, <span class="keyword">sizeof</span>(<span class="type">long long</span>));
+    <span class="function">printf</span>(<span class="string">"pointer:   %zu bytes\n"</span>, <span class="keyword">sizeof</span>(<span class="type">int</span> *));
+    <span class="keyword">return</span> <span class="number">0</span>;
+}</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 1.6 -->
+    <div class="module-section" id="m1-6">
+      <div class="module-header"><div class="module-number">1.6</div><h2 class="module-title">Constants & Literals — const, #define, escape sequences</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Constants — values that never change</h3>
+        <p class="explain-en">
+          Constants prevent accidental modification. Use <code>const</code> for type-safe constants and <code>#define</code> for compile-time macros.
+          <code>const</code> is preferred in modern C because the compiler can type-check it.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Constants woh values hain jo kabhi change nahi hoti. <code>const</code> type-safe hai aur <code>#define</code> compile-time macro hai. Modern C me <code>const</code> preferred hai kyunki compiler type-check kar sakta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Constants</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Method 1: const (preferred — type-safe) */</span>
+<span class="keyword">const</span> <span class="type">int</span> MAX_STUDENTS = <span class="number">100</span>;
+<span class="keyword">const</span> <span class="type">double</span> PI = <span class="number">3.14159265358979</span>;
+<span class="keyword">const</span> <span class="type">char</span> NEWLINE = <span class="string">'\n'</span>;
+
+<span class="comment">/* Method 2: #define (preprocessor macro) */</span>
+<span class="preprocessor">#define</span> <span class="function">MAX_BUFFER</span> <span class="number">1024</span>
+<span class="preprocessor">#define</span> <span class="function">VERSION</span> <span class="string">"1.0.0"</span>
+<span class="preprocessor">#define</span> <span class="function">SQUARE</span>(x) ((x) * (x))
+
+<span class="comment">/* Method 3: enum (for related integer constants) */</span>
+<span class="keyword">enum</span> { RED = <span class="number">0</span>, GREEN = <span class="number">1</span>, BLUE = <span class="number">2</span> };</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Method</th><th>Type-safe?</th><th>Scope</th><th>Best for</th></tr></thead>
+            <tbody>
+              <tr><td><code>const</code></td><td>✅ Yes</td><td>Block scope</td><td>Local/file constants</td></tr>
+              <tr><td><code>#define</code></td><td>❌ No (text replace)</td><td>Global</td><td>Macros, config values</td></tr>
+              <tr><td><code>enum</code></td><td>✅ Yes (int)</td><td>Block scope</td><td>Related integer sets</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Escape sequences</h3>
+        <p class="explain-en">
+          Escape sequences represent special characters inside strings and character literals. They start with a backslash <code>\</code>.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Escape sequences special characters ko represent karte hain strings ke andar. Ye backslash <code>\</code> se shuru hote hain.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Escape</th><th>Meaning</th><th>Example output</th></tr></thead>
+            <tbody>
+              <tr><td><code>\n</code></td><td>Newline</td><td>Line break</td></tr>
+              <tr><td><code>\t</code></td><td>Tab</td><td>Horizontal tab</td></tr>
+              <tr><td><code>\\</code></td><td>Backslash</td><td>\</td></tr>
+              <tr><td><code>\"</code></td><td>Double quote</td><td>"</td></tr>
+              <tr><td><code>\'</code></td><td>Single quote</td><td>'</td></tr>
+              <tr><td><code>\0</code></td><td>Null character</td><td>String terminator</td></tr>
+              <tr><td><code>\r</code></td><td>Carriage return</td><td>Cursor to line start</td></tr>
+              <tr><td><code>\a</code></td><td>Alert (bell)</td><td>System beep</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Critical:</strong> <code>\0</code> (null character) is how C knows where a string ends. Every string in C automatically has <code>\0</code> appended. Understanding this prevents buffer overflow bugs.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 1.7 -->
+    <div class="module-section" id="m1-7">
+      <div class="module-header"><div class="module-number">1.7</div><h2 class="module-title">Input & Output — printf format specifiers, scanf, getchar, fgets</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">printf — formatted output</h3>
+        <p class="explain-en">
+          <code>printf</code> writes formatted text to <strong>stdout</strong> (the terminal). It uses <strong>format specifiers</strong>
+          starting with <code>%</code> to insert variable values. Understanding format specifiers is essential — wrong ones cause undefined behavior.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>printf</code> formatted text terminal pe print karta hai. <code>%</code> se shuru hone wale format specifiers se variable values insert hoti hain. Galat specifier = undefined behavior.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Specifier</th><th>Type</th><th>Example</th><th>Output</th></tr></thead>
+            <tbody>
+              <tr><td><code>%d</code></td><td>int (signed)</td><td><code>printf("%d", 42);</code></td><td>42</td></tr>
+              <tr><td><code>%u</code></td><td>unsigned int</td><td><code>printf("%u", 42);</code></td><td>42</td></tr>
+              <tr><td><code>%f</code></td><td>float/double</td><td><code>printf("%f", 3.14);</code></td><td>3.140000</td></tr>
+              <tr><td><code>%.2f</code></td><td>2 decimal places</td><td><code>printf("%.2f", 3.14);</code></td><td>3.14</td></tr>
+              <tr><td><code>%c</code></td><td>char</td><td><code>printf("%c", 'A');</code></td><td>A</td></tr>
+              <tr><td><code>%s</code></td><td>string</td><td><code>printf("%s", "Hi");</code></td><td>Hi</td></tr>
+              <tr><td><code>%p</code></td><td>pointer address</td><td><code>printf("%p", &x);</code></td><td>0x7ffd...</td></tr>
+              <tr><td><code>%x</code></td><td>hex (lowercase)</td><td><code>printf("%x", 255);</code></td><td>ff</td></tr>
+              <tr><td><code>%o</code></td><td>octal</td><td><code>printf("%o", 8);</code></td><td>10</td></tr>
+              <tr><td><code>%ld</code></td><td>long</td><td><code>printf("%ld", 123L);</code></td><td>123</td></tr>
+              <tr><td><code>%lld</code></td><td>long long</td><td><code>printf("%lld", 123LL);</code></td><td>123</td></tr>
+              <tr><td><code>%zu</code></td><td>size_t</td><td><code>printf("%zu", sizeof(int));</code></td><td>4</td></tr>
+              <tr><td><code>%%</code></td><td>literal %</td><td><code>printf("100%%");</code></td><td>100%</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">scanf — formatted input</h3>
+        <p class="explain-en">
+          <code>scanf</code> reads formatted input from <strong>stdin</strong>. It requires the <strong>address-of operator</strong> (<code>&</code>)
+          for each variable. Be careful — <code>scanf</code> with <code>%s</code> is <strong>unsafe</strong> (no bounds checking).
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>scanf</code> keyboard se input leta hai. Har variable ke saath <code>&</code> (address-of) lagana padta hai. <code>%s</code> ke saath <code>scanf</code> unsafe hai — bounds check nahi karta.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — scanf examples</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="preprocessor">#include</span> <span class="string">&lt;stdio.h&gt;</span>
+
+<span class="type">int</span> <span class="function">main</span>(<span class="type">void</span>) {
+    <span class="type">int</span> age;
+    <span class="type">char</span> name[<span class="number">50</span>];
+    <span class="type">double</span> gpa;
+
+    <span class="comment">/* Reading an integer */</span>
+    <span class="function">printf</span>(<span class="string">"Enter age: "</span>);
+    <span class="function">scanf</span>(<span class="string">"%d"</span>, &amp;age);    <span class="comment">/* &amp; is REQUIRED! */</span>
+
+    <span class="comment">/* Reading a float */</span>
+    <span class="function">printf</span>(<span class="string">"Enter GPA: "</span>);
+    <span class="function">scanf</span>(<span class="string">"%lf"</span>, &amp;gpa);   <span class="comment">/* %lf for double! */</span>
+
+    <span class="comment">/* ❌ UNSAFE: scanf with %s (no limit) */</span>
+    <span class="function">scanf</span>(<span class="string">"%s"</span>, name);     <span class="comment">/* Buffer overflow risk! */</span>
+
+    <span class="comment">/* ✅ SAFE: fgets (preferred for strings) */</span>
+    <span class="function">printf</span>(<span class="string">"Enter name: "</span>);
+    <span class="function">fgets</span>(name, <span class="number">50</span>, stdin); <span class="comment">/* Max 49 chars + \0 */</span>
+
+    <span class="function">printf</span>(<span class="string">"Hello %s, age %d, GPA %.2f\n"</span>, name, age, gpa);
+    <span class="keyword">return</span> <span class="number">0</span>;
+}</pre></div>
+        </div>
+        <div class="callout callout-warning"><strong>Security rule:</strong> NEVER use <code>scanf("%s", ...)</code> or <code>gets()</code> for string input. They have no bounds checking and are the #1 cause of buffer overflow vulnerabilities. Use <code>fgets()</code> instead.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Character I/O — getchar & putchar</h3>
+        <p class="explain-en">
+          For single characters, <code>getchar()</code> reads one character and <code>putchar()</code> writes one. These are faster than printf/scanf for character-level processing.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Single character ke liye <code>getchar()</code> read karta hai aur <code>putchar()</code> write karta hai. Ye printf/scanf se fast hain character-level processing ke liye.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Character I/O</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="preprocessor">#include</span> <span class="string">&lt;stdio.h&gt;</span>
+
+<span class="type">int</span> <span class="function">main</span>(<span class="type">void</span>) {
+    <span class="type">int</span> ch;  <span class="comment">/* int, not char! (to detect EOF) */</span>
+
+    <span class="function">printf</span>(<span class="string">"Type a character: "</span>);
+    ch = <span class="function">getchar</span>();
+
+    <span class="function">printf</span>(<span class="string">"You typed: "</span>);
+    <span class="function">putchar</span>(ch);
+    <span class="function">putchar</span>(<span class="string">'\n'</span>);
+
+    <span class="keyword">return</span> <span class="number">0</span>;
+}</pre></div>
+        </div>
+        <div class="callout callout-tip"><strong>Why int, not char?</strong> <code>getchar()</code> returns <code>int</code> because it needs to return <code>EOF</code> (-1) when input ends. If you use <code>char</code>, you can't distinguish EOF from valid data on some systems.</div>
+      </div>
+    </div>
+
+    <div class="practice-box">
+      <div class="practice-title">✏️ Practice Exercises — Part 1</div>
+      <ol>
+        <li>Install GCC, write "Hello, World!", compile with <code>gcc -Wall</code>, and run it. Verify output.</li>
+        <li>Write a program that prints the sizeof every primitive data type (char, short, int, long, float, double, pointer).</li>
+        <li>Create a program with both <code>const</code> and <code>#define</code> constants. Try modifying the const — what error do you get?</li>
+        <li>Write a calculator that reads two numbers and an operator (+, -, *, /) using scanf, performs the operation, and prints the result with 2 decimal places.</li>
+        <li>Create a program that reads a full name using <code>fgets()</code> and prints a personalized greeting. Handle the trailing newline.</li>
+        <li>Use <code>gcc -E</code> to see preprocessed output, <code>gcc -S</code> for assembly. Compare the assembly of an optimized (-O2) vs unoptimized build.</li>
+      </ol>
+    </div>
+
+    <div class="handbook-nav">
+      <a href="syllabus.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Master Syllabus</div></div></a>
+      <a href="part2.html" class="nav-btn next"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Part 2: Operators & Control Flow →</div></div><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+
+  </div>
+
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
+  <script src="../../../js/main.js"></script>
+  <script>
+    (() => {
+      document.querySelectorAll('.code-block').forEach((block) => { const pre = block.querySelector('.code-body pre'), header = block.querySelector('.code-header'); if (!pre || !header) return; let actions = header.querySelector('.code-actions'); if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); } const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'code-copy-btn'; btn.textContent = 'Copy'; btn.addEventListener('click', async () => { try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; } catch { btn.textContent = 'Failed'; } finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); } }); actions.prepend(btn); });
+      const fill = document.querySelector('.hb-progress-fill'), label = document.querySelector('.hb-progress-label');
+      if (fill && label) { const update = () => { const h = document.documentElement, d = (h.scrollHeight - h.clientHeight) || 1, p = Math.max(0, Math.min(1, h.scrollTop / d)); fill.style.width = (p*100).toFixed(0)+'%'; label.textContent = (p*100).toFixed(0)+'%'; }; document.addEventListener('scroll', update, { passive: true }); update(); }
+    })();
+  </script>
+</body>
+</html>

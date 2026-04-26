@@ -90,7 +90,7 @@ function initHandbookGlobalIndex() {
   if (!page) return;
 
   const path = window.location.pathname.replace(/\\/g, '/');
-  const partMatch = path.match(/\/content\/handbooks\/(python|html-css)\/part([1-8])\.html$/);
+  const partMatch = path.match(/\/content\/handbooks\/(python|html-css|c-programming)\/part([1-8])\.html$/);
   if (!partMatch) return;
 
   const handbookSlug = partMatch[1];
@@ -129,13 +129,27 @@ function initHandbookGlobalIndex() {
       6: 'Visual Effects & Animations',
       7: 'Accessibility, SEO & Performance',
       8: 'Architecture & Industry Practices'
+    },
+    'c-programming': {
+      1: 'C Foundations',
+      2: 'Operators & Control Flow',
+      3: 'Functions & Modular Programming',
+      4: 'Arrays, Strings & Pointers',
+      5: 'Structures, Unions & Advanced Types',
+      6: 'Dynamic Memory & File I/O',
+      7: 'Data Structures in C',
+      8: 'Systems Programming & Industry Practices'
     }
   };
   const partTitles = partTitlesByHandbook[handbookSlug];
 
   const indexLink = document.createElement('a');
   indexLink.href = 'index.html';
-  indexLink.textContent = handbookSlug === 'python' ? 'Python Index' : 'HTML/CSS Index';
+  indexLink.textContent = handbookSlug === 'python'
+    ? 'Python Index'
+    : handbookSlug === 'html-css'
+      ? 'HTML/CSS Index'
+      : 'C Programming Index';
   links.appendChild(indexLink);
 
   for (let i = 1; i <= 8; i++) {

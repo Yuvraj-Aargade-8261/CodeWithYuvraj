@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Part 8: Systems Programming & Industry Practices — C Programming Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 8 of C Programming Handbook: systems programming workflows, preprocessor macros, Makefiles, GDB, multithreading, advanced C, and industry practices.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/handbook.css">
+</head>
+<body class="handbook-wrapper">
+  <nav class="navbar"><div class="container"><a href="../../../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../../../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
+
+  <div class="handbook-page">
+    <div class="hb-topbar">
+      <div class="hb-topbar-inner">
+        <div class="hb-breadcrumbs">
+          <a href="index.html">C Programming Handbook</a>
+          <span class="hb-muted">/</span><span>Part 8</span><span class="hb-muted">·</span>
+          <a href="#m8-1">8.1</a> <a href="#m8-2">8.2</a> <a href="#m8-3">8.3</a> <a href="#m8-4">8.4</a> <a href="#m8-5">8.5</a> <a href="#m8-6">8.6</a> <a href="#m8-7">8.7</a>
+        </div>
+        <div class="hb-progress" aria-label="Reading progress">
+          <div class="hb-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="hb-progress-fill"></div></div>
+          <div class="hb-progress-label">0%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chapter-header" data-chapter-num="08">
+      <div class="chapter-part-label">📖 Part 8 — Systems Programming & Industry Practices</div>
+      <h1 class="chapter-title">Engineer Like a <span class="gradient-text">Professional</span></h1>
+      <p class="chapter-subtitle">The final piece — master the tools and techniques that turn C students into production-ready engineers.</p>
+      <div class="chapter-meta"><span>📄 Modules 8.1 – 8.7</span><span>⏱️ 100–150 min read</span><span>💻 50+ Examples</span></div>
+    </div>
+
+    <div class="callout callout-tip"><strong>How to study Part 8:</strong> These topics tie everything together. Build a real multi-file project with a Makefile. Use <code>-Wall -Wextra -Werror</code> flags. Write portable code. This is what employers look for.</div>
+
+    <div class="hb-mini-toc">
+      <div class="hb-mini-title">📍 Part 8 Modules</div>
+      <div class="hb-mini-links">
+        <a href="#m8-1">8.1 Preprocessor</a>
+        <a href="#m8-2">8.2 Macros</a>
+        <a href="#m8-3">8.3 Conditional Compilation</a>
+        <a href="#m8-4">8.4 Makefiles</a>
+        <a href="#m8-5">8.5 Multithreading</a>
+        <a href="#m8-6">8.6 Advanced Keywords</a>
+        <a href="#m8-7">8.7 C Standards</a>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">🚀 Advanced Lens — Part 8</div>
+      <p class="explain-en">The preprocessor, build systems, and advanced keywords are what separate toy programs from production software. Understanding conditional compilation enables cross-platform code. Makefiles automate builds. Multithreading unlocks modern hardware. These are essential skills for any systems programmer.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Preprocessor, build systems, aur advanced keywords toy programs ko production software se alag karte hain. Conditional compilation se cross-platform code banta hai. Makefiles build workflow automate karte hain. Multithreading modern hardware unlock karta hai.</div>
+    </div>
+
+    <!-- MODULE 8.1 -->
+    <div class="module-section" id="m8-1">
+      <div class="module-header"><div class="module-number">8.1</div><h2 class="module-title">Preprocessor Directives — #include, #define, #pragma, stringification</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">What is the preprocessor?</h3>
+        <p class="explain-en">The <strong>preprocessor</strong> runs <em>before</em> compilation. It processes lines starting with <code>#</code>: includes files, expands macros, and handles conditional compilation. The output is pure C code that the compiler sees. Think of it as a text substitution engine.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Preprocessor compilation se <em>pehle</em> run hota hai. <code>#</code> se shuru hone wali lines process karta hai: files include karta hai, macros expand karta hai, conditional compilation handle karta hai. Output pure C code hota hai jo compiler ko milta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Preprocessor directives</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* #include — copy file contents here */</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;stdio.h&gt;</span>     <span class="comment">/* System headers: /usr/include/ */</span>
+<span class="preprocessor">#include</span> <span class="string">"myheader.h"</span>  <span class="comment">/* Local headers: current dir first */</span>
+
+<span class="comment">/* #define — simple constants */</span>
+<span class="preprocessor">#define</span> PI <span class="number">3.14159265</span>
+<span class="preprocessor">#define</span> MAX_SIZE <span class="number">1024</span>
+<span class="preprocessor">#define</span> VERSION <span class="string">"2.0.1"</span>
+
+<span class="comment">/* #undef — remove a definition */</span>
+<span class="preprocessor">#undef</span> PI
+
+<span class="comment">/* # (stringification) — turn argument into string */</span>
+<span class="preprocessor">#define</span> <span class="function">STRINGIFY</span>(x)  #x
+<span class="function">printf</span>(<span class="string">"%s\n"</span>, <span class="function">STRINGIFY</span>(hello));  <span class="comment">/* "hello" */</span>
+
+<span class="comment">/* ## (token pasting) — join tokens */</span>
+<span class="preprocessor">#define</span> <span class="function">CONCAT</span>(a, b)  a##b
+<span class="type">int</span> <span class="function">CONCAT</span>(my, Var) = <span class="number">42</span>;  <span class="comment">/* int myVar = 42; */</span>
+
+<span class="comment">/* Predefined macros */</span>
+<span class="function">printf</span>(<span class="string">"File: %s\n"</span>, __FILE__);
+<span class="function">printf</span>(<span class="string">"Line: %d\n"</span>, __LINE__);
+<span class="function">printf</span>(<span class="string">"Date: %s\n"</span>, __DATE__);
+<span class="function">printf</span>(<span class="string">"Time: %s\n"</span>, __TIME__);
+<span class="function">printf</span>(<span class="string">"C std: %ld\n"</span>, __STDC_VERSION__);  <span class="comment">/* 201710L = C17 */</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Directive</th><th>Purpose</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td><code>#include</code></td><td>Copy file contents</td><td><code>#include &lt;stdio.h&gt;</code></td></tr>
+              <tr><td><code>#define</code></td><td>Define constant/macro</td><td><code>#define MAX 100</code></td></tr>
+              <tr><td><code>#undef</code></td><td>Remove definition</td><td><code>#undef MAX</code></td></tr>
+              <tr><td><code>#pragma</code></td><td>Compiler-specific hints</td><td><code>#pragma once</code></td></tr>
+              <tr><td><code>#error</code></td><td>Stop compilation</td><td><code>#error "Unsupported platform"</code></td></tr>
+              <tr><td><code>#warning</code></td><td>Emit warning (GCC)</td><td><code>#warning "Deprecated API"</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 8.2 -->
+    <div class="module-section" id="m8-2">
+      <div class="module-header"><div class="module-number">8.2</div><h2 class="module-title">Macros — Function-like macros, variadic, do-while(0), pitfalls</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Function-like macros</h3>
+        <p class="explain-en">Macros can take arguments like functions but are expanded <strong>at compile time</strong> (zero runtime cost). However, they have dangerous pitfalls: no type checking, multiple evaluation of arguments, and operator precedence issues. Always wrap in parentheses!</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Macros functions jaise arguments le sakte hain par <strong>compile time</strong> pe expand hote hain (zero runtime cost). Par dangerous pitfalls hain: type checking nahi, arguments multiple baar evaluate, precedence issues. Hamesha parentheses me wrap karo!</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Macros: good vs dangerous</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* ❌ Dangerous — no parentheses */</span>
+<span class="preprocessor">#define</span> <span class="function">SQUARE_BAD</span>(x)  x * x
+<span class="function">SQUARE_BAD</span>(<span class="number">3</span> + <span class="number">1</span>)  <span class="comment">/* Expands to: 3 + 1 * 3 + 1 = 7 (not 16!) */</span>
+
+<span class="comment">/* ✅ Safe — wrap everything in parentheses */</span>
+<span class="preprocessor">#define</span> <span class="function">SQUARE</span>(x)  ((x) * (x))
+<span class="function">SQUARE</span>(<span class="number">3</span> + <span class="number">1</span>)  <span class="comment">/* Expands to: ((3 + 1) * (3 + 1)) = 16 ✅ */</span>
+
+<span class="comment">/* ❌ Double evaluation problem */</span>
+<span class="preprocessor">#define</span> <span class="function">MAX</span>(a, b)  ((a) &gt; (b) ? (a) : (b))
+<span class="function">MAX</span>(i++, j++)  <span class="comment">/* i or j incremented TWICE! */</span>
+
+<span class="comment">/* ✅ Use inline functions instead (C99+) */</span>
+<span class="keyword">static inline</span> <span class="type">int</span> <span class="function">max_safe</span>(<span class="type">int</span> a, <span class="type">int</span> b) {
+    <span class="keyword">return</span> a &gt; b ? a : b;
+}
+
+<span class="comment">/* Multi-statement macro — use do-while(0) */</span>
+<span class="preprocessor">#define</span> <span class="function">LOG</span>(msg) <span class="keyword">do</span> { \
+    <span class="function">fprintf</span>(stderr, <span class="string">"[%s:%d] %s\n"</span>, __FILE__, __LINE__, msg); \
+} <span class="keyword">while</span>(<span class="number">0</span>)
+
+<span class="comment">/* Variadic macro (C99+) */</span>
+<span class="preprocessor">#define</span> <span class="function">DEBUG</span>(fmt, ...) \
+    <span class="function">fprintf</span>(stderr, <span class="string">"[DEBUG] "</span> fmt <span class="string">"\n"</span>, ##__VA_ARGS__)
+
+<span class="function">DEBUG</span>(<span class="string">"x = %d, y = %d"</span>, x, y);</pre></div>
+        </div>
+        <div class="callout callout-warning"><strong>Rule of thumb:</strong> Use <code>#define</code> for constants and conditional compilation. Use <code>static inline</code> functions for everything that looks like a function. Macros are powerful but dangerous.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 8.3 -->
+    <div class="module-section" id="m8-3">
+      <div class="module-header"><div class="module-number">8.3</div><h2 class="module-title">Conditional Compilation — #ifdef, #if, platform detection, feature flags</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Conditional compilation</h3>
+        <p class="explain-en">Conditional compilation lets you include/exclude code based on <strong>compile-time conditions</strong>. This is essential for: cross-platform code, debug/release builds, feature flags, and header include guards.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Conditional compilation se compile-time conditions ke basis pe code include/exclude kar sakte ho. Cross-platform code, debug/release builds, feature flags, aur header include guards ke liye zaroori hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Conditional compilation</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Header include guard (classic) */</span>
+<span class="preprocessor">#ifndef</span> MYHEADER_H
+<span class="preprocessor">#define</span> MYHEADER_H
+<span class="comment">/* ... header contents ... */</span>
+<span class="preprocessor">#endif</span>
+
+<span class="comment">/* Modern alternative (non-standard but widely supported) */</span>
+<span class="preprocessor">#pragma once</span>
+
+<span class="comment">/* Debug/Release toggle */</span>
+<span class="preprocessor">#ifdef</span> DEBUG
+    <span class="preprocessor">#define</span> <span class="function">LOG</span>(msg) <span class="function">fprintf</span>(stderr, <span class="string">"[DBG] %s\n"</span>, msg)
+<span class="preprocessor">#else</span>
+    <span class="preprocessor">#define</span> <span class="function">LOG</span>(msg)  <span class="comment">/* Expands to nothing in release */</span>
+<span class="preprocessor">#endif</span>
+<span class="comment">/* Compile: gcc -DDEBUG program.c  (enables debug) */</span>
+
+<span class="comment">/* Platform detection */</span>
+<span class="preprocessor">#if</span> defined(_WIN32)
+    <span class="preprocessor">#include</span> <span class="string">&lt;windows.h&gt;</span>
+    <span class="preprocessor">#define</span> CLEAR <span class="string">"cls"</span>
+<span class="preprocessor">#elif</span> defined(__linux__)
+    <span class="preprocessor">#include</span> <span class="string">&lt;unistd.h&gt;</span>
+    <span class="preprocessor">#define</span> CLEAR <span class="string">"clear"</span>
+<span class="preprocessor">#elif</span> defined(__APPLE__)
+    <span class="preprocessor">#include</span> <span class="string">&lt;unistd.h&gt;</span>
+    <span class="preprocessor">#define</span> CLEAR <span class="string">"clear"</span>
+<span class="preprocessor">#else</span>
+    <span class="preprocessor">#error</span> <span class="string">"Unsupported platform!"</span>
+<span class="preprocessor">#endif</span>
+
+<span class="comment">/* Feature flags */</span>
+<span class="preprocessor">#if</span> __STDC_VERSION__ >= <span class="number">201112L</span>
+    <span class="comment">/* C11 features available */</span>
+    <span class="preprocessor">#define</span> HAS_GENERIC <span class="number">1</span>
+<span class="preprocessor">#endif</span></pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 8.4 -->
+    <div class="module-section" id="m8-4">
+      <div class="module-header"><div class="module-number">8.4</div><h2 class="module-title">Makefiles & Build Systems — Automation, dependencies, multi-file projects</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Why Makefiles?</h3>
+        <p class="explain-en">A <strong>Makefile</strong> automates compilation. Instead of typing long <code>gcc</code> commands, you type <code>make</code>. It tracks file dependencies and only recompiles what changed — critical for large projects with hundreds of files.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Makefile compilation automate karta hai. Lambe <code>gcc</code> commands ki jagah sirf <code>make</code> likhte ho. Ye file dependencies track karta hai aur sirf changed files recompile karta hai — large projects ke liye zaroori.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Makefile — Production-quality</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># Compiler & flags</span>
+CC      = gcc
+CFLAGS  = -Wall -Wextra -Werror -std=c17 -O2
+LDFLAGS =
+TARGET  = myapp
+SRCS    = main.c utils.c parser.c
+OBJS    = $(SRCS:.c=.o)
+
+<span class="comment"># Default target</span>
+all: $(TARGET)
+
+<span class="comment"># Link object files into executable</span>
+$(TARGET): $(OBJS)
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+
+<span class="comment"># Compile .c → .o (pattern rule)</span>
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+<span class="comment"># Clean build artifacts</span>
+clean:
+	rm -f $(OBJS) $(TARGET)
+
+<span class="comment"># Debug build</span>
+debug: CFLAGS += -g -DDEBUG -O0
+debug: clean all
+
+<span class="comment"># Dependencies (auto-generated with gcc -MM)</span>
+main.o: main.c utils.h parser.h
+utils.o: utils.c utils.h
+parser.o: parser.c parser.h utils.h
+
+.PHONY: all clean debug</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Variable</th><th>Meaning</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td><code>$@</code></td><td>Target name</td><td>myapp</td></tr>
+              <tr><td><code>$^</code></td><td>All prerequisites</td><td>main.o utils.o parser.o</td></tr>
+              <tr><td><code>$<</code></td><td>First prerequisite</td><td>main.c</td></tr>
+              <tr><td><code>$*</code></td><td>Stem of pattern</td><td>main (from %.o)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Essential GCC flags:</strong> <code>-Wall</code> (all warnings), <code>-Wextra</code> (extra warnings), <code>-Werror</code> (warnings = errors), <code>-g</code> (debug info), <code>-O2</code> (optimize), <code>-fsanitize=address</code> (memory bugs).</div>
+      </div>
+    </div>
+
+    <!-- MODULE 8.5 -->
+    <div class="module-section" id="m8-5">
+      <div class="module-header"><div class="module-number">8.5</div><h2 class="module-title">Multithreading — pthreads, mutex, race conditions, thread safety</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">POSIX threads (pthreads)</h3>
+        <p class="explain-en">Multithreading lets multiple threads execute concurrently within one process, sharing the same memory space. <strong>Race conditions</strong> occur when threads access shared data without synchronization. Use <strong>mutexes</strong> to protect critical sections.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Multithreading me multiple threads ek process me concurrently execute hote hain, same memory share karte hain. Race conditions tab hoti hain jab threads shared data bina synchronization ke access karte hain. Critical sections protect karne ke liye mutex use karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — pthreads example</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="preprocessor">#include</span> <span class="string">&lt;pthread.h&gt;</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;stdio.h&gt;</span>
+
+<span class="type">int</span> counter = <span class="number">0</span>;
+pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
+
+<span class="type">void</span> *<span class="function">increment</span>(<span class="type">void</span> *arg) {
+    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100000</span>; i++) {
+        <span class="function">pthread_mutex_lock</span>(&amp;lock);   <span class="comment">/* Enter critical section */</span>
+        counter++;
+        <span class="function">pthread_mutex_unlock</span>(&amp;lock); <span class="comment">/* Exit critical section */</span>
+    }
+    <span class="keyword">return</span> <span class="number">NULL</span>;
+}
+
+<span class="type">int</span> <span class="function">main</span>(<span class="type">void</span>) {
+    pthread_t t1, t2;
+    <span class="function">pthread_create</span>(&amp;t1, <span class="number">NULL</span>, increment, <span class="number">NULL</span>);
+    <span class="function">pthread_create</span>(&amp;t2, <span class="number">NULL</span>, increment, <span class="number">NULL</span>);
+    <span class="function">pthread_join</span>(t1, <span class="number">NULL</span>);  <span class="comment">/* Wait for t1 */</span>
+    <span class="function">pthread_join</span>(t2, <span class="number">NULL</span>);  <span class="comment">/* Wait for t2 */</span>
+    <span class="function">printf</span>(<span class="string">"Counter: %d\n"</span>, counter);  <span class="comment">/* 200000 ✅ */</span>
+    <span class="function">pthread_mutex_destroy</span>(&amp;lock);
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+<span class="comment">/* Compile: gcc -pthread program.c -o program */</span></pre></div>
+        </div>
+        <div class="callout callout-warning"><strong>Without mutex:</strong> counter might be 150000, 180000, or any random value. Two threads reading/writing <code>counter</code> simultaneously is a <strong>data race</strong> — undefined behavior in C11+.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 8.6 -->
+    <div class="module-section" id="m8-6">
+      <div class="module-header"><div class="module-number">8.6</div><h2 class="module-title">Advanced Keywords — volatile, restrict, _Generic, _Atomic, _Static_assert</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Keywords professionals use</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Advanced keywords</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* volatile — prevent compiler optimization on this variable
+   Used for: hardware registers, signal handlers, memory-mapped I/O */</span>
+<span class="keyword">volatile</span> <span class="type">int</span> *hw_reg = (<span class="keyword">volatile</span> <span class="type">int</span> *)<span class="number">0x40021000</span>;
+<span class="comment">/* Compiler will ALWAYS read from this address, never cache it */</span>
+
+<span class="comment">/* restrict (C99) — promise that pointer is the ONLY way to access data
+   Enables aggressive compiler optimization */</span>
+<span class="type">void</span> <span class="function">add_arrays</span>(<span class="type">int</span> *<span class="keyword">restrict</span> dst,
+               <span class="keyword">const</span> <span class="type">int</span> *<span class="keyword">restrict</span> a,
+               <span class="keyword">const</span> <span class="type">int</span> *<span class="keyword">restrict</span> b, <span class="type">int</span> n) {
+    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++)
+        dst[i] = a[i] + b[i];  <span class="comment">/* Compiler can vectorize this! */</span>
+}
+
+<span class="comment">/* _Generic (C11) — type-based dispatch (poor man's overloading) */</span>
+<span class="preprocessor">#define</span> <span class="function">type_name</span>(x) _Generic((x), \
+    <span class="type">int</span>: <span class="string">"int"</span>,           \
+    <span class="type">float</span>: <span class="string">"float"</span>,       \
+    <span class="type">double</span>: <span class="string">"double"</span>,     \
+    <span class="type">char</span>*: <span class="string">"string"</span>,      \
+    default: <span class="string">"unknown"</span>)
+
+<span class="function">printf</span>(<span class="string">"%s\n"</span>, <span class="function">type_name</span>(<span class="number">42</span>));     <span class="comment">/* "int" */</span>
+<span class="function">printf</span>(<span class="string">"%s\n"</span>, <span class="function">type_name</span>(<span class="number">3.14</span>));  <span class="comment">/* "double" */</span>
+
+<span class="comment">/* _Atomic (C11) — thread-safe atomic operations */</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;stdatomic.h&gt;</span>
+_Atomic <span class="type">int</span> shared_counter = <span class="number">0</span>;
+<span class="function">atomic_fetch_add</span>(&amp;shared_counter, <span class="number">1</span>);  <span class="comment">/* Thread-safe increment */</span>
+
+<span class="comment">/* _Static_assert (C11) — compile-time assertion */</span>
+_Static_assert(<span class="keyword">sizeof</span>(<span class="type">int</span>) == <span class="number">4</span>, <span class="string">"int must be 4 bytes"</span>);
+_Static_assert(<span class="keyword">sizeof</span>(<span class="type">void</span>*) == <span class="number">8</span>, <span class="string">"Requires 64-bit platform"</span>);</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Keyword</th><th>Standard</th><th>Purpose</th><th>When to use</th></tr></thead>
+            <tbody>
+              <tr><td><code>volatile</code></td><td>C89+</td><td>Prevent optimization</td><td>Hardware, signals</td></tr>
+              <tr><td><code>restrict</code></td><td>C99+</td><td>No pointer aliasing</td><td>Performance-critical loops</td></tr>
+              <tr><td><code>inline</code></td><td>C99+</td><td>Inline expansion hint</td><td>Small, hot functions</td></tr>
+              <tr><td><code>_Generic</code></td><td>C11+</td><td>Type dispatch</td><td>Type-safe macros</td></tr>
+              <tr><td><code>_Atomic</code></td><td>C11+</td><td>Thread-safe ops</td><td>Lock-free programming</td></tr>
+              <tr><td><code>_Static_assert</code></td><td>C11+</td><td>Compile-time check</td><td>Platform assumptions</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 8.7 -->
+    <div class="module-section" id="m8-7">
+      <div class="module-header"><div class="module-number">8.7</div><h2 class="module-title">C Standards Evolution — C89 → C99 → C11 → C17 → C23, what's new</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">C standards timeline</h3>
+        <p class="explain-en">C has evolved through multiple ISO standards. Each adds features while maintaining backward compatibility. Most modern code targets <strong>C11</strong> or <strong>C17</strong>. Use <code>-std=c17</code> for new projects.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>C multiple ISO standards se evolve hua hai. Har standard features add karta hai backward compatibility maintain karke. Modern code C11 ya C17 target karta hai. Naye projects me <code>-std=c17</code> use karo.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Standard</th><th>Year</th><th>Key additions</th><th>Flag</th></tr></thead>
+            <tbody>
+              <tr><td><strong>C89/C90</strong></td><td>1989</td><td>Original ANSI standard. Function prototypes.</td><td><code>-std=c89</code></td></tr>
+              <tr><td><strong>C99</strong></td><td>1999</td><td><code>//</code> comments, <code>bool</code>, VLAs, <code>restrict</code>, <code>inline</code>, designated initializers, <code>snprintf</code></td><td><code>-std=c99</code></td></tr>
+              <tr><td><strong>C11</strong></td><td>2011</td><td><code>_Generic</code>, <code>_Atomic</code>, <code>_Static_assert</code>, threads, anonymous structs/unions</td><td><code>-std=c11</code></td></tr>
+              <tr><td><strong>C17</strong></td><td>2018</td><td>Bug fixes only, no new features. Current "safe default."</td><td><code>-std=c17</code></td></tr>
+              <tr><td><strong>C23</strong></td><td>2024</td><td><code>typeof</code>, <code>#embed</code>, <code>constexpr</code>, <code>nullptr</code>, binary literals, <code>auto</code></td><td><code>-std=c23</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>Recommendation:</strong> Use <code>-std=c17</code> for production code today. Enable <code>-std=c23</code> for new personal projects to learn modern features. Always use <code>-Wall -Wextra</code> regardless of standard.</div>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Professional C Developer Checklist</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Category</th><th>Practice</th><th>Tool/Flag</th></tr></thead>
+          <tbody>
+            <tr><td>Warnings</td><td>Treat all warnings as errors</td><td><code>-Wall -Wextra -Werror</code></td></tr>
+            <tr><td>Memory safety</td><td>Check every malloc, free everything</td><td>Valgrind, ASan</td></tr>
+            <tr><td>Undefined behavior</td><td>Never rely on UB, test with sanitizers</td><td><code>-fsanitize=undefined</code></td></tr>
+            <tr><td>Portability</td><td>Use stdint.h types, avoid platform tricks</td><td><code>uint32_t</code> not <code>unsigned int</code></td></tr>
+            <tr><td>Build system</td><td>Use Makefile or CMake, never manual gcc</td><td><code>make</code> / <code>cmake</code></td></tr>
+            <tr><td>Version control</td><td>Commit often, meaningful messages</td><td>Git</td></tr>
+            <tr><td>Code review</td><td>Review for memory bugs, bounds, UB</td><td>Peer review + static analysis</td></tr>
+            <tr><td>Documentation</td><td>Comment WHY, not WHAT</td><td>Doxygen for APIs</td></tr>
+            <tr><td>Testing</td><td>Unit test every function</td><td>assert(), CUnit, Check</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="module-section" id="m8-bonus">
+      <div class="module-header"><div class="module-number">8+</div><h2 class="module-title">Debugging with GDB — Breakpoints, watchpoints, backtrace, core dumps</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">GDB essential commands</h3>
+        <p class="explain-en"><strong>GDB</strong> (GNU Debugger) is the industry-standard debugger for C. Compile with <code>-g</code> to include debug symbols. GDB lets you set breakpoints, step through code, inspect variables, and examine crashes with backtraces.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>GDB C ka industry-standard debugger hai. <code>-g</code> flag se compile karo debug symbols include karne ke liye. GDB se breakpoints set kar sakte ho, code step through, variables inspect, aur crashes examine kar sakte ho.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Terminal — GDB session</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># Compile with debug info</span>
+$ gcc -g -O0 -Wall program.c -o program
+
+<span class="comment"># Start GDB</span>
+$ gdb ./program
+
+<span class="comment"># Essential commands:</span>
+(gdb) <span class="keyword">break</span> main          <span class="comment"># Breakpoint at main()</span>
+(gdb) <span class="keyword">break</span> utils.c:42    <span class="comment"># Breakpoint at file:line</span>
+(gdb) <span class="keyword">run</span>                 <span class="comment"># Start execution</span>
+(gdb) <span class="keyword">next</span>                <span class="comment"># Step over (skip into functions)</span>
+(gdb) <span class="keyword">step</span>                <span class="comment"># Step into function calls</span>
+(gdb) <span class="keyword">continue</span>            <span class="comment"># Continue to next breakpoint</span>
+(gdb) <span class="keyword">print</span> x             <span class="comment"># Print variable x</span>
+(gdb) <span class="keyword">print</span> *ptr           <span class="comment"># Dereference pointer</span>
+(gdb) <span class="keyword">print</span> arr[0]@10     <span class="comment"># Print 10 elements of array</span>
+(gdb) <span class="keyword">backtrace</span>           <span class="comment"># Show call stack (crucial for crashes!)</span>
+(gdb) <span class="keyword">watch</span> counter       <span class="comment"># Break when variable changes</span>
+(gdb) <span class="keyword">info</span> locals         <span class="comment"># Show all local variables</span>
+(gdb) <span class="keyword">quit</span>                <span class="comment"># Exit GDB</span>
+
+<span class="comment"># Debugging a crash (core dump)</span>
+$ ulimit -c unlimited      <span class="comment"># Enable core dumps</span>
+$ ./program                <span class="comment"># Crash → generates core file</span>
+$ gdb ./program core       <span class="comment"># Analyze the crash</span>
+(gdb) <span class="keyword">backtrace</span>           <span class="comment"># See exactly where it crashed</span></pre></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 GCC/Clang Compiler Flags — Complete Reference</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Flag</th><th>Purpose</th><th>When to use</th></tr></thead>
+          <tbody>
+            <tr><td><code>-Wall</code></td><td>Enable common warnings</td><td>Always</td></tr>
+            <tr><td><code>-Wextra</code></td><td>Additional warnings</td><td>Always</td></tr>
+            <tr><td><code>-Werror</code></td><td>Treat warnings as errors</td><td>CI/CD, production</td></tr>
+            <tr><td><code>-Wpedantic</code></td><td>Strict ISO C compliance</td><td>Portable code</td></tr>
+            <tr><td><code>-g</code></td><td>Debug symbols for GDB</td><td>Debug builds</td></tr>
+            <tr><td><code>-O0</code></td><td>No optimization (debug)</td><td>Debug builds</td></tr>
+            <tr><td><code>-O2</code></td><td>Balanced optimization</td><td>Release builds</td></tr>
+            <tr><td><code>-O3</code></td><td>Aggressive optimization</td><td>Performance-critical</td></tr>
+            <tr><td><code>-Os</code></td><td>Optimize for size</td><td>Embedded systems</td></tr>
+            <tr><td><code>-std=c17</code></td><td>Use C17 standard</td><td>New projects</td></tr>
+            <tr><td><code>-fsanitize=address</code></td><td>AddressSanitizer (ASan)</td><td>Memory bug detection</td></tr>
+            <tr><td><code>-fsanitize=undefined</code></td><td>UB Sanitizer (UBSan)</td><td>UB detection</td></tr>
+            <tr><td><code>-fsanitize=thread</code></td><td>ThreadSanitizer (TSan)</td><td>Data race detection</td></tr>
+            <tr><td><code>-pthread</code></td><td>Enable POSIX threads</td><td>Multithreaded code</td></tr>
+            <tr><td><code>-lm</code></td><td>Link math library</td><td>When using math.h</td></tr>
+            <tr><td><code>-I./include</code></td><td>Add header search path</td><td>Multi-dir projects</td></tr>
+            <tr><td><code>-DDEBUG</code></td><td>Define DEBUG macro</td><td>Conditional compilation</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="concept-block">
+      <h3 class="concept-heading">Multi-file project structure</h3>
+      <p class="explain-en">Professional C projects follow a standard directory layout. This structure scales from small utilities to million-line codebases like Linux, PostgreSQL, and Redis.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Professional C projects standard directory layout follow karte hain. Ye structure small utilities se million-line codebases (Linux, PostgreSQL, Redis) tak scale karta hai.</div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">📁 Standard C project layout</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+        <div class="code-body"><pre>myproject/
+├── Makefile           <span class="comment"># Build automation</span>
+├── README.md          <span class="comment"># Project documentation</span>
+├── include/           <span class="comment"># Public header files</span>
+│   ├── config.h
+│   ├── utils.h
+│   └── parser.h
+├── src/               <span class="comment"># Source files</span>
+│   ├── main.c
+│   ├── utils.c
+│   └── parser.c
+├── tests/             <span class="comment"># Unit tests</span>
+│   ├── test_utils.c
+│   └── test_parser.c
+├── build/             <span class="comment"># Build artifacts (gitignored)</span>
+│   └── *.o
+└── docs/              <span class="comment"># Documentation</span>
+    └── api.md</pre></div>
+      </div>
+    </div>
+
+    <div class="concept-block">
+      <h3 class="concept-heading">Top C interview topics — what to master</h3>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Topic</th><th>Key concepts</th><th>Covered in</th></tr></thead>
+          <tbody>
+            <tr><td>Pointers</td><td>Arithmetic, double pointers, function pointers, void*</td><td>Part 4</td></tr>
+            <tr><td>Memory</td><td>Stack vs heap, malloc/free, leaks, dangling pointers</td><td>Parts 4, 6</td></tr>
+            <tr><td>Strings</td><td>Null termination, buffer overflow, safe functions</td><td>Part 4</td></tr>
+            <tr><td>Structs</td><td>Padding, alignment, self-referential, typedef</td><td>Part 5</td></tr>
+            <tr><td>Data structures</td><td>Linked lists, BST, hash tables from scratch</td><td>Part 7</td></tr>
+            <tr><td>File I/O</td><td>fopen/fclose, binary files, error handling</td><td>Part 6</td></tr>
+            <tr><td>Preprocessor</td><td>Macros, conditional compilation, include guards</td><td>Part 8</td></tr>
+            <tr><td>Build systems</td><td>Makefiles, compilation pipeline, linking</td><td>Parts 1, 8</td></tr>
+            <tr><td>Undefined behavior</td><td>Signed overflow, null deref, sequence points</td><td>All parts</td></tr>
+            <tr><td>Concurrency</td><td>Threads, mutex, race conditions, atomics</td><td>Part 8</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="concept-block">
+      <h3 class="concept-heading">Secure coding checklist (CERT-C mindset)</h3>
+      <p class="explain-en">
+        Production C code must be secure by default. Treat security rules as coding requirements, not optional review comments.
+        This checklist mirrors what strong teams enforce in code review and CI before shipping binaries.
+      </p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Production C code by default secure hona chahiye. Security rules optional nahi, mandatory coding requirements hain. Ye checklist wahi discipline follow karti hai jo strong teams review aur CI me enforce karti hain.</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Security area</th><th>Rule</th><th>Practical enforcement</th></tr></thead>
+          <tbody>
+            <tr><td>Input safety</td><td>Never trust user/file/network input</td><td>Validate length, range, and format before use</td></tr>
+            <tr><td>Strings</td><td>Avoid unbounded writes</td><td>Prefer <code>snprintf</code>, bounded copy/concat patterns</td></tr>
+            <tr><td>Pointers</td><td>No unchecked dereference</td><td>Guard against <code>NULL</code> before access</td></tr>
+            <tr><td>Memory</td><td>No leaks, double-free, use-after-free</td><td>Run ASan/Valgrind in CI and fail on findings</td></tr>
+            <tr><td>Integer math</td><td>Avoid overflow in size calculations</td><td>Check <code>count * size</code> before allocation</td></tr>
+            <tr><td>Error paths</td><td>Always handle failure returns</td><td>Centralized cleanup labels + explicit return codes</td></tr>
+            <tr><td>Build hardening</td><td>Enable compiler protections</td><td><code>-Wall -Wextra -Werror -fstack-protector-strong -D_FORTIFY_SOURCE=2</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="concept-block">
+      <h3 class="concept-heading">Release workflow (development to production)</h3>
+      <p class="explain-en">
+        Reliable C projects ship through a repeatable workflow: lint/warnings clean, sanitizers clean, tests passing, and release artifacts reproducible.
+        This process reduces regressions and makes debugging production issues much faster.
+      </p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Reliable C project ka release workflow repeatable hota hai: warnings clean, sanitizers clean, tests pass, aur release artifacts reproducible. Is process se regressions kam hote hain aur production debugging fast hoti hai.</div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">💻 Shell — Professional release pipeline</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+        <div class="code-body"><pre><span class="comment"># 1) Debug build with strict checks</span>
+gcc -std=c17 -Wall -Wextra -Werror -g -O0 -fsanitize=address,undefined src/*.c -o app-debug
+
+<span class="comment"># 2) Run tests (example)</span>
+./app-debug --run-tests
+
+<span class="comment"># 3) Static analysis (example tools)</span>
+cppcheck --enable=all --inconclusive src/
+
+<span class="comment"># 4) Release build</span>
+gcc -std=c17 -Wall -Wextra -O2 -DNDEBUG src/*.c -o app
+
+<span class="comment"># 5) Smoke test release artifact</span>
+./app --version</pre></div>
+      </div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Gate</th><th>Required state</th><th>Failure action</th></tr></thead>
+          <tbody>
+            <tr><td>Compilation</td><td>No warnings/errors</td><td>Block merge/release</td></tr>
+            <tr><td>Sanitizers</td><td>No ASan/UBSan findings</td><td>Fix memory/UB before release</td></tr>
+            <tr><td>Tests</td><td>All pass</td><td>Investigate regression</td></tr>
+            <tr><td>Runtime smoke checks</td><td>Critical flows work</td><td>Rollback candidate build</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="concept-block">
+      <h3 class="concept-heading">Project evaluation rubric (interview and client readiness)</h3>
+      <p class="explain-en">Use this rubric to self-audit C projects before sharing GitHub links in interviews or freelance proposals.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Interview ya freelance proposal me project share karne se pehle is rubric se self-audit karo.</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Dimension</th><th>Weak signal</th><th>Strong signal</th></tr></thead>
+          <tbody>
+            <tr><td>Memory safety</td><td>Occasional leaks/crashes</td><td>Clean ASan/Valgrind report</td></tr>
+            <tr><td>Error handling</td><td>Silent failures</td><td>Clear return codes + helpful diagnostics</td></tr>
+            <tr><td>Code structure</td><td>Single large file</td><td>Modular headers/source with clean APIs</td></tr>
+            <tr><td>Build quality</td><td>Manual compile commands only</td><td>Makefile/CMake + reproducible builds</td></tr>
+            <tr><td>Documentation</td><td>No setup/run instructions</td><td>README with build, run, test, and limitations</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="practice-box">
+      <div class="practice-title">✏️ Practice Exercises — Part 8</div>
+      <ol>
+        <li>Create a header file with an include guard. Define 3 macros: a constant, a function-like macro, and a variadic debug macro.</li>
+        <li>Write a program that uses <code>#ifdef</code> to print different messages on Windows vs Linux vs Mac.</li>
+        <li>Create a multi-file project (main.c, math_utils.c, math_utils.h) and write a Makefile to build it.</li>
+        <li>Write a multithreaded program: 4 threads each increment a shared counter 100,000 times. Compare results with and without mutex.</li>
+        <li>Use <code>_Generic</code> to create a <code>print_val</code> macro that auto-selects the right printf format for int, float, double, char*.</li>
+        <li>Use <code>_Static_assert</code> to verify that <code>sizeof(int)</code> is 4 and <code>sizeof(pointer)</code> is 8 on your platform.</li>
+        <li>Write a complete Makefile with <code>all</code>, <code>clean</code>, <code>debug</code>, and <code>test</code> targets. Include automatic dependency tracking.</li>
+      </ol>
+    </div>
+
+    <div class="callout callout-tip" style="text-align:center;font-size:1.1em;padding:2em;">
+      🎉 <strong>Congratulations!</strong> You've completed the entire C Programming Handbook — 8 parts, 56 modules, 400+ examples. You now have the foundation to build operating systems, embedded firmware, compilers, and high-performance applications. Keep coding. Keep building. Keep learning. <strong>— Yuvraj Aargade</strong>
+    </div>
+
+    <div class="handbook-nav">
+      <a href="part7.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Part 7: Data Structures in C</div></div></a>
+      <a href="index.html" class="nav-btn next"><div><div class="nav-btn-label">Back to</div><div class="nav-btn-title">📖 Table of Contents</div></div><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+
+  </div>
+
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
+  <script src="../../../js/main.js"></script>
+  <script>
+    (() => {
+      document.querySelectorAll('.code-block').forEach((block) => { const pre = block.querySelector('.code-body pre'), header = block.querySelector('.code-header'); if (!pre || !header) return; let actions = header.querySelector('.code-actions'); if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); } const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'code-copy-btn'; btn.textContent = 'Copy'; btn.addEventListener('click', async () => { try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; } catch { btn.textContent = 'Failed'; } finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); } }); actions.prepend(btn); });
+      const fill = document.querySelector('.hb-progress-fill'), label = document.querySelector('.hb-progress-label');
+      if (fill && label) { const update = () => { const h = document.documentElement, d = (h.scrollHeight - h.clientHeight) || 1, p = Math.max(0, Math.min(1, h.scrollTop / d)); fill.style.width = (p*100).toFixed(0)+'%'; label.textContent = (p*100).toFixed(0)+'%'; }; document.addEventListener('scroll', update, { passive: true }); update(); }
+    })();
+  </script>
+</body>
+</html>

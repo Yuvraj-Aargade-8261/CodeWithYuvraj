@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Part 7: Data Structures in C — C Programming Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 7 of C Programming Handbook: Linked lists, stacks, queues, binary trees, hash tables, sorting algorithms, and Big-O analysis.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/handbook.css">
+</head>
+<body class="handbook-wrapper">
+  <nav class="navbar"><div class="container"><a href="../../../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../../../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
+
+  <div class="handbook-page">
+    <div class="hb-topbar">
+      <div class="hb-topbar-inner">
+        <div class="hb-breadcrumbs">
+          <a href="index.html">C Programming Handbook</a>
+          <span class="hb-muted">/</span><span>Part 7</span><span class="hb-muted">·</span>
+          <a href="#m7-1">7.1</a> <a href="#m7-2">7.2</a> <a href="#m7-3">7.3</a> <a href="#m7-4">7.4</a> <a href="#m7-5">7.5</a> <a href="#m7-6">7.6</a> <a href="#m7-7">7.7</a>
+        </div>
+        <div class="hb-progress" aria-label="Reading progress">
+          <div class="hb-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="hb-progress-fill"></div></div>
+          <div class="hb-progress-label">0%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chapter-header" data-chapter-num="07">
+      <div class="chapter-part-label">📖 Part 7 — Data Structures in C</div>
+      <h1 class="chapter-title">Think in <span class="gradient-text">Structures</span></h1>
+      <p class="chapter-subtitle">Data structures are the backbone of every algorithm — build them from scratch in C to truly understand them.</p>
+      <div class="chapter-meta"><span>📄 Modules 7.1 – 7.7</span><span>⏱️ 120–180 min read</span><span>💻 70+ Examples</span></div>
+    </div>
+
+    <div class="callout callout-tip"><strong>How to study Part 7:</strong> Implement EVERY data structure yourself. Don't just read — type it, compile it, test edge cases (empty, single element, full). Drawing diagrams for each operation (insert, delete, traverse) is mandatory.</div>
+
+    <div class="hb-mini-toc">
+      <div class="hb-mini-title">📍 Part 7 Modules</div>
+      <div class="hb-mini-links">
+        <a href="#m7-1">7.1 Linked Lists</a>
+        <a href="#m7-2">7.2 Stacks</a>
+        <a href="#m7-3">7.3 Queues</a>
+        <a href="#m7-4">7.4 Binary Trees</a>
+        <a href="#m7-5">7.5 Hash Tables</a>
+        <a href="#m7-6">7.6 Sorting</a>
+        <a href="#m7-7">7.7 Big-O</a>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">🚀 Advanced Lens — Part 7</div>
+      <p class="explain-en">In C, you build data structures from scratch — there's no STL or Collections library. This forces you to understand HOW they work internally: memory allocation, pointer manipulation, and algorithmic complexity. This knowledge is transferable to every language and is the core of technical interviews.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>C me data structures scratch se banate hain — koi STL ya Collections library nahi. Isse samajhte ho KI ye internally KAISE kaam karte hain: memory allocation, pointer manipulation, algorithmic complexity. Ye knowledge har language me transferable hai.</div>
+    </div>
+
+    <!-- MODULE 7.1 -->
+    <div class="module-section" id="m7-1">
+      <div class="module-header"><div class="module-number">7.1</div><h2 class="module-title">Linked Lists — Singly, doubly, circular, all operations</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Singly linked list</h3>
+        <p class="explain-en">A linked list is a chain of <strong>nodes</strong> where each node contains data and a pointer to the next node. Unlike arrays, linked lists allow <strong>O(1) insertion/deletion</strong> at any position (if you have the pointer), but <strong>O(n) access</strong> (no random access).</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Linked list nodes ki chain hai jahan har node me data aur next node ka pointer hota hai. Arrays se different, linked lists me O(1) insertion/deletion hota hai (agar pointer ho), par O(n) access (random access nahi).</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Singly linked list</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">typedef</span> <span class="keyword">struct</span> Node {
+    <span class="type">int</span> data;
+    <span class="keyword">struct</span> Node *next;
+} Node;
+
+<span class="comment">/* Create a new node */</span>
+Node *<span class="function">node_new</span>(<span class="type">int</span> data) {
+    Node *n = <span class="function">malloc</span>(<span class="keyword">sizeof</span>(Node));
+    n-&gt;data = data;
+    n-&gt;next = <span class="number">NULL</span>;
+    <span class="keyword">return</span> n;
+}
+
+<span class="comment">/* Insert at head — O(1) */</span>
+<span class="type">void</span> <span class="function">push_front</span>(Node **head, <span class="type">int</span> data) {
+    Node *n = <span class="function">node_new</span>(data);
+    n-&gt;next = *head;
+    *head = n;
+}
+
+<span class="comment">/* Insert at tail — O(n) */</span>
+<span class="type">void</span> <span class="function">push_back</span>(Node **head, <span class="type">int</span> data) {
+    Node *n = <span class="function">node_new</span>(data);
+    <span class="keyword">if</span> (!*head) { *head = n; <span class="keyword">return</span>; }
+    Node *curr = *head;
+    <span class="keyword">while</span> (curr-&gt;next) curr = curr-&gt;next;
+    curr-&gt;next = n;
+}
+
+<span class="comment">/* Delete node with value — O(n) */</span>
+<span class="type">void</span> <span class="function">delete_node</span>(Node **head, <span class="type">int</span> target) {
+    <span class="keyword">if</span> (!*head) <span class="keyword">return</span>;
+    <span class="keyword">if</span> ((*head)-&gt;data == target) {
+        Node *temp = *head;
+        *head = (*head)-&gt;next;
+        <span class="function">free</span>(temp);
+        <span class="keyword">return</span>;
+    }
+    Node *curr = *head;
+    <span class="keyword">while</span> (curr-&gt;next &amp;&amp; curr-&gt;next-&gt;data != target)
+        curr = curr-&gt;next;
+    <span class="keyword">if</span> (curr-&gt;next) {
+        Node *temp = curr-&gt;next;
+        curr-&gt;next = temp-&gt;next;
+        <span class="function">free</span>(temp);
+    }
+}
+
+<span class="comment">/* Print & free all */</span>
+<span class="type">void</span> <span class="function">print_list</span>(Node *head) {
+    <span class="keyword">while</span> (head) {
+        <span class="function">printf</span>(<span class="string">"%d → "</span>, head-&gt;data);
+        head = head-&gt;next;
+    }
+    <span class="function">printf</span>(<span class="string">"NULL\n"</span>);
+}
+
+<span class="type">void</span> <span class="function">free_list</span>(Node **head) {
+    <span class="keyword">while</span> (*head) {
+        Node *temp = *head;
+        *head = (*head)-&gt;next;
+        <span class="function">free</span>(temp);
+    }
+}</pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Doubly linked list</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Doubly linked list node</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">typedef</span> <span class="keyword">struct</span> DNode {
+    <span class="type">int</span> data;
+    <span class="keyword">struct</span> DNode *prev;
+    <span class="keyword">struct</span> DNode *next;
+} DNode;
+
+<span class="comment">/* Advantages over singly:
+   - O(1) delete if you have the node pointer
+   - Can traverse backwards
+   - Used in: LRU cache, browser history, undo/redo */</span>
+
+DNode *<span class="function">dnode_new</span>(<span class="type">int</span> data) {
+    DNode *n = <span class="function">calloc</span>(<span class="number">1</span>, <span class="keyword">sizeof</span>(DNode));
+    n-&gt;data = data;
+    <span class="keyword">return</span> n;  <span class="comment">/* prev & next = NULL from calloc */</span>
+}
+
+<span class="comment">/* Insert after a given node — O(1) */</span>
+<span class="type">void</span> <span class="function">insert_after</span>(DNode *node, <span class="type">int</span> data) {
+    DNode *n = <span class="function">dnode_new</span>(data);
+    n-&gt;next = node-&gt;next;
+    n-&gt;prev = node;
+    <span class="keyword">if</span> (node-&gt;next) node-&gt;next-&gt;prev = n;
+    node-&gt;next = n;
+}</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Operation</th><th>Array</th><th>Singly LL</th><th>Doubly LL</th></tr></thead>
+            <tbody>
+              <tr><td>Access by index</td><td>O(1)</td><td>O(n)</td><td>O(n)</td></tr>
+              <tr><td>Insert at head</td><td>O(n)</td><td>O(1)</td><td>O(1)</td></tr>
+              <tr><td>Insert at tail</td><td>O(1)*</td><td>O(n)</td><td>O(1)**</td></tr>
+              <tr><td>Delete by value</td><td>O(n)</td><td>O(n)</td><td>O(1)***</td></tr>
+              <tr><td>Memory</td><td>Contiguous</td><td>+1 pointer/node</td><td>+2 pointers/node</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 7.2 -->
+    <div class="module-section" id="m7-2">
+      <div class="module-header"><div class="module-number">7.2</div><h2 class="module-title">Stacks — LIFO, array & linked list implementations, applications</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Stack = LIFO (Last In, First Out)</h3>
+        <p class="explain-en">A stack has two operations: <code>push</code> (add to top) and <code>pop</code> (remove from top). Think of a stack of plates. Used for: function call stack, expression parsing, undo operations, DFS traversal, balanced parentheses checking.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Stack me do operations hain: <code>push</code> (top pe add) aur <code>pop</code> (top se remove). Plates ke stack jaisa sochho. Function call stack, expression parsing, undo, DFS, aur parentheses checking me use hota hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Stack (array-based)</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="preprocessor">#define</span> <span class="function">MAX_SIZE</span> <span class="number">100</span>
+
+<span class="keyword">typedef</span> <span class="keyword">struct</span> {
+    <span class="type">int</span> data[<span class="function">MAX_SIZE</span>];
+    <span class="type">int</span> top;
+} Stack;
+
+<span class="type">void</span> <span class="function">stack_init</span>(Stack *s) { s-&gt;top = -<span class="number">1</span>; }
+<span class="type">int</span>  <span class="function">stack_empty</span>(Stack *s) { <span class="keyword">return</span> s-&gt;top == -<span class="number">1</span>; }
+<span class="type">int</span>  <span class="function">stack_full</span>(Stack *s)  { <span class="keyword">return</span> s-&gt;top == <span class="function">MAX_SIZE</span> - <span class="number">1</span>; }
+
+<span class="type">void</span> <span class="function">push</span>(Stack *s, <span class="type">int</span> val) {
+    <span class="keyword">if</span> (<span class="function">stack_full</span>(s)) { <span class="function">printf</span>(<span class="string">"Overflow!\n"</span>); <span class="keyword">return</span>; }
+    s-&gt;data[++s-&gt;top] = val;
+}
+
+<span class="type">int</span> <span class="function">pop</span>(Stack *s) {
+    <span class="keyword">if</span> (<span class="function">stack_empty</span>(s)) { <span class="function">printf</span>(<span class="string">"Underflow!\n"</span>); <span class="keyword">return</span> -<span class="number">1</span>; }
+    <span class="keyword">return</span> s-&gt;data[s-&gt;top--];
+}
+
+<span class="type">int</span> <span class="function">peek</span>(Stack *s) {
+    <span class="keyword">if</span> (<span class="function">stack_empty</span>(s)) <span class="keyword">return</span> -<span class="number">1</span>;
+    <span class="keyword">return</span> s-&gt;data[s-&gt;top];
+}
+
+<span class="comment">/* Usage */</span>
+Stack s;
+<span class="function">stack_init</span>(&amp;s);
+<span class="function">push</span>(&amp;s, <span class="number">10</span>);
+<span class="function">push</span>(&amp;s, <span class="number">20</span>);
+<span class="function">push</span>(&amp;s, <span class="number">30</span>);
+<span class="function">printf</span>(<span class="string">"%d\n"</span>, <span class="function">pop</span>(&amp;s));   <span class="comment">/* 30 (LIFO) */</span>
+<span class="function">printf</span>(<span class="string">"%d\n"</span>, <span class="function">peek</span>(&amp;s));  <span class="comment">/* 20 */</span></pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 7.3 -->
+    <div class="module-section" id="m7-3">
+      <div class="module-header"><div class="module-number">7.3</div><h2 class="module-title">Queues — FIFO, circular queue, priority queue concepts</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Queue = FIFO (First In, First Out)</h3>
+        <p class="explain-en">A queue has <code>enqueue</code> (add to rear) and <code>dequeue</code> (remove from front). Think of a line at a ticket counter. Used for: BFS traversal, task scheduling, print spooling, message buffers in OS.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Queue me <code>enqueue</code> (rear pe add) aur <code>dequeue</code> (front se remove). Ticket counter ki line jaisa sochho. BFS, task scheduling, print spooling, OS message buffers me use hota hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Circular queue (array-based)</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">typedef</span> <span class="keyword">struct</span> {
+    <span class="type">int</span> data[<span class="function">MAX_SIZE</span>];
+    <span class="type">int</span> front, rear, count;
+} Queue;
+
+<span class="type">void</span> <span class="function">queue_init</span>(Queue *q) { q-&gt;front = q-&gt;rear = q-&gt;count = <span class="number">0</span>; }
+<span class="type">int</span>  <span class="function">queue_empty</span>(Queue *q) { <span class="keyword">return</span> q-&gt;count == <span class="number">0</span>; }
+<span class="type">int</span>  <span class="function">queue_full</span>(Queue *q)  { <span class="keyword">return</span> q-&gt;count == <span class="function">MAX_SIZE</span>; }
+
+<span class="type">void</span> <span class="function">enqueue</span>(Queue *q, <span class="type">int</span> val) {
+    <span class="keyword">if</span> (<span class="function">queue_full</span>(q)) { <span class="function">printf</span>(<span class="string">"Full!\n"</span>); <span class="keyword">return</span>; }
+    q-&gt;data[q-&gt;rear] = val;
+    q-&gt;rear = (q-&gt;rear + <span class="number">1</span>) % <span class="function">MAX_SIZE</span>;  <span class="comment">/* Wrap around! */</span>
+    q-&gt;count++;
+}
+
+<span class="type">int</span> <span class="function">dequeue</span>(Queue *q) {
+    <span class="keyword">if</span> (<span class="function">queue_empty</span>(q)) { <span class="function">printf</span>(<span class="string">"Empty!\n"</span>); <span class="keyword">return</span> -<span class="number">1</span>; }
+    <span class="type">int</span> val = q-&gt;data[q-&gt;front];
+    q-&gt;front = (q-&gt;front + <span class="number">1</span>) % <span class="function">MAX_SIZE</span>;
+    q-&gt;count--;
+    <span class="keyword">return</span> val;
+}
+
+<span class="comment">/* Circular: front and rear wrap around the array
+   [_, _, _, front, d, d, rear, _, _]
+   After dequeue+enqueue: wraps to beginning */</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Structure</th><th>Order</th><th>Push/Enq</th><th>Pop/Deq</th><th>Use case</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Stack</strong></td><td>LIFO</td><td>O(1)</td><td>O(1)</td><td>Undo, DFS, parsing</td></tr>
+              <tr><td><strong>Queue</strong></td><td>FIFO</td><td>O(1)</td><td>O(1)</td><td>BFS, scheduling, buffers</td></tr>
+              <tr><td><strong>Priority Queue</strong></td><td>By priority</td><td>O(log n)</td><td>O(log n)</td><td>Dijkstra, task scheduler</td></tr>
+              <tr><td><strong>Deque</strong></td><td>Both ends</td><td>O(1)</td><td>O(1)</td><td>Sliding window, palindromes</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 7.4 -->
+    <div class="module-section" id="m7-4">
+      <div class="module-header"><div class="module-number">7.4</div><h2 class="module-title">Binary Trees & BST — Insert, search, traversals, delete</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Binary Search Tree (BST)</h3>
+        <p class="explain-en">A BST is a binary tree where: left child &lt; parent &lt; right child. This property enables <strong>O(log n) search, insert, delete</strong> on average. Worst case (skewed): O(n). Used in: databases (B-trees), file systems, symbol tables.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>BST ek binary tree hai jahan: left child &lt; parent &lt; right child. Isse average me O(log n) search, insert, delete milta hai. Worst case (skewed): O(n). Databases, file systems, symbol tables me use hota hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Binary Search Tree</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">typedef</span> <span class="keyword">struct</span> TreeNode {
+    <span class="type">int</span> data;
+    <span class="keyword">struct</span> TreeNode *left, *right;
+} TreeNode;
+
+TreeNode *<span class="function">tree_new</span>(<span class="type">int</span> data) {
+    TreeNode *n = <span class="function">malloc</span>(<span class="keyword">sizeof</span>(TreeNode));
+    n-&gt;data = data;
+    n-&gt;left = n-&gt;right = <span class="number">NULL</span>;
+    <span class="keyword">return</span> n;
+}
+
+<span class="comment">/* Insert into BST — O(log n) avg */</span>
+TreeNode *<span class="function">bst_insert</span>(TreeNode *root, <span class="type">int</span> data) {
+    <span class="keyword">if</span> (!root) <span class="keyword">return</span> <span class="function">tree_new</span>(data);
+    <span class="keyword">if</span> (data &lt; root-&gt;data)
+        root-&gt;left = <span class="function">bst_insert</span>(root-&gt;left, data);
+    <span class="keyword">else if</span> (data &gt; root-&gt;data)
+        root-&gt;right = <span class="function">bst_insert</span>(root-&gt;right, data);
+    <span class="keyword">return</span> root;
+}
+
+<span class="comment">/* Search in BST — O(log n) avg */</span>
+TreeNode *<span class="function">bst_search</span>(TreeNode *root, <span class="type">int</span> target) {
+    <span class="keyword">if</span> (!root || root-&gt;data == target) <span class="keyword">return</span> root;
+    <span class="keyword">if</span> (target &lt; root-&gt;data)
+        <span class="keyword">return</span> <span class="function">bst_search</span>(root-&gt;left, target);
+    <span class="keyword">return</span> <span class="function">bst_search</span>(root-&gt;right, target);
+}
+
+<span class="comment">/* Inorder traversal — prints sorted! */</span>
+<span class="type">void</span> <span class="function">inorder</span>(TreeNode *root) {
+    <span class="keyword">if</span> (!root) <span class="keyword">return</span>;
+    <span class="function">inorder</span>(root-&gt;left);
+    <span class="function">printf</span>(<span class="string">"%d "</span>, root-&gt;data);
+    <span class="function">inorder</span>(root-&gt;right);
+}
+
+<span class="comment">/* Build BST: 50, 30, 70, 20, 40, 60, 80 */</span>
+TreeNode *root = <span class="number">NULL</span>;
+<span class="type">int</span> vals[] = {<span class="number">50</span>, <span class="number">30</span>, <span class="number">70</span>, <span class="number">20</span>, <span class="number">40</span>, <span class="number">60</span>, <span class="number">80</span>};
+<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">7</span>; i++)
+    root = <span class="function">bst_insert</span>(root, vals[i]);
+<span class="function">inorder</span>(root);  <span class="comment">/* 20 30 40 50 60 70 80 (sorted!) */</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Traversal</th><th>Order</th><th>Use case</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Inorder</strong> (LNR)</td><td>Left → Node → Right</td><td>Sorted output from BST</td></tr>
+              <tr><td><strong>Preorder</strong> (NLR)</td><td>Node → Left → Right</td><td>Copy tree, serialize</td></tr>
+              <tr><td><strong>Postorder</strong> (LRN)</td><td>Left → Right → Node</td><td>Delete tree, evaluate expressions</td></tr>
+              <tr><td><strong>Level-order</strong></td><td>BFS (level by level)</td><td>Print tree structure</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 7.5 -->
+    <div class="module-section" id="m7-5">
+      <div class="module-header"><div class="module-number">7.5</div><h2 class="module-title">Hash Tables — Hash functions, collision handling, O(1) lookup</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Hash table with chaining</h3>
+        <p class="explain-en">A hash table maps <strong>keys to values</strong> using a hash function. Average case: <strong>O(1)</strong> for insert, search, delete. Collisions (two keys → same index) are handled by <strong>chaining</strong> (linked list at each bucket) or <strong>open addressing</strong>.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Hash table hash function use karke keys ko values se map karta hai. Average case: O(1) insert, search, delete. Collision (do keys → same index) chaining (har bucket pe linked list) ya open addressing se handle hota hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Hash table (string keys)</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="preprocessor">#define</span> <span class="function">TABLE_SIZE</span> <span class="number">64</span>
+
+<span class="keyword">typedef</span> <span class="keyword">struct</span> Entry {
+    <span class="type">char</span> *key;
+    <span class="type">int</span> value;
+    <span class="keyword">struct</span> Entry *next;  <span class="comment">/* Chaining */</span>
+} Entry;
+
+<span class="keyword">typedef</span> <span class="keyword">struct</span> {
+    Entry *buckets[<span class="function">TABLE_SIZE</span>];
+} HashTable;
+
+<span class="comment">/* djb2 hash function (classic) */</span>
+<span class="type">unsigned int</span> <span class="function">hash</span>(<span class="keyword">const</span> <span class="type">char</span> *key) {
+    <span class="type">unsigned int</span> h = <span class="number">5381</span>;
+    <span class="keyword">while</span> (*key) h = h * <span class="number">33</span> + *key++;
+    <span class="keyword">return</span> h % <span class="function">TABLE_SIZE</span>;
+}
+
+<span class="type">void</span> <span class="function">ht_set</span>(HashTable *ht, <span class="keyword">const</span> <span class="type">char</span> *key, <span class="type">int</span> val) {
+    <span class="type">unsigned int</span> idx = <span class="function">hash</span>(key);
+    Entry *e = <span class="function">malloc</span>(<span class="keyword">sizeof</span>(Entry));
+    e-&gt;key = <span class="function">strdup</span>(key);
+    e-&gt;value = val;
+    e-&gt;next = ht-&gt;buckets[idx];  <span class="comment">/* Prepend to chain */</span>
+    ht-&gt;buckets[idx] = e;
+}
+
+<span class="type">int</span> <span class="function">ht_get</span>(HashTable *ht, <span class="keyword">const</span> <span class="type">char</span> *key) {
+    Entry *e = ht-&gt;buckets[<span class="function">hash</span>(key)];
+    <span class="keyword">while</span> (e) {
+        <span class="keyword">if</span> (<span class="function">strcmp</span>(e-&gt;key, key) == <span class="number">0</span>) <span class="keyword">return</span> e-&gt;value;
+        e = e-&gt;next;
+    }
+    <span class="keyword">return</span> -<span class="number">1</span>;  <span class="comment">/* Not found */</span>
+}</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 7.6 -->
+    <div class="module-section" id="m7-6">
+      <div class="module-header"><div class="module-number">7.6</div><h2 class="module-title">Sorting Algorithms — Bubble, selection, merge sort, quicksort</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Essential sorting algorithms</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Merge sort (O(n log n) guaranteed)</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="type">void</span> <span class="function">merge</span>(<span class="type">int</span> *arr, <span class="type">int</span> l, <span class="type">int</span> m, <span class="type">int</span> r) {
+    <span class="type">int</span> n1 = m - l + <span class="number">1</span>, n2 = r - m;
+    <span class="type">int</span> *L = <span class="function">malloc</span>(n1 * <span class="keyword">sizeof</span>(<span class="type">int</span>));
+    <span class="type">int</span> *R = <span class="function">malloc</span>(n2 * <span class="keyword">sizeof</span>(<span class="type">int</span>));
+    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n1; i++) L[i] = arr[l + i];
+    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n2; i++) R[i] = arr[m + <span class="number">1</span> + i];
+
+    <span class="type">int</span> i = <span class="number">0</span>, j = <span class="number">0</span>, k = l;
+    <span class="keyword">while</span> (i &lt; n1 &amp;&amp; j &lt; n2)
+        arr[k++] = (L[i] &lt;= R[j]) ? L[i++] : R[j++];
+    <span class="keyword">while</span> (i &lt; n1) arr[k++] = L[i++];
+    <span class="keyword">while</span> (j &lt; n2) arr[k++] = R[j++];
+    <span class="function">free</span>(L); <span class="function">free</span>(R);
+}
+
+<span class="type">void</span> <span class="function">merge_sort</span>(<span class="type">int</span> *arr, <span class="type">int</span> l, <span class="type">int</span> r) {
+    <span class="keyword">if</span> (l &lt; r) {
+        <span class="type">int</span> m = l + (r - l) / <span class="number">2</span>;
+        <span class="function">merge_sort</span>(arr, l, m);
+        <span class="function">merge_sort</span>(arr, m + <span class="number">1</span>, r);
+        <span class="function">merge</span>(arr, l, m, r);
+    }
+}</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Algorithm</th><th>Best</th><th>Average</th><th>Worst</th><th>Space</th><th>Stable?</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Bubble sort</strong></td><td>O(n)</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td><td>✅</td></tr>
+              <tr><td><strong>Selection sort</strong></td><td>O(n²)</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td><td>❌</td></tr>
+              <tr><td><strong>Insertion sort</strong></td><td>O(n)</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td><td>✅</td></tr>
+              <tr><td><strong>Merge sort</strong></td><td>O(n log n)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n)</td><td>✅</td></tr>
+              <tr><td><strong>Quicksort</strong></td><td>O(n log n)</td><td>O(n log n)</td><td>O(n²)</td><td>O(log n)</td><td>❌</td></tr>
+              <tr><td><strong>Heap sort</strong></td><td>O(n log n)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(1)</td><td>❌</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Interview tip:</strong> Know when to use which: Quicksort for general purpose (fastest in practice), Merge sort when stability matters, Insertion sort for nearly-sorted small arrays, Heap sort when O(1) space is required.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 7.7 -->
+    <div class="module-section" id="m7-7">
+      <div class="module-header"><div class="module-number">7.7</div><h2 class="module-title">Big-O Complexity — Time & space analysis, common patterns</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Big-O cheat sheet</h3>
+        <p class="explain-en">Big-O describes how runtime/space grows as input size grows. It ignores constants and lower-order terms. Knowing Big-O for every data structure operation is essential for technical interviews and system design.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Big-O batata hai input size badhne pe runtime/space kaise badhta hai. Constants aur lower-order terms ignore karta hai. Har data structure operation ka Big-O jaanna interviews aur system design ke liye zaroori hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Complexity</th><th>Name</th><th>Example</th><th>n=1M time</th></tr></thead>
+            <tbody>
+              <tr><td><code>O(1)</code></td><td>Constant</td><td>Array access, hash table lookup</td><td>Instant</td></tr>
+              <tr><td><code>O(log n)</code></td><td>Logarithmic</td><td>Binary search, BST search</td><td>~20 ops</td></tr>
+              <tr><td><code>O(n)</code></td><td>Linear</td><td>Array scan, linked list traversal</td><td>1M ops</td></tr>
+              <tr><td><code>O(n log n)</code></td><td>Linearithmic</td><td>Merge sort, quicksort</td><td>~20M ops</td></tr>
+              <tr><td><code>O(n²)</code></td><td>Quadratic</td><td>Bubble sort, nested loops</td><td>1 trillion ops</td></tr>
+              <tr><td><code>O(2ⁿ)</code></td><td>Exponential</td><td>Naive Fibonacci, subsets</td><td>Heat death ☠️</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Recognizing complexity patterns</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* O(1) — constant */</span>
+arr[i];  hash_table[key];
+
+<span class="comment">/* O(log n) — halving each step */</span>
+<span class="keyword">while</span> (n &gt; <span class="number">0</span>) n /= <span class="number">2</span>;
+
+<span class="comment">/* O(n) — single loop */</span>
+<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++) { <span class="comment">/* ... */</span> }
+
+<span class="comment">/* O(n log n) — divide & conquer */</span>
+<span class="function">merge_sort</span>(arr, <span class="number">0</span>, n - <span class="number">1</span>);
+
+<span class="comment">/* O(n²) — nested loops */</span>
+<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++)
+    <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; n; j++) { <span class="comment">/* ... */</span> }</pre></div>
+        </div>
+        <div class="callout callout-important"><strong>Data structure selection rule:</strong> Need fast lookup? → Hash table O(1). Need sorted data? → BST O(log n). Need fast insert/delete? → Linked list O(1). Need random access? → Array O(1). Need FIFO? → Queue. Need LIFO? → Stack.</div>
+      </div>
+    </div>
+
+    <div class="concept-block">
+      <h3 class="concept-heading">Quicksort implementation</h3>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">💻 C — Quicksort with Lomuto partition</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+        <div class="code-body"><pre><span class="type">void</span> <span class="function">swap</span>(<span class="type">int</span> *a, <span class="type">int</span> *b) {
+    <span class="type">int</span> t = *a; *a = *b; *b = t;
+}
+
+<span class="type">int</span> <span class="function">partition</span>(<span class="type">int</span> *arr, <span class="type">int</span> lo, <span class="type">int</span> hi) {
+    <span class="type">int</span> pivot = arr[hi];  <span class="comment">/* Last element as pivot */</span>
+    <span class="type">int</span> i = lo - <span class="number">1</span>;
+    <span class="keyword">for</span> (<span class="type">int</span> j = lo; j &lt; hi; j++) {
+        <span class="keyword">if</span> (arr[j] &lt;= pivot) {
+            i++;
+            <span class="function">swap</span>(&amp;arr[i], &amp;arr[j]);
+        }
+    }
+    <span class="function">swap</span>(&amp;arr[i + <span class="number">1</span>], &amp;arr[hi]);
+    <span class="keyword">return</span> i + <span class="number">1</span>;
+}
+
+<span class="type">void</span> <span class="function">quicksort</span>(<span class="type">int</span> *arr, <span class="type">int</span> lo, <span class="type">int</span> hi) {
+    <span class="keyword">if</span> (lo &lt; hi) {
+        <span class="type">int</span> p = <span class="function">partition</span>(arr, lo, hi);
+        <span class="function">quicksort</span>(arr, lo, p - <span class="number">1</span>);
+        <span class="function">quicksort</span>(arr, p + <span class="number">1</span>, hi);
+    }
+}
+
+<span class="comment">/* Binary search — O(log n) */</span>
+<span class="type">int</span> <span class="function">binary_search</span>(<span class="type">int</span> *arr, <span class="type">int</span> n, <span class="type">int</span> target) {
+    <span class="type">int</span> lo = <span class="number">0</span>, hi = n - <span class="number">1</span>;
+    <span class="keyword">while</span> (lo &lt;= hi) {
+        <span class="type">int</span> mid = lo + (hi - lo) / <span class="number">2</span>;  <span class="comment">/* Avoids overflow */</span>
+        <span class="keyword">if</span> (arr[mid] == target) <span class="keyword">return</span> mid;
+        <span class="keyword">else if</span> (arr[mid] &lt; target) lo = mid + <span class="number">1</span>;
+        <span class="keyword">else</span> hi = mid - <span class="number">1</span>;
+    }
+    <span class="keyword">return</span> -<span class="number">1</span>;  <span class="comment">/* Not found */</span>
+}</pre></div>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Data Structure Operations — Complete Reference</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Structure</th><th>Access</th><th>Search</th><th>Insert</th><th>Delete</th><th>Space</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Array</strong></td><td>O(1)</td><td>O(n)</td><td>O(n)</td><td>O(n)</td><td>O(n)</td></tr>
+            <tr><td><strong>Sorted Array</strong></td><td>O(1)</td><td>O(log n)</td><td>O(n)</td><td>O(n)</td><td>O(n)</td></tr>
+            <tr><td><strong>Singly LL</strong></td><td>O(n)</td><td>O(n)</td><td>O(1)*</td><td>O(n)</td><td>O(n)</td></tr>
+            <tr><td><strong>Doubly LL</strong></td><td>O(n)</td><td>O(n)</td><td>O(1)*</td><td>O(1)*</td><td>O(n)</td></tr>
+            <tr><td><strong>Stack</strong></td><td>O(n)</td><td>O(n)</td><td>O(1)</td><td>O(1)</td><td>O(n)</td></tr>
+            <tr><td><strong>Queue</strong></td><td>O(n)</td><td>O(n)</td><td>O(1)</td><td>O(1)</td><td>O(n)</td></tr>
+            <tr><td><strong>Hash Table</strong></td><td>N/A</td><td>O(1) avg</td><td>O(1) avg</td><td>O(1) avg</td><td>O(n)</td></tr>
+            <tr><td><strong>BST (balanced)</strong></td><td>O(log n)</td><td>O(log n)</td><td>O(log n)</td><td>O(log n)</td><td>O(n)</td></tr>
+            <tr><td><strong>BST (skewed)</strong></td><td>O(n)</td><td>O(n)</td><td>O(n)</td><td>O(n)</td><td>O(n)</td></tr>
+            <tr><td><strong>Heap</strong></td><td>O(1) max</td><td>O(n)</td><td>O(log n)</td><td>O(log n)</td><td>O(n)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.85em;opacity:0.7">* O(1) when you already have the pointer to the insertion/deletion point.</p>
+    </div>
+
+    <div class="practice-box">
+      <div class="practice-title">✏️ Practice Exercises — Part 7</div>
+      <ol>
+        <li>Implement a singly linked list with insert, delete, search, reverse, and print. Test with 10 elements.</li>
+        <li>Build a stack using a linked list (not array). Implement push, pop, peek, isEmpty.</li>
+        <li>Implement a circular queue. Test enqueue/dequeue sequences that wrap around the array.</li>
+        <li>Build a BST with insert and all 3 traversals (inorder, preorder, postorder). Insert: 50, 30, 70, 20, 40, 60, 80.</li>
+        <li>Create a hash table that stores student names → grades. Handle collisions with chaining.</li>
+        <li>Implement merge sort and quicksort. Compare execution time on an array of 10,000 random integers.</li>
+        <li>For each of these, state the Big-O: binary search, traversing a linked list, inserting into a hash table, bubble sort.</li>
+      </ol>
+    </div>
+
+    <div class="handbook-nav">
+      <a href="part6.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Part 6: Dynamic Memory & File I/O</div></div></a>
+      <a href="part8.html" class="nav-btn next"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Part 8: Systems Programming & Industry Practices →</div></div><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+
+  </div>
+
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
+  <script src="../../../js/main.js"></script>
+  <script>
+    (() => {
+      document.querySelectorAll('.code-block').forEach((block) => { const pre = block.querySelector('.code-body pre'), header = block.querySelector('.code-header'); if (!pre || !header) return; let actions = header.querySelector('.code-actions'); if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); } const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'code-copy-btn'; btn.textContent = 'Copy'; btn.addEventListener('click', async () => { try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; } catch { btn.textContent = 'Failed'; } finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); } }); actions.prepend(btn); });
+      const fill = document.querySelector('.hb-progress-fill'), label = document.querySelector('.hb-progress-label');
+      if (fill && label) { const update = () => { const h = document.documentElement, d = (h.scrollHeight - h.clientHeight) || 1, p = Math.max(0, Math.min(1, h.scrollTop / d)); fill.style.width = (p*100).toFixed(0)+'%'; label.textContent = (p*100).toFixed(0)+'%'; }; document.addEventListener('scroll', update, { passive: true }); update(); }
+    })();
+  </script>
+</body>
+</html>

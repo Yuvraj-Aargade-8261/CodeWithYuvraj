@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Part 4: Arrays, Strings & Pointers — C Programming Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 4 of C Programming Handbook: Arrays, strings, pointer fundamentals, pointer-array equivalence, function pointers, and common pitfalls.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/handbook.css">
+</head>
+<body class="handbook-wrapper">
+  <nav class="navbar"><div class="container"><a href="../../../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../../../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
+
+  <div class="handbook-page">
+    <div class="hb-topbar">
+      <div class="hb-topbar-inner">
+        <div class="hb-breadcrumbs">
+          <a href="index.html">C Programming Handbook</a>
+          <span class="hb-muted">/</span><span>Part 4</span><span class="hb-muted">·</span>
+          <a href="#m4-1">4.1</a> <a href="#m4-2">4.2</a> <a href="#m4-3">4.3</a> <a href="#m4-4">4.4</a> <a href="#m4-5">4.5</a> <a href="#m4-6">4.6</a> <a href="#m4-7">4.7</a>
+        </div>
+        <div class="hb-progress" aria-label="Reading progress">
+          <div class="hb-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="hb-progress-fill"></div></div>
+          <div class="hb-progress-label">0%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chapter-header" data-chapter-num="04">
+      <div class="chapter-part-label">📖 Part 4 — Arrays, Strings & Pointers</div>
+      <h1 class="chapter-title">The <span class="gradient-text">Power of C</span></h1>
+      <p class="chapter-subtitle">Pointers are what make C powerful — and dangerous. Master them and you master C itself.</p>
+      <div class="chapter-meta"><span>📄 Modules 4.1 – 4.7</span><span>⏱️ 100–150 min read</span><span>💻 65+ Examples</span></div>
+    </div>
+
+    <div class="callout callout-tip"><strong>How to study Part 4:</strong> Draw memory diagrams on paper for every pointer example. Visualize the addresses. Use <code>printf("%p", &amp;var)</code> to see real addresses. This part separates beginners from professionals.</div>
+
+    <div class="hb-mini-toc">
+      <div class="hb-mini-title">📍 Part 4 Modules</div>
+      <div class="hb-mini-links">
+        <a href="#m4-1">4.1 1D & 2D Arrays</a>
+        <a href="#m4-2">4.2 Strings</a>
+        <a href="#m4-3">4.3 Pointer Basics</a>
+        <a href="#m4-4">4.4 Pointer-Array</a>
+        <a href="#m4-5">4.5 Function Pointers</a>
+        <a href="#m4-6">4.6 Double Pointers</a>
+        <a href="#m4-7">4.7 Pitfalls</a>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">🚀 Advanced Lens — Part 4</div>
+      <p class="explain-en">Pointers are the bridge between C code and hardware. Understanding memory addresses, pointer arithmetic, and how arrays decay to pointers is what makes you a systems programmer. Every OS, driver, and embedded system relies on this knowledge.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Pointers C code aur hardware ke beech ka bridge hain. Memory addresses, pointer arithmetic, aur array-to-pointer decay samajhna systems programmer banne ke liye zaroori hai.</div>
+    </div>
+
+    <!-- MODULE 4.1 -->
+    <div class="module-section" id="m4-1">
+      <div class="module-header"><div class="module-number">4.1</div><h2 class="module-title">1D & 2D Arrays — Declaration, initialization, accessing, passing to functions</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">1D Arrays</h3>
+        <p class="explain-en">An array is a <strong>contiguous block of memory</strong> holding elements of the same type. The name of an array is the <strong>address of its first element</strong>. Array indexing starts at <strong>0</strong>. C does NOT perform bounds checking — accessing out-of-bounds is <strong>undefined behavior</strong>.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Array ek contiguous memory block hai jisme same type ke elements hote hain. Array ka naam pehle element ka address hai. Indexing 0 se start hoti hai. C bounds checking nahi karta — out-of-bounds access undefined behavior hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — 1D Arrays</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Declaration & initialization */</span>
+<span class="type">int</span> nums[<span class="number">5</span>] = {<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>, <span class="number">50</span>};
+<span class="type">int</span> zeros[<span class="number">100</span>] = {<span class="number">0</span>};  <span class="comment">/* All elements set to 0 */</span>
+<span class="type">int</span> auto_size[] = {<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>};  <span class="comment">/* Size = 3 (auto) */</span>
+
+<span class="comment">/* Accessing elements */</span>
+<span class="function">printf</span>(<span class="string">"%d\n"</span>, nums[<span class="number">0</span>]);  <span class="comment">/* 10 (first element) */</span>
+<span class="function">printf</span>(<span class="string">"%d\n"</span>, nums[<span class="number">4</span>]);  <span class="comment">/* 50 (last element) */</span>
+
+<span class="comment">/* Array size calculation */</span>
+<span class="type">int</span> size = <span class="keyword">sizeof</span>(nums) / <span class="keyword">sizeof</span>(nums[<span class="number">0</span>]);  <span class="comment">/* 5 */</span>
+
+<span class="comment">/* ⚠️ No bounds checking! */</span>
+nums[<span class="number">10</span>] = <span class="number">99</span>;  <span class="comment">/* UNDEFINED BEHAVIOR — may crash or corrupt memory */</span></pre></div>
+        </div>
+        <div class="diagram-box">
+          <div class="diagram-title">📐 Array Memory Layout</div>
+          <div class="diagram-flow">
+            <div class="diagram-node primary">nums[0]<br><small>addr: 0x100</small></div>
+            <div class="diagram-node secondary">nums[1]<br><small>addr: 0x104</small></div>
+            <div class="diagram-node success">nums[2]<br><small>addr: 0x108</small></div>
+            <div class="diagram-node accent">nums[3]<br><small>addr: 0x10C</small></div>
+            <div class="diagram-node primary">nums[4]<br><small>addr: 0x110</small></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">2D Arrays (matrices)</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — 2D Arrays</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* 3×4 matrix */</span>
+<span class="type">int</span> matrix[<span class="number">3</span>][<span class="number">4</span>] = {
+    {<span class="number">1</span>,  <span class="number">2</span>,  <span class="number">3</span>,  <span class="number">4</span>},
+    {<span class="number">5</span>,  <span class="number">6</span>,  <span class="number">7</span>,  <span class="number">8</span>},
+    {<span class="number">9</span>, <span class="number">10</span>, <span class="number">11</span>, <span class="number">12</span>}
+};
+
+<span class="comment">/* Accessing: matrix[row][col] */</span>
+<span class="function">printf</span>(<span class="string">"%d\n"</span>, matrix[<span class="number">1</span>][<span class="number">2</span>]);  <span class="comment">/* 7 */</span>
+
+<span class="comment">/* Iterating with nested loops */</span>
+<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i++) {
+    <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; <span class="number">4</span>; j++) {
+        <span class="function">printf</span>(<span class="string">"%3d "</span>, matrix[i][j]);
+    }
+    <span class="function">printf</span>(<span class="string">"\n"</span>);
+}
+
+<span class="comment">/* Passing 2D array to function — MUST specify column size */</span>
+<span class="type">void</span> <span class="function">print_matrix</span>(<span class="type">int</span> mat[][<span class="number">4</span>], <span class="type">int</span> rows) {
+    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; rows; i++)
+        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; <span class="number">4</span>; j++)
+            <span class="function">printf</span>(<span class="string">"%d "</span>, mat[i][j]);
+}</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 4.2 -->
+    <div class="module-section" id="m4-2">
+      <div class="module-header"><div class="module-number">4.2</div><h2 class="module-title">Character Arrays & Strings — Null termination, string.h, safe I/O</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Strings in C = char arrays + '\0'</h3>
+        <p class="explain-en">C has <strong>no string type</strong>. Strings are <code>char</code> arrays terminated by <code>'\0'</code> (null character). The null terminator tells functions like <code>printf</code> and <code>strlen</code> where the string ends. Forgetting it causes buffer overflows.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>C me string type nahi hai. Strings char arrays hain jinke end me <code>'\0'</code> (null character) hota hai. Null terminator se pata chalta hai string kahan khatam hoti hai. Bhool gaye toh buffer overflow hoga.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Strings</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* String literal — auto null-terminated */</span>
+<span class="type">char</span> greet[] = <span class="string">"Hello"</span>;  <span class="comment">/* Actually: {'H','e','l','l','o','\0'} = 6 bytes */</span>
+
+<span class="comment">/* Manual char array */</span>
+<span class="type">char</span> name[<span class="number">20</span>];
+<span class="function">strcpy</span>(name, <span class="string">"Yuvraj"</span>);
+
+<span class="comment">/* String length vs array size */</span>
+<span class="function">printf</span>(<span class="string">"strlen: %zu\n"</span>, <span class="function">strlen</span>(greet));   <span class="comment">/* 5 (no \0) */</span>
+<span class="function">printf</span>(<span class="string">"sizeof: %zu\n"</span>, <span class="keyword">sizeof</span>(greet));   <span class="comment">/* 6 (with \0) */</span>
+
+<span class="comment">/* ⚠️ char* vs char[] */</span>
+<span class="type">char</span> *ptr = <span class="string">"Hello"</span>;     <span class="comment">/* Points to READ-ONLY memory */</span>
+<span class="type">char</span> arr[] = <span class="string">"Hello"</span>;    <span class="comment">/* Mutable copy on stack */</span>
+arr[<span class="number">0</span>] = <span class="string">'J'</span>;            <span class="comment">/* ✅ OK */</span>
+<span class="comment">/* ptr[0] = 'J';          ❌ CRASH — read-only! */</span></pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Essential string operations</h3>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Function</th><th>Purpose</th><th>Safe alternative</th></tr></thead>
+            <tbody>
+              <tr><td><code>strlen(s)</code></td><td>Length (not counting \0)</td><td>—</td></tr>
+              <tr><td><code>strcpy(dst, src)</code></td><td>Copy string</td><td><code>strncpy(dst, src, n)</code></td></tr>
+              <tr><td><code>strcat(dst, src)</code></td><td>Concatenate</td><td><code>strncat(dst, src, n)</code></td></tr>
+              <tr><td><code>strcmp(a, b)</code></td><td>Compare (0=equal)</td><td><code>strncmp(a, b, n)</code></td></tr>
+              <tr><td><code>strchr(s, c)</code></td><td>Find first char</td><td>—</td></tr>
+              <tr><td><code>strstr(s, sub)</code></td><td>Find substring</td><td>—</td></tr>
+              <tr><td><code>sprintf(buf, fmt, ...)</code></td><td>Formatted to string</td><td><code>snprintf(buf, n, fmt, ...)</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>Golden rule:</strong> Always use the <code>n</code>-variant (<code>strncpy</code>, <code>snprintf</code>) in production code. The original functions don't check buffer sizes — the #1 source of security vulnerabilities in C.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 4.3 -->
+    <div class="module-section" id="m4-3">
+      <div class="module-header"><div class="module-number">4.3</div><h2 class="module-title">Pointer Fundamentals — Address-of, dereference, pointer types, NULL</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">What is a pointer?</h3>
+        <p class="explain-en">A pointer is a variable that <strong>stores a memory address</strong>. The <code>&amp;</code> operator gets the address of a variable. The <code>*</code> operator <strong>dereferences</strong> (accesses the value at that address). Pointers are the foundation of dynamic memory, data structures, and systems programming.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Pointer ek variable hai jo memory address store karta hai. <code>&amp;</code> operator variable ka address deta hai. <code>*</code> operator dereference karta hai (us address ki value access karta hai). Pointers dynamic memory, data structures, aur systems programming ki foundation hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Pointer basics</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="type">int</span> x = <span class="number">42</span>;
+<span class="type">int</span> *ptr = &amp;x;    <span class="comment">/* ptr stores the ADDRESS of x */</span>
+
+<span class="function">printf</span>(<span class="string">"Value of x:    %d\n"</span>, x);       <span class="comment">/* 42 */</span>
+<span class="function">printf</span>(<span class="string">"Address of x:  %p\n"</span>, (<span class="type">void</span>*)&amp;x); <span class="comment">/* 0x7ffd... */</span>
+<span class="function">printf</span>(<span class="string">"Value of ptr:  %p\n"</span>, (<span class="type">void</span>*)ptr); <span class="comment">/* Same address */</span>
+<span class="function">printf</span>(<span class="string">"Deref *ptr:    %d\n"</span>, *ptr);      <span class="comment">/* 42 */</span>
+
+<span class="comment">/* Modify value through pointer */</span>
+*ptr = <span class="number">100</span>;
+<span class="function">printf</span>(<span class="string">"x is now:      %d\n"</span>, x);   <span class="comment">/* 100! */</span></pre></div>
+        </div>
+        <div class="diagram-box">
+          <div class="diagram-title">📐 Pointer Memory Model</div>
+          <div class="diagram-flow">
+            <div class="diagram-node primary">x = 42<br><small>addr: 0x1000</small></div>
+            <div class="diagram-arrow">← points to ←</div>
+            <div class="diagram-node accent">ptr = 0x1000<br><small>addr: 0x2000</small></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Pointer arithmetic</h3>
+        <p class="explain-en">Adding 1 to a pointer moves it by <code>sizeof(type)</code> bytes, not 1 byte. This is how array traversal works with pointers. <code>ptr + 1</code> on an <code>int*</code> moves <strong>4 bytes</strong> forward.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Pointer me 1 add karne se <code>sizeof(type)</code> bytes aage jaata hai, 1 byte nahi. <code>int*</code> pe <code>ptr + 1</code> = 4 bytes aage. Isi se arrays pe pointers kaam karte hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Pointer arithmetic</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="type">int</span> arr[] = {<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>, <span class="number">50</span>};
+<span class="type">int</span> *p = arr;    <span class="comment">/* Points to arr[0] */</span>
+
+<span class="function">printf</span>(<span class="string">"%d\n"</span>, *p);       <span class="comment">/* 10  (arr[0]) */</span>
+<span class="function">printf</span>(<span class="string">"%d\n"</span>, *(p + <span class="number">1</span>)); <span class="comment">/* 20  (arr[1]) */</span>
+<span class="function">printf</span>(<span class="string">"%d\n"</span>, *(p + <span class="number">4</span>)); <span class="comment">/* 50  (arr[4]) */</span>
+
+<span class="comment">/* Traverse array with pointer */</span>
+<span class="keyword">for</span> (<span class="type">int</span> *q = arr; q &lt; arr + <span class="number">5</span>; q++) {
+    <span class="function">printf</span>(<span class="string">"%d "</span>, *q);  <span class="comment">/* 10 20 30 40 50 */</span>
+}
+
+<span class="comment">/* Pointer subtraction = distance in elements */</span>
+<span class="type">int</span> *start = &amp;arr[<span class="number">0</span>];
+<span class="type">int</span> *end = &amp;arr[<span class="number">4</span>];
+<span class="function">printf</span>(<span class="string">"Distance: %td\n"</span>, end - start);  <span class="comment">/* 4 */</span></pre></div>
+        </div>
+        <div class="callout callout-warning"><strong>NULL pointer:</strong> Always initialize pointers to <code>NULL</code> if not assigning immediately. Dereferencing <code>NULL</code> crashes your program (segfault). Always check: <code>if (ptr != NULL)</code> before using.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 4.4 -->
+    <div class="module-section" id="m4-4">
+      <div class="module-header"><div class="module-number">4.4</div><h2 class="module-title">Pointer-Array Equivalence — Array decay, pointer notation, passing arrays</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Arrays "decay" to pointers</h3>
+        <p class="explain-en">When you use an array name in most expressions, it <strong>decays</strong> to a pointer to its first element. This is why you can pass arrays to functions that expect pointers. The two exceptions: <code>sizeof(arr)</code> gives array size, and <code>&amp;arr</code> gives pointer to the whole array.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Array name jab expression me use hota hai toh pehle element ke pointer me "decay" ho jaata hai. Isliye arrays ko pointer expect karne wale functions me pass kar sakte ho. Do exceptions: <code>sizeof(arr)</code> array size deta hai, <code>&amp;arr</code> poori array ka pointer deta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Array-pointer equivalence</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="type">int</span> arr[<span class="number">5</span>] = {<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>, <span class="number">50</span>};
+
+<span class="comment">/* These are ALL equivalent: */</span>
+arr[<span class="number">2</span>]        <span class="comment">/* 30 — subscript notation */</span>
+*(arr + <span class="number">2</span>)    <span class="comment">/* 30 — pointer arithmetic */</span>
+*(<span class="number">2</span> + arr)    <span class="comment">/* 30 — addition is commutative */</span>
+<span class="number">2</span>[arr]        <span class="comment">/* 30 — bizarre but valid! */</span>
+
+<span class="comment">/* Passing array to function = passing pointer */</span>
+<span class="type">void</span> <span class="function">print_arr</span>(<span class="type">int</span> *arr, <span class="type">int</span> n) {  <span class="comment">/* Same as int arr[] */</span>
+    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++)
+        <span class="function">printf</span>(<span class="string">"%d "</span>, arr[i]);
+}
+
+<span class="comment">/* ⚠️ sizeof lost after decay! */</span>
+<span class="function">printf</span>(<span class="string">"%zu\n"</span>, <span class="keyword">sizeof</span>(arr));  <span class="comment">/* 20 (5 × 4 bytes) in main */</span>
+<span class="comment">/* Inside function: sizeof(arr) = 8 (pointer size!) */</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Expression</th><th>Type</th><th>Value</th></tr></thead>
+            <tbody>
+              <tr><td><code>arr</code></td><td><code>int *</code> (decayed)</td><td>Address of arr[0]</td></tr>
+              <tr><td><code>&amp;arr</code></td><td><code>int (*)[5]</code></td><td>Address of whole array</td></tr>
+              <tr><td><code>&amp;arr[0]</code></td><td><code>int *</code></td><td>Same as arr</td></tr>
+              <tr><td><code>sizeof(arr)</code></td><td><code>size_t</code></td><td>20 (total bytes)</td></tr>
+              <tr><td><code>sizeof(arr[0])</code></td><td><code>size_t</code></td><td>4 (one int)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>Critical gotcha:</strong> When you pass an array to a function, you MUST also pass the size separately. The function only receives a pointer — <code>sizeof</code> inside the function gives pointer size (8 bytes), not array size!</div>
+      </div>
+    </div>
+
+    <!-- MODULE 4.5 -->
+    <div class="module-section" id="m4-5">
+      <div class="module-header"><div class="module-number">4.5</div><h2 class="module-title">Function Pointers & Callbacks — qsort, event systems, plugin patterns</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Function pointers</h3>
+        <p class="explain-en">A <strong>function pointer</strong> stores the address of a function. This enables <strong>callbacks</strong>, <strong>plugin systems</strong>, and <strong>strategy patterns</strong>. The stdlib function <code>qsort</code> uses function pointers to sort any data type.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Function pointer ek function ka address store karta hai. Isse callbacks, plugin systems, aur strategy patterns possible hote hain. <code>qsort</code> function pointer use karke kisi bhi type ka data sort kar sakta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Function pointers</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Declare a function pointer */</span>
+<span class="type">int</span> (<span class="function">*operation</span>)(<span class="type">int</span>, <span class="type">int</span>);  <span class="comment">/* Pointer to func(int,int)->int */</span>
+
+<span class="type">int</span> <span class="function">add</span>(<span class="type">int</span> a, <span class="type">int</span> b) { <span class="keyword">return</span> a + b; }
+<span class="type">int</span> <span class="function">mul</span>(<span class="type">int</span> a, <span class="type">int</span> b) { <span class="keyword">return</span> a * b; }
+
+<span class="comment">/* Assign and call */</span>
+operation = add;
+<span class="function">printf</span>(<span class="string">"%d\n"</span>, operation(<span class="number">3</span>, <span class="number">4</span>));  <span class="comment">/* 7 */</span>
+
+operation = mul;
+<span class="function">printf</span>(<span class="string">"%d\n"</span>, operation(<span class="number">3</span>, <span class="number">4</span>));  <span class="comment">/* 12 */</span>
+
+<span class="comment">/* Array of function pointers (dispatch table) */</span>
+<span class="type">int</span> (*ops[<span class="number">2</span>])(<span class="type">int</span>, <span class="type">int</span>) = {add, mul};
+<span class="function">printf</span>(<span class="string">"%d\n"</span>, ops[<span class="number">0</span>](<span class="number">5</span>, <span class="number">3</span>));  <span class="comment">/* 8 (add) */</span>
+<span class="function">printf</span>(<span class="string">"%d\n"</span>, ops[<span class="number">1</span>](<span class="number">5</span>, <span class="number">3</span>));  <span class="comment">/* 15 (mul) */</span></pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Callbacks with qsort</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — qsort with callback</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="preprocessor">#include</span> <span class="string">&lt;stdlib.h&gt;</span>
+
+<span class="comment">/* Comparator callback for qsort */</span>
+<span class="type">int</span> <span class="function">compare_asc</span>(<span class="keyword">const</span> <span class="type">void</span> *a, <span class="keyword">const</span> <span class="type">void</span> *b) {
+    <span class="keyword">return</span> (*(<span class="keyword">const</span> <span class="type">int</span>*)a) - (*(<span class="keyword">const</span> <span class="type">int</span>*)b);
+}
+
+<span class="type">int</span> <span class="function">compare_desc</span>(<span class="keyword">const</span> <span class="type">void</span> *a, <span class="keyword">const</span> <span class="type">void</span> *b) {
+    <span class="keyword">return</span> (*(<span class="keyword">const</span> <span class="type">int</span>*)b) - (*(<span class="keyword">const</span> <span class="type">int</span>*)a);
+}
+
+<span class="type">int</span> <span class="function">main</span>(<span class="type">void</span>) {
+    <span class="type">int</span> nums[] = {<span class="number">42</span>, <span class="number">7</span>, <span class="number">99</span>, <span class="number">13</span>, <span class="number">55</span>};
+    <span class="type">int</span> n = <span class="number">5</span>;
+
+    <span class="comment">/* Sort ascending */</span>
+    <span class="function">qsort</span>(nums, n, <span class="keyword">sizeof</span>(<span class="type">int</span>), compare_asc);
+    <span class="comment">/* nums = {7, 13, 42, 55, 99} */</span>
+
+    <span class="comment">/* Sort descending — just change the callback! */</span>
+    <span class="function">qsort</span>(nums, n, <span class="keyword">sizeof</span>(<span class="type">int</span>), compare_desc);
+    <span class="comment">/* nums = {99, 55, 42, 13, 7} */</span>
+
+    <span class="keyword">return</span> <span class="number">0</span>;
+}</pre></div>
+        </div>
+        <div class="callout callout-tip"><strong>typedef simplifies function pointers:</strong> <code>typedef int (*Comparator)(const void*, const void*);</code> then use <code>Comparator cmp = compare_asc;</code> — much more readable.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 4.6 -->
+    <div class="module-section" id="m4-6">
+      <div class="module-header"><div class="module-number">4.6</div><h2 class="module-title">Pointer to Pointer (Double Pointers) — **ptr, dynamic 2D arrays, APIs</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">What is a double pointer?</h3>
+        <p class="explain-en">A <strong>double pointer</strong> (<code>int **pp</code>) is a pointer that stores the address of another pointer. It's used for: (1) <strong>modifying a pointer inside a function</strong>, (2) <strong>dynamic 2D arrays</strong>, and (3) <strong>arrays of strings</strong> (<code>char **argv</code>).</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Double pointer (<code>int **pp</code>) ek pointer hai jo doosre pointer ka address store karta hai. Ye use hota hai: (1) function ke andar pointer modify karna, (2) dynamic 2D arrays, (3) strings ka array (<code>char **argv</code>).</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Double pointers</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="type">int</span> x = <span class="number">42</span>;
+<span class="type">int</span> *p = &amp;x;      <span class="comment">/* p points to x */</span>
+<span class="type">int</span> **pp = &amp;p;    <span class="comment">/* pp points to p */</span>
+
+<span class="function">printf</span>(<span class="string">"%d\n"</span>, x);     <span class="comment">/* 42 */</span>
+<span class="function">printf</span>(<span class="string">"%d\n"</span>, *p);    <span class="comment">/* 42 */</span>
+<span class="function">printf</span>(<span class="string">"%d\n"</span>, **pp);  <span class="comment">/* 42 — double dereference */</span>
+
+<span class="comment">/* Modify pointer inside a function */</span>
+<span class="type">void</span> <span class="function">allocate</span>(<span class="type">int</span> **ptr, <span class="type">int</span> size) {
+    *ptr = <span class="function">malloc</span>(size * <span class="keyword">sizeof</span>(<span class="type">int</span>));
+}
+
+<span class="type">int</span> *arr = <span class="number">NULL</span>;
+<span class="function">allocate</span>(&amp;arr, <span class="number">10</span>);  <span class="comment">/* Now arr points to heap memory */</span></pre></div>
+        </div>
+        <div class="diagram-box">
+          <div class="diagram-title">📐 Double Pointer Chain</div>
+          <div class="diagram-flow">
+            <div class="diagram-node primary">x = 42<br><small>addr: 0x100</small></div>
+            <div class="diagram-arrow">← p ←</div>
+            <div class="diagram-node secondary">p = 0x100<br><small>addr: 0x200</small></div>
+            <div class="diagram-arrow">← pp ←</div>
+            <div class="diagram-node accent">pp = 0x200<br><small>addr: 0x300</small></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Dynamic 2D array with double pointers</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Dynamic 2D array</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="type">int</span> rows = <span class="number">3</span>, cols = <span class="number">4</span>;
+
+<span class="comment">/* Allocate array of row pointers */</span>
+<span class="type">int</span> **matrix = <span class="function">malloc</span>(rows * <span class="keyword">sizeof</span>(<span class="type">int</span> *));
+
+<span class="comment">/* Allocate each row */</span>
+<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; rows; i++) {
+    matrix[i] = <span class="function">malloc</span>(cols * <span class="keyword">sizeof</span>(<span class="type">int</span>));
+}
+
+<span class="comment">/* Use it like a normal 2D array */</span>
+matrix[<span class="number">1</span>][<span class="number">2</span>] = <span class="number">99</span>;
+
+<span class="comment">/* Free in REVERSE order */</span>
+<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; rows; i++) {
+    <span class="function">free</span>(matrix[i]);   <span class="comment">/* Free each row first */</span>
+}
+<span class="function">free</span>(matrix);          <span class="comment">/* Then free the row pointer array */</span></pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 4.7 -->
+    <div class="module-section" id="m4-7">
+      <div class="module-header"><div class="module-number">4.7</div><h2 class="module-title">Common Pointer Pitfalls — Dangling, wild, memory leaks, buffer overflow</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">The 5 deadly pointer bugs</h3>
+        <p class="explain-en">Pointer bugs are the most dangerous in C — they cause crashes, security vulnerabilities, and data corruption. Memorize these patterns and always check for them in code reviews.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Pointer bugs C ke sabse dangerous bugs hain — crashes, security vulnerabilities, aur data corruption karte hain. Ye patterns yaad karo aur code reviews me hamesha check karo.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Bug</th><th>Cause</th><th>Prevention</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Dangling pointer</strong></td><td>Using pointer after <code>free()</code></td><td>Set to <code>NULL</code> after free</td></tr>
+              <tr><td><strong>Wild pointer</strong></td><td>Uninitialized pointer</td><td>Always initialize to <code>NULL</code></td></tr>
+              <tr><td><strong>Memory leak</strong></td><td>Forgetting to <code>free()</code></td><td>Every <code>malloc</code> needs a <code>free</code></td></tr>
+              <tr><td><strong>Buffer overflow</strong></td><td>Writing past array bounds</td><td>Always check bounds</td></tr>
+              <tr><td><strong>Double free</strong></td><td>Calling <code>free()</code> twice</td><td>Set to <code>NULL</code> after free</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Pointer pitfalls & fixes</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* ❌ Dangling pointer */</span>
+<span class="type">int</span> *p = <span class="function">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">int</span>));
+*p = <span class="number">42</span>;
+<span class="function">free</span>(p);
+<span class="comment">/* *p = 10;  ← CRASH! p still holds freed address */</span>
+
+<span class="comment">/* ✅ Fix: set to NULL after free */</span>
+<span class="function">free</span>(p);
+p = <span class="number">NULL</span>;  <span class="comment">/* Now dereferencing will segfault immediately (debuggable) */</span>
+
+<span class="comment">/* ❌ Wild pointer */</span>
+<span class="type">int</span> *q;         <span class="comment">/* Points to RANDOM memory! */</span>
+<span class="comment">/* *q = 5;     ← CRASH or corruption */</span>
+
+<span class="comment">/* ✅ Fix: always initialize */</span>
+<span class="type">int</span> *q = <span class="number">NULL</span>;  <span class="comment">/* Safe — will segfault if used */</span>
+
+<span class="comment">/* ❌ Memory leak */</span>
+<span class="type">void</span> <span class="function">leaky</span>(<span class="type">void</span>) {
+    <span class="type">int</span> *data = <span class="function">malloc</span>(<span class="number">1000</span>);
+    <span class="comment">/* ... use data ... */</span>
+    <span class="keyword">return</span>;  <span class="comment">/* ← Forgot free()! 1000 bytes leaked */</span>
+}
+
+<span class="comment">/* ❌ Buffer overflow */</span>
+<span class="type">char</span> buf[<span class="number">10</span>];
+<span class="function">strcpy</span>(buf, <span class="string">"This string is way too long!"</span>);  <span class="comment">/* OVERFLOW! */</span>
+
+<span class="comment">/* ✅ Fix: use bounded functions */</span>
+<span class="function">strncpy</span>(buf, <span class="string">"This string is way too long!"</span>, <span class="number">9</span>);
+buf[<span class="number">9</span>] = <span class="string">'\0'</span>;  <span class="comment">/* Ensure null termination */</span></pre></div>
+        </div>
+        <div class="callout callout-important"><strong>Industry tool:</strong> Use <strong>Valgrind</strong> (<code>valgrind ./program</code>) to detect memory leaks, use-after-free, and buffer overflows. Every professional C developer uses Valgrind or AddressSanitizer (<code>gcc -fsanitize=address</code>).</div>
+      </div>
+    </div>
+
+    <div class="practice-box">
+      <div class="practice-title">✏️ Practice Exercises — Part 4</div>
+      <ol>
+        <li>Create an array of 10 integers, fill it with random numbers, then print using both subscript <code>arr[i]</code> and pointer <code>*(arr+i)</code> notation.</li>
+        <li>Write a function that reverses a string <strong>in place</strong> using pointer arithmetic (no array indexing).</li>
+        <li>Implement your own <code>strlen</code>, <code>strcpy</code>, and <code>strcmp</code> using pointers only.</li>
+        <li>Create a <code>qsort</code> comparator to sort an array of strings alphabetically.</li>
+        <li>Build a dynamic 2D matrix using double pointers, fill with values, print it, and free all memory with zero leaks.</li>
+        <li>Write a program with an intentional dangling pointer, wild pointer, and memory leak. Then fix each one. Test with Valgrind.</li>
+        <li>Create a dispatch table (array of function pointers) for a calculator with 4 operations.</li>
+      </ol>
+    </div>
+
+    <div class="handbook-nav">
+      <a href="part3.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Part 3: Functions & Modular Programming</div></div></a>
+      <a href="part5.html" class="nav-btn next"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Part 5: Structures, Unions & Advanced Types →</div></div><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+
+  </div>
+
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
+  <script src="../../../js/main.js"></script>
+  <script>
+    (() => {
+      document.querySelectorAll('.code-block').forEach((block) => { const pre = block.querySelector('.code-body pre'), header = block.querySelector('.code-header'); if (!pre || !header) return; let actions = header.querySelector('.code-actions'); if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); } const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'code-copy-btn'; btn.textContent = 'Copy'; btn.addEventListener('click', async () => { try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; } catch { btn.textContent = 'Failed'; } finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); } }); actions.prepend(btn); });
+      const fill = document.querySelector('.hb-progress-fill'), label = document.querySelector('.hb-progress-label');
+      if (fill && label) { const update = () => { const h = document.documentElement, d = (h.scrollHeight - h.clientHeight) || 1, p = Math.max(0, Math.min(1, h.scrollTop / d)); fill.style.width = (p*100).toFixed(0)+'%'; label.textContent = (p*100).toFixed(0)+'%'; }; document.addEventListener('scroll', update, { passive: true }); update(); }
+    })();
+  </script>
+</body>
+</html>

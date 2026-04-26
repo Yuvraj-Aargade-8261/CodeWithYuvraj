@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Part 5: Structures, Unions & Advanced Types — C Programming Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 5 of C Programming Handbook: Structures, nested structs, memory padding, unions, enums, typedef, and bit fields.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/handbook.css">
+</head>
+<body class="handbook-wrapper">
+  <nav class="navbar"><div class="container"><a href="../../../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../../../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
+
+  <div class="handbook-page">
+    <div class="hb-topbar">
+      <div class="hb-topbar-inner">
+        <div class="hb-breadcrumbs">
+          <a href="index.html">C Programming Handbook</a>
+          <span class="hb-muted">/</span><span>Part 5</span><span class="hb-muted">·</span>
+          <a href="#m5-1">5.1</a> <a href="#m5-2">5.2</a> <a href="#m5-3">5.3</a> <a href="#m5-4">5.4</a> <a href="#m5-5">5.5</a> <a href="#m5-6">5.6</a> <a href="#m5-7">5.7</a>
+        </div>
+        <div class="hb-progress" aria-label="Reading progress">
+          <div class="hb-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="hb-progress-fill"></div></div>
+          <div class="hb-progress-label">0%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chapter-header" data-chapter-num="05">
+      <div class="chapter-part-label">📖 Part 5 — Structures, Unions & Advanced Types</div>
+      <h1 class="chapter-title">Build <span class="gradient-text">Custom Data</span></h1>
+      <p class="chapter-subtitle">Structures are the foundation of object-oriented thinking in C — model real-world data with precision.</p>
+      <div class="chapter-meta"><span>📄 Modules 5.1 – 5.7</span><span>⏱️ 90–130 min read</span><span>💻 55+ Examples</span></div>
+    </div>
+
+    <div class="callout callout-tip"><strong>How to study Part 5:</strong> For every struct, draw its memory layout on paper — including padding bytes. Use <code>sizeof</code> and <code>offsetof</code> to verify your diagrams. Understanding memory layout is essential for embedded and network programming.</div>
+
+    <div class="hb-mini-toc">
+      <div class="hb-mini-title">📍 Part 5 Modules</div>
+      <div class="hb-mini-links">
+        <a href="#m5-1">5.1 Struct Basics</a>
+        <a href="#m5-2">5.2 Advanced Structs</a>
+        <a href="#m5-3">5.3 Memory Layout</a>
+        <a href="#m5-4">5.4 Unions</a>
+        <a href="#m5-5">5.5 Enumerations</a>
+        <a href="#m5-6">5.6 typedef</a>
+        <a href="#m5-7">5.7 Bit Fields</a>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">🚀 Advanced Lens — Part 5</div>
+      <p class="explain-en">Structures in C are used to build everything from network packet parsers to database records to linked list nodes. Understanding padding, alignment, and how to use structs with pointers is what separates a student from a professional C developer.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>C me structures se network packets, database records, linked list nodes — sab bante hain. Padding, alignment, aur structs with pointers samajhna professional C developer banne ke liye zaroori hai.</div>
+    </div>
+
+    <!-- MODULE 5.1 -->
+    <div class="module-section" id="m5-1">
+      <div class="module-header"><div class="module-number">5.1</div><h2 class="module-title">Structure Basics — Definition, initialization, accessing members, nested</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">What is a struct?</h3>
+        <p class="explain-en">A <strong>struct</strong> groups related variables of <strong>different types</strong> into a single unit. Think of it as creating a custom data type. Unlike arrays (same type), structs can hold mixed types — like a student record with name, age, and GPA together.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Struct related variables ko ek unit me group karta hai — different types ke. Ye custom data type banane jaisa hai. Array me same type hota hai, struct me mixed types ho sakte hain — jaise student ka naam, age, aur GPA ek saath.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Struct basics</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Define a struct */</span>
+<span class="keyword">struct</span> Student {
+    <span class="type">char</span> name[<span class="number">50</span>];
+    <span class="type">int</span> age;
+    <span class="type">double</span> gpa;
+    <span class="type">int</span> roll_no;
+};
+
+<span class="comment">/* Declare & initialize */</span>
+<span class="keyword">struct</span> Student s1 = {<span class="string">"Yuvraj"</span>, <span class="number">21</span>, <span class="number">3.85</span>, <span class="number">101</span>};
+
+<span class="comment">/* Designated initializers (C99+) — preferred! */</span>
+<span class="keyword">struct</span> Student s2 = {
+    .name = <span class="string">"Rahul"</span>,
+    .age = <span class="number">22</span>,
+    .gpa = <span class="number">3.90</span>,
+    .roll_no = <span class="number">102</span>
+};
+
+<span class="comment">/* Access members with dot operator */</span>
+<span class="function">printf</span>(<span class="string">"Name: %s\n"</span>, s1.name);
+<span class="function">printf</span>(<span class="string">"GPA:  %.2f\n"</span>, s1.gpa);
+
+<span class="comment">/* Modify members */</span>
+s1.age = <span class="number">22</span>;
+s1.gpa = <span class="number">3.95</span>;</pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Nested structs</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Nested structs</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">struct</span> Date {
+    <span class="type">int</span> day, month, year;
+};
+
+<span class="keyword">struct</span> Employee {
+    <span class="type">char</span> name[<span class="number">50</span>];
+    <span class="type">double</span> salary;
+    <span class="keyword">struct</span> Date join_date;  <span class="comment">/* Nested struct */</span>
+};
+
+<span class="keyword">struct</span> Employee emp = {
+    .name = <span class="string">"Priya"</span>,
+    .salary = <span class="number">75000.0</span>,
+    .join_date = {.day = <span class="number">15</span>, .month = <span class="number">3</span>, .year = <span class="number">2024</span>}
+};
+
+<span class="function">printf</span>(<span class="string">"Joined: %d/%d/%d\n"</span>,
+    emp.join_date.day, emp.join_date.month, emp.join_date.year);</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 5.2 -->
+    <div class="module-section" id="m5-2">
+      <div class="module-header"><div class="module-number">5.2</div><h2 class="module-title">Advanced Structs — Pointers to structs, arrays of structs, self-referential</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Pointers to structs (arrow operator)</h3>
+        <p class="explain-en">When you have a <strong>pointer to a struct</strong>, use the <strong>arrow operator</strong> <code>-&gt;</code> instead of dot. <code>ptr-&gt;member</code> is equivalent to <code>(*ptr).member</code>. This is used everywhere — function parameters, linked lists, dynamic allocation.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Struct ke pointer pe <strong>arrow operator</strong> <code>-&gt;</code> use karo dot ki jagah. <code>ptr-&gt;member</code> same hai <code>(*ptr).member</code> ke. Ye function parameters, linked lists, dynamic allocation me har jagah use hota hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Struct pointers</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">struct</span> Student s = {<span class="string">"Yuvraj"</span>, <span class="number">21</span>, <span class="number">3.85</span>, <span class="number">101</span>};
+<span class="keyword">struct</span> Student *ptr = &amp;s;
+
+<span class="comment">/* Arrow operator — clean syntax */</span>
+<span class="function">printf</span>(<span class="string">"%s\n"</span>, ptr-&gt;name);   <span class="comment">/* Yuvraj */</span>
+<span class="function">printf</span>(<span class="string">"%d\n"</span>, ptr-&gt;age);    <span class="comment">/* 21 */</span>
+
+<span class="comment">/* Equivalent but ugly */</span>
+<span class="function">printf</span>(<span class="string">"%s\n"</span>, (*ptr).name); <span class="comment">/* Same thing */</span>
+
+<span class="comment">/* Dynamic allocation */</span>
+<span class="keyword">struct</span> Student *p = <span class="function">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> Student));
+<span class="function">strcpy</span>(p-&gt;name, <span class="string">"Dynamic"</span>);
+p-&gt;age = <span class="number">20</span>;
+p-&gt;gpa = <span class="number">3.70</span>;
+<span class="function">free</span>(p);</pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Array of structs & self-referential structs</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Array of structs & linked list node</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Array of structs */</span>
+<span class="keyword">struct</span> Student class[<span class="number">30</span>];
+class[<span class="number">0</span>] = (<span class="keyword">struct</span> Student){<span class="string">"Alice"</span>, <span class="number">20</span>, <span class="number">3.9</span>, <span class="number">1</span>};
+class[<span class="number">1</span>] = (<span class="keyword">struct</span> Student){<span class="string">"Bob"</span>, <span class="number">21</span>, <span class="number">3.5</span>, <span class="number">2</span>};
+
+<span class="comment">/* Self-referential struct (for linked lists!) */</span>
+<span class="keyword">struct</span> Node {
+    <span class="type">int</span> data;
+    <span class="keyword">struct</span> Node *next;  <span class="comment">/* Points to another Node */</span>
+};
+
+<span class="comment">/* Create a 3-node linked list */</span>
+<span class="keyword">struct</span> Node n3 = {<span class="number">30</span>, <span class="number">NULL</span>};
+<span class="keyword">struct</span> Node n2 = {<span class="number">20</span>, &amp;n3};
+<span class="keyword">struct</span> Node n1 = {<span class="number">10</span>, &amp;n2};
+
+<span class="comment">/* Traverse: n1 → n2 → n3 → NULL */</span>
+<span class="keyword">struct</span> Node *curr = &amp;n1;
+<span class="keyword">while</span> (curr != <span class="number">NULL</span>) {
+    <span class="function">printf</span>(<span class="string">"%d → "</span>, curr-&gt;data);
+    curr = curr-&gt;next;
+}
+<span class="function">printf</span>(<span class="string">"NULL\n"</span>);  <span class="comment">/* 10 → 20 → 30 → NULL */</span></pre></div>
+        </div>
+        <div class="callout callout-important"><strong>Foundation for DSA:</strong> Self-referential structs are the building block for ALL dynamic data structures — linked lists, trees, graphs, stacks, and queues. Master this pattern now; Part 7 builds on it heavily.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 5.3 -->
+    <div class="module-section" id="m5-3">
+      <div class="module-header"><div class="module-number">5.3</div><h2 class="module-title">Memory Layout & Padding — Alignment, sizeof struct, packed structs</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Why structs have padding</h3>
+        <p class="explain-en">CPUs access memory most efficiently at <strong>aligned addresses</strong> (e.g., a 4-byte int at an address divisible by 4). The compiler inserts <strong>padding bytes</strong> between struct members to ensure alignment. This means <code>sizeof(struct)</code> is often <strong>larger</strong> than the sum of member sizes.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>CPUs aligned addresses pe memory efficiently access karte hain (e.g., 4-byte int address divisible by 4 pe). Compiler struct members ke beech padding bytes dalta hai alignment ke liye. Isliye <code>sizeof(struct)</code> members ke sum se bada hota hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Padding example</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="preprocessor">#include</span> <span class="string">&lt;stddef.h&gt;</span>  <span class="comment">/* for offsetof */</span>
+
+<span class="keyword">struct</span> Bad {
+    <span class="type">char</span> a;      <span class="comment">/* 1 byte + 3 padding */</span>
+    <span class="type">int</span> b;       <span class="comment">/* 4 bytes */</span>
+    <span class="type">char</span> c;      <span class="comment">/* 1 byte + 3 padding */</span>
+};  <span class="comment">/* Total: 12 bytes (not 6!) */</span>
+
+<span class="keyword">struct</span> Good {
+    <span class="type">int</span> b;       <span class="comment">/* 4 bytes */</span>
+    <span class="type">char</span> a;      <span class="comment">/* 1 byte */</span>
+    <span class="type">char</span> c;      <span class="comment">/* 1 byte + 2 padding */</span>
+};  <span class="comment">/* Total: 8 bytes — saved 33%! */</span>
+
+<span class="function">printf</span>(<span class="string">"Bad:  %zu\n"</span>, <span class="keyword">sizeof</span>(<span class="keyword">struct</span> Bad));   <span class="comment">/* 12 */</span>
+<span class="function">printf</span>(<span class="string">"Good: %zu\n"</span>, <span class="keyword">sizeof</span>(<span class="keyword">struct</span> Good));  <span class="comment">/* 8 */</span>
+
+<span class="comment">/* Use offsetof to see member positions */</span>
+<span class="function">printf</span>(<span class="string">"a offset: %zu\n"</span>, <span class="function">offsetof</span>(<span class="keyword">struct</span> Bad, a)); <span class="comment">/* 0 */</span>
+<span class="function">printf</span>(<span class="string">"b offset: %zu\n"</span>, <span class="function">offsetof</span>(<span class="keyword">struct</span> Bad, b)); <span class="comment">/* 4 */</span>
+<span class="function">printf</span>(<span class="string">"c offset: %zu\n"</span>, <span class="function">offsetof</span>(<span class="keyword">struct</span> Bad, c)); <span class="comment">/* 8 */</span></pre></div>
+        </div>
+        <div class="diagram-box">
+          <div class="diagram-title">📐 struct Bad Memory Layout (12 bytes)</div>
+          <div class="diagram-flow">
+            <div class="diagram-node primary">a (1B)<br><small>offset 0</small></div>
+            <div class="diagram-node" style="opacity:0.4">pad<br><small>3 bytes</small></div>
+            <div class="diagram-node secondary">b (4B)<br><small>offset 4</small></div>
+            <div class="diagram-node success">c (1B)<br><small>offset 8</small></div>
+            <div class="diagram-node" style="opacity:0.4">pad<br><small>3 bytes</small></div>
+          </div>
+        </div>
+        <div class="callout callout-tip"><strong>Optimization rule:</strong> Order struct members from <strong>largest to smallest</strong> to minimize padding. This can save significant memory in arrays of millions of structs (databases, games, scientific computing).</div>
+      </div>
+    </div>
+
+    <!-- MODULE 5.4 -->
+    <div class="module-section" id="m5-4">
+      <div class="module-header"><div class="module-number">5.4</div><h2 class="module-title">Unions & Tagged Unions — Memory-efficient variants, type-punning</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">What is a union?</h3>
+        <p class="explain-en">A <strong>union</strong> looks like a struct, but all members <strong>share the same memory</strong>. Only one member can be used at a time. The size of a union equals the size of its <strong>largest member</strong>. Unions save memory when a variable can be one of several types.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Union struct jaisa dikhta hai, par sabhi members <strong>same memory share</strong> karte hain. Ek time pe sirf ek member use ho sakta hai. Union ka size largest member ke barabar hota hai. Jab variable kisi ek type ka ho — tab memory bachane ke liye union use hota hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Union basics</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">union</span> Data {
+    <span class="type">int</span> i;        <span class="comment">/* 4 bytes */</span>
+    <span class="type">float</span> f;      <span class="comment">/* 4 bytes */</span>
+    <span class="type">char</span> str[<span class="number">20</span>]; <span class="comment">/* 20 bytes */</span>
+};
+<span class="comment">/* sizeof(union Data) = 20 (largest member) */</span>
+
+<span class="keyword">union</span> Data d;
+d.i = <span class="number">42</span>;
+<span class="function">printf</span>(<span class="string">"%d\n"</span>, d.i);  <span class="comment">/* 42 ✅ */</span>
+
+d.f = <span class="number">3.14</span>;
+<span class="comment">/* d.i is now GARBAGE — they share memory! */</span>
+<span class="function">printf</span>(<span class="string">"%f\n"</span>, d.f);  <span class="comment">/* 3.14 ✅ */</span>
+<span class="function">printf</span>(<span class="string">"%d\n"</span>, d.i);  <span class="comment">/* Garbage ❌ */</span></pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Tagged union (discriminated union)</h3>
+        <p class="explain-en">A <strong>tagged union</strong> combines a union with an enum "tag" that tracks which member is currently active. This is the safe, industry-standard pattern — used in parsers, interpreters, and protocol handlers.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Tagged union me union ke saath ek enum "tag" hota hai jo batata hai kaunsa member abhi active hai. Ye safe, industry-standard pattern hai — parsers, interpreters, aur protocol handlers me use hota hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Tagged union</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">enum</span> ValueType { TYPE_INT, TYPE_FLOAT, TYPE_STRING };
+
+<span class="keyword">struct</span> Value {
+    <span class="keyword">enum</span> ValueType type;  <span class="comment">/* Tag — tracks active member */</span>
+    <span class="keyword">union</span> {
+        <span class="type">int</span> i;
+        <span class="type">float</span> f;
+        <span class="type">char</span> str[<span class="number">32</span>];
+    } data;
+};
+
+<span class="type">void</span> <span class="function">print_value</span>(<span class="keyword">struct</span> Value v) {
+    <span class="keyword">switch</span> (v.type) {
+        <span class="keyword">case</span> TYPE_INT:    <span class="function">printf</span>(<span class="string">"%d\n"</span>, v.data.i); <span class="keyword">break</span>;
+        <span class="keyword">case</span> TYPE_FLOAT:  <span class="function">printf</span>(<span class="string">"%f\n"</span>, v.data.f); <span class="keyword">break</span>;
+        <span class="keyword">case</span> TYPE_STRING: <span class="function">printf</span>(<span class="string">"%s\n"</span>, v.data.str); <span class="keyword">break</span>;
+    }
+}
+
+<span class="keyword">struct</span> Value v = {.type = TYPE_INT, .data.i = <span class="number">42</span>};
+<span class="function">print_value</span>(v);  <span class="comment">/* 42 */</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Feature</th><th>Struct</th><th>Union</th></tr></thead>
+            <tbody>
+              <tr><td>Memory</td><td>Sum of all members + padding</td><td>Size of largest member</td></tr>
+              <tr><td>Active members</td><td>All at once</td><td>Only one at a time</td></tr>
+              <tr><td>Use case</td><td>Group related data</td><td>Memory-efficient variants</td></tr>
+              <tr><td>Access</td><td>Any member anytime</td><td>Only the last written member</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 5.5 -->
+    <div class="module-section" id="m5-5">
+      <div class="module-header"><div class="module-number">5.5</div><h2 class="module-title">Enumerations — Named constants, readability, state machines</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">enum basics</h3>
+        <p class="explain-en">An <code>enum</code> creates a set of named integer constants. It makes code more <strong>readable</strong> and <strong>self-documenting</strong>. By default, values start at 0 and increment by 1, but you can assign custom values.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>enum</code> named integer constants ka set banata hai. Code readable aur self-documenting banta hai. Default me values 0 se start hoti hain aur 1 se increment, par custom values bhi de sakte ho.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Enumerations</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Basic enum */</span>
+<span class="keyword">enum</span> Color { RED, GREEN, BLUE };  <span class="comment">/* 0, 1, 2 */</span>
+
+<span class="comment">/* Custom values */</span>
+<span class="keyword">enum</span> HttpStatus {
+    HTTP_OK = <span class="number">200</span>,
+    HTTP_NOT_FOUND = <span class="number">404</span>,
+    HTTP_SERVER_ERROR = <span class="number">500</span>
+};
+
+<span class="comment">/* State machine pattern */</span>
+<span class="keyword">enum</span> State { STATE_IDLE, STATE_RUNNING, STATE_ERROR, STATE_DONE };
+
+<span class="keyword">enum</span> State current = STATE_IDLE;
+
+<span class="keyword">switch</span> (current) {
+    <span class="keyword">case</span> STATE_IDLE:    <span class="function">start_process</span>();  current = STATE_RUNNING; <span class="keyword">break</span>;
+    <span class="keyword">case</span> STATE_RUNNING: <span class="function">check_progress</span>(); <span class="keyword">break</span>;
+    <span class="keyword">case</span> STATE_ERROR:   <span class="function">handle_error</span>();   current = STATE_IDLE; <span class="keyword">break</span>;
+    <span class="keyword">case</span> STATE_DONE:    <span class="function">cleanup</span>();        <span class="keyword">break</span>;
+}</pre></div>
+        </div>
+        <div class="callout callout-tip"><strong>Best practice:</strong> Use enums instead of <code>#define</code> for related constants. Enums are type-checked by the compiler, show up in debuggers, and group related values together.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 5.6 -->
+    <div class="module-section" id="m5-6">
+      <div class="module-header"><div class="module-number">5.6</div><h2 class="module-title">typedef & Type Aliases — Portability, readability, opaque types</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">typedef creates aliases</h3>
+        <p class="explain-en"><code>typedef</code> creates a new name for an existing type. It makes code more <strong>readable</strong>, <strong>portable</strong>, and enables <strong>opaque types</strong> (hiding implementation details). Every major C project uses typedef extensively.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>typedef</code> existing type ko naya naam deta hai. Code readable, portable banta hai, aur opaque types (implementation details chhupana) possible hote hain. Har major C project typedef use karta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — typedef</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Simple type alias */</span>
+<span class="keyword">typedef</span> <span class="type">unsigned int</span> uint;
+<span class="keyword">typedef</span> <span class="type">unsigned char</span> byte;
+
+uint count = <span class="number">100</span>;
+byte pixel = <span class="number">255</span>;
+
+<span class="comment">/* Struct typedef — avoids writing 'struct' every time */</span>
+<span class="keyword">typedef</span> <span class="keyword">struct</span> {
+    <span class="type">double</span> x, y;
+} Point;
+
+Point p1 = {<span class="number">3.0</span>, <span class="number">4.0</span>};  <span class="comment">/* No 'struct' keyword needed */</span>
+
+<span class="comment">/* Function pointer typedef */</span>
+<span class="keyword">typedef</span> <span class="type">int</span> (*Comparator)(<span class="keyword">const</span> <span class="type">void</span>*, <span class="keyword">const</span> <span class="type">void</span>*);
+Comparator cmp = compare_asc;  <span class="comment">/* Much cleaner! */</span>
+
+<span class="comment">/* Opaque type (hide implementation) */</span>
+<span class="comment">/* In header: */</span>
+<span class="keyword">typedef</span> <span class="keyword">struct</span> Database Database;  <span class="comment">/* Forward declaration */</span>
+Database* <span class="function">db_open</span>(<span class="keyword">const</span> <span class="type">char</span> *path);
+<span class="type">void</span> <span class="function">db_close</span>(Database *db);
+<span class="comment">/* User can't access internals — clean API! */</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Pattern</th><th>Example</th><th>Benefit</th></tr></thead>
+            <tbody>
+              <tr><td>Platform types</td><td><code>typedef uint32_t sensor_id_t;</code></td><td>Portable across platforms</td></tr>
+              <tr><td>Struct shorthand</td><td><code>typedef struct {...} Config;</code></td><td>No 'struct' keyword</td></tr>
+              <tr><td>Function pointers</td><td><code>typedef void (*Handler)(int);</code></td><td>Readable declarations</td></tr>
+              <tr><td>Opaque types</td><td><code>typedef struct Impl Impl;</code></td><td>Hide internals</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 5.7 -->
+    <div class="module-section" id="m5-7">
+      <div class="module-header"><div class="module-number">5.7</div><h2 class="module-title">Bit Fields — Hardware register mapping, compact data storage</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">What are bit fields?</h3>
+        <p class="explain-en">Bit fields let you specify the exact <strong>number of bits</strong> a struct member uses. They're essential for: <strong>hardware register mapping</strong> (embedded systems), <strong>network protocol headers</strong>, and <strong>compact data storage</strong> when memory is limited.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Bit fields se struct member me exact bits specify kar sakte ho. Hardware register mapping (embedded systems), network protocol headers, aur compact data storage ke liye zaroori hain jab memory limited ho.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Bit fields</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Compact flags — uses only 1 byte instead of 16! */</span>
+<span class="keyword">struct</span> Permissions {
+    <span class="type">unsigned int</span> read    : <span class="number">1</span>;  <span class="comment">/* 1 bit: 0 or 1 */</span>
+    <span class="type">unsigned int</span> write   : <span class="number">1</span>;
+    <span class="type">unsigned int</span> execute : <span class="number">1</span>;
+    <span class="type">unsigned int</span> admin   : <span class="number">1</span>;
+};
+
+<span class="keyword">struct</span> Permissions p = {.read = <span class="number">1</span>, .write = <span class="number">1</span>, .execute = <span class="number">0</span>, .admin = <span class="number">0</span>};
+
+<span class="keyword">if</span> (p.read) <span class="function">printf</span>(<span class="string">"Can read\n"</span>);
+<span class="keyword">if</span> (p.admin) <span class="function">printf</span>(<span class="string">"Is admin\n"</span>);
+
+<span class="comment">/* Hardware register mapping (embedded C) */</span>
+<span class="keyword">struct</span> StatusReg {
+    <span class="type">unsigned int</span> ready    : <span class="number">1</span>;
+    <span class="type">unsigned int</span> error    : <span class="number">1</span>;
+    <span class="type">unsigned int</span> mode     : <span class="number">3</span>;  <span class="comment">/* 3 bits: 0-7 */</span>
+    <span class="type">unsigned int</span> speed    : <span class="number">2</span>;  <span class="comment">/* 2 bits: 0-3 */</span>
+    <span class="type">unsigned int</span> reserved : <span class="number">1</span>;
+};</pre></div>
+        </div>
+        <div class="callout callout-warning"><strong>Portability warning:</strong> Bit field layout (order, padding) is <strong>implementation-defined</strong> — different compilers may order bits differently. For cross-platform code, use explicit bitwise operations instead. Bit fields are best for single-platform embedded work.</div>
+      </div>
+    <div class="concept-block">
+        <h3 class="concept-heading">Packed structs — removing padding</h3>
+        <p class="explain-en">Sometimes you <strong>need</strong> structs without padding — for network protocols, file formats, or binary data. GCC/Clang provide <code>__attribute__((packed))</code> and MSVC uses <code>#pragma pack</code>. Warning: packed structs can cause <strong>slower memory access</strong> on some architectures.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Kabhi kabhi structs bina padding ke chahiye — network protocols, file formats, ya binary data ke liye. GCC/Clang me <code>__attribute__((packed))</code> aur MSVC me <code>#pragma pack</code> use hota hai. Warning: packed structs se kuch architectures pe slow memory access hota hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Packed structs</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* GCC/Clang — packed attribute */</span>
+<span class="keyword">struct</span> __attribute__((<span class="function">packed</span>)) NetworkPacket {
+    <span class="type">uint8_t</span>  version;     <span class="comment">/* 1 byte */</span>
+    <span class="type">uint16_t</span> length;      <span class="comment">/* 2 bytes */</span>
+    <span class="type">uint32_t</span> source_ip;   <span class="comment">/* 4 bytes */</span>
+    <span class="type">uint32_t</span> dest_ip;     <span class="comment">/* 4 bytes */</span>
+    <span class="type">uint16_t</span> checksum;    <span class="comment">/* 2 bytes */</span>
+};  <span class="comment">/* sizeof = 13 (no padding!) */</span>
+
+<span class="comment">/* Without packed: sizeof = 16 (3 bytes wasted) */</span>
+
+<span class="comment">/* MSVC equivalent */</span>
+<span class="preprocessor">#pragma pack(push, 1)</span>
+<span class="keyword">struct</span> PackedData {
+    <span class="type">char</span> a;
+    <span class="type">int</span> b;
+    <span class="type">char</span> c;
+};  <span class="comment">/* sizeof = 6 instead of 12 */</span>
+<span class="preprocessor">#pragma pack(pop)</span></pre></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Struct, Union, Enum — Complete Quick Reference</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Feature</th><th>Syntax</th><th>When to use</th></tr></thead>
+          <tbody>
+            <tr><td>Basic struct</td><td><code>struct Point { int x, y; };</code></td><td>Group related data</td></tr>
+            <tr><td>typedef struct</td><td><code>typedef struct { ... } Point;</code></td><td>Skip 'struct' keyword</td></tr>
+            <tr><td>Nested struct</td><td><code>struct A { struct B inner; };</code></td><td>Compose complex types</td></tr>
+            <tr><td>Struct pointer</td><td><code>ptr-&gt;member</code></td><td>Dynamic allocation, linked lists</td></tr>
+            <tr><td>Self-referential</td><td><code>struct Node { struct Node *next; };</code></td><td>Linked lists, trees, graphs</td></tr>
+            <tr><td>Designated init</td><td><code>{ .x = 1, .y = 2 }</code></td><td>Readable initialization (C99+)</td></tr>
+            <tr><td>Compound literal</td><td><code>(struct Point){3, 4}</code></td><td>Inline struct creation</td></tr>
+            <tr><td>Union</td><td><code>union { int i; float f; };</code></td><td>Memory-efficient variants</td></tr>
+            <tr><td>Tagged union</td><td><code>struct { enum type; union data; };</code></td><td>Safe variant types</td></tr>
+            <tr><td>Enum</td><td><code>enum Color { RED, GREEN };</code></td><td>Named integer constants</td></tr>
+            <tr><td>Bit field</td><td><code>unsigned int flag : 1;</code></td><td>Compact flags, hardware</td></tr>
+            <tr><td>Packed struct</td><td><code>__attribute__((packed))</code></td><td>Network packets, binary files</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="concept-block">
+      <h3 class="concept-heading">Real-world struct patterns used in industry</h3>
+      <p class="explain-en">Here are patterns you'll find in production C codebases — from Linux kernel modules to game engines to embedded firmware. Understanding these patterns makes you interview-ready.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Ye patterns production C codebases me milte hain — Linux kernel modules se game engines se embedded firmware tak. Ye patterns samajhna interview-ready banata hai.</div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">💻 C — Industry patterns</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+        <div class="code-body"><pre><span class="comment">/* Pattern 1: Constructor/Destructor pattern */</span>
+<span class="keyword">typedef</span> <span class="keyword">struct</span> {
+    <span class="type">char</span> *data;
+    <span class="type">size_t</span> length;
+    <span class="type">size_t</span> capacity;
+} String;
+
+String <span class="function">string_new</span>(<span class="keyword">const</span> <span class="type">char</span> *init) {
+    <span class="type">size_t</span> len = <span class="function">strlen</span>(init);
+    String s = {
+        .data = <span class="function">malloc</span>(len + <span class="number">1</span>),
+        .length = len,
+        .capacity = len + <span class="number">1</span>
+    };
+    <span class="function">strcpy</span>(s.data, init);
+    <span class="keyword">return</span> s;
+}
+
+<span class="type">void</span> <span class="function">string_free</span>(String *s) {
+    <span class="function">free</span>(s-&gt;data);
+    s-&gt;data = <span class="number">NULL</span>;
+    s-&gt;length = <span class="number">0</span>;
+    s-&gt;capacity = <span class="number">0</span>;
+}
+
+<span class="comment">/* Pattern 2: Flexible array member (C99+) */</span>
+<span class="keyword">struct</span> Packet {
+    <span class="type">uint16_t</span> type;
+    <span class="type">uint16_t</span> length;
+    <span class="type">uint8_t</span>  data[];  <span class="comment">/* Flexible array — must be last member */</span>
+};
+
+<span class="comment">/* Allocate packet with N bytes of data */</span>
+<span class="keyword">struct</span> Packet *pkt = <span class="function">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> Packet) + <span class="number">1024</span>);
+pkt-&gt;type = <span class="number">1</span>;
+pkt-&gt;length = <span class="number">1024</span>;
+<span class="function">memcpy</span>(pkt-&gt;data, payload, <span class="number">1024</span>);
+
+<span class="comment">/* Pattern 3: Vtable (virtual function table) — OOP in C */</span>
+<span class="keyword">typedef</span> <span class="keyword">struct</span> Shape Shape;
+<span class="keyword">typedef</span> <span class="keyword">struct</span> {
+    <span class="type">double</span> (*area)(Shape *self);
+    <span class="type">void</span>   (*draw)(Shape *self);
+    <span class="type">void</span>   (*destroy)(Shape *self);
+} ShapeVtable;
+
+<span class="keyword">struct</span> Shape {
+    <span class="keyword">const</span> ShapeVtable *vtable;  <span class="comment">/* Pointer to method table */</span>
+};
+
+<span class="comment">/* Usage: shape->vtable->area(shape); */</span></pre></div>
+      </div>
+      <div class="callout callout-important"><strong>Interview gold:</strong> "How do you implement polymorphism in C?" → Answer: vtable pattern with function pointers. This is exactly how the Linux kernel handles device drivers, file systems, and network protocols.</div>
+    </div>
+
+    <div class="practice-box">
+      <div class="practice-title">✏️ Practice Exercises — Part 5</div>
+      <ol>
+        <li>Create a <code>Student</code> struct with name, age, GPA. Make an array of 5 students, fill them, and print the one with highest GPA.</li>
+        <li>Build a 3-node linked list using self-referential structs. Traverse and print all values.</li>
+        <li>Create two versions of a struct — one with poor member ordering (max padding) and one optimized. Compare <code>sizeof</code> results.</li>
+        <li>Implement a tagged union <code>Value</code> that can hold int, float, or string. Write a <code>print_value</code> function.</li>
+        <li>Create a state machine using enums for a traffic light (RED → GREEN → YELLOW → RED).</li>
+        <li>Use typedef to create clean types: <code>Point</code>, <code>Color</code>, <code>Comparator</code>. Build a program using all three.</li>
+        <li>Design a bit field struct for file permissions (rwx for owner, group, others — 9 bits total). Print the sizeof.</li>
+      </ol>
+    </div>
+
+    <div class="handbook-nav">
+      <a href="part4.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Part 4: Arrays, Strings & Pointers</div></div></a>
+      <a href="part6.html" class="nav-btn next"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Part 6: Dynamic Memory & File I/O →</div></div><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+
+  </div>
+
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
+  <script src="../../../js/main.js"></script>
+  <script>
+    (() => {
+      document.querySelectorAll('.code-block').forEach((block) => { const pre = block.querySelector('.code-body pre'), header = block.querySelector('.code-header'); if (!pre || !header) return; let actions = header.querySelector('.code-actions'); if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); } const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'code-copy-btn'; btn.textContent = 'Copy'; btn.addEventListener('click', async () => { try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; } catch { btn.textContent = 'Failed'; } finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); } }); actions.prepend(btn); });
+      const fill = document.querySelector('.hb-progress-fill'), label = document.querySelector('.hb-progress-label');
+      if (fill && label) { const update = () => { const h = document.documentElement, d = (h.scrollHeight - h.clientHeight) || 1, p = Math.max(0, Math.min(1, h.scrollTop / d)); fill.style.width = (p*100).toFixed(0)+'%'; label.textContent = (p*100).toFixed(0)+'%'; }; document.addEventListener('scroll', update, { passive: true }); update(); }
+    })();
+  </script>
+</body>
+</html>

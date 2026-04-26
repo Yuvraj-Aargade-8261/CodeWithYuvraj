@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Part 6: Dynamic Memory & File I/O — C Programming Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 6 of C Programming Handbook: malloc, calloc, realloc, free, memory management patterns, file I/O, binary files, and error handling.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/handbook.css">
+</head>
+<body class="handbook-wrapper">
+  <nav class="navbar"><div class="container"><a href="../../../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../../../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
+
+  <div class="handbook-page">
+    <div class="hb-topbar">
+      <div class="hb-topbar-inner">
+        <div class="hb-breadcrumbs">
+          <a href="index.html">C Programming Handbook</a>
+          <span class="hb-muted">/</span><span>Part 6</span><span class="hb-muted">·</span>
+          <a href="#m6-1">6.1</a> <a href="#m6-2">6.2</a> <a href="#m6-3">6.3</a> <a href="#m6-4">6.4</a> <a href="#m6-5">6.5</a> <a href="#m6-6">6.6</a> <a href="#m6-7">6.7</a>
+        </div>
+        <div class="hb-progress" aria-label="Reading progress">
+          <div class="hb-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="hb-progress-fill"></div></div>
+          <div class="hb-progress-label">0%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chapter-header" data-chapter-num="06">
+      <div class="chapter-part-label">📖 Part 6 — Dynamic Memory & File I/O</div>
+      <h1 class="chapter-title">Master <span class="gradient-text">Memory & Files</span></h1>
+      <p class="chapter-subtitle">Dynamic memory management and file handling are what make C programs interact with the real world.</p>
+      <div class="chapter-meta"><span>📄 Modules 6.1 – 6.7</span><span>⏱️ 100–140 min read</span><span>💻 60+ Examples</span></div>
+    </div>
+
+    <div class="callout callout-tip"><strong>How to study Part 6:</strong> For every <code>malloc</code>, write a corresponding <code>free</code> IMMEDIATELY. Use Valgrind to check for leaks. For file I/O, always check return values. These habits define professional C developers.</div>
+
+    <div class="hb-mini-toc">
+      <div class="hb-mini-title">📍 Part 6 Modules</div>
+      <div class="hb-mini-links">
+        <a href="#m6-1">6.1 Stack vs Heap</a>
+        <a href="#m6-2">6.2 malloc/free</a>
+        <a href="#m6-3">6.3 calloc/realloc</a>
+        <a href="#m6-4">6.4 Memory Patterns</a>
+        <a href="#m6-5">6.5 Text File I/O</a>
+        <a href="#m6-6">6.6 Binary Files</a>
+        <a href="#m6-7">6.7 Error Handling</a>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">🚀 Advanced Lens — Part 6</div>
+      <p class="explain-en">In C, YOU are the memory manager. There's no garbage collector — every byte you allocate must be freed. Understanding the stack vs heap distinction, memory allocation patterns, and file I/O is what separates C from all other languages. These skills are critical for embedded systems, OS development, and high-performance computing.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>C me TUM memory manager ho. Koi garbage collector nahi — har byte jo allocate karo woh free karna padega. Stack vs heap, memory allocation patterns, aur file I/O samajhna C ko doosri languages se alag banata hai.</div>
+    </div>
+
+    <!-- MODULE 6.1 -->
+    <div class="module-section" id="m6-1">
+      <div class="module-header"><div class="module-number">6.1</div><h2 class="module-title">Stack vs Heap Memory — Two worlds of allocation</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Memory regions in a C program</h3>
+        <p class="explain-en">Every C program has 4 memory regions: <strong>Text</strong> (code), <strong>Data</strong> (globals), <strong>Stack</strong> (local variables, function calls), and <strong>Heap</strong> (dynamic allocation). Understanding which region your data lives in determines its lifetime and how it's managed.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Har C program me 4 memory regions hain: Text (code), Data (globals), Stack (local variables, function calls), Heap (dynamic allocation). Data kis region me hai ye uski lifetime aur management decide karta hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Region</th><th>Stores</th><th>Lifetime</th><th>Size</th><th>Speed</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Text</strong></td><td>Machine code</td><td>Entire program</td><td>Fixed</td><td>—</td></tr>
+              <tr><td><strong>Data/BSS</strong></td><td>Global & static vars</td><td>Entire program</td><td>Fixed</td><td>Fast</td></tr>
+              <tr><td><strong>Stack</strong></td><td>Local vars, function frames</td><td>Function scope</td><td>1-8 MB (limited!)</td><td>Very fast</td></tr>
+              <tr><td><strong>Heap</strong></td><td>malloc'd memory</td><td>Until free()</td><td>GBs (limited by RAM)</td><td>Slower</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="diagram-box">
+          <div class="diagram-title">📐 C Program Memory Layout</div>
+          <div class="diagram-flow">
+            <div class="diagram-node primary">Stack ↓<br><small>grows down</small></div>
+            <div class="diagram-arrow">↕ free space ↕</div>
+            <div class="diagram-node accent">Heap ↑<br><small>grows up</small></div>
+            <div class="diagram-node secondary">Data/BSS<br><small>globals</small></div>
+            <div class="diagram-node success">Text<br><small>code</small></div>
+          </div>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Where does data live?</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="type">int</span> global = <span class="number">10</span>;           <span class="comment">/* Data segment */</span>
+<span class="keyword">static</span> <span class="type">int</span> s_var = <span class="number">20</span>;     <span class="comment">/* Data segment */</span>
+
+<span class="type">void</span> <span class="function">example</span>(<span class="type">void</span>) {
+    <span class="type">int</span> local = <span class="number">30</span>;          <span class="comment">/* Stack — auto-freed when function returns */</span>
+    <span class="type">int</span> arr[<span class="number">100</span>];             <span class="comment">/* Stack — 400 bytes on stack */</span>
+
+    <span class="type">int</span> *heap = <span class="function">malloc</span>(<span class="number">400</span>);  <span class="comment">/* Heap — YOU must free this */</span>
+    <span class="comment">/* ... use heap ... */</span>
+    <span class="function">free</span>(heap);               <span class="comment">/* Heap memory returned to OS */</span>
+}
+
+<span class="comment">/* ⚠️ DON'T return stack pointers! */</span>
+<span class="type">int</span> *<span class="function">bad_function</span>(<span class="type">void</span>) {
+    <span class="type">int</span> x = <span class="number">42</span>;
+    <span class="keyword">return</span> &amp;x;  <span class="comment">/* ❌ DANGLING POINTER — x is dead after return! */</span>
+}
+
+<span class="comment">/* ✅ Return heap pointer instead */</span>
+<span class="type">int</span> *<span class="function">good_function</span>(<span class="type">void</span>) {
+    <span class="type">int</span> *x = <span class="function">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">int</span>));
+    *x = <span class="number">42</span>;
+    <span class="keyword">return</span> x;  <span class="comment">/* ✅ Caller must free this */</span>
+}</pre></div>
+        </div>
+        <div class="callout callout-warning"><strong>Stack overflow:</strong> Declaring <code>int arr[1000000];</code> (4MB) on the stack will crash your program. Large arrays MUST go on the heap with <code>malloc</code>. Default stack size: Linux ~8MB, Windows ~1MB.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 6.2 -->
+    <div class="module-section" id="m6-2">
+      <div class="module-header"><div class="module-number">6.2</div><h2 class="module-title">malloc & free — Dynamic allocation, sizeof, error checking</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">malloc — allocate heap memory</h3>
+        <p class="explain-en"><code>malloc(size)</code> allocates <code>size</code> bytes on the heap and returns a <code>void*</code> pointer. It does <strong>NOT</strong> initialize the memory (contains garbage). <strong>Always</strong> check if malloc returns NULL (allocation failure). <strong>Always</strong> free when done.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>malloc(size)</code> heap pe <code>size</code> bytes allocate karta hai aur <code>void*</code> pointer return karta hai. Memory initialize NAHI hoti (garbage hota hai). Hamesha check karo ki NULL toh nahi mila. Kaam ho jaaye toh free karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — malloc & free</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="preprocessor">#include</span> <span class="string">&lt;stdlib.h&gt;</span>
+
+<span class="comment">/* Allocate a single int */</span>
+<span class="type">int</span> *p = <span class="function">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">int</span>));
+<span class="keyword">if</span> (p == <span class="number">NULL</span>) {
+    <span class="function">fprintf</span>(stderr, <span class="string">"malloc failed!\n"</span>);
+    <span class="keyword">return</span> <span class="number">1</span>;
+}
+*p = <span class="number">42</span>;
+<span class="function">free</span>(p);
+p = <span class="number">NULL</span>;  <span class="comment">/* Prevent dangling pointer */</span>
+
+<span class="comment">/* Allocate an array of 100 ints */</span>
+<span class="type">int</span> n = <span class="number">100</span>;
+<span class="type">int</span> *arr = <span class="function">malloc</span>(n * <span class="keyword">sizeof</span>(<span class="type">int</span>));
+<span class="keyword">if</span> (!arr) { <span class="function">perror</span>(<span class="string">"malloc"</span>); <span class="function">exit</span>(<span class="number">1</span>); }
+
+<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++) {
+    arr[i] = i * <span class="number">10</span>;  <span class="comment">/* Use like a normal array */</span>
+}
+<span class="function">free</span>(arr);
+arr = <span class="number">NULL</span>;
+
+<span class="comment">/* Allocate a struct */</span>
+<span class="keyword">struct</span> Student *s = <span class="function">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> Student));
+<span class="function">strcpy</span>(s-&gt;name, <span class="string">"Yuvraj"</span>);
+s-&gt;age = <span class="number">21</span>;
+<span class="function">free</span>(s);</pre></div>
+        </div>
+        <div class="callout callout-important"><strong>Rule:</strong> <code>sizeof(*ptr)</code> is safer than <code>sizeof(type)</code>. If the type changes, sizeof(*ptr) adapts automatically: <code>int *p = malloc(sizeof(*p));</code></div>
+      </div>
+    </div>
+
+    <!-- MODULE 6.3 -->
+    <div class="module-section" id="m6-3">
+      <div class="module-header"><div class="module-number">6.3</div><h2 class="module-title">calloc, realloc & Memory Resizing — Zero-init, dynamic arrays</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">calloc vs malloc</h3>
+        <p class="explain-en"><code>calloc(count, size)</code> allocates <code>count × size</code> bytes and <strong>initializes all to zero</strong>. This is safer than malloc for arrays and structs because there's no garbage data. Use calloc when you need zeroed memory.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>calloc(count, size)</code> <code>count × size</code> bytes allocate karta hai aur <strong>sab zero initialize</strong> karta hai. Arrays aur structs ke liye malloc se safe hai kyunki garbage data nahi hota.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — calloc vs malloc</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* malloc — NOT zeroed (garbage values!) */</span>
+<span class="type">int</span> *a = <span class="function">malloc</span>(<span class="number">5</span> * <span class="keyword">sizeof</span>(<span class="type">int</span>));
+<span class="comment">/* a[0..4] = garbage! Must initialize manually */</span>
+
+<span class="comment">/* calloc — zeroed automatically */</span>
+<span class="type">int</span> *b = <span class="function">calloc</span>(<span class="number">5</span>, <span class="keyword">sizeof</span>(<span class="type">int</span>));
+<span class="comment">/* b[0..4] = 0, 0, 0, 0, 0 ✅ */</span>
+
+<span class="comment">/* calloc also checks for overflow in count × size */</span>
+<span class="type">size_t</span> huge = <span class="number">SIZE_MAX</span>;
+<span class="type">int</span> *c = <span class="function">calloc</span>(huge, <span class="keyword">sizeof</span>(<span class="type">int</span>));  <span class="comment">/* Returns NULL safely */</span></pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">realloc — resize dynamic arrays</h3>
+        <p class="explain-en"><code>realloc(ptr, new_size)</code> resizes a previously allocated block. It may move the data to a new location if needed. <strong>Critical:</strong> always assign realloc's return to a <strong>temp variable</strong> — if it returns NULL, the original pointer is still valid.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>realloc(ptr, new_size)</code> pehle se allocated block ka size change karta hai. Zaroorat ho toh data naye location pe move kar sakta hai. Important: realloc ka return temp variable me rakho — NULL mile toh original pointer valid rehta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Dynamic array with realloc</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Growing array pattern */</span>
+<span class="type">int</span> capacity = <span class="number">4</span>;
+<span class="type">int</span> size = <span class="number">0</span>;
+<span class="type">int</span> *arr = <span class="function">malloc</span>(capacity * <span class="keyword">sizeof</span>(<span class="type">int</span>));
+
+<span class="type">void</span> <span class="function">push</span>(<span class="type">int</span> value) {
+    <span class="keyword">if</span> (size == capacity) {
+        capacity *= <span class="number">2</span>;  <span class="comment">/* Double capacity (amortized O(1)) */</span>
+        <span class="type">int</span> *temp = <span class="function">realloc</span>(arr, capacity * <span class="keyword">sizeof</span>(<span class="type">int</span>));
+        <span class="keyword">if</span> (!temp) {
+            <span class="function">perror</span>(<span class="string">"realloc failed"</span>);
+            <span class="function">free</span>(arr);
+            <span class="function">exit</span>(<span class="number">1</span>);
+        }
+        arr = temp;  <span class="comment">/* ✅ Only update after success */</span>
+    }
+    arr[size++] = value;
+}
+
+<span class="comment">/* ❌ WRONG — loses original on failure */</span>
+arr = <span class="function">realloc</span>(arr, new_size);  <span class="comment">/* If NULL, original is LEAKED! */</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Function</th><th>Zeros?</th><th>Args</th><th>Use case</th></tr></thead>
+            <tbody>
+              <tr><td><code>malloc(size)</code></td><td>❌ No</td><td>Total bytes</td><td>General allocation</td></tr>
+              <tr><td><code>calloc(n, size)</code></td><td>✅ Yes</td><td>Count × element size</td><td>Arrays, structs</td></tr>
+              <tr><td><code>realloc(ptr, size)</code></td><td>❌ No (new part)</td><td>New total size</td><td>Resize existing</td></tr>
+              <tr><td><code>free(ptr)</code></td><td>—</td><td>Pointer to free</td><td>Release memory</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 6.4 -->
+    <div class="module-section" id="m6-4">
+      <div class="module-header"><div class="module-number">6.4</div><h2 class="module-title">Memory Management Patterns — Ownership, RAII in C, memory pools</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Ownership rules</h3>
+        <p class="explain-en">In C, every allocated block has an <strong>owner</strong> — the code responsible for freeing it. Clear ownership prevents leaks and double-frees. Three patterns: (1) <strong>caller allocates, caller frees</strong>, (2) <strong>function allocates, caller frees</strong> (document this!), (3) <strong>init/destroy pairs</strong>.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>C me har allocated block ka ek owner hota hai — woh code jo free karne ke liye responsible hai. Clear ownership se leaks aur double-frees prevent hote hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Ownership patterns</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Pattern 1: Init/Destroy pair (most common) */</span>
+<span class="keyword">typedef</span> <span class="keyword">struct</span> {
+    <span class="type">int</span> *data;
+    <span class="type">int</span> size, capacity;
+} IntVec;
+
+<span class="type">void</span> <span class="function">vec_init</span>(IntVec *v, <span class="type">int</span> cap) {
+    v-&gt;data = <span class="function">malloc</span>(cap * <span class="keyword">sizeof</span>(<span class="type">int</span>));
+    v-&gt;size = <span class="number">0</span>;
+    v-&gt;capacity = cap;
+}
+
+<span class="type">void</span> <span class="function">vec_push</span>(IntVec *v, <span class="type">int</span> val) {
+    <span class="keyword">if</span> (v-&gt;size == v-&gt;capacity) {
+        v-&gt;capacity *= <span class="number">2</span>;
+        v-&gt;data = <span class="function">realloc</span>(v-&gt;data, v-&gt;capacity * <span class="keyword">sizeof</span>(<span class="type">int</span>));
+    }
+    v-&gt;data[v-&gt;size++] = val;
+}
+
+<span class="type">void</span> <span class="function">vec_destroy</span>(IntVec *v) {
+    <span class="function">free</span>(v-&gt;data);
+    v-&gt;data = <span class="number">NULL</span>;
+    v-&gt;size = v-&gt;capacity = <span class="number">0</span>;
+}
+
+<span class="comment">/* Usage: always pair init + destroy */</span>
+IntVec nums;
+<span class="function">vec_init</span>(&amp;nums, <span class="number">8</span>);
+<span class="function">vec_push</span>(&amp;nums, <span class="number">42</span>);
+<span class="function">vec_push</span>(&amp;nums, <span class="number">99</span>);
+<span class="function">vec_destroy</span>(&amp;nums);  <span class="comment">/* ✅ Clean */</span>
+
+<span class="comment">/* Pattern 2: Cleanup with goto (Linux kernel style) */</span>
+<span class="type">int</span> <span class="function">process</span>(<span class="type">void</span>) {
+    <span class="type">char</span> *buf1 = <span class="function">malloc</span>(<span class="number">1024</span>);
+    <span class="keyword">if</span> (!buf1) <span class="keyword">goto</span> err1;
+    <span class="type">char</span> *buf2 = <span class="function">malloc</span>(<span class="number">2048</span>);
+    <span class="keyword">if</span> (!buf2) <span class="keyword">goto</span> err2;
+
+    <span class="comment">/* ... do work ... */</span>
+
+    <span class="function">free</span>(buf2);
+    <span class="function">free</span>(buf1);
+    <span class="keyword">return</span> <span class="number">0</span>;
+err2: <span class="function">free</span>(buf1);
+err1: <span class="keyword">return</span> -<span class="number">1</span>;
+}</pre></div>
+        </div>
+        <div class="callout callout-important"><strong>Memory debugging tools:</strong> Use <code>valgrind --leak-check=full ./program</code> or <code>gcc -fsanitize=address</code> to catch leaks, use-after-free, and buffer overflows. These are mandatory in professional C development.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 6.5 -->
+    <div class="module-section" id="m6-5">
+      <div class="module-header"><div class="module-number">6.5</div><h2 class="module-title">Text File I/O — fopen, fclose, fgets, fprintf, fscanf</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">File operations workflow</h3>
+        <p class="explain-en">File I/O in C follows: <strong>Open → Read/Write → Close</strong>. Always check if <code>fopen</code> returns NULL. Always <code>fclose</code> when done. Use <code>fgets</code> (not <code>gets</code>!) for reading lines. Use <code>fprintf</code> for formatted output to files.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>C me file I/O ka workflow: Open → Read/Write → Close. Hamesha check karo ki <code>fopen</code> NULL toh nahi return kiya. Kaam ho jaaye toh <code>fclose</code> karo. Lines padhne ke liye <code>fgets</code> use karo (<code>gets</code> KABHI nahi!).</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Mode</th><th>Description</th><th>File exists?</th><th>File missing?</th></tr></thead>
+            <tbody>
+              <tr><td><code>"r"</code></td><td>Read only</td><td>Opens</td><td>Returns NULL</td></tr>
+              <tr><td><code>"w"</code></td><td>Write (truncate)</td><td>Empties file</td><td>Creates new</td></tr>
+              <tr><td><code>"a"</code></td><td>Append</td><td>Adds to end</td><td>Creates new</td></tr>
+              <tr><td><code>"r+"</code></td><td>Read & write</td><td>Opens</td><td>Returns NULL</td></tr>
+              <tr><td><code>"w+"</code></td><td>Read & write (truncate)</td><td>Empties file</td><td>Creates new</td></tr>
+              <tr><td><code>"rb"</code></td><td>Read binary</td><td>Opens</td><td>Returns NULL</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Text file I/O</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Writing to a file */</span>
+<span class="type">FILE</span> *f = <span class="function">fopen</span>(<span class="string">"output.txt"</span>, <span class="string">"w"</span>);
+<span class="keyword">if</span> (!f) { <span class="function">perror</span>(<span class="string">"fopen"</span>); <span class="keyword">return</span> <span class="number">1</span>; }
+
+<span class="function">fprintf</span>(f, <span class="string">"Name: %s\n"</span>, <span class="string">"Yuvraj"</span>);
+<span class="function">fprintf</span>(f, <span class="string">"Score: %d\n"</span>, <span class="number">95</span>);
+<span class="function">fclose</span>(f);
+
+<span class="comment">/* Reading from a file */</span>
+<span class="type">FILE</span> *in = <span class="function">fopen</span>(<span class="string">"output.txt"</span>, <span class="string">"r"</span>);
+<span class="keyword">if</span> (!in) { <span class="function">perror</span>(<span class="string">"fopen"</span>); <span class="keyword">return</span> <span class="number">1</span>; }
+
+<span class="type">char</span> line[<span class="number">256</span>];
+<span class="keyword">while</span> (<span class="function">fgets</span>(line, <span class="keyword">sizeof</span>(line), in)) {
+    <span class="function">printf</span>(<span class="string">"Read: %s"</span>, line);
+}
+<span class="function">fclose</span>(in);
+
+<span class="comment">/* Character-by-character reading */</span>
+<span class="type">int</span> ch;
+<span class="keyword">while</span> ((ch = <span class="function">fgetc</span>(in)) != <span class="number">EOF</span>) {
+    <span class="function">putchar</span>(ch);
+}</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 6.6 -->
+    <div class="module-section" id="m6-6">
+      <div class="module-header"><div class="module-number">6.6</div><h2 class="module-title">Binary File I/O — fread, fwrite, fseek, ftell, struct serialization</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Reading & writing binary data</h3>
+        <p class="explain-en">Binary files store data in raw format — no text conversion. <code>fwrite</code> dumps struct bytes directly to file. <code>fread</code> reads them back. <code>fseek</code> lets you jump to any position. This is how databases, image formats, and save files work.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Binary files data ko raw format me store karte hain — text conversion nahi. <code>fwrite</code> struct ke bytes seedha file me dalta hai. <code>fread</code> wapas padhta hai. <code>fseek</code> kisi bhi position pe jump kar sakta hai. Databases, images, aur save files aise hi kaam karte hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Binary file I/O</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">struct</span> Record {
+    <span class="type">char</span> name[<span class="number">50</span>];
+    <span class="type">int</span> age;
+    <span class="type">double</span> salary;
+};
+
+<span class="comment">/* Write structs to binary file */</span>
+<span class="keyword">struct</span> Record employees[] = {
+    {<span class="string">"Alice"</span>, <span class="number">30</span>, <span class="number">75000.0</span>},
+    {<span class="string">"Bob"</span>,   <span class="number">25</span>, <span class="number">62000.0</span>},
+    {<span class="string">"Carol"</span>, <span class="number">35</span>, <span class="number">88000.0</span>}
+};
+
+<span class="type">FILE</span> *f = <span class="function">fopen</span>(<span class="string">"data.bin"</span>, <span class="string">"wb"</span>);
+<span class="function">fwrite</span>(employees, <span class="keyword">sizeof</span>(<span class="keyword">struct</span> Record), <span class="number">3</span>, f);
+<span class="function">fclose</span>(f);
+
+<span class="comment">/* Read back */</span>
+<span class="type">FILE</span> *in = <span class="function">fopen</span>(<span class="string">"data.bin"</span>, <span class="string">"rb"</span>);
+<span class="keyword">struct</span> Record r;
+<span class="keyword">while</span> (<span class="function">fread</span>(&amp;r, <span class="keyword">sizeof</span>(r), <span class="number">1</span>, in) == <span class="number">1</span>) {
+    <span class="function">printf</span>(<span class="string">"%s, %d, %.0f\n"</span>, r.name, r.age, r.salary);
+}
+
+<span class="comment">/* Random access: jump to record #2 */</span>
+<span class="function">fseek</span>(in, <span class="number">1</span> * <span class="keyword">sizeof</span>(<span class="keyword">struct</span> Record), <span class="number">SEEK_SET</span>);
+<span class="function">fread</span>(&amp;r, <span class="keyword">sizeof</span>(r), <span class="number">1</span>, in);  <span class="comment">/* Bob */</span>
+
+<span class="comment">/* Get file size */</span>
+<span class="function">fseek</span>(in, <span class="number">0</span>, <span class="number">SEEK_END</span>);
+<span class="type">long</span> file_size = <span class="function">ftell</span>(in);
+<span class="function">fclose</span>(in);</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Function</th><th>Purpose</th><th>Returns</th></tr></thead>
+            <tbody>
+              <tr><td><code>fwrite(data, size, count, file)</code></td><td>Write binary data</td><td>Items written</td></tr>
+              <tr><td><code>fread(buf, size, count, file)</code></td><td>Read binary data</td><td>Items read</td></tr>
+              <tr><td><code>fseek(file, offset, origin)</code></td><td>Move file cursor</td><td>0 on success</td></tr>
+              <tr><td><code>ftell(file)</code></td><td>Get current position</td><td>Byte offset</td></tr>
+              <tr><td><code>rewind(file)</code></td><td>Go back to start</td><td>void</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>Portability warning:</strong> Binary files with structs are NOT portable across platforms (different padding, endianness). For portable formats, use explicit serialization or libraries like Protocol Buffers.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 6.7 -->
+    <div class="module-section" id="m6-7">
+      <div class="module-header"><div class="module-number">6.7</div><h2 class="module-title">Error Handling — errno, perror, strerror, return codes, assert</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">C error handling patterns</h3>
+        <p class="explain-en">C has no exceptions. Errors are handled via <strong>return codes</strong> (0=success, negative=error) and the global <code>errno</code> variable. <code>perror()</code> prints a human-readable error. <code>assert()</code> catches programmer bugs during development.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>C me exceptions nahi hain. Errors return codes (0=success, negative=error) aur global <code>errno</code> variable se handle hote hain. <code>perror()</code> readable error print karta hai. <code>assert()</code> development me programmer bugs pakadta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Error handling</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="preprocessor">#include</span> <span class="string">&lt;errno.h&gt;</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;string.h&gt;</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;assert.h&gt;</span>
+
+<span class="comment">/* Pattern 1: perror — prints "message: error description" */</span>
+<span class="type">FILE</span> *f = <span class="function">fopen</span>(<span class="string">"nonexistent.txt"</span>, <span class="string">"r"</span>);
+<span class="keyword">if</span> (!f) {
+    <span class="function">perror</span>(<span class="string">"Failed to open file"</span>);
+    <span class="comment">/* Output: "Failed to open file: No such file or directory" */</span>
+}
+
+<span class="comment">/* Pattern 2: errno + strerror */</span>
+<span class="type">int</span> *p = <span class="function">malloc</span>(<span class="number">SIZE_MAX</span>);  <span class="comment">/* Will fail */</span>
+<span class="keyword">if</span> (!p) {
+    <span class="function">fprintf</span>(stderr, <span class="string">"Error %d: %s\n"</span>, errno, <span class="function">strerror</span>(errno));
+}
+
+<span class="comment">/* Pattern 3: Return code convention */</span>
+<span class="type">int</span> <span class="function">read_config</span>(<span class="keyword">const</span> <span class="type">char</span> *path, Config *out) {
+    <span class="type">FILE</span> *f = <span class="function">fopen</span>(path, <span class="string">"r"</span>);
+    <span class="keyword">if</span> (!f) <span class="keyword">return</span> -<span class="number">1</span>;        <span class="comment">/* Error: can't open */</span>
+    <span class="keyword">if</span> (!<span class="function">parse</span>(f, out)) {
+        <span class="function">fclose</span>(f);
+        <span class="keyword">return</span> -<span class="number">2</span>;             <span class="comment">/* Error: parse failed */</span>
+    }
+    <span class="function">fclose</span>(f);
+    <span class="keyword">return</span> <span class="number">0</span>;                 <span class="comment">/* Success */</span>
+}
+
+<span class="comment">/* Pattern 4: assert for debugging */</span>
+<span class="type">void</span> <span class="function">process</span>(<span class="type">int</span> *data, <span class="type">int</span> n) {
+    <span class="function">assert</span>(data != <span class="number">NULL</span>);    <span class="comment">/* Crashes if NULL (debug only) */</span>
+    <span class="function">assert</span>(n &gt; <span class="number">0</span>);           <span class="comment">/* Crashes if n ≤ 0 */</span>
+    <span class="comment">/* Disabled in release: compile with -DNDEBUG */</span>
+}</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Tool</th><th>When to use</th><th>Production?</th></tr></thead>
+            <tbody>
+              <tr><td><code>perror("msg")</code></td><td>After failed system call</td><td>✅ Yes</td></tr>
+              <tr><td><code>strerror(errno)</code></td><td>Custom error messages</td><td>✅ Yes</td></tr>
+              <tr><td><code>assert(cond)</code></td><td>Catch programmer bugs</td><td>❌ Debug only</td></tr>
+              <tr><td>Return codes</td><td>Function success/failure</td><td>✅ Yes — primary method</td></tr>
+              <tr><td><code>exit(code)</code></td><td>Fatal, unrecoverable errors</td><td>✅ Sparingly</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Dynamic Memory & File I/O — Complete Quick Reference</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Category</th><th>Function</th><th>Signature</th><th>Key notes</th></tr></thead>
+          <tbody>
+            <tr><td rowspan="4">Memory</td><td><code>malloc</code></td><td><code>void* malloc(size_t size)</code></td><td>Uninitialized, may return NULL</td></tr>
+            <tr><td><code>calloc</code></td><td><code>void* calloc(size_t n, size_t size)</code></td><td>Zero-initialized, overflow safe</td></tr>
+            <tr><td><code>realloc</code></td><td><code>void* realloc(void *ptr, size_t size)</code></td><td>Use temp var! May move data</td></tr>
+            <tr><td><code>free</code></td><td><code>void free(void *ptr)</code></td><td>Set ptr = NULL after. free(NULL) is safe</td></tr>
+            <tr><td rowspan="5">Text I/O</td><td><code>fopen</code></td><td><code>FILE* fopen(const char*, const char*)</code></td><td>Always check for NULL return</td></tr>
+            <tr><td><code>fclose</code></td><td><code>int fclose(FILE*)</code></td><td>Returns 0 on success</td></tr>
+            <tr><td><code>fgets</code></td><td><code>char* fgets(char*, int, FILE*)</code></td><td>Reads line, includes \n. NULL = EOF</td></tr>
+            <tr><td><code>fprintf</code></td><td><code>int fprintf(FILE*, const char*, ...)</code></td><td>Formatted output to file</td></tr>
+            <tr><td><code>fscanf</code></td><td><code>int fscanf(FILE*, const char*, ...)</code></td><td>Returns items matched</td></tr>
+            <tr><td rowspan="4">Binary I/O</td><td><code>fread</code></td><td><code>size_t fread(void*, size_t, size_t, FILE*)</code></td><td>Returns items read (check!)</td></tr>
+            <tr><td><code>fwrite</code></td><td><code>size_t fwrite(const void*, size_t, size_t, FILE*)</code></td><td>Returns items written</td></tr>
+            <tr><td><code>fseek</code></td><td><code>int fseek(FILE*, long, int)</code></td><td>SEEK_SET, SEEK_CUR, SEEK_END</td></tr>
+            <tr><td><code>ftell</code></td><td><code>long ftell(FILE*)</code></td><td>Current byte offset</td></tr>
+            <tr><td rowspan="3">Errors</td><td><code>perror</code></td><td><code>void perror(const char*)</code></td><td>Prints "msg: error text"</td></tr>
+            <tr><td><code>strerror</code></td><td><code>char* strerror(int errnum)</code></td><td>Error number to string</td></tr>
+            <tr><td><code>errno</code></td><td><code>int errno</code></td><td>Global error number (thread-local)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="concept-block">
+      <h3 class="concept-heading">Common interview questions — Memory & Files</h3>
+      <p class="explain-en">These are frequently asked in C/systems programming interviews. Practice explaining each clearly.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Ye C/systems programming interviews me baar baar poochhe jaate hain. Har ek clearly explain karna practice karo.</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Question</th><th>Key answer points</th></tr></thead>
+          <tbody>
+            <tr><td>Stack vs Heap difference?</td><td>Stack: auto, fast, limited, LIFO. Heap: manual, unlimited, slower, fragmentation.</td></tr>
+            <tr><td>What happens if you forget free()?</td><td>Memory leak — program uses more and more RAM until crash/kill.</td></tr>
+            <tr><td>malloc vs calloc?</td><td>calloc zeros memory, checks for overflow in n×size. malloc is raw bytes.</td></tr>
+            <tr><td>What is a dangling pointer?</td><td>Pointer to freed memory. Set to NULL after free to catch early.</td></tr>
+            <tr><td>What is a memory leak?</td><td>Allocated memory that's unreachable (no pointer to it). Can't be freed.</td></tr>
+            <tr><td>How to detect memory leaks?</td><td>Valgrind, AddressSanitizer (gcc -fsanitize=address), or custom malloc wrappers.</td></tr>
+            <tr><td>"r" vs "rb" in fopen?</td><td>"rb" disables text-mode newline translation (important on Windows: \r\n → \n).</td></tr>
+            <tr><td>Why use fgets over gets?</td><td>gets has NO buffer limit → buffer overflow. fgets takes max size parameter.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="practice-box">
+      <div class="practice-title">✏️ Practice Exercises — Part 6</div>
+      <ol>
+        <li>Write a program that allocates an array with <code>malloc</code>, fills it, prints it, and frees it. Check for NULL.</li>
+        <li>Implement a <strong>dynamic int vector</strong> (init, push, get, destroy) using realloc with doubling capacity.</li>
+        <li>Compare <code>malloc</code> vs <code>calloc</code>: allocate 10 ints with each, print values before initialization.</li>
+        <li>Write a program that reads a text file line-by-line and counts: lines, words, and characters (like <code>wc</code>).</li>
+        <li>Create a student database: write 5 student records to a binary file, then read and display record #3 using <code>fseek</code>.</li>
+        <li>Write a file copy program: read from source, write to destination. Handle all errors with <code>perror</code>.</li>
+        <li>Build a program with intentional memory bugs. Use Valgrind or AddressSanitizer to detect and fix them.</li>
+      </ol>
+    </div>
+
+    <div class="handbook-nav">
+      <a href="part5.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Part 5: Structures, Unions & Advanced Types</div></div></a>
+      <a href="part7.html" class="nav-btn next"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Part 7: Data Structures in C →</div></div><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+
+  </div>
+
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
+  <script src="../../../js/main.js"></script>
+  <script>
+    (() => {
+      document.querySelectorAll('.code-block').forEach((block) => { const pre = block.querySelector('.code-body pre'), header = block.querySelector('.code-header'); if (!pre || !header) return; let actions = header.querySelector('.code-actions'); if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); } const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'code-copy-btn'; btn.textContent = 'Copy'; btn.addEventListener('click', async () => { try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; } catch { btn.textContent = 'Failed'; } finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); } }); actions.prepend(btn); });
+      const fill = document.querySelector('.hb-progress-fill'), label = document.querySelector('.hb-progress-label');
+      if (fill && label) { const update = () => { const h = document.documentElement, d = (h.scrollHeight - h.clientHeight) || 1, p = Math.max(0, Math.min(1, h.scrollTop / d)); fill.style.width = (p*100).toFixed(0)+'%'; label.textContent = (p*100).toFixed(0)+'%'; }; document.addEventListener('scroll', update, { passive: true }); update(); }
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Part 2: Operators & Control Flow — C Programming Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 2 of C Programming Handbook: Arithmetic, bitwise, relational operators, precedence, conditionals, loops, and storage classes.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/handbook.css">
+</head>
+<body class="handbook-wrapper">
+  <nav class="navbar"><div class="container"><a href="../../../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../../../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
+
+  <div class="handbook-page">
+    <div class="hb-topbar">
+      <div class="hb-topbar-inner">
+        <div class="hb-breadcrumbs">
+          <a href="index.html">C Programming Handbook</a>
+          <span class="hb-muted">/</span>
+          <span>Part 2</span>
+          <span class="hb-muted">·</span>
+          <a href="#m2-1">2.1</a> <a href="#m2-2">2.2</a> <a href="#m2-3">2.3</a> <a href="#m2-4">2.4</a> <a href="#m2-5">2.5</a> <a href="#m2-6">2.6</a> <a href="#m2-7">2.7</a>
+        </div>
+        <div class="hb-progress" aria-label="Reading progress">
+          <div class="hb-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="hb-progress-fill"></div></div>
+          <div class="hb-progress-label">0%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chapter-header" data-chapter-num="02">
+      <div class="chapter-part-label">📖 Part 2 — Operators & Control Flow</div>
+      <h1 class="chapter-title">Master <span class="gradient-text">Logic Building</span></h1>
+      <p class="chapter-subtitle">Every algorithm starts with operators and control flow — the brain of your C programs.</p>
+      <div class="chapter-meta"><span>📄 Modules 2.1 – 2.7</span><span>⏱️ 90–130 min read</span><span>💻 60+ Examples</span></div>
+    </div>
+
+    <div class="callout callout-tip">
+      <strong>How to study Part 2:</strong> Don't just read — predict the output of each code example before reading the answer. Write small programs to test edge cases (integer overflow, division by zero, short-circuit evaluation).
+    </div>
+
+    <div class="hb-mini-toc">
+      <div class="hb-mini-title">📍 Part 2 Modules</div>
+      <div class="hb-mini-links">
+        <a href="#m2-1">2.1 Arithmetic</a>
+        <a href="#m2-2">2.2 Relational & Logical</a>
+        <a href="#m2-3">2.3 Bitwise</a>
+        <a href="#m2-4">2.4 Precedence</a>
+        <a href="#m2-5">2.5 Conditionals</a>
+        <a href="#m2-6">2.6 Loops</a>
+        <a href="#m2-7">2.7 Storage Classes</a>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">🚀 Advanced Lens — Part 2</div>
+      <p class="explain-en">
+        At the industry level, operators aren't just math — bitwise operators control hardware registers, short-circuit evaluation prevents crashes,
+        and understanding precedence prevents billion-dollar bugs. Every embedded system, driver, and kernel module relies on these fundamentals.
+      </p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Industry me operators sirf math nahi — bitwise operators hardware registers control karte hain, short-circuit evaluation crashes prevent karta hai, aur precedence samajhna billion-dollar bugs rokta hai.</div>
+    </div>
+
+    <!-- MODULE 2.1 -->
+    <div class="module-section" id="m2-1">
+      <div class="module-header"><div class="module-number">2.1</div><h2 class="module-title">Arithmetic & Assignment Operators — +, -, *, /, %, compound assignment</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Arithmetic operators</h3>
+        <p class="explain-en">
+          Arithmetic operators perform mathematical calculations. The key gotcha in C: <strong>integer division truncates</strong> — <code>7 / 2</code> gives <code>3</code>, not <code>3.5</code>.
+          The modulo operator <code>%</code> gives the remainder and only works with integers.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Arithmetic operators math calculations karte hain. C ka important gotcha: integer division truncate hota hai — <code>7 / 2 = 3</code>, 3.5 nahi. Modulo <code>%</code> remainder deta hai aur sirf integers pe kaam karta hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Operator</th><th>Name</th><th>Example</th><th>Result</th><th>Note</th></tr></thead>
+            <tbody>
+              <tr><td><code>+</code></td><td>Addition</td><td><code>5 + 3</code></td><td>8</td><td></td></tr>
+              <tr><td><code>-</code></td><td>Subtraction</td><td><code>5 - 3</code></td><td>2</td><td></td></tr>
+              <tr><td><code>*</code></td><td>Multiplication</td><td><code>5 * 3</code></td><td>15</td><td></td></tr>
+              <tr><td><code>/</code></td><td>Division</td><td><code>7 / 2</code></td><td>3</td><td>⚠️ Truncates for ints!</td></tr>
+              <tr><td><code>/</code></td><td>Float division</td><td><code>7.0 / 2</code></td><td>3.5</td><td>One operand must be float</td></tr>
+              <tr><td><code>%</code></td><td>Modulo</td><td><code>7 % 2</code></td><td>1</td><td>Integers only</td></tr>
+              <tr><td><code>++</code></td><td>Increment</td><td><code>x++</code></td><td>x + 1</td><td>Post vs pre: <code>x++</code> vs <code>++x</code></td></tr>
+              <tr><td><code>--</code></td><td>Decrement</td><td><code>x--</code></td><td>x - 1</td><td>Post vs pre: <code>x--</code> vs <code>--x</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Pre-increment vs post-increment</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — ++ and --</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="type">int</span> a = <span class="number">5</span>;
+
+<span class="comment">/* Post-increment: use THEN increment */</span>
+<span class="type">int</span> b = a++;   <span class="comment">/* b = 5, a = 6 */</span>
+
+<span class="comment">/* Pre-increment: increment THEN use */</span>
+<span class="type">int</span> c = ++a;   <span class="comment">/* a = 7, c = 7 */</span>
+
+<span class="function">printf</span>(<span class="string">"a=%d b=%d c=%d\n"</span>, a, b, c);
+<span class="comment">/* Output: a=7 b=5 c=7 */</span></pre></div>
+        </div>
+        <div class="callout callout-warning"><strong>Interview trap:</strong> Never use <code>++</code> on the same variable multiple times in one expression like <code>x = x++ + ++x</code>. This is <strong>undefined behavior</strong> — the result varies across compilers.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Assignment & compound assignment</h3>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Operator</th><th>Example</th><th>Equivalent to</th></tr></thead>
+            <tbody>
+              <tr><td><code>=</code></td><td><code>x = 10</code></td><td>Assign 10 to x</td></tr>
+              <tr><td><code>+=</code></td><td><code>x += 5</code></td><td><code>x = x + 5</code></td></tr>
+              <tr><td><code>-=</code></td><td><code>x -= 3</code></td><td><code>x = x - 3</code></td></tr>
+              <tr><td><code>*=</code></td><td><code>x *= 2</code></td><td><code>x = x * 2</code></td></tr>
+              <tr><td><code>/=</code></td><td><code>x /= 4</code></td><td><code>x = x / 4</code></td></tr>
+              <tr><td><code>%=</code></td><td><code>x %= 3</code></td><td><code>x = x % 3</code></td></tr>
+              <tr><td><code>&amp;=</code></td><td><code>x &amp;= 0xFF</code></td><td><code>x = x &amp; 0xFF</code></td></tr>
+              <tr><td><code>|=</code></td><td><code>x |= 0x01</code></td><td><code>x = x | 0x01</code></td></tr>
+              <tr><td><code>^=</code></td><td><code>x ^= mask</code></td><td><code>x = x ^ mask</code></td></tr>
+              <tr><td><code>&lt;&lt;=</code></td><td><code>x &lt;&lt;= 2</code></td><td><code>x = x &lt;&lt; 2</code></td></tr>
+              <tr><td><code>&gt;&gt;=</code></td><td><code>x &gt;&gt;= 1</code></td><td><code>x = x &gt;&gt; 1</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 2.2 -->
+    <div class="module-section" id="m2-2">
+      <div class="module-header"><div class="module-number">2.2</div><h2 class="module-title">Relational & Logical Operators — Comparison, boolean logic, short-circuit</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Relational operators (comparison)</h3>
+        <p class="explain-en">
+          Relational operators compare two values and return <code>1</code> (true) or <code>0</code> (false). C has no built-in <code>bool</code> type in C89 —
+          it uses integers. C99 added <code>&lt;stdbool.h&gt;</code> with <code>true</code>/<code>false</code>.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Relational operators do values compare karte hain aur 1 (true) ya 0 (false) return karte hain. C89 me built-in bool nahi tha — integers use hote the. C99 me stdbool.h aaya.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Operator</th><th>Meaning</th><th>Example</th><th>Result</th></tr></thead>
+            <tbody>
+              <tr><td><code>==</code></td><td>Equal to</td><td><code>5 == 5</code></td><td>1 (true)</td></tr>
+              <tr><td><code>!=</code></td><td>Not equal</td><td><code>5 != 3</code></td><td>1 (true)</td></tr>
+              <tr><td><code>&lt;</code></td><td>Less than</td><td><code>3 &lt; 5</code></td><td>1 (true)</td></tr>
+              <tr><td><code>&gt;</code></td><td>Greater than</td><td><code>3 &gt; 5</code></td><td>0 (false)</td></tr>
+              <tr><td><code>&lt;=</code></td><td>Less or equal</td><td><code>5 &lt;= 5</code></td><td>1 (true)</td></tr>
+              <tr><td><code>&gt;=</code></td><td>Greater or equal</td><td><code>3 &gt;= 5</code></td><td>0 (false)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>Classic bug:</strong> <code>if (x = 5)</code> is ASSIGNMENT (always true), not comparison! Use <code>if (x == 5)</code>. Pro tip: write <code>if (5 == x)</code> — the compiler catches <code>5 = x</code> as an error.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Logical operators & short-circuit evaluation</h3>
+        <p class="explain-en">
+          Logical operators combine boolean conditions. <strong>Short-circuit evaluation</strong> means C stops evaluating as soon as the result is determined:
+          in <code>A &amp;&amp; B</code>, if A is false, B is never evaluated. This is used for <strong>null-pointer safety</strong>.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Logical operators boolean conditions combine karte hain. Short-circuit evaluation me C jaldi result decide kar leta hai: <code>A &amp;&amp; B</code> me agar A false hai toh B evaluate hi nahi hota. Ye null-pointer safety ke liye use hota hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Operator</th><th>Meaning</th><th>Short-circuit?</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td><code>&amp;&amp;</code></td><td>Logical AND</td><td>✅ Stops if left is false</td><td><code>x &gt; 0 &amp;&amp; x &lt; 100</code></td></tr>
+              <tr><td><code>||</code></td><td>Logical OR</td><td>✅ Stops if left is true</td><td><code>x == 0 || x == 1</code></td></tr>
+              <tr><td><code>!</code></td><td>Logical NOT</td><td>N/A</td><td><code>!done</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Short-circuit for safety</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Short-circuit prevents null pointer crash */</span>
+<span class="type">int</span> *ptr = <span class="function">get_data</span>();
+
+<span class="comment">/* If ptr is NULL, *ptr is NEVER accessed ✅ */</span>
+<span class="keyword">if</span> (ptr != <span class="number">NULL</span> &amp;&amp; *ptr &gt; <span class="number">0</span>) {
+    <span class="function">printf</span>(<span class="string">"Value: %d\n"</span>, *ptr);
+}
+
+<span class="comment">/* Without short-circuit — this would CRASH if ptr is NULL ❌ */</span></pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 2.3 -->
+    <div class="module-section" id="m2-3">
+      <div class="module-header"><div class="module-number">2.3</div><h2 class="module-title">Bitwise Operators — &amp;, |, ^, ~, &lt;&lt;, &gt;&gt; — hardware-level control</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Why bitwise matters</h3>
+        <p class="explain-en">
+          Bitwise operators work on individual <strong>bits</strong> of integers. They're essential for: <strong>embedded systems</strong> (controlling hardware registers),
+          <strong>network protocols</strong> (parsing packet headers), <strong>graphics</strong> (color manipulation), and <strong>performance optimization</strong> (faster than multiplication/division).
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Bitwise operators individual bits pe kaam karte hain. Embedded systems (hardware registers), network protocols (packet headers), graphics (color manipulation), aur performance optimization ke liye zaroori hain.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Operator</th><th>Name</th><th>Example (binary)</th><th>Result</th></tr></thead>
+            <tbody>
+              <tr><td><code>&amp;</code></td><td>AND</td><td><code>1100 &amp; 1010</code></td><td><code>1000</code></td></tr>
+              <tr><td><code>|</code></td><td>OR</td><td><code>1100 | 1010</code></td><td><code>1110</code></td></tr>
+              <tr><td><code>^</code></td><td>XOR</td><td><code>1100 ^ 1010</code></td><td><code>0110</code></td></tr>
+              <tr><td><code>~</code></td><td>NOT (complement)</td><td><code>~1100</code></td><td><code>0011</code></td></tr>
+              <tr><td><code>&lt;&lt;</code></td><td>Left shift</td><td><code>0001 &lt;&lt; 2</code></td><td><code>0100</code> (×4)</td></tr>
+              <tr><td><code>&gt;&gt;</code></td><td>Right shift</td><td><code>1000 &gt;&gt; 2</code></td><td><code>0010</code> (÷4)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Bit manipulation patterns (interview essentials)</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Bit manipulation</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="type">unsigned int</span> reg = <span class="number">0b10110100</span>;
+
+<span class="comment">/* SET a bit (turn ON bit 1) */</span>
+reg |= (<span class="number">1</span> &lt;&lt; <span class="number">1</span>);    <span class="comment">/* reg = 0b10110110 */</span>
+
+<span class="comment">/* CLEAR a bit (turn OFF bit 2) */</span>
+reg &amp;= ~(<span class="number">1</span> &lt;&lt; <span class="number">2</span>);   <span class="comment">/* reg = 0b10110010 */</span>
+
+<span class="comment">/* TOGGLE a bit (flip bit 4) */</span>
+reg ^= (<span class="number">1</span> &lt;&lt; <span class="number">4</span>);    <span class="comment">/* reg = 0b10100010 */</span>
+
+<span class="comment">/* CHECK a bit (is bit 5 set?) */</span>
+<span class="keyword">if</span> (reg &amp; (<span class="number">1</span> &lt;&lt; <span class="number">5</span>)) {
+    <span class="function">printf</span>(<span class="string">"Bit 5 is ON\n"</span>);
+}
+
+<span class="comment">/* Multiply by 2^n using left shift */</span>
+<span class="type">int</span> x = <span class="number">5</span>;
+<span class="type">int</span> y = x &lt;&lt; <span class="number">3</span>;     <span class="comment">/* y = 5 * 8 = 40 */</span>
+
+<span class="comment">/* Divide by 2^n using right shift */</span>
+<span class="type">int</span> z = <span class="number">40</span> &gt;&gt; <span class="number">2</span>;     <span class="comment">/* z = 40 / 4 = 10 */</span>
+
+<span class="comment">/* Swap two variables without temp (XOR trick) */</span>
+<span class="type">int</span> a = <span class="number">10</span>, b = <span class="number">20</span>;
+a ^= b; b ^= a; a ^= b;
+<span class="comment">/* Now a = 20, b = 10 */</span>
+
+<span class="comment">/* Check if number is even/odd */</span>
+<span class="keyword">if</span> (n &amp; <span class="number">1</span>) <span class="function">printf</span>(<span class="string">"Odd\n"</span>);
+<span class="keyword">else</span>       <span class="function">printf</span>(<span class="string">"Even\n"</span>);</pre></div>
+        </div>
+        <div class="callout callout-important"><strong>Embedded C essential:</strong> Hardware registers are controlled entirely through bitwise operations. <code>REG |= (1 &lt;&lt; BIT)</code> to set, <code>REG &amp;= ~(1 &lt;&lt; BIT)</code> to clear. Memorize these patterns.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 2.4 -->
+    <div class="module-section" id="m2-4">
+      <div class="module-header"><div class="module-number">2.4</div><h2 class="module-title">Operator Precedence & Type Casting — evaluation order, implicit vs explicit</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Operator precedence table (memorize the top 5)</h3>
+        <p class="explain-en">
+          When multiple operators appear in one expression, <strong>precedence</strong> determines which is evaluated first.
+          <strong>Associativity</strong> determines order when operators have equal precedence. When in doubt, use <strong>parentheses</strong>.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Ek expression me multiple operators ho toh precedence decide karta hai kaunsa pehle evaluate hoga. Associativity equal precedence me order decide karti hai. Doubt ho toh parentheses lagao.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Priority</th><th>Operator</th><th>Description</th><th>Associativity</th></tr></thead>
+            <tbody>
+              <tr><td>1 (highest)</td><td><code>() [] -> .</code></td><td>Grouping, access</td><td>Left → Right</td></tr>
+              <tr><td>2</td><td><code>! ~ ++ -- + - * & sizeof</code></td><td>Unary operators</td><td>Right → Left</td></tr>
+              <tr><td>3</td><td><code>* / %</code></td><td>Multiplication</td><td>Left → Right</td></tr>
+              <tr><td>4</td><td><code>+ -</code></td><td>Addition</td><td>Left → Right</td></tr>
+              <tr><td>5</td><td><code>&lt;&lt; &gt;&gt;</code></td><td>Bit shift</td><td>Left → Right</td></tr>
+              <tr><td>6</td><td><code>&lt; &lt;= &gt; &gt;=</code></td><td>Relational</td><td>Left → Right</td></tr>
+              <tr><td>7</td><td><code>== !=</code></td><td>Equality</td><td>Left → Right</td></tr>
+              <tr><td>8</td><td><code>&amp;</code></td><td>Bitwise AND</td><td>Left → Right</td></tr>
+              <tr><td>9</td><td><code>^</code></td><td>Bitwise XOR</td><td>Left → Right</td></tr>
+              <tr><td>10</td><td><code>|</code></td><td>Bitwise OR</td><td>Left → Right</td></tr>
+              <tr><td>11</td><td><code>&amp;&amp;</code></td><td>Logical AND</td><td>Left → Right</td></tr>
+              <tr><td>12</td><td><code>||</code></td><td>Logical OR</td><td>Left → Right</td></tr>
+              <tr><td>13</td><td><code>?:</code></td><td>Ternary</td><td>Right → Left</td></tr>
+              <tr><td>14</td><td><code>= += -= *= /=</code></td><td>Assignment</td><td>Right → Left</td></tr>
+              <tr><td>15 (lowest)</td><td><code>,</code></td><td>Comma</td><td>Left → Right</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Rule of thumb:</strong> If you have to think about precedence, add parentheses. <code>(a &amp; b) == 0</code> is clearer than <code>a &amp; b == 0</code> (which actually means <code>a &amp; (b == 0)</code> — a common bug!).</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Type casting — implicit vs explicit</h3>
+        <p class="explain-en">
+          <strong>Implicit casting</strong> (type promotion) happens automatically when mixing types. <strong>Explicit casting</strong>
+          uses the cast operator <code>(type)</code>. Always cast explicitly to make intent clear and prevent bugs.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Implicit casting (type promotion) automatically hota hai jab different types mix hote hain. Explicit casting me <code>(type)</code> operator use karte hain. Hamesha explicitly cast karo — intent clear rehta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Type casting</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Implicit promotion (automatic) */</span>
+<span class="type">int</span> a = <span class="number">5</span>;
+<span class="type">double</span> b = a;       <span class="comment">/* int → double (safe, no data loss) */</span>
+
+<span class="comment">/* Implicit truncation (DANGEROUS!) */</span>
+<span class="type">double</span> pi = <span class="number">3.14</span>;
+<span class="type">int</span> x = pi;          <span class="comment">/* ⚠️ x = 3 (decimal part LOST) */</span>
+
+<span class="comment">/* Explicit cast (preferred — shows intent) */</span>
+<span class="type">int</span> total = <span class="number">7</span>, count = <span class="number">2</span>;
+<span class="type">double</span> avg = (<span class="type">double</span>)total / count;  <span class="comment">/* 3.5 ✅ */</span>
+<span class="type">double</span> wrong = total / count;        <span class="comment">/* 3.0 ❌ (int division first!) */</span>
+
+<span class="comment">/* Promotion hierarchy: char → int → long → float → double */</span></pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 2.5 -->
+    <div class="module-section" id="m2-5">
+      <div class="module-header"><div class="module-number">2.5</div><h2 class="module-title">Conditional Statements — if, else-if, switch-case, ternary</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">if, else-if, else</h3>
+        <p class="explain-en">
+          Conditionals let your program make decisions. <code>if</code> checks a condition; if true, the block executes.
+          <code>else if</code> adds alternative checks. <code>else</code> catches everything remaining. In C, any <strong>non-zero value is true</strong> and <strong>0 is false</strong>.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Conditionals se program decisions le sakta hai. <code>if</code> condition check karta hai; true ho toh block execute hota hai. C me koi bhi non-zero value true hai aur 0 false hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — if / else-if / else</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="type">int</span> score = <span class="number">85</span>;
+
+<span class="keyword">if</span> (score &gt;= <span class="number">90</span>) {
+    <span class="function">printf</span>(<span class="string">"Grade: A\n"</span>);
+} <span class="keyword">else if</span> (score &gt;= <span class="number">80</span>) {
+    <span class="function">printf</span>(<span class="string">"Grade: B\n"</span>);
+} <span class="keyword">else if</span> (score &gt;= <span class="number">70</span>) {
+    <span class="function">printf</span>(<span class="string">"Grade: C\n"</span>);
+} <span class="keyword">else</span> {
+    <span class="function">printf</span>(<span class="string">"Grade: F\n"</span>);
+}
+
+<span class="comment">/* C truth values: 0 = false, anything else = true */</span>
+<span class="type">int</span> x = <span class="number">42</span>;
+<span class="keyword">if</span> (x) <span class="function">printf</span>(<span class="string">"This prints! (42 is truthy)\n"</span>);
+
+<span class="type">int</span> y = <span class="number">0</span>;
+<span class="keyword">if</span> (y) <span class="function">printf</span>(<span class="string">"This does NOT print (0 is falsy)\n"</span>);</pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">switch-case</h3>
+        <p class="explain-en">
+          <code>switch</code> compares one value against multiple constants. It's cleaner than long else-if chains for <strong>discrete values</strong>.
+          Always include <code>break</code> to prevent <strong>fall-through</strong> (executing the next case too) and a <code>default</code> case.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>switch</code> ek value ko multiple constants se compare karta hai. Discrete values ke liye long else-if se clean hai. <code>break</code> hamesha lagao warna fall-through hota hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — switch-case</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="type">char</span> op = <span class="string">'+'</span>;
+<span class="type">int</span> a = <span class="number">10</span>, b = <span class="number">3</span>;
+
+<span class="keyword">switch</span> (op) {
+    <span class="keyword">case</span> <span class="string">'+'</span>: <span class="function">printf</span>(<span class="string">"%d\n"</span>, a + b); <span class="keyword">break</span>;
+    <span class="keyword">case</span> <span class="string">'-'</span>: <span class="function">printf</span>(<span class="string">"%d\n"</span>, a - b); <span class="keyword">break</span>;
+    <span class="keyword">case</span> <span class="string">'*'</span>: <span class="function">printf</span>(<span class="string">"%d\n"</span>, a * b); <span class="keyword">break</span>;
+    <span class="keyword">case</span> <span class="string">'/'</span>:
+        <span class="keyword">if</span> (b != <span class="number">0</span>) <span class="function">printf</span>(<span class="string">"%d\n"</span>, a / b);
+        <span class="keyword">else</span> <span class="function">printf</span>(<span class="string">"Division by zero!\n"</span>);
+        <span class="keyword">break</span>;
+    <span class="keyword">default</span>:
+        <span class="function">printf</span>(<span class="string">"Unknown operator\n"</span>);
+}</pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Ternary operator</h3>
+        <p class="explain-en">
+          The ternary operator <code>condition ? value_if_true : value_if_false</code> is a compact if-else for simple assignments. Don't nest them — it becomes unreadable.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Ternary operator <code>condition ? true_value : false_value</code> simple if-else ka compact version hai. Nest mat karo — unreadable ho jaata hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Ternary</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="type">int</span> age = <span class="number">18</span>;
+
+<span class="comment">/* ✅ Good: simple assignment */</span>
+<span class="type">char</span> *status = (age &gt;= <span class="number">18</span>) ? <span class="string">"Adult"</span> : <span class="string">"Minor"</span>;
+
+<span class="comment">/* ✅ Good: inline in printf */</span>
+<span class="function">printf</span>(<span class="string">"Max: %d\n"</span>, (a &gt; b) ? a : b);
+
+<span class="comment">/* ❌ Bad: nested ternary (unreadable) */</span>
+<span class="type">int</span> result = (x &gt; <span class="number">0</span>) ? ((x &gt; <span class="number">100</span>) ? <span class="number">100</span> : x) : <span class="number">0</span>;</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 2.6 -->
+    <div class="module-section" id="m2-6">
+      <div class="module-header"><div class="module-number">2.6</div><h2 class="module-title">Loops — for, while, do-while, break, continue, nested loops</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Three types of loops</h3>
+        <p class="explain-en">
+          Loops repeat code blocks. <code>for</code> is best when you know the count. <code>while</code> when you have a condition.
+          <code>do-while</code> when the body must execute at least once. Choose the right loop for readable, bug-free code.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Loops code blocks repeat karte hain. <code>for</code> jab count pata ho, <code>while</code> jab condition ho, <code>do-while</code> jab body kam se kam ek baar execute hona chahiye.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — All three loops</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* FOR loop — known iteration count */</span>
+<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++) {
+    <span class="function">printf</span>(<span class="string">"%d "</span>, i);  <span class="comment">/* 0 1 2 3 4 */</span>
+}
+
+<span class="comment">/* WHILE loop — condition-based */</span>
+<span class="type">int</span> n = <span class="number">1</span>;
+<span class="keyword">while</span> (n &lt;= <span class="number">100</span>) {
+    n *= <span class="number">2</span>;  <span class="comment">/* Double until > 100 */</span>
+}
+<span class="function">printf</span>(<span class="string">"n = %d\n"</span>, n);  <span class="comment">/* 128 */</span>
+
+<span class="comment">/* DO-WHILE — executes at least once */</span>
+<span class="type">int</span> input;
+<span class="keyword">do</span> {
+    <span class="function">printf</span>(<span class="string">"Enter 1-10: "</span>);
+    <span class="function">scanf</span>(<span class="string">"%d"</span>, &amp;input);
+} <span class="keyword">while</span> (input &lt; <span class="number">1</span> || input &gt; <span class="number">10</span>);</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Loop</th><th>Check</th><th>Min executions</th><th>Best for</th></tr></thead>
+            <tbody>
+              <tr><td><code>for</code></td><td>Before each iteration</td><td>0</td><td>Known count, arrays</td></tr>
+              <tr><td><code>while</code></td><td>Before each iteration</td><td>0</td><td>Unknown count, streams</td></tr>
+              <tr><td><code>do-while</code></td><td>After each iteration</td><td>1</td><td>Input validation, menus</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">break & continue</h3>
+        <p class="explain-en">
+          <code>break</code> exits the loop entirely. <code>continue</code> skips to the next iteration. Both work inside for, while, and do-while.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>break</code> loop se bahar nikal jaata hai. <code>continue</code> current iteration skip karke next pe jaata hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — break & continue</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* break — exit loop early */</span>
+<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) {
+    <span class="keyword">if</span> (arr[i] == target) {
+        <span class="function">printf</span>(<span class="string">"Found at %d\n"</span>, i);
+        <span class="keyword">break</span>;  <span class="comment">/* Stop searching */</span>
+    }
+}
+
+<span class="comment">/* continue — skip odd numbers */</span>
+<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) {
+    <span class="keyword">if</span> (i % <span class="number">2</span> != <span class="number">0</span>) <span class="keyword">continue</span>;
+    <span class="function">printf</span>(<span class="string">"%d "</span>, i);  <span class="comment">/* 0 2 4 6 8 */</span>
+}
+
+<span class="comment">/* Nested loop with break */</span>
+<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">5</span>; i++) {
+    <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">1</span>; j &lt;= <span class="number">5</span>; j++) {
+        <span class="keyword">if</span> (j &gt; i) <span class="keyword">break</span>;
+        <span class="function">printf</span>(<span class="string">"* "</span>);
+    }
+    <span class="function">printf</span>(<span class="string">"\n"</span>);
+}
+<span class="comment">/* Output:
+ * 
+ * * 
+ * * * 
+ * * * * 
+ * * * * *  */</span></pre></div>
+        </div>
+        <div class="callout callout-warning"><strong>Infinite loop:</strong> <code>while(1)</code> or <code>for(;;)</code> runs forever. Always ensure there's a <code>break</code> condition inside. Used intentionally in embedded systems for main event loops.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 2.7 -->
+    <div class="module-section" id="m2-7">
+      <div class="module-header"><div class="module-number">2.7</div><h2 class="module-title">goto, Scope & Storage Classes — auto, static, extern, register</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">goto — when it's acceptable</h3>
+        <p class="explain-en">
+          <code>goto</code> jumps to a labeled statement. It's <strong>generally avoided</strong> because it creates spaghetti code. The one <strong>acceptable use</strong>
+          is for <strong>error cleanup</strong> in functions with multiple resource allocations (common in Linux kernel code).
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>goto</code> labeled statement pe jump karta hai. Generally avoid karo — spaghetti code banta hai. Ek acceptable use: error cleanup jab multiple resources allocate kiye hon (Linux kernel me common hai).</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — goto for error cleanup</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="type">int</span> <span class="function">process_file</span>(<span class="keyword">const</span> <span class="type">char</span> *path) {
+    <span class="type">FILE</span> *f = <span class="function">fopen</span>(path, <span class="string">"r"</span>);
+    <span class="keyword">if</span> (!f) <span class="keyword">goto</span> error_file;
+
+    <span class="type">char</span> *buf = <span class="function">malloc</span>(<span class="number">1024</span>);
+    <span class="keyword">if</span> (!buf) <span class="keyword">goto</span> error_malloc;
+
+    <span class="comment">/* ... process data ... */</span>
+
+    <span class="function">free</span>(buf);
+    <span class="function">fclose</span>(f);
+    <span class="keyword">return</span> <span class="number">0</span>;
+
+error_malloc:
+    <span class="function">fclose</span>(f);
+error_file:
+    <span class="keyword">return</span> -<span class="number">1</span>;
+}</pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Storage classes</h3>
+        <p class="explain-en">
+          Storage classes determine a variable's <strong>lifetime</strong> (how long it exists), <strong>scope</strong> (where it's accessible),
+          and <strong>linkage</strong> (whether other files can see it). Understanding these is essential for multi-file C projects.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Storage classes variable ki lifetime (kitni der exist kare), scope (kahan accessible ho), aur linkage (doosri files dekh sake ya nahi) decide karte hain.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Class</th><th>Lifetime</th><th>Scope</th><th>Default value</th><th>Use case</th></tr></thead>
+            <tbody>
+              <tr><td><code>auto</code></td><td>Block</td><td>Local</td><td>Garbage</td><td>Default for local vars (rarely written)</td></tr>
+              <tr><td><code>static</code> (local)</td><td>Program</td><td>Local</td><td>0</td><td>Persist value between function calls</td></tr>
+              <tr><td><code>static</code> (global)</td><td>Program</td><td>File only</td><td>0</td><td>Private to this .c file</td></tr>
+              <tr><td><code>extern</code></td><td>Program</td><td>Global</td><td>0</td><td>Share variable across files</td></tr>
+              <tr><td><code>register</code></td><td>Block</td><td>Local</td><td>Garbage</td><td>Hint: store in CPU register (rarely used)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — static local variable</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="type">void</span> <span class="function">counter</span>(<span class="type">void</span>) {
+    <span class="keyword">static</span> <span class="type">int</span> count = <span class="number">0</span>;  <span class="comment">/* Initialized ONCE, persists */</span>
+    count++;
+    <span class="function">printf</span>(<span class="string">"Called %d times\n"</span>, count);
+}
+
+<span class="type">int</span> <span class="function">main</span>(<span class="type">void</span>) {
+    <span class="function">counter</span>();  <span class="comment">/* Called 1 times */</span>
+    <span class="function">counter</span>();  <span class="comment">/* Called 2 times */</span>
+    <span class="function">counter</span>();  <span class="comment">/* Called 3 times */</span>
+    <span class="keyword">return</span> <span class="number">0</span>;
+}</pre></div>
+        </div>
+        <div class="callout callout-important"><strong>Interview favorite:</strong> "What does <code>static</code> do?" — It has THREE meanings: (1) local variable that persists, (2) global variable private to file, (3) function private to file. Know all three.</div>
+      </div>
+    </div>
+
+    <div class="practice-box">
+      <div class="practice-title">✏️ Practice Exercises — Part 2</div>
+      <ol>
+        <li>Write a program that checks if a number is even/odd using <strong>bitwise AND</strong> (not modulo).</li>
+        <li>Create a calculator using <code>switch-case</code> that handles +, -, *, / and division-by-zero.</li>
+        <li>Print a multiplication table (1-10) using nested <code>for</code> loops with formatted columns.</li>
+        <li>Write a program that reads numbers until -1 is entered, then prints the sum, average, min, and max.</li>
+        <li>Implement the XOR swap trick. Verify it works with printf before and after.</li>
+        <li>Create a function with a <code>static</code> local counter. Call it 5 times and observe the output.</li>
+        <li>Write a bit manipulation program that sets bit 3, clears bit 5, and toggles bit 7 of a number. Print in binary.</li>
+      </ol>
+    </div>
+
+    <div class="handbook-nav">
+      <a href="part1.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Part 1: C Foundations</div></div></a>
+      <a href="part3.html" class="nav-btn next"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Part 3: Functions & Modular Programming →</div></div><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+
+  </div>
+
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
+  <script src="../../../js/main.js"></script>
+  <script>
+    (() => {
+      document.querySelectorAll('.code-block').forEach((block) => { const pre = block.querySelector('.code-body pre'), header = block.querySelector('.code-header'); if (!pre || !header) return; let actions = header.querySelector('.code-actions'); if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); } const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'code-copy-btn'; btn.textContent = 'Copy'; btn.addEventListener('click', async () => { try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; } catch { btn.textContent = 'Failed'; } finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); } }); actions.prepend(btn); });
+      const fill = document.querySelector('.hb-progress-fill'), label = document.querySelector('.hb-progress-label');
+      if (fill && label) { const update = () => { const h = document.documentElement, d = (h.scrollHeight - h.clientHeight) || 1, p = Math.max(0, Math.min(1, h.scrollTop / d)); fill.style.width = (p*100).toFixed(0)+'%'; label.textContent = (p*100).toFixed(0)+'%'; }; document.addEventListener('scroll', update, { passive: true }); update(); }
+    })();
+  </script>
+</body>
+</html>

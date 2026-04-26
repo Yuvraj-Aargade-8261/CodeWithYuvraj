@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Part 3: Functions & Modular Programming — C Programming Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 3 of C Programming Handbook: Functions, recursion, header files, scope, standard library, and variadic functions.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/handbook.css">
+</head>
+<body class="handbook-wrapper">
+  <nav class="navbar"><div class="container"><a href="../../../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../../../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
+
+  <div class="handbook-page">
+    <div class="hb-topbar">
+      <div class="hb-topbar-inner">
+        <div class="hb-breadcrumbs">
+          <a href="index.html">C Programming Handbook</a>
+          <span class="hb-muted">/</span><span>Part 3</span><span class="hb-muted">·</span>
+          <a href="#m3-1">3.1</a> <a href="#m3-2">3.2</a> <a href="#m3-3">3.3</a> <a href="#m3-4">3.4</a> <a href="#m3-5">3.5</a> <a href="#m3-6">3.6</a> <a href="#m3-7">3.7</a>
+        </div>
+        <div class="hb-progress" aria-label="Reading progress">
+          <div class="hb-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="hb-progress-fill"></div></div>
+          <div class="hb-progress-label">0%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chapter-header" data-chapter-num="03">
+      <div class="chapter-part-label">📖 Part 3 — Functions & Modular Programming</div>
+      <h1 class="chapter-title">Write <span class="gradient-text">Reusable Code</span></h1>
+      <p class="chapter-subtitle">Functions are the building blocks of every C program — master them and you master modularity.</p>
+      <div class="chapter-meta"><span>📄 Modules 3.1 – 3.7</span><span>⏱️ 90–130 min read</span><span>💻 55+ Examples</span></div>
+    </div>
+
+    <div class="callout callout-tip"><strong>How to study Part 3:</strong> Write each function yourself, then test it with multiple inputs — including edge cases (0, negative, NULL). Functions are the most testable unit of code.</div>
+
+    <div class="hb-mini-toc">
+      <div class="hb-mini-title">📍 Part 3 Modules</div>
+      <div class="hb-mini-links">
+        <a href="#m3-1">3.1 Basics</a>
+        <a href="#m3-2">3.2 Parameters</a>
+        <a href="#m3-3">3.3 Recursion</a>
+        <a href="#m3-4">3.4 Header Files</a>
+        <a href="#m3-5">3.5 Scope & Linkage</a>
+        <a href="#m3-6">3.6 Standard Library</a>
+        <a href="#m3-7">3.7 Variadic</a>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">🚀 Advanced Lens — Part 3</div>
+      <p class="explain-en">In industry, functions are not just "reusable code blocks" — they're the unit of testing, documentation, and API design. Every function should do ONE thing, have a clear name, and handle edge cases. Think: "Could another developer call this function correctly just by reading its signature?"</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Industry me functions sirf "reusable code" nahi — ye testing, documentation, aur API design ki unit hain. Har function EK kaam kare, clear naam ho, aur edge cases handle kare.</div>
+    </div>
+
+    <!-- MODULE 3.1 -->
+    <div class="module-section" id="m3-1">
+      <div class="module-header"><div class="module-number">3.1</div><h2 class="module-title">Function Basics — Declaration, definition, calling, return types</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">What is a function?</h3>
+        <p class="explain-en">A <strong>function</strong> is a named block of code that performs a specific task. It takes <strong>inputs</strong> (parameters), processes them, and returns an <strong>output</strong> (return value). Functions enable <strong>code reuse</strong>, <strong>modularity</strong>, and <strong>readability</strong>.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Function ek named code block hai jo specific kaam karta hai. Input (parameters) leta hai, process karta hai, aur output (return value) deta hai. Functions se code reuse, modularity, aur readability milti hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Function anatomy</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/*  return_type  function_name(parameter_list) { body } */</span>
+
+<span class="comment">/* 1. Declaration (prototype) — tells compiler the signature */</span>
+<span class="type">int</span> <span class="function">add</span>(<span class="type">int</span> a, <span class="type">int</span> b);
+
+<span class="comment">/* 2. Definition — the actual implementation */</span>
+<span class="type">int</span> <span class="function">add</span>(<span class="type">int</span> a, <span class="type">int</span> b) {
+    <span class="keyword">return</span> a + b;
+}
+
+<span class="comment">/* 3. Calling — using the function */</span>
+<span class="type">int</span> result = <span class="function">add</span>(<span class="number">3</span>, <span class="number">7</span>);  <span class="comment">/* result = 10 */</span></pre></div>
+        </div>
+        <div class="diagram-box">
+          <div class="diagram-title">📐 Function Flow</div>
+          <div class="diagram-flow">
+            <div class="diagram-node primary">Caller<br><small>main()</small></div>
+            <div class="diagram-arrow">→ args →</div>
+            <div class="diagram-node secondary">Function<br><small>add(a, b)</small></div>
+            <div class="diagram-arrow">→ return →</div>
+            <div class="diagram-node success">Result<br><small>int value</small></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Return types & void functions</h3>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Return type</th><th>Example</th><th>Use case</th></tr></thead>
+            <tbody>
+              <tr><td><code>int</code></td><td><code>int add(int a, int b)</code></td><td>Return a computed integer</td></tr>
+              <tr><td><code>double</code></td><td><code>double average(int *arr, int n)</code></td><td>Return a decimal value</td></tr>
+              <tr><td><code>char *</code></td><td><code>char *get_name(int id)</code></td><td>Return a string pointer</td></tr>
+              <tr><td><code>void</code></td><td><code>void print_hello(void)</code></td><td>No return value (side effects only)</td></tr>
+              <tr><td><code>int</code> (status)</td><td><code>int save_file(const char *path)</code></td><td>0 = success, -1 = error</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — void vs return</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* void — no return value */</span>
+<span class="type">void</span> <span class="function">greet</span>(<span class="keyword">const</span> <span class="type">char</span> *name) {
+    <span class="function">printf</span>(<span class="string">"Hello, %s!\n"</span>, name);
+    <span class="comment">/* No return statement needed */</span>
+}
+
+<span class="comment">/* int — return status code (industry pattern) */</span>
+<span class="type">int</span> <span class="function">divide</span>(<span class="type">int</span> a, <span class="type">int</span> b, <span class="type">int</span> *result) {
+    <span class="keyword">if</span> (b == <span class="number">0</span>) <span class="keyword">return</span> -<span class="number">1</span>;  <span class="comment">/* Error */</span>
+    *result = a / b;
+    <span class="keyword">return</span> <span class="number">0</span>;              <span class="comment">/* Success */</span>
+}</pre></div>
+        </div>
+        <div class="callout callout-important"><strong>Industry pattern:</strong> Functions that can fail should return an <strong>error code</strong> (0 for success, negative for error) and pass the result through a pointer parameter. This is used in Linux kernel, POSIX APIs, and embedded systems.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 3.2 -->
+    <div class="module-section" id="m3-2">
+      <div class="module-header"><div class="module-number">3.2</div><h2 class="module-title">Parameter Passing — Pass by value, simulating pass by reference, const</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Pass by value (default in C)</h3>
+        <p class="explain-en">C passes arguments <strong>by value</strong> — the function receives a <strong>copy</strong> of the variable. Modifying the parameter inside the function does NOT affect the original. To modify the original, pass a <strong>pointer</strong> (simulated pass by reference).</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>C me arguments by value pass hote hain — function ko variable ki copy milti hai. Function ke andar modify karne se original nahi badalta. Original badalne ke liye pointer pass karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Pass by value vs pointer</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* ❌ Pass by value — original NOT modified */</span>
+<span class="type">void</span> <span class="function">double_bad</span>(<span class="type">int</span> x) {
+    x = x * <span class="number">2</span>;  <span class="comment">/* Only modifies the copy! */</span>
+}
+
+<span class="comment">/* ✅ Pass by pointer — original IS modified */</span>
+<span class="type">void</span> <span class="function">double_good</span>(<span class="type">int</span> *x) {
+    *x = *x * <span class="number">2</span>;  <span class="comment">/* Modifies the original via pointer */</span>
+}
+
+<span class="type">int</span> <span class="function">main</span>(<span class="type">void</span>) {
+    <span class="type">int</span> n = <span class="number">5</span>;
+
+    <span class="function">double_bad</span>(n);
+    <span class="function">printf</span>(<span class="string">"%d\n"</span>, n);   <span class="comment">/* Still 5 ❌ */</span>
+
+    <span class="function">double_good</span>(&amp;n);
+    <span class="function">printf</span>(<span class="string">"%d\n"</span>, n);   <span class="comment">/* Now 10 ✅ */</span>
+
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+
+<span class="comment">/* Classic: swap function */</span>
+<span class="type">void</span> <span class="function">swap</span>(<span class="type">int</span> *a, <span class="type">int</span> *b) {
+    <span class="type">int</span> temp = *a;
+    *a = *b;
+    *b = temp;
+}</pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">const parameters — promise not to modify</h3>
+        <p class="explain-en"><code>const</code> in parameters tells the caller: "I will NOT modify your data." This is a <strong>contract</strong> that prevents bugs and enables compiler optimizations. Always use <code>const</code> for pointer parameters you don't intend to modify.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>const</code> parameter me lagana caller ko bolna hai: "main tumhara data modify nahi karunga." Ye contract bugs prevent karta hai. Pointer parameters jo modify nahi karne, unpe hamesha <code>const</code> lagao.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — const parameters</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* ✅ const pointer — data is read-only */</span>
+<span class="type">int</span> <span class="function">sum_array</span>(<span class="keyword">const</span> <span class="type">int</span> *arr, <span class="type">int</span> n) {
+    <span class="type">int</span> total = <span class="number">0</span>;
+    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++) {
+        total += arr[i];
+        <span class="comment">/* arr[i] = 0;  ← Compiler ERROR! const prevents this */</span>
+    }
+    <span class="keyword">return</span> total;
+}
+
+<span class="comment">/* String functions always use const for input */</span>
+<span class="type">int</span> <span class="function">str_length</span>(<span class="keyword">const</span> <span class="type">char</span> *str) {
+    <span class="type">int</span> len = <span class="number">0</span>;
+    <span class="keyword">while</span> (str[len] != <span class="string">'\0'</span>) len++;
+    <span class="keyword">return</span> len;
+}</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 3.3 -->
+    <div class="module-section" id="m3-3">
+      <div class="module-header"><div class="module-number">3.3</div><h2 class="module-title">Recursion — Base case, factorial, Fibonacci, Tower of Hanoi</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">What is recursion?</h3>
+        <p class="explain-en">A function that <strong>calls itself</strong> is recursive. Every recursive function MUST have: (1) a <strong>base case</strong> that stops recursion, and (2) a <strong>recursive case</strong> that moves toward the base case. Without a base case → <strong>stack overflow</strong>.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Jo function khud ko call kare woh recursive hai. Har recursive function me chahiye: (1) base case jo recursion rok de, (2) recursive case jo base case ki taraf jaaye. Base case na ho → stack overflow crash.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Factorial (recursion)</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Factorial: n! = n × (n-1)! */</span>
+<span class="type">long long</span> <span class="function">factorial</span>(<span class="type">int</span> n) {
+    <span class="keyword">if</span> (n &lt;= <span class="number">1</span>) <span class="keyword">return</span> <span class="number">1</span>;      <span class="comment">/* Base case */</span>
+    <span class="keyword">return</span> n * <span class="function">factorial</span>(n - <span class="number">1</span>); <span class="comment">/* Recursive case */</span>
+}
+
+<span class="comment">/* How it unfolds:
+   factorial(4)
+   = 4 * factorial(3)
+   = 4 * 3 * factorial(2)
+   = 4 * 3 * 2 * factorial(1)
+   = 4 * 3 * 2 * 1
+   = 24 */</span></pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Fibonacci & Tower of Hanoi</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Fibonacci</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* ❌ Naive Fibonacci — O(2^n) exponential! */</span>
+<span class="type">int</span> <span class="function">fib_slow</span>(<span class="type">int</span> n) {
+    <span class="keyword">if</span> (n &lt;= <span class="number">1</span>) <span class="keyword">return</span> n;
+    <span class="keyword">return</span> <span class="function">fib_slow</span>(n - <span class="number">1</span>) + <span class="function">fib_slow</span>(n - <span class="number">2</span>);
+}
+
+<span class="comment">/* ✅ Iterative Fibonacci — O(n) linear */</span>
+<span class="type">int</span> <span class="function">fib_fast</span>(<span class="type">int</span> n) {
+    <span class="keyword">if</span> (n &lt;= <span class="number">1</span>) <span class="keyword">return</span> n;
+    <span class="type">int</span> prev = <span class="number">0</span>, curr = <span class="number">1</span>;
+    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">2</span>; i &lt;= n; i++) {
+        <span class="type">int</span> next = prev + curr;
+        prev = curr;
+        curr = next;
+    }
+    <span class="keyword">return</span> curr;
+}</pre></div>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Tower of Hanoi</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="type">void</span> <span class="function">hanoi</span>(<span class="type">int</span> n, <span class="type">char</span> from, <span class="type">char</span> to, <span class="type">char</span> aux) {
+    <span class="keyword">if</span> (n == <span class="number">1</span>) {
+        <span class="function">printf</span>(<span class="string">"Move disk 1: %c → %c\n"</span>, from, to);
+        <span class="keyword">return</span>;
+    }
+    <span class="function">hanoi</span>(n - <span class="number">1</span>, from, aux, to);
+    <span class="function">printf</span>(<span class="string">"Move disk %d: %c → %c\n"</span>, n, from, to);
+    <span class="function">hanoi</span>(n - <span class="number">1</span>, aux, to, from);
+}
+
+<span class="comment">/* hanoi(3, 'A', 'C', 'B'); → 7 moves */</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Approach</th><th>When to use</th><th>Risk</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Recursion</strong></td><td>Tree traversals, divide & conquer</td><td>Stack overflow for deep calls</td></tr>
+              <tr><td><strong>Iteration</strong></td><td>Simple loops, performance-critical</td><td>Can be less readable</td></tr>
+              <tr><td><strong>Tail recursion</strong></td><td>Last action is recursive call</td><td>Some compilers optimize to loop</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>Stack overflow:</strong> Each recursive call uses stack memory. Too many calls (e.g., <code>factorial(100000)</code>) crashes the program. Default stack is ~1-8 MB. Always consider iterative alternatives for large inputs.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 3.4 -->
+    <div class="module-section" id="m3-4">
+      <div class="module-header"><div class="module-number">3.4</div><h2 class="module-title">Header Files & Multi-File Projects — .h files, #include guards, linking</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Why header files?</h3>
+        <p class="explain-en">Real C projects have <strong>multiple .c files</strong>. Header files (<code>.h</code>) contain <strong>declarations</strong> (function prototypes, type definitions, macros) shared between files. The <code>.c</code> files contain the <strong>definitions</strong> (actual code). This separation is how large C projects (Linux kernel: 30,000+ files) stay organized.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Real projects me multiple .c files hoti hain. Header files (.h) me declarations (prototypes, types, macros) hote hain jo files ke beech share hote hain. .c files me definitions hoti hain. Linux kernel me 30,000+ files hain — tabhi ye separation zaroori hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — math_utils.h (header)</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* math_utils.h — Header file */</span>
+<span class="preprocessor">#ifndef</span> <span class="function">MATH_UTILS_H</span>    <span class="comment">/* Include guard — prevents double inclusion */</span>
+<span class="preprocessor">#define</span> <span class="function">MATH_UTILS_H</span>
+
+<span class="comment">/* Function prototypes */</span>
+<span class="type">int</span> <span class="function">add</span>(<span class="type">int</span> a, <span class="type">int</span> b);
+<span class="type">int</span> <span class="function">multiply</span>(<span class="type">int</span> a, <span class="type">int</span> b);
+<span class="type">double</span> <span class="function">average</span>(<span class="keyword">const</span> <span class="type">int</span> *arr, <span class="type">int</span> n);
+
+<span class="comment">/* Constants */</span>
+<span class="preprocessor">#define</span> <span class="function">PI</span> <span class="number">3.14159265358979</span>
+
+<span class="preprocessor">#endif</span> <span class="comment">/* MATH_UTILS_H */</span></pre></div>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — math_utils.c (implementation)</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* math_utils.c — Implementation */</span>
+<span class="preprocessor">#include</span> <span class="string">"math_utils.h"</span>
+
+<span class="type">int</span> <span class="function">add</span>(<span class="type">int</span> a, <span class="type">int</span> b) { <span class="keyword">return</span> a + b; }
+<span class="type">int</span> <span class="function">multiply</span>(<span class="type">int</span> a, <span class="type">int</span> b) { <span class="keyword">return</span> a * b; }
+
+<span class="type">double</span> <span class="function">average</span>(<span class="keyword">const</span> <span class="type">int</span> *arr, <span class="type">int</span> n) {
+    <span class="type">int</span> sum = <span class="number">0</span>;
+    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++) sum += arr[i];
+    <span class="keyword">return</span> (<span class="type">double</span>)sum / n;
+}</pre></div>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — main.c (usage)</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="preprocessor">#include</span> <span class="string">&lt;stdio.h&gt;</span>
+<span class="preprocessor">#include</span> <span class="string">"math_utils.h"</span>  <span class="comment">/* Our custom header */</span>
+
+<span class="type">int</span> <span class="function">main</span>(<span class="type">void</span>) {
+    <span class="function">printf</span>(<span class="string">"3 + 7 = %d\n"</span>, <span class="function">add</span>(<span class="number">3</span>, <span class="number">7</span>));
+    <span class="keyword">return</span> <span class="number">0</span>;
+}</pre></div>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Terminal — Compiling multi-file</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># Compile all .c files together</span>
+gcc -Wall main.c math_utils.c -o program
+
+<span class="comment"># Or compile separately then link</span>
+gcc -c main.c -o main.o
+gcc -c math_utils.c -o math_utils.o
+gcc main.o math_utils.o -o program</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>#include</th><th>Syntax</th><th>Search path</th></tr></thead>
+            <tbody>
+              <tr><td>System headers</td><td><code>#include &lt;stdio.h&gt;</code></td><td>System include directories</td></tr>
+              <tr><td>Your headers</td><td><code>#include "myfile.h"</code></td><td>Current directory first, then system</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Modern alternative:</strong> Instead of <code>#ifndef</code> guards, use <code>#pragma once</code> at the top of your header. It's non-standard but supported by every major compiler (GCC, Clang, MSVC) and is shorter.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 3.5 -->
+    <div class="module-section" id="m3-5">
+      <div class="module-header"><div class="module-number">3.5</div><h2 class="module-title">Scope, Lifetime & Linkage — Local vs global, static across files, extern</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Three dimensions of a variable</h3>
+        <p class="explain-en">Every variable has three properties: <strong>scope</strong> (where it's visible), <strong>lifetime</strong> (when it exists), and <strong>linkage</strong> (whether other translation units can access it). Mastering these prevents name collisions and memory bugs in multi-file projects.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Har variable ki teen properties hain: scope (kahan visible), lifetime (kab tak exist kare), linkage (doosri files access kar sakti hain ya nahi). Multi-file projects me name collisions aur memory bugs rokne ke liye ye samajhna zaroori hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Variable type</th><th>Scope</th><th>Lifetime</th><th>Linkage</th></tr></thead>
+            <tbody>
+              <tr><td>Local variable</td><td>Block <code>{ }</code></td><td>Block execution</td><td>None</td></tr>
+              <tr><td>Static local</td><td>Block <code>{ }</code></td><td>Entire program</td><td>None</td></tr>
+              <tr><td>Global variable</td><td>File + extern</td><td>Entire program</td><td>External</td></tr>
+              <tr><td>Static global</td><td>File only</td><td>Entire program</td><td>Internal (file-private)</td></tr>
+              <tr><td>Extern variable</td><td>All files</td><td>Entire program</td><td>External</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — extern across files</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* config.c — DEFINE the global variable */</span>
+<span class="type">int</span> debug_mode = <span class="number">0</span>;  <span class="comment">/* Definition (allocates memory) */</span>
+
+<span class="comment">/* config.h — DECLARE for other files */</span>
+<span class="keyword">extern</span> <span class="type">int</span> debug_mode; <span class="comment">/* Declaration (no memory) */</span>
+
+<span class="comment">/* main.c — USE the shared variable */</span>
+<span class="preprocessor">#include</span> <span class="string">"config.h"</span>
+<span class="keyword">if</span> (debug_mode) <span class="function">printf</span>(<span class="string">"DEBUG ON\n"</span>);</pre></div>
+        </div>
+        <div class="callout callout-warning"><strong>Avoid globals!</strong> Global variables make code hard to test, debug, and parallelize. Use function parameters or structs to pass state. If you must use globals, make them <code>static</code> (file-private) whenever possible.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 3.6 -->
+    <div class="module-section" id="m3-6">
+      <div class="module-header"><div class="module-number">3.6</div><h2 class="module-title">Standard Library Functions — math.h, stdlib.h, string.h, ctype.h, time.h</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Essential standard library headers</h3>
+        <p class="explain-en">The C standard library provides hundreds of pre-built functions. Knowing the most important ones saves you from reinventing the wheel. Here are the <strong>must-know headers</strong> and their key functions.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>C standard library me hundreds of pre-built functions hain. Important functions jaanne se wheel reinvent karne ki zaroorat nahi. Yahan must-know headers aur unke key functions hain.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Header</th><th>Key functions</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td><code>&lt;stdio.h&gt;</code></td><td><code>printf, scanf, fgets, fopen, fclose, fprintf</code></td><td>Input/Output</td></tr>
+              <tr><td><code>&lt;stdlib.h&gt;</code></td><td><code>malloc, free, atoi, atof, rand, srand, exit, qsort</code></td><td>Memory, conversion, utilities</td></tr>
+              <tr><td><code>&lt;string.h&gt;</code></td><td><code>strlen, strcpy, strcat, strcmp, memcpy, memset</code></td><td>String & memory operations</td></tr>
+              <tr><td><code>&lt;math.h&gt;</code></td><td><code>sqrt, pow, ceil, floor, abs, sin, cos, log</code></td><td>Math functions (link with -lm)</td></tr>
+              <tr><td><code>&lt;ctype.h&gt;</code></td><td><code>isalpha, isdigit, isspace, toupper, tolower</code></td><td>Character classification</td></tr>
+              <tr><td><code>&lt;time.h&gt;</code></td><td><code>time, clock, difftime, strftime</code></td><td>Date & time</td></tr>
+              <tr><td><code>&lt;stdbool.h&gt;</code></td><td><code>bool, true, false</code></td><td>Boolean type (C99+)</td></tr>
+              <tr><td><code>&lt;stdint.h&gt;</code></td><td><code>int8_t, uint32_t, int64_t</code></td><td>Fixed-width integers (C99+)</td></tr>
+              <tr><td><code>&lt;assert.h&gt;</code></td><td><code>assert(condition)</code></td><td>Debug assertions</td></tr>
+              <tr><td><code>&lt;errno.h&gt;</code></td><td><code>errno, perror, strerror</code></td><td>Error handling</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Practical examples</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — stdlib.h & string.h essentials</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="preprocessor">#include</span> <span class="string">&lt;stdlib.h&gt;</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;string.h&gt;</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;ctype.h&gt;</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;time.h&gt;</span>
+
+<span class="comment">/* String to integer */</span>
+<span class="type">int</span> num = <span class="function">atoi</span>(<span class="string">"42"</span>);       <span class="comment">/* 42 */</span>
+<span class="type">double</span> pi = <span class="function">atof</span>(<span class="string">"3.14"</span>);   <span class="comment">/* 3.14 */</span>
+
+<span class="comment">/* String operations */</span>
+<span class="type">char</span> dest[<span class="number">50</span>];
+<span class="function">strcpy</span>(dest, <span class="string">"Hello"</span>);      <span class="comment">/* Copy */</span>
+<span class="function">strcat</span>(dest, <span class="string">" World"</span>);     <span class="comment">/* Concatenate → "Hello World" */</span>
+<span class="type">int</span> len = <span class="function">strlen</span>(dest);      <span class="comment">/* 11 */</span>
+<span class="type">int</span> cmp = <span class="function">strcmp</span>(<span class="string">"abc"</span>, <span class="string">"def"</span>); <span class="comment">/* negative (abc < def) */</span>
+
+<span class="comment">/* Random numbers */</span>
+<span class="function">srand</span>(<span class="function">time</span>(<span class="number">NULL</span>));         <span class="comment">/* Seed with current time */</span>
+<span class="type">int</span> dice = <span class="function">rand</span>() % <span class="number">6</span> + <span class="number">1</span>; <span class="comment">/* 1-6 */</span>
+
+<span class="comment">/* Character classification */</span>
+<span class="keyword">if</span> (<span class="function">isdigit</span>(<span class="string">'5'</span>)) <span class="function">printf</span>(<span class="string">"It's a digit\n"</span>);
+<span class="type">char</span> upper = <span class="function">toupper</span>(<span class="string">'a'</span>);  <span class="comment">/* 'A' */</span></pre></div>
+        </div>
+        <div class="callout callout-important"><strong>Use <code>strncpy</code> not <code>strcpy</code>!</strong> <code>strcpy</code> has no bounds checking — buffer overflow risk. Always prefer <code>strncpy(dest, src, sizeof(dest) - 1)</code> in production code.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 3.7 -->
+    <div class="module-section" id="m3-7">
+      <div class="module-header"><div class="module-number">3.7</div><h2 class="module-title">Variadic Functions — stdarg.h, va_list, building printf-like functions</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">What are variadic functions?</h3>
+        <p class="explain-en">Variadic functions accept a <strong>variable number of arguments</strong>. <code>printf</code> is the most famous example. You create them using <code>&lt;stdarg.h&gt;</code> with <code>va_list</code>, <code>va_start</code>, <code>va_arg</code>, and <code>va_end</code>.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Variadic functions variable number of arguments accept karte hain. <code>printf</code> sabse famous example hai. <code>&lt;stdarg.h&gt;</code> ke <code>va_list</code>, <code>va_start</code>, <code>va_arg</code>, <code>va_end</code> se banate hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Custom variadic function</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="preprocessor">#include</span> <span class="string">&lt;stdio.h&gt;</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;stdarg.h&gt;</span>
+
+<span class="comment">/* Sum any number of integers */</span>
+<span class="type">int</span> <span class="function">sum</span>(<span class="type">int</span> count, ...) {
+    <span class="type">va_list</span> args;
+    <span class="function">va_start</span>(args, count);  <span class="comment">/* Initialize after last named param */</span>
+
+    <span class="type">int</span> total = <span class="number">0</span>;
+    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; count; i++) {
+        total += <span class="function">va_arg</span>(args, <span class="type">int</span>);  <span class="comment">/* Get next int argument */</span>
+    }
+
+    <span class="function">va_end</span>(args);  <span class="comment">/* Cleanup — REQUIRED! */</span>
+    <span class="keyword">return</span> total;
+}
+
+<span class="type">int</span> <span class="function">main</span>(<span class="type">void</span>) {
+    <span class="function">printf</span>(<span class="string">"%d\n"</span>, <span class="function">sum</span>(<span class="number">3</span>, <span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>));  <span class="comment">/* 60 */</span>
+    <span class="function">printf</span>(<span class="string">"%d\n"</span>, <span class="function">sum</span>(<span class="number">5</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>));  <span class="comment">/* 15 */</span>
+    <span class="keyword">return</span> <span class="number">0</span>;
+}</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Macro</th><th>Purpose</th><th>Must call?</th></tr></thead>
+            <tbody>
+              <tr><td><code>va_list</code></td><td>Type for the argument list</td><td>Declare it</td></tr>
+              <tr><td><code>va_start(args, last_named)</code></td><td>Initialize after last named param</td><td>✅ Always</td></tr>
+              <tr><td><code>va_arg(args, type)</code></td><td>Get next argument of given type</td><td>In loop</td></tr>
+              <tr><td><code>va_end(args)</code></td><td>Cleanup resources</td><td>✅ Always</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Real-world use:</strong> Variadic functions power logging systems (<code>log_debug("User %s logged in at %d", name, time)</code>), error handlers, and formatted output across every C codebase.</div>
+      </div>
+    </div>
+
+    <div class="practice-box">
+      <div class="practice-title">✏️ Practice Exercises — Part 3</div>
+      <ol>
+        <li>Write a <code>swap(int *a, int *b)</code> function and test it — prove that pass-by-value doesn't work for swap.</li>
+        <li>Implement factorial both recursively and iteratively. Compare stack usage for <code>factorial(20)</code>.</li>
+        <li>Create a multi-file project: <code>utils.h</code>, <code>utils.c</code>, <code>main.c</code>. Compile with <code>gcc -Wall</code>.</li>
+        <li>Write a function that uses <code>const</code> parameters to safely compute the average of an array.</li>
+        <li>Implement Tower of Hanoi with 4 disks. Count and print the total number of moves.</li>
+        <li>Create a variadic <code>max(int count, ...)</code> function that returns the largest of N integers.</li>
+        <li>Write a program using 5 different standard library headers. Use at least 2 functions from each.</li>
+      </ol>
+    </div>
+
+    <div class="handbook-nav">
+      <a href="part2.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Part 2: Operators & Control Flow</div></div></a>
+      <a href="part4.html" class="nav-btn next"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Part 4: Arrays, Strings & Pointers →</div></div><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+
+  </div>
+
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
+  <script src="../../../js/main.js"></script>
+  <script>
+    (() => {
+      document.querySelectorAll('.code-block').forEach((block) => { const pre = block.querySelector('.code-body pre'), header = block.querySelector('.code-header'); if (!pre || !header) return; let actions = header.querySelector('.code-actions'); if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); } const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'code-copy-btn'; btn.textContent = 'Copy'; btn.addEventListener('click', async () => { try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; } catch { btn.textContent = 'Failed'; } finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); } }); actions.prepend(btn); });
+      const fill = document.querySelector('.hb-progress-fill'), label = document.querySelector('.hb-progress-label');
+      if (fill && label) { const update = () => { const h = document.documentElement, d = (h.scrollHeight - h.clientHeight) || 1, p = Math.max(0, Math.min(1, h.scrollTop / d)); fill.style.width = (p*100).toFixed(0)+'%'; label.textContent = (p*100).toFixed(0)+'%'; }; document.addEventListener('scroll', update, { passive: true }); update(); }
+    })();
+  </script>
+</body>
+</html>

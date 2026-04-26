@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>C Programming Syllabus (Basics → Advanced) — C Programming Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Complete industry-level C programming syllabus: fundamentals, pointers, memory management, data structures, systems programming, and professional practices.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/handbook.css">
+</head>
+<body class="handbook-wrapper">
+  <nav class="navbar"><div class="container"><a href="../../../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../../../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
+
+  <div class="handbook-page">
+    <div class="hb-topbar">
+      <div class="hb-topbar-inner">
+        <div class="hb-breadcrumbs">
+          <a href="index.html">C Programming Handbook</a>
+          <span class="hb-muted">/</span>
+          <span>Syllabus</span>
+        </div>
+        <div class="hb-progress" aria-label="Reading progress">
+          <div class="hb-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="hb-progress-fill"></div></div>
+          <div class="hb-progress-label">0%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chapter-header" data-chapter-num="🧭">
+      <div class="chapter-part-label">📚 Complete Curriculum</div>
+      <h1 class="chapter-title">C Programming <span class="gradient-text">Syllabus</span> (Basics → Advanced)</h1>
+      <p class="chapter-subtitle">A complete industry-level curriculum map: what to learn, why it matters, and where it is covered in this handbook.</p>
+      <div class="chapter-meta"><span>✅ Beginner → Advanced</span><span>🎯 Industry-first</span><span>🗺️ Roadmap + checklist</span></div>
+    </div>
+
+    <div class="callout callout-tip">
+      <strong>How to use this page:</strong> Treat this as a checklist. Read the linked part, practice the exercises, and come back to tick off missing topics.
+    </div>
+
+    <div class="card" style="padding:22px;margin:14px 0 18px;">
+      <h3 style="margin-bottom:10px;">🛒 Get Complete C Programming Notes Pack</h3>
+      <p class="explain-en" style="margin-bottom:14px;">
+        Includes printable notes, structured revision sheets, interview-focused quick points, and roadmap checkpoints mapped to this syllabus.
+      </p>
+      <div class="project-price">
+        <span class="price-old">₹299</span>
+        <span class="price-current">₹99</span>
+        <span class="price-badge">MINIMAL</span>
+      </div>
+      <div class="project-actions">
+        <a href="index.html" class="btn-details">👁️ View Handbook</a>
+        <a href="#" class="btn-buy" data-buy-project="C Programming Notes Pack (Syllabus + Handbook Support)" data-project-price="99">🛒 Buy Now</a>
+      </div>
+    </div>
+
+    <div class="hb-mini-toc">
+      <div class="hb-mini-title">📍 Syllabus Sections</div>
+      <div class="hb-mini-links">
+        <a href="#c-foundations">C Foundations</a>
+        <a href="#operators-control">Operators & Control</a>
+        <a href="#functions">Functions</a>
+        <a href="#arrays-pointers">Arrays & Pointers</a>
+        <a href="#structs-types">Structs & Types</a>
+        <a href="#memory-files">Memory & Files</a>
+        <a href="#dsa">DSA in C</a>
+        <a href="#systems">Systems Programming</a>
+        <a href="#projects">Project Roadmap</a>
+      </div>
+    </div>
+
+    <div class="module-section" id="c-foundations">
+      <div class="module-header"><div class="module-number">A</div><h2 class="module-title">C Foundations (Your First C Program)</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">What you must master</h3>
+        <p class="explain-en">
+          C is the mother of all modern programming languages. Understanding how C works means understanding how computers work —
+          from memory addresses to CPU instructions. Start with the compilation pipeline, data types, and I/O fundamentals.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>C sabhi modern languages ki foundation hai. C samajhna matlab computer samajhna — memory addresses se lekar CPU instructions tak. Compilation pipeline, data types, aur I/O se shuru karo.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Topic</th><th>Industry use</th><th>Handbook</th></tr></thead>
+            <tbody>
+              <tr><td>History & why C matters today</td><td>Systems, embedded, OS</td><td><a href="part1.html">Part 1</a></td></tr>
+              <tr><td>Setting up GCC/Clang & VS Code</td><td>Development workflow</td><td><a href="part1.html">Part 1</a></td></tr>
+              <tr><td>Structure of a C program</td><td>Correct mental model</td><td><a href="part1.html">Part 1</a></td></tr>
+              <tr><td>Compilation pipeline (4 stages)</td><td>Build system understanding</td><td><a href="part1.html">Part 1</a></td></tr>
+              <tr><td>Data types & variables</td><td>Memory-efficient code</td><td><a href="part1.html">Part 1</a></td></tr>
+              <tr><td>Constants & literals</td><td>Safe, readable code</td><td><a href="part1.html">Part 1</a></td></tr>
+              <tr><td>printf, scanf & I/O functions</td><td>User interaction basics</td><td><a href="part1.html">Part 1</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="module-section" id="operators-control">
+      <div class="module-header"><div class="module-number">B</div><h2 class="module-title">Operators, Expressions & Control Flow (Logic Building)</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">What you must master</h3>
+        <p class="explain-en">
+          Operators are the building blocks of every algorithm. Bitwise operators are essential for embedded/systems programming.
+          Control flow (if/else, loops, switch) shapes program behavior. Mastering operator precedence prevents subtle bugs that crash production systems.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Operators har algorithm ke building blocks hain. Bitwise operators embedded systems ke liye zaroori hain. Control flow (if/else, loops) se program ka behavior decide hota hai. Precedence na samjhe toh subtle bugs aate hain.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Topic</th><th>Industry use</th><th>Handbook</th></tr></thead>
+            <tbody>
+              <tr><td>Arithmetic & assignment operators</td><td>Every calculation</td><td><a href="part2.html">Part 2</a></td></tr>
+              <tr><td>Relational & logical operators</td><td>Decision making</td><td><a href="part2.html">Part 2</a></td></tr>
+              <tr><td>Bitwise operators</td><td>Hardware registers, flags</td><td><a href="part2.html">Part 2</a></td></tr>
+              <tr><td>Operator precedence & type casting</td><td>Bug-free expressions</td><td><a href="part2.html">Part 2</a></td></tr>
+              <tr><td>Conditional statements</td><td>Branching logic</td><td><a href="part2.html">Part 2</a></td></tr>
+              <tr><td>Loops (for, while, do-while)</td><td>Iteration & processing</td><td><a href="part2.html">Part 2</a></td></tr>
+              <tr><td>Storage classes & scope</td><td>Variable lifetime control</td><td><a href="part2.html">Part 2</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="module-section" id="functions">
+      <div class="module-header"><div class="module-number">C</div><h2 class="module-title">Functions & Modular Programming (Code Organization)</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">What you must master</h3>
+        <p class="explain-en">
+          Functions are the foundation of modular programming. Recursion solves complex problems elegantly. Header files and multi-file compilation
+          are how real C projects are structured. Understanding the standard library saves thousands of lines of custom code.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Functions modular programming ki base hain. Recursion se complex problems elegantly solve hote hain. Header files aur multi-file compilation se real projects structure hote hain. Standard library se hazaaron lines bachte hain.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Topic</th><th>Industry use</th><th>Handbook</th></tr></thead>
+            <tbody>
+              <tr><td>Function declaration & definition</td><td>Code modularity</td><td><a href="part3.html">Part 3</a></td></tr>
+              <tr><td>Parameter passing (by value)</td><td>Data flow control</td><td><a href="part3.html">Part 3</a></td></tr>
+              <tr><td>Recursion</td><td>Tree/graph algorithms, DSA</td><td><a href="part3.html">Part 3</a></td></tr>
+              <tr><td>Header files & multi-file projects</td><td>Large project structure</td><td><a href="part3.html">Part 3</a></td></tr>
+              <tr><td>Scope, lifetime & linkage</td><td>Memory management</td><td><a href="part3.html">Part 3</a></td></tr>
+              <tr><td>Standard library functions</td><td>Productivity</td><td><a href="part3.html">Part 3</a></td></tr>
+              <tr><td>Variadic functions</td><td>Flexible APIs</td><td><a href="part3.html">Part 3</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="module-section" id="arrays-pointers">
+      <div class="module-header"><div class="module-number">D</div><h2 class="module-title">Arrays, Strings & Pointers (The Power of C)</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">What you must master</h3>
+        <p class="explain-en">
+          Pointers are what make C powerful — and dangerous. They give direct memory access, enable dynamic data structures, and are essential for
+          systems programming. This is the most critical section of the entire handbook. Master pointers and you master C.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Pointers C ko powerful banate hain — aur dangerous bhi. Direct memory access, dynamic data structures, systems programming — sab ke liye pointers chahiye. Ye handbook ka sabse important section hai. Pointers master karo = C master karo.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Topic</th><th>Industry use</th><th>Handbook</th></tr></thead>
+            <tbody>
+              <tr><td>1D & 2D arrays</td><td>Data storage & matrices</td><td><a href="part4.html">Part 4</a></td></tr>
+              <tr><td>Character arrays & strings</td><td>Text processing</td><td><a href="part4.html">Part 4</a></td></tr>
+              <tr><td>Pointer fundamentals</td><td>Memory-level programming</td><td><a href="part4.html">Part 4</a></td></tr>
+              <tr><td>Pointer-array equivalence</td><td>Efficient data access</td><td><a href="part4.html">Part 4</a></td></tr>
+              <tr><td>Function pointers & callbacks</td><td>Event-driven systems, plugins</td><td><a href="part4.html">Part 4</a></td></tr>
+              <tr><td>Pointer to pointer (double pointers)</td><td>Dynamic 2D arrays, APIs</td><td><a href="part4.html">Part 4</a></td></tr>
+              <tr><td>Common pointer pitfalls</td><td>Bug prevention & debugging</td><td><a href="part4.html">Part 4</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="module-section" id="structs-types">
+      <div class="module-header"><div class="module-number">E</div><h2 class="module-title">Structures, Unions & Advanced Types (Custom Data)</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">What you must master</h3>
+        <p class="explain-en">
+          Structures let you create complex data types — the foundation of object-oriented thinking in C. Understanding memory layout, padding,
+          and alignment is crucial for embedded systems and network protocols. Bit fields pack data efficiently for hardware registers.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Structures se complex data types banate hain — C me OOP jaisi soch ki foundation. Memory layout, padding, alignment embedded systems aur protocols ke liye zaroori hai. Bit fields hardware registers ke liye data efficiently pack karte hain.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Topic</th><th>Industry use</th><th>Handbook</th></tr></thead>
+            <tbody>
+              <tr><td>Structures basics & nested structs</td><td>Data modeling</td><td><a href="part5.html">Part 5</a></td></tr>
+              <tr><td>Structures advanced (pointers, arrays)</td><td>Complex data management</td><td><a href="part5.html">Part 5</a></td></tr>
+              <tr><td>Memory layout & padding</td><td>Embedded, networking</td><td><a href="part5.html">Part 5</a></td></tr>
+              <tr><td>Unions & tagged unions</td><td>Memory-efficient variants</td><td><a href="part5.html">Part 5</a></td></tr>
+              <tr><td>Enumerations</td><td>Readable, type-safe constants</td><td><a href="part5.html">Part 5</a></td></tr>
+              <tr><td>typedef & type aliases</td><td>Portable, clean code</td><td><a href="part5.html">Part 5</a></td></tr>
+              <tr><td>Bit fields</td><td>Hardware register mapping</td><td><a href="part5.html">Part 5</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="module-section" id="memory-files">
+      <div class="module-header"><div class="module-number">F</div><h2 class="module-title">Dynamic Memory & File Handling (System Interaction)</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">What you must master</h3>
+        <p class="explain-en">
+          Dynamic memory allocation gives programs flexibility. File handling enables data persistence. Understanding the memory layout
+          (stack vs heap), avoiding leaks with Valgrind, and building CLI tools with argc/argv are essential professional skills.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Dynamic memory se programs flexible bante hain. File handling se data persist hota hai. Stack vs heap samajhna, Valgrind se leaks dhundhna, aur argc/argv se CLI tools banana — ye sab professional skills hain.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Topic</th><th>Industry use</th><th>Handbook</th></tr></thead>
+            <tbody>
+              <tr><td>Memory layout (stack, heap, BSS)</td><td>Debugging, optimization</td><td><a href="part6.html">Part 6</a></td></tr>
+              <tr><td>malloc, calloc, realloc, free</td><td>Dynamic data structures</td><td><a href="part6.html">Part 6</a></td></tr>
+              <tr><td>Memory leaks & Valgrind</td><td>Production stability</td><td><a href="part6.html">Part 6</a></td></tr>
+              <tr><td>Text file I/O</td><td>Config files, logging</td><td><a href="part6.html">Part 6</a></td></tr>
+              <tr><td>Binary file I/O</td><td>Database-like storage</td><td><a href="part6.html">Part 6</a></td></tr>
+              <tr><td>File positioning & error handling</td><td>Robust file operations</td><td><a href="part6.html">Part 6</a></td></tr>
+              <tr><td>Command line arguments</td><td>CLI tools & automation</td><td><a href="part6.html">Part 6</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="module-section" id="dsa">
+      <div class="module-header"><div class="module-number">G</div><h2 class="module-title">Data Structures & Algorithms in C (Interview Ready)</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">What you must master</h3>
+        <p class="explain-en">
+          Implementing data structures from scratch in C is the ultimate test of your programming skills. Linked lists, stacks, queues,
+          sorting algorithms, and trees are asked in every technical interview. Understanding Big O notation is mandatory.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>C me data structures scratch se implement karna programming skills ka ultimate test hai. Linked lists, stacks, queues, sorting, trees — har interview me puchte hain. Big O notation mandatory hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Topic</th><th>Industry use</th><th>Handbook</th></tr></thead>
+            <tbody>
+              <tr><td>Singly linked lists</td><td>Dynamic collections</td><td><a href="part7.html">Part 7</a></td></tr>
+              <tr><td>Doubly & circular linked lists</td><td>Buffers, playlists</td><td><a href="part7.html">Part 7</a></td></tr>
+              <tr><td>Stacks</td><td>Undo systems, parsing</td><td><a href="part7.html">Part 7</a></td></tr>
+              <tr><td>Queues (linear, circular)</td><td>Task scheduling, BFS</td><td><a href="part7.html">Part 7</a></td></tr>
+              <tr><td>Sorting algorithms</td><td>Data processing, interviews</td><td><a href="part7.html">Part 7</a></td></tr>
+              <tr><td>Searching algorithms</td><td>Fast lookups</td><td><a href="part7.html">Part 7</a></td></tr>
+              <tr><td>Trees & graphs introduction</td><td>Hierarchical data, networks</td><td><a href="part7.html">Part 7</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="module-section" id="systems">
+      <div class="module-header"><div class="module-number">H</div><h2 class="module-title">Systems Programming & Industry Practices (Engineer Level)</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">What you must master</h3>
+        <p class="explain-en">
+          This is what separates a coder from a systems engineer: advanced preprocessor techniques, build systems (Make/CMake),
+          debugging with GDB, multithreading with pthreads, embedded C concepts, and secure coding practices (CERT C standards).
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Engineer-level skillset: advanced preprocessor, build systems (Make/CMake), GDB se debugging, pthreads se multithreading, embedded C, aur secure coding (CERT C). Team me kaam karne ke liye ye sab zaroori hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Topic</th><th>Industry use</th><th>Handbook</th></tr></thead>
+            <tbody>
+              <tr><td>Preprocessor deep dive (macros)</td><td>Conditional compilation</td><td><a href="part8.html">Part 8</a></td></tr>
+              <tr><td>Make & build systems</td><td>Automated builds</td><td><a href="part8.html">Part 8</a></td></tr>
+              <tr><td>GDB debugging</td><td>Production bug hunting</td><td><a href="part8.html">Part 8</a></td></tr>
+              <tr><td>Multithreading (pthreads)</td><td>Concurrent programming</td><td><a href="part8.html">Part 8</a></td></tr>
+              <tr><td>Embedded C concepts</td><td>IoT, microcontrollers</td><td><a href="part8.html">Part 8</a></td></tr>
+              <tr><td>Security & CERT C standards</td><td>Secure software</td><td><a href="part8.html">Part 8</a></td></tr>
+              <tr><td>Career roadmap & interviews</td><td>Job readiness</td><td><a href="part8.html">Part 8</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="module-section" id="projects">
+      <div class="module-header"><div class="module-number">🏆</div><h2 class="module-title">Project Roadmap (Portfolio Building)</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Industry-level progression</h3>
+        <p class="explain-en">
+          If you can build these projects with clean code, proper memory management, and no memory leaks, you are job-ready:
+          start with simple programs, then build data structures, then create systems-level tools.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Portfolio ka best path: pehle simple programs → phir data structures → phir systems-level tools. Har stage me clean code + proper memory management follow karo.</div>
+        <div class="practice-box">
+          <div class="practice-title">✅ Project Checklist</div>
+          <ol>
+            <li><strong>Calculator & Unit Converter:</strong> Practice operators, functions, I/O, and switch-case with real utility programs</li>
+            <li><strong>Student Management System:</strong> Structs, arrays, file I/O — full CRUD operations with persistent data storage</li>
+            <li><strong>Contact Manager:</strong> Linked list-based, file-backed contact book with search, sort, and CLI interface</li>
+            <li><strong>Custom Shell (mini-bash):</strong> Process creation, command parsing, pipes — systems programming capstone</li>
+            <li><strong>Memory Allocator:</strong> Custom malloc/free implementation — deep understanding of heap management</li>
+            <li><strong>Quality:</strong> Zero memory leaks (Valgrind clean), no undefined behavior, GDB-debugged, well-documented</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="handbook-nav">
+      <a href="index.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Back</div><div class="nav-btn-title">C Programming Handbook Index</div></div></a>
+      <a href="part1.html" class="nav-btn next"><div><div class="nav-btn-label">Start</div><div class="nav-btn-title">Begin Part 1 →</div></div><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+  </div>
+
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
+  <script src="../../../js/main.js"></script>
+  <script>
+    (() => {
+      const fill = document.querySelector('.hb-progress-fill');
+      const label = document.querySelector('.hb-progress-label');
+      if (!fill || !label) return;
+      const update = () => {
+        const h = document.documentElement;
+        const denom = (h.scrollHeight - h.clientHeight) || 1;
+        const pct = Math.max(0, Math.min(1, h.scrollTop / denom));
+        fill.style.width = (pct * 100).toFixed(0) + '%';
+        label.textContent = (pct * 100).toFixed(0) + '%';
+      };
+      document.addEventListener('scroll', update, { passive: true });
+      update();
+    })();
+  </script>
+</body>
+</html>
