@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Part 4: Inheritance & Polymorphism — Java Programming Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 4: Inheritance, polymorphism, abstract classes, interfaces, sealed classes, enums in Java.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/handbook.css">
+</head>
+<body class="handbook-wrapper">
+  <nav class="navbar"><div class="container"><a href="../../../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../../../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
+
+  <div class="handbook-page">
+    <div class="hb-topbar"><div class="hb-topbar-inner"><div class="hb-breadcrumbs"><a href="index.html">Java Programming Handbook</a><span class="hb-muted">/</span><span>Part 4</span><span class="hb-muted">·</span><a href="#m4-1">4.1</a> <a href="#m4-2">4.2</a> <a href="#m4-3">4.3</a> <a href="#m4-4">4.4</a> <a href="#m4-5">4.5</a> <a href="#m4-6">4.6</a> <a href="#m4-7">4.7</a></div><div class="hb-progress" aria-label="Reading progress"><div class="hb-progress-track" role="progressbar"><div class="hb-progress-fill"></div></div><div class="hb-progress-label">0%</div></div></div></div>
+
+    <div class="chapter-header" data-chapter-num="04">
+      <div class="chapter-part-label">📖 Part 4 — Inheritance & Polymorphism</div>
+      <h1 class="chapter-title">OOP <span class="gradient-text">Power</span></h1>
+      <p class="chapter-subtitle">Inheritance, method overriding, abstract classes, interfaces, sealed classes, enums — master the pillars of object-oriented design.</p>
+      <div class="chapter-meta"><span>📄 Modules 4.1 – 4.7</span><span>⏱️ 75–100 min read</span><span>💻 60+ Examples</span></div>
+    </div>
+
+    <div class="hb-mini-toc"><div class="hb-mini-title">📍 Part 4 Modules</div><div class="hb-mini-links"><a href="#m4-1">4.1 Inheritance</a><a href="#m4-2">4.2 Overriding</a><a href="#m4-3">4.3 abstract</a><a href="#m4-4">4.4 Interfaces</a><a href="#m4-5">4.5 Sealed</a><a href="#m4-6">4.6 Enums</a><a href="#m4-7">4.7 Casting</a></div></div>
+
+    <div class="quick-ref">
+      <div class="qr-title">🚀 Advanced Lens — Part 4</div>
+      <p class="explain-en">At scale, inheritance strategy impacts system evolution. Modern Java favors interface-first modeling, sealed hierarchies, and composition over deep inheritance trees to keep behavior predictable and upgrades safer.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Bade systems me inheritance decisions future change cost ko decide karte hain. Interface-first design, sealed classes, aur composition approach zyada safe aur maintainable hota hai.</div>
+    </div>
+
+    <div class="concept-block">
+      <h3>Inheritance strategy checklist (Part 4)</h3>
+      <table>
+        <thead><tr><th>Decision point</th><th>Preferred modern Java approach</th></tr></thead>
+        <tbody>
+          <tr><td>Behavior sharing</td><td>Prefer composition unless strict "is-a" relationship exists.</td></tr>
+          <tr><td>Polymorphism</td><td>Model contracts with interfaces and keep implementations replaceable.</td></tr>
+          <tr><td>Hierarchy control</td><td>Use sealed classes when domain variants are finite.</td></tr>
+          <tr><td>Casting safety</td><td>Use `instanceof` pattern matching and avoid unsafe downcasts.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- MODULE 4.1 -->
+    <div class="module-section" id="m4-1">
+      <div class="module-header"><div class="module-number">4.1</div><h2 class="module-title">Inheritance — extends, super, IS-A relationship</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Reusing and extending classes</h3>
+        <p class="explain-en"><strong>Inheritance</strong> lets a child class reuse fields/methods from a parent class. Java supports <strong>single inheritance</strong> only (one parent). Use <code>extends</code> to inherit, <code>super</code> to call parent constructor/methods. Every class implicitly extends <code>Object</code>. The child IS-A type of parent.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Inheritance</strong> se child class parent class ke fields/methods reuse kar sakti hai. Java me <strong>single inheritance</strong> hi hai (ek parent). <code>extends</code> se inherit karo, <code>super</code> se parent constructor/methods call karo. Har class implicitly <code>Object</code> extend karti hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — Inheritance</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Parent class (superclass / base class)</span>
+<span class="keyword">public class</span> <span class="type">Animal</span> {
+    <span class="keyword">protected</span> <span class="type">String</span> name;
+    <span class="keyword">protected int</span> age;
+
+    <span class="keyword">public</span> <span class="function">Animal</span>(<span class="type">String</span> name, <span class="keyword">int</span> age) {
+        <span class="keyword">this</span>.name = name;
+        <span class="keyword">this</span>.age = age;
+    }
+
+    <span class="keyword">public void</span> <span class="function">eat</span>() {
+        System.out.println(name + <span class="string">" is eating"</span>);
+    }
+
+    <span class="keyword">public</span> <span class="type">String</span> <span class="function">getInfo</span>() {
+        <span class="keyword">return</span> <span class="type">String</span>.format(<span class="string">"%s (age %d)"</span>, name, age);
+    }
+}
+
+<span class="comment">// Child class (subclass / derived class)</span>
+<span class="keyword">public class</span> <span class="type">Dog</span> <span class="keyword">extends</span> <span class="type">Animal</span> {
+    <span class="keyword">private</span> <span class="type">String</span> breed;
+
+    <span class="keyword">public</span> <span class="function">Dog</span>(<span class="type">String</span> name, <span class="keyword">int</span> age, <span class="type">String</span> breed) {
+        <span class="keyword">super</span>(name, age);  <span class="comment">// Must call parent constructor first!</span>
+        <span class="keyword">this</span>.breed = breed;
+    }
+
+    <span class="comment">// New method specific to Dog</span>
+    <span class="keyword">public void</span> <span class="function">bark</span>() {
+        System.out.println(name + <span class="string">" says: Woof!"</span>);
+    }
+
+    @Override
+    <span class="keyword">public</span> <span class="type">String</span> <span class="function">getInfo</span>() {
+        <span class="keyword">return</span> <span class="keyword">super</span>.getInfo() + <span class="string">", breed: "</span> + breed;
+    }
+}
+
+<span class="comment">// Usage</span>
+<span class="type">Dog</span> dog = <span class="keyword">new</span> <span class="type">Dog</span>(<span class="string">"Buddy"</span>, <span class="number">3</span>, <span class="string">"Golden Retriever"</span>);
+dog.eat();       <span class="comment">// Inherited: "Buddy is eating"</span>
+dog.bark();      <span class="comment">// Own method: "Buddy says: Woof!"</span>
+dog.getInfo();   <span class="comment">// Overridden: "Buddy (age 3), breed: Golden Retriever"</span>
+
+<span class="comment">// IS-A relationship</span>
+System.out.println(dog <span class="keyword">instanceof</span> <span class="type">Dog</span>);    <span class="comment">// true</span>
+System.out.println(dog <span class="keyword">instanceof</span> <span class="type">Animal</span>); <span class="comment">// true — Dog IS-A Animal</span>
+System.out.println(dog <span class="keyword">instanceof</span> <span class="type">Object</span>); <span class="comment">// true — Everything IS-A Object</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Keyword</th><th>Purpose</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td><code>extends</code></td><td>Inherit from parent</td><td><code>class Dog extends Animal</code></td></tr>
+              <tr><td><code>super()</code></td><td>Call parent constructor</td><td><code>super(name, age)</code></td></tr>
+              <tr><td><code>super.method()</code></td><td>Call parent method</td><td><code>super.getInfo()</code></td></tr>
+              <tr><td><code>protected</code></td><td>Accessible in subclasses</td><td><code>protected String name</code></td></tr>
+              <tr><td><code>@Override</code></td><td>Mark overridden method</td><td>Compile-time safety</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>Rules:</strong> <code>super()</code> must be the <strong>first statement</strong> in child constructor. If parent has no no-arg constructor, you MUST call <code>super(args)</code> explicitly. <code>private</code> members are NOT inherited (not visible to child).</div>
+      </div>
+    </div>
+
+    <!-- MODULE 4.2 -->
+    <div class="module-section" id="m4-2">
+      <div class="module-header"><div class="module-number">4.2</div><h2 class="module-title">Polymorphism — method overriding, dynamic dispatch, upcasting</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">One type, many behaviors</h3>
+        <p class="explain-en"><strong>Polymorphism</strong> = parent reference can hold child objects. The <strong>actual method called</strong> depends on the object's runtime type, not the reference type. This is <strong>dynamic dispatch</strong> (resolved at runtime). Enables writing flexible, extensible code.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Polymorphism</strong> = parent reference child objects ko hold kar sakta hai. <strong>Actual method</strong> object ke runtime type pe depend karta hai, reference type pe nahi. Ise <strong>dynamic dispatch</strong> kehte hain (runtime pe resolve hota hai). Flexible, extensible code likhne me madad karta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — Polymorphism</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">public class</span> <span class="type">Shape</span> {
+    <span class="keyword">public double</span> <span class="function">area</span>() { <span class="keyword">return</span> <span class="number">0</span>; }
+    <span class="keyword">public</span> <span class="type">String</span> <span class="function">describe</span>() { <span class="keyword">return</span> <span class="string">"Shape"</span>; }
+}
+
+<span class="keyword">public class</span> <span class="type">Circle</span> <span class="keyword">extends</span> <span class="type">Shape</span> {
+    <span class="keyword">private double</span> radius;
+    <span class="keyword">public</span> <span class="function">Circle</span>(<span class="keyword">double</span> r) { <span class="keyword">this</span>.radius = r; }
+
+    @Override
+    <span class="keyword">public double</span> <span class="function">area</span>() { <span class="keyword">return</span> Math.PI * radius * radius; }
+    @Override
+    <span class="keyword">public</span> <span class="type">String</span> <span class="function">describe</span>() { <span class="keyword">return</span> <span class="string">"Circle(r="</span> + radius + <span class="string">")"</span>; }
+}
+
+<span class="keyword">public class</span> <span class="type">Rectangle</span> <span class="keyword">extends</span> <span class="type">Shape</span> {
+    <span class="keyword">private double</span> w, h;
+    <span class="keyword">public</span> <span class="function">Rectangle</span>(<span class="keyword">double</span> w, <span class="keyword">double</span> h) { <span class="keyword">this</span>.w = w; <span class="keyword">this</span>.h = h; }
+
+    @Override
+    <span class="keyword">public double</span> <span class="function">area</span>() { <span class="keyword">return</span> w * h; }
+    @Override
+    <span class="keyword">public</span> <span class="type">String</span> <span class="function">describe</span>() { <span class="keyword">return</span> <span class="string">"Rect("</span> + w + <span class="string">"x"</span> + h + <span class="string">")"</span>; }
+}
+
+<span class="comment">// ✅ Polymorphism in action!</span>
+<span class="type">Shape</span>[] shapes = {
+    <span class="keyword">new</span> <span class="type">Circle</span>(<span class="number">5</span>),
+    <span class="keyword">new</span> <span class="type">Rectangle</span>(<span class="number">4</span>, <span class="number">6</span>),
+    <span class="keyword">new</span> <span class="type">Circle</span>(<span class="number">3</span>)
+};
+
+<span class="comment">// Same code handles ALL shape types!</span>
+<span class="keyword">for</span> (<span class="type">Shape</span> s : shapes) {
+    System.out.printf(<span class="string">"%s → area = %.2f%n"</span>, s.describe(), s.area());
+}
+<span class="comment">// Circle(r=5.0) → area = 78.54</span>
+<span class="comment">// Rect(4.0x6.0) → area = 24.00</span>
+<span class="comment">// Circle(r=3.0) → area = 28.27</span>
+
+<span class="comment">// Method that works with ANY shape</span>
+<span class="keyword">public static double</span> <span class="function">totalArea</span>(<span class="type">Shape</span>[] shapes) {
+    <span class="keyword">double</span> total = <span class="number">0</span>;
+    <span class="keyword">for</span> (<span class="type">Shape</span> s : shapes) total += s.area(); <span class="comment">// Dynamic dispatch!</span>
+    <span class="keyword">return</span> total;
+}</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Concept</th><th>Compile-time</th><th>Runtime</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Overloading</strong></td><td>✅ Resolved at compile</td><td>Same name, different params</td></tr>
+              <tr><td><strong>Overriding</strong></td><td>Declared</td><td>✅ Resolved at runtime</td></tr>
+              <tr><td>Reference type</td><td>Determines available methods</td><td>—</td></tr>
+              <tr><td>Object type</td><td>—</td><td>Determines which version runs</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 4.3 -->
+    <div class="module-section" id="m4-3">
+      <div class="module-header"><div class="module-number">4.3</div><h2 class="module-title">abstract classes — abstract methods, template pattern</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Partial implementations</h3>
+        <p class="explain-en"><strong>Abstract classes</strong> cannot be instantiated. They can have both abstract methods (no body — subclass MUST implement) and concrete methods (with body). Use for <strong>partial implementations</strong> and the <strong>Template Method</strong> design pattern. A class with any abstract method must be declared abstract.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Abstract classes</strong> ka object nahi ban sakta. Inme abstract methods (bina body — subclass ko MUST implement karna padta hai) aur concrete methods (body ke saath) dono ho sakte hain. <strong>Partial implementations</strong> aur <strong>Template Method</strong> pattern ke liye use karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — Abstract Classes</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Abstract class — cannot instantiate!</span>
+<span class="keyword">public abstract class</span> <span class="type">Vehicle</span> {
+    <span class="keyword">protected</span> <span class="type">String</span> brand;
+    <span class="keyword">protected int</span> speed;
+
+    <span class="keyword">public</span> <span class="function">Vehicle</span>(<span class="type">String</span> brand) {
+        <span class="keyword">this</span>.brand = brand;
+        <span class="keyword">this</span>.speed = <span class="number">0</span>;
+    }
+
+    <span class="comment">// Abstract method — no body! Subclass MUST implement.</span>
+    <span class="keyword">public abstract</span> <span class="type">String</span> <span class="function">fuelType</span>();
+    <span class="keyword">public abstract int</span> <span class="function">maxSpeed</span>();
+
+    <span class="comment">// Concrete method — shared by all subclasses</span>
+    <span class="keyword">public void</span> <span class="function">accelerate</span>(<span class="keyword">int</span> amount) {
+        speed = Math.min(speed + amount, maxSpeed());
+        System.out.printf(<span class="string">"%s speed: %d/%d km/h%n"</span>, brand, speed, maxSpeed());
+    }
+
+    <span class="comment">// Template method pattern</span>
+    <span class="keyword">public final void</span> <span class="function">startEngine</span>() {
+        System.out.println(<span class="string">"Checking fuel: "</span> + fuelType());
+        System.out.println(<span class="string">"Starting "</span> + brand + <span class="string">"..."</span>);
+        onStart(); <span class="comment">// Hook for subclasses</span>
+        System.out.println(<span class="string">"Ready to go!"</span>);
+    }
+    <span class="keyword">protected void</span> <span class="function">onStart</span>() {} <span class="comment">// Optional hook</span>
+}
+
+<span class="keyword">public class</span> <span class="type">ElectricCar</span> <span class="keyword">extends</span> <span class="type">Vehicle</span> {
+    <span class="keyword">public</span> <span class="function">ElectricCar</span>(<span class="type">String</span> brand) { <span class="keyword">super</span>(brand); }
+
+    @Override
+    <span class="keyword">public</span> <span class="type">String</span> <span class="function">fuelType</span>() { <span class="keyword">return</span> <span class="string">"Electric"</span>; }
+    @Override
+    <span class="keyword">public int</span> <span class="function">maxSpeed</span>() { <span class="keyword">return</span> <span class="number">250</span>; }
+    @Override
+    <span class="keyword">protected void</span> <span class="function">onStart</span>() { System.out.println(<span class="string">"Silent mode activated"</span>); }
+}
+
+<span class="comment">// Vehicle v = new Vehicle("X");  // ❌ Cannot instantiate abstract!</span>
+<span class="type">Vehicle</span> tesla = <span class="keyword">new</span> <span class="type">ElectricCar</span>(<span class="string">"Tesla"</span>); <span class="comment">// ✅ Polymorphism</span>
+tesla.startEngine();  <span class="comment">// Template method runs</span>
+tesla.accelerate(<span class="number">100</span>);</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Feature</th><th>Abstract Class</th><th>Concrete Class</th></tr></thead>
+            <tbody>
+              <tr><td>Instantiate</td><td>❌ No</td><td>✅ Yes</td></tr>
+              <tr><td>Abstract methods</td><td>✅ Can have</td><td>❌ Cannot</td></tr>
+              <tr><td>Concrete methods</td><td>✅ Can have</td><td>✅ Yes</td></tr>
+              <tr><td>Constructor</td><td>✅ Yes (called via super)</td><td>✅ Yes</td></tr>
+              <tr><td>Fields</td><td>✅ Any type</td><td>✅ Any type</td></tr>
+              <tr><td>Use case</td><td>Partial implementation</td><td>Full implementation</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 4.4 -->
+    <div class="module-section" id="m4-4">
+      <div class="module-header"><div class="module-number">4.4</div><h2 class="module-title">Interfaces — contracts, default methods, functional interfaces</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Defining contracts</h3>
+        <p class="explain-en"><strong>Interfaces</strong> define a contract — what a class MUST do, not HOW. A class can implement <strong>multiple interfaces</strong> (solving Java's single-inheritance limit). Java 8+ added <code>default</code> methods (with body) and <code>static</code> methods. <strong>Functional interfaces</strong> (one abstract method) enable lambdas.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Interfaces</strong> ek contract define karte hain — class ko KYA karna hai, KAISE nahi. Ek class <strong>multiple interfaces</strong> implement kar sakti hai. Java 8+ me <code>default</code> methods (body ke saath) aur <code>static</code> methods aaye. <strong>Functional interfaces</strong> (ek abstract method) lambdas enable karte hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — Interfaces</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Interface — pure contract</span>
+<span class="keyword">public interface</span> <span class="type">Flyable</span> {
+    <span class="keyword">void</span> <span class="function">fly</span>();                    <span class="comment">// Abstract (no body)</span>
+    <span class="keyword">int</span> <span class="function">maxAltitude</span>();             <span class="comment">// Abstract</span>
+
+    <span class="comment">// Default method (Java 8+) — optional override</span>
+    <span class="keyword">default</span> <span class="type">String</span> <span class="function">flightStatus</span>() {
+        <span class="keyword">return</span> <span class="string">"In flight at max "</span> + maxAltitude() + <span class="string">"m"</span>;
+    }
+
+    <span class="comment">// Static method — called on interface</span>
+    <span class="keyword">static boolean</span> <span class="function">canFly</span>(<span class="type">Object</span> obj) {
+        <span class="keyword">return</span> obj <span class="keyword">instanceof</span> <span class="type">Flyable</span>;
+    }
+}
+
+<span class="keyword">public interface</span> <span class="type">Swimmable</span> {
+    <span class="keyword">void</span> <span class="function">swim</span>();
+    <span class="keyword">int</span> <span class="function">maxDepth</span>();
+}
+
+<span class="comment">// ✅ Multiple interfaces!</span>
+<span class="keyword">public class</span> <span class="type">Duck</span> <span class="keyword">extends</span> <span class="type">Animal</span> <span class="keyword">implements</span> <span class="type">Flyable</span>, <span class="type">Swimmable</span> {
+    <span class="keyword">public</span> <span class="function">Duck</span>(<span class="type">String</span> name) { <span class="keyword">super</span>(name, <span class="number">2</span>); }
+
+    @Override <span class="keyword">public void</span> <span class="function">fly</span>() { System.out.println(name + <span class="string">" flies!"</span>); }
+    @Override <span class="keyword">public int</span> <span class="function">maxAltitude</span>() { <span class="keyword">return</span> <span class="number">100</span>; }
+    @Override <span class="keyword">public void</span> <span class="function">swim</span>() { System.out.println(name + <span class="string">" swims!"</span>); }
+    @Override <span class="keyword">public int</span> <span class="function">maxDepth</span>() { <span class="keyword">return</span> <span class="number">5</span>; }
+}
+
+<span class="comment">// Use as interface type (polymorphism)</span>
+<span class="type">Flyable</span> bird = <span class="keyword">new</span> <span class="type">Duck</span>(<span class="string">"Donald"</span>);
+bird.fly();
+bird.flightStatus(); <span class="comment">// Default method</span>
+
+<span class="comment">// ✅ Functional interface (one abstract method) → lambdas!</span>
+@FunctionalInterface
+<span class="keyword">public interface</span> <span class="type">Validator</span>&lt;<span class="type">T</span>&gt; {
+    <span class="keyword">boolean</span> <span class="function">isValid</span>(<span class="type">T</span> item);
+}
+
+<span class="type">Validator</span>&lt;<span class="type">String</span>&gt; notEmpty = s -> !s.isEmpty();
+<span class="type">Validator</span>&lt;<span class="type">Integer</span>&gt; positive = n -> n > <span class="number">0</span>;
+notEmpty.isValid(<span class="string">"hello"</span>); <span class="comment">// true</span>
+positive.isValid(-<span class="number">5</span>);     <span class="comment">// false</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Feature</th><th>Abstract Class</th><th>Interface</th></tr></thead>
+            <tbody>
+              <tr><td>Keyword</td><td><code>extends</code></td><td><code>implements</code></td></tr>
+              <tr><td>Multiple</td><td>❌ Single only</td><td>✅ Multiple interfaces</td></tr>
+              <tr><td>Fields</td><td>Any type</td><td>Only <code>public static final</code></td></tr>
+              <tr><td>Constructor</td><td>✅ Yes</td><td>❌ No</td></tr>
+              <tr><td>Methods</td><td>Any access</td><td>public abstract / default / static</td></tr>
+              <tr><td>State</td><td>✅ Can have state</td><td>❌ No instance state</td></tr>
+              <tr><td>Use when</td><td>IS-A + shared code</td><td>CAN-DO contract</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 4.5 -->
+    <div class="module-section" id="m4-5">
+      <div class="module-header"><div class="module-number">4.5</div><h2 class="module-title">Sealed classes (Java 17+) — restricted hierarchies</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Controlling who can extend</h3>
+        <p class="explain-en"><strong>Sealed classes</strong> (Java 17) restrict which classes can extend them using <code>permits</code>. Subclasses must be <code>final</code>, <code>sealed</code>, or <code>non-sealed</code>. Combined with pattern matching in switch, they enable exhaustive type checking — the compiler knows ALL possible subtypes.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Sealed classes</strong> (Java 17) restrict karte hain ki kaun classes extend kar sakti hain <code>permits</code> ke saath. Subclasses ko <code>final</code>, <code>sealed</code>, ya <code>non-sealed</code> hona chahiye. Switch me pattern matching ke saath, compiler ko sab possible subtypes pata hote hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — Sealed Classes</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Sealed class — only listed classes can extend</span>
+<span class="keyword">public sealed class</span> <span class="type">Payment</span>
+    <span class="keyword">permits</span> <span class="type">CreditCard</span>, <span class="type">DebitCard</span>, <span class="type">UPI</span> {
+    <span class="keyword">protected double</span> amount;
+    <span class="keyword">public</span> <span class="function">Payment</span>(<span class="keyword">double</span> amount) { <span class="keyword">this</span>.amount = amount; }
+}
+
+<span class="comment">// final — no further extension</span>
+<span class="keyword">public final class</span> <span class="type">CreditCard</span> <span class="keyword">extends</span> <span class="type">Payment</span> {
+    <span class="keyword">private</span> <span class="type">String</span> cardNumber;
+    <span class="keyword">public</span> <span class="function">CreditCard</span>(<span class="keyword">double</span> amount, <span class="type">String</span> card) {
+        <span class="keyword">super</span>(amount); <span class="keyword">this</span>.cardNumber = card;
+    }
+}
+
+<span class="keyword">public final class</span> <span class="type">DebitCard</span> <span class="keyword">extends</span> <span class="type">Payment</span> {
+    <span class="keyword">public</span> <span class="function">DebitCard</span>(<span class="keyword">double</span> amount) { <span class="keyword">super</span>(amount); }
+}
+
+<span class="comment">// non-sealed — open for further extension</span>
+<span class="keyword">public non-sealed class</span> <span class="type">UPI</span> <span class="keyword">extends</span> <span class="type">Payment</span> {
+    <span class="keyword">private</span> <span class="type">String</span> upiId;
+    <span class="keyword">public</span> <span class="function">UPI</span>(<span class="keyword">double</span> amount, <span class="type">String</span> upiId) {
+        <span class="keyword">super</span>(amount); <span class="keyword">this</span>.upiId = upiId;
+    }
+}
+
+<span class="comment">// ✅ Exhaustive switch — compiler knows ALL subtypes!</span>
+<span class="keyword">public</span> <span class="type">String</span> <span class="function">processPayment</span>(<span class="type">Payment</span> payment) {
+    <span class="keyword">return switch</span> (payment) {
+        <span class="keyword">case</span> <span class="type">CreditCard</span> cc -> <span class="string">"Processing credit: "</span> + cc.amount;
+        <span class="keyword">case</span> <span class="type">DebitCard</span> dc  -> <span class="string">"Processing debit: "</span> + dc.amount;
+        <span class="keyword">case</span> <span class="type">UPI</span> upi       -> <span class="string">"Processing UPI: "</span> + upi.amount;
+        <span class="comment">// No default needed! Compiler knows it's exhaustive.</span>
+    };
+}</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Subclass modifier</th><th>Meaning</th><th>Can be extended?</th></tr></thead>
+            <tbody>
+              <tr><td><code>final</code></td><td>End of hierarchy</td><td>❌ No</td></tr>
+              <tr><td><code>sealed</code></td><td>Restricted extension</td><td>✅ Only permitted classes</td></tr>
+              <tr><td><code>non-sealed</code></td><td>Open for extension</td><td>✅ Anyone</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>🏭 Industry insight:</strong> Sealed classes + records + switch pattern matching = <strong>algebraic data types</strong> in Java. This pattern is used in domain modeling, payment systems, and event sourcing architectures.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 4.6 -->
+    <div class="module-section" id="m4-6">
+      <div class="module-header"><div class="module-number">4.6</div><h2 class="module-title">Enums — constants with behavior, enum methods</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Type-safe constants</h3>
+        <p class="explain-en"><strong>Enums</strong> define a fixed set of constants. Unlike simple <code>int</code> constants, enums are <strong>type-safe</strong>, can have fields, methods, and constructors. Enums implicitly extend <code>java.lang.Enum</code>. Use <code>values()</code> to iterate, <code>valueOf()</code> to parse from string.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Enums</strong> fixed set of constants define karte hain. Simple <code>int</code> constants ke unlike, enums <strong>type-safe</strong> hain, inme fields, methods, aur constructors ho sakte hain. <code>values()</code> se iterate karo, <code>valueOf()</code> se string se parse karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — Enums</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Simple enum</span>
+<span class="keyword">public enum</span> <span class="type">Day</span> {
+    MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY
+}
+
+<span class="type">Day</span> today = <span class="type">Day</span>.MONDAY;
+System.out.println(today);         <span class="comment">// MONDAY</span>
+System.out.println(today.name());  <span class="comment">// "MONDAY" (string)</span>
+System.out.println(today.ordinal()); <span class="comment">// 0 (index)</span>
+
+<span class="comment">// Iterate all values</span>
+<span class="keyword">for</span> (<span class="type">Day</span> d : <span class="type">Day</span>.values()) {
+    System.out.println(d);
+}
+
+<span class="comment">// Parse from string</span>
+<span class="type">Day</span> parsed = <span class="type">Day</span>.valueOf(<span class="string">"FRIDAY"</span>); <span class="comment">// Case-sensitive!</span>
+
+<span class="comment">// ✅ Enum with fields, constructor, methods</span>
+<span class="keyword">public enum</span> <span class="type">Planet</span> {
+    MERCURY(<span class="number">3.303e+23</span>, <span class="number">2.4397e6</span>),
+    VENUS(<span class="number">4.869e+24</span>, <span class="number">6.0518e6</span>),
+    EARTH(<span class="number">5.976e+24</span>, <span class="number">6.37814e6</span>),
+    MARS(<span class="number">6.421e+23</span>, <span class="number">3.3972e6</span>);
+
+    <span class="keyword">private final double</span> mass;    <span class="comment">// in kg</span>
+    <span class="keyword">private final double</span> radius;  <span class="comment">// in meters</span>
+
+    <span class="comment">// Private constructor! Enums cannot be instantiated.</span>
+    <span class="function">Planet</span>(<span class="keyword">double</span> mass, <span class="keyword">double</span> radius) {
+        <span class="keyword">this</span>.mass = mass;
+        <span class="keyword">this</span>.radius = radius;
+    }
+
+    <span class="keyword">public double</span> <span class="function">surfaceGravity</span>() {
+        <span class="keyword">final double</span> G = <span class="number">6.67300E-11</span>;
+        <span class="keyword">return</span> G * mass / (radius * radius);
+    }
+
+    <span class="keyword">public double</span> <span class="function">surfaceWeight</span>(<span class="keyword">double</span> otherMass) {
+        <span class="keyword">return</span> otherMass * surfaceGravity();
+    }
+}
+
+<span class="comment">// Usage in switch</span>
+<span class="type">String</span> type = <span class="keyword">switch</span> (today) {
+    <span class="keyword">case</span> SATURDAY, SUNDAY -> <span class="string">"Weekend 🎉"</span>;
+    <span class="keyword">default</span> -> <span class="string">"Weekday 💼"</span>;
+};</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Enum Method</th><th>Purpose</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td><code>values()</code></td><td>All constants as array</td><td><code>Day.values()</code></td></tr>
+              <tr><td><code>valueOf(s)</code></td><td>Parse from string</td><td><code>Day.valueOf("MONDAY")</code></td></tr>
+              <tr><td><code>name()</code></td><td>Constant name as string</td><td><code>MONDAY.name() → "MONDAY"</code></td></tr>
+              <tr><td><code>ordinal()</code></td><td>Position (0-indexed)</td><td><code>MONDAY.ordinal() → 0</code></td></tr>
+              <tr><td><code>compareTo()</code></td><td>Compare by ordinal</td><td>For ordering</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 4.7 -->
+    <div class="module-section" id="m4-7">
+      <div class="module-header"><div class="module-number">4.7</div><h2 class="module-title">Object casting — upcasting, downcasting, ClassCastException</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Converting between types in hierarchies</h3>
+        <p class="explain-en"><strong>Upcasting</strong> (child → parent) is automatic and safe. <strong>Downcasting</strong> (parent → child) requires explicit cast and may throw <code>ClassCastException</code>. Always check with <code>instanceof</code> before downcasting. Java 16+ pattern matching makes this safer and cleaner.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Upcasting</strong> (child → parent) automatic aur safe hai. <strong>Downcasting</strong> (parent → child) me explicit cast chahiye aur <code>ClassCastException</code> aa sakta hai. Downcasting se pehle hamesha <code>instanceof</code> check karo. Java 16+ pattern matching ise safer banata hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — Casting</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Upcasting — automatic, always safe</span>
+<span class="type">Dog</span> dog = <span class="keyword">new</span> <span class="type">Dog</span>(<span class="string">"Buddy"</span>, <span class="number">3</span>, <span class="string">"Lab"</span>);
+<span class="type">Animal</span> animal = dog;  <span class="comment">// Upcasting (implicit)</span>
+animal.eat();         <span class="comment">// ✅ Animal methods work</span>
+<span class="comment">// animal.bark();    // ❌ Compile error! Animal doesn't have bark()</span>
+
+<span class="comment">// Downcasting — explicit, risky!</span>
+<span class="keyword">if</span> (animal <span class="keyword">instanceof</span> <span class="type">Dog</span>) {
+    <span class="type">Dog</span> d = (<span class="type">Dog</span>) animal;  <span class="comment">// Safe — we checked first</span>
+    d.bark();              <span class="comment">// ✅ Now bark() is available</span>
+}
+
+<span class="comment">// ✅ Pattern matching instanceof (Java 16+)</span>
+<span class="keyword">if</span> (animal <span class="keyword">instanceof</span> <span class="type">Dog</span> d) {  <span class="comment">// Check + cast in one!</span>
+    d.bark();
+}
+
+<span class="comment">// ❌ Unsafe downcasting</span>
+<span class="type">Animal</span> cat = <span class="keyword">new</span> <span class="type">Animal</span>(<span class="string">"Cat"</span>, <span class="number">2</span>);
+<span class="comment">// Dog bad = (Dog) cat;  // ❌ ClassCastException at runtime!</span>
+
+<span class="comment">// Polymorphic collection with type checking</span>
+<span class="type">Animal</span>[] zoo = { <span class="keyword">new</span> <span class="type">Dog</span>(<span class="string">"Rex"</span>, <span class="number">5</span>, <span class="string">"GSD"</span>), <span class="keyword">new</span> <span class="type">Animal</span>(<span class="string">"Cat"</span>, <span class="number">3</span>) };
+<span class="keyword">for</span> (<span class="type">Animal</span> a : zoo) {
+    <span class="keyword">if</span> (a <span class="keyword">instanceof</span> <span class="type">Dog</span> d) {
+        d.bark();  <span class="comment">// Only for dogs</span>
+    }
+    a.eat();  <span class="comment">// Works for all animals</span>
+}</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Casting</th><th>Direction</th><th>Syntax</th><th>Safe?</th></tr></thead>
+            <tbody>
+              <tr><td>Upcasting</td><td>Child → Parent</td><td><code>Animal a = dog;</code></td><td>✅ Always</td></tr>
+              <tr><td>Downcasting</td><td>Parent → Child</td><td><code>Dog d = (Dog) animal;</code></td><td>⚠️ Check first</td></tr>
+              <tr><td>Pattern match</td><td>Check + cast</td><td><code>if (a instanceof Dog d)</code></td><td>✅ Safe (16+)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Overriding Rules — Complete Reference</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Rule</th><th>Requirement</th></tr></thead>
+          <tbody>
+            <tr><td>Method name</td><td>Must be exactly the same</td></tr>
+            <tr><td>Parameters</td><td>Must be exactly the same</td></tr>
+            <tr><td>Return type</td><td>Same or covariant (subtype)</td></tr>
+            <tr><td>Access</td><td>Same or more visible (private → protected → public)</td></tr>
+            <tr><td>Exceptions</td><td>Same or narrower checked exceptions</td></tr>
+            <tr><td><code>@Override</code></td><td>Optional but strongly recommended</td></tr>
+            <tr><td><code>static</code> methods</td><td>Cannot be overridden (hidden instead)</td></tr>
+            <tr><td><code>final</code> methods</td><td>Cannot be overridden</td></tr>
+            <tr><td><code>private</code> methods</td><td>Cannot be overridden (not inherited)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Built-in Functional Interfaces (java.util.function)</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Interface</th><th>Method</th><th>Input → Output</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><code>Predicate&lt;T&gt;</code></td><td><code>test(T)</code></td><td>T → boolean</td><td><code>s -> s.isEmpty()</code></td></tr>
+            <tr><td><code>Function&lt;T,R&gt;</code></td><td><code>apply(T)</code></td><td>T → R</td><td><code>s -> s.length()</code></td></tr>
+            <tr><td><code>Consumer&lt;T&gt;</code></td><td><code>accept(T)</code></td><td>T → void</td><td><code>s -> println(s)</code></td></tr>
+            <tr><td><code>Supplier&lt;T&gt;</code></td><td><code>get()</code></td><td>() → T</td><td><code>() -> new ArrayList()</code></td></tr>
+            <tr><td><code>UnaryOperator&lt;T&gt;</code></td><td><code>apply(T)</code></td><td>T → T</td><td><code>s -> s.toUpperCase()</code></td></tr>
+            <tr><td><code>BinaryOperator&lt;T&gt;</code></td><td><code>apply(T,T)</code></td><td>(T,T) → T</td><td><code>(a,b) -> a + b</code></td></tr>
+            <tr><td><code>BiFunction&lt;T,U,R&gt;</code></td><td><code>apply(T,U)</code></td><td>(T,U) → R</td><td><code>(s,n) -> s.repeat(n)</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Design Patterns with OOP</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Pattern</th><th>OOP Feature</th><th>Use case</th></tr></thead>
+          <tbody>
+            <tr><td>Template Method</td><td>Abstract class + final method</td><td>Algorithm skeleton with hooks</td></tr>
+            <tr><td>Strategy</td><td>Interface + polymorphism</td><td>Swappable algorithms</td></tr>
+            <tr><td>Factory Method</td><td>Abstract method returns object</td><td>Create without specifying class</td></tr>
+            <tr><td>Singleton</td><td>Private constructor + static</td><td>Single instance</td></tr>
+            <tr><td>Observer</td><td>Interface callbacks</td><td>Event notification</td></tr>
+            <tr><td>Decorator</td><td>Wrapping + interface</td><td>Add behavior dynamically</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="callout callout-tip"><strong>🏭 Industry insight:</strong> In enterprise Java (Spring Boot), interfaces are everywhere: <code>Repository</code>, <code>Service</code>, <code>Controller</code> layers all use interface-based design for testability (mock injection) and flexibility. Prefer composition over inheritance — "HAS-A" is usually better than "IS-A".</div>
+
+    <div class="practice-box">
+      <div class="practice-title">✏️ Practice Exercises — Part 4</div>
+      <ol>
+        <li>Create a <code>Shape</code> hierarchy: abstract <code>Shape</code> with <code>area()</code>, and concrete <code>Circle</code>, <code>Rectangle</code>, <code>Triangle</code>.</li>
+        <li>Write a polymorphic method <code>printAreas(Shape[])</code> that prints each shape's area using dynamic dispatch.</li>
+        <li>Design a <code>Flyable</code> and <code>Swimmable</code> interface, then create <code>Duck</code> that implements both.</li>
+        <li>Implement a sealed class hierarchy for <code>HttpResponse</code>: <code>Success</code>, <code>NotFound</code>, <code>ServerError</code>.</li>
+        <li>Create a <code>Season</code> enum with fields for average temperature and a method <code>isWarm()</code>.</li>
+        <li>Demonstrate safe downcasting using pattern matching <code>instanceof</code> with an <code>Animal[]</code> array.</li>
+        <li>Implement the Strategy pattern: a <code>Sorter</code> interface with <code>BubbleSort</code> and <code>QuickSort</code> implementations.</li>
+      </ol>
+    </div>
+
+    <div class="handbook-nav">
+      <a href="part3.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Part 3: OOP Basics</div></div></a>
+      <a href="part5.html" class="nav-btn next"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Part 5: Collections & Generics →</div></div><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+
+  </div>
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
+  <script src="../../../js/main.js"></script>
+  <script>
+    (() => {
+      document.querySelectorAll('.code-block').forEach((block) => { const pre = block.querySelector('.code-body pre'), header = block.querySelector('.code-header'); if (!pre || !header) return; let actions = header.querySelector('.code-actions'); if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); } const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'code-copy-btn'; btn.textContent = 'Copy'; btn.addEventListener('click', async () => { try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; } catch { btn.textContent = 'Failed'; } finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); } }); actions.prepend(btn); });
+      const fill = document.querySelector('.hb-progress-fill'), label = document.querySelector('.hb-progress-label');
+      if (fill && label) { const update = () => { const h = document.documentElement, d = (h.scrollHeight - h.clientHeight) || 1, p = Math.max(0, Math.min(1, h.scrollTop / d)); fill.style.width = (p*100).toFixed(0)+'%'; label.textContent = (p*100).toFixed(0)+'%'; }; document.addEventListener('scroll', update, { passive: true }); update(); }
+    })();
+  </script>
+</body>
+</html>

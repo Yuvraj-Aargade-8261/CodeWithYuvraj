@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Part 5: Collections & Generics — Java Programming Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 5: ArrayList, HashMap, HashSet, Generics, Comparable, Iterator in Java.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/handbook.css">
+</head>
+<body class="handbook-wrapper">
+  <nav class="navbar"><div class="container"><a href="../../../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../../../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
+
+  <div class="handbook-page">
+    <div class="hb-topbar"><div class="hb-topbar-inner"><div class="hb-breadcrumbs"><a href="index.html">Java Programming Handbook</a><span class="hb-muted">/</span><span>Part 5</span><span class="hb-muted">·</span><a href="#m5-1">5.1</a> <a href="#m5-2">5.2</a> <a href="#m5-3">5.3</a> <a href="#m5-4">5.4</a> <a href="#m5-5">5.5</a> <a href="#m5-6">5.6</a> <a href="#m5-7">5.7</a></div><div class="hb-progress" aria-label="Reading progress"><div class="hb-progress-track" role="progressbar"><div class="hb-progress-fill"></div></div><div class="hb-progress-label">0%</div></div></div></div>
+
+    <div class="chapter-header" data-chapter-num="05">
+      <div class="chapter-part-label">📖 Part 5 — Collections & Generics</div>
+      <h1 class="chapter-title">Data <span class="gradient-text">Structures</span></h1>
+      <p class="chapter-subtitle">ArrayList, LinkedList, HashMap, HashSet, Generics, Comparable, Iterator — the backbone of real-world Java applications.</p>
+      <div class="chapter-meta"><span>📄 Modules 5.1 – 5.7</span><span>⏱️ 75–100 min read</span><span>💻 65+ Examples</span></div>
+    </div>
+
+    <div class="hb-mini-toc"><div class="hb-mini-title">📍 Part 5 Modules</div><div class="hb-mini-links"><a href="#m5-1">5.1 List</a><a href="#m5-2">5.2 Set</a><a href="#m5-3">5.3 Map</a><a href="#m5-4">5.4 Generics</a><a href="#m5-5">5.5 Comparable</a><a href="#m5-6">5.6 Iterator</a><a href="#m5-7">5.7 Collections</a></div></div>
+
+    <div class="quick-ref">
+      <div class="qr-title">🚀 Advanced Lens — Part 5</div>
+      <p class="explain-en">Collections design drives performance and memory profile in real services. Correct data-structure choice, generic boundaries, and comparator consistency are core to writing scalable, bug-resistant Java backends.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Production Java me collections ka sahi choice bahut critical hota hai. Generics boundaries aur comparator consistency se performance better hoti hai aur hidden bugs kam hote hain.</div>
+    </div>
+
+    <div class="concept-block">
+      <h3>Collections readiness checklist (Part 5)</h3>
+      <table>
+        <thead><tr><th>Area</th><th>Production-ready standard</th></tr></thead>
+        <tbody>
+          <tr><td>Data structure fit</td><td>Choose by operation profile (lookup/order/insert/delete patterns).</td></tr>
+          <tr><td>Generic contracts</td><td>Avoid raw types and keep generic APIs explicit.</td></tr>
+          <tr><td>Comparator rules</td><td>Ensure comparator consistency with equals where required.</td></tr>
+          <tr><td>Iteration safety</td><td>Use iterator-safe removal patterns and avoid concurrent mutation bugs.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- MODULE 5.1 -->
+    <div class="module-section" id="m5-1">
+      <div class="module-header"><div class="module-number">5.1</div><h2 class="module-title">List — ArrayList, LinkedList, List.of(), operations</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Dynamic, ordered collections</h3>
+        <p class="explain-en"><code>List</code> is an <strong>ordered, indexed</strong> collection that allows duplicates. <code>ArrayList</code> (backed by array) is fastest for random access. <code>LinkedList</code> (doubly-linked) is faster for insertions/deletions. Java 9+ adds <code>List.of()</code> for immutable lists. Always declare as <code>List&lt;T&gt;</code> (interface type).</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>List</code> ek <strong>ordered, indexed</strong> collection hai jo duplicates allow karta hai. <code>ArrayList</code> (array-backed) random access me fastest hai. <code>LinkedList</code> insertions/deletions me faster hai. Java 9+ me <code>List.of()</code> immutable lists ke liye hai. Hamesha <code>List&lt;T&gt;</code> (interface type) se declare karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — List & ArrayList</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">import</span> java.util.*;
+
+<span class="comment">// ✅ Declare as List (interface), create as ArrayList</span>
+<span class="type">List</span>&lt;<span class="type">String</span>&gt; names = <span class="keyword">new</span> <span class="type">ArrayList</span>&lt;&gt;();
+
+<span class="comment">// Add elements</span>
+names.add(<span class="string">"Alice"</span>);        <span class="comment">// [Alice]</span>
+names.add(<span class="string">"Bob"</span>);          <span class="comment">// [Alice, Bob]</span>
+names.add(<span class="number">0</span>, <span class="string">"Charlie"</span>);  <span class="comment">// [Charlie, Alice, Bob]</span>
+names.addAll(<span class="type">List</span>.of(<span class="string">"Dave"</span>, <span class="string">"Eve"</span>)); <span class="comment">// Add multiple</span>
+
+<span class="comment">// Access</span>
+names.get(<span class="number">0</span>);        <span class="comment">// "Charlie" (by index)</span>
+names.size();        <span class="comment">// 5</span>
+names.isEmpty();     <span class="comment">// false</span>
+names.contains(<span class="string">"Bob"</span>); <span class="comment">// true</span>
+names.indexOf(<span class="string">"Alice"</span>); <span class="comment">// 1</span>
+
+<span class="comment">// Modify</span>
+names.set(<span class="number">0</span>, <span class="string">"Carl"</span>);  <span class="comment">// Replace at index</span>
+names.remove(<span class="string">"Bob"</span>);    <span class="comment">// Remove by value</span>
+names.remove(<span class="number">0</span>);        <span class="comment">// Remove by index</span>
+
+<span class="comment">// Iterate</span>
+<span class="keyword">for</span> (<span class="type">String</span> name : names) System.out.println(name);
+names.forEach(System.out::println); <span class="comment">// Method reference</span>
+
+<span class="comment">// Sort</span>
+<span class="type">Collections</span>.sort(names);          <span class="comment">// Natural order</span>
+names.sort(<span class="type">Comparator</span>.reverseOrder()); <span class="comment">// Reverse</span>
+
+<span class="comment">// ✅ Immutable list (Java 9+)</span>
+<span class="type">List</span>&lt;<span class="type">String</span>&gt; fixed = <span class="type">List</span>.of(<span class="string">"A"</span>, <span class="string">"B"</span>, <span class="string">"C"</span>);
+<span class="comment">// fixed.add("D"); // ❌ UnsupportedOperationException!</span>
+
+<span class="comment">// Convert array ↔ list</span>
+<span class="type">String</span>[] arr = names.toArray(<span class="keyword">new</span> <span class="type">String</span>[<span class="number">0</span>]);
+<span class="type">List</span>&lt;<span class="type">String</span>&gt; fromArr = <span class="type">Arrays</span>.asList(<span class="string">"X"</span>, <span class="string">"Y"</span>); <span class="comment">// Fixed-size!</span>
+<span class="type">List</span>&lt;<span class="type">String</span>&gt; mutable = <span class="keyword">new</span> <span class="type">ArrayList</span>&lt;&gt;(<span class="type">List</span>.of(<span class="string">"X"</span>, <span class="string">"Y"</span>)); <span class="comment">// Mutable copy</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Operation</th><th>ArrayList</th><th>LinkedList</th></tr></thead>
+            <tbody>
+              <tr><td>get(i)</td><td>O(1) ✅</td><td>O(n)</td></tr>
+              <tr><td>add (end)</td><td>O(1) amortized</td><td>O(1) ✅</td></tr>
+              <tr><td>add (middle)</td><td>O(n)</td><td>O(1) ✅</td></tr>
+              <tr><td>remove (middle)</td><td>O(n)</td><td>O(1) ✅</td></tr>
+              <tr><td>Memory</td><td>Compact (array)</td><td>More (node pointers)</td></tr>
+              <tr><td>Use when</td><td>Most cases (default)</td><td>Frequent insert/remove</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 5.2 -->
+    <div class="module-section" id="m5-2">
+      <div class="module-header"><div class="module-number">5.2</div><h2 class="module-title">Set — HashSet, LinkedHashSet, TreeSet, no duplicates</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Unique elements only</h3>
+        <p class="explain-en"><code>Set</code> stores <strong>unique elements</strong> — no duplicates allowed. <code>HashSet</code> is fastest (O(1) add/contains) but unordered. <code>LinkedHashSet</code> maintains insertion order. <code>TreeSet</code> keeps elements sorted. Sets use <code>equals()</code>/<code>hashCode()</code> for uniqueness.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>Set</code> <strong>unique elements</strong> store karta hai — duplicates allowed nahi. <code>HashSet</code> fastest hai (O(1)) par unordered. <code>LinkedHashSet</code> insertion order maintain karta hai. <code>TreeSet</code> sorted rakhta hai. Uniqueness ke liye <code>equals()</code>/<code>hashCode()</code> use hota hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — Sets</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// HashSet — fast, unordered</span>
+<span class="type">Set</span>&lt;<span class="type">String</span>&gt; colors = <span class="keyword">new</span> <span class="type">HashSet</span>&lt;&gt;();
+colors.add(<span class="string">"Red"</span>);
+colors.add(<span class="string">"Blue"</span>);
+colors.add(<span class="string">"Red"</span>);   <span class="comment">// Ignored! Already exists</span>
+System.out.println(colors.size()); <span class="comment">// 2 (no duplicates)</span>
+colors.contains(<span class="string">"Blue"</span>); <span class="comment">// true — O(1)!</span>
+colors.remove(<span class="string">"Red"</span>);
+
+<span class="comment">// LinkedHashSet — maintains insertion order</span>
+<span class="type">Set</span>&lt;<span class="type">String</span>&gt; ordered = <span class="keyword">new</span> <span class="type">LinkedHashSet</span>&lt;&gt;();
+ordered.add(<span class="string">"C"</span>); ordered.add(<span class="string">"A"</span>); ordered.add(<span class="string">"B"</span>);
+<span class="comment">// Iterates: C, A, B (insertion order)</span>
+
+<span class="comment">// TreeSet — sorted (natural order)</span>
+<span class="type">Set</span>&lt;<span class="type">Integer</span>&gt; sorted = <span class="keyword">new</span> <span class="type">TreeSet</span>&lt;&gt;();
+sorted.addAll(<span class="type">List</span>.of(<span class="number">30</span>, <span class="number">10</span>, <span class="number">20</span>, <span class="number">50</span>, <span class="number">40</span>));
+<span class="comment">// Iterates: 10, 20, 30, 40, 50 (sorted!)</span>
+
+<span class="comment">// Set operations</span>
+<span class="type">Set</span>&lt;<span class="type">Integer</span>&gt; a = <span class="keyword">new</span> <span class="type">HashSet</span>&lt;&gt;(<span class="type">Set</span>.of(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>));
+<span class="type">Set</span>&lt;<span class="type">Integer</span>&gt; b = <span class="keyword">new</span> <span class="type">HashSet</span>&lt;&gt;(<span class="type">Set</span>.of(<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>));
+
+<span class="type">Set</span>&lt;<span class="type">Integer</span>&gt; union = <span class="keyword">new</span> <span class="type">HashSet</span>&lt;&gt;(a);
+union.addAll(b);        <span class="comment">// {1,2,3,4,5,6}</span>
+
+<span class="type">Set</span>&lt;<span class="type">Integer</span>&gt; intersection = <span class="keyword">new</span> <span class="type">HashSet</span>&lt;&gt;(a);
+intersection.retainAll(b); <span class="comment">// {3,4}</span>
+
+<span class="type">Set</span>&lt;<span class="type">Integer</span>&gt; diff = <span class="keyword">new</span> <span class="type">HashSet</span>&lt;&gt;(a);
+diff.removeAll(b);      <span class="comment">// {1,2}</span>
+
+<span class="comment">// Immutable set (Java 9+)</span>
+<span class="type">Set</span>&lt;<span class="type">String</span>&gt; immutable = <span class="type">Set</span>.of(<span class="string">"A"</span>, <span class="string">"B"</span>, <span class="string">"C"</span>);</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Set Type</th><th>Order</th><th>add/contains</th><th>Use case</th></tr></thead>
+            <tbody>
+              <tr><td><code>HashSet</code></td><td>None</td><td>O(1)</td><td>Default — fastest</td></tr>
+              <tr><td><code>LinkedHashSet</code></td><td>Insertion order</td><td>O(1)</td><td>Need insertion order</td></tr>
+              <tr><td><code>TreeSet</code></td><td>Sorted (natural)</td><td>O(log n)</td><td>Need sorted elements</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 5.3 -->
+    <div class="module-section" id="m5-3">
+      <div class="module-header"><div class="module-number">5.3</div><h2 class="module-title">Map — HashMap, LinkedHashMap, TreeMap, key-value pairs</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Key-value data stores</h3>
+        <p class="explain-en"><code>Map</code> stores <strong>key-value pairs</strong> — keys must be unique, values can repeat. <code>HashMap</code> is fastest (O(1) get/put). <code>LinkedHashMap</code> keeps insertion order. <code>TreeMap</code> sorts by keys. Use <code>Map.of()</code> for immutable maps. The <code>getOrDefault()</code> and <code>computeIfAbsent()</code> methods are essential.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>Map</code> <strong>key-value pairs</strong> store karta hai — keys unique honi chahiye, values repeat ho sakti hain. <code>HashMap</code> fastest hai (O(1)). <code>LinkedHashMap</code> insertion order rakhta hai. <code>TreeMap</code> keys ke hisaab se sort karta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — Maps</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// HashMap — fast, unordered</span>
+<span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">Integer</span>&gt; scores = <span class="keyword">new</span> <span class="type">HashMap</span>&lt;&gt;();
+scores.put(<span class="string">"Alice"</span>, <span class="number">95</span>);
+scores.put(<span class="string">"Bob"</span>, <span class="number">87</span>);
+scores.put(<span class="string">"Charlie"</span>, <span class="number">92</span>);
+scores.put(<span class="string">"Alice"</span>, <span class="number">98</span>); <span class="comment">// Overwrites! Keys unique.</span>
+
+<span class="comment">// Access</span>
+scores.get(<span class="string">"Alice"</span>);       <span class="comment">// 98</span>
+scores.get(<span class="string">"Unknown"</span>);     <span class="comment">// null</span>
+scores.getOrDefault(<span class="string">"Unknown"</span>, <span class="number">0</span>); <span class="comment">// 0 (safe!)</span>
+scores.containsKey(<span class="string">"Bob"</span>);  <span class="comment">// true</span>
+scores.containsValue(<span class="number">87</span>);   <span class="comment">// true</span>
+scores.size();              <span class="comment">// 3</span>
+
+<span class="comment">// Remove</span>
+scores.remove(<span class="string">"Charlie"</span>);
+
+<span class="comment">// Iterate</span>
+<span class="keyword">for</span> (<span class="type">Map.Entry</span>&lt;<span class="type">String</span>, <span class="type">Integer</span>&gt; entry : scores.entrySet()) {
+    System.out.printf(<span class="string">"%s: %d%n"</span>, entry.getKey(), entry.getValue());
+}
+
+<span class="comment">// Java 10+ — var makes it cleaner</span>
+scores.forEach((name, score) ->
+    System.out.printf(<span class="string">"%s: %d%n"</span>, name, score)
+);
+
+<span class="comment">// Advanced methods</span>
+scores.putIfAbsent(<span class="string">"Dave"</span>, <span class="number">75</span>);  <span class="comment">// Only if key absent</span>
+scores.computeIfAbsent(<span class="string">"Eve"</span>, k -> <span class="number">80</span>); <span class="comment">// Lazy compute</span>
+scores.merge(<span class="string">"Alice"</span>, <span class="number">5</span>, <span class="type">Integer</span>::sum); <span class="comment">// 98 + 5 = 103</span>
+
+<span class="comment">// Word frequency counter pattern</span>
+<span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">Integer</span>&gt; freq = <span class="keyword">new</span> <span class="type">HashMap</span>&lt;&gt;();
+<span class="keyword">for</span> (<span class="type">String</span> word : words) {
+    freq.merge(word, <span class="number">1</span>, <span class="type">Integer</span>::sum);
+}
+
+<span class="comment">// Immutable map (Java 9+)</span>
+<span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">Integer</span>&gt; fixed = <span class="type">Map</span>.of(<span class="string">"A"</span>, <span class="number">1</span>, <span class="string">"B"</span>, <span class="number">2</span>);
+
+<span class="comment">// TreeMap — sorted by keys</span>
+<span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">Integer</span>&gt; sorted = <span class="keyword">new</span> <span class="type">TreeMap</span>&lt;&gt;(scores);</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Map Type</th><th>Key Order</th><th>get/put</th><th>Use case</th></tr></thead>
+            <tbody>
+              <tr><td><code>HashMap</code></td><td>None</td><td>O(1)</td><td>Default — fastest</td></tr>
+              <tr><td><code>LinkedHashMap</code></td><td>Insertion order</td><td>O(1)</td><td>Need ordering</td></tr>
+              <tr><td><code>TreeMap</code></td><td>Sorted by key</td><td>O(log n)</td><td>Need sorted keys</td></tr>
+              <tr><td><code>ConcurrentHashMap</code></td><td>None</td><td>O(1)</td><td>Thread-safe</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>Never use mutable objects as Map keys!</strong> If the key's <code>hashCode()</code> changes after insertion, you'll lose the entry. Use immutable types (String, Integer, records) as keys.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 5.4 -->
+    <div class="module-section" id="m5-4">
+      <div class="module-header"><div class="module-number">5.4</div><h2 class="module-title">Generics — type parameters, bounded types, wildcards</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Type-safe reusable code</h3>
+        <p class="explain-en"><strong>Generics</strong> add compile-time type safety to collections and classes. <code>&lt;T&gt;</code> is a type parameter — replaced with actual type at usage. <strong>Bounded types</strong> (<code>&lt;T extends Number&gt;</code>) restrict allowed types. <strong>Wildcards</strong> (<code>? extends</code>, <code>? super</code>) enable flexible method signatures.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Generics</strong> compile-time type safety dete hain collections aur classes ko. <code>&lt;T&gt;</code> ek type parameter hai. <strong>Bounded types</strong> (<code>&lt;T extends Number&gt;</code>) allowed types restrict karte hain. <strong>Wildcards</strong> (<code>? extends</code>, <code>? super</code>) flexible method signatures enable karte hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — Generics</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Generic class</span>
+<span class="keyword">public class</span> <span class="type">Box</span>&lt;<span class="type">T</span>&gt; {
+    <span class="keyword">private</span> <span class="type">T</span> value;
+
+    <span class="keyword">public</span> <span class="function">Box</span>(<span class="type">T</span> value) { <span class="keyword">this</span>.value = value; }
+    <span class="keyword">public</span> <span class="type">T</span> <span class="function">getValue</span>() { <span class="keyword">return</span> value; }
+    <span class="keyword">public void</span> <span class="function">setValue</span>(<span class="type">T</span> value) { <span class="keyword">this</span>.value = value; }
+}
+
+<span class="type">Box</span>&lt;<span class="type">String</span>&gt; strBox = <span class="keyword">new</span> <span class="type">Box</span>&lt;&gt;(<span class="string">"Hello"</span>);
+<span class="type">Box</span>&lt;<span class="type">Integer</span>&gt; intBox = <span class="keyword">new</span> <span class="type">Box</span>&lt;&gt;(<span class="number">42</span>);
+<span class="type">String</span> s = strBox.getValue(); <span class="comment">// No cast needed!</span>
+
+<span class="comment">// Generic method</span>
+<span class="keyword">public static</span> &lt;<span class="type">T</span>&gt; <span class="type">List</span>&lt;<span class="type">T</span>&gt; <span class="function">listOf</span>(<span class="type">T</span>... items) {
+    <span class="keyword">return new</span> <span class="type">ArrayList</span>&lt;&gt;(<span class="type">Arrays</span>.asList(items));
+}
+
+<span class="comment">// Bounded type — T must extend Number</span>
+<span class="keyword">public static</span> &lt;<span class="type">T</span> <span class="keyword">extends</span> <span class="type">Number</span>&gt; <span class="keyword">double</span> <span class="function">sum</span>(<span class="type">List</span>&lt;<span class="type">T</span>&gt; list) {
+    <span class="keyword">double</span> total = <span class="number">0</span>;
+    <span class="keyword">for</span> (<span class="type">T</span> item : list) total += item.doubleValue();
+    <span class="keyword">return</span> total;
+}
+sum(<span class="type">List</span>.of(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>));     <span class="comment">// ✅ Integer extends Number</span>
+sum(<span class="type">List</span>.of(<span class="number">1.5</span>, <span class="number">2.5</span>));   <span class="comment">// ✅ Double extends Number</span>
+<span class="comment">// sum(List.of("a"));     // ❌ String doesn't extend Number</span>
+
+<span class="comment">// Wildcards</span>
+<span class="comment">// ? extends T — read-only (producer)</span>
+<span class="keyword">public void</span> <span class="function">printAll</span>(<span class="type">List</span>&lt;? <span class="keyword">extends</span> <span class="type">Number</span>&gt; list) {
+    <span class="keyword">for</span> (<span class="type">Number</span> n : list) System.out.println(n);
+}
+
+<span class="comment">// ? super T — write-only (consumer)</span>
+<span class="keyword">public void</span> <span class="function">addNumbers</span>(<span class="type">List</span>&lt;? <span class="keyword">super</span> <span class="type">Integer</span>&gt; list) {
+    list.add(<span class="number">1</span>);
+    list.add(<span class="number">2</span>);
+}
+
+<span class="comment">// Multiple bounds</span>
+<span class="keyword">public</span> &lt;<span class="type">T</span> <span class="keyword">extends</span> <span class="type">Comparable</span>&lt;<span class="type">T</span>&gt; & <span class="type">Serializable</span>&gt; <span class="type">T</span> <span class="function">max</span>(<span class="type">T</span> a, <span class="type">T</span> b) {
+    <span class="keyword">return</span> a.compareTo(b) >= <span class="number">0</span> ? a : b;
+}</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Wildcard</th><th>Meaning</th><th>Read?</th><th>Write?</th><th>Mnemonic</th></tr></thead>
+            <tbody>
+              <tr><td><code>? extends T</code></td><td>T or subtype</td><td>✅ as T</td><td>❌ No</td><td>PECS: Producer Extends</td></tr>
+              <tr><td><code>? super T</code></td><td>T or supertype</td><td>⚠️ as Object</td><td>✅ as T</td><td>PECS: Consumer Super</td></tr>
+              <tr><td><code>?</code></td><td>Unknown type</td><td>⚠️ as Object</td><td>❌ No</td><td>Read-only, any type</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>PECS Rule:</strong> <strong>P</strong>roducer <strong>E</strong>xtends, <strong>C</strong>onsumer <strong>S</strong>uper. If you READ from a collection → <code>? extends</code>. If you WRITE to a collection → <code>? super</code>.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 5.5 -->
+    <div class="module-section" id="m5-5">
+      <div class="module-header"><div class="module-number">5.5</div><h2 class="module-title">Comparable & Comparator — sorting custom objects</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Custom sorting logic</h3>
+        <p class="explain-en"><code>Comparable&lt;T&gt;</code> defines <strong>natural ordering</strong> inside the class (implement <code>compareTo()</code>). <code>Comparator&lt;T&gt;</code> defines <strong>external ordering</strong> — multiple sort strategies without modifying the class. Java 8+ adds <code>Comparator.comparing()</code> for clean lambda-based sorting.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>Comparable&lt;T&gt;</code> class ke andar <strong>natural ordering</strong> define karta hai (<code>compareTo()</code> implement karo). <code>Comparator&lt;T&gt;</code> <strong>external ordering</strong> define karta hai — class modify kiye bina multiple sort strategies. Java 8+ me <code>Comparator.comparing()</code> clean sorting deta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — Comparable & Comparator</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Comparable — natural ordering (inside the class)</span>
+<span class="keyword">public class</span> <span class="type">Student</span> <span class="keyword">implements</span> <span class="type">Comparable</span>&lt;<span class="type">Student</span>&gt; {
+    <span class="keyword">private</span> <span class="type">String</span> name;
+    <span class="keyword">private double</span> gpa;
+
+    <span class="keyword">public</span> <span class="function">Student</span>(<span class="type">String</span> name, <span class="keyword">double</span> gpa) {
+        <span class="keyword">this</span>.name = name; <span class="keyword">this</span>.gpa = gpa;
+    }
+
+    @Override
+    <span class="keyword">public int</span> <span class="function">compareTo</span>(<span class="type">Student</span> other) {
+        <span class="keyword">return</span> <span class="type">Double</span>.compare(<span class="keyword">this</span>.gpa, other.gpa); <span class="comment">// By GPA</span>
+    }
+
+    <span class="keyword">public</span> <span class="type">String</span> <span class="function">getName</span>() { <span class="keyword">return</span> name; }
+    <span class="keyword">public double</span> <span class="function">getGpa</span>() { <span class="keyword">return</span> gpa; }
+}
+
+<span class="type">List</span>&lt;<span class="type">Student</span>&gt; students = <span class="keyword">new</span> <span class="type">ArrayList</span>&lt;&gt;(<span class="type">List</span>.of(
+    <span class="keyword">new</span> <span class="type">Student</span>(<span class="string">"Alice"</span>, <span class="number">9.2</span>),
+    <span class="keyword">new</span> <span class="type">Student</span>(<span class="string">"Bob"</span>, <span class="number">8.5</span>),
+    <span class="keyword">new</span> <span class="type">Student</span>(<span class="string">"Charlie"</span>, <span class="number">9.8</span>)
+));
+<span class="type">Collections</span>.sort(students); <span class="comment">// Uses compareTo() → by GPA</span>
+
+<span class="comment">// ✅ Comparator — external sorting (multiple strategies)</span>
+<span class="type">Comparator</span>&lt;<span class="type">Student</span>&gt; byName = <span class="type">Comparator</span>.comparing(<span class="type">Student</span>::getName);
+<span class="type">Comparator</span>&lt;<span class="type">Student</span>&gt; byGpaDesc = <span class="type">Comparator</span>.comparingDouble(<span class="type">Student</span>::getGpa).reversed();
+<span class="type">Comparator</span>&lt;<span class="type">Student</span>&gt; byNameThenGpa = byName.thenComparingDouble(<span class="type">Student</span>::getGpa);
+
+students.sort(byName);      <span class="comment">// Sort by name</span>
+students.sort(byGpaDesc);   <span class="comment">// Sort by GPA descending</span>
+
+<span class="comment">// Inline lambda comparator</span>
+students.sort((a, b) -> <span class="type">Double</span>.compare(b.getGpa(), a.getGpa()));
+
+<span class="comment">// Collections utility sorting</span>
+<span class="type">Collections</span>.sort(students, byName);
+<span class="type">Collections</span>.min(students); <span class="comment">// Lowest by natural order</span>
+<span class="type">Collections</span>.max(students); <span class="comment">// Highest by natural order</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Feature</th><th>Comparable</th><th>Comparator</th></tr></thead>
+            <tbody>
+              <tr><td>Package</td><td><code>java.lang</code></td><td><code>java.util</code></td></tr>
+              <tr><td>Method</td><td><code>compareTo(T)</code></td><td><code>compare(T, T)</code></td></tr>
+              <tr><td>Where</td><td>Inside the class</td><td>External / lambda</td></tr>
+              <tr><td>Count</td><td>One natural order</td><td>Many strategies</td></tr>
+              <tr><td>Modify class?</td><td>Yes (implement)</td><td>No</td></tr>
+              <tr><td>Usage</td><td><code>Collections.sort(list)</code></td><td><code>list.sort(comparator)</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 5.6 -->
+    <div class="module-section" id="m5-6">
+      <div class="module-header"><div class="module-number">5.6</div><h2 class="module-title">Iterator & Iterable — custom iteration, ConcurrentModification</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Traversing collections safely</h3>
+        <p class="explain-en"><code>Iterator&lt;T&gt;</code> provides <code>hasNext()</code>, <code>next()</code>, and <code>remove()</code> for safe traversal. For-each loops use <code>Iterable</code> internally. <strong>Never modify a collection while iterating with for-each</strong> — use <code>Iterator.remove()</code> or <code>removeIf()</code>. Implement <code>Iterable</code> to make your class work with for-each.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>Iterator&lt;T&gt;</code> me <code>hasNext()</code>, <code>next()</code>, aur <code>remove()</code> hain safe traversal ke liye. For-each loops internally <code>Iterable</code> use karte hain. <strong>For-each se iterate karte waqt collection modify mat karo</strong> — <code>Iterator.remove()</code> ya <code>removeIf()</code> use karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — Iterator</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="type">List</span>&lt;<span class="type">String</span>&gt; names = <span class="keyword">new</span> <span class="type">ArrayList</span>&lt;&gt;(<span class="type">List</span>.of(<span class="string">"A"</span>, <span class="string">"B"</span>, <span class="string">"C"</span>, <span class="string">"D"</span>));
+
+<span class="comment">// ❌ ConcurrentModificationException!</span>
+<span class="comment">// for (String s : names) { if (s.equals("B")) names.remove(s); }</span>
+
+<span class="comment">// ✅ Safe removal with Iterator</span>
+<span class="type">Iterator</span>&lt;<span class="type">String</span>&gt; it = names.iterator();
+<span class="keyword">while</span> (it.hasNext()) {
+    <span class="type">String</span> s = it.next();
+    <span class="keyword">if</span> (s.equals(<span class="string">"B"</span>)) it.remove(); <span class="comment">// Safe!</span>
+}
+
+<span class="comment">// ✅ Even simpler — removeIf (Java 8+)</span>
+names.removeIf(s -> s.equals(<span class="string">"C"</span>));
+
+<span class="comment">// Custom Iterable class</span>
+<span class="keyword">public class</span> <span class="type">NumberRange</span> <span class="keyword">implements</span> <span class="type">Iterable</span>&lt;<span class="type">Integer</span>&gt; {
+    <span class="keyword">private final int</span> start, end;
+    <span class="keyword">public</span> <span class="function">NumberRange</span>(<span class="keyword">int</span> start, <span class="keyword">int</span> end) {
+        <span class="keyword">this</span>.start = start; <span class="keyword">this</span>.end = end;
+    }
+
+    @Override
+    <span class="keyword">public</span> <span class="type">Iterator</span>&lt;<span class="type">Integer</span>&gt; <span class="function">iterator</span>() {
+        <span class="keyword">return new</span> <span class="type">Iterator</span>&lt;&gt;() {
+            <span class="keyword">int</span> current = start;
+            <span class="keyword">public boolean</span> <span class="function">hasNext</span>() { <span class="keyword">return</span> current <= end; }
+            <span class="keyword">public</span> <span class="type">Integer</span> <span class="function">next</span>() { <span class="keyword">return</span> current++; }
+        };
+    }
+}
+
+<span class="comment">// Now works with for-each!</span>
+<span class="keyword">for</span> (<span class="keyword">int</span> n : <span class="keyword">new</span> <span class="type">NumberRange</span>(<span class="number">1</span>, <span class="number">5</span>)) {
+    System.out.print(n + <span class="string">" "</span>); <span class="comment">// 1 2 3 4 5</span>
+}</pre></div>
+        </div>
+        <div class="callout callout-warning"><strong>Golden rule:</strong> Never modify a collection inside a for-each loop. Use <code>Iterator.remove()</code>, <code>removeIf()</code>, or create a new collection.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 5.7 -->
+    <div class="module-section" id="m5-7">
+      <div class="module-header"><div class="module-number">5.7</div><h2 class="module-title">Collections utility class — sort, shuffle, unmodifiable, frequency</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Power tools for collections</h3>
+        <p class="explain-en"><code>java.util.Collections</code> provides static utility methods: sorting, searching, shuffling, creating unmodifiable wrappers, frequency counting, and more. Java 9+ adds factory methods (<code>List.of()</code>, <code>Map.of()</code>) for immutable collections. <code>Collections.unmodifiableList()</code> wraps a mutable list as read-only.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>java.util.Collections</code> static utility methods provide karta hai: sorting, searching, shuffling, unmodifiable wrappers, frequency counting. Java 9+ me factory methods (<code>List.of()</code>, <code>Map.of()</code>) immutable collections ke liye hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — Collections Utility</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="type">List</span>&lt;<span class="type">Integer</span>&gt; nums = <span class="keyword">new</span> <span class="type">ArrayList</span>&lt;&gt;(<span class="type">List</span>.of(<span class="number">5</span>, <span class="number">2</span>, <span class="number">8</span>, <span class="number">1</span>, <span class="number">9</span>, <span class="number">3</span>));
+
+<span class="comment">// Sorting</span>
+<span class="type">Collections</span>.sort(nums);          <span class="comment">// [1, 2, 3, 5, 8, 9]</span>
+<span class="type">Collections</span>.sort(nums, <span class="type">Comparator</span>.reverseOrder()); <span class="comment">// [9,8,5,3,2,1]</span>
+
+<span class="comment">// Searching (must be sorted first!)</span>
+<span class="type">Collections</span>.sort(nums);
+<span class="keyword">int</span> idx = <span class="type">Collections</span>.binarySearch(nums, <span class="number">5</span>); <span class="comment">// index of 5</span>
+
+<span class="comment">// Min, Max</span>
+<span class="type">Collections</span>.min(nums); <span class="comment">// 1</span>
+<span class="type">Collections</span>.max(nums); <span class="comment">// 9</span>
+
+<span class="comment">// Shuffle</span>
+<span class="type">Collections</span>.shuffle(nums); <span class="comment">// Random order</span>
+
+<span class="comment">// Reverse</span>
+<span class="type">Collections</span>.reverse(nums);
+
+<span class="comment">// Frequency</span>
+<span class="type">List</span>&lt;<span class="type">String</span>&gt; words = <span class="type">List</span>.of(<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"a"</span>, <span class="string">"c"</span>, <span class="string">"a"</span>);
+<span class="type">Collections</span>.frequency(words, <span class="string">"a"</span>); <span class="comment">// 3</span>
+
+<span class="comment">// Unmodifiable wrappers</span>
+<span class="type">List</span>&lt;<span class="type">String</span>&gt; readOnly = <span class="type">Collections</span>.unmodifiableList(names);
+<span class="comment">// readOnly.add("X"); // ❌ UnsupportedOperationException!</span>
+
+<span class="comment">// Empty collections (immutable)</span>
+<span class="type">List</span>&lt;<span class="type">String</span>&gt; empty = <span class="type">Collections</span>.emptyList();
+<span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">Integer</span>&gt; emptyMap = <span class="type">Collections</span>.emptyMap();
+
+<span class="comment">// Singleton (immutable, one element)</span>
+<span class="type">List</span>&lt;<span class="type">String</span>&gt; single = <span class="type">Collections</span>.singletonList(<span class="string">"only"</span>);
+
+<span class="comment">// Fill, nCopies</span>
+<span class="type">Collections</span>.fill(nums, <span class="number">0</span>);  <span class="comment">// All elements → 0</span>
+<span class="type">List</span>&lt;<span class="type">Integer</span>&gt; fives = <span class="type">Collections</span>.nCopies(<span class="number">10</span>, <span class="number">5</span>); <span class="comment">// [5,5,5,...×10]</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Method</th><th>Purpose</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td><code>sort(list)</code></td><td>Sort ascending</td><td>Natural or Comparator</td></tr>
+              <tr><td><code>binarySearch(list, key)</code></td><td>Find (sorted list)</td><td>Returns index</td></tr>
+              <tr><td><code>min()/max()</code></td><td>Extremes</td><td>By natural or Comparator</td></tr>
+              <tr><td><code>shuffle(list)</code></td><td>Randomize order</td><td>For card games, etc.</td></tr>
+              <tr><td><code>reverse(list)</code></td><td>Reverse order</td><td>In-place</td></tr>
+              <tr><td><code>frequency(list, obj)</code></td><td>Count occurrences</td><td>Returns int</td></tr>
+              <tr><td><code>unmodifiableList()</code></td><td>Read-only wrapper</td><td>Defensive copies</td></tr>
+              <tr><td><code>synchronizedList()</code></td><td>Thread-safe wrapper</td><td>Multi-threaded code</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Collections Framework — Complete Hierarchy</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Interface</th><th>Implementations</th><th>Ordered?</th><th>Duplicates?</th><th>Key feature</th></tr></thead>
+          <tbody>
+            <tr><td><code>List</code></td><td>ArrayList, LinkedList, Vector</td><td>✅ Index</td><td>✅ Yes</td><td>Random access</td></tr>
+            <tr><td><code>Set</code></td><td>HashSet, LinkedHashSet, TreeSet</td><td>Varies</td><td>❌ No</td><td>Uniqueness</td></tr>
+            <tr><td><code>Queue</code></td><td>LinkedList, PriorityQueue, ArrayDeque</td><td>✅ FIFO</td><td>✅ Yes</td><td>Processing order</td></tr>
+            <tr><td><code>Deque</code></td><td>ArrayDeque, LinkedList</td><td>✅ Both ends</td><td>✅ Yes</td><td>Stack + Queue</td></tr>
+            <tr><td><code>Map</code></td><td>HashMap, LinkedHashMap, TreeMap</td><td>Varies</td><td>Keys: No</td><td>Key-value lookup</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Choosing the Right Collection</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Need</th><th>Best choice</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td>Indexed access</td><td><code>ArrayList</code></td><td>O(1) random access</td></tr>
+            <tr><td>Frequent insert/remove</td><td><code>LinkedList</code></td><td>O(1) at position</td></tr>
+            <tr><td>No duplicates</td><td><code>HashSet</code></td><td>O(1) contains</td></tr>
+            <tr><td>Sorted unique</td><td><code>TreeSet</code></td><td>O(log n) sorted</td></tr>
+            <tr><td>Key-value lookup</td><td><code>HashMap</code></td><td>O(1) get/put</td></tr>
+            <tr><td>Sorted by key</td><td><code>TreeMap</code></td><td>O(log n) sorted keys</td></tr>
+            <tr><td>FIFO queue</td><td><code>ArrayDeque</code></td><td>Faster than LinkedList</td></tr>
+            <tr><td>Priority queue</td><td><code>PriorityQueue</code></td><td>Min-heap by default</td></tr>
+            <tr><td>Thread-safe map</td><td><code>ConcurrentHashMap</code></td><td>Lock-free segments</td></tr>
+            <tr><td>Immutable list</td><td><code>List.of()</code></td><td>Java 9+ factory</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Immutable Collection Factories (Java 9+)</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Factory</th><th>Creates</th><th>Nulls?</th><th>Mutable?</th></tr></thead>
+          <tbody>
+            <tr><td><code>List.of(a, b, c)</code></td><td>Immutable List</td><td>❌ No nulls</td><td>❌ No</td></tr>
+            <tr><td><code>Set.of(a, b, c)</code></td><td>Immutable Set</td><td>❌ No nulls</td><td>❌ No</td></tr>
+            <tr><td><code>Map.of(k1, v1, k2, v2)</code></td><td>Immutable Map</td><td>❌ No nulls</td><td>❌ No</td></tr>
+            <tr><td><code>List.copyOf(list)</code></td><td>Immutable copy</td><td>❌ No nulls</td><td>❌ No</td></tr>
+            <tr><td><code>Map.entry(k, v)</code></td><td>Immutable Entry</td><td>❌ No nulls</td><td>❌ No</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="callout callout-tip"><strong>🏭 Industry insight:</strong> In production Java, 90% of code uses <code>ArrayList</code>, <code>HashMap</code>, and <code>HashSet</code>. Know when to use <code>ConcurrentHashMap</code> for thread safety and <code>List.of()</code>/<code>Map.of()</code> for immutable data. Streams (Part 7) replace most manual iteration.</div>
+
+    <div class="practice-box">
+      <div class="practice-title">✏️ Practice Exercises — Part 5</div>
+      <ol>
+        <li>Create an <code>ArrayList&lt;Student&gt;</code>, add 5 students, then sort by GPA descending using <code>Comparator</code>.</li>
+        <li>Build a word frequency counter: read a sentence, split into words, use <code>HashMap</code> to count each word.</li>
+        <li>Remove all duplicate integers from a <code>List&lt;Integer&gt;</code> using a <code>HashSet</code>.</li>
+        <li>Write a generic <code>Pair&lt;A, B&gt;</code> class that holds two values of different types.</li>
+        <li>Implement <code>Comparable&lt;Employee&gt;</code> sorting by salary, then use <code>Comparator</code> to sort by name.</li>
+        <li>Use <code>Iterator</code> to safely remove all even numbers from a <code>List&lt;Integer&gt;</code> while iterating.</li>
+        <li>Create an inventory system using <code>Map&lt;String, Integer&gt;</code> with add, remove, search, and list operations.</li>
+      </ol>
+    </div>
+
+    <div class="handbook-nav">
+      <a href="part4.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Part 4: Inheritance & Polymorphism</div></div></a>
+      <a href="part6.html" class="nav-btn next"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Part 6: Exceptions & File I/O →</div></div><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+
+  </div>
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
+  <script src="../../../js/main.js"></script>
+  <script>
+    (() => {
+      document.querySelectorAll('.code-block').forEach((block) => { const pre = block.querySelector('.code-body pre'), header = block.querySelector('.code-header'); if (!pre || !header) return; let actions = header.querySelector('.code-actions'); if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); } const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'code-copy-btn'; btn.textContent = 'Copy'; btn.addEventListener('click', async () => { try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; } catch { btn.textContent = 'Failed'; } finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); } }); actions.prepend(btn); });
+      const fill = document.querySelector('.hb-progress-fill'), label = document.querySelector('.hb-progress-label');
+      if (fill && label) { const update = () => { const h = document.documentElement, d = (h.scrollHeight - h.clientHeight) || 1, p = Math.max(0, Math.min(1, h.scrollTop / d)); fill.style.width = (p*100).toFixed(0)+'%'; label.textContent = (p*100).toFixed(0)+'%'; }; document.addEventListener('scroll', update, { passive: true }); update(); }
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Part 2: Control Flow & Arrays — Java Programming Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 2: Conditionals, switch expressions, loops, pattern matching, strings, arrays in Java.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/handbook.css">
+</head>
+<body class="handbook-wrapper">
+  <nav class="navbar"><div class="container"><a href="../../../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../../../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
+
+  <div class="handbook-page">
+    <div class="hb-topbar"><div class="hb-topbar-inner"><div class="hb-breadcrumbs"><a href="index.html">Java Programming Handbook</a><span class="hb-muted">/</span><span>Part 2</span><span class="hb-muted">·</span><a href="#m2-1">2.1</a> <a href="#m2-2">2.2</a> <a href="#m2-3">2.3</a> <a href="#m2-4">2.4</a> <a href="#m2-5">2.5</a> <a href="#m2-6">2.6</a> <a href="#m2-7">2.7</a></div><div class="hb-progress" aria-label="Reading progress"><div class="hb-progress-track" role="progressbar"><div class="hb-progress-fill"></div></div><div class="hb-progress-label">0%</div></div></div></div>
+
+    <div class="chapter-header" data-chapter-num="02">
+      <div class="chapter-part-label">📖 Part 2 — Control Flow & Arrays</div>
+      <h1 class="chapter-title">Logic <span class="gradient-text">Building</span></h1>
+      <p class="chapter-subtitle">Conditionals, switch expressions, loops, pattern matching, strings, and arrays — the core engine of every Java program.</p>
+      <div class="chapter-meta"><span>📄 Modules 2.1 – 2.7</span><span>⏱️ 60–90 min read</span><span>💻 55+ Examples</span></div>
+    </div>
+
+    <div class="hb-mini-toc"><div class="hb-mini-title">📍 Part 2 Modules</div><div class="hb-mini-links"><a href="#m2-1">2.1 if/else</a><a href="#m2-2">2.2 switch</a><a href="#m2-3">2.3 for loops</a><a href="#m2-4">2.4 while</a><a href="#m2-5">2.5 Patterns</a><a href="#m2-6">2.6 Strings</a><a href="#m2-7">2.7 Arrays</a></div></div>
+
+    <div class="quick-ref">
+      <div class="qr-title">🚀 Advanced Lens — Part 2</div>
+      <p class="explain-en">Production control flow should optimize readability first, then performance. Prefer expressive switch patterns, guarded branches, and clear loop boundaries. Bugs in branching logic are among the most expensive to diagnose in large Java services.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Real projects me control flow ka goal readable aur predictable code hota hai. Clear branching aur loop boundaries se debugging aur maintenance dono easy hote hain.</div>
+    </div>
+
+    <div class="concept-block">
+      <h3>Control-flow quality checklist (Part 2)</h3>
+      <table>
+        <thead><tr><th>Signal</th><th>What teams enforce</th></tr></thead>
+        <tbody>
+          <tr><td>Branch clarity</td><td>Prefer guard clauses to reduce nesting and improve readability.</td></tr>
+          <tr><td>Switch safety</td><td>Use exhaustive switch handling for enums/sealed types.</td></tr>
+          <tr><td>Loop boundaries</td><td>Define clear start/end conditions and avoid magic indices.</td></tr>
+          <tr><td>String handling</td><td>Use immutable transformations and avoid repeated concat in loops.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- MODULE 2.1 -->
+    <div class="module-section" id="m2-1">
+      <div class="module-header"><div class="module-number">2.1</div><h2 class="module-title">Conditionals — if / else if / else, nested conditions</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Making decisions in code</h3>
+        <p class="explain-en">Java uses <code>if</code>, <code>else if</code>, <code>else</code> for conditional branching. Conditions must be <strong>boolean expressions</strong> — unlike Python, <code>0</code> and <code>""</code> are NOT falsy in Java. Use <code>&&</code> (AND), <code>||</code> (OR), <code>!</code> (NOT) for compound conditions. Ternary operator <code>? :</code> provides inline conditionals.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Java me <code>if</code>, <code>else if</code>, <code>else</code> conditional branching ke liye use hota hai. Conditions <strong>boolean</strong> honi chahiye — Python ke unlike, <code>0</code> aur <code>""</code> falsy nahi hain Java me. Compound conditions ke liye <code>&&</code>, <code>||</code>, <code>!</code> use karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — Conditionals</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">int</span> age = <span class="number">20</span>;
+
+<span class="comment">// Basic if-else</span>
+<span class="keyword">if</span> (age >= <span class="number">18</span>) {
+    System.out.println(<span class="string">"Adult"</span>);
+} <span class="keyword">else</span> {
+    System.out.println(<span class="string">"Minor"</span>);
+}
+
+<span class="comment">// if-else if-else chain</span>
+<span class="keyword">int</span> score = <span class="number">85</span>;
+<span class="keyword">if</span> (score >= <span class="number">90</span>) {
+    System.out.println(<span class="string">"A Grade"</span>);
+} <span class="keyword">else if</span> (score >= <span class="number">80</span>) {
+    System.out.println(<span class="string">"B Grade"</span>);
+} <span class="keyword">else if</span> (score >= <span class="number">70</span>) {
+    System.out.println(<span class="string">"C Grade"</span>);
+} <span class="keyword">else</span> {
+    System.out.println(<span class="string">"Fail"</span>);
+}
+
+<span class="comment">// Compound conditions</span>
+<span class="keyword">boolean</span> hasID = <span class="keyword">true</span>;
+<span class="keyword">if</span> (age >= <span class="number">18</span> && hasID) {
+    System.out.println(<span class="string">"Entry allowed"</span>);
+}
+
+<span class="comment">// ⚠️ Java does NOT have truthy/falsy like Python!</span>
+<span class="comment">// if (0)  → ❌ Compile error! Must be boolean</span>
+<span class="comment">// if ("") → ❌ Compile error! Must be boolean</span>
+<span class="keyword">if</span> (age != <span class="number">0</span>) { <span class="comment">// ✅ Explicit boolean check</span>
+    System.out.println(<span class="string">"Age is not zero"</span>);
+}
+
+<span class="comment">// Ternary operator</span>
+<span class="type">String</span> status = (age >= <span class="number">18</span>) ? <span class="string">"Adult"</span> : <span class="string">"Minor"</span>;
+
+<span class="comment">// Nested ternary (avoid — use if-else instead)</span>
+<span class="type">String</span> category = (age < <span class="number">13</span>) ? <span class="string">"Child"</span>
+               : (age < <span class="number">18</span>) ? <span class="string">"Teen"</span>
+               : <span class="string">"Adult"</span>;</pre></div>
+        </div>
+        <div class="callout callout-warning"><strong>Java vs Python:</strong> Java conditions <strong>must</strong> be boolean. <code>if (0)</code>, <code>if ("")</code>, <code>if (null)</code> are all compile errors. Always use explicit comparisons: <code>if (str != null && !str.isEmpty())</code>.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 2.2 -->
+    <div class="module-section" id="m2-2">
+      <div class="module-header"><div class="module-number">2.2</div><h2 class="module-title">switch — traditional, enhanced switch expressions (Java 14+)</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Multi-way branching</h3>
+        <p class="explain-en">Traditional <code>switch</code> uses <code>case</code> + <code>break</code>. Java 14+ adds <strong>switch expressions</strong> with arrow syntax (<code>-></code>) — no break needed, and they can return values. Switch works with <code>int</code>, <code>char</code>, <code>String</code>, and <code>enum</code>. Java 21+ adds <strong>pattern matching</strong> in switch.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Traditional <code>switch</code> me <code>case</code> + <code>break</code> lagta hai. Java 14+ me <strong>switch expressions</strong> arrow syntax (<code>-></code>) ke saath aaye — break ki zaroorat nahi, aur values return kar sakte hain. Java 21+ me switch me <strong>pattern matching</strong> bhi hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — switch Statement & Expression</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Traditional switch (break required!)</span>
+<span class="keyword">int</span> day = <span class="number">3</span>;
+<span class="keyword">switch</span> (day) {
+    <span class="keyword">case</span> <span class="number">1</span>: System.out.println(<span class="string">"Monday"</span>); <span class="keyword">break</span>;
+    <span class="keyword">case</span> <span class="number">2</span>: System.out.println(<span class="string">"Tuesday"</span>); <span class="keyword">break</span>;
+    <span class="keyword">case</span> <span class="number">3</span>: System.out.println(<span class="string">"Wednesday"</span>); <span class="keyword">break</span>;
+    <span class="keyword">default</span>: System.out.println(<span class="string">"Other"</span>);
+}
+
+<span class="comment">// ⚠️ Fall-through bug (missing break)</span>
+<span class="keyword">switch</span> (day) {
+    <span class="keyword">case</span> <span class="number">1</span>: <span class="comment">// Falls through to case 2!</span>
+    <span class="keyword">case</span> <span class="number">2</span>: System.out.println(<span class="string">"Mon or Tue"</span>); <span class="keyword">break</span>;
+}
+
+<span class="comment">// ✅ Enhanced switch expression (Java 14+)</span>
+<span class="type">String</span> dayName = <span class="keyword">switch</span> (day) {
+    <span class="keyword">case</span> <span class="number">1</span> -> <span class="string">"Monday"</span>;
+    <span class="keyword">case</span> <span class="number">2</span> -> <span class="string">"Tuesday"</span>;
+    <span class="keyword">case</span> <span class="number">3</span> -> <span class="string">"Wednesday"</span>;
+    <span class="keyword">case</span> <span class="number">4</span> -> <span class="string">"Thursday"</span>;
+    <span class="keyword">case</span> <span class="number">5</span> -> <span class="string">"Friday"</span>;
+    <span class="keyword">case</span> <span class="number">6</span>, <span class="number">7</span> -> <span class="string">"Weekend"</span>;  <span class="comment">// Multiple labels!</span>
+    <span class="keyword">default</span> -> <span class="string">"Invalid"</span>;
+};  <span class="comment">// Semicolon after expression!</span>
+
+<span class="comment">// Switch with String</span>
+<span class="type">String</span> command = <span class="string">"start"</span>;
+<span class="keyword">switch</span> (command) {
+    <span class="keyword">case</span> <span class="string">"start"</span> -> System.out.println(<span class="string">"Starting..."</span>);
+    <span class="keyword">case</span> <span class="string">"stop"</span> -> System.out.println(<span class="string">"Stopping..."</span>);
+    <span class="keyword">case</span> <span class="string">"restart"</span> -> {
+        System.out.println(<span class="string">"Restarting..."</span>);
+        <span class="comment">// Multi-line block</span>
+    }
+    <span class="keyword">default</span> -> System.out.println(<span class="string">"Unknown"</span>);
+}
+
+<span class="comment">// yield — return value from block in switch expression</span>
+<span class="keyword">int</span> numLetters = <span class="keyword">switch</span> (dayName) {
+    <span class="keyword">case</span> <span class="string">"Monday"</span>, <span class="string">"Friday"</span> -> <span class="number">6</span>;
+    <span class="keyword">case</span> <span class="string">"Tuesday"</span> -> <span class="number">7</span>;
+    <span class="keyword">default</span> -> {
+        <span class="keyword">int</span> len = dayName.length();
+        <span class="keyword">yield</span> len;  <span class="comment">// yield instead of return!</span>
+    }
+};</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Feature</th><th>Traditional switch</th><th>Switch Expression (14+)</th></tr></thead>
+            <tbody>
+              <tr><td>Syntax</td><td><code>case X: ... break;</code></td><td><code>case X -> ...</code></td></tr>
+              <tr><td>Fall-through</td><td>Yes (if no break)</td><td>No (safe by default)</td></tr>
+              <tr><td>Returns value</td><td>No</td><td>Yes (<code>yield</code> for blocks)</td></tr>
+              <tr><td>Multiple labels</td><td>Stacked cases</td><td><code>case 1, 2, 3 -></code></td></tr>
+              <tr><td>Exhaustive</td><td>No</td><td>Yes (if returning value)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 2.3 -->
+    <div class="module-section" id="m2-3">
+      <div class="module-header"><div class="module-number">2.3</div><h2 class="module-title">for loops — classic for, enhanced for-each, labeled loops</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Iterating through data</h3>
+        <p class="explain-en">Java has three loop types: <strong>classic for</strong> with counter, <strong>enhanced for-each</strong> for collections/arrays, and <strong>while/do-while</strong>. Use <code>break</code> to exit, <code>continue</code> to skip. <strong>Labeled loops</strong> let you break/continue from nested loops.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Java me teen loop types hain: <strong>classic for</strong> counter ke saath, <strong>enhanced for-each</strong> collections/arrays ke liye, aur <strong>while/do-while</strong>. <code>break</code> se exit karo, <code>continue</code> se skip karo. <strong>Labeled loops</strong> se nested loops me break/continue kar sakte ho.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — for Loops</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Classic for loop</span>
+<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < <span class="number">5</span>; i++) {
+    System.out.print(i + <span class="string">" "</span>); <span class="comment">// 0 1 2 3 4</span>
+}
+
+<span class="comment">// Reverse loop</span>
+<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">10</span>; i >= <span class="number">0</span>; i -= <span class="number">2</span>) {
+    System.out.print(i + <span class="string">" "</span>); <span class="comment">// 10 8 6 4 2 0</span>
+}
+
+<span class="comment">// Enhanced for-each (arrays & collections)</span>
+<span class="keyword">int</span>[] nums = {<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>, <span class="number">50</span>};
+<span class="keyword">for</span> (<span class="keyword">int</span> n : nums) {
+    System.out.print(n + <span class="string">" "</span>); <span class="comment">// 10 20 30 40 50</span>
+}
+
+<span class="comment">// for-each with String array</span>
+<span class="type">String</span>[] names = {<span class="string">"Alice"</span>, <span class="string">"Bob"</span>, <span class="string">"Charlie"</span>};
+<span class="keyword">for</span> (<span class="type">String</span> name : names) {
+    System.out.println(<span class="string">"Hello, "</span> + name);
+}
+
+<span class="comment">// break and continue</span>
+<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < <span class="number">10</span>; i++) {
+    <span class="keyword">if</span> (i == <span class="number">5</span>) <span class="keyword">break</span>;     <span class="comment">// Exit loop at 5</span>
+    <span class="keyword">if</span> (i % <span class="number">2</span> == <span class="number">0</span>) <span class="keyword">continue</span>; <span class="comment">// Skip even numbers</span>
+    System.out.print(i + <span class="string">" "</span>); <span class="comment">// 1 3</span>
+}
+
+<span class="comment">// Labeled loops (break outer loop from inner)</span>
+<span class="keyword">outer:</span>
+<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < <span class="number">3</span>; i++) {
+    <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j < <span class="number">3</span>; j++) {
+        <span class="keyword">if</span> (i == <span class="number">1</span> && j == <span class="number">1</span>) <span class="keyword">break</span> outer; <span class="comment">// Exits BOTH loops</span>
+        System.out.printf(<span class="string">"(%d,%d) "</span>, i, j);
+    }
+}
+<span class="comment">// Output: (0,0) (0,1) (0,2) (1,0)</span>
+
+<span class="comment">// Infinite loop</span>
+<span class="keyword">for</span> (;;) { <span class="comment">// Same as while(true)</span>
+    <span class="keyword">break</span>; <span class="comment">// Must break to avoid infinite loop!</span>
+}</pre></div>
+        </div>
+        <div class="callout callout-tip"><strong>When to use which loop:</strong> Use <strong>for-each</strong> when you don't need the index. Use <strong>classic for</strong> when you need the index or custom step. Use <strong>while</strong> when the number of iterations is unknown.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 2.4 -->
+    <div class="module-section" id="m2-4">
+      <div class="module-header"><div class="module-number">2.4</div><h2 class="module-title">while & do-while — break, continue, infinite loops</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Looping with unknown iterations</h3>
+        <p class="explain-en"><code>while</code> checks condition <strong>before</strong> each iteration. <code>do-while</code> executes <strong>at least once</strong>, then checks. Use <code>while(true)</code> for event loops, servers, and menu-driven programs. Always ensure a <strong>termination condition</strong> to avoid infinite loops.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>while</code> condition <strong>pehle</strong> check karta hai. <code>do-while</code> <strong>kam se kam ek baar</strong> execute karta hai, phir check karta hai. <code>while(true)</code> event loops aur menu programs ke liye use hota hai. Infinite loop se bachne ke liye hamesha termination condition rakho.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — while & do-while</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// while loop</span>
+<span class="keyword">int</span> count = <span class="number">0</span>;
+<span class="keyword">while</span> (count < <span class="number">5</span>) {
+    System.out.print(count + <span class="string">" "</span>); <span class="comment">// 0 1 2 3 4</span>
+    count++;
+}
+
+<span class="comment">// do-while — always runs at least once!</span>
+<span class="keyword">int</span> num = <span class="number">10</span>;
+<span class="keyword">do</span> {
+    System.out.println(num);  <span class="comment">// Prints 10 (even though 10 > 5)</span>
+} <span class="keyword">while</span> (num < <span class="number">5</span>);
+
+<span class="comment">// Menu-driven program pattern</span>
+<span class="type">Scanner</span> sc = <span class="keyword">new</span> <span class="type">Scanner</span>(System.in);
+<span class="keyword">int</span> choice;
+<span class="keyword">do</span> {
+    System.out.println(<span class="string">"1. Add  2. Remove  3. Exit"</span>);
+    choice = sc.nextInt();
+    <span class="keyword">switch</span> (choice) {
+        <span class="keyword">case</span> <span class="number">1</span> -> System.out.println(<span class="string">"Adding..."</span>);
+        <span class="keyword">case</span> <span class="number">2</span> -> System.out.println(<span class="string">"Removing..."</span>);
+        <span class="keyword">case</span> <span class="number">3</span> -> System.out.println(<span class="string">"Bye!"</span>);
+        <span class="keyword">default</span> -> System.out.println(<span class="string">"Invalid!"</span>);
+    }
+} <span class="keyword">while</span> (choice != <span class="number">3</span>);
+
+<span class="comment">// Sentinel loop — read until -1</span>
+<span class="keyword">int</span> sum = <span class="number">0</span>, input;
+<span class="keyword">while</span> ((input = sc.nextInt()) != -<span class="number">1</span>) {
+    sum += input;
+}
+System.out.println(<span class="string">"Total: "</span> + sum);
+
+<span class="comment">// Infinite loop with break</span>
+<span class="keyword">while</span> (<span class="keyword">true</span>) {
+    <span class="type">String</span> line = sc.nextLine();
+    <span class="keyword">if</span> (line.equals(<span class="string">"quit"</span>)) <span class="keyword">break</span>;
+    System.out.println(<span class="string">"You said: "</span> + line);
+}</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Loop</th><th>Checks condition</th><th>Min executions</th><th>Best for</th></tr></thead>
+            <tbody>
+              <tr><td><code>for</code></td><td>Before</td><td>0</td><td>Known count, index needed</td></tr>
+              <tr><td><code>for-each</code></td><td>Before</td><td>0</td><td>Arrays, collections</td></tr>
+              <tr><td><code>while</code></td><td>Before</td><td>0</td><td>Unknown count, condition-based</td></tr>
+              <tr><td><code>do-while</code></td><td>After</td><td>1</td><td>Menu loops, validate-first</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 2.5 -->
+    <div class="module-section" id="m2-5">
+      <div class="module-header"><div class="module-number">2.5</div><h2 class="module-title">Pattern matching — instanceof patterns (16+), switch patterns (21+)</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Modern Java type-safe dispatch</h3>
+        <p class="explain-en">Java 16+ introduces <strong>pattern matching for instanceof</strong> — cast and assign in one step. Java 21+ adds <strong>pattern matching in switch</strong> with type patterns, guarded patterns (<code>when</code>), and null handling. This replaces verbose instanceof-then-cast chains.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Java 16+ me <strong>pattern matching for instanceof</strong> aaya — cast aur assign ek step me. Java 21+ me <strong>switch me pattern matching</strong> aaya type patterns, guarded patterns (<code>when</code>), aur null handling ke saath. Ye verbose instanceof-then-cast chains ko replace karta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — Pattern Matching</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// ❌ Old way (Java 15 and earlier)</span>
+<span class="type">Object</span> obj = <span class="string">"Hello"</span>;
+<span class="keyword">if</span> (obj <span class="keyword">instanceof</span> <span class="type">String</span>) {
+    <span class="type">String</span> s = (<span class="type">String</span>) obj;  <span class="comment">// Redundant cast!</span>
+    System.out.println(s.toUpperCase());
+}
+
+<span class="comment">// ✅ Pattern matching instanceof (Java 16+)</span>
+<span class="keyword">if</span> (obj <span class="keyword">instanceof</span> <span class="type">String</span> s) {  <span class="comment">// Cast + assign in one!</span>
+    System.out.println(s.toUpperCase()); <span class="comment">// s is already String</span>
+}
+
+<span class="comment">// Works with &&</span>
+<span class="keyword">if</span> (obj <span class="keyword">instanceof</span> <span class="type">String</span> s && s.length() > <span class="number">3</span>) {
+    System.out.println(s); <span class="comment">// Safe — s.length() only if String</span>
+}
+
+<span class="comment">// ✅ Pattern matching in switch (Java 21+)</span>
+<span class="type">Object</span> value = <span class="number">42</span>;
+<span class="type">String</span> result = <span class="keyword">switch</span> (value) {
+    <span class="keyword">case</span> <span class="type">Integer</span> i -> <span class="string">"Integer: "</span> + i;
+    <span class="keyword">case</span> <span class="type">String</span> s  -> <span class="string">"String: "</span> + s;
+    <span class="keyword">case</span> <span class="type">Double</span> d  -> <span class="string">"Double: "</span> + d;
+    <span class="keyword">case</span> <span class="keyword">null</span>     -> <span class="string">"null value"</span>;
+    <span class="keyword">default</span>       -> <span class="string">"Unknown: "</span> + value;
+};
+
+<span class="comment">// Guarded patterns (when clause)</span>
+<span class="type">String</span> desc = <span class="keyword">switch</span> (value) {
+    <span class="keyword">case</span> <span class="type">Integer</span> i <span class="keyword">when</span> i > <span class="number">0</span>  -> <span class="string">"Positive int"</span>;
+    <span class="keyword">case</span> <span class="type">Integer</span> i <span class="keyword">when</span> i < <span class="number">0</span>  -> <span class="string">"Negative int"</span>;
+    <span class="keyword">case</span> <span class="type">Integer</span> i              -> <span class="string">"Zero"</span>;
+    <span class="keyword">case</span> <span class="type">String</span> s <span class="keyword">when</span> s.isEmpty() -> <span class="string">"Empty string"</span>;
+    <span class="keyword">case</span> <span class="type">String</span> s               -> <span class="string">"String: "</span> + s;
+    <span class="keyword">default</span>                     -> <span class="string">"Other"</span>;
+};</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Feature</th><th>Java Version</th><th>Syntax</th></tr></thead>
+            <tbody>
+              <tr><td>instanceof + cast</td><td>Java 1</td><td><code>if (obj instanceof String) { String s = (String) obj; }</code></td></tr>
+              <tr><td>Pattern instanceof</td><td>Java 16</td><td><code>if (obj instanceof String s) { ... }</code></td></tr>
+              <tr><td>Switch type patterns</td><td>Java 21</td><td><code>case Integer i -> ...</code></td></tr>
+              <tr><td>Guarded patterns</td><td>Java 21</td><td><code>case Integer i when i > 0 -> ...</code></td></tr>
+              <tr><td>Null in switch</td><td>Java 21</td><td><code>case null -> ...</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 2.6 -->
+    <div class="module-section" id="m2-6">
+      <div class="module-header"><div class="module-number">2.6</div><h2 class="module-title">Strings — String, StringBuilder, immutability, methods</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Text processing in Java</h3>
+        <p class="explain-en"><code>String</code> is <strong>immutable</strong> — every modification creates a new object. Use <code>StringBuilder</code> for mutable, efficient string building (loops, concatenation). Compare strings with <code>.equals()</code>, never <code>==</code>. Java strings are UTF-16 encoded and support Unicode.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>String</code> <strong>immutable</strong> hai — har modification naya object banata hai. Mutable aur efficient string building ke liye <code>StringBuilder</code> use karo. Strings compare karne ke liye <code>.equals()</code> use karo, kabhi <code>==</code> nahi. Java strings UTF-16 encoded hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — Strings</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// String creation</span>
+<span class="type">String</span> s1 = <span class="string">"Hello"</span>;            <span class="comment">// String literal (pool)</span>
+<span class="type">String</span> s2 = <span class="keyword">new</span> <span class="type">String</span>(<span class="string">"Hello"</span>); <span class="comment">// New object (heap)</span>
+
+<span class="comment">// ⚠️ Comparison</span>
+s1 == <span class="string">"Hello"</span>        <span class="comment">// true  (same pool object)</span>
+s1 == s2              <span class="comment">// false (different objects!)</span>
+s1.equals(s2)         <span class="comment">// true  (same content ✅)</span>
+s1.equalsIgnoreCase(<span class="string">"HELLO"</span>) <span class="comment">// true</span>
+
+<span class="comment">// Common methods</span>
+<span class="type">String</span> name = <span class="string">"  Java Programming  "</span>;
+name.length()         <span class="comment">// 22</span>
+name.trim()           <span class="comment">// "Java Programming"</span>
+name.strip()          <span class="comment">// "Java Programming" (Java 11+ Unicode-aware)</span>
+name.toUpperCase()    <span class="comment">// "  JAVA PROGRAMMING  "</span>
+name.toLowerCase()    <span class="comment">// "  java programming  "</span>
+name.charAt(<span class="number">2</span>)        <span class="comment">// 'J'</span>
+name.indexOf(<span class="string">"Pro"</span>)   <span class="comment">// 7</span>
+name.contains(<span class="string">"Java"</span>) <span class="comment">// true</span>
+name.startsWith(<span class="string">"  J"</span>)<span class="comment">// true</span>
+name.endsWith(<span class="string">"  "</span>)   <span class="comment">// true</span>
+name.substring(<span class="number">2</span>, <span class="number">6</span>)  <span class="comment">// "Java"</span>
+name.replace(<span class="string">"Java"</span>, <span class="string">"C++"</span>) <span class="comment">// "  C++ Programming  "</span>
+name.isEmpty()        <span class="comment">// false</span>
+name.isBlank()        <span class="comment">// false (Java 11+)</span>
+
+<span class="comment">// Split and join</span>
+<span class="type">String</span> csv = <span class="string">"a,b,c,d"</span>;
+<span class="type">String</span>[] parts = csv.split(<span class="string">","</span>);  <span class="comment">// ["a","b","c","d"]</span>
+<span class="type">String</span> joined = <span class="type">String</span>.join(<span class="string">"-"</span>, parts); <span class="comment">// "a-b-c-d"</span>
+
+<span class="comment">// StringBuilder — mutable, efficient</span>
+<span class="type">StringBuilder</span> sb = <span class="keyword">new</span> <span class="type">StringBuilder</span>();
+<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < <span class="number">5</span>; i++) {
+    sb.append(i).append(<span class="string">", "</span>);
+}
+<span class="type">String</span> result = sb.toString(); <span class="comment">// "0, 1, 2, 3, 4, "</span>
+
+<span class="comment">// char[] ↔ String</span>
+<span class="keyword">char</span>[] chars = name.toCharArray();
+<span class="type">String</span> back = <span class="keyword">new</span> <span class="type">String</span>(chars);
+
+<span class="comment">// String.format()</span>
+<span class="type">String</span> msg = <span class="type">String</span>.format(<span class="string">"Name: %s, Age: %d"</span>, <span class="string">"Yuvraj"</span>, <span class="number">21</span>);</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Method</th><th>Returns</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td><code>length()</code></td><td>int</td><td><code>"abc".length() → 3</code></td></tr>
+              <tr><td><code>charAt(i)</code></td><td>char</td><td><code>"abc".charAt(0) → 'a'</code></td></tr>
+              <tr><td><code>substring(s,e)</code></td><td>String</td><td><code>"Hello".substring(1,4) → "ell"</code></td></tr>
+              <tr><td><code>indexOf(s)</code></td><td>int</td><td><code>"Hello".indexOf("ll") → 2</code></td></tr>
+              <tr><td><code>contains(s)</code></td><td>boolean</td><td><code>"Hello".contains("ell") → true</code></td></tr>
+              <tr><td><code>equals(s)</code></td><td>boolean</td><td><code>"a".equals("a") → true</code></td></tr>
+              <tr><td><code>split(regex)</code></td><td>String[]</td><td><code>"a,b".split(",") → ["a","b"]</code></td></tr>
+              <tr><td><code>trim()</code></td><td>String</td><td><code>" hi ".trim() → "hi"</code></td></tr>
+              <tr><td><code>replace(a,b)</code></td><td>String</td><td><code>"ab".replace("a","x") → "xb"</code></td></tr>
+              <tr><td><code>toUpperCase()</code></td><td>String</td><td><code>"hi".toUpperCase() → "HI"</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>Performance:</strong> Never concatenate strings in a loop with <code>+</code>. Each <code>+</code> creates a new String object → O(n²). Use <code>StringBuilder</code> for O(n) performance.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 2.7 -->
+    <div class="module-section" id="m2-7">
+      <div class="module-header"><div class="module-number">2.7</div><h2 class="module-title">Arrays — declaration, multidimensional, Arrays utility class</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Fixed-size, indexed data containers</h3>
+        <p class="explain-en">Java arrays are <strong>fixed-size</strong>, <strong>zero-indexed</strong>, and <strong>type-safe</strong>. They hold primitives or objects. Use <code>Arrays</code> utility class for sorting, searching, and filling. For dynamic sizing, use <code>ArrayList</code> (Part 5). Multidimensional arrays are arrays of arrays.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Java arrays <strong>fixed-size</strong>, <strong>zero-indexed</strong>, aur <strong>type-safe</strong> hain. Primitives ya objects hold karte hain. Sorting, searching ke liye <code>Arrays</code> utility class use karo. Dynamic sizing ke liye <code>ArrayList</code> (Part 5) use karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — Arrays</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Declaration + initialization</span>
+<span class="keyword">int</span>[] nums = {<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>, <span class="number">50</span>};
+<span class="type">String</span>[] names = {<span class="string">"Alice"</span>, <span class="string">"Bob"</span>, <span class="string">"Charlie"</span>};
+
+<span class="comment">// Declare then fill</span>
+<span class="keyword">int</span>[] scores = <span class="keyword">new int</span>[<span class="number">5</span>]; <span class="comment">// [0, 0, 0, 0, 0] (defaults)</span>
+scores[<span class="number">0</span>] = <span class="number">95</span>;
+scores[<span class="number">1</span>] = <span class="number">87</span>;
+
+<span class="comment">// Access and modify</span>
+System.out.println(nums[<span class="number">0</span>]);  <span class="comment">// 10 (first element)</span>
+System.out.println(nums.length); <span class="comment">// 5 (property, not method!)</span>
+<span class="comment">// nums[5] = 60; // ❌ ArrayIndexOutOfBoundsException!</span>
+
+<span class="comment">// Iterate with for-each</span>
+<span class="keyword">for</span> (<span class="keyword">int</span> n : nums) {
+    System.out.print(n + <span class="string">" "</span>);
+}
+
+<span class="comment">// Iterate with index</span>
+<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < nums.length; i++) {
+    System.out.printf(<span class="string">"nums[%d] = %d%n"</span>, i, nums[i]);
+}
+
+<span class="comment">// Arrays utility class</span>
+<span class="keyword">import</span> java.util.Arrays;
+Arrays.sort(nums);           <span class="comment">// Sort in-place: [10,20,30,40,50]</span>
+Arrays.fill(scores, <span class="number">0</span>);      <span class="comment">// Fill all with 0</span>
+<span class="keyword">int</span> idx = Arrays.binarySearch(nums, <span class="number">30</span>); <span class="comment">// 2 (must be sorted!)</span>
+<span class="type">String</span> str = Arrays.toString(nums);  <span class="comment">// "[10, 20, 30, 40, 50]"</span>
+<span class="keyword">boolean</span> eq = Arrays.equals(nums, scores); <span class="comment">// false</span>
+<span class="keyword">int</span>[] copy = Arrays.copyOf(nums, <span class="number">3</span>);     <span class="comment">// [10, 20, 30]</span>
+
+<span class="comment">// 2D array (matrix)</span>
+<span class="keyword">int</span>[][] matrix = {
+    {<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>},
+    {<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>},
+    {<span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>}
+};
+System.out.println(matrix[<span class="number">1</span>][<span class="number">2</span>]); <span class="comment">// 6 (row 1, col 2)</span>
+
+<span class="comment">// Iterate 2D array</span>
+<span class="keyword">for</span> (<span class="keyword">int</span>[] row : matrix) {
+    <span class="keyword">for</span> (<span class="keyword">int</span> val : row) {
+        System.out.printf(<span class="string">"%3d"</span>, val);
+    }
+    System.out.println();
+}
+
+<span class="comment">// Jagged array (different row sizes)</span>
+<span class="keyword">int</span>[][] jagged = <span class="keyword">new int</span>[<span class="number">3</span>][];
+jagged[<span class="number">0</span>] = <span class="keyword">new int</span>[]{<span class="number">1</span>};
+jagged[<span class="number">1</span>] = <span class="keyword">new int</span>[]{<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>};
+jagged[<span class="number">2</span>] = <span class="keyword">new int</span>[]{<span class="number">1</span>, <span class="number">2</span>};</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Arrays Method</th><th>Purpose</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td><code>Arrays.sort(arr)</code></td><td>Sort in-place</td><td>Ascending order</td></tr>
+              <tr><td><code>Arrays.binarySearch(arr, key)</code></td><td>Find index (sorted)</td><td>Returns index or negative</td></tr>
+              <tr><td><code>Arrays.toString(arr)</code></td><td>Pretty print</td><td><code>"[1, 2, 3]"</code></td></tr>
+              <tr><td><code>Arrays.deepToString(arr)</code></td><td>Print 2D+ arrays</td><td><code>"[[1,2],[3,4]]"</code></td></tr>
+              <tr><td><code>Arrays.fill(arr, val)</code></td><td>Fill all elements</td><td>Set all to value</td></tr>
+              <tr><td><code>Arrays.copyOf(arr, len)</code></td><td>Copy with new size</td><td>Truncate or pad</td></tr>
+              <tr><td><code>Arrays.equals(a, b)</code></td><td>Compare contents</td><td>true if same elements</td></tr>
+              <tr><td><code>Arrays.stream(arr)</code></td><td>Create Stream</td><td>For functional ops</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Array vs ArrayList:</strong> Arrays are fixed-size and faster. <code>ArrayList</code> is dynamic and feature-rich. Use arrays for primitives and performance-critical code. Use <code>ArrayList</code> for everything else (covered in Part 5).</div>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 String Methods — Complete Quick Reference</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Method</th><th>Purpose</th><th>Example → Output</th></tr></thead>
+          <tbody>
+            <tr><td><code>length()</code></td><td>Number of characters</td><td><code>"Java".length() → 4</code></td></tr>
+            <tr><td><code>charAt(i)</code></td><td>Character at index</td><td><code>"Java".charAt(0) → 'J'</code></td></tr>
+            <tr><td><code>substring(s,e)</code></td><td>Extract portion</td><td><code>"Hello".substring(1,4) → "ell"</code></td></tr>
+            <tr><td><code>indexOf(s)</code></td><td>First occurrence</td><td><code>"aabaa".indexOf("b") → 2</code></td></tr>
+            <tr><td><code>lastIndexOf(s)</code></td><td>Last occurrence</td><td><code>"aabaa".lastIndexOf("a") → 4</code></td></tr>
+            <tr><td><code>contains(s)</code></td><td>Has substring?</td><td><code>"Hello".contains("ell") → true</code></td></tr>
+            <tr><td><code>startsWith(s)</code></td><td>Starts with?</td><td><code>"Java".startsWith("Ja") → true</code></td></tr>
+            <tr><td><code>endsWith(s)</code></td><td>Ends with?</td><td><code>"test.java".endsWith(".java") → true</code></td></tr>
+            <tr><td><code>matches(regex)</code></td><td>Regex match</td><td><code>"abc".matches("[a-z]+") → true</code></td></tr>
+            <tr><td><code>compareTo(s)</code></td><td>Lexicographic compare</td><td><code>"a".compareTo("b") → -1</code></td></tr>
+            <tr><td><code>repeat(n)</code></td><td>Repeat n times (11+)</td><td><code>"ha".repeat(3) → "hahaha"</code></td></tr>
+            <tr><td><code>strip()</code></td><td>Unicode-aware trim (11+)</td><td><code>" hi ".strip() → "hi"</code></td></tr>
+            <tr><td><code>isBlank()</code></td><td>Empty or whitespace (11+)</td><td><code>"  ".isBlank() → true</code></td></tr>
+            <tr><td><code>chars()</code></td><td>IntStream of chars</td><td>For stream processing</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Array Default Values</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Array Type</th><th>Default Value</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><code>int[]</code></td><td><code>0</code></td><td><code>new int[3] → {0, 0, 0}</code></td></tr>
+            <tr><td><code>double[]</code></td><td><code>0.0</code></td><td><code>new double[3] → {0.0, 0.0, 0.0}</code></td></tr>
+            <tr><td><code>boolean[]</code></td><td><code>false</code></td><td><code>new boolean[3] → {false, false, false}</code></td></tr>
+            <tr><td><code>char[]</code></td><td><code>'\u0000'</code></td><td>Null character</td></tr>
+            <tr><td><code>String[]</code></td><td><code>null</code></td><td><code>new String[3] → {null, null, null}</code></td></tr>
+            <tr><td><code>Object[]</code></td><td><code>null</code></td><td>Any reference type</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Loop Patterns — Common Idioms</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Pattern</th><th>Code</th><th>Use case</th></tr></thead>
+          <tbody>
+            <tr><td>Count up</td><td><code>for (int i = 0; i < n; i++)</code></td><td>Standard iteration</td></tr>
+            <tr><td>Count down</td><td><code>for (int i = n-1; i >= 0; i--)</code></td><td>Reverse iteration</td></tr>
+            <tr><td>Step by 2</td><td><code>for (int i = 0; i < n; i += 2)</code></td><td>Skip elements</td></tr>
+            <tr><td>For-each</td><td><code>for (var x : collection)</code></td><td>Read-only iteration</td></tr>
+            <tr><td>While input</td><td><code>while (sc.hasNext())</code></td><td>Read until EOF</td></tr>
+            <tr><td>Do-while menu</td><td><code>do { ... } while (choice != 0)</code></td><td>Menu loop</td></tr>
+            <tr><td>Infinite + break</td><td><code>while (true) { if (...) break; }</code></td><td>Event loop</td></tr>
+            <tr><td>Nested 2D</td><td><code>for (row) { for (col) { } }</code></td><td>Matrix traversal</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="callout callout-tip"><strong>🏭 Industry insight:</strong> In enterprise Java, raw arrays are rarely used. Most code uses <code>List&lt;T&gt;</code> from the Collections framework. However, arrays are essential for algorithm interviews, performance-critical code, and understanding how collections work internally.</div>
+
+    <div class="practice-box">
+      <div class="practice-title">✏️ Practice Exercises — Part 2</div>
+      <ol>
+        <li>Write a grade calculator using if-else chain: A (90+), B (80+), C (70+), D (60+), F (below 60).</li>
+        <li>Rewrite the grade calculator using enhanced switch expressions (Java 14+).</li>
+        <li>Print a multiplication table (1–10) using nested for loops with <code>printf()</code> formatting.</li>
+        <li>Write a menu-driven calculator using do-while loop with add, subtract, multiply, divide options.</li>
+        <li>Reverse a String using <code>StringBuilder</code> and also manually with a char array.</li>
+        <li>Find the maximum and minimum values in an integer array without using <code>Arrays.sort()</code>.</li>
+        <li>Create a 3×3 matrix, fill it with user input, then print the sum of each row and column.</li>
+      </ol>
+    </div>
+
+    <div class="handbook-nav">
+      <a href="part1.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Part 1: Java Foundations & Setup</div></div></a>
+      <a href="part3.html" class="nav-btn next"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Part 3: OOP Basics →</div></div><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+
+  </div>
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
+  <script src="../../../js/main.js"></script>
+  <script>
+    (() => {
+      document.querySelectorAll('.code-block').forEach((block) => { const pre = block.querySelector('.code-body pre'), header = block.querySelector('.code-header'); if (!pre || !header) return; let actions = header.querySelector('.code-actions'); if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); } const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'code-copy-btn'; btn.textContent = 'Copy'; btn.addEventListener('click', async () => { try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; } catch { btn.textContent = 'Failed'; } finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); } }); actions.prepend(btn); });
+      const fill = document.querySelector('.hb-progress-fill'), label = document.querySelector('.hb-progress-label');
+      if (fill && label) { const update = () => { const h = document.documentElement, d = (h.scrollHeight - h.clientHeight) || 1, p = Math.max(0, Math.min(1, h.scrollTop / d)); fill.style.width = (p*100).toFixed(0)+'%'; label.textContent = (p*100).toFixed(0)+'%'; }; document.addEventListener('scroll', update, { passive: true }); update(); }
+    })();
+  </script>
+</body>
+</html>

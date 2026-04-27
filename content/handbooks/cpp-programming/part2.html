@@ -44,6 +44,25 @@
       </div>
     </div>
 
+    <div class="quick-ref">
+      <div class="qr-title">🚀 Advanced Lens — Part 2</div>
+      <p class="explain-en">Production C++ control-flow code optimizes for predictability: explicit branching, narrow scopes, reference-safe APIs, and exception boundaries. These choices reduce undefined behavior risks and improve debugging velocity in large codebases.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Industry C++ me Part 2 ka focus sirf syntax nahi hota, balki predictable branching, safe references, aur clear exception boundaries par hota hai taaki bugs fast diagnose ho sake.</div>
+    </div>
+
+    <div class="concept-block">
+      <h3>Control-flow readiness checklist (Part 2)</h3>
+      <table>
+        <thead><tr><th>Area</th><th>Production expectation</th></tr></thead>
+        <tbody>
+          <tr><td>Branch design</td><td>Prefer guard clauses and avoid deeply nested logic trees.</td></tr>
+          <tr><td>Reference safety</td><td>Never return dangling references; document lifetime assumptions.</td></tr>
+          <tr><td>Exception boundaries</td><td>Throw at domain edges and convert to stable error contracts.</td></tr>
+          <tr><td>Loop discipline</td><td>Use clear termination conditions and avoid hidden side effects.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
     <!-- MODULE 2.1 -->
     <div class="module-section" id="m2-1">
       <div class="module-header"><div class="module-number">2.1</div><h2 class="module-title">Operators, precedence & the spaceship operator &lt;=&gt; (C++20)</h2></div>

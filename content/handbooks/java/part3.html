@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Part 3: OOP Basics — Java Programming Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 3: Classes, objects, access modifiers, static, final, constructors, records in Java.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/handbook.css">
+</head>
+<body class="handbook-wrapper">
+  <nav class="navbar"><div class="container"><a href="../../../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../../../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
+
+  <div class="handbook-page">
+    <div class="hb-topbar"><div class="hb-topbar-inner"><div class="hb-breadcrumbs"><a href="index.html">Java Programming Handbook</a><span class="hb-muted">/</span><span>Part 3</span><span class="hb-muted">·</span><a href="#m3-1">3.1</a> <a href="#m3-2">3.2</a> <a href="#m3-3">3.3</a> <a href="#m3-4">3.4</a> <a href="#m3-5">3.5</a> <a href="#m3-6">3.6</a> <a href="#m3-7">3.7</a></div><div class="hb-progress" aria-label="Reading progress"><div class="hb-progress-track" role="progressbar"><div class="hb-progress-fill"></div></div><div class="hb-progress-label">0%</div></div></div></div>
+
+    <div class="chapter-header" data-chapter-num="03">
+      <div class="chapter-part-label">📖 Part 3 — OOP Basics</div>
+      <h1 class="chapter-title">Java's <span class="gradient-text">Core</span></h1>
+      <p class="chapter-subtitle">Classes, objects, access modifiers, static, final, constructors, method overloading, and records — the foundation of every Java application.</p>
+      <div class="chapter-meta"><span>📄 Modules 3.1 – 3.7</span><span>⏱️ 75–100 min read</span><span>💻 60+ Examples</span></div>
+    </div>
+
+    <div class="hb-mini-toc"><div class="hb-mini-title">📍 Part 3 Modules</div><div class="hb-mini-links"><a href="#m3-1">3.1 Classes</a><a href="#m3-2">3.2 Access</a><a href="#m3-3">3.3 static</a><a href="#m3-4">3.4 final</a><a href="#m3-5">3.5 Constructors</a><a href="#m3-6">3.6 Overloading</a><a href="#m3-7">3.7 Records</a></div></div>
+
+    <div class="quick-ref">
+      <div class="qr-title">🚀 Advanced Lens — Part 3</div>
+      <p class="explain-en">Enterprise Java architecture is built on Part 3 principles: encapsulation, immutable design, and explicit constructors. Strong object design here directly improves API safety, testability, and long-term maintainability.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Part 3 ke OOP concepts real enterprise architecture ka base hain. Encapsulation aur immutability strong hone se code safe, testable aur maintainable banta hai.</div>
+    </div>
+
+    <div class="concept-block">
+      <h3>OOP design checklist (Part 3)</h3>
+      <table>
+        <thead><tr><th>Design area</th><th>Interview/client-grade expectation</th></tr></thead>
+        <tbody>
+          <tr><td>Encapsulation</td><td>State is private; mutation flows through validated methods.</td></tr>
+          <tr><td>Construction</td><td>Constructors enforce invariants; avoid half-initialized objects.</td></tr>
+          <tr><td>Immutability</td><td>Use immutable fields/records when behavior is value-like.</td></tr>
+          <tr><td>API clarity</td><td>Method names communicate intent, side effects, and contracts.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- MODULE 3.1 -->
+    <div class="module-section" id="m3-1">
+      <div class="module-header"><div class="module-number">3.1</div><h2 class="module-title">Classes & objects — fields, methods, constructors, this</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Everything is inside a class</h3>
+        <p class="explain-en">Java is a <strong>pure OOP</strong> language — every line of code lives inside a class. A class is a <strong>blueprint</strong> (template), an object is an <strong>instance</strong> (actual data). Fields store state, methods define behavior, constructors initialize objects. <code>this</code> refers to the current object.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Java ek <strong>pure OOP</strong> language hai — har line code class ke andar hoti hai. Class ek <strong>blueprint</strong> (template) hai, object ek <strong>instance</strong> (actual data) hai. Fields state store karte hain, methods behavior define karte hain, constructors objects initialize karte hain. <code>this</code> current object ko refer karta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — Classes & Objects</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Class definition (blueprint)</span>
+<span class="keyword">public class</span> <span class="type">Student</span> {
+    <span class="comment">// Fields (state / attributes)</span>
+    <span class="type">String</span> name;
+    <span class="keyword">int</span> age;
+    <span class="keyword">double</span> gpa;
+
+    <span class="comment">// Constructor (initializer)</span>
+    <span class="keyword">public</span> <span class="function">Student</span>(<span class="type">String</span> name, <span class="keyword">int</span> age, <span class="keyword">double</span> gpa) {
+        <span class="keyword">this</span>.name = name;   <span class="comment">// this.field = parameter</span>
+        <span class="keyword">this</span>.age = age;
+        <span class="keyword">this</span>.gpa = gpa;
+    }
+
+    <span class="comment">// Method (behavior)</span>
+    <span class="keyword">public</span> <span class="type">String</span> <span class="function">getGrade</span>() {
+        <span class="keyword">if</span> (gpa >= <span class="number">9.0</span>) <span class="keyword">return</span> <span class="string">"A"</span>;
+        <span class="keyword">if</span> (gpa >= <span class="number">8.0</span>) <span class="keyword">return</span> <span class="string">"B"</span>;
+        <span class="keyword">return</span> <span class="string">"C"</span>;
+    }
+
+    <span class="comment">// toString — readable representation</span>
+    @Override
+    <span class="keyword">public</span> <span class="type">String</span> <span class="function">toString</span>() {
+        <span class="keyword">return</span> <span class="type">String</span>.format(<span class="string">"Student{name='%s', age=%d, gpa=%.1f}"</span>,
+                             name, age, gpa);
+    }
+}
+
+<span class="comment">// Creating objects (instances)</span>
+<span class="type">Student</span> s1 = <span class="keyword">new</span> <span class="type">Student</span>(<span class="string">"Yuvraj"</span>, <span class="number">21</span>, <span class="number">9.5</span>);
+<span class="type">Student</span> s2 = <span class="keyword">new</span> <span class="type">Student</span>(<span class="string">"Alice"</span>, <span class="number">20</span>, <span class="number">8.7</span>);
+
+<span class="comment">// Using objects</span>
+System.out.println(s1.name);     <span class="comment">// Yuvraj</span>
+System.out.println(s1.getGrade()); <span class="comment">// A</span>
+System.out.println(s1);          <span class="comment">// Student{name='Yuvraj', age=21, gpa=9.5}</span>
+
+<span class="comment">// Objects are references</span>
+<span class="type">Student</span> s3 = s1;    <span class="comment">// s3 points to SAME object as s1</span>
+s3.age = <span class="number">22</span>;         <span class="comment">// Changes s1.age too!</span>
+System.out.println(s1.age); <span class="comment">// 22</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Concept</th><th>Description</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Class</strong></td><td>Blueprint / template</td><td><code>class Student { }</code></td></tr>
+              <tr><td><strong>Object</strong></td><td>Instance of a class</td><td><code>new Student(...)</code></td></tr>
+              <tr><td><strong>Field</strong></td><td>Data / state</td><td><code>String name;</code></td></tr>
+              <tr><td><strong>Method</strong></td><td>Behavior / function</td><td><code>getGrade()</code></td></tr>
+              <tr><td><strong>Constructor</strong></td><td>Initializer</td><td><code>Student(name, age)</code></td></tr>
+              <tr><td><strong>this</strong></td><td>Current object ref</td><td><code>this.name = name;</code></td></tr>
+              <tr><td><strong>new</strong></td><td>Create instance</td><td><code>new Student(...)</code></td></tr>
+              <tr><td><strong>null</strong></td><td>No object reference</td><td><code>Student s = null;</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Stack vs Heap:</strong> Primitives and references live on the <strong>stack</strong>. Objects live on the <strong>heap</strong>. When you do <code>Student s = new Student()</code>, <code>s</code> is a reference on the stack pointing to the Student object on the heap.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 3.2 -->
+    <div class="module-section" id="m3-2">
+      <div class="module-header"><div class="module-number">3.2</div><h2 class="module-title">Access modifiers — public, private, protected, default</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Controlling visibility</h3>
+        <p class="explain-en">Java has <strong>4 access levels</strong>: <code>public</code> (everywhere), <code>protected</code> (package + subclasses), <strong>default</strong>/package-private (same package only), <code>private</code> (same class only). Use <code>private</code> fields + <code>public</code> getters/setters for <strong>encapsulation</strong> — this is the most important OOP principle.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Java me <strong>4 access levels</strong> hain: <code>public</code> (kahin bhi), <code>protected</code> (package + subclasses), <strong>default</strong> (same package), <code>private</code> (same class). <code>private</code> fields + <code>public</code> getters/setters se <strong>encapsulation</strong> karo — ye OOP ka sabse important principle hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — Access Modifiers & Encapsulation</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">public class</span> <span class="type">BankAccount</span> {
+    <span class="comment">// ✅ Private fields — encapsulation!</span>
+    <span class="keyword">private</span> <span class="type">String</span> owner;
+    <span class="keyword">private</span> <span class="keyword">double</span> balance;
+    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">String</span> accountId;
+
+    <span class="comment">// Constructor</span>
+    <span class="keyword">public</span> <span class="function">BankAccount</span>(<span class="type">String</span> owner, <span class="type">String</span> accountId) {
+        <span class="keyword">this</span>.owner = owner;
+        <span class="keyword">this</span>.accountId = accountId;
+        <span class="keyword">this</span>.balance = <span class="number">0.0</span>;
+    }
+
+    <span class="comment">// ✅ Public getter — controlled read access</span>
+    <span class="keyword">public double</span> <span class="function">getBalance</span>() {
+        <span class="keyword">return</span> balance;
+    }
+
+    <span class="comment">// ✅ Public method with validation</span>
+    <span class="keyword">public void</span> <span class="function">deposit</span>(<span class="keyword">double</span> amount) {
+        <span class="keyword">if</span> (amount <= <span class="number">0</span>) {
+            <span class="keyword">throw new</span> <span class="type">IllegalArgumentException</span>(<span class="string">"Amount must be positive"</span>);
+        }
+        balance += amount;
+    }
+
+    <span class="keyword">public boolean</span> <span class="function">withdraw</span>(<span class="keyword">double</span> amount) {
+        <span class="keyword">if</span> (amount > balance) <span class="keyword">return false</span>;
+        balance -= amount;
+        <span class="keyword">return true</span>;
+    }
+
+    <span class="comment">// No setter for accountId — it's immutable!</span>
+    <span class="keyword">public</span> <span class="type">String</span> <span class="function">getAccountId</span>() { <span class="keyword">return</span> accountId; }
+    <span class="keyword">public</span> <span class="type">String</span> <span class="function">getOwner</span>() { <span class="keyword">return</span> owner; }
+}
+
+<span class="comment">// Usage</span>
+<span class="type">BankAccount</span> acc = <span class="keyword">new</span> <span class="type">BankAccount</span>(<span class="string">"Yuvraj"</span>, <span class="string">"ACC001"</span>);
+acc.deposit(<span class="number">1000</span>);
+<span class="comment">// acc.balance = -500;  // ❌ Compile error! private field</span>
+System.out.println(acc.getBalance()); <span class="comment">// 1000.0 ✅</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Modifier</th><th>Same Class</th><th>Same Package</th><th>Subclass</th><th>Everywhere</th></tr></thead>
+            <tbody>
+              <tr><td><code>public</code></td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+              <tr><td><code>protected</code></td><td>✅</td><td>✅</td><td>✅</td><td>❌</td></tr>
+              <tr><td><em>default</em> (no keyword)</td><td>✅</td><td>✅</td><td>❌</td><td>❌</td></tr>
+              <tr><td><code>private</code></td><td>✅</td><td>❌</td><td>❌</td><td>❌</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>Rule of thumb:</strong> Make fields <code>private</code>, methods <code>public</code> (if part of API) or <code>private</code> (if internal). Never use <code>public</code> fields — it breaks encapsulation and makes refactoring impossible.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 3.3 -->
+    <div class="module-section" id="m3-3">
+      <div class="module-header"><div class="module-number">3.3</div><h2 class="module-title">static keyword — static fields, methods, blocks, nested classes</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Class-level vs instance-level</h3>
+        <p class="explain-en"><code>static</code> means "belongs to the <strong>class</strong>, not to instances." Static fields are shared by all objects. Static methods can be called without creating an object (<code>Math.pow()</code>). Static blocks run once when the class is loaded. Use for utility methods, constants, and counters.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>static</code> ka matlab hai "ye <strong>class</strong> ka hai, instance ka nahi." Static fields sabhi objects share karte hain. Static methods bina object banaye call ho sakte hain (<code>Math.pow()</code>). Static blocks class load hone pe ek baar run hote hain. Utility methods, constants aur counters ke liye use karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — static Keyword</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">public class</span> <span class="type">Student</span> {
+    <span class="comment">// Static field — shared by ALL instances</span>
+    <span class="keyword">private static int</span> totalStudents = <span class="number">0</span>;
+    <span class="keyword">public static final</span> <span class="type">String</span> SCHOOL = <span class="string">"MIT"</span>; <span class="comment">// Constant</span>
+
+    <span class="comment">// Instance fields — unique per object</span>
+    <span class="keyword">private</span> <span class="type">String</span> name;
+    <span class="keyword">private int</span> rollNo;
+
+    <span class="comment">// Static block — runs once when class loads</span>
+    <span class="keyword">static</span> {
+        System.out.println(<span class="string">"Student class loaded!"</span>);
+    }
+
+    <span class="comment">// Constructor</span>
+    <span class="keyword">public</span> <span class="function">Student</span>(<span class="type">String</span> name) {
+        <span class="keyword">this</span>.name = name;
+        totalStudents++;
+        <span class="keyword">this</span>.rollNo = totalStudents;
+    }
+
+    <span class="comment">// Static method — called on CLASS, not object</span>
+    <span class="keyword">public static int</span> <span class="function">getTotalStudents</span>() {
+        <span class="comment">// ❌ Cannot use 'this' or instance fields here!</span>
+        <span class="keyword">return</span> totalStudents;
+    }
+
+    <span class="comment">// Instance method — called on object</span>
+    <span class="keyword">public</span> <span class="type">String</span> <span class="function">getInfo</span>() {
+        <span class="keyword">return</span> <span class="type">String</span>.format(<span class="string">"#%d: %s (%s)"</span>, rollNo, name, SCHOOL);
+    }
+}
+
+<span class="comment">// Usage</span>
+<span class="type">Student</span> s1 = <span class="keyword">new</span> <span class="type">Student</span>(<span class="string">"Alice"</span>);
+<span class="type">Student</span> s2 = <span class="keyword">new</span> <span class="type">Student</span>(<span class="string">"Bob"</span>);
+
+<span class="comment">// Static access — via class name (preferred)</span>
+System.out.println(<span class="type">Student</span>.getTotalStudents()); <span class="comment">// 2</span>
+System.out.println(<span class="type">Student</span>.SCHOOL);             <span class="comment">// MIT</span>
+
+<span class="comment">// Instance access</span>
+System.out.println(s1.getInfo()); <span class="comment">// #1: Alice (MIT)</span>
+
+<span class="comment">// ✅ Utility class pattern (all static)</span>
+<span class="keyword">public final class</span> <span class="type">MathUtils</span> {
+    <span class="keyword">private</span> <span class="function">MathUtils</span>() {} <span class="comment">// Prevent instantiation</span>
+
+    <span class="keyword">public static int</span> <span class="function">square</span>(<span class="keyword">int</span> n) {
+        <span class="keyword">return</span> n * n;
+    }
+    <span class="keyword">public static boolean</span> <span class="function">isEven</span>(<span class="keyword">int</span> n) {
+        <span class="keyword">return</span> n % <span class="number">2</span> == <span class="number">0</span>;
+    }
+}
+<span class="comment">// MathUtils.square(5) → 25</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Feature</th><th>static (class-level)</th><th>Instance (object-level)</th></tr></thead>
+            <tbody>
+              <tr><td>Belongs to</td><td>Class</td><td>Object</td></tr>
+              <tr><td>Shared?</td><td>Yes — all instances share</td><td>No — each object has own</td></tr>
+              <tr><td>Access</td><td><code>ClassName.method()</code></td><td><code>object.method()</code></td></tr>
+              <tr><td>Can use <code>this</code>?</td><td>❌ No</td><td>✅ Yes</td></tr>
+              <tr><td>Can access instance fields?</td><td>❌ No</td><td>✅ Yes</td></tr>
+              <tr><td>Memory</td><td>One copy in Method Area</td><td>One copy per object in Heap</td></tr>
+              <tr><td>Use case</td><td>Utility, constants, counters</td><td>Object state/behavior</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 3.4 -->
+    <div class="module-section" id="m3-4">
+      <div class="module-header"><div class="module-number">3.4</div><h2 class="module-title">final keyword — final variables, methods, classes</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Making things immutable</h3>
+        <p class="explain-en"><code>final</code> means <strong>"cannot be changed"</strong>. Final variables = constants (cannot reassign). Final methods = cannot override in subclasses. Final classes = cannot extend (no inheritance). Use <code>static final</code> for compile-time constants. Final references can still mutate the object's contents!</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>final</code> ka matlab hai <strong>"change nahi ho sakta"</strong>. Final variables = constants (reassign nahi). Final methods = subclasses me override nahi. Final classes = extend nahi. <code>static final</code> compile-time constants ke liye use karo. Final references me object ka content change ho sakta hai!</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — final Keyword</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// ✅ final variable — constant</span>
+<span class="keyword">final int</span> MAX_SIZE = <span class="number">100</span>;
+<span class="comment">// MAX_SIZE = 200;  // ❌ Compile error!</span>
+
+<span class="comment">// ✅ static final — class constant</span>
+<span class="keyword">public static final double</span> PI = <span class="number">3.14159265358979</span>;
+<span class="keyword">public static final</span> <span class="type">String</span> APP_NAME = <span class="string">"MyApp"</span>;
+
+<span class="comment">// ⚠️ final reference — object can still be modified!</span>
+<span class="keyword">final</span> <span class="type">List</span>&lt;<span class="type">String</span>&gt; names = <span class="keyword">new</span> <span class="type">ArrayList</span>&lt;&gt;();
+names.add(<span class="string">"Alice"</span>);   <span class="comment">// ✅ Modifying contents is OK</span>
+<span class="comment">// names = new ArrayList<>(); // ❌ Reassigning reference is NOT OK</span>
+
+<span class="comment">// final parameter — cannot reassign inside method</span>
+<span class="keyword">public void</span> <span class="function">process</span>(<span class="keyword">final</span> <span class="type">String</span> data) {
+    <span class="comment">// data = "new";  // ❌ Compile error!</span>
+    System.out.println(data.toUpperCase()); <span class="comment">// ✅ Can read</span>
+}
+
+<span class="comment">// ✅ final method — cannot be overridden</span>
+<span class="keyword">public class</span> <span class="type">Base</span> {
+    <span class="keyword">public final void</span> <span class="function">criticalMethod</span>() {
+        System.out.println(<span class="string">"Cannot override this!"</span>);
+    }
+}
+
+<span class="comment">// ✅ final class — cannot be extended</span>
+<span class="keyword">public final class</span> <span class="type">ImmutableConfig</span> {
+    <span class="keyword">private final</span> <span class="type">String</span> dbUrl;
+    <span class="keyword">private final int</span> port;
+
+    <span class="keyword">public</span> <span class="function">ImmutableConfig</span>(<span class="type">String</span> dbUrl, <span class="keyword">int</span> port) {
+        <span class="keyword">this</span>.dbUrl = dbUrl;
+        <span class="keyword">this</span>.port = port;
+    }
+    <span class="keyword">public</span> <span class="type">String</span> <span class="function">getDbUrl</span>() { <span class="keyword">return</span> dbUrl; }
+    <span class="keyword">public int</span> <span class="function">getPort</span>() { <span class="keyword">return</span> port; }
+}
+<span class="comment">// class SubConfig extends ImmutableConfig {} // ❌ Cannot extend!</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>final on...</th><th>Meaning</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td>Variable</td><td>Cannot reassign</td><td><code>final int X = 5;</code></td></tr>
+              <tr><td>Field</td><td>Must init in constructor</td><td><code>final String id;</code></td></tr>
+              <tr><td>Parameter</td><td>Cannot reassign param</td><td><code>void f(final int x)</code></td></tr>
+              <tr><td>Method</td><td>Cannot override</td><td><code>final void method()</code></td></tr>
+              <tr><td>Class</td><td>Cannot extend</td><td><code>final class Config</code></td></tr>
+              <tr><td>Reference</td><td>Cannot reassign ref</td><td>Object contents CAN change</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 3.5 -->
+    <div class="module-section" id="m3-5">
+      <div class="module-header"><div class="module-number">3.5</div><h2 class="module-title">Constructors — default, parameterized, copy, this(), chaining</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Initializing objects properly</h3>
+        <p class="explain-en">A constructor is a special method with the <strong>same name as the class</strong>, no return type. Java provides a <strong>default no-arg constructor</strong> only if you don't define any. Use <code>this()</code> to chain constructors. Copy constructors create a new object from an existing one.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Constructor ek special method hai jiska <strong>naam class jaisa</strong> hota hai, koi return type nahi. Agar koi constructor nahi banaya to Java <strong>default no-arg constructor</strong> deta hai. <code>this()</code> se constructors chain karo. Copy constructor existing object se naya object banata hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — Constructors</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">public class</span> <span class="type">Product</span> {
+    <span class="keyword">private</span> <span class="type">String</span> name;
+    <span class="keyword">private double</span> price;
+    <span class="keyword">private int</span> quantity;
+
+    <span class="comment">// No-arg constructor</span>
+    <span class="keyword">public</span> <span class="function">Product</span>() {
+        <span class="keyword">this</span>(<span class="string">"Unknown"</span>, <span class="number">0.0</span>, <span class="number">0</span>); <span class="comment">// Chain to full constructor</span>
+    }
+
+    <span class="comment">// Partial constructor</span>
+    <span class="keyword">public</span> <span class="function">Product</span>(<span class="type">String</span> name) {
+        <span class="keyword">this</span>(name, <span class="number">0.0</span>, <span class="number">0</span>);  <span class="comment">// Chain with defaults</span>
+    }
+
+    <span class="comment">// Full constructor</span>
+    <span class="keyword">public</span> <span class="function">Product</span>(<span class="type">String</span> name, <span class="keyword">double</span> price, <span class="keyword">int</span> quantity) {
+        <span class="keyword">this</span>.name = name;
+        <span class="keyword">this</span>.price = price;
+        <span class="keyword">this</span>.quantity = quantity;
+    }
+
+    <span class="comment">// Copy constructor</span>
+    <span class="keyword">public</span> <span class="function">Product</span>(<span class="type">Product</span> other) {
+        <span class="keyword">this</span>(other.name, other.price, other.quantity);
+    }
+
+    <span class="comment">// Getters & Setters</span>
+    <span class="keyword">public</span> <span class="type">String</span> <span class="function">getName</span>() { <span class="keyword">return</span> name; }
+    <span class="keyword">public double</span> <span class="function">getPrice</span>() { <span class="keyword">return</span> price; }
+    <span class="keyword">public int</span> <span class="function">getQuantity</span>() { <span class="keyword">return</span> quantity; }
+    <span class="keyword">public void</span> <span class="function">setPrice</span>(<span class="keyword">double</span> price) { <span class="keyword">this</span>.price = price; }
+
+    @Override
+    <span class="keyword">public</span> <span class="type">String</span> <span class="function">toString</span>() {
+        <span class="keyword">return</span> <span class="type">String</span>.format(<span class="string">"%s ($%.2f x %d)"</span>, name, price, quantity);
+    }
+}
+
+<span class="comment">// Usage — multiple ways to create</span>
+<span class="type">Product</span> p1 = <span class="keyword">new</span> <span class="type">Product</span>();                  <span class="comment">// Unknown ($0.00 x 0)</span>
+<span class="type">Product</span> p2 = <span class="keyword">new</span> <span class="type">Product</span>(<span class="string">"Laptop"</span>);          <span class="comment">// Laptop ($0.00 x 0)</span>
+<span class="type">Product</span> p3 = <span class="keyword">new</span> <span class="type">Product</span>(<span class="string">"Phone"</span>, <span class="number">999.0</span>, <span class="number">5</span>); <span class="comment">// Phone ($999.00 x 5)</span>
+<span class="type">Product</span> p4 = <span class="keyword">new</span> <span class="type">Product</span>(p3);               <span class="comment">// Copy of Phone</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Constructor Type</th><th>Signature</th><th>Use case</th></tr></thead>
+            <tbody>
+              <tr><td>Default (implicit)</td><td><code>Product()</code></td><td>Only if no constructors defined</td></tr>
+              <tr><td>No-arg</td><td><code>Product()</code></td><td>Create with defaults</td></tr>
+              <tr><td>Parameterized</td><td><code>Product(name, price)</code></td><td>Create with specific values</td></tr>
+              <tr><td>Copy</td><td><code>Product(Product other)</code></td><td>Clone existing object</td></tr>
+              <tr><td>Chained</td><td><code>this(...)</code></td><td>Avoid code duplication</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>Important:</strong> <code>this()</code> must be the <strong>first statement</strong> in a constructor. If you define ANY constructor, Java stops providing the default no-arg constructor — you must define it explicitly if needed.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 3.6 -->
+    <div class="module-section" id="m3-6">
+      <div class="module-header"><div class="module-number">3.6</div><h2 class="module-title">Method overloading — same name, different parameters</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Multiple methods, one name</h3>
+        <p class="explain-en"><strong>Overloading</strong> = same method name, different parameter list (type, count, or order). Return type alone does NOT count. Resolved at <strong>compile time</strong> (static dispatch). Common in constructors, utility methods (<code>Math.abs()</code> has 4 overloads), and <code>println()</code>.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Overloading</strong> = same method name, different parameters (type, count, ya order). Sirf return type se overload nahi hota. <strong>Compile time</strong> pe resolve hota hai. Constructors, utility methods (<code>Math.abs()</code> me 4 overloads hain), aur <code>println()</code> me common hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — Method Overloading</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">public class</span> <span class="type">Calculator</span> {
+    <span class="comment">// Overloaded add methods</span>
+    <span class="keyword">public int</span> <span class="function">add</span>(<span class="keyword">int</span> a, <span class="keyword">int</span> b) {
+        <span class="keyword">return</span> a + b;
+    }
+    <span class="keyword">public double</span> <span class="function">add</span>(<span class="keyword">double</span> a, <span class="keyword">double</span> b) {
+        <span class="keyword">return</span> a + b;
+    }
+    <span class="keyword">public int</span> <span class="function">add</span>(<span class="keyword">int</span> a, <span class="keyword">int</span> b, <span class="keyword">int</span> c) {
+        <span class="keyword">return</span> a + b + c;
+    }
+    <span class="keyword">public</span> <span class="type">String</span> <span class="function">add</span>(<span class="type">String</span> a, <span class="type">String</span> b) {
+        <span class="keyword">return</span> a + b; <span class="comment">// String concatenation</span>
+    }
+}
+
+<span class="type">Calculator</span> calc = <span class="keyword">new</span> <span class="type">Calculator</span>();
+calc.add(<span class="number">1</span>, <span class="number">2</span>);         <span class="comment">// calls int version → 3</span>
+calc.add(<span class="number">1.5</span>, <span class="number">2.5</span>);     <span class="comment">// calls double version → 4.0</span>
+calc.add(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>);      <span class="comment">// calls 3-arg version → 6</span>
+calc.add(<span class="string">"Hello"</span>, <span class="string">" World"</span>); <span class="comment">// calls String version</span>
+
+<span class="comment">// ✅ Varargs — variable-length arguments</span>
+<span class="keyword">public int</span> <span class="function">sum</span>(<span class="keyword">int</span>... numbers) {  <span class="comment">// int[] internally</span>
+    <span class="keyword">int</span> total = <span class="number">0</span>;
+    <span class="keyword">for</span> (<span class="keyword">int</span> n : numbers) total += n;
+    <span class="keyword">return</span> total;
+}
+sum(<span class="number">1</span>, <span class="number">2</span>);            <span class="comment">// 3</span>
+sum(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>);  <span class="comment">// 15</span>
+sum();                <span class="comment">// 0</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Valid overload?</th><th>Example</th><th>Why</th></tr></thead>
+            <tbody>
+              <tr><td>✅ Different param types</td><td><code>add(int, int)</code> vs <code>add(double, double)</code></td><td>Types differ</td></tr>
+              <tr><td>✅ Different param count</td><td><code>add(int, int)</code> vs <code>add(int, int, int)</code></td><td>Count differs</td></tr>
+              <tr><td>✅ Different param order</td><td><code>f(int, String)</code> vs <code>f(String, int)</code></td><td>Order differs</td></tr>
+              <tr><td>❌ Different return only</td><td><code>int f(int)</code> vs <code>double f(int)</code></td><td>Ambiguous!</td></tr>
+              <tr><td>❌ Different access only</td><td><code>public f(int)</code> vs <code>private f(int)</code></td><td>Not overloading</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 3.7 -->
+    <div class="module-section" id="m3-7">
+      <div class="module-header"><div class="module-number">3.7</div><h2 class="module-title">Records (Java 16+) — immutable data carriers, DTOs</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Concise immutable data classes</h3>
+        <p class="explain-en"><strong>Records</strong> (Java 16+) auto-generate constructor, getters, <code>equals()</code>, <code>hashCode()</code>, and <code>toString()</code>. They're <strong>immutable</strong> — fields are <code>final</code>. Perfect for DTOs, API responses, value objects. Records can have custom methods but cannot extend classes.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Records</strong> (Java 16+) automatically constructor, getters, <code>equals()</code>, <code>hashCode()</code>, aur <code>toString()</code> generate karte hain. Ye <strong>immutable</strong> hain — fields <code>final</code> hain. DTOs, API responses, value objects ke liye perfect hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — Records</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// ❌ Old way — 50+ lines of boilerplate!</span>
+<span class="keyword">public class</span> <span class="type">PointOld</span> {
+    <span class="keyword">private final int</span> x, y;
+    <span class="keyword">public</span> <span class="function">PointOld</span>(<span class="keyword">int</span> x, <span class="keyword">int</span> y) { <span class="keyword">this</span>.x = x; <span class="keyword">this</span>.y = y; }
+    <span class="keyword">public int</span> <span class="function">x</span>() { <span class="keyword">return</span> x; }
+    <span class="keyword">public int</span> <span class="function">y</span>() { <span class="keyword">return</span> y; }
+    <span class="comment">// + equals(), hashCode(), toString()... 😴</span>
+}
+
+<span class="comment">// ✅ Record — one line! (Java 16+)</span>
+<span class="keyword">public record</span> <span class="type">Point</span>(<span class="keyword">int</span> x, <span class="keyword">int</span> y) {}
+
+<span class="comment">// Auto-generates:</span>
+<span class="comment">// - Constructor: Point(int x, int y)</span>
+<span class="comment">// - Getters: x(), y()  (no "get" prefix!)</span>
+<span class="comment">// - equals(), hashCode(), toString()</span>
+
+<span class="type">Point</span> p = <span class="keyword">new</span> <span class="type">Point</span>(<span class="number">3</span>, <span class="number">4</span>);
+System.out.println(p.x());   <span class="comment">// 3 (accessor, not getX)</span>
+System.out.println(p.y());   <span class="comment">// 4</span>
+System.out.println(p);       <span class="comment">// Point[x=3, y=4]</span>
+
+<span class="comment">// Records with custom methods</span>
+<span class="keyword">public record</span> <span class="type">Rectangle</span>(<span class="keyword">double</span> width, <span class="keyword">double</span> height) {
+    <span class="comment">// Custom method</span>
+    <span class="keyword">public double</span> <span class="function">area</span>() { <span class="keyword">return</span> width * height; }
+    <span class="keyword">public double</span> <span class="function">perimeter</span>() { <span class="keyword">return</span> <span class="number">2</span> * (width + height); }
+
+    <span class="comment">// Compact constructor — validation</span>
+    <span class="keyword">public</span> <span class="function">Rectangle</span> {
+        <span class="keyword">if</span> (width <= <span class="number">0</span> || height <= <span class="number">0</span>) {
+            <span class="keyword">throw new</span> <span class="type">IllegalArgumentException</span>(<span class="string">"Dimensions must be positive"</span>);
+        }
+    }
+}
+
+<span class="comment">// Record for API response (DTO pattern)</span>
+<span class="keyword">public record</span> <span class="type">ApiResponse</span>&lt;<span class="type">T</span>&gt;(<span class="keyword">int</span> status, <span class="type">String</span> message, <span class="type">T</span> data) {}
+
+<span class="keyword">var</span> response = <span class="keyword">new</span> <span class="type">ApiResponse</span>&lt;&gt;(<span class="number">200</span>, <span class="string">"OK"</span>, <span class="type">List</span>.of(<span class="string">"a"</span>, <span class="string">"b"</span>));</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Feature</th><th>Regular Class</th><th>Record</th></tr></thead>
+            <tbody>
+              <tr><td>Boilerplate</td><td>50+ lines</td><td>1 line</td></tr>
+              <tr><td>Fields</td><td>Mutable or immutable</td><td>Always <code>final</code></td></tr>
+              <tr><td>Getters</td><td>Manual (<code>getX()</code>)</td><td>Auto (<code>x()</code>)</td></tr>
+              <tr><td>equals/hashCode</td><td>Manual</td><td>Auto (all fields)</td></tr>
+              <tr><td>toString</td><td>Manual</td><td>Auto (all fields)</td></tr>
+              <tr><td>Extends class</td><td>Yes</td><td>No (implicitly extends Record)</td></tr>
+              <tr><td>Implements interface</td><td>Yes</td><td>Yes</td></tr>
+              <tr><td>Use case</td><td>General-purpose</td><td>DTOs, value objects</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>🏭 Industry insight:</strong> Records are now the standard for DTOs in Spring Boot APIs. They replace Lombok's <code>@Data</code> for immutable data carriers. Always prefer records for simple data holders — they reduce bugs from missing <code>equals()</code>/<code>hashCode()</code>.</div>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 OOP Pillars — Quick Reference</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Pillar</th><th>What</th><th>Java Mechanism</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Encapsulation</strong></td><td>Hide internal state</td><td><code>private</code> fields + <code>public</code> getters/setters</td></tr>
+            <tr><td><strong>Abstraction</strong></td><td>Show only essentials</td><td><code>abstract</code> classes, interfaces</td></tr>
+            <tr><td><strong>Inheritance</strong></td><td>Reuse parent class</td><td><code>extends</code>, <code>super</code></td></tr>
+            <tr><td><strong>Polymorphism</strong></td><td>One interface, many forms</td><td>Method overriding, interfaces</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Java Memory Model — Stack vs Heap</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Feature</th><th>Stack</th><th>Heap</th></tr></thead>
+          <tbody>
+            <tr><td>Stores</td><td>Primitives, references, method calls</td><td>Objects, arrays</td></tr>
+            <tr><td>Lifetime</td><td>Method scope</td><td>Until garbage collected</td></tr>
+            <tr><td>Speed</td><td>Fast (LIFO)</td><td>Slower (dynamic)</td></tr>
+            <tr><td>Thread</td><td>Each thread has own stack</td><td>Shared across threads</td></tr>
+            <tr><td>Size</td><td>Small (~512KB–1MB)</td><td>Large (configurable)</td></tr>
+            <tr><td>Error</td><td><code>StackOverflowError</code></td><td><code>OutOfMemoryError</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Object Class Methods — Every Object Has These</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Method</th><th>Purpose</th><th>Override?</th></tr></thead>
+          <tbody>
+            <tr><td><code>toString()</code></td><td>String representation</td><td>✅ Always override</td></tr>
+            <tr><td><code>equals(Object)</code></td><td>Content equality</td><td>✅ Override with hashCode</td></tr>
+            <tr><td><code>hashCode()</code></td><td>Hash for collections</td><td>✅ Override with equals</td></tr>
+            <tr><td><code>getClass()</code></td><td>Runtime class info</td><td>❌ final</td></tr>
+            <tr><td><code>clone()</code></td><td>Shallow copy</td><td>⚠️ Use copy constructor</td></tr>
+            <tr><td><code>finalize()</code></td><td>Before GC (deprecated)</td><td>❌ Never use</td></tr>
+            <tr><td><code>notify()/wait()</code></td><td>Thread synchronization</td><td>❌ Use java.util.concurrent</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Class vs Record vs Enum</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Feature</th><th>class</th><th>record (16+)</th><th>enum</th></tr></thead>
+          <tbody>
+            <tr><td>Mutable</td><td>Yes</td><td>No (immutable)</td><td>No (constants)</td></tr>
+            <tr><td>Inheritance</td><td><code>extends</code></td><td>No extends</td><td>No extends</td></tr>
+            <tr><td>Interfaces</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
+            <tr><td>Constructor</td><td>Manual</td><td>Auto-generated</td><td>Private</td></tr>
+            <tr><td>Best for</td><td>General objects</td><td>DTOs, value objects</td><td>Fixed constants</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="practice-box">
+      <div class="practice-title">✏️ Practice Exercises — Part 3</div>
+      <ol>
+        <li>Create a <code>BankAccount</code> class with encapsulation: private fields, public methods, deposit/withdraw with validation.</li>
+        <li>Create a <code>Counter</code> class with a static field that tracks total instances created.</li>
+        <li>Build a <code>Student</code> class with 3 overloaded constructors using <code>this()</code> chaining.</li>
+        <li>Create a <code>MathUtils</code> utility class with all-static methods and a private constructor.</li>
+        <li>Define a <code>record Person(String name, int age)</code> and demonstrate its auto-generated methods.</li>
+        <li>Implement overloaded <code>format()</code> methods: one for ints, one for doubles, one for strings.</li>
+        <li>Create an immutable <code>Config</code> class using <code>final</code> fields and no setters. Explain why it's thread-safe.</li>
+      </ol>
+    </div>
+
+    <div class="handbook-nav">
+      <a href="part2.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Part 2: Control Flow & Arrays</div></div></a>
+      <a href="part4.html" class="nav-btn next"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Part 4: Inheritance & Polymorphism →</div></div><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+
+  </div>
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
+  <script src="../../../js/main.js"></script>
+  <script>
+    (() => {
+      document.querySelectorAll('.code-block').forEach((block) => { const pre = block.querySelector('.code-body pre'), header = block.querySelector('.code-header'); if (!pre || !header) return; let actions = header.querySelector('.code-actions'); if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); } const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'code-copy-btn'; btn.textContent = 'Copy'; btn.addEventListener('click', async () => { try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; } catch { btn.textContent = 'Failed'; } finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); } }); actions.prepend(btn); });
+      const fill = document.querySelector('.hb-progress-fill'), label = document.querySelector('.hb-progress-label');
+      if (fill && label) { const update = () => { const h = document.documentElement, d = (h.scrollHeight - h.clientHeight) || 1, p = Math.max(0, Math.min(1, h.scrollTop / d)); fill.style.width = (p*100).toFixed(0)+'%'; label.textContent = (p*100).toFixed(0)+'%'; }; document.addEventListener('scroll', update, { passive: true }); update(); }
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Part 6: Exceptions & File I/O — Java Programming Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 6: exceptions, try-catch, custom exceptions, file I/O, NIO, serialization in Java.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/handbook.css">
+</head>
+<body class="handbook-wrapper">
+  <nav class="navbar"><div class="container"><a href="../../../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../../../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
+
+  <div class="handbook-page">
+    <div class="hb-topbar"><div class="hb-topbar-inner"><div class="hb-breadcrumbs"><a href="index.html">Java Programming Handbook</a><span class="hb-muted">/</span><span>Part 6</span><span class="hb-muted">·</span><a href="#m6-1">6.1</a> <a href="#m6-2">6.2</a> <a href="#m6-3">6.3</a> <a href="#m6-4">6.4</a> <a href="#m6-5">6.5</a> <a href="#m6-6">6.6</a> <a href="#m6-7">6.7</a></div><div class="hb-progress" aria-label="Reading progress"><div class="hb-progress-track" role="progressbar"><div class="hb-progress-fill"></div></div><div class="hb-progress-label">0%</div></div></div></div>
+
+    <div class="chapter-header" data-chapter-num="06">
+      <div class="chapter-part-label">📖 Part 6 — Exceptions & File I/O</div>
+      <h1 class="chapter-title">Error <span class="gradient-text">Handling</span></h1>
+      <p class="chapter-subtitle">try-catch-finally, custom exceptions, checked vs unchecked, file I/O, NIO.2, serialization — writing robust, production-grade code.</p>
+      <div class="chapter-meta"><span>📄 Modules 6.1 – 6.7</span><span>⏱️ 70–90 min read</span><span>💻 55+ Examples</span></div>
+    </div>
+
+    <div class="hb-mini-toc"><div class="hb-mini-title">📍 Part 6 Modules</div><div class="hb-mini-links"><a href="#m6-1">6.1 try-catch</a><a href="#m6-2">6.2 Hierarchy</a><a href="#m6-3">6.3 Custom</a><a href="#m6-4">6.4 Resources</a><a href="#m6-5">6.5 File I/O</a><a href="#m6-6">6.6 NIO.2</a><a href="#m6-7">6.7 Serialize</a></div></div>
+
+    <!-- MODULE 6.1 -->
+    <div class="module-section" id="m6-1">
+      <div class="module-header"><div class="module-number">6.1</div><h2 class="module-title">try-catch-finally — handling exceptions, multi-catch</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Graceful error handling</h3>
+        <p class="explain-en">Exceptions are Java's mechanism for handling <strong>runtime errors</strong>. <code>try</code> wraps risky code, <code>catch</code> handles specific exceptions, <code>finally</code> always runs (cleanup). Java 7+ adds <strong>multi-catch</strong> (<code>catch (A | B e)</code>) to handle multiple types. Never catch <code>Exception</code> or <code>Throwable</code> in production — be specific!</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Exceptions Java ka mechanism hai <strong>runtime errors</strong> handle karne ka. <code>try</code> risky code wrap karta hai, <code>catch</code> specific exceptions handle karta hai, <code>finally</code> hamesha run hota hai (cleanup). Java 7+ me <strong>multi-catch</strong> se multiple types ek saath handle karo. Production me <code>Exception</code> ya <code>Throwable</code> kabhi catch mat karo — specific raho!</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — try-catch-finally</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Basic try-catch</span>
+<span class="keyword">try</span> {
+    <span class="keyword">int</span> result = <span class="number">10</span> / <span class="number">0</span>;  <span class="comment">// ArithmeticException!</span>
+} <span class="keyword">catch</span> (<span class="type">ArithmeticException</span> e) {
+    System.out.println(<span class="string">"Cannot divide by zero: "</span> + e.getMessage());
+}
+
+<span class="comment">// try-catch-finally</span>
+<span class="type">Connection</span> conn = <span class="keyword">null</span>;
+<span class="keyword">try</span> {
+    conn = getConnection();
+    conn.executeQuery(<span class="string">"SELECT * FROM users"</span>);
+} <span class="keyword">catch</span> (<span class="type">SQLException</span> e) {
+    System.err.println(<span class="string">"DB error: "</span> + e.getMessage());
+} <span class="keyword">finally</span> {
+    <span class="comment">// Always runs — even if exception thrown!</span>
+    <span class="keyword">if</span> (conn != <span class="keyword">null</span>) conn.close();
+}
+
+<span class="comment">// Multi-catch (Java 7+)</span>
+<span class="keyword">try</span> {
+    <span class="type">String</span> s = <span class="keyword">null</span>;
+    <span class="keyword">int</span> n = <span class="type">Integer</span>.parseInt(s);
+} <span class="keyword">catch</span> (<span class="type">NumberFormatException</span> | <span class="type">NullPointerException</span> e) {
+    System.out.println(<span class="string">"Invalid input: "</span> + e.getClass().getSimpleName());
+}
+
+<span class="comment">// Multiple catch blocks (order matters — specific first!)</span>
+<span class="keyword">try</span> {
+    <span class="keyword">int</span>[] arr = <span class="keyword">new int</span>[<span class="number">3</span>];
+    arr[<span class="number">5</span>] = <span class="number">10</span>;
+} <span class="keyword">catch</span> (<span class="type">ArrayIndexOutOfBoundsException</span> e) {
+    System.out.println(<span class="string">"Index out of bounds"</span>);
+} <span class="keyword">catch</span> (<span class="type">RuntimeException</span> e) {
+    System.out.println(<span class="string">"Runtime error"</span>);
+} <span class="keyword">catch</span> (<span class="type">Exception</span> e) {
+    System.out.println(<span class="string">"General error"</span>); <span class="comment">// Broadest last!</span>
+}
+
+<span class="comment">// throw — manually throw an exception</span>
+<span class="keyword">public void</span> <span class="function">setAge</span>(<span class="keyword">int</span> age) {
+    <span class="keyword">if</span> (age < <span class="number">0</span>) {
+        <span class="keyword">throw new</span> <span class="type">IllegalArgumentException</span>(<span class="string">"Age cannot be negative: "</span> + age);
+    }
+    <span class="keyword">this</span>.age = age;
+}
+
+<span class="comment">// throws — declare checked exception</span>
+<span class="keyword">public void</span> <span class="function">readFile</span>(<span class="type">String</span> path) <span class="keyword">throws</span> <span class="type">IOException</span> {
+    <span class="type">Files</span>.readString(<span class="type">Path</span>.of(path));
+}</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Keyword</th><th>Purpose</th><th>Required?</th></tr></thead>
+            <tbody>
+              <tr><td><code>try</code></td><td>Wrap risky code</td><td>✅ Always</td></tr>
+              <tr><td><code>catch</code></td><td>Handle specific exception</td><td>✅ At least one catch or finally</td></tr>
+              <tr><td><code>finally</code></td><td>Always runs (cleanup)</td><td>Optional</td></tr>
+              <tr><td><code>throw</code></td><td>Throw an exception</td><td>Manual trigger</td></tr>
+              <tr><td><code>throws</code></td><td>Declare in method signature</td><td>For checked exceptions</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 6.2 -->
+    <div class="module-section" id="m6-2">
+      <div class="module-header"><div class="module-number">6.2</div><h2 class="module-title">Exception hierarchy — checked vs unchecked, Error vs Exception</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Understanding the exception tree</h3>
+        <p class="explain-en"><strong>Checked exceptions</strong> (extend <code>Exception</code>) must be handled or declared — compiler enforces it. <strong>Unchecked exceptions</strong> (extend <code>RuntimeException</code>) are programming bugs — no enforcement. <strong>Errors</strong> (extend <code>Error</code>) are JVM failures — never catch. This is Java's most distinctive feature vs other languages.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Checked exceptions</strong> (<code>Exception</code> extend karte hain) handle ya declare karna zaroori hai — compiler enforce karta hai. <strong>Unchecked exceptions</strong> (<code>RuntimeException</code> extend) programming bugs hain — enforcement nahi. <strong>Errors</strong> (<code>Error</code> extend) JVM failures hain — kabhi catch mat karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — Exception Hierarchy</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Exception hierarchy:</span>
+<span class="comment">// Throwable</span>
+<span class="comment">//   ├── Error (DON'T catch!)</span>
+<span class="comment">//   │   ├── OutOfMemoryError</span>
+<span class="comment">//   │   ├── StackOverflowError</span>
+<span class="comment">//   │   └── VirtualMachineError</span>
+<span class="comment">//   └── Exception (CATCH these)</span>
+<span class="comment">//       ├── IOException (checked)</span>
+<span class="comment">//       ├── SQLException (checked)</span>
+<span class="comment">//       ├── ClassNotFoundException (checked)</span>
+<span class="comment">//       └── RuntimeException (unchecked)</span>
+<span class="comment">//           ├── NullPointerException</span>
+<span class="comment">//           ├── IllegalArgumentException</span>
+<span class="comment">//           ├── IndexOutOfBoundsException</span>
+<span class="comment">//           ├── ClassCastException</span>
+<span class="comment">//           └── ArithmeticException</span>
+
+<span class="comment">// ✅ Checked — MUST handle or declare</span>
+<span class="keyword">public</span> <span class="type">String</span> <span class="function">readFile</span>() <span class="keyword">throws</span> <span class="type">IOException</span> { <span class="comment">// Must declare!</span>
+    <span class="keyword">return</span> <span class="type">Files</span>.readString(<span class="type">Path</span>.of(<span class="string">"data.txt"</span>));
+}
+
+<span class="comment">// Calling code MUST handle it</span>
+<span class="keyword">try</span> {
+    <span class="type">String</span> data = readFile();
+} <span class="keyword">catch</span> (<span class="type">IOException</span> e) {
+    e.printStackTrace();
+}
+
+<span class="comment">// ✅ Unchecked — no enforcement, but should fix</span>
+<span class="type">String</span> name = <span class="keyword">null</span>;
+<span class="comment">// name.length(); // NullPointerException — fix your code!</span>
+
+<span class="comment">// ❌ NEVER catch Error</span>
+<span class="comment">// try { ... } catch (OutOfMemoryError e) { } // WRONG!</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Type</th><th>Extends</th><th>Compiler enforced?</th><th>Examples</th><th>Action</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Checked</strong></td><td><code>Exception</code></td><td>✅ Yes</td><td>IOException, SQLException</td><td>Handle or declare</td></tr>
+              <tr><td><strong>Unchecked</strong></td><td><code>RuntimeException</code></td><td>❌ No</td><td>NullPointer, IllegalArgument</td><td>Fix the bug</td></tr>
+              <tr><td><strong>Error</strong></td><td><code>Error</code></td><td>❌ No</td><td>OutOfMemory, StackOverflow</td><td>Never catch</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 6.3 -->
+    <div class="module-section" id="m6-3">
+      <div class="module-header"><div class="module-number">6.3</div><h2 class="module-title">Custom exceptions — creating domain-specific exceptions</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Application-specific errors</h3>
+        <p class="explain-en">Create <strong>custom exceptions</strong> by extending <code>Exception</code> (checked) or <code>RuntimeException</code> (unchecked). Add meaningful fields (error codes, context). Use exception chaining (<code>cause</code>) to wrap lower-level exceptions. Industry standard: create a base exception + specific sub-exceptions per domain.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Custom exceptions</strong> banao <code>Exception</code> (checked) ya <code>RuntimeException</code> (unchecked) extend karke. Meaningful fields add karo (error codes, context). Exception chaining (<code>cause</code>) se lower-level exceptions wrap karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — Custom Exceptions</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Custom checked exception</span>
+<span class="keyword">public class</span> <span class="type">InsufficientFundsException</span> <span class="keyword">extends</span> <span class="type">Exception</span> {
+    <span class="keyword">private final double</span> amount;
+    <span class="keyword">private final double</span> balance;
+
+    <span class="keyword">public</span> <span class="function">InsufficientFundsException</span>(<span class="keyword">double</span> amount, <span class="keyword">double</span> balance) {
+        <span class="keyword">super</span>(<span class="type">String</span>.format(
+            <span class="string">"Cannot withdraw %.2f — balance is %.2f"</span>, amount, balance
+        ));
+        <span class="keyword">this</span>.amount = amount;
+        <span class="keyword">this</span>.balance = balance;
+    }
+
+    <span class="keyword">public double</span> <span class="function">getAmount</span>() { <span class="keyword">return</span> amount; }
+    <span class="keyword">public double</span> <span class="function">getBalance</span>() { <span class="keyword">return</span> balance; }
+    <span class="keyword">public double</span> <span class="function">getShortfall</span>() { <span class="keyword">return</span> amount - balance; }
+}
+
+<span class="comment">// Custom unchecked exception</span>
+<span class="keyword">public class</span> <span class="type">InvalidEmailException</span> <span class="keyword">extends</span> <span class="type">RuntimeException</span> {
+    <span class="keyword">public</span> <span class="function">InvalidEmailException</span>(<span class="type">String</span> email) {
+        <span class="keyword">super</span>(<span class="string">"Invalid email format: "</span> + email);
+    }
+}
+
+<span class="comment">// Usage</span>
+<span class="keyword">public void</span> <span class="function">withdraw</span>(<span class="keyword">double</span> amount) <span class="keyword">throws</span> <span class="type">InsufficientFundsException</span> {
+    <span class="keyword">if</span> (amount > balance) {
+        <span class="keyword">throw new</span> <span class="type">InsufficientFundsException</span>(amount, balance);
+    }
+    balance -= amount;
+}
+
+<span class="comment">// Exception chaining — wrap cause</span>
+<span class="keyword">public</span> <span class="type">User</span> <span class="function">loadUser</span>(<span class="keyword">int</span> id) {
+    <span class="keyword">try</span> {
+        <span class="keyword">return</span> database.findById(id);
+    } <span class="keyword">catch</span> (<span class="type">SQLException</span> e) {
+        <span class="keyword">throw new</span> <span class="type">UserNotFoundException</span>(<span class="string">"User "</span> + id + <span class="string">" not found"</span>, e);
+        <span class="comment">// Original cause preserved for debugging!</span>
+    }
+}</pre></div>
+        </div>
+        <div class="callout callout-tip"><strong>🏭 Industry pattern:</strong> Create a <code>BaseAppException</code> with error codes, then extend for specific cases: <code>UserNotFoundException</code>, <code>PaymentFailedException</code>, etc. Always include the original cause in exception chaining.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 6.4 -->
+    <div class="module-section" id="m6-4">
+      <div class="module-header"><div class="module-number">6.4</div><h2 class="module-title">try-with-resources — AutoCloseable, resource management</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Automatic cleanup</h3>
+        <p class="explain-en"><strong>try-with-resources</strong> (Java 7+) automatically closes resources implementing <code>AutoCloseable</code>. No need for <code>finally</code> blocks. Resources are closed in <strong>reverse order</strong>. This eliminates resource leaks — the #1 production bug in old Java code. Use for files, streams, connections, sockets.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>try-with-resources</strong> (Java 7+) automatically <code>AutoCloseable</code> resources close karta hai. <code>finally</code> blocks ki zaroorat nahi. Resources <strong>reverse order</strong> me close hote hain. Files, streams, connections, sockets ke liye use karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — try-with-resources</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// ❌ Old way — verbose, error-prone</span>
+<span class="type">BufferedReader</span> reader = <span class="keyword">null</span>;
+<span class="keyword">try</span> {
+    reader = <span class="keyword">new</span> <span class="type">BufferedReader</span>(<span class="keyword">new</span> <span class="type">FileReader</span>(<span class="string">"data.txt"</span>));
+    <span class="type">String</span> line = reader.readLine();
+} <span class="keyword">catch</span> (<span class="type">IOException</span> e) {
+    e.printStackTrace();
+} <span class="keyword">finally</span> {
+    <span class="keyword">if</span> (reader != <span class="keyword">null</span>) {
+        <span class="keyword">try</span> { reader.close(); } <span class="keyword">catch</span> (<span class="type">IOException</span> e) { <span class="comment">/* 😫 */</span> }
+    }
+}
+
+<span class="comment">// ✅ try-with-resources — clean, safe!</span>
+<span class="keyword">try</span> (<span class="type">BufferedReader</span> reader = <span class="keyword">new</span> <span class="type">BufferedReader</span>(<span class="keyword">new</span> <span class="type">FileReader</span>(<span class="string">"data.txt"</span>))) {
+    <span class="type">String</span> line;
+    <span class="keyword">while</span> ((line = reader.readLine()) != <span class="keyword">null</span>) {
+        System.out.println(line);
+    }
+} <span class="comment">// reader.close() called automatically!</span>
+
+<span class="comment">// Multiple resources</span>
+<span class="keyword">try</span> (
+    <span class="type">FileReader</span> fr = <span class="keyword">new</span> <span class="type">FileReader</span>(<span class="string">"input.txt"</span>);
+    <span class="type">FileWriter</span> fw = <span class="keyword">new</span> <span class="type">FileWriter</span>(<span class="string">"output.txt"</span>)
+) {
+    <span class="keyword">int</span> ch;
+    <span class="keyword">while</span> ((ch = fr.read()) != -<span class="number">1</span>) fw.write(ch);
+} <span class="comment">// Both closed in reverse order (fw first, then fr)</span>
+
+<span class="comment">// Custom AutoCloseable</span>
+<span class="keyword">public class</span> <span class="type">DatabaseConnection</span> <span class="keyword">implements</span> <span class="type">AutoCloseable</span> {
+    <span class="keyword">public</span> <span class="function">DatabaseConnection</span>() {
+        System.out.println(<span class="string">"Connected to DB"</span>);
+    }
+    <span class="keyword">public void</span> <span class="function">query</span>(<span class="type">String</span> sql) { <span class="comment">/* ... */</span> }
+
+    @Override
+    <span class="keyword">public void</span> <span class="function">close</span>() {
+        System.out.println(<span class="string">"Disconnected from DB"</span>);
+    }
+}
+
+<span class="keyword">try</span> (<span class="keyword">var</span> db = <span class="keyword">new</span> <span class="type">DatabaseConnection</span>()) {
+    db.query(<span class="string">"SELECT * FROM users"</span>);
+} <span class="comment">// Auto-disconnects!</span></pre></div>
+        </div>
+        <div class="callout callout-warning"><strong>Rule:</strong> Every resource that needs closing (files, streams, connections, sockets) should use try-with-resources. If you see <code>finally { resource.close(); }</code> in your code, refactor to try-with-resources.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 6.5 -->
+    <div class="module-section" id="m6-5">
+      <div class="module-header"><div class="module-number">6.5</div><h2 class="module-title">File I/O — reading, writing, BufferedReader, PrintWriter</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Reading and writing files</h3>
+        <p class="explain-en">Java has multiple I/O APIs: legacy <code>java.io</code> (streams, readers) and modern <code>java.nio.file</code> (Files, Path). <strong>Use <code>Files</code> class</strong> for simple operations — it's cleaner and handles encoding. <code>BufferedReader</code>/<code>BufferedWriter</code> for line-by-line. <code>Scanner</code> for formatted input.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Java me multiple I/O APIs hain: legacy <code>java.io</code> aur modern <code>java.nio.file</code>. Simple operations ke liye <strong><code>Files</code> class</strong> use karo — cleaner hai aur encoding handle karta hai. <code>BufferedReader</code>/<code>BufferedWriter</code> line-by-line ke liye.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — File I/O</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">import</span> java.nio.file.*;
+<span class="keyword">import</span> java.io.*;
+
+<span class="comment">// ✅ Modern way — Files class (Java 11+)</span>
+<span class="comment">// Read entire file as string</span>
+<span class="type">String</span> content = <span class="type">Files</span>.readString(<span class="type">Path</span>.of(<span class="string">"data.txt"</span>));
+
+<span class="comment">// Read all lines as List</span>
+<span class="type">List</span>&lt;<span class="type">String</span>&gt; lines = <span class="type">Files</span>.readAllLines(<span class="type">Path</span>.of(<span class="string">"data.txt"</span>));
+
+<span class="comment">// Write string to file</span>
+<span class="type">Files</span>.writeString(<span class="type">Path</span>.of(<span class="string">"output.txt"</span>), <span class="string">"Hello, World!\n"</span>);
+
+<span class="comment">// Write lines</span>
+<span class="type">Files</span>.write(<span class="type">Path</span>.of(<span class="string">"output.txt"</span>), <span class="type">List</span>.of(<span class="string">"Line 1"</span>, <span class="string">"Line 2"</span>));
+
+<span class="comment">// Append to file</span>
+<span class="type">Files</span>.writeString(<span class="type">Path</span>.of(<span class="string">"log.txt"</span>), <span class="string">"New entry\n"</span>,
+    <span class="type">StandardOpenOption</span>.APPEND, <span class="type">StandardOpenOption</span>.CREATE);
+
+<span class="comment">// BufferedReader — line by line (large files)</span>
+<span class="keyword">try</span> (<span class="type">BufferedReader</span> br = <span class="type">Files</span>.newBufferedReader(<span class="type">Path</span>.of(<span class="string">"big.txt"</span>))) {
+    <span class="type">String</span> line;
+    <span class="keyword">while</span> ((line = br.readLine()) != <span class="keyword">null</span>) {
+        System.out.println(line);
+    }
+}
+
+<span class="comment">// PrintWriter — formatted writing</span>
+<span class="keyword">try</span> (<span class="type">PrintWriter</span> pw = <span class="keyword">new</span> <span class="type">PrintWriter</span>(<span class="keyword">new</span> <span class="type">FileWriter</span>(<span class="string">"report.txt"</span>))) {
+    pw.println(<span class="string">"=== Report ==="</span>);
+    pw.printf(<span class="string">"Name: %s, Score: %d%n"</span>, <span class="string">"Alice"</span>, <span class="number">95</span>);
+    pw.printf(<span class="string">"Name: %s, Score: %d%n"</span>, <span class="string">"Bob"</span>, <span class="number">87</span>);
+}
+
+<span class="comment">// Stream lines (memory efficient for huge files)</span>
+<span class="keyword">try</span> (<span class="type">Stream</span>&lt;<span class="type">String</span>&gt; stream = <span class="type">Files</span>.lines(<span class="type">Path</span>.of(<span class="string">"huge.txt"</span>))) {
+    stream.filter(l -> l.contains(<span class="string">"ERROR"</span>))
+          .forEach(System.out::println);
+}</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Method</th><th>Use case</th><th>Memory</th></tr></thead>
+            <tbody>
+              <tr><td><code>Files.readString()</code></td><td>Small files (< 10MB)</td><td>Entire file in memory</td></tr>
+              <tr><td><code>Files.readAllLines()</code></td><td>Small files, need lines</td><td>All lines in memory</td></tr>
+              <tr><td><code>BufferedReader</code></td><td>Large files, line-by-line</td><td>One line at a time</td></tr>
+              <tr><td><code>Files.lines()</code></td><td>Huge files + Stream</td><td>Lazy, memory-efficient</td></tr>
+              <tr><td><code>Files.writeString()</code></td><td>Write/overwrite</td><td>Simple string</td></tr>
+              <tr><td><code>PrintWriter</code></td><td>Formatted output</td><td>Buffered writing</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 6.6 -->
+    <div class="module-section" id="m6-6">
+      <div class="module-header"><div class="module-number">6.6</div><h2 class="module-title">NIO.2 — Path, Files, directory walking, file attributes</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Modern file system operations</h3>
+        <p class="explain-en"><code>java.nio.file</code> (NIO.2, Java 7+) provides <code>Path</code> for file paths and <code>Files</code> for operations. Supports creating, copying, moving, deleting files/dirs. <code>Files.walk()</code> recursively traverses directories. <code>Files.find()</code> searches with predicates. <code>WatchService</code> monitors file changes.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>java.nio.file</code> (NIO.2, Java 7+) me <code>Path</code> file paths ke liye aur <code>Files</code> operations ke liye hai. Files/dirs create, copy, move, delete support karta hai. <code>Files.walk()</code> recursively directories traverse karta hai. <code>WatchService</code> file changes monitor karta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — NIO.2 Path & Files</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">import</span> java.nio.file.*;
+
+<span class="comment">// Path — file system paths</span>
+<span class="type">Path</span> p = <span class="type">Path</span>.of(<span class="string">"src"</span>, <span class="string">"main"</span>, <span class="string">"data.txt"</span>); <span class="comment">// src/main/data.txt</span>
+<span class="type">Path</span> abs = p.toAbsolutePath();
+p.getFileName();   <span class="comment">// data.txt</span>
+p.getParent();     <span class="comment">// src/main</span>
+p.getNameCount();  <span class="comment">// 3</span>
+p.resolve(<span class="string">"sub"</span>);  <span class="comment">// src/main/data.txt/sub</span>
+
+<span class="comment">// File operations</span>
+<span class="type">Files</span>.exists(p);
+<span class="type">Files</span>.isDirectory(p);
+<span class="type">Files</span>.isRegularFile(p);
+<span class="type">Files</span>.size(p);        <span class="comment">// bytes</span>
+
+<span class="comment">// Create</span>
+<span class="type">Files</span>.createFile(<span class="type">Path</span>.of(<span class="string">"new.txt"</span>));
+<span class="type">Files</span>.createDirectory(<span class="type">Path</span>.of(<span class="string">"newDir"</span>));
+<span class="type">Files</span>.createDirectories(<span class="type">Path</span>.of(<span class="string">"a/b/c"</span>)); <span class="comment">// Creates parents</span>
+
+<span class="comment">// Copy, Move, Delete</span>
+<span class="type">Files</span>.copy(source, target, <span class="type">StandardCopyOption</span>.REPLACE_EXISTING);
+<span class="type">Files</span>.move(source, target, <span class="type">StandardCopyOption</span>.ATOMIC_MOVE);
+<span class="type">Files</span>.delete(p);            <span class="comment">// Throws if not exists</span>
+<span class="type">Files</span>.deleteIfExists(p);     <span class="comment">// Safe</span>
+
+<span class="comment">// Walk directory tree</span>
+<span class="keyword">try</span> (<span class="type">Stream</span>&lt;<span class="type">Path</span>&gt; walk = <span class="type">Files</span>.walk(<span class="type">Path</span>.of(<span class="string">"src"</span>))) {
+    walk.filter(<span class="type">Files</span>::isRegularFile)
+        .filter(f -> f.toString().endsWith(<span class="string">".java"</span>))
+        .forEach(System.out::println);
+}
+
+<span class="comment">// List directory contents</span>
+<span class="keyword">try</span> (<span class="type">Stream</span>&lt;<span class="type">Path</span>&gt; list = <span class="type">Files</span>.list(<span class="type">Path</span>.of(<span class="string">"."</span>))) {
+    list.forEach(System.out::println);
+}
+
+<span class="comment">// File attributes</span>
+<span class="type">BasicFileAttributes</span> attrs = <span class="type">Files</span>.readAttributes(p, <span class="type">BasicFileAttributes</span>.class);
+attrs.creationTime();
+attrs.lastModifiedTime();
+attrs.size();</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Files Method</th><th>Purpose</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td><code>Files.exists()</code></td><td>Check existence</td><td>Returns boolean</td></tr>
+              <tr><td><code>Files.copy()</code></td><td>Copy file</td><td>Use REPLACE_EXISTING</td></tr>
+              <tr><td><code>Files.move()</code></td><td>Move/rename</td><td>ATOMIC_MOVE for safety</td></tr>
+              <tr><td><code>Files.delete()</code></td><td>Delete file</td><td>Throws if missing</td></tr>
+              <tr><td><code>Files.walk()</code></td><td>Recursive traversal</td><td>Returns Stream&lt;Path&gt;</td></tr>
+              <tr><td><code>Files.list()</code></td><td>Directory contents</td><td>Non-recursive</td></tr>
+              <tr><td><code>Files.find()</code></td><td>Search with filter</td><td>BiPredicate matcher</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 6.7 -->
+    <div class="module-section" id="m6-7">
+      <div class="module-header"><div class="module-number">6.7</div><h2 class="module-title">Serialization — ObjectOutputStream, JSON, best practices</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Persisting objects</h3>
+        <p class="explain-en"><strong>Java serialization</strong> converts objects to bytes (<code>Serializable</code> interface). <strong>Avoid it in production</strong> — it's insecure and brittle. Use <strong>JSON</strong> (Jackson/Gson) instead. <code>transient</code> fields are skipped during serialization. <code>serialVersionUID</code> ensures version compatibility.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Java serialization</strong> objects ko bytes me convert karta hai (<code>Serializable</code> interface). <strong>Production me avoid karo</strong> — insecure aur brittle hai. <strong>JSON</strong> (Jackson/Gson) use karo. <code>transient</code> fields serialization me skip hote hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — Serialization</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Java Serialization (legacy — avoid in new code!)</span>
+<span class="keyword">public class</span> <span class="type">User</span> <span class="keyword">implements</span> <span class="type">Serializable</span> {
+    <span class="keyword">private static final long</span> serialVersionUID = <span class="number">1L</span>;
+    <span class="keyword">private</span> <span class="type">String</span> name;
+    <span class="keyword">private int</span> age;
+    <span class="keyword">private transient</span> <span class="type">String</span> password; <span class="comment">// NOT serialized!</span>
+}
+
+<span class="comment">// Serialize (write)</span>
+<span class="keyword">try</span> (<span class="type">ObjectOutputStream</span> oos = <span class="keyword">new</span> <span class="type">ObjectOutputStream</span>(
+        <span class="keyword">new</span> <span class="type">FileOutputStream</span>(<span class="string">"user.dat"</span>))) {
+    oos.writeObject(<span class="keyword">new</span> <span class="type">User</span>(<span class="string">"Alice"</span>, <span class="number">25</span>));
+}
+
+<span class="comment">// Deserialize (read)</span>
+<span class="keyword">try</span> (<span class="type">ObjectInputStream</span> ois = <span class="keyword">new</span> <span class="type">ObjectInputStream</span>(
+        <span class="keyword">new</span> <span class="type">FileInputStream</span>(<span class="string">"user.dat"</span>))) {
+    <span class="type">User</span> user = (<span class="type">User</span>) ois.readObject();
+}
+
+<span class="comment">// ✅ Modern approach — JSON with Jackson</span>
+<span class="comment">// ObjectMapper mapper = new ObjectMapper();</span>
+<span class="comment">// String json = mapper.writeValueAsString(user);</span>
+<span class="comment">// User fromJson = mapper.readValue(json, User.class);</span>
+
+<span class="comment">// ✅ Simple CSV writing (no library needed)</span>
+<span class="keyword">try</span> (<span class="type">PrintWriter</span> pw = <span class="keyword">new</span> <span class="type">PrintWriter</span>(<span class="string">"data.csv"</span>)) {
+    pw.println(<span class="string">"Name,Age,Score"</span>);
+    pw.println(<span class="string">"Alice,20,95"</span>);
+    pw.println(<span class="string">"Bob,21,87"</span>);
+}</pre></div>
+        </div>
+        <div class="callout callout-warning"><strong>⚠️ Security warning:</strong> Java's built-in serialization (<code>ObjectInputStream</code>) is a known attack vector. Oracle recommends avoiding it. Use JSON (Jackson, Gson) or Protocol Buffers for data exchange in modern applications.</div>
+      </div>
+    </div>
+
+    <div class="concept-block">
+      <h3 class="concept-heading">Data safety checklist (files, parsing, exceptions)</h3>
+      <p class="explain-en">Part 6 topics directly impact reliability. Use this checklist before shipping any feature that reads files, parses inputs, or handles external system failures.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>File handling aur exception handling production stability ka base hai. Deploy se pehle data-safety checklist verify karo.</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Area</th><th>Baseline rule</th><th>Check</th></tr></thead>
+          <tbody>
+            <tr><td>Input parsing</td><td>Reject invalid formats early, fail fast</td><td>Validation tests</td></tr>
+            <tr><td>File encoding</td><td>Use explicit UTF-8, avoid default charset reliance</td><td>Cross-platform test run</td></tr>
+            <tr><td>Resource handling</td><td>All I/O resources in try-with-resources</td><td>Static scan/code review</td></tr>
+            <tr><td>Exception scope</td><td>Catch specific exceptions only</td><td>No broad catch in critical code</td></tr>
+            <tr><td>Logging</td><td>Log context + error code, avoid sensitive data in logs</td><td>Log audit</td></tr>
+            <tr><td>Fallbacks</td><td>Safe defaults or explicit failure path</td><td>Negative path tests</td></tr>
+            <tr><td>Serialization</td><td>Prefer JSON formats over Java native serialization</td><td>Payload compatibility checks</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="concept-block">
+      <h3 class="concept-heading">Error-handling release workflow (service-grade)</h3>
+      <p class="explain-en">Treat error handling as a release gate. A service is not production-ready until failure paths are validated.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Error handling ko release gate ki tarah treat karo. Jab tak failure paths test nahi hote, deploy mat karo.</div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">💻 Exception/file readiness workflow</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+        <div class="code-body"><pre><span class="comment"># 1) Run tests for exception and I/O paths</span>
+mvn -q -Dtest='**/*Exception*Test,**/*File*Test' test
+
+<span class="comment"># 2) Full verify (unit + integration)</span>
+mvn -q verify
+
+<span class="comment"># 3) Static checks + dependency scan</span>
+mvn -q spotbugs:check
+mvn org.owasp:dependency-check-maven:check
+
+<span class="comment"># 4) Staging smoke with invalid/missing file scenarios</span>
+curl -fsS https://staging.example.com/health
+curl -s https://staging.example.com/import?file=missing.csv
+
+<span class="comment"># 5) Deploy + monitor error budget</span>
+kubectl rollout status deployment/java-app
+curl -fsS https://api.example.com/actuator/health</pre></div>
+      </div>
+    </div>
+
+    <div class="concept-block">
+      <h3 class="concept-heading">Part 6 quality rubric (interview/client readiness)</h3>
+      <p class="explain-en">Use this rubric to evaluate robustness of your exception and I/O implementation.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Is rubric se aap evaluate kar sakte ho ki aapka exception + file I/O code real-world ready hai ya nahi.</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Dimension</th><th>Strong (ready)</th><th>Weak (needs work)</th></tr></thead>
+          <tbody>
+            <tr><td>Exception design</td><td>Specific exceptions, clear error contracts</td><td>Generic catch-all blocks</td></tr>
+            <tr><td>I/O safety</td><td>No resource leaks, explicit charset handling</td><td>Implicit defaults, manual close logic</td></tr>
+            <tr><td>Observability</td><td>Structured logs with traceable context</td><td>printStackTrace-only patterns</td></tr>
+            <tr><td>Resilience</td><td>Validated fallback paths for failure cases</td><td>Crash-only behavior</td></tr>
+            <tr><td>Security</td><td>No sensitive data leaks in errors/logs</td><td>Raw exception dumps exposed</td></tr>
+            <tr><td>Testing</td><td>Failure paths covered by automated tests</td><td>Happy-path-only tests</td></tr>
+            <tr><td>Maintainability</td><td>Consistent exception hierarchy and docs</td><td>Ad-hoc patterns per class</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Common Exceptions — Quick Reference</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Exception</th><th>Type</th><th>Cause</th><th>Fix</th></tr></thead>
+          <tbody>
+            <tr><td><code>NullPointerException</code></td><td>Unchecked</td><td>Calling method on null</td><td>Null check or Optional</td></tr>
+            <tr><td><code>ArrayIndexOutOfBoundsException</code></td><td>Unchecked</td><td>Invalid array index</td><td>Check bounds</td></tr>
+            <tr><td><code>ClassCastException</code></td><td>Unchecked</td><td>Invalid type cast</td><td>instanceof check</td></tr>
+            <tr><td><code>IllegalArgumentException</code></td><td>Unchecked</td><td>Bad method argument</td><td>Validate inputs</td></tr>
+            <tr><td><code>NumberFormatException</code></td><td>Unchecked</td><td>Invalid number string</td><td>Try-catch parse</td></tr>
+            <tr><td><code>StackOverflowError</code></td><td>Error</td><td>Infinite recursion</td><td>Fix base case</td></tr>
+            <tr><td><code>IOException</code></td><td>Checked</td><td>I/O failure</td><td>Handle or declare</td></tr>
+            <tr><td><code>FileNotFoundException</code></td><td>Checked</td><td>File doesn't exist</td><td>Check path</td></tr>
+            <tr><td><code>SQLException</code></td><td>Checked</td><td>Database error</td><td>Handle + log</td></tr>
+            <tr><td><code>ConcurrentModificationException</code></td><td>Unchecked</td><td>Modify during iteration</td><td>Use Iterator.remove()</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Exception Best Practices</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>✅ Do</th><th>❌ Don't</th></tr></thead>
+          <tbody>
+            <tr><td>Catch specific exceptions</td><td>Catch Exception/Throwable</td></tr>
+            <tr><td>Use try-with-resources</td><td>Manual finally close</td></tr>
+            <tr><td>Include meaningful messages</td><td>Empty catch blocks</td></tr>
+            <tr><td>Use exception chaining (cause)</td><td>Swallow exceptions silently</td></tr>
+            <tr><td>Prefer unchecked for programming errors</td><td>Force callers to handle bugs</td></tr>
+            <tr><td>Log exceptions properly</td><td>Print stack trace in production</td></tr>
+            <tr><td>Use Optional for nullable returns</td><td>Return null and hope</td></tr>
+            <tr><td>Fail fast with validation</td><td>Catch late, deep in code</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 java.nio.file.Files — Complete Method Reference</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Method</th><th>Purpose</th><th>Returns</th></tr></thead>
+          <tbody>
+            <tr><td><code>readString(Path)</code></td><td>Read file as String</td><td>String (Java 11+)</td></tr>
+            <tr><td><code>readAllLines(Path)</code></td><td>Read all lines</td><td>List&lt;String&gt;</td></tr>
+            <tr><td><code>readAllBytes(Path)</code></td><td>Read raw bytes</td><td>byte[]</td></tr>
+            <tr><td><code>writeString(Path, str)</code></td><td>Write string</td><td>Path (Java 11+)</td></tr>
+            <tr><td><code>write(Path, lines)</code></td><td>Write lines</td><td>Path</td></tr>
+            <tr><td><code>lines(Path)</code></td><td>Lazy line stream</td><td>Stream&lt;String&gt;</td></tr>
+            <tr><td><code>walk(Path)</code></td><td>Recursive tree</td><td>Stream&lt;Path&gt;</td></tr>
+            <tr><td><code>list(Path)</code></td><td>Directory listing</td><td>Stream&lt;Path&gt;</td></tr>
+            <tr><td><code>copy(src, dst)</code></td><td>Copy file</td><td>Path</td></tr>
+            <tr><td><code>move(src, dst)</code></td><td>Move/rename</td><td>Path</td></tr>
+            <tr><td><code>createDirectories()</code></td><td>Create dir + parents</td><td>Path</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="callout callout-tip"><strong>🏭 Industry insight:</strong> In Spring Boot apps, exceptions are handled globally with <code>@ControllerAdvice</code> + <code>@ExceptionHandler</code>. Custom exceptions map to HTTP status codes (404, 400, 500). File I/O uses <code>Files</code> class or cloud storage SDKs (AWS S3, GCS). Never use Java serialization for APIs — always JSON.</div>
+
+    <div class="practice-box">
+      <div class="practice-title">✏️ Practice Exercises — Part 6</div>
+      <ol>
+        <li>Write a method that reads a file and counts the number of words, lines, and characters.</li>
+        <li>Create custom <code>InsufficientFundsException</code> and <code>AccountNotFoundException</code> for a banking app.</li>
+        <li>Implement try-with-resources with a custom <code>AutoCloseable</code> class that logs open/close.</li>
+        <li>Write a program that copies a file using <code>Files.copy()</code> with error handling for all edge cases.</li>
+        <li>Use <code>Files.walk()</code> to find all <code>.java</code> files in a directory tree and print their sizes.</li>
+        <li>Build a CSV reader that parses a file into a <code>List&lt;String[]&gt;</code> with proper exception handling.</li>
+        <li>Create a simple log file writer that appends timestamped entries using <code>Files.writeString()</code>.</li>
+      </ol>
+    </div>
+
+    <div class="handbook-nav">
+      <a href="part5.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Part 5: Collections & Generics</div></div></a>
+      <a href="part7.html" class="nav-btn next"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Part 7: Functional Java & Streams →</div></div><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+
+  </div>
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
+  <script src="../../../js/main.js"></script>
+  <script>
+    (() => {
+      document.querySelectorAll('.code-block').forEach((block) => { const pre = block.querySelector('.code-body pre'), header = block.querySelector('.code-header'); if (!pre || !header) return; let actions = header.querySelector('.code-actions'); if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); } const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'code-copy-btn'; btn.textContent = 'Copy'; btn.addEventListener('click', async () => { try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; } catch { btn.textContent = 'Failed'; } finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); } }); actions.prepend(btn); });
+      const fill = document.querySelector('.hb-progress-fill'), label = document.querySelector('.hb-progress-label');
+      if (fill && label) { const update = () => { const h = document.documentElement, d = (h.scrollHeight - h.clientHeight) || 1, p = Math.max(0, Math.min(1, h.scrollTop / d)); fill.style.width = (p*100).toFixed(0)+'%'; label.textContent = (p*100).toFixed(0)+'%'; }; document.addEventListener('scroll', update, { passive: true }); update(); }
+    })();
+  </script>
+</body>
+</html>

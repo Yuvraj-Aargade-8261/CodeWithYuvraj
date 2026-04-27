@@ -24,6 +24,25 @@
 
     <div class="hb-mini-toc"><div class="hb-mini-title">📍 Part 5 Modules</div><div class="hb-mini-links"><a href="#m5-1">5.1 Function</a><a href="#m5-2">5.2 Class</a><a href="#m5-3">5.3 Specialize</a><a href="#m5-4">5.4 Variadic</a><a href="#m5-5">5.5 constexpr</a><a href="#m5-6">5.6 Concepts</a><a href="#m5-7">5.7 SFINAE</a></div></div>
 
+    <div class="quick-ref">
+      <div class="qr-title">🚀 Advanced Lens — Part 5</div>
+      <p class="explain-en">Templates power zero-cost abstraction, but production quality depends on compile-time constraints and diagnostics. Concepts, careful specialization, and measurable build-performance discipline keep generic C++ code fast and maintainable.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Templates C++ ki sabse powerful capability hain, lekin real projects me concepts, clean specialization, aur compile-time discipline zaruri hai taaki code fast bhi rahe aur maintainable bhi.</div>
+    </div>
+
+    <div class="concept-block">
+      <h3>Template quality checklist (Part 5)</h3>
+      <table>
+        <thead><tr><th>Focus</th><th>Production standard</th></tr></thead>
+        <tbody>
+          <tr><td>Constraints</td><td>Use concepts/static_assert for clear compile-time contracts.</td></tr>
+          <tr><td>Specialization control</td><td>Avoid ambiguous partial specializations and document intent.</td></tr>
+          <tr><td>Error diagnostics</td><td>Prefer readable template errors via constrained interfaces.</td></tr>
+          <tr><td>Build performance</td><td>Track template-heavy compile times and refactor hot spots.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
     <!-- MODULE 5.1 -->
     <div class="module-section" id="m5-1">
       <div class="module-header"><div class="module-number">5.1</div><h2 class="module-title">Function templates — deduction, instantiation, specialization</h2></div>

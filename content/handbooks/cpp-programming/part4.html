@@ -24,6 +24,25 @@
 
     <div class="hb-mini-toc"><div class="hb-mini-title">📍 Part 4 Modules</div><div class="hb-mini-links"><a href="#m4-1">4.1 Inheritance</a><a href="#m4-2">4.2 Virtual</a><a href="#m4-3">4.3 Abstract</a><a href="#m4-4">4.4 Multiple</a><a href="#m4-5">4.5 CRTP</a><a href="#m4-6">4.6 RTTI</a><a href="#m4-7">4.7 Patterns</a></div></div>
 
+    <div class="quick-ref">
+      <div class="qr-title">🚀 Advanced Lens — Part 4</div>
+      <p class="explain-en">In large C++ systems, polymorphism strategy decides extensibility and runtime cost. Interface-centric design, correct virtual destructor usage, and controlled hierarchy depth improve ABI stability and reduce maintenance overhead.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Part 4 ka industry focus hota hai extensible architecture banana. Interfaces, virtual destructors, aur controlled inheritance depth se system stable, scalable aur maintainable rehta hai.</div>
+    </div>
+
+    <div class="concept-block">
+      <h3>Polymorphism strategy checklist (Part 4)</h3>
+      <table>
+        <thead><tr><th>Decision area</th><th>Preferred C++ practice</th></tr></thead>
+        <tbody>
+          <tr><td>Base class cleanup</td><td>Use virtual destructors for polymorphic base classes.</td></tr>
+          <tr><td>Hierarchy depth</td><td>Keep inheritance shallow; prefer composition when possible.</td></tr>
+          <tr><td>Interface contracts</td><td>Design small, stable interfaces with explicit behavior guarantees.</td></tr>
+          <tr><td>Runtime typing</td><td>Minimize RTTI dependence; prefer compile-time polymorphism where valid.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
     <!-- MODULE 4.1 -->
     <div class="module-section" id="m4-1">
       <div class="module-header"><div class="module-number">4.1</div><h2 class="module-title">Inheritance — single, multilevel, access specifiers</h2></div>

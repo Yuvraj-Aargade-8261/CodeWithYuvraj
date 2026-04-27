@@ -24,6 +24,25 @@
 
     <div class="hb-mini-toc"><div class="hb-mini-title">📍 Part 3 Modules</div><div class="hb-mini-links"><a href="#m3-1">3.1 Strings</a><a href="#m3-2">3.2 Lists</a><a href="#m3-3">3.3 Tuples</a><a href="#m3-4">3.4 Dicts</a><a href="#m3-5">3.5 Sets</a><a href="#m3-6">3.6 Collections</a><a href="#m3-7">3.7 Selection</a></div></div>
 
+    <div class="quick-ref">
+      <div class="qr-title">🚀 Advanced Lens — Part 3</div>
+      <p class="explain-en">Data-structure choice drives throughput and memory behavior. In production Python, choosing list/set/dict/tuple intentionally and modeling data access patterns correctly gives bigger wins than micro-optimizations.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Real Python projects me sahi data structure choose karna sabse important optimization hota hai. List, set, dict, tuple ka wrong choice performance aur maintainability dono ko affect karta hai.</div>
+    </div>
+
+    <div class="concept-block">
+      <h3>Data-structure readiness checklist (Part 3)</h3>
+      <table>
+        <thead><tr><th>Area</th><th>Industry baseline</th></tr></thead>
+        <tbody>
+          <tr><td>Lookup profile</td><td>Use `dict`/`set` for frequent membership and keyed access.</td></tr>
+          <tr><td>Ordering needs</td><td>Use list when sequence order and indexing are primary.</td></tr>
+          <tr><td>Immutability</td><td>Use tuple/frozen types for stable records and hash safety.</td></tr>
+          <tr><td>Data contracts</td><td>Keep schema shape consistent across pipeline boundaries.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
     <!-- MODULE 3.1 -->
     <div class="module-section" id="m3-1">
       <div class="module-header"><div class="module-number">3.1</div><h2 class="module-title">Strings — methods, slicing, f-strings, raw strings</h2></div>

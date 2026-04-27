@@ -24,6 +24,25 @@
 
     <div class="hb-mini-toc"><div class="hb-mini-title">📍 Part 3 Modules</div><div class="hb-mini-links"><a href="#m3-1">3.1 Classes</a><a href="#m3-2">3.2 Access</a><a href="#m3-3">3.3 Operators</a><a href="#m3-4">3.4 Copy</a><a href="#m3-5">3.5 Move</a><a href="#m3-6">3.6 Static</a><a href="#m3-7">3.7 RAII</a></div></div>
 
+    <div class="quick-ref">
+      <div class="qr-title">🚀 Advanced Lens — Part 3</div>
+      <p class="explain-en">Enterprise-grade C++ object design is ownership-first: constructors establish invariants, copy/move rules are intentional, and RAII controls lifetime deterministically. Strong Part 3 design prevents leaks, dangling pointers, and costly refactors.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Advanced C++ OOP ka core ownership aur lifetime management hai. Agar constructors, copy/move rules, aur RAII sahi design hon, to memory bugs aur maintenance cost dono bahut kam hote hain.</div>
+    </div>
+
+    <div class="concept-block">
+      <h3>Object design checklist (Part 3)</h3>
+      <table>
+        <thead><tr><th>Design point</th><th>Industry baseline</th></tr></thead>
+        <tbody>
+          <tr><td>Class invariants</td><td>Constructors establish valid state and prohibit partial objects.</td></tr>
+          <tr><td>Rule of 5</td><td>Define copy/move/destructor explicitly when owning resources.</td></tr>
+          <tr><td>RAII usage</td><td>Bind resource lifetime to object lifetime, avoid manual cleanup.</td></tr>
+          <tr><td>API clarity</td><td>Expose intent-focused methods and keep mutable state controlled.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
     <!-- MODULE 3.1 -->
     <div class="module-section" id="m3-1">
       <div class="module-header"><div class="module-number">3.1</div><h2 class="module-title">Classes & objects — constructors, destructors, this pointer</h2></div>

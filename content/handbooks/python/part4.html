@@ -24,6 +24,25 @@
 
     <div class="hb-mini-toc"><div class="hb-mini-title">📍 Part 4 Modules</div><div class="hb-mini-links"><a href="#m4-1">4.1 def</a><a href="#m4-2">4.2 Args</a><a href="#m4-3">4.3 Lambda</a><a href="#m4-4">4.4 Scope</a><a href="#m4-5">4.5 Modules</a><a href="#m4-6">4.6 venv</a><a href="#m4-7">4.7 functools</a></div></div>
 
+    <div class="quick-ref">
+      <div class="qr-title">🚀 Advanced Lens — Part 4</div>
+      <p class="explain-en">Function and module design define long-term maintainability. Strong signatures, explicit dependencies, and small reusable units make Python systems testable, refactor-friendly, and easier for teams to scale.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Part 4 ka core maintainable architecture banana hai. Clean functions, clear modules, aur explicit dependencies se codebase grow hone par bhi manageable rehta hai.</div>
+    </div>
+
+    <div class="concept-block">
+      <h3>Function/module quality checklist (Part 4)</h3>
+      <table>
+        <thead><tr><th>Focus</th><th>Production standard</th></tr></thead>
+        <tbody>
+          <tr><td>Function signatures</td><td>Use explicit arguments and predictable return contracts.</td></tr>
+          <tr><td>Side effects</td><td>Keep side effects isolated and clearly documented.</td></tr>
+          <tr><td>Module boundaries</td><td>Split by responsibility, avoid circular imports.</td></tr>
+          <tr><td>Environment parity</td><td>Use reproducible virtual environments for all contributors.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
     <!-- MODULE 4.1 -->
     <div class="module-section" id="m4-1">
       <div class="module-header"><div class="module-number">4.1</div><h2 class="module-title">Defining functions — def, return, type hints</h2></div>

@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Part 8: Concurrency, Testing & Industry — Java Programming Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 8: concurrency, testing, design patterns, modules, annotations, and modern Java industry practices.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/handbook.css">
+</head>
+<body class="handbook-wrapper">
+  <nav class="navbar"><div class="container"><a href="../../../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../../../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
+
+  <div class="handbook-page">
+    <div class="hb-topbar"><div class="hb-topbar-inner"><div class="hb-breadcrumbs"><a href="index.html">Java Programming Handbook</a><span class="hb-muted">/</span><span>Part 8</span><span class="hb-muted">·</span><a href="#m8-1">8.1</a> <a href="#m8-2">8.2</a> <a href="#m8-3">8.3</a> <a href="#m8-4">8.4</a> <a href="#m8-5">8.5</a> <a href="#m8-6">8.6</a> <a href="#m8-7">8.7</a></div><div class="hb-progress" aria-label="Reading progress"><div class="hb-progress-track" role="progressbar"><div class="hb-progress-fill"></div></div><div class="hb-progress-label">0%</div></div></div></div>
+
+    <div class="chapter-header" data-chapter-num="08">
+      <div class="chapter-part-label">📖 Part 8 — Concurrency, Testing & Industry</div>
+      <h1 class="chapter-title">Beyond <span class="gradient-text">Basics</span></h1>
+      <p class="chapter-subtitle">Multithreading, concurrency, design patterns, annotations, modules, modern Java features — industry-ready skills.</p>
+      <div class="chapter-meta"><span>📄 Modules 8.1 – 8.7</span><span>⏱️ 80–100 min read</span><span>💻 60+ Examples</span></div>
+    </div>
+
+    <div class="hb-mini-toc"><div class="hb-mini-title">📍 Part 8 Modules</div><div class="hb-mini-links"><a href="#m8-1">8.1 Threads</a><a href="#m8-2">8.2 Concurrency</a><a href="#m8-3">8.3 Patterns</a><a href="#m8-4">8.4 Annotations</a><a href="#m8-5">8.5 Modules</a><a href="#m8-6">8.6 Modern</a><a href="#m8-7">8.7 Next Steps</a></div></div>
+
+    <!-- MODULE 8.1 -->
+    <div class="module-section" id="m8-1">
+      <div class="module-header"><div class="module-number">8.1</div><h2 class="module-title">Multithreading — Thread, Runnable, thread lifecycle</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Running code in parallel</h3>
+        <p class="explain-en"><strong>Threads</strong> allow concurrent execution. Create via extending <code>Thread</code> or implementing <code>Runnable</code> (preferred). Thread states: NEW → RUNNABLE → BLOCKED/WAITING → TERMINATED. Use <code>start()</code> (not <code>run()</code>!). Modern Java prefers <code>ExecutorService</code> over raw threads.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Threads</strong> concurrent execution allow karte hain. <code>Thread</code> extend karke ya <code>Runnable</code> implement karke (preferred) banao. <code>start()</code> use karo (<code>run()</code> nahi!). Modern Java me <code>ExecutorService</code> raw threads se better hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — Multithreading</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// ❌ Extending Thread (not recommended)</span>
+<span class="keyword">class</span> <span class="type">MyThread</span> <span class="keyword">extends</span> <span class="type">Thread</span> {
+    @Override
+    <span class="keyword">public void</span> <span class="function">run</span>() {
+        System.out.println(<span class="type">Thread</span>.currentThread().getName() + <span class="string">" running"</span>);
+    }
+}
+
+<span class="comment">// ✅ Implementing Runnable (preferred)</span>
+<span class="type">Runnable</span> task = () -> {
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < <span class="number">5</span>; i++) {
+        System.out.printf(<span class="string">"[%s] Count: %d%n"</span>,
+            <span class="type">Thread</span>.currentThread().getName(), i);
+        <span class="keyword">try</span> { <span class="type">Thread</span>.sleep(<span class="number">100</span>); }
+        <span class="keyword">catch</span> (<span class="type">InterruptedException</span> e) { <span class="type">Thread</span>.currentThread().interrupt(); }
+    }
+};
+
+<span class="type">Thread</span> t1 = <span class="keyword">new</span> <span class="type">Thread</span>(task, <span class="string">"Worker-1"</span>);
+<span class="type">Thread</span> t2 = <span class="keyword">new</span> <span class="type">Thread</span>(task, <span class="string">"Worker-2"</span>);
+t1.start(); <span class="comment">// ✅ Starts new thread</span>
+t2.start();
+<span class="comment">// t1.run(); // ❌ Runs on current thread! NOT parallel!</span>
+
+<span class="comment">// Wait for threads to finish</span>
+t1.join();
+t2.join();
+System.out.println(<span class="string">"Both threads finished!"</span>);
+
+<span class="comment">// Thread states</span>
+System.out.println(t1.getState()); <span class="comment">// TERMINATED</span>
+System.out.println(t1.isAlive());  <span class="comment">// false</span>
+
+<span class="comment">// Daemon threads — background, auto-killed when main ends</span>
+<span class="type">Thread</span> daemon = <span class="keyword">new</span> <span class="type">Thread</span>(() -> {
+    <span class="keyword">while</span> (<span class="keyword">true</span>) { <span class="comment">/* background task */</span> }
+});
+daemon.setDaemon(<span class="keyword">true</span>);
+daemon.start();
+
+<span class="comment">// ✅ Synchronized — thread safety</span>
+<span class="keyword">class</span> <span class="type">Counter</span> {
+    <span class="keyword">private int</span> count = <span class="number">0</span>;
+    <span class="keyword">public synchronized void</span> <span class="function">increment</span>() { count++; }
+    <span class="keyword">public synchronized int</span> <span class="function">getCount</span>() { <span class="keyword">return</span> count; }
+}</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Thread State</th><th>Meaning</th><th>Transition</th></tr></thead>
+            <tbody>
+              <tr><td>NEW</td><td>Created, not started</td><td>→ start() → RUNNABLE</td></tr>
+              <tr><td>RUNNABLE</td><td>Running or ready</td><td>→ BLOCKED/WAITING/TERMINATED</td></tr>
+              <tr><td>BLOCKED</td><td>Waiting for monitor lock</td><td>→ gets lock → RUNNABLE</td></tr>
+              <tr><td>WAITING</td><td>wait(), join()</td><td>→ notify() → RUNNABLE</td></tr>
+              <tr><td>TIMED_WAITING</td><td>sleep(), join(timeout)</td><td>→ timeout → RUNNABLE</td></tr>
+              <tr><td>TERMINATED</td><td>Finished execution</td><td>End state</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 8.2 -->
+    <div class="module-section" id="m8-2">
+      <div class="module-header"><div class="module-number">8.2</div><h2 class="module-title">Concurrency — ExecutorService, CompletableFuture, thread pools</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Modern concurrent programming</h3>
+        <p class="explain-en"><code>ExecutorService</code> manages thread pools — never create raw threads in production. <code>CompletableFuture</code> (Java 8+) enables async programming with chaining. Use <code>Executors.newFixedThreadPool()</code> for bounded pools, <code>Executors.newVirtualThreadPerTaskExecutor()</code> (Java 21+) for lightweight threads.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>ExecutorService</code> thread pools manage karta hai — production me raw threads mat banao. <code>CompletableFuture</code> (Java 8+) async programming enable karta hai chaining ke saath. Java 21+ me virtual threads aaye hain lightweight tasks ke liye.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — Concurrency</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">import</span> java.util.concurrent.*;
+
+<span class="comment">// ✅ ExecutorService — thread pool</span>
+<span class="type">ExecutorService</span> pool = <span class="type">Executors</span>.newFixedThreadPool(<span class="number">4</span>);
+
+<span class="comment">// Submit tasks</span>
+pool.submit(() -> System.out.println(<span class="string">"Task 1"</span>));
+pool.submit(() -> System.out.println(<span class="string">"Task 2"</span>));
+
+<span class="comment">// Future — get result from async task</span>
+<span class="type">Future</span>&lt;<span class="type">Integer</span>&gt; future = pool.submit(() -> {
+    <span class="type">Thread</span>.sleep(<span class="number">1000</span>);
+    <span class="keyword">return</span> <span class="number">42</span>;
+});
+<span class="type">Integer</span> result = future.get(); <span class="comment">// Blocks until complete</span>
+
+pool.shutdown(); <span class="comment">// Always shutdown!</span>
+
+<span class="comment">// ✅ CompletableFuture — async chains (no blocking!)</span>
+<span class="type">CompletableFuture</span>.supplyAsync(() -> fetchUserFromDB(<span class="number">1</span>))
+    .thenApply(user -> user.getName())
+    .thenApply(<span class="type">String</span>::toUpperCase)
+    .thenAccept(name -> System.out.println(<span class="string">"Hello, "</span> + name))
+    .exceptionally(ex -> { System.err.println(ex); <span class="keyword">return null</span>; });
+
+<span class="comment">// Combine multiple futures</span>
+<span class="type">CompletableFuture</span>&lt;<span class="type">String</span>&gt; userFuture = <span class="type">CompletableFuture</span>.supplyAsync(() -> <span class="string">"Alice"</span>);
+<span class="type">CompletableFuture</span>&lt;<span class="type">Integer</span>&gt; ageFuture = <span class="type">CompletableFuture</span>.supplyAsync(() -> <span class="number">25</span>);
+
+userFuture.thenCombine(ageFuture, (name, age) ->
+    <span class="type">String</span>.format(<span class="string">"%s is %d years old"</span>, name, age)
+).thenAccept(System.out::println);
+
+<span class="comment">// Wait for all futures</span>
+<span class="type">CompletableFuture</span>.allOf(userFuture, ageFuture).join();
+
+<span class="comment">// ✅ Virtual Threads (Java 21+) — lightweight!</span>
+<span class="keyword">try</span> (<span class="keyword">var</span> executor = <span class="type">Executors</span>.newVirtualThreadPerTaskExecutor()) {
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < <span class="number">10_000</span>; i++) {
+        executor.submit(() -> {
+            <span class="type">Thread</span>.sleep(<span class="type">Duration</span>.ofSeconds(<span class="number">1</span>));
+            <span class="keyword">return</span> <span class="number">42</span>;
+        });
+    }
+} <span class="comment">// 10K concurrent tasks — no problem!</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>API</th><th>Use case</th><th>Blocking?</th></tr></thead>
+            <tbody>
+              <tr><td><code>ExecutorService</code></td><td>Thread pool management</td><td>submit() is non-blocking</td></tr>
+              <tr><td><code>Future</code></td><td>Get result of async task</td><td>get() blocks</td></tr>
+              <tr><td><code>CompletableFuture</code></td><td>Async chains, combine</td><td>Non-blocking chains</td></tr>
+              <tr><td><code>Virtual Threads</code></td><td>High-concurrency I/O</td><td>Lightweight (21+)</td></tr>
+              <tr><td><code>synchronized</code></td><td>Simple mutual exclusion</td><td>Blocks on contention</td></tr>
+              <tr><td><code>ReentrantLock</code></td><td>Advanced locking</td><td>tryLock() non-blocking</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 8.3 -->
+    <div class="module-section" id="m8-3">
+      <div class="module-header"><div class="module-number">8.3</div><h2 class="module-title">Design patterns — Singleton, Builder, Factory, Observer</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Proven solutions to common problems</h3>
+        <p class="explain-en"><strong>Design patterns</strong> are reusable solutions to recurring software design problems. <strong>Creational</strong>: Singleton, Builder, Factory. <strong>Behavioral</strong>: Observer, Strategy. <strong>Structural</strong>: Decorator, Adapter. These patterns are essential for writing maintainable enterprise Java code.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Design patterns</strong> recurring software design problems ke reusable solutions hain. <strong>Creational</strong>: Singleton, Builder, Factory. <strong>Behavioral</strong>: Observer, Strategy. <strong>Structural</strong>: Decorator, Adapter. Enterprise Java me essential hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — Design Patterns</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// ✅ Singleton — one instance only</span>
+<span class="keyword">public class</span> <span class="type">AppConfig</span> {
+    <span class="keyword">private static final</span> <span class="type">AppConfig</span> INSTANCE = <span class="keyword">new</span> <span class="type">AppConfig</span>();
+    <span class="keyword">private</span> <span class="function">AppConfig</span>() {} <span class="comment">// Private constructor</span>
+    <span class="keyword">public static</span> <span class="type">AppConfig</span> <span class="function">getInstance</span>() { <span class="keyword">return</span> INSTANCE; }
+}
+
+<span class="comment">// ✅ Builder — complex object construction</span>
+<span class="keyword">public class</span> <span class="type">User</span> {
+    <span class="keyword">private final</span> <span class="type">String</span> name, email;
+    <span class="keyword">private final int</span> age;
+
+    <span class="keyword">private</span> <span class="function">User</span>(<span class="type">Builder</span> b) {
+        <span class="keyword">this</span>.name = b.name; <span class="keyword">this</span>.email = b.email; <span class="keyword">this</span>.age = b.age;
+    }
+
+    <span class="keyword">public static class</span> <span class="type">Builder</span> {
+        <span class="keyword">private</span> <span class="type">String</span> name, email;
+        <span class="keyword">private int</span> age;
+
+        <span class="keyword">public</span> <span class="type">Builder</span> <span class="function">name</span>(<span class="type">String</span> n) { name = n; <span class="keyword">return this</span>; }
+        <span class="keyword">public</span> <span class="type">Builder</span> <span class="function">email</span>(<span class="type">String</span> e) { email = e; <span class="keyword">return this</span>; }
+        <span class="keyword">public</span> <span class="type">Builder</span> <span class="function">age</span>(<span class="keyword">int</span> a) { age = a; <span class="keyword">return this</span>; }
+        <span class="keyword">public</span> <span class="type">User</span> <span class="function">build</span>() { <span class="keyword">return new</span> <span class="type">User</span>(<span class="keyword">this</span>); }
+    }
+}
+<span class="type">User</span> user = <span class="keyword">new</span> <span class="type">User</span>.<span class="type">Builder</span>()
+    .name(<span class="string">"Alice"</span>).email(<span class="string">"alice@mail.com"</span>).age(<span class="number">25</span>).build();
+
+<span class="comment">// ✅ Factory Method — create without specifying class</span>
+<span class="keyword">public interface</span> <span class="type">Notification</span> { <span class="keyword">void</span> <span class="function">send</span>(<span class="type">String</span> msg); }
+<span class="keyword">public class</span> <span class="type">EmailNotification</span> <span class="keyword">implements</span> <span class="type">Notification</span> { <span class="comment">/* ... */</span> }
+<span class="keyword">public class</span> <span class="type">SMSNotification</span> <span class="keyword">implements</span> <span class="type">Notification</span> { <span class="comment">/* ... */</span> }
+
+<span class="keyword">public static</span> <span class="type">Notification</span> <span class="function">create</span>(<span class="type">String</span> type) {
+    <span class="keyword">return switch</span> (type) {
+        <span class="keyword">case</span> <span class="string">"email"</span> -> <span class="keyword">new</span> <span class="type">EmailNotification</span>();
+        <span class="keyword">case</span> <span class="string">"sms"</span>   -> <span class="keyword">new</span> <span class="type">SMSNotification</span>();
+        <span class="keyword">default</span>     -> <span class="keyword">throw new</span> <span class="type">IllegalArgumentException</span>(type);
+    };
+}
+
+<span class="comment">// ✅ Observer — event notification</span>
+<span class="keyword">public interface</span> <span class="type">EventListener</span> { <span class="keyword">void</span> <span class="function">onEvent</span>(<span class="type">String</span> data); }
+<span class="keyword">public class</span> <span class="type">EventBus</span> {
+    <span class="keyword">private final</span> <span class="type">List</span>&lt;<span class="type">EventListener</span>&gt; listeners = <span class="keyword">new</span> <span class="type">ArrayList</span>&lt;&gt;();
+    <span class="keyword">public void</span> <span class="function">subscribe</span>(<span class="type">EventListener</span> l) { listeners.add(l); }
+    <span class="keyword">public void</span> <span class="function">publish</span>(<span class="type">String</span> data) {
+        listeners.forEach(l -> l.onEvent(data));
+    }
+}</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Pattern</th><th>Category</th><th>Problem it solves</th><th>Java example</th></tr></thead>
+            <tbody>
+              <tr><td>Singleton</td><td>Creational</td><td>One instance globally</td><td>Config, Logger</td></tr>
+              <tr><td>Builder</td><td>Creational</td><td>Complex construction</td><td>HttpRequest.newBuilder()</td></tr>
+              <tr><td>Factory</td><td>Creational</td><td>Create without class</td><td>List.of(), Optional.of()</td></tr>
+              <tr><td>Observer</td><td>Behavioral</td><td>Event notification</td><td>PropertyChangeListener</td></tr>
+              <tr><td>Strategy</td><td>Behavioral</td><td>Swappable algorithms</td><td>Comparator, Validator</td></tr>
+              <tr><td>Decorator</td><td>Structural</td><td>Add behavior</td><td>BufferedReader wrapping</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 8.4 -->
+    <div class="module-section" id="m8-4">
+      <div class="module-header"><div class="module-number">8.4</div><h2 class="module-title">Annotations — built-in, custom, reflection</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Metadata for code</h3>
+        <p class="explain-en"><strong>Annotations</strong> are metadata markers on classes, methods, fields. Built-in: <code>@Override</code>, <code>@Deprecated</code>, <code>@FunctionalInterface</code>, <code>@SuppressWarnings</code>. Frameworks use them extensively: Spring's <code>@Autowired</code>, JPA's <code>@Entity</code>. You can create custom annotations processed at compile-time or runtime via reflection.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Annotations</strong> classes, methods, fields pe metadata markers hain. Built-in: <code>@Override</code>, <code>@Deprecated</code>, <code>@FunctionalInterface</code>. Frameworks inhe extensively use karte hain: Spring ka <code>@Autowired</code>, JPA ka <code>@Entity</code>. Custom annotations bhi bana sakte ho.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — Annotations</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Built-in annotations</span>
+@Override
+<span class="keyword">public</span> <span class="type">String</span> <span class="function">toString</span>() { <span class="keyword">return</span> <span class="string">"Custom string"</span>; }
+
+@Deprecated(since = <span class="string">"2.0"</span>, forRemoval = <span class="keyword">true</span>)
+<span class="keyword">public void</span> <span class="function">oldMethod</span>() { }
+
+@SuppressWarnings(<span class="string">"unchecked"</span>)
+<span class="keyword">public void</span> <span class="function">rawTypes</span>() { <span class="type">List</span> raw = <span class="keyword">new</span> <span class="type">ArrayList</span>(); }
+
+@FunctionalInterface
+<span class="keyword">public interface</span> <span class="type">Transformer</span>&lt;<span class="type">T</span>, <span class="type">R</span>&gt; {
+    <span class="type">R</span> <span class="function">transform</span>(<span class="type">T</span> input);
+}
+
+<span class="comment">// ✅ Custom annotation</span>
+@Retention(<span class="type">RetentionPolicy</span>.RUNTIME)  <span class="comment">// Available at runtime</span>
+@Target(<span class="type">ElementType</span>.METHOD)          <span class="comment">// For methods only</span>
+<span class="keyword">public @interface</span> <span class="type">LogExecution</span> {
+    <span class="type">String</span> <span class="function">value</span>() <span class="keyword">default</span> <span class="string">"INFO"</span>;
+    <span class="keyword">boolean</span> <span class="function">timed</span>() <span class="keyword">default</span> <span class="keyword">false</span>;
+}
+
+<span class="comment">// Using custom annotation</span>
+<span class="keyword">public class</span> <span class="type">UserService</span> {
+    @LogExecution(value = <span class="string">"DEBUG"</span>, timed = <span class="keyword">true</span>)
+    <span class="keyword">public</span> <span class="type">User</span> <span class="function">findUser</span>(<span class="keyword">int</span> id) { <span class="comment">/* ... */</span> }
+}
+
+<span class="comment">// Reading annotations via reflection</span>
+<span class="type">Method</span> method = <span class="type">UserService</span>.class.getMethod(<span class="string">"findUser"</span>, <span class="keyword">int</span>.class);
+<span class="keyword">if</span> (method.isAnnotationPresent(<span class="type">LogExecution</span>.class)) {
+    <span class="type">LogExecution</span> log = method.getAnnotation(<span class="type">LogExecution</span>.class);
+    System.out.println(<span class="string">"Level: "</span> + log.value());  <span class="comment">// "DEBUG"</span>
+    System.out.println(<span class="string">"Timed: "</span> + log.timed());  <span class="comment">// true</span>
+}</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Annotation</th><th>Purpose</th><th>Where used</th></tr></thead>
+            <tbody>
+              <tr><td><code>@Override</code></td><td>Verify method override</td><td>Compile-time safety</td></tr>
+              <tr><td><code>@Deprecated</code></td><td>Mark obsolete API</td><td>Compiler warning</td></tr>
+              <tr><td><code>@FunctionalInterface</code></td><td>Verify single abstract method</td><td>Lambda-ready interfaces</td></tr>
+              <tr><td><code>@SuppressWarnings</code></td><td>Silence compiler warnings</td><td>Unchecked, deprecation</td></tr>
+              <tr><td><code>@SafeVarargs</code></td><td>Suppress heap pollution</td><td>Generic varargs</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 8.5 -->
+    <div class="module-section" id="m8-5">
+      <div class="module-header"><div class="module-number">8.5</div><h2 class="module-title">Java Platform Module System — module-info, exports, requires</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Modular Java (Java 9+)</h3>
+        <p class="explain-en">The <strong>Java Platform Module System</strong> (JPMS, Java 9+) organizes code into modules with explicit dependencies. <code>module-info.java</code> declares what a module exports and requires. This enables strong encapsulation, reliable configuration, and smaller runtime images with <code>jlink</code>.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Java Platform Module System</strong> (JPMS, Java 9+) code ko modules me organize karta hai explicit dependencies ke saath. <code>module-info.java</code> declare karta hai ki module kya export karta hai aur kya require karta hai. Strong encapsulation aur smaller runtime images enable karta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — Module System</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// module-info.java — in src root</span>
+<span class="keyword">module</span> com.myapp.core {
+    <span class="comment">// What this module exposes</span>
+    <span class="keyword">exports</span> com.myapp.core.api;
+    <span class="keyword">exports</span> com.myapp.core.model;
+
+    <span class="comment">// What this module needs</span>
+    <span class="keyword">requires</span> java.sql;
+    <span class="keyword">requires</span> java.logging;
+    <span class="keyword">requires transitive</span> com.myapp.utils; <span class="comment">// Transitive dep</span>
+
+    <span class="comment">// Open for reflection (frameworks like Spring)</span>
+    <span class="keyword">opens</span> com.myapp.core.model <span class="keyword">to</span> com.fasterxml.jackson;
+
+    <span class="comment">// Service provider</span>
+    <span class="keyword">provides</span> com.myapp.core.api.Service
+        <span class="keyword">with</span> com.myapp.core.impl.ServiceImpl;
+
+    <span class="comment">// Service consumer</span>
+    <span class="keyword">uses</span> com.myapp.core.api.Plugin;
+}
+
+<span class="comment">// Module directory structure:</span>
+<span class="comment">// src/</span>
+<span class="comment">//   com.myapp.core/</span>
+<span class="comment">//     module-info.java</span>
+<span class="comment">//     com/myapp/core/</span>
+<span class="comment">//       api/Service.java</span>
+<span class="comment">//       model/User.java</span>
+<span class="comment">//       impl/ServiceImpl.java</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Keyword</th><th>Purpose</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td><code>module</code></td><td>Declare module</td><td><code>module com.myapp {}</code></td></tr>
+              <tr><td><code>exports</code></td><td>Make package public</td><td><code>exports com.myapp.api</code></td></tr>
+              <tr><td><code>requires</code></td><td>Declare dependency</td><td><code>requires java.sql</code></td></tr>
+              <tr><td><code>opens</code></td><td>Allow reflection</td><td>For Spring, Jackson</td></tr>
+              <tr><td><code>provides...with</code></td><td>Service implementation</td><td>SPI pattern</td></tr>
+              <tr><td><code>uses</code></td><td>Service consumer</td><td>Plugin architecture</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 8.6 -->
+    <div class="module-section" id="m8-6">
+      <div class="module-header"><div class="module-number">8.6</div><h2 class="module-title">Modern Java — text blocks, switch expressions, pattern matching, var</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Java keeps evolving</h3>
+        <p class="explain-en">Java evolves every 6 months. Key modern features: <strong>Text blocks</strong> (13+) for multi-line strings, <strong>var</strong> (10+) for local type inference, <strong>switch expressions</strong> (14+) with arrow syntax, <strong>pattern matching</strong> (16+) for instanceof, <strong>sealed classes</strong> (17+), <strong>virtual threads</strong> (21+).</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Java har 6 months me evolve hota hai. Key modern features: <strong>Text blocks</strong> (13+) multi-line strings ke liye, <strong>var</strong> (10+) local type inference, <strong>switch expressions</strong> (14+) arrow syntax ke saath, <strong>pattern matching</strong> (16+) instanceof ke liye.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — Modern Features</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// ✅ Text Blocks (Java 13+)</span>
+<span class="type">String</span> json = <span class="string">"""
+        {
+            "name": "Alice",
+            "age": 25,
+            "city": "Mumbai"
+        }
+        """</span>;
+
+<span class="type">String</span> html = <span class="string">"""
+        &lt;html&gt;
+            &lt;body&gt;
+                &lt;h1&gt;Hello, %s!&lt;/h1&gt;
+            &lt;/body&gt;
+        &lt;/html&gt;
+        """</span>.formatted(<span class="string">"World"</span>);
+
+<span class="comment">// ✅ var — Local Variable Type Inference (Java 10+)</span>
+<span class="keyword">var</span> list = <span class="keyword">new</span> <span class="type">ArrayList</span>&lt;<span class="type">String</span>&gt;(); <span class="comment">// Inferred as ArrayList&lt;String&gt;</span>
+<span class="keyword">var</span> map = <span class="type">Map</span>.of(<span class="string">"key"</span>, <span class="number">42</span>);       <span class="comment">// Map&lt;String, Integer&gt;</span>
+<span class="keyword">var</span> stream = list.stream();          <span class="comment">// Stream&lt;String&gt;</span>
+
+<span class="comment">// ✅ Switch Expressions (Java 14+)</span>
+<span class="type">String</span> day = <span class="string">"MONDAY"</span>;
+<span class="type">String</span> type = <span class="keyword">switch</span> (day) {
+    <span class="keyword">case</span> <span class="string">"SATURDAY"</span>, <span class="string">"SUNDAY"</span> -> <span class="string">"Weekend"</span>;
+    <span class="keyword">case</span> <span class="string">"MONDAY"</span>, <span class="string">"FRIDAY"</span>   -> <span class="string">"Almost weekend"</span>;
+    <span class="keyword">default</span>                    -> <span class="string">"Midweek"</span>;
+};
+
+<span class="comment">// Switch with blocks</span>
+<span class="keyword">int</span> numLetters = <span class="keyword">switch</span> (day) {
+    <span class="keyword">case</span> <span class="string">"MONDAY"</span>, <span class="string">"FRIDAY"</span>, <span class="string">"SUNDAY"</span> -> <span class="number">6</span>;
+    <span class="keyword">case</span> <span class="string">"TUESDAY"</span>                   -> <span class="number">7</span>;
+    <span class="keyword">default</span> -> {
+        <span class="type">String</span> trimmed = day.strip();
+        <span class="keyword">yield</span> trimmed.length(); <span class="comment">// yield for block expressions</span>
+    }
+};
+
+<span class="comment">// ✅ Pattern Matching instanceof (Java 16+)</span>
+<span class="type">Object</span> obj = <span class="string">"Hello"</span>;
+<span class="keyword">if</span> (obj <span class="keyword">instanceof</span> <span class="type">String</span> s && s.length() > <span class="number">3</span>) {
+    System.out.println(s.toUpperCase()); <span class="comment">// No cast needed!</span>
+}
+
+<span class="comment">// ✅ Record Patterns (Java 21+)</span>
+<span class="keyword">record</span> <span class="type">Point</span>(<span class="keyword">int</span> x, <span class="keyword">int</span> y) {}
+<span class="type">Object</span> obj2 = <span class="keyword">new</span> <span class="type">Point</span>(<span class="number">3</span>, <span class="number">4</span>);
+<span class="keyword">if</span> (obj2 <span class="keyword">instanceof</span> <span class="type">Point</span>(var x, var y)) {
+    System.out.println(<span class="string">"x="</span> + x + <span class="string">", y="</span> + y); <span class="comment">// Destructured!</span>
+}</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Feature</th><th>Java Version</th><th>What it replaces</th></tr></thead>
+            <tbody>
+              <tr><td>var</td><td>10+</td><td>Verbose type declarations</td></tr>
+              <tr><td>Text blocks</td><td>13+</td><td>String concatenation for multi-line</td></tr>
+              <tr><td>Switch expressions</td><td>14+</td><td>Switch statements with break</td></tr>
+              <tr><td>Records</td><td>16+</td><td>Boilerplate data classes</td></tr>
+              <tr><td>Pattern matching</td><td>16+</td><td>Manual instanceof + cast</td></tr>
+              <tr><td>Sealed classes</td><td>17+</td><td>Open hierarchies</td></tr>
+              <tr><td>Virtual threads</td><td>21+</td><td>Platform threads for I/O</td></tr>
+              <tr><td>Record patterns</td><td>21+</td><td>Manual field extraction</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 8.7 -->
+    <div class="module-section" id="m8-7">
+      <div class="module-header"><div class="module-number">8.7</div><h2 class="module-title">Next steps — frameworks, tools, career roadmap</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">From core Java to industry</h3>
+        <p class="explain-en">You've completed core Java! Now specialize: <strong>Backend</strong> → Spring Boot + REST APIs + databases. <strong>Android</strong> → Kotlin + Jetpack Compose. <strong>Enterprise</strong> → Jakarta EE + microservices. Key tools: Maven/Gradle, Git, Docker, JUnit. Always use Java 17+ (LTS) in production.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Core Java complete ho gaya! Ab specialize karo: <strong>Backend</strong> → Spring Boot + REST APIs + databases. <strong>Android</strong> → Kotlin + Jetpack Compose. <strong>Enterprise</strong> → Jakarta EE + microservices. Key tools: Maven/Gradle, Git, Docker, JUnit. Production me hamesha Java 17+ (LTS) use karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — Spring Boot Hello World</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Spring Boot — the most popular Java framework</span>
+@SpringBootApplication
+<span class="keyword">public class</span> <span class="type">MyApp</span> {
+    <span class="keyword">public static void</span> <span class="function">main</span>(<span class="type">String</span>[] args) {
+        <span class="type">SpringApplication</span>.run(<span class="type">MyApp</span>.class, args);
+    }
+}
+
+@RestController
+<span class="keyword">public class</span> <span class="type">HelloController</span> {
+    @GetMapping(<span class="string">"/hello"</span>)
+    <span class="keyword">public</span> <span class="type">String</span> <span class="function">hello</span>() {
+        <span class="keyword">return</span> <span class="string">"Hello, World!"</span>;
+    }
+
+    @GetMapping(<span class="string">"/users/{id}"</span>)
+    <span class="keyword">public</span> <span class="type">User</span> <span class="function">getUser</span>(@PathVariable <span class="keyword">int</span> id) {
+        <span class="keyword">return</span> userService.findById(id);
+    }
+}
+
+<span class="comment">// JUnit 5 — unit testing</span>
+<span class="keyword">import</span> org.junit.jupiter.api.*;
+<span class="keyword">import static</span> org.junit.jupiter.api.Assertions.*;
+
+<span class="keyword">class</span> <span class="type">CalculatorTest</span> {
+    @Test
+    <span class="keyword">void</span> <span class="function">shouldAddTwoNumbers</span>() {
+        <span class="keyword">var</span> calc = <span class="keyword">new</span> <span class="type">Calculator</span>();
+        assertEquals(<span class="number">5</span>, calc.add(<span class="number">2</span>, <span class="number">3</span>));
+    }
+
+    @Test
+    <span class="keyword">void</span> <span class="function">shouldThrowOnDivideByZero</span>() {
+        assertThrows(<span class="type">ArithmeticException</span>.class,
+            () -> <span class="keyword">new</span> <span class="type">Calculator</span>().divide(<span class="number">1</span>, <span class="number">0</span>));
+    }
+}</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Path</th><th>Learn next</th><th>Key technologies</th></tr></thead>
+            <tbody>
+              <tr><td>🌐 Backend Dev</td><td>Spring Boot, REST, JPA</td><td>Spring, Hibernate, PostgreSQL</td></tr>
+              <tr><td>📱 Android Dev</td><td>Kotlin, Jetpack Compose</td><td>Android Studio, Room, Retrofit</td></tr>
+              <tr><td>🏢 Enterprise</td><td>Jakarta EE, Microservices</td><td>Quarkus, Kafka, Docker</td></tr>
+              <tr><td>☁️ Cloud</td><td>AWS/GCP, Kubernetes</td><td>Spring Cloud, Docker, K8s</td></tr>
+              <tr><td>🧪 Testing</td><td>JUnit 5, Mockito</td><td>TDD, Integration testing</td></tr>
+              <tr><td>🔧 Build Tools</td><td>Maven, Gradle</td><td>CI/CD, GitHub Actions</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>🎯 Career advice:</strong> Java developer is the #1 in-demand backend role. Master Spring Boot → build a REST API → deploy to cloud → land your first job. Open-source contributions and a strong GitHub profile matter more than certificates.</div>
+      </div>
+    </div>
+
+    <div class="concept-block">
+      <h3 class="concept-heading">Secure Java checklist (production baseline)</h3>
+      <p class="explain-en">Before release, Java services should pass a security baseline: strict input validation, safe auth/session handling, dependency scanning, and secret management. This checklist helps prevent common enterprise incidents.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Production deploy se pehle Java apps ko security baseline pass karna chahiye: input validation, auth/session safety, dependency scanning, aur secret management. Is checklist se common security issues avoid hote hain.</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Area</th><th>Baseline rule</th><th>Verification</th></tr></thead>
+          <tbody>
+            <tr><td>Input validation</td><td>Validate all external input with allowlists and bean validation</td><td>Controller/service boundary tests</td></tr>
+            <tr><td>Authentication</td><td>Use strong password hashing (BCrypt/Argon2), MFA where needed</td><td>Security config review</td></tr>
+            <tr><td>Authorization</td><td>Enforce role checks server-side for every sensitive endpoint</td><td>Negative authorization tests</td></tr>
+            <tr><td>Secrets</td><td>No API keys/passwords in source; use env/vault</td><td>Secret scan in CI</td></tr>
+            <tr><td>Dependencies</td><td>Scan with OWASP Dependency-Check / Snyk</td><td>CI security report</td></tr>
+            <tr><td>SQL safety</td><td>Use parameterized queries / JPA prepared access only</td><td>SAST + code review</td></tr>
+            <tr><td>Transport</td><td>HTTPS only, secure headers, strict CORS</td><td>Integration test + header checks</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="concept-block">
+      <h3 class="concept-heading">Release workflow (dev to production)</h3>
+      <p class="explain-en">A predictable release workflow reduces failures. The goal is to build once, test thoroughly, and deploy with rollback readiness.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Stable release process se production failures kam hote hain. Build once, test properly, aur rollback-ready deploy karo.</div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">💻 Java release workflow (example)</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+        <div class="code-body"><pre><span class="comment"># 1) Static checks + unit tests</span>
+mvn -q -DskipTests=false clean test
+
+<span class="comment"># 2) Package immutable artifact</span>
+mvn -q clean package
+
+<span class="comment"># 3) Security scan (dependency + image)</span>
+mvn org.owasp:dependency-check-maven:check
+
+<span class="comment"># 4) Run integration tests against staging</span>
+mvn -q -Pstaging verify
+
+<span class="comment"># 5) Deploy with migration + health checks</span>
+kubectl apply -f k8s/deployment.yaml
+kubectl rollout status deployment/java-app
+curl -fsS https://api.example.com/actuator/health
+
+<span class="comment"># 6) Rollback if SLO or health fails</span>
+kubectl rollout undo deployment/java-app</pre></div>
+      </div>
+    </div>
+
+    <div class="concept-block">
+      <h3 class="concept-heading">Project evaluation rubric (interview/client readiness)</h3>
+      <p class="explain-en">Use this rubric to self-evaluate Java projects before showing them in interviews or to clients.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Interview/client demo se pehle project quality evaluate karne ke liye ye rubric use karo.</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Dimension</th><th>Strong (ready)</th><th>Weak (needs work)</th></tr></thead>
+          <tbody>
+            <tr><td>Architecture</td><td>Clear layering (controller/service/repository), clean packages</td><td>Mixed responsibilities, tight coupling</td></tr>
+            <tr><td>Correctness</td><td>Critical paths covered by unit/integration tests</td><td>Manual testing only</td></tr>
+            <tr><td>Performance</td><td>Measured queries/latency, no obvious bottlenecks</td><td>No profiling or DB optimization</td></tr>
+            <tr><td>Concurrency safety</td><td>Thread-safe code for shared state paths</td><td>Race conditions possible</td></tr>
+            <tr><td>Security</td><td>Authz/authn enforced, secrets handled correctly</td><td>Hardcoded secrets / weak guards</td></tr>
+            <tr><td>DX & docs</td><td>README, setup, API examples, run steps included</td><td>No clear onboarding docs</td></tr>
+            <tr><td>Release readiness</td><td>CI pipeline, health checks, rollback plan</td><td>Ad-hoc deployment process</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Java Version History — Key Features</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Version</th><th>Year</th><th>Key Features</th><th>LTS?</th></tr></thead>
+          <tbody>
+            <tr><td>Java 8</td><td>2014</td><td>Lambdas, Streams, Optional, default methods</td><td>✅</td></tr>
+            <tr><td>Java 9</td><td>2017</td><td>Modules (JPMS), JShell, List.of()</td><td>❌</td></tr>
+            <tr><td>Java 10</td><td>2018</td><td>var (local type inference)</td><td>❌</td></tr>
+            <tr><td>Java 11</td><td>2018</td><td>HttpClient, String methods, Files.readString()</td><td>✅</td></tr>
+            <tr><td>Java 14</td><td>2020</td><td>Switch expressions, Records (preview)</td><td>❌</td></tr>
+            <tr><td>Java 16</td><td>2021</td><td>Records, Pattern matching instanceof</td><td>❌</td></tr>
+            <tr><td>Java 17</td><td>2021</td><td>Sealed classes, pattern matching switch</td><td>✅</td></tr>
+            <tr><td>Java 21</td><td>2023</td><td>Virtual threads, record patterns, sequenced collections</td><td>✅</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Concurrency Cheat Sheet</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Need</th><th>Use</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td>Simple background task</td><td><code>CompletableFuture.runAsync()</code></td><td>Non-blocking</td></tr>
+            <tr><td>Get async result</td><td><code>CompletableFuture.supplyAsync()</code></td><td>Chain with thenApply</td></tr>
+            <tr><td>Thread pool</td><td><code>Executors.newFixedThreadPool(n)</code></td><td>Bounded threads</td></tr>
+            <tr><td>High I/O concurrency</td><td><code>Virtual threads (21+)</code></td><td>Millions of threads</td></tr>
+            <tr><td>Atomic counter</td><td><code>AtomicInteger</code></td><td>Lock-free</td></tr>
+            <tr><td>Thread-safe map</td><td><code>ConcurrentHashMap</code></td><td>Segmented locking</td></tr>
+            <tr><td>Producer-consumer</td><td><code>BlockingQueue</code></td><td>Thread-safe queue</td></tr>
+            <tr><td>Mutual exclusion</td><td><code>synchronized</code> or <code>ReentrantLock</code></td><td>Critical sections</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Essential Build & Development Tools</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Tool</th><th>Purpose</th><th>Command</th></tr></thead>
+          <tbody>
+            <tr><td>Maven</td><td>Build & dependency management</td><td><code>mvn clean install</code></td></tr>
+            <tr><td>Gradle</td><td>Build (Kotlin DSL)</td><td><code>gradle build</code></td></tr>
+            <tr><td>JUnit 5</td><td>Unit testing</td><td><code>@Test void test()</code></td></tr>
+            <tr><td>Mockito</td><td>Mocking in tests</td><td><code>mock(), when().thenReturn()</code></td></tr>
+            <tr><td>Docker</td><td>Containerization</td><td><code>docker build -t app .</code></td></tr>
+            <tr><td>Git</td><td>Version control</td><td><code>git commit -m "feat:"</code></td></tr>
+            <tr><td>IntelliJ IDEA</td><td>IDE</td><td>Industry standard</td></tr>
+            <tr><td>JShell</td><td>REPL for quick tests</td><td><code>jshell</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="callout callout-tip"><strong>🏭 Final industry insight:</strong> You've covered everything from Hello World to virtual threads. The Java ecosystem is massive — Spring Boot alone powers 60%+ of enterprise backends. Keep building projects, contribute to open source, and remember: <em>the best code is code that's easy to read, test, and maintain</em>. Happy coding! 🚀</div>
+
+    <div class="practice-box">
+      <div class="practice-title">✏️ Practice Exercises — Part 8</div>
+      <ol>
+        <li>Create two threads that print odd and even numbers alternately from 1 to 20 using <code>synchronized</code>.</li>
+        <li>Use <code>CompletableFuture</code> to fetch user data and order data in parallel, then combine results.</li>
+        <li>Implement the Builder pattern for a <code>HttpRequest</code> class with method, URL, headers, and body.</li>
+        <li>Create a custom <code>@Validate</code> annotation and a processor that checks field constraints via reflection.</li>
+        <li>Rewrite an old-style Java program using modern features: var, text blocks, switch expressions, records.</li>
+        <li>Build a simple thread-safe cache using <code>ConcurrentHashMap</code> with expiration.</li>
+        <li>Write JUnit 5 tests for a <code>Calculator</code> class with <code>@ParameterizedTest</code> and edge cases.</li>
+      </ol>
+    </div>
+
+    <div class="handbook-nav">
+      <a href="part7.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Part 7: Functional Java & Streams</div></div></a>
+      <a href="syllabus.html" class="nav-btn next"><div><div class="nav-btn-label">Complete!</div><div class="nav-btn-title">📋 View Full Syllabus →</div></div><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+
+  </div>
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
+  <script src="../../../js/main.js"></script>
+  <script>
+    (() => {
+      document.querySelectorAll('.code-block').forEach((block) => { const pre = block.querySelector('.code-body pre'), header = block.querySelector('.code-header'); if (!pre || !header) return; let actions = header.querySelector('.code-actions'); if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); } const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'code-copy-btn'; btn.textContent = 'Copy'; btn.addEventListener('click', async () => { try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; } catch { btn.textContent = 'Failed'; } finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); } }); actions.prepend(btn); });
+      const fill = document.querySelector('.hb-progress-fill'), label = document.querySelector('.hb-progress-label');
+      if (fill && label) { const update = () => { const h = document.documentElement, d = (h.scrollHeight - h.clientHeight) || 1, p = Math.max(0, Math.min(1, h.scrollTop / d)); fill.style.width = (p*100).toFixed(0)+'%'; label.textContent = (p*100).toFixed(0)+'%'; }; document.addEventListener('scroll', update, { passive: true }); update(); }
+    })();
+  </script>
+</body>
+</html>

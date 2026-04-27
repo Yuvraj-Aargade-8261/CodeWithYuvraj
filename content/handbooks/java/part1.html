@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Part 1: Java Foundations & Setup — Java Programming Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 1: Java history, JDK/JVM, primitives, operators, I/O, coding standards.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/handbook.css">
+</head>
+<body class="handbook-wrapper">
+  <nav class="navbar"><div class="container"><a href="../../../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../../../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
+
+  <div class="handbook-page">
+    <div class="hb-topbar"><div class="hb-topbar-inner"><div class="hb-breadcrumbs"><a href="index.html">Java Programming Handbook</a><span class="hb-muted">/</span><span>Part 1</span><span class="hb-muted">·</span><a href="#m1-1">1.1</a> <a href="#m1-2">1.2</a> <a href="#m1-3">1.3</a> <a href="#m1-4">1.4</a> <a href="#m1-5">1.5</a> <a href="#m1-6">1.6</a> <a href="#m1-7">1.7</a></div><div class="hb-progress" aria-label="Reading progress"><div class="hb-progress-track" role="progressbar"><div class="hb-progress-fill"></div></div><div class="hb-progress-label">0%</div></div></div></div>
+
+    <div class="chapter-header" data-chapter-num="01">
+      <div class="chapter-part-label">📖 Part 1 — Java Foundations & Setup</div>
+      <h1 class="chapter-title">Getting <span class="gradient-text">Started</span></h1>
+      <p class="chapter-subtitle">What is Java, how to set it up, variables, data types, operators, I/O — everything you need to write your first programs.</p>
+      <div class="chapter-meta"><span>📄 Modules 1.1 – 1.7</span><span>⏱️ 60–90 min read</span><span>💻 50+ Examples</span></div>
+    </div>
+
+    <div class="hb-mini-toc"><div class="hb-mini-title">📍 Part 1 Modules</div><div class="hb-mini-links"><a href="#m1-1">1.1 What is Java</a><a href="#m1-2">1.2 Setup</a><a href="#m1-3">1.3 Primitives</a><a href="#m1-4">1.4 Type Casting</a><a href="#m1-5">1.5 Operators</a><a href="#m1-6">1.6 I/O</a><a href="#m1-7">1.7 Standards</a></div></div>
+
+    <div class="quick-ref">
+      <div class="qr-title">🚀 Advanced Lens — Part 1</div>
+      <p class="explain-en">In industry, Part 1 topics map to runtime clarity and build reliability: JDK version discipline (LTS), compiler flags, charset consistency, and clean coding contracts. Teams that standardize these basics reduce production bugs dramatically.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Industry me Part 1 ka focus sirf syntax nahi hota — JDK LTS standardization, build consistency, charset safety, aur coding standards se hi stable systems bante hain.</div>
+    </div>
+
+    <div class="concept-block">
+      <h3>Foundation readiness checklist (Part 1)</h3>
+      <table>
+        <thead><tr><th>Area</th><th>Industry baseline</th></tr></thead>
+        <tbody>
+          <tr><td>JDK policy</td><td>Use one LTS version across dev/CI/prod and document upgrade cadence.</td></tr>
+          <tr><td>Encoding</td><td>Enforce UTF-8 in source files, compiler, and runtime arguments.</td></tr>
+          <tr><td>Code style</td><td>Apply formatter + static checks in pre-commit/CI pipeline.</td></tr>
+          <tr><td>Build reproducibility</td><td>Pin plugin/tool versions so builds are deterministic.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- MODULE 1.1 -->
+    <div class="module-section" id="m1-1">
+      <div class="module-header"><div class="module-number">1.1</div><h2 class="module-title">What is Java — history, JDK/JRE/JVM, bytecode, WORA</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">The world's most popular enterprise language</h3>
+        <p class="explain-en"><strong>Java</strong> was created by <strong>James Gosling</strong> at Sun Microsystems in 1995. It's a statically-typed, compiled, object-oriented language. Java's "Write Once, Run Anywhere" (WORA) philosophy means compiled bytecode runs on any platform with a <strong>JVM</strong> (Java Virtual Machine). Used in enterprise apps, Android, banking, and large-scale systems.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Java</strong> ko <strong>James Gosling</strong> ne 1995 me Sun Microsystems me banaya tha. Ye statically-typed, compiled, object-oriented language hai. Java ka "Write Once, Run Anywhere" (WORA) matlab hai ki compiled bytecode kisi bhi platform pe <strong>JVM</strong> ke saath chal sakta hai. Enterprise apps, Android, banking me use hota hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — Hello World</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Your first Java program</span>
+<span class="keyword">public class</span> <span class="type">HelloWorld</span> {
+    <span class="keyword">public static void</span> <span class="function">main</span>(<span class="type">String</span>[] args) {
+        System.out.println(<span class="string">"Hello, World!"</span>);
+    }
+}
+
+<span class="comment">// Compile: javac HelloWorld.java</span>
+<span class="comment">// Run:     java HelloWorld</span>
+<span class="comment">// Output:  Hello, World!</span>
+
+<span class="comment">// Check version</span>
+<span class="comment">// java --version  →  java 17.0.x</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Component</th><th>Full Name</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td><strong>JDK</strong></td><td>Java Development Kit</td><td>Compiler (javac) + JRE + dev tools</td></tr>
+              <tr><td><strong>JRE</strong></td><td>Java Runtime Environment</td><td>JVM + standard libraries (run only)</td></tr>
+              <tr><td><strong>JVM</strong></td><td>Java Virtual Machine</td><td>Executes bytecode on any OS</td></tr>
+              <tr><td><strong>javac</strong></td><td>Java Compiler</td><td>.java → .class (bytecode)</td></tr>
+              <tr><td><strong>java</strong></td><td>Java Launcher</td><td>Runs .class files on JVM</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Feature</th><th>Java</th><th>Python</th><th>C++</th></tr></thead>
+            <tbody>
+              <tr><td>Typing</td><td>Static</td><td>Dynamic</td><td>Static</td></tr>
+              <tr><td>Execution</td><td>JIT compiled (JVM)</td><td>Interpreted</td><td>Compiled (native)</td></tr>
+              <tr><td>Syntax</td><td>Verbose, structured</td><td>Clean, minimal</td><td>Complex</td></tr>
+              <tr><td>Speed</td><td>Fast (JIT)</td><td>Slower</td><td>Fastest</td></tr>
+              <tr><td>Memory</td><td>Garbage collected</td><td>Garbage collected</td><td>Manual</td></tr>
+              <tr><td>Use case</td><td>Enterprise, Android</td><td>AI, scripting</td><td>Systems, games</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Java flow:</strong> <code>.java</code> (source) → <code>javac</code> → <code>.class</code> (bytecode) → <code>JVM</code> → runs on any OS. This is why Java is platform-independent — the JVM acts as a translator between bytecode and the native OS.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 1.2 -->
+    <div class="module-section" id="m1-2">
+      <div class="module-header"><div class="module-number">1.2</div><h2 class="module-title">Setup — JDK 17+, IntelliJ IDEA / VS Code, javac & java CLI</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Setting up your development environment</h3>
+        <p class="explain-en">Install <strong>JDK 17+</strong> (LTS) from <strong>adoptium.net</strong> or Oracle. Set <code>JAVA_HOME</code> and add <code>bin</code> to <code>PATH</code>. <strong>IntelliJ IDEA</strong> (Community Edition) is the best Java IDE. VS Code with the "Extension Pack for Java" also works well. Use <code>javac</code> to compile and <code>java</code> to run.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>JDK 17+</strong> (LTS) <strong>adoptium.net</strong> ya Oracle se install karo. <code>JAVA_HOME</code> set karo aur <code>bin</code> folder <code>PATH</code> me add karo. <strong>IntelliJ IDEA</strong> (Community Edition) best Java IDE hai. VS Code bhi "Extension Pack for Java" ke saath kaam karta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Terminal — Setup & Compile</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># Check Java installation</span>
+java --version        <span class="comment"># java 17.0.x 2024-xx-xx LTS</span>
+javac --version       <span class="comment"># javac 17.0.x</span>
+
+<span class="comment"># Set JAVA_HOME (Windows)</span>
+set JAVA_HOME=C:\Program Files\Java\jdk-17
+set PATH=%JAVA_HOME%\bin;%PATH%
+
+<span class="comment"># Set JAVA_HOME (macOS/Linux)</span>
+export JAVA_HOME=/usr/lib/jvm/java-17
+export PATH=$JAVA_HOME/bin:$PATH
+
+<span class="comment"># Compile and run</span>
+javac HelloWorld.java   <span class="comment"># Creates HelloWorld.class</span>
+java HelloWorld         <span class="comment"># Runs bytecode on JVM</span>
+
+<span class="comment"># Single-file execution (Java 11+)</span>
+java HelloWorld.java    <span class="comment"># Compile + run in one step!</span>
+
+<span class="comment"># Run with classpath</span>
+java -cp ./out HelloWorld</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>IDE</th><th>Type</th><th>Best for</th></tr></thead>
+            <tbody>
+              <tr><td><strong>IntelliJ IDEA CE</strong></td><td>Free IDE</td><td>Professional Java development</td></tr>
+              <tr><td><strong>VS Code + Java Pack</strong></td><td>Free editor</td><td>Lightweight, multi-language</td></tr>
+              <tr><td><strong>Eclipse</strong></td><td>Free IDE</td><td>Enterprise, legacy projects</td></tr>
+              <tr><td><strong>NetBeans</strong></td><td>Free IDE</td><td>Academic, GUI development</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 1.3 -->
+    <div class="module-section" id="m1-3">
+      <div class="module-header"><div class="module-number">1.3</div><h2 class="module-title">Variables & data types — 8 primitives, type sizes, ranges</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Statically typed — every variable needs a type</h3>
+        <p class="explain-en">Java has <strong>8 primitive types</strong> — fixed-size, stack-allocated, high-performance. Unlike Python, you <strong>must declare the type</strong> before using a variable. Java 10+ supports <code>var</code> for local variable type inference. Every primitive has a corresponding <strong>wrapper class</strong> for object contexts (collections, generics).</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Java me <strong>8 primitive types</strong> hain — fixed-size, stack-allocated, high-performance. Python ke unlike, aapko variable use karne se pehle <strong>type declare</strong> karna padta hai. Java 10+ me <code>var</code> se local variable type inference milta hai. Har primitive ka ek <strong>wrapper class</strong> hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — Variables & Types</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Must declare type!</span>
+<span class="type">String</span> name = <span class="string">"Yuvraj"</span>;
+<span class="keyword">int</span> age = <span class="number">21</span>;
+<span class="keyword">double</span> gpa = <span class="number">9.5</span>;
+<span class="keyword">boolean</span> isStudent = <span class="keyword">true</span>;
+<span class="keyword">char</span> grade = <span class="string">'A'</span>;
+
+<span class="comment">// 8 Primitive types</span>
+<span class="keyword">byte</span> b = <span class="number">127</span>;              <span class="comment">// 1 byte  (-128 to 127)</span>
+<span class="keyword">short</span> s = <span class="number">32767</span>;           <span class="comment">// 2 bytes (-32768 to 32767)</span>
+<span class="keyword">int</span> i = <span class="number">2_147_483_647</span>;     <span class="comment">// 4 bytes (use _ for readability!)</span>
+<span class="keyword">long</span> l = <span class="number">9_223_372_036_854_775_807L</span>; <span class="comment">// 8 bytes (L suffix!)</span>
+<span class="keyword">float</span> f = <span class="number">3.14f</span>;           <span class="comment">// 4 bytes (f suffix!)</span>
+<span class="keyword">double</span> d = <span class="number">3.14159265358979</span>; <span class="comment">// 8 bytes (default decimal)</span>
+<span class="keyword">char</span> c = <span class="string">'A'</span>;              <span class="comment">// 2 bytes (Unicode UTF-16)</span>
+<span class="keyword">boolean</span> flag = <span class="keyword">true</span>;       <span class="comment">// 1 bit (true/false only)</span>
+
+<span class="comment">// var — type inference (Java 10+)</span>
+<span class="keyword">var</span> message = <span class="string">"Hello"</span>;     <span class="comment">// Compiler infers String</span>
+<span class="keyword">var</span> count = <span class="number">42</span>;            <span class="comment">// Compiler infers int</span>
+<span class="keyword">var</span> pi = <span class="number">3.14</span>;             <span class="comment">// Compiler infers double</span>
+
+<span class="comment">// Constants — use final</span>
+<span class="keyword">final int</span> MAX_SIZE = <span class="number">100</span>;  <span class="comment">// Cannot be reassigned!</span>
+<span class="keyword">final double</span> PI = <span class="number">3.14159</span>;
+
+<span class="comment">// Wrapper classes (for objects/collections)</span>
+<span class="type">Integer</span> boxedInt = <span class="number">42</span>;     <span class="comment">// Autoboxing: int → Integer</span>
+<span class="keyword">int</span> unboxed = boxedInt;    <span class="comment">// Unboxing: Integer → int</span>
+
+<span class="comment">// String is NOT a primitive — it's a class</span>
+<span class="type">String</span> str = <span class="string">"Java"</span>;       <span class="comment">// Immutable object</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Type</th><th>Size</th><th>Range</th><th>Default</th><th>Wrapper</th></tr></thead>
+            <tbody>
+              <tr><td><code>byte</code></td><td>1 byte</td><td>-128 to 127</td><td>0</td><td><code>Byte</code></td></tr>
+              <tr><td><code>short</code></td><td>2 bytes</td><td>-32,768 to 32,767</td><td>0</td><td><code>Short</code></td></tr>
+              <tr><td><code>int</code></td><td>4 bytes</td><td>-2.1B to 2.1B</td><td>0</td><td><code>Integer</code></td></tr>
+              <tr><td><code>long</code></td><td>8 bytes</td><td>-9.2×10¹⁸ to 9.2×10¹⁸</td><td>0L</td><td><code>Long</code></td></tr>
+              <tr><td><code>float</code></td><td>4 bytes</td><td>~7 decimal digits</td><td>0.0f</td><td><code>Float</code></td></tr>
+              <tr><td><code>double</code></td><td>8 bytes</td><td>~15 decimal digits</td><td>0.0d</td><td><code>Double</code></td></tr>
+              <tr><td><code>char</code></td><td>2 bytes</td><td>'\u0000' to '\uffff'</td><td>'\u0000'</td><td><code>Character</code></td></tr>
+              <tr><td><code>boolean</code></td><td>1 bit</td><td>true / false</td><td>false</td><td><code>Boolean</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>Common pitfalls:</strong> <code>long</code> literals need <code>L</code> suffix, <code>float</code> needs <code>f</code> suffix. <code>char</code> uses single quotes (<code>'A'</code>), <code>String</code> uses double quotes (<code>"A"</code>). <code>var</code> only works for local variables — not fields, parameters, or return types.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 1.4 -->
+    <div class="module-section" id="m1-4">
+      <div class="module-header"><div class="module-number">1.4</div><h2 class="module-title">Type casting — widening, narrowing, autoboxing, wrapper classes</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Converting between types</h3>
+        <p class="explain-en"><strong>Widening</strong> (implicit) happens automatically when going from smaller to larger type (byte→int→long→double). <strong>Narrowing</strong> (explicit) requires a cast and may lose data. <strong>Autoboxing</strong> automatically converts primitives ↔ wrapper objects. <strong>Parsing</strong> converts strings to numbers.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Widening</strong> (implicit) automatic hota hai jab chhote type se bade type me jata hai (byte→int→long→double). <strong>Narrowing</strong> (explicit) me cast zaroori hai aur data loss ho sakta hai. <strong>Autoboxing</strong> primitives ↔ wrapper objects automatically convert karta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — Type Casting</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// ✅ Widening (implicit) — no data loss</span>
+<span class="keyword">int</span> num = <span class="number">42</span>;
+<span class="keyword">long</span> big = num;          <span class="comment">// int → long (automatic)</span>
+<span class="keyword">double</span> dec = num;        <span class="comment">// int → double (automatic)</span>
+<span class="keyword">float</span> f = <span class="number">10L</span>;           <span class="comment">// long → float (automatic)</span>
+
+<span class="comment">// ⚠️ Narrowing (explicit) — may lose data!</span>
+<span class="keyword">double</span> pi = <span class="number">3.14159</span>;
+<span class="keyword">int</span> truncated = (<span class="keyword">int</span>) pi;  <span class="comment">// 3 (decimal lost!)</span>
+<span class="keyword">long</span> bigNum = <span class="number">100_000L</span>;
+<span class="keyword">short</span> small = (<span class="keyword">short</span>) bigNum; <span class="comment">// May overflow!</span>
+
+<span class="comment">// Autoboxing & Unboxing</span>
+<span class="type">Integer</span> boxed = <span class="number">42</span>;      <span class="comment">// Autoboxing: int → Integer</span>
+<span class="keyword">int</span> unboxed = boxed;     <span class="comment">// Unboxing: Integer → int</span>
+
+<span class="comment">// ⚠️ Null unboxing = NullPointerException!</span>
+<span class="type">Integer</span> nullBox = <span class="keyword">null</span>;
+<span class="comment">// int crash = nullBox;  // ❌ NullPointerException!</span>
+
+<span class="comment">// String ↔ Number parsing</span>
+<span class="keyword">int</span> parsed = <span class="type">Integer</span>.parseInt(<span class="string">"42"</span>);       <span class="comment">// String → int</span>
+<span class="keyword">double</span> parsedD = <span class="type">Double</span>.parseDouble(<span class="string">"3.14"</span>); <span class="comment">// String → double</span>
+<span class="type">String</span> str = <span class="type">String</span>.valueOf(<span class="number">42</span>);          <span class="comment">// int → String</span>
+<span class="type">String</span> str2 = <span class="number">42</span> + <span class="string">""</span>;                  <span class="comment">// Quick trick: int → String</span>
+
+<span class="comment">// char ↔ int (ASCII/Unicode)</span>
+<span class="keyword">char</span> letter = <span class="string">'A'</span>;
+<span class="keyword">int</span> ascii = letter;      <span class="comment">// 65</span>
+<span class="keyword">char</span> back = (<span class="keyword">char</span>) <span class="number">65</span>;   <span class="comment">// 'A'</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Conversion</th><th>Direction</th><th>Automatic?</th><th>Risk</th></tr></thead>
+            <tbody>
+              <tr><td>byte → short → int → long</td><td>Widening</td><td>✅ Yes</td><td>None</td></tr>
+              <tr><td>int → float, long → double</td><td>Widening</td><td>✅ Yes</td><td>Precision loss possible</td></tr>
+              <tr><td>double → int</td><td>Narrowing</td><td>❌ Cast required</td><td>Truncation</td></tr>
+              <tr><td>long → short</td><td>Narrowing</td><td>❌ Cast required</td><td>Overflow</td></tr>
+              <tr><td>int ↔ Integer</td><td>Boxing</td><td>✅ Auto</td><td>NPE if null</td></tr>
+              <tr><td>String → int</td><td>Parsing</td><td>❌ Method call</td><td>NumberFormatException</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 1.5 -->
+    <div class="module-section" id="m1-5">
+      <div class="module-header"><div class="module-number">1.5</div><h2 class="module-title">Operators — arithmetic, relational, logical, bitwise, ternary</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Building expressions</h3>
+        <p class="explain-en">Java has all standard operators. Key differences from Python: <code>/</code> is <strong>integer division</strong> when both operands are int, <code>&&</code> and <code>||</code> are logical operators (not <code>and</code>/<code>or</code>), and <code>instanceof</code> checks types. Java 16+ adds <strong>pattern matching</strong> for <code>instanceof</code>.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Java me sab standard operators hain. Python se key differences: <code>/</code> integer division karta hai jab dono operands int hain, <code>&&</code> aur <code>||</code> logical operators hain (<code>and</code>/<code>or</code> nahi), aur <code>instanceof</code> type check karta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — Operators</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Arithmetic</span>
+<span class="number">10</span> + <span class="number">3</span>     <span class="comment">// 13</span>
+<span class="number">10</span> - <span class="number">3</span>     <span class="comment">// 7</span>
+<span class="number">10</span> * <span class="number">3</span>     <span class="comment">// 30</span>
+<span class="number">10</span> / <span class="number">3</span>     <span class="comment">// 3  ← INTEGER division! (both int)</span>
+<span class="number">10.0</span> / <span class="number">3</span>   <span class="comment">// 3.333... (one is double → double result)</span>
+<span class="number">10</span> % <span class="number">3</span>     <span class="comment">// 1  (modulo)</span>
+
+<span class="comment">// No power operator! Use Math.pow()</span>
+Math.pow(<span class="number">2</span>, <span class="number">10</span>)  <span class="comment">// 1024.0 (returns double)</span>
+
+<span class="comment">// Increment / Decrement</span>
+<span class="keyword">int</span> x = <span class="number">5</span>;
+x++;       <span class="comment">// 6 (post-increment)</span>
+++x;       <span class="comment">// 7 (pre-increment)</span>
+x--;       <span class="comment">// 6</span>
+
+<span class="comment">// Relational</span>
+<span class="number">5</span> == <span class="number">5</span>     <span class="comment">// true (value equality for primitives)</span>
+<span class="number">5</span> != <span class="number">3</span>     <span class="comment">// true</span>
+<span class="number">5</span> > <span class="number">3</span>      <span class="comment">// true</span>
+<span class="number">5</span> >= <span class="number">5</span>     <span class="comment">// true</span>
+
+<span class="comment">// ⚠️ For objects, use .equals() not ==</span>
+<span class="type">String</span> a = <span class="keyword">new</span> <span class="type">String</span>(<span class="string">"hi"</span>);
+<span class="type">String</span> b = <span class="keyword">new</span> <span class="type">String</span>(<span class="string">"hi"</span>);
+a == b        <span class="comment">// false (different objects!)</span>
+a.equals(b)   <span class="comment">// true  (same content ✅)</span>
+
+<span class="comment">// Logical (short-circuit)</span>
+<span class="keyword">true</span> && <span class="keyword">false</span>   <span class="comment">// false</span>
+<span class="keyword">true</span> || <span class="keyword">false</span>   <span class="comment">// true</span>
+!<span class="keyword">true</span>           <span class="comment">// false</span>
+
+<span class="comment">// Ternary (inline if)</span>
+<span class="keyword">int</span> age = <span class="number">20</span>;
+<span class="type">String</span> status = (age >= <span class="number">18</span>) ? <span class="string">"Adult"</span> : <span class="string">"Minor"</span>;
+
+<span class="comment">// Bitwise</span>
+<span class="number">5</span> & <span class="number">3</span>    <span class="comment">// 1   (AND)</span>
+<span class="number">5</span> | <span class="number">3</span>    <span class="comment">// 7   (OR)</span>
+<span class="number">5</span> ^ <span class="number">3</span>    <span class="comment">// 6   (XOR)</span>
+~<span class="number">5</span>       <span class="comment">// -6  (NOT)</span>
+<span class="number">1</span> << <span class="number">3</span>   <span class="comment">// 8   (left shift = ×2³)</span>
+<span class="number">8</span> >> <span class="number">2</span>   <span class="comment">// 2   (right shift = ÷2²)</span>
+
+<span class="comment">// instanceof (type checking)</span>
+<span class="type">Object</span> obj = <span class="string">"Hello"</span>;
+<span class="keyword">if</span> (obj <span class="keyword">instanceof</span> <span class="type">String</span> s) {  <span class="comment">// Pattern matching (16+)</span>
+    System.out.println(s.toUpperCase()); <span class="comment">// HELLO</span>
+}</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Category</th><th>Operators</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td>Arithmetic</td><td><code>+ - * / %</code></td><td><code>10 / 3 → 3</code></td></tr>
+              <tr><td>Increment</td><td><code>++ --</code></td><td><code>x++ → post-increment</code></td></tr>
+              <tr><td>Relational</td><td><code>== != &lt; &gt; &lt;= &gt;=</code></td><td><code>5 >= 3 → true</code></td></tr>
+              <tr><td>Logical</td><td><code>&& || !</code></td><td><code>true && false → false</code></td></tr>
+              <tr><td>Bitwise</td><td><code>&amp; | ^ ~ &lt;&lt; &gt;&gt; &gt;&gt;&gt;</code></td><td><code>5 &amp; 3 → 1</code></td></tr>
+              <tr><td>Assignment</td><td><code>= += -= *= /= %=</code></td><td><code>x += 1</code></td></tr>
+              <tr><td>Ternary</td><td><code>? :</code></td><td><code>x > 0 ? "pos" : "neg"</code></td></tr>
+              <tr><td>Type check</td><td><code>instanceof</code></td><td><code>obj instanceof String</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>Java vs Python:</strong> No <code>**</code> power operator (use <code>Math.pow()</code>), no <code>//</code> floor division (just <code>/</code> with ints), no <code>and</code>/<code>or</code>/<code>not</code> keywords (use <code>&&</code>/<code>||</code>/<code>!</code>), and <code>==</code> compares references for objects (use <code>.equals()</code> for content).</div>
+      </div>
+    </div>
+
+    <!-- MODULE 1.6 -->
+    <div class="module-section" id="m1-6">
+      <div class="module-header"><div class="module-number">1.6</div><h2 class="module-title">Input/Output — System.out, Scanner, printf formatting</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Talking to the user</h3>
+        <p class="explain-en"><code>System.out.println()</code> outputs with newline, <code>System.out.print()</code> without. Use <code>Scanner</code> class to read input. <code>printf()</code> provides C-style formatted output with <code>%d</code>, <code>%f</code>, <code>%s</code> placeholders. Java 15+ adds <strong>text blocks</strong> (<code>"""</code>) for multi-line strings.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>System.out.println()</code> newline ke saath output deta hai, <code>System.out.print()</code> bina newline. Input ke liye <code>Scanner</code> class use karo. <code>printf()</code> C-style formatted output deta hai <code>%d</code>, <code>%f</code>, <code>%s</code> placeholders ke saath. Java 15+ me <strong>text blocks</strong> (<code>"""</code>) multi-line strings ke liye hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — I/O & Formatting</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">import</span> java.util.Scanner;
+
+<span class="keyword">public class</span> <span class="type">IODemo</span> {
+    <span class="keyword">public static void</span> <span class="function">main</span>(<span class="type">String</span>[] args) {
+        <span class="comment">// Output methods</span>
+        System.out.println(<span class="string">"Hello!"</span>);      <span class="comment">// With newline</span>
+        System.out.print(<span class="string">"No newline"</span>);    <span class="comment">// Without newline</span>
+        System.out.println();              <span class="comment">// Just newline</span>
+
+        <span class="comment">// String concatenation</span>
+        <span class="type">String</span> name = <span class="string">"Yuvraj"</span>;
+        <span class="keyword">int</span> age = <span class="number">21</span>;
+        System.out.println(<span class="string">"Name: "</span> + name + <span class="string">", Age: "</span> + age);
+
+        <span class="comment">// printf — formatted output (C-style)</span>
+        System.out.printf(<span class="string">"Name: %s, Age: %d%n"</span>, name, age);
+        System.out.printf(<span class="string">"Pi: %.2f%n"</span>, <span class="number">3.14159</span>);      <span class="comment">// Pi: 3.14</span>
+        System.out.printf(<span class="string">"Hex: %x%n"</span>, <span class="number">255</span>);             <span class="comment">// Hex: ff</span>
+        System.out.printf(<span class="string">"Padded: %05d%n"</span>, <span class="number">42</span>);         <span class="comment">// Padded: 00042</span>
+        System.out.printf(<span class="string">"Big: %,d%n"</span>, <span class="number">1_000_000</span>);      <span class="comment">// Big: 1,000,000</span>
+        System.out.printf(<span class="string">"Left: %-10s|%n"</span>, <span class="string">"hi"</span>);       <span class="comment">// Left: hi        |</span>
+
+        <span class="comment">// Scanner — reading input</span>
+        <span class="type">Scanner</span> sc = <span class="keyword">new</span> <span class="type">Scanner</span>(System.in);
+        System.out.print(<span class="string">"Enter name: "</span>);
+        <span class="type">String</span> input = sc.nextLine();   <span class="comment">// Read full line</span>
+        System.out.print(<span class="string">"Enter age: "</span>);
+        <span class="keyword">int</span> userAge = sc.nextInt();     <span class="comment">// Read int</span>
+        System.out.print(<span class="string">"Enter GPA: "</span>);
+        <span class="keyword">double</span> gpa = sc.nextDouble();   <span class="comment">// Read double</span>
+        sc.close();                        <span class="comment">// Always close Scanner!</span>
+
+        <span class="comment">// Text blocks (Java 15+)</span>
+        <span class="type">String</span> json = <span class="string">"""
+                {
+                    "name": "Yuvraj",
+                    "age": 21
+                }
+                """</span>;
+        System.out.println(json);
+
+        <span class="comment">// String.format() — like printf but returns String</span>
+        <span class="type">String</span> msg = <span class="type">String</span>.format(<span class="string">"Hello %s, age %d"</span>, name, age);
+    }
+}</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Format</th><th>Type</th><th>Example</th><th>Output</th></tr></thead>
+            <tbody>
+              <tr><td><code>%d</code></td><td>int</td><td><code>printf("%d", 42)</code></td><td>42</td></tr>
+              <tr><td><code>%f</code></td><td>float/double</td><td><code>printf("%.2f", 3.14159)</code></td><td>3.14</td></tr>
+              <tr><td><code>%s</code></td><td>String</td><td><code>printf("%s", "Java")</code></td><td>Java</td></tr>
+              <tr><td><code>%c</code></td><td>char</td><td><code>printf("%c", 'A')</code></td><td>A</td></tr>
+              <tr><td><code>%x</code></td><td>hex</td><td><code>printf("%x", 255)</code></td><td>ff</td></tr>
+              <tr><td><code>%o</code></td><td>octal</td><td><code>printf("%o", 8)</code></td><td>10</td></tr>
+              <tr><td><code>%b</code></td><td>boolean</td><td><code>printf("%b", true)</code></td><td>true</td></tr>
+              <tr><td><code>%n</code></td><td>newline</td><td>Platform-independent</td><td>(newline)</td></tr>
+              <tr><td><code>%,d</code></td><td>thousands</td><td><code>printf("%,d", 1000000)</code></td><td>1,000,000</td></tr>
+              <tr><td><code>%05d</code></td><td>zero-pad</td><td><code>printf("%05d", 42)</code></td><td>00042</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Scanner Method</th><th>Reads</th><th>Returns</th></tr></thead>
+            <tbody>
+              <tr><td><code>nextLine()</code></td><td>Full line (until Enter)</td><td><code>String</code></td></tr>
+              <tr><td><code>next()</code></td><td>Single word (until space)</td><td><code>String</code></td></tr>
+              <tr><td><code>nextInt()</code></td><td>Integer</td><td><code>int</code></td></tr>
+              <tr><td><code>nextDouble()</code></td><td>Decimal</td><td><code>double</code></td></tr>
+              <tr><td><code>nextBoolean()</code></td><td>true/false</td><td><code>boolean</code></td></tr>
+              <tr><td><code>hasNextInt()</code></td><td>Check if int available</td><td><code>boolean</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>Scanner trap:</strong> After <code>nextInt()</code>, call <code>nextLine()</code> to consume the leftover newline before reading a string. Otherwise, <code>nextLine()</code> returns an empty string!</div>
+      </div>
+    </div>
+
+    <!-- MODULE 1.7 -->
+    <div class="module-section" id="m1-7">
+      <div class="module-header"><div class="module-number">1.7</div><h2 class="module-title">Comments, naming conventions, Java coding standards</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Writing clean, readable Java code</h3>
+        <p class="explain-en">Java uses <code>//</code> for single-line, <code>/* */</code> for multi-line, and <code>/** */</code> for <strong>Javadoc</strong> comments. Naming follows <strong>camelCase</strong> for methods/variables, <strong>PascalCase</strong> for classes, <strong>UPPER_SNAKE</strong> for constants. Java has strict conventions backed by Google and Oracle style guides.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Java me <code>//</code> single-line, <code>/* */</code> multi-line, aur <code>/** */</code> <strong>Javadoc</strong> comments ke liye use hota hai. Naming me <strong>camelCase</strong> methods/variables ke liye, <strong>PascalCase</strong> classes ke liye, <strong>UPPER_SNAKE</strong> constants ke liye. Google aur Oracle style guides follow karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Java — Comments & Style</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Single-line comment</span>
+
+<span class="comment">/*
+ * Multi-line comment
+ * Used for longer explanations
+ */</span>
+
+<span class="comment">/**
+ * Javadoc comment — generates HTML documentation.
+ * Used for classes, methods, and fields.
+ *
+ * @param radius the radius of the circle
+ * @return the calculated area
+ * @throws IllegalArgumentException if radius is negative
+ */</span>
+<span class="keyword">public static double</span> <span class="function">calculateArea</span>(<span class="keyword">double</span> radius) {
+    <span class="keyword">if</span> (radius < <span class="number">0</span>) {
+        <span class="keyword">throw new</span> <span class="type">IllegalArgumentException</span>(<span class="string">"Radius must be positive"</span>);
+    }
+    <span class="keyword">return</span> Math.PI * radius * radius;
+}
+
+<span class="comment">// ✅ Java naming conventions</span>
+<span class="keyword">int</span> studentAge = <span class="number">21</span>;            <span class="comment">// camelCase for variables</span>
+<span class="keyword">void</span> <span class="function">calculateTotal</span>() {}       <span class="comment">// camelCase for methods</span>
+<span class="keyword">class</span> <span class="type">StudentProfile</span> {}        <span class="comment">// PascalCase for classes</span>
+<span class="keyword">interface</span> <span class="type">Sortable</span> {}          <span class="comment">// PascalCase for interfaces</span>
+<span class="keyword">static final int</span> MAX_SIZE = <span class="number">100</span>; <span class="comment">// UPPER_SNAKE for constants</span>
+<span class="type">String</span> <span class="function">getFirstName</span>() {}       <span class="comment">// Getters: get + Property</span>
+<span class="keyword">void</span> <span class="function">setFirstName</span>() {}         <span class="comment">// Setters: set + Property</span>
+<span class="keyword">boolean</span> <span class="function">isActive</span>() {}          <span class="comment">// Boolean getters: is + Adjective</span>
+
+<span class="comment">// ❌ Bad naming examples</span>
+<span class="comment">// int x;          // Too short, meaningless</span>
+<span class="comment">// int student_age; // Python style, not Java</span>
+<span class="comment">// class student {} // Should be PascalCase</span>
+<span class="comment">// int MAX_SIZE;    // Not final? Don't use UPPER_SNAKE</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Item</th><th>Convention</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td>Variable</td><td><code>camelCase</code></td><td><code>studentAge</code></td></tr>
+              <tr><td>Method</td><td><code>camelCase</code></td><td><code>getUser()</code></td></tr>
+              <tr><td>Class</td><td><code>PascalCase</code></td><td><code>UserProfile</code></td></tr>
+              <tr><td>Interface</td><td><code>PascalCase</code></td><td><code>Comparable</code></td></tr>
+              <tr><td>Constant</td><td><code>UPPER_SNAKE</code></td><td><code>MAX_RETRIES</code></td></tr>
+              <tr><td>Package</td><td><code>all.lowercase</code></td><td><code>com.example.utils</code></td></tr>
+              <tr><td>Getter</td><td><code>get + Property</code></td><td><code>getName()</code></td></tr>
+              <tr><td>Boolean getter</td><td><code>is + Adjective</code></td><td><code>isActive()</code></td></tr>
+              <tr><td>Setter</td><td><code>set + Property</code></td><td><code>setName()</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Java Rule</th><th>✅ Good</th><th>❌ Bad</th></tr></thead>
+            <tbody>
+              <tr><td>Braces</td><td>Same line (K&R style)</td><td>New line (Allman style)</td></tr>
+              <tr><td>Indentation</td><td>4 spaces</td><td>Tabs or 2 spaces</td></tr>
+              <tr><td>Line length</td><td>≤ 100 chars (Google)</td><td>300+ char lines</td></tr>
+              <tr><td>One class per file</td><td>Filename = class name</td><td>Multiple public classes</td></tr>
+              <tr><td>Imports</td><td>Explicit: <code>java.util.List</code></td><td>Wildcard: <code>java.util.*</code></td></tr>
+              <tr><td>Semicolons</td><td>Required after every statement</td><td>Missing semicolons</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Javadoc tip:</strong> Run <code>javadoc MyClass.java</code> to auto-generate HTML documentation from your <code>/** */</code> comments. IntelliJ generates Javadoc stubs with <code>/**</code> + Enter above a method.</div>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Java Keywords — Complete List (50+ reserved words)</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Category</th><th>Keywords</th></tr></thead>
+          <tbody>
+            <tr><td>Data types</td><td><code>byte</code> <code>short</code> <code>int</code> <code>long</code> <code>float</code> <code>double</code> <code>char</code> <code>boolean</code> <code>void</code></td></tr>
+            <tr><td>Access</td><td><code>public</code> <code>private</code> <code>protected</code></td></tr>
+            <tr><td>Modifiers</td><td><code>static</code> <code>final</code> <code>abstract</code> <code>synchronized</code> <code>volatile</code> <code>transient</code> <code>native</code> <code>strictfp</code></td></tr>
+            <tr><td>Classes</td><td><code>class</code> <code>interface</code> <code>enum</code> <code>record</code> <code>extends</code> <code>implements</code> <code>sealed</code> <code>permits</code> <code>non-sealed</code></td></tr>
+            <tr><td>Control flow</td><td><code>if</code> <code>else</code> <code>switch</code> <code>case</code> <code>default</code> <code>for</code> <code>while</code> <code>do</code> <code>break</code> <code>continue</code> <code>return</code> <code>yield</code></td></tr>
+            <tr><td>Exceptions</td><td><code>try</code> <code>catch</code> <code>finally</code> <code>throw</code> <code>throws</code></td></tr>
+            <tr><td>Object</td><td><code>new</code> <code>this</code> <code>super</code> <code>instanceof</code></td></tr>
+            <tr><td>Package</td><td><code>package</code> <code>import</code></td></tr>
+            <tr><td>Other</td><td><code>var</code> <code>assert</code></td></tr>
+            <tr><td>Literals</td><td><code>true</code> <code>false</code> <code>null</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Java vs Python vs C++ — Quick Comparison</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Feature</th><th>Java</th><th>Python</th><th>C++</th></tr></thead>
+          <tbody>
+            <tr><td>Semicolons</td><td>Required</td><td>None</td><td>Required</td></tr>
+            <tr><td>Braces</td><td>Required <code>{}</code></td><td>None (indentation)</td><td>Required <code>{}</code></td></tr>
+            <tr><td>Variable decl</td><td><code>int x = 5;</code></td><td><code>x = 5</code></td><td><code>int x = 5;</code></td></tr>
+            <tr><td>String format</td><td><code>String.format()</code></td><td>f-string</td><td><code>printf()</code></td></tr>
+            <tr><td>Null value</td><td><code>null</code></td><td><code>None</code></td><td><code>nullptr</code></td></tr>
+            <tr><td>Entry point</td><td><code>public static void main</code></td><td>No main required</td><td><code>int main()</code></td></tr>
+            <tr><td>Memory</td><td>Garbage collected</td><td>Garbage collected</td><td>Manual</td></tr>
+            <tr><td>Multiple inherit</td><td>Interfaces only</td><td>Yes (MRO)</td><td>Yes</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Java Escape Sequences</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Escape</th><th>Meaning</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><code>\n</code></td><td>Newline</td><td><code>"line1\nline2"</code></td></tr>
+            <tr><td><code>\t</code></td><td>Tab</td><td><code>"col1\tcol2"</code></td></tr>
+            <tr><td><code>\\</code></td><td>Backslash</td><td><code>"C:\\Users"</code></td></tr>
+            <tr><td><code>\"</code></td><td>Double quote</td><td><code>"say \"hi\""</code></td></tr>
+            <tr><td><code>\'</code></td><td>Single quote</td><td><code>'\''</code></td></tr>
+            <tr><td><code>\r</code></td><td>Carriage return</td><td>Windows line endings</td></tr>
+            <tr><td><code>\0</code></td><td>Null character</td><td>String terminator</td></tr>
+            <tr><td><code>\uXXXX</code></td><td>Unicode character</td><td><code>'\u0041'</code> → A</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Math Class — Essential Methods</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Method</th><th>Purpose</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><code>Math.abs(x)</code></td><td>Absolute value</td><td><code>Math.abs(-5) → 5</code></td></tr>
+            <tr><td><code>Math.max(a,b)</code></td><td>Maximum</td><td><code>Math.max(3,7) → 7</code></td></tr>
+            <tr><td><code>Math.min(a,b)</code></td><td>Minimum</td><td><code>Math.min(3,7) → 3</code></td></tr>
+            <tr><td><code>Math.pow(a,b)</code></td><td>Power (aᵇ)</td><td><code>Math.pow(2,10) → 1024.0</code></td></tr>
+            <tr><td><code>Math.sqrt(x)</code></td><td>Square root</td><td><code>Math.sqrt(16) → 4.0</code></td></tr>
+            <tr><td><code>Math.ceil(x)</code></td><td>Round up</td><td><code>Math.ceil(3.2) → 4.0</code></td></tr>
+            <tr><td><code>Math.floor(x)</code></td><td>Round down</td><td><code>Math.floor(3.8) → 3.0</code></td></tr>
+            <tr><td><code>Math.round(x)</code></td><td>Round nearest</td><td><code>Math.round(3.5) → 4</code></td></tr>
+            <tr><td><code>Math.random()</code></td><td>Random [0, 1)</td><td><code>Math.random()</code></td></tr>
+            <tr><td><code>Math.PI</code></td><td>π constant</td><td><code>3.141592653589793</code></td></tr>
+            <tr><td><code>Math.E</code></td><td>e constant</td><td><code>2.718281828459045</code></td></tr>
+            <tr><td><code>Math.log(x)</code></td><td>Natural logarithm</td><td><code>Math.log(Math.E) → 1.0</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Java LTS Versions — Evolution Timeline</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Version</th><th>Year</th><th>Key Features</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Java 8</strong> (LTS)</td><td>2014</td><td>Lambdas, Streams, Optional, Date/Time API</td></tr>
+            <tr><td><strong>Java 11</strong> (LTS)</td><td>2018</td><td>var in lambdas, HTTP Client, String methods</td></tr>
+            <tr><td>Java 14</td><td>2020</td><td>Switch expressions, Records (preview)</td></tr>
+            <tr><td>Java 16</td><td>2021</td><td>Records (final), Pattern matching instanceof</td></tr>
+            <tr><td><strong>Java 17</strong> (LTS)</td><td>2021</td><td>Sealed classes, text blocks, pattern matching</td></tr>
+            <tr><td><strong>Java 21</strong> (LTS)</td><td>2023</td><td>Virtual threads, switch patterns, sequenced collections</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="callout callout-tip"><strong>🏭 Industry insight:</strong> Java 17 is the current <strong>LTS</strong> (Long-Term Support) standard for most enterprises. Always target the latest LTS version for production. Use <code>var</code> for local variables, text blocks for multi-line strings, and Records for DTOs — these are modern Java essentials.</div>
+
+    <div class="practice-box">
+      <div class="practice-title">✏️ Practice Exercises — Part 1</div>
+      <ol>
+        <li>Write a program that asks for name and age using Scanner, then prints a greeting using <code>printf()</code>.</li>
+        <li>Declare all 8 primitive types with example values and print their sizes using wrapper class constants (e.g., <code>Integer.BYTES</code>).</li>
+        <li>Demonstrate widening and narrowing casts — show what happens when you cast <code>double</code> to <code>int</code>.</li>
+        <li>Write a temperature converter: Celsius ↔ Fahrenheit (both directions) with formatted output.</li>
+        <li>Use <code>Math</code> class to calculate: area of circle, hypotenuse of triangle, and a random number between 1-100.</li>
+        <li>Create a simple receipt formatter using <code>printf()</code> with left-aligned item names and right-aligned prices.</li>
+        <li>Write a class with proper Javadoc comments following Google Java Style Guide conventions.</li>
+      </ol>
+    </div>
+
+    <div class="handbook-nav">
+      <a href="syllabus.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">📋 Master Syllabus</div></div></a>
+      <a href="part2.html" class="nav-btn next"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Part 2: Control Flow & Arrays →</div></div><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+
+  </div>
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
+  <script src="../../../js/main.js"></script>
+  <script>
+    (() => {
+      document.querySelectorAll('.code-block').forEach((block) => { const pre = block.querySelector('.code-body pre'), header = block.querySelector('.code-header'); if (!pre || !header) return; let actions = header.querySelector('.code-actions'); if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); } const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'code-copy-btn'; btn.textContent = 'Copy'; btn.addEventListener('click', async () => { try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; } catch { btn.textContent = 'Failed'; } finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); } }); actions.prepend(btn); });
+      const fill = document.querySelector('.hb-progress-fill'), label = document.querySelector('.hb-progress-label');
+      if (fill && label) { const update = () => { const h = document.documentElement, d = (h.scrollHeight - h.clientHeight) || 1, p = Math.max(0, Math.min(1, h.scrollTop / d)); fill.style.width = (p*100).toFixed(0)+'%'; label.textContent = (p*100).toFixed(0)+'%'; }; document.addEventListener('scroll', update, { passive: true }); update(); }
+    })();
+  </script>
+</body>
+</html>

@@ -154,7 +154,7 @@ function initHandbookGlobalIndex() {
   if (!page) return;
 
   const path = window.location.pathname.replace(/\\/g, '/');
-  const partMatch = path.match(/\/content\/handbooks\/(python|html-css|c-programming|cpp-programming)\/part([1-8])\.html$/);
+  const partMatch = path.match(/\/content\/handbooks\/(python|html-css|c-programming|cpp-programming|java)\/part([1-8])\.html$/);
   if (!partMatch) return;
 
   const handbookSlug = partMatch[1];
@@ -213,6 +213,16 @@ function initHandbookGlobalIndex() {
       6: 'STL — Containers, Iterators & Algorithms',
       7: 'Memory Management & Smart Pointers',
       8: 'Concurrency & Modern C++'
+    },
+    java: {
+      1: 'Java Foundations & Setup',
+      2: 'Control Flow & Arrays',
+      3: 'OOP Basics',
+      4: 'Inheritance & Polymorphism',
+      5: 'Collections & Generics',
+      6: 'Exceptions & File I/O',
+      7: 'Functional Java & Streams',
+      8: 'Concurrency, Testing & Industry'
     }
   };
   const partTitles = partTitlesByHandbook[handbookSlug];
@@ -225,7 +235,9 @@ function initHandbookGlobalIndex() {
       ? 'HTML/CSS Index'
       : handbookSlug === 'c-programming'
         ? 'C Programming Index'
-        : 'C++ Programming Index';
+        : handbookSlug === 'cpp-programming'
+          ? 'C++ Programming Index'
+          : 'Java Programming Index';
   links.appendChild(indexLink);
 
   for (let i = 1; i <= 8; i++) {
