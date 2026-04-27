@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>Part 3: Strings & Data Structures — Python Handbook | CodeWithYuvraj</title>
-  <meta name="description" content="Part 3 of Python Handbook: Strings, Lists, Tuples, Dictionaries, Sets, and Comprehensions with bilingual explanations and practical examples.">
+  <title>Part 3: Strings & Data Structures — Python Programming Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 3: Strings, lists, tuples, dictionaries, sets, collections module in Python.">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="../../../css/style.css">
   <link rel="stylesheet" href="../../../css/handbook.css">
@@ -13,418 +13,504 @@
   <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
 
   <div class="handbook-page">
-    <div class="hb-topbar">
-      <div class="hb-topbar-inner">
-        <div class="hb-breadcrumbs">
-          <a href="index.html">Python Handbook</a>
-          <span class="hb-muted">/</span>
-          <span>Part 3</span>
-          <span class="hb-muted">·</span>
-          <a href="#m3-1">3.1</a>
-          <a href="#m3-2">3.2</a>
-          <a href="#m3-3">3.3</a>
-          <a href="#m3-4">3.4</a>
-          <a href="#m3-5">3.5</a>
-          <a href="#m3-6">3.6</a>
-        </div>
-        <div class="hb-progress" aria-label="Reading progress">
-          <div class="hb-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-            <div class="hb-progress-fill"></div>
-          </div>
-          <div class="hb-progress-label">0%</div>
-        </div>
-      </div>
-    </div>
+    <div class="hb-topbar"><div class="hb-topbar-inner"><div class="hb-breadcrumbs"><a href="index.html">Python Programming Handbook</a><span class="hb-muted">/</span><span>Part 3</span><span class="hb-muted">·</span><a href="#m3-1">3.1</a> <a href="#m3-2">3.2</a> <a href="#m3-3">3.3</a> <a href="#m3-4">3.4</a> <a href="#m3-5">3.5</a> <a href="#m3-6">3.6</a> <a href="#m3-7">3.7</a></div><div class="hb-progress" aria-label="Reading progress"><div class="hb-progress-track" role="progressbar"><div class="hb-progress-fill"></div></div><div class="hb-progress-label">0%</div></div></div></div>
 
     <div class="chapter-header" data-chapter-num="03">
       <div class="chapter-part-label">📖 Part 3 — Strings & Data Structures</div>
-      <h1 class="chapter-title">Data Handling with <span class="gradient-text">Core Collections</span></h1>
-      <p class="chapter-subtitle">Text and collections mastery: build clean, scalable Python logic.</p>
-      <div class="chapter-meta"><span>📄 Modules 3.1 – 3.6</span><span>⏱️ 60–95 min read</span><span>💻 40+ Examples</span></div>
+      <h1 class="chapter-title">Organize Your <span class="gradient-text">Data</span></h1>
+      <p class="chapter-subtitle">Strings, lists, tuples, dictionaries, sets, collections — master Python's built-in data structures.</p>
+      <div class="chapter-meta"><span>📄 Modules 3.1 – 3.7</span><span>⏱️ 80–110 min read</span><span>💻 60+ Examples</span></div>
     </div>
 
-    <div class="callout callout-tip">
-      <strong>How to study Part 3:</strong> Practice by creating small datasets and transforming them. Data structures become easy only through repetition.
-    </div>
+    <div class="hb-mini-toc"><div class="hb-mini-title">📍 Part 3 Modules</div><div class="hb-mini-links"><a href="#m3-1">3.1 Strings</a><a href="#m3-2">3.2 Lists</a><a href="#m3-3">3.3 Tuples</a><a href="#m3-4">3.4 Dicts</a><a href="#m3-5">3.5 Sets</a><a href="#m3-6">3.6 Collections</a><a href="#m3-7">3.7 Selection</a></div></div>
 
-    <div class="hb-mini-toc">
-      <div class="hb-mini-title">📍 Part 3 Modules</div>
-      <div class="hb-mini-links">
-        <a href="#m3-1">3.1 Strings</a>
-        <a href="#m3-2">3.2 Lists</a>
-        <a href="#m3-3">3.3 Tuples</a>
-        <a href="#m3-4">3.4 Dictionaries</a>
-        <a href="#m3-5">3.5 Sets</a>
-        <a href="#m3-6">3.6 Comprehensions</a>
-      </div>
-    </div>
-
-    <div class="quick-ref">
-      <div class="qr-title">🚀 Advanced Lens — Part 3</div>
-      <p class="explain-en">
-        Data-structure maturity comes from choosing the right structure for the right operation: list for order, tuple for fixed contracts,
-        dictionary for keyed lookup, set for uniqueness and fast membership. Analyze each task by access pattern, mutation pattern, and data integrity needs.
-      </p>
-      <div class="explain-hi">
-        <span class="hi-label">Hindi mein samjho</span>
-        Advanced level par focus ye hota hai ki kaunse problem ke liye kaunsa structure best hai. Galat structure choose karne se code slow aur complex ho jata hai.
-        Correct structure selection performance aur readability dono improve karta hai.
-      </div>
-    </div>
-
+    <!-- MODULE 3.1 -->
     <div class="module-section" id="m3-1">
-      <div class="module-header">
-        <div class="module-number">3.1</div>
-        <h2 class="module-title">Strings — Creation, Indexing, Slicing, Common Methods</h2>
-      </div>
-
+      <div class="module-header"><div class="module-number">3.1</div><h2 class="module-title">Strings — methods, slicing, f-strings, raw strings</h2></div>
       <div class="concept-block">
-        <h3 class="concept-heading">What is a string in Python?</h3>
-        <p class="explain-en">
-          A string is an ordered sequence of Unicode characters used to represent text data.
-          In real-world applications, strings handle names, emails, logs, user messages, file paths, API payloads, and more.
-          Strings are immutable, which means every modification operation returns a new string object.
-        </p>
-        <div class="explain-hi">
-          <span class="hi-label">Hindi mein samjho</span>
-          String text data store karta hai, jaise username, email, message, logs. Python mein strings immutable hoti hain, yani change karne pe naya string banta hai.
-        </div>
-      </div>
-
-      <div class="concept-block">
-        <h3 class="concept-heading">Unicode + encoding (real-world production detail)</h3>
-        <p class="explain-en">
-          Python strings are Unicode, which means they can represent characters from many languages (Hindi, Marathi, emojis, etc.).
-          When you read/write files or interact with APIs, you are often converting between text (Unicode) and bytes (encoded form like UTF-8).
-          Most bugs happen when encoding is not specified consistently.
-        </p>
-        <div class="explain-hi">
-          <span class="hi-label">Hindi mein samjho</span>
-          Python strings Unicode hote hain, isliye Hindi/Marathi/emoji sab support hota hai.
-          File aur APIs ke time text ko bytes me encode/decode karna padta hai (UTF-8 common hai). Encoding specify na karne se real projects me bugs aate hain.
-        </div>
+        <h3 class="concept-heading">Immutable text sequences</h3>
+        <p class="explain-en">Strings are <strong>immutable</strong> sequences of Unicode characters. All string methods return new strings. Slicing with <code>[start:stop:step]</code> extracts substrings. Python supports single, double, and triple quotes.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Strings Unicode characters ki <strong>immutable</strong> sequences hain. Sab string methods naye strings return karte hain. <code>[start:stop:step]</code> se substrings extract hoti hain. Python single, double, aur triple quotes support karta hai.</div>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — encoding demo</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre>s = <span class="string">"नमस्ते Python"</span>
-b = s.encode(<span class="string">"utf-8"</span>)
-<span class="builtin">print</span>(b)
-<span class="builtin">print</span>(b.decode(<span class="string">"utf-8"</span>))</pre></div>
-        </div>
-        <div class="callout callout-note"><strong>Example explained:</strong> Text becomes bytes via <code>encode()</code>, then returns to text via <code>decode()</code>.</div>
-      </div>
+          <div class="code-header"><span class="code-lang">💻 Python — String operations</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># String creation</span>
+s = <span class="string">"Hello, World!"</span>
+multi = <span class="string">"""Line 1
+Line 2
+Line 3"""</span>
 
-      <div class="concept-block">
-        <h3 class="concept-heading">Indexing and slicing</h3>
-        <p class="explain-en">
-          Indexing gives direct access to a single element by position, while slicing extracts a contiguous range of elements.
-          Python supports both positive indexing (left to right) and negative indexing (right to left), which makes boundary access very convenient.
-          In practical text-processing tasks, slicing is frequently used for token extraction, prefix/suffix checks, masking sensitive values, and preprocessing data.
-        </p>
-        <div class="explain-hi">
-          <span class="hi-label">Hindi mein samjho</span>
-          Indexing se ek specific position ka character milta hai, aur slicing se range ke characters milte hain.
-          Negative indexing se aap end side se access kar sakte ho, jo real projects mein last characters, extensions, ya suffix check ke liye kaafi useful hota hai.
-        </div>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — indexing and slicing</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre>text = <span class="string">"CodeWithYuvraj"</span>
-<span class="builtin">print</span>(text[<span class="number">0</span>])      <span class="comment"># C</span>
-<span class="builtin">print</span>(text[-<span class="number">1</span>])     <span class="comment"># j</span>
-<span class="builtin">print</span>(text[<span class="number">0</span>:<span class="number">4</span>])    <span class="comment"># Code</span>
-<span class="builtin">print</span>(text[<span class="number">4</span>:<span class="number">8</span>])    <span class="comment"># With</span></pre></div>
-        </div>
-        <div class="callout callout-note">
-          <strong>Example explained:</strong> Single index returns one character; slice <code>start:end</code> returns characters from start to end-1.
-        </div>
-      </div>
+<span class="comment"># Slicing [start:stop:step]</span>
+s[<span class="number">0</span>]       <span class="comment"># 'H'</span>
+s[<span class="number">-1</span>]      <span class="comment"># '!'</span>
+s[<span class="number">0</span>:<span class="number">5</span>]     <span class="comment"># 'Hello'</span>
+s[::<span class="number">-1</span>]    <span class="comment"># '!dlroW ,olleH' (reverse)</span>
+s[<span class="number">7</span>:]      <span class="comment"># 'World!'</span>
 
-      <div class="concept-block">
-        <h3 class="concept-heading">Useful string methods</h3>
-        <p class="explain-en">
-          String methods are essential for normalization, cleaning, and controlled transformation of text inputs.
-          In production code, user input almost always needs preprocessing before validation or storage.
-          Common methods include <code>lower()</code>, <code>upper()</code>, <code>strip()</code>, <code>replace()</code>, and <code>split()</code>, each solving a specific cleaning step.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>String methods data cleaning pipeline ka core hote hain. User se aaya raw text directly reliable nahi hota, isliye normalize karke hi aage process karna chahiye.</div>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — string cleanup</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre>raw = <span class="string">"  PYTHON,java,Go  "</span>
-clean = raw.strip().lower().replace(<span class="string">"go"</span>, <span class="string">"golang"</span>)
-langs = clean.split(<span class="string">","</span>)
-<span class="builtin">print</span>(langs)</pre></div>
-          <div class="code-output">['python', 'java', 'golang']</div>
-        </div>
-        <div class="callout callout-note">
-          <strong>Example explained:</strong> Spaces removed by <code>strip()</code>, case normalized by <code>lower()</code>, and text transformed using <code>replace()</code>.
-        </div>
-      </div>
-    </div>
+<span class="comment"># Common methods</span>
+s.upper()           <span class="comment"># 'HELLO, WORLD!'</span>
+s.lower()           <span class="comment"># 'hello, world!'</span>
+s.strip()           <span class="comment"># Remove whitespace</span>
+s.split(<span class="string">", "</span>)       <span class="comment"># ['Hello', 'World!']</span>
+<span class="string">"-"</span>.join([<span class="string">"a"</span>,<span class="string">"b"</span>]) <span class="comment"># 'a-b'</span>
+s.replace(<span class="string">"World"</span>, <span class="string">"Python"</span>)  <span class="comment"># 'Hello, Python!'</span>
+s.find(<span class="string">"World"</span>)     <span class="comment"># 7 (index or -1)</span>
+s.count(<span class="string">"l"</span>)        <span class="comment"># 3</span>
+s.startswith(<span class="string">"He"</span>) <span class="comment"># True</span>
+s.endswith(<span class="string">"!"</span>)    <span class="comment"># True</span>
+s.isdigit()        <span class="comment"># False</span>
+s.isalpha()        <span class="comment"># False (has space, comma)</span>
 
-    <div class="module-section" id="m3-2">
-      <div class="module-header">
-        <div class="module-number">3.2</div>
-        <h2 class="module-title">Lists — Mutable Ordered Collections</h2>
-      </div>
-
-      <div class="concept-block">
-        <h3 class="concept-heading">What is a list?</h3>
-        <p class="explain-en">
-          A list is an ordered, mutable collection that can store mixed data types.
-          Lists are heavily used for task queues, item catalogs, marks tables, API response handling, and dynamic datasets.
-          Because lists are mutable, they are ideal where data changes frequently during program execution.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>List ordered aur mutable collection hai, isliye runtime mein items add/remove/update karna easy hota hai. Dynamic workflows ke liye list sabse common aur practical choice hai.</div>
-      </div>
-
-      <div class="concept-block">
-        <h3 class="concept-heading">Core list operations</h3>
-        <p class="explain-en">
-          Learn append, insert, remove, pop, and slicing for efficient daily work.
-          Understanding these operations reduces errors in dynamic list management and helps you reason about state changes clearly.
-          In interviews and production code, many bugs come from incorrect assumptions about whether an operation mutates list in-place or returns a new object.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>List operations se data maintain hota hai: add, delete, update, extract. Advanced level par yeh samajhna important hai ki kaunsa method list ko directly change karta hai aur kaunsa new value return karta hai.</div>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — list operations</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre>items = [<span class="string">"pen"</span>, <span class="string">"book"</span>, <span class="string">"laptop"</span>]
-items.append(<span class="string">"mouse"</span>)
-items.insert(<span class="number">1</span>, <span class="string">"notebook"</span>)
-items.remove(<span class="string">"pen"</span>)
-last = items.pop()
-<span class="builtin">print</span>(items)
-<span class="builtin">print</span>(last)</pre></div>
-          <div class="code-output">['notebook', 'book', 'laptop']\nmouse</div>
+<span class="comment"># String is immutable!</span>
+<span class="comment"># s[0] = 'h'  # ❌ TypeError!</span></pre></div>
         </div>
-        <div class="callout callout-note">
-          <strong>Example explained:</strong> <code>append()</code> adds at end, <code>insert()</code> adds at position, <code>remove()</code> deletes by value, and <code>pop()</code> returns removed item.
-        </div>
-      </div>
-
-      <div class="concept-block">
-        <h3 class="concept-heading">Performance intuition (Big-O) — choose the right tool</h3>
-        <p class="explain-en">
-          Industry code often fails performance not because Python is slow, but because the wrong data structure is used.
-          Basic intuition: list membership checks are linear, while set/dict membership is usually constant time.
-          This directly impacts search-heavy tasks.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Performance ka biggest lever hota hai correct data structure. List me membership check slow (linear) hota hai, set/dict me usually fast (constant) hota hai.</div>
         <div class="hb-table-wrap">
           <table class="hb-table">
-            <thead><tr><th>Operation</th><th>List</th><th>Set/Dict</th></tr></thead>
+            <thead><tr><th>Method</th><th>Purpose</th><th>Returns</th></tr></thead>
             <tbody>
-              <tr><td>Membership (<code>x in ...</code>)</td><td>O(n)</td><td>≈ O(1)</td></tr>
-              <tr><td>Append</td><td>≈ O(1)</td><td>≈ O(1)</td></tr>
-              <tr><td>Insert at start</td><td>O(n)</td><td>n/a</td></tr>
+              <tr><td><code>.upper() / .lower()</code></td><td>Case conversion</td><td>New string</td></tr>
+              <tr><td><code>.strip() / .lstrip() / .rstrip()</code></td><td>Remove whitespace</td><td>New string</td></tr>
+              <tr><td><code>.split(sep)</code></td><td>Split into list</td><td>List of strings</td></tr>
+              <tr><td><code>.join(iterable)</code></td><td>Join list into string</td><td>New string</td></tr>
+              <tr><td><code>.replace(old, new)</code></td><td>Replace substrings</td><td>New string</td></tr>
+              <tr><td><code>.find(sub)</code></td><td>Find index (-1 if not found)</td><td>int</td></tr>
+              <tr><td><code>.count(sub)</code></td><td>Count occurrences</td><td>int</td></tr>
+              <tr><td><code>.startswith() / .endswith()</code></td><td>Prefix/suffix check</td><td>bool</td></tr>
+              <tr><td><code>.title() / .capitalize()</code></td><td>Title/Sentence case</td><td>New string</td></tr>
+              <tr><td><code>.zfill(width)</code></td><td>Zero-pad left</td><td>New string</td></tr>
             </tbody>
           </table>
         </div>
       </div>
     </div>
 
+    <!-- MODULE 3.2 -->
+    <div class="module-section" id="m3-2">
+      <div class="module-header"><div class="module-number">3.2</div><h2 class="module-title">Lists — CRUD, slicing, sorting, copying</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Mutable ordered sequences</h3>
+        <p class="explain-en"><strong>Lists</strong> are Python's most versatile data structure — ordered, mutable, and can hold mixed types. Use <code>append()</code>, <code>insert()</code>, <code>remove()</code>, <code>pop()</code> for CRUD. <code>sort()</code> modifies in-place; <code>sorted()</code> returns a new list.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Lists</strong> Python ka sabse versatile data structure hai — ordered, mutable, aur mixed types rakh sakta hai. CRUD ke liye <code>append()</code>, <code>insert()</code>, <code>remove()</code>, <code>pop()</code> use karo. <code>sort()</code> in-place modify karta hai; <code>sorted()</code> naya list return karta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Python — List operations</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># Create</span>
+nums = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]
+mixed = [<span class="number">1</span>, <span class="string">"hello"</span>, <span class="keyword">True</span>, <span class="number">3.14</span>]
+
+<span class="comment"># CRUD operations</span>
+nums.append(<span class="number">6</span>)           <span class="comment"># [1,2,3,4,5,6]</span>
+nums.insert(<span class="number">0</span>, <span class="number">0</span>)       <span class="comment"># [0,1,2,3,4,5,6]</span>
+nums.extend([<span class="number">7</span>, <span class="number">8</span>])     <span class="comment"># [0,1,2,3,4,5,6,7,8]</span>
+nums.remove(<span class="number">0</span>)           <span class="comment"># Remove first occurrence</span>
+last = nums.pop()        <span class="comment"># Remove & return last</span>
+nums.pop(<span class="number">2</span>)              <span class="comment"># Remove at index 2</span>
+
+<span class="comment"># Slicing (same as strings)</span>
+nums[<span class="number">1</span>:<span class="number">4</span>]    <span class="comment"># [2, 3, 4]</span>
+nums[::<span class="number">-1</span>]   <span class="comment"># Reversed copy</span>
+nums[<span class="number">1</span>:<span class="number">4</span>] = [<span class="number">20</span>, <span class="number">30</span>]  <span class="comment"># Slice assignment!</span>
+
+<span class="comment"># Sorting</span>
+nums.sort()                    <span class="comment"># In-place, modifies list</span>
+nums.sort(reverse=<span class="keyword">True</span>)       <span class="comment"># Descending</span>
+new = <span class="function">sorted</span>(nums)            <span class="comment"># Returns new list</span>
+new = <span class="function">sorted</span>(nums, key=<span class="function">abs</span>)  <span class="comment"># Custom key</span>
+
+<span class="comment"># ⚠️ Shallow copy vs deep copy</span>
+a = [[<span class="number">1</span>,<span class="number">2</span>], [<span class="number">3</span>,<span class="number">4</span>]]
+b = a.copy()       <span class="comment"># Shallow — nested lists still shared!</span>
+<span class="keyword">import</span> copy
+c = copy.deepcopy(a)  <span class="comment"># Deep — fully independent</span></pre></div>
+        </div>
+        <div class="callout callout-warning"><strong>Shallow copy trap!</strong> <code>list.copy()</code>, <code>list[:]</code>, and <code>list(original)</code> only copy the top level. Nested objects are still shared references. Use <code>copy.deepcopy()</code> for nested structures.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 3.3 -->
     <div class="module-section" id="m3-3">
-      <div class="module-header">
-        <div class="module-number">3.3</div>
-        <h2 class="module-title">Tuples — Immutable Ordered Collections</h2>
-      </div>
-
+      <div class="module-header"><div class="module-number">3.3</div><h2 class="module-title">Tuples — immutability, named tuples, unpacking</h2></div>
       <div class="concept-block">
-        <h3 class="concept-heading">Why tuples exist?</h3>
-        <p class="explain-en">
-          Tuples are ordered but immutable sequences, useful when data should remain constant.
-          They are suitable for coordinates, fixed configuration values, and dictionary keys.
-          Immutability communicates intent: "this structure should not change", which improves code reliability and predictability.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Tuple fixed contract jaisa hota hai. Jab data stable hona chahiye tab tuple best hai, kyunki accidental modification ka risk kam ho jata hai.</div>
-      </div>
-
-      <div class="concept-block">
-        <h3 class="concept-heading">Tuple unpacking</h3>
-        <p class="explain-en">
-          Unpacking allows assigning tuple values into multiple variables in one line.
-          This pattern improves readability and is common in loops and function returns.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Tuple unpacking se ek line mein multiple variables assign ho jate hain.</div>
+        <h3 class="concept-heading">Immutable ordered sequences</h3>
+        <p class="explain-en"><strong>Tuples</strong> are like lists but <strong>immutable</strong>. They're faster, hashable (can be dict keys), and used for fixed data. <strong>Named tuples</strong> add field names. <strong>Unpacking</strong> extracts values into variables.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Tuples</strong> lists jaisi hain par <strong>immutable</strong> hain. Ye faster hain, hashable hain (dict keys ban sakte hain), aur fixed data ke liye use hote hain. <strong>Named tuples</strong> field names add karte hain. <strong>Unpacking</strong> values ko variables me extract karta hai.</div>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — tuple unpacking</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre>point = (<span class="number">10</span>, <span class="number">25</span>)
-x, y = point
-<span class="builtin">print</span>(x, y)</pre></div>
-          <div class="code-output">10 25</div>
-        </div>
-        <div class="callout callout-note">
-          <strong>Example explained:</strong> Tuple’s first value goes to <code>x</code>, second goes to <code>y</code> automatically.
+          <div class="code-header"><span class="code-lang">💻 Python — Tuples</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># Create tuples</span>
+point = (<span class="number">3</span>, <span class="number">4</span>)
+single = (<span class="number">42</span>,)  <span class="comment"># Single item needs trailing comma!</span>
+empty = ()
+
+<span class="comment"># Unpacking</span>
+x, y = point              <span class="comment"># x=3, y=4</span>
+first, *rest = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>]  <span class="comment"># first=1, rest=[2,3,4]</span>
+_, mid, _ = (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)     <span class="comment"># Ignore with _</span>
+
+<span class="comment"># Swap without temp variable</span>
+a, b = <span class="number">1</span>, <span class="number">2</span>
+a, b = b, a  <span class="comment"># a=2, b=1 (tuple swap!)</span>
+
+<span class="comment"># Named tuples — readable tuples</span>
+<span class="keyword">from</span> collections <span class="keyword">import</span> namedtuple
+
+Point = namedtuple(<span class="string">"Point"</span>, [<span class="string">"x"</span>, <span class="string">"y"</span>])
+p = Point(<span class="number">3</span>, <span class="number">4</span>)
+<span class="function">print</span>(p.x, p.y)  <span class="comment"># 3, 4 (access by name!)</span>
+
+<span class="comment"># Tuples as dict keys (lists can't!)</span>
+grid = {(<span class="number">0</span>,<span class="number">0</span>): <span class="string">"origin"</span>, (<span class="number">1</span>,<span class="number">0</span>): <span class="string">"right"</span>}</pre></div>
         </div>
       </div>
     </div>
 
+    <!-- MODULE 3.4 -->
     <div class="module-section" id="m3-4">
-      <div class="module-header">
-        <div class="module-number">3.4</div>
-        <h2 class="module-title">Dictionaries — Key-Value Data Modeling</h2>
-      </div>
-
+      <div class="module-header"><div class="module-number">3.4</div><h2 class="module-title">Dictionaries — methods, merging (|), defaultdict</h2></div>
       <div class="concept-block">
-        <h3 class="concept-heading">What is a dictionary?</h3>
-        <p class="explain-en">
-          A dictionary stores data in key-value pairs for fast lookup by key.
-          It is ideal for modeling JSON-like data such as user profiles, product details, and configuration objects.
-          Compared to list scanning, keyed lookup in dictionaries is significantly more efficient for retrieval-heavy workflows.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Dictionary ka strength hai fast key-based access. API data, configs, profile objects jaise structured information ke liye dictionary most practical structure hai.</div>
-      </div>
-
-      <div class="concept-block">
-        <h3 class="concept-heading">Common dictionary operations</h3>
-        <p class="explain-en">
-          Practice create/read/update/delete (CRUD), <code>get()</code>, and iteration.
-          <code>get()</code> is safer than direct indexing when key may not exist.
-          Mature dictionary handling includes safe defaults, predictable key naming, and explicit handling of missing fields.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Dictionary access mein missing keys common hoti hain, especially API data mein. Isliye <code>get()</code> + default value use karna safer aur production-friendly approach hai.</div>
+        <h3 class="concept-heading">Key-value pairs</h3>
+        <p class="explain-en"><strong>Dictionaries</strong> store key-value pairs with O(1) average lookup. Keys must be hashable (immutable). Since Python 3.7, dicts <strong>preserve insertion order</strong>. Use <code>.get()</code> for safe access, <code>|</code> (Python 3.9+) for merging.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Dictionaries</strong> key-value pairs store karte hain O(1) average lookup ke saath. Keys hashable (immutable) honi chahiye. Python 3.7 se dicts <strong>insertion order preserve</strong> karte hain. Safe access ke liye <code>.get()</code>, merging ke liye <code>|</code> (Python 3.9+) use karo.</div>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — dictionary CRUD</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre>user = {<span class="string">"name"</span>: <span class="string">"Yuvraj"</span>, <span class="string">"role"</span>: <span class="string">"admin"</span>}
-user[<span class="string">"city"</span>] = <span class="string">"Pune"</span>
-user[<span class="string">"role"</span>] = <span class="string">"mentor"</span>
-<span class="builtin">print</span>(user.get(<span class="string">"email"</span>, <span class="string">"not provided"</span>))
-<span class="keyword">for</span> k, v <span class="keyword">in</span> user.items():
-    <span class="builtin">print</span>(k, <span class="string">"->"</span>, v)</pre></div>
-        </div>
-        <div class="callout callout-note">
-          <strong>Example explained:</strong> Dictionary was updated dynamically and iterated using <code>items()</code> for key-value access.
+          <div class="code-header"><span class="code-lang">💻 Python — Dictionaries</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># Create</span>
+person = {<span class="string">"name"</span>: <span class="string">"Yuvraj"</span>, <span class="string">"age"</span>: <span class="number">21</span>}
+person = <span class="function">dict</span>(name=<span class="string">"Yuvraj"</span>, age=<span class="number">21</span>)
+
+<span class="comment"># Access</span>
+person[<span class="string">"name"</span>]           <span class="comment"># 'Yuvraj'</span>
+person.get(<span class="string">"email"</span>, <span class="string">"N/A"</span>) <span class="comment"># 'N/A' (safe!)</span>
+
+<span class="comment"># CRUD</span>
+person[<span class="string">"email"</span>] = <span class="string">"y@mail.com"</span>  <span class="comment"># Add/update</span>
+<span class="keyword">del</span> person[<span class="string">"email"</span>]              <span class="comment"># Delete</span>
+age = person.pop(<span class="string">"age"</span>, <span class="number">0</span>)       <span class="comment"># Remove & return</span>
+
+<span class="comment"># Iteration</span>
+<span class="keyword">for</span> key <span class="keyword">in</span> person:               <span class="comment"># Keys</span>
+    <span class="function">print</span>(key)
+<span class="keyword">for</span> k, v <span class="keyword">in</span> person.items():     <span class="comment"># Key-value pairs</span>
+    <span class="function">print</span>(<span class="string">f"</span>{k}<span class="string">: </span>{v}<span class="string">"</span>)
+
+<span class="comment"># Merging (Python 3.9+)</span>
+d1 = {<span class="string">"a"</span>: <span class="number">1</span>}
+d2 = {<span class="string">"b"</span>: <span class="number">2</span>}
+merged = d1 | d2  <span class="comment"># {'a': 1, 'b': 2}</span>
+d1 |= d2          <span class="comment"># In-place merge</span>
+
+<span class="comment"># setdefault — get or set default</span>
+counts = {}
+counts.setdefault(<span class="string">"apple"</span>, <span class="number">0</span>)
+counts[<span class="string">"apple"</span>] += <span class="number">1</span>
+
+<span class="comment"># defaultdict — auto-default values</span>
+<span class="keyword">from</span> collections <span class="keyword">import</span> defaultdict
+word_count = defaultdict(<span class="type">int</span>)
+<span class="keyword">for</span> word <span class="keyword">in</span> <span class="string">"hello world hello"</span>.split():
+    word_count[word] += <span class="number">1</span>
+<span class="comment"># {'hello': 2, 'world': 1}</span></pre></div>
         </div>
       </div>
     </div>
 
+    <!-- MODULE 3.5 -->
     <div class="module-section" id="m3-5">
-      <div class="module-header">
-        <div class="module-number">3.5</div>
-        <h2 class="module-title">Sets — Unique Values and Fast Membership Checks</h2>
-      </div>
-
+      <div class="module-header"><div class="module-number">3.5</div><h2 class="module-title">Sets — operations, frozen sets, membership testing</h2></div>
       <div class="concept-block">
-        <h3 class="concept-heading">Why use sets?</h3>
-        <p class="explain-en">
-          A set stores unique unordered values and automatically removes duplicates.
-          It is highly useful for membership checks and operations like union, intersection, and difference.
-          For repeated existence checks, sets often outperform lists due to their hash-based lookup behavior.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Set duplicates automatically remove karta hai aur membership checks fast banata hai. Data deduplication aur overlap analysis ke liye set bahut powerful tool hai.</div>
-      </div>
-
-      <div class="concept-block">
-        <h3 class="concept-heading">Set operations in practice</h3>
-        <p class="explain-en">
-          Use set math to compare groups, detect overlaps, and find missing entries.
-          This is common in permission systems, tags, recommendation engines, and analytics.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Set operations se common, extra, aur missing values quickly nikal sakte ho.</div>
+        <h3 class="concept-heading">Unordered unique collections</h3>
+        <p class="explain-en"><strong>Sets</strong> hold unique elements with O(1) membership testing. They support mathematical operations: union <code>|</code>, intersection <code>&amp;</code>, difference <code>-</code>, symmetric difference <code>^</code>. <code>frozenset</code> is immutable (can be dict key).</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Sets</strong> unique elements hold karte hain O(1) membership testing ke saath. Ye mathematical operations support karte hain: union <code>|</code>, intersection <code>&amp;</code>, difference <code>-</code>, symmetric difference <code>^</code>. <code>frozenset</code> immutable hai (dict key ban sakta hai).</div>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — set math</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre>a = {<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>}
-b = {<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>}
-<span class="builtin">print</span>(a | b)   <span class="comment"># union</span>
-<span class="builtin">print</span>(a &amp; b)   <span class="comment"># intersection</span>
-<span class="builtin">print</span>(a - b)   <span class="comment"># difference</span></pre></div>
-        </div>
-        <div class="callout callout-note">
-          <strong>Example explained:</strong> Union combines all unique values, intersection gives common values, and difference gives values only in first set.
+          <div class="code-header"><span class="code-lang">💻 Python — Sets</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># Create</span>
+fruits = {<span class="string">"apple"</span>, <span class="string">"banana"</span>, <span class="string">"cherry"</span>}
+nums = <span class="function">set</span>([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">2</span>,<span class="number">1</span>])  <span class="comment"># {1, 2, 3} — duplicates removed!</span>
+empty = <span class="function">set</span>()  <span class="comment"># NOT {} (that's an empty dict!)</span>
+
+<span class="comment"># Operations</span>
+a = {<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>}
+b = {<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>}
+a | b   <span class="comment"># {1, 2, 3, 4} — union</span>
+a &amp; b   <span class="comment"># {2, 3}       — intersection</span>
+a - b   <span class="comment"># {1}          — difference</span>
+a ^ b   <span class="comment"># {1, 4}       — symmetric diff</span>
+
+<span class="comment"># Membership (O(1) — FAST!)</span>
+<span class="number">3</span> <span class="keyword">in</span> a    <span class="comment"># True</span>
+<span class="number">5</span> <span class="keyword">in</span> a    <span class="comment"># False</span>
+
+<span class="comment"># Modify</span>
+a.add(<span class="number">5</span>)
+a.discard(<span class="number">99</span>)  <span class="comment"># No error if missing</span>
+a.remove(<span class="number">1</span>)    <span class="comment"># KeyError if missing</span>
+
+<span class="comment"># frozenset — immutable set</span>
+fs = <span class="function">frozenset</span>([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])
+d = {fs: <span class="string">"frozen!"</span>}  <span class="comment"># Can be dict key</span>
+
+<span class="comment"># Practical: remove duplicates</span>
+names = [<span class="string">"Alice"</span>, <span class="string">"Bob"</span>, <span class="string">"Alice"</span>]
+unique = <span class="function">list</span>(<span class="function">set</span>(names))  <span class="comment"># ['Alice', 'Bob']</span></pre></div>
         </div>
       </div>
     </div>
 
+    <!-- MODULE 3.6 -->
     <div class="module-section" id="m3-6">
-      <div class="module-header">
-        <div class="module-number">3.6</div>
-        <h2 class="module-title">Comprehensions — Compact Data Transformation</h2>
-      </div>
-
+      <div class="module-header"><div class="module-number">3.6</div><h2 class="module-title">Collections module — Counter, deque, OrderedDict, ChainMap</h2></div>
       <div class="concept-block">
-        <h3 class="concept-heading">What are comprehensions?</h3>
-        <p class="explain-en">
-          Comprehensions provide concise syntax to create new collections from iterables.
-          Python supports list, set, and dictionary comprehensions for transform + filter workflows.
-          They improve readability when logic is simple and predictable.
-          Use comprehensions when they reduce ceremony without hiding intent; for multi-step logic, explicit loops remain more maintainable.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Comprehension concise syntax deta hai, lekin readability first rule hai. Simple map/filter cases mein best hai, complex transformations mein normal loop zyada clear hota hai.</div>
-      </div>
-
-      <div class="concept-block">
-        <h3 class="concept-heading">List, set, and dict comprehension examples</h3>
-        <p class="explain-en">
-          Use comprehensions for mapping and filtering data.
-          Avoid over-complex one-liners; if expression becomes hard to read, use normal loops.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Simple transformation ke liye comprehension best hai. Complex condition ho to readable loop likhna better hai.</div>
+        <h3 class="concept-heading">Specialized containers</h3>
+        <p class="explain-en">The <code>collections</code> module provides high-performance container alternatives. <code>Counter</code> counts elements, <code>deque</code> is a fast double-ended queue, <code>defaultdict</code> provides default values, <code>ChainMap</code> combines multiple dicts.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>collections</code> module high-performance container alternatives provide karta hai. <code>Counter</code> elements count karta hai, <code>deque</code> fast double-ended queue hai, <code>defaultdict</code> default values deta hai, <code>ChainMap</code> multiple dicts combine karta hai.</div>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — comprehensions</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre>nums = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]
-squares = [n * n <span class="keyword">for</span> n <span class="keyword">in</span> nums <span class="keyword">if</span> n % <span class="number">2</span> == <span class="number">0</span>]
-unique_chars = {c.lower() <span class="keyword">for</span> c <span class="keyword">in</span> <span class="string">"CodeWithYuvraj"</span>}
-marks = {name: len(name) * <span class="number">10</span> <span class="keyword">for</span> name <span class="keyword">in</span> [<span class="string">"Asha"</span>, <span class="string">"Ravi"</span>, <span class="string">"Meena"</span>]}
-<span class="builtin">print</span>(squares)
-<span class="builtin">print</span>(unique_chars)
-<span class="builtin">print</span>(marks)</pre></div>
-        </div>
-        <div class="callout callout-note">
-          <strong>Example explained:</strong> First line builds even-number squares, second builds a unique lowercase character set, third builds a derived dictionary.
-        </div>
-      </div>
+          <div class="code-header"><span class="code-lang">💻 Python — collections module</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">from</span> collections <span class="keyword">import</span> Counter, deque, defaultdict, ChainMap
 
-      <div class="practice-box">
-        <div class="practice-title">✏️ Practice Exercises — Part 3</div>
-        <ol>
-          <li>Build a text analyzer: count vowels, words, and character frequency from a sentence.</li>
-          <li>Create a shopping list manager using list operations (add/remove/update/display).</li>
-          <li>Store 5 students in dictionaries and print topper based on marks.</li>
-          <li>Use sets to compare enrolled students across two courses.</li>
-          <li>Create list/dict comprehensions to transform a raw marks list into grade summaries.</li>
-        </ol>
+<span class="comment"># Counter — count elements</span>
+c = Counter(<span class="string">"abracadabra"</span>)
+<span class="comment"># Counter({'a': 5, 'b': 2, 'r': 2, 'c': 1, 'd': 1})</span>
+c.most_common(<span class="number">2</span>)  <span class="comment"># [('a', 5), ('b', 2)]</span>
+
+<span class="comment"># Counter arithmetic</span>
+c1 = Counter(a=<span class="number">3</span>, b=<span class="number">1</span>)
+c2 = Counter(a=<span class="number">1</span>, b=<span class="number">2</span>)
+c1 + c2  <span class="comment"># Counter({'a': 4, 'b': 3})</span>
+c1 - c2  <span class="comment"># Counter({'a': 2})</span>
+
+<span class="comment"># deque — fast append/pop from both ends</span>
+dq = deque([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], maxlen=<span class="number">5</span>)
+dq.appendleft(<span class="number">0</span>)  <span class="comment"># O(1) — lists are O(n)!</span>
+dq.rotate(<span class="number">1</span>)       <span class="comment"># [3, 0, 1, 2]</span>
+
+<span class="comment"># defaultdict — auto-creates missing keys</span>
+groups = defaultdict(<span class="type">list</span>)
+<span class="keyword">for</span> name, grade <span class="keyword">in</span> [(<span class="string">"Alice"</span>,<span class="string">"A"</span>), (<span class="string">"Bob"</span>,<span class="string">"B"</span>), (<span class="string">"Alice"</span>,<span class="string">"A+"</span>)]:
+    groups[name].append(grade)
+<span class="comment"># {'Alice': ['A', 'A+'], 'Bob': ['B']}</span>
+
+<span class="comment"># ChainMap — search multiple dicts</span>
+defaults = {<span class="string">"color"</span>: <span class="string">"blue"</span>, <span class="string">"size"</span>: <span class="string">"M"</span>}
+user = {<span class="string">"color"</span>: <span class="string">"red"</span>}
+config = ChainMap(user, defaults)
+config[<span class="string">"color"</span>]  <span class="comment"># 'red' (user wins)</span>
+config[<span class="string">"size"</span>]   <span class="comment"># 'M' (falls back to defaults)</span></pre></div>
+        </div>
       </div>
+    </div>
+
+    <!-- MODULE 3.7 -->
+    <div class="module-section" id="m3-7">
+      <div class="module-header"><div class="module-number">3.7</div><h2 class="module-title">Data structure selection guide & performance</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Choosing the right container</h3>
+        <p class="explain-en">Pick your data structure based on: <strong>mutability</strong>, <strong>ordering</strong>, <strong>uniqueness</strong>, and <strong>access pattern</strong>. Lists for ordered mutable sequences, tuples for immutable records, dicts for key-value lookup, sets for uniqueness and membership.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Data structure choose karo: <strong>mutability</strong>, <strong>ordering</strong>, <strong>uniqueness</strong>, aur <strong>access pattern</strong> ke basis pe. Ordered mutable sequences ke liye lists, immutable records ke liye tuples, key-value lookup ke liye dicts, uniqueness ke liye sets.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Structure</th><th>Ordered?</th><th>Mutable?</th><th>Duplicates?</th><th>Best for</th></tr></thead>
+            <tbody>
+              <tr><td><code>list</code></td><td>✅</td><td>✅</td><td>✅</td><td>General sequences</td></tr>
+              <tr><td><code>tuple</code></td><td>✅</td><td>❌</td><td>✅</td><td>Fixed records, dict keys</td></tr>
+              <tr><td><code>dict</code></td><td>✅ (3.7+)</td><td>✅</td><td>Keys: ❌</td><td>Key-value lookup</td></tr>
+              <tr><td><code>set</code></td><td>❌</td><td>✅</td><td>❌</td><td>Uniqueness, membership</td></tr>
+              <tr><td><code>frozenset</code></td><td>❌</td><td>❌</td><td>❌</td><td>Immutable set, dict keys</td></tr>
+              <tr><td><code>deque</code></td><td>✅</td><td>✅</td><td>✅</td><td>Fast append/pop both ends</td></tr>
+              <tr><td><code>Counter</code></td><td>❌</td><td>✅</td><td>N/A</td><td>Counting elements</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Time Complexity — Common Operations</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Operation</th><th>list</th><th>dict</th><th>set</th></tr></thead>
+          <tbody>
+            <tr><td>Access by index</td><td>O(1)</td><td>—</td><td>—</td></tr>
+            <tr><td>Access by key</td><td>—</td><td>O(1)</td><td>—</td></tr>
+            <tr><td>Search (<code>in</code>)</td><td>O(n)</td><td>O(1)</td><td>O(1)</td></tr>
+            <tr><td>Append / Add</td><td>O(1)*</td><td>O(1)</td><td>O(1)</td></tr>
+            <tr><td>Insert at front</td><td>O(n)</td><td>—</td><td>—</td></tr>
+            <tr><td>Delete by value</td><td>O(n)</td><td>O(1)</td><td>O(1)</td></tr>
+            <tr><td>Sort</td><td>O(n log n)</td><td>—</td><td>—</td></tr>
+            <tr><td>Iteration</td><td>O(n)</td><td>O(n)</td><td>O(n)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="color:var(--hb-text2);font-size:0.85rem;margin-top:6px;">* Amortized O(1). Occasionally O(n) when the internal array needs resizing.</p>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Dict Methods — Complete Reference</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Method</th><th>Purpose</th><th>Returns</th></tr></thead>
+          <tbody>
+            <tr><td><code>.get(k, default)</code></td><td>Safe access</td><td>Value or default</td></tr>
+            <tr><td><code>.keys()</code></td><td>All keys</td><td>dict_keys view</td></tr>
+            <tr><td><code>.values()</code></td><td>All values</td><td>dict_values view</td></tr>
+            <tr><td><code>.items()</code></td><td>Key-value pairs</td><td>dict_items view</td></tr>
+            <tr><td><code>.pop(k, default)</code></td><td>Remove & return</td><td>Value</td></tr>
+            <tr><td><code>.update(other)</code></td><td>Merge in-place</td><td>None</td></tr>
+            <tr><td><code>.setdefault(k, v)</code></td><td>Get or set default</td><td>Value</td></tr>
+            <tr><td><code>.fromkeys(keys, v)</code></td><td>Create from keys</td><td>New dict</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Dict Methods — Complete Reference</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Method</th><th>Purpose</th><th>Returns</th></tr></thead>
+          <tbody>
+            <tr><td><code>.get(key, default)</code></td><td>Get value or default</td><td>Value or default</td></tr>
+            <tr><td><code>.setdefault(k, v)</code></td><td>Get or set default</td><td>Value</td></tr>
+            <tr><td><code>.update(other)</code></td><td>Merge dict/pairs</td><td>None</td></tr>
+            <tr><td><code>.pop(key, default)</code></td><td>Remove &amp; return</td><td>Value</td></tr>
+            <tr><td><code>.popitem()</code></td><td>Remove last pair</td><td>(key, value)</td></tr>
+            <tr><td><code>.keys()</code></td><td>View of keys</td><td>dict_keys</td></tr>
+            <tr><td><code>.values()</code></td><td>View of values</td><td>dict_values</td></tr>
+            <tr><td><code>.items()</code></td><td>View of pairs</td><td>dict_items</td></tr>
+            <tr><td><code>.copy()</code></td><td>Shallow copy</td><td>New dict</td></tr>
+            <tr><td><code>.clear()</code></td><td>Remove all items</td><td>None</td></tr>
+            <tr><td><code>d1 | d2</code></td><td>Merge (3.9+)</td><td>New dict</td></tr>
+            <tr><td><code>d1 |= d2</code></td><td>Update in-place (3.9+)</td><td>None</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Slice Notation — [start:stop:step]</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Slice</th><th>Meaning</th><th>Result for [0,1,2,3,4]</th></tr></thead>
+          <tbody>
+            <tr><td><code>a[:]</code></td><td>Full copy</td><td>[0, 1, 2, 3, 4]</td></tr>
+            <tr><td><code>a[1:3]</code></td><td>Index 1 to 2</td><td>[1, 2]</td></tr>
+            <tr><td><code>a[:3]</code></td><td>First 3</td><td>[0, 1, 2]</td></tr>
+            <tr><td><code>a[2:]</code></td><td>From index 2</td><td>[2, 3, 4]</td></tr>
+            <tr><td><code>a[-2:]</code></td><td>Last 2</td><td>[3, 4]</td></tr>
+            <tr><td><code>a[::2]</code></td><td>Every 2nd</td><td>[0, 2, 4]</td></tr>
+            <tr><td><code>a[::-1]</code></td><td>Reversed</td><td>[4, 3, 2, 1, 0]</td></tr>
+            <tr><td><code>a[1:4:2]</code></td><td>1 to 3, step 2</td><td>[1, 3]</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 List Methods — Complete Reference</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Method</th><th>Purpose</th><th>Returns</th><th>Mutates?</th></tr></thead>
+          <tbody>
+            <tr><td><code>.append(x)</code></td><td>Add to end</td><td>None</td><td>✅</td></tr>
+            <tr><td><code>.extend(iter)</code></td><td>Add all items</td><td>None</td><td>✅</td></tr>
+            <tr><td><code>.insert(i, x)</code></td><td>Insert at index</td><td>None</td><td>✅</td></tr>
+            <tr><td><code>.remove(x)</code></td><td>Remove first occurrence</td><td>None</td><td>✅</td></tr>
+            <tr><td><code>.pop(i=-1)</code></td><td>Remove &amp; return at index</td><td>Item</td><td>✅</td></tr>
+            <tr><td><code>.clear()</code></td><td>Remove all items</td><td>None</td><td>✅</td></tr>
+            <tr><td><code>.index(x)</code></td><td>Find index of value</td><td>int</td><td>❌</td></tr>
+            <tr><td><code>.count(x)</code></td><td>Count occurrences</td><td>int</td><td>❌</td></tr>
+            <tr><td><code>.sort(key, reverse)</code></td><td>Sort in-place</td><td>None</td><td>✅</td></tr>
+            <tr><td><code>.reverse()</code></td><td>Reverse in-place</td><td>None</td><td>✅</td></tr>
+            <tr><td><code>.copy()</code></td><td>Shallow copy</td><td>New list</td><td>❌</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 String Methods — Complete Reference</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Category</th><th>Methods</th></tr></thead>
+          <tbody>
+            <tr><td>Case</td><td><code>.upper()</code> <code>.lower()</code> <code>.title()</code> <code>.capitalize()</code> <code>.swapcase()</code> <code>.casefold()</code></td></tr>
+            <tr><td>Search</td><td><code>.find()</code> <code>.rfind()</code> <code>.index()</code> <code>.rindex()</code> <code>.count()</code></td></tr>
+            <tr><td>Test</td><td><code>.startswith()</code> <code>.endswith()</code> <code>.isdigit()</code> <code>.isalpha()</code> <code>.isalnum()</code> <code>.isspace()</code></td></tr>
+            <tr><td>Transform</td><td><code>.strip()</code> <code>.lstrip()</code> <code>.rstrip()</code> <code>.replace()</code> <code>.translate()</code></td></tr>
+            <tr><td>Split/Join</td><td><code>.split()</code> <code>.rsplit()</code> <code>.splitlines()</code> <code>.join()</code> <code>.partition()</code></td></tr>
+            <tr><td>Format</td><td><code>.format()</code> <code>.center()</code> <code>.ljust()</code> <code>.rjust()</code> <code>.zfill()</code></td></tr>
+            <tr><td>Encode</td><td><code>.encode()</code> <code>.maketrans()</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Set Operations — Visual Guide</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Operation</th><th>Operator</th><th>Method</th><th>Result for {1,2,3} op {2,3,4}</th></tr></thead>
+          <tbody>
+            <tr><td>Union</td><td><code>a | b</code></td><td><code>a.union(b)</code></td><td>{1, 2, 3, 4}</td></tr>
+            <tr><td>Intersection</td><td><code>a &amp; b</code></td><td><code>a.intersection(b)</code></td><td>{2, 3}</td></tr>
+            <tr><td>Difference</td><td><code>a - b</code></td><td><code>a.difference(b)</code></td><td>{1}</td></tr>
+            <tr><td>Symmetric Diff</td><td><code>a ^ b</code></td><td><code>a.symmetric_difference(b)</code></td><td>{1, 4}</td></tr>
+            <tr><td>Subset</td><td><code>a &lt;= b</code></td><td><code>a.issubset(b)</code></td><td>False</td></tr>
+            <tr><td>Superset</td><td><code>a &gt;= b</code></td><td><code>a.issuperset(b)</code></td><td>False</td></tr>
+            <tr><td>Disjoint</td><td>—</td><td><code>a.isdisjoint(b)</code></td><td>False</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 f-string Formatting — Mini Spec Reference</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Format</th><th>Purpose</th><th>Example → Output</th></tr></thead>
+          <tbody>
+            <tr><td><code>{x:.2f}</code></td><td>2 decimal float</td><td><code>f"{3.14159:.2f}"</code> → 3.14</td></tr>
+            <tr><td><code>{x:,}</code></td><td>Thousands separator</td><td><code>f"{1000000:,}"</code> → 1,000,000</td></tr>
+            <tr><td><code>{x:>10}</code></td><td>Right-align, width 10</td><td><code>f"{'hi':>10}"</code></td></tr>
+            <tr><td><code>{x:<10}</code></td><td>Left-align</td><td><code>f"{'hi':<10}"</code></td></tr>
+            <tr><td><code>{x:^10}</code></td><td>Center-align</td><td><code>f"{'hi':^10}"</code></td></tr>
+            <tr><td><code>{x:+}</code></td><td>Show +/- sign</td><td><code>f"{42:+}"</code> → +42</td></tr>
+            <tr><td><code>{x:0>5}</code></td><td>Zero-pad</td><td><code>f"{42:0>5}"</code> → 00042</td></tr>
+            <tr><td><code>{x:b}</code></td><td>Binary</td><td><code>f"{10:b}"</code> → 1010</td></tr>
+            <tr><td><code>{x:x}</code></td><td>Hexadecimal</td><td><code>f"{255:x}"</code> → ff</td></tr>
+            <tr><td><code>{x:e}</code></td><td>Scientific notation</td><td><code>f"{1500:e}"</code> → 1.5e+03</td></tr>
+            <tr><td><code>{x:%}</code></td><td>Percentage</td><td><code>f"{0.85:%}"</code> → 85%</td></tr>
+            <tr><td><code>{x!r}</code></td><td>repr()</td><td><code>f"{'hi'!r}"</code> → 'hi'</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="practice-box">
+      <div class="practice-title">✏️ Practice Exercises — Part 3</div>
+      <ol>
+        <li>Write a function that reverses a string without using <code>[::-1]</code> (use a loop).</li>
+        <li>Count word frequency in a paragraph using <code>Counter</code>.</li>
+        <li>Implement a stack and queue using <code>list</code> and <code>deque</code> respectively.</li>
+        <li>Use a dict comprehension to invert a dictionary (swap keys and values).</li>
+        <li>Find common elements between two lists using set intersection.</li>
+        <li>Group a list of students by grade using <code>defaultdict(list)</code>.</li>
+        <li>Create a <code>namedtuple</code> for a <code>Student</code> with fields: name, age, gpa.</li>
+      </ol>
     </div>
 
     <div class="handbook-nav">
       <a href="part2.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Part 2: Control Flow & Loops</div></div></a>
       <a href="part4.html" class="nav-btn next"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Part 4: Functions & Modules →</div></div><i class="fa-solid fa-arrow-right"></i></a>
     </div>
-  </div>
 
+  </div>
   <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
   <script src="../../../js/main.js"></script>
   <script>
     (() => {
-      document.querySelectorAll('.code-block').forEach((block) => {
-        const pre = block.querySelector('.code-body pre');
-        const header = block.querySelector('.code-header');
-        if (!pre || !header) return;
-        let actions = header.querySelector('.code-actions');
-        if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); }
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'code-copy-btn';
-        btn.textContent = 'Copy';
-        btn.addEventListener('click', async () => {
-          try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; }
-          catch { btn.textContent = 'Failed'; }
-          finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); }
-        });
-        actions.prepend(btn);
-      });
-      const fill = document.querySelector('.hb-progress-fill');
-      const label = document.querySelector('.hb-progress-label');
-      if (fill && label) {
-        const update = () => {
-          const h = document.documentElement;
-          const denom = (h.scrollHeight - h.clientHeight) || 1;
-          const pct = Math.max(0, Math.min(1, h.scrollTop / denom));
-          fill.style.width = (pct * 100).toFixed(0) + '%';
-          label.textContent = (pct * 100).toFixed(0) + '%';
-        };
-        document.addEventListener('scroll', update, { passive: true });
-        update();
-      }
+      document.querySelectorAll('.code-block').forEach((block) => { const pre = block.querySelector('.code-body pre'), header = block.querySelector('.code-header'); if (!pre || !header) return; let actions = header.querySelector('.code-actions'); if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); } const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'code-copy-btn'; btn.textContent = 'Copy'; btn.addEventListener('click', async () => { try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; } catch { btn.textContent = 'Failed'; } finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); } }); actions.prepend(btn); });
+      const fill = document.querySelector('.hb-progress-fill'), label = document.querySelector('.hb-progress-label');
+      if (fill && label) { const update = () => { const h = document.documentElement, d = (h.scrollHeight - h.clientHeight) || 1, p = Math.max(0, Math.min(1, h.scrollTop / d)); fill.style.width = (p*100).toFixed(0)+'%'; label.textContent = (p*100).toFixed(0)+'%'; }; document.addEventListener('scroll', update, { passive: true }); update(); }
     })();
   </script>
 </body>
 </html>
+
+

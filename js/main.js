@@ -1,6 +1,7 @@
 // ===== MAIN.JS — CodeWithYuvraj =====
 
 document.addEventListener('DOMContentLoaded', () => {
+  initPublicPageEnhancements();
   initThemeToggle();
   initNavbar();
   initHandbookGlobalIndex();
@@ -15,6 +16,69 @@ document.addEventListener('DOMContentLoaded', () => {
   hardenExternalLinks();
   setActiveNav();
 });
+
+function initPublicPageEnhancements() {
+  ensureSkipToContent();
+  ensureMainLandmark();
+  initScrollProgress();
+  initBackToTop();
+}
+
+function ensureSkipToContent() {
+  if (document.querySelector('.skip-link')) return;
+  const skip = document.createElement('a');
+  skip.className = 'skip-link';
+  skip.href = '#main-content';
+  skip.textContent = 'Skip to main content';
+  document.body.insertAdjacentElement('afterbegin', skip);
+}
+
+function ensureMainLandmark() {
+  const main = document.querySelector('main') || document.getElementById('main-content');
+  if (main) return;
+  const firstSection = document.querySelector('section');
+  if (!firstSection) return;
+  const wrapper = document.createElement('main');
+  wrapper.id = 'main-content';
+  firstSection.parentNode.insertBefore(wrapper, firstSection);
+  while (firstSection && firstSection.tagName === 'SECTION') {
+    const next = firstSection.nextElementSibling;
+    wrapper.appendChild(firstSection);
+    if (!next || next.tagName !== 'SECTION') break;
+  }
+}
+
+function initScrollProgress() {
+  if (document.querySelector('.scroll-progress')) return;
+  const bar = document.createElement('div');
+  bar.className = 'scroll-progress';
+  document.body.appendChild(bar);
+
+  const update = () => {
+    const scrollTop = window.scrollY;
+    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = maxScroll > 0 ? (scrollTop / maxScroll) * 100 : 0;
+    bar.style.width = `${Math.min(progress, 100)}%`;
+  };
+  update();
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+}
+
+function initBackToTop() {
+  if (document.querySelector('.back-to-top')) return;
+  const btn = document.createElement('button');
+  btn.className = 'back-to-top';
+  btn.type = 'button';
+  btn.setAttribute('aria-label', 'Back to top');
+  btn.innerHTML = '<i class="fa-solid fa-arrow-up"></i>';
+  btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  document.body.appendChild(btn);
+
+  const toggle = () => btn.classList.toggle('show', window.scrollY > 360);
+  toggle();
+  window.addEventListener('scroll', toggle, { passive: true });
+}
 
 // ===== THEME TOGGLE =====
 function initThemeToggle() {
@@ -90,7 +154,7 @@ function initHandbookGlobalIndex() {
   if (!page) return;
 
   const path = window.location.pathname.replace(/\\/g, '/');
-  const partMatch = path.match(/\/content\/handbooks\/(python|html-css|c-programming)\/part([1-8])\.html$/);
+  const partMatch = path.match(/\/content\/handbooks\/(python|html-css|c-programming|cpp-programming)\/part([1-8])\.html$/);
   if (!partMatch) return;
 
   const handbookSlug = partMatch[1];
@@ -139,6 +203,16 @@ function initHandbookGlobalIndex() {
       6: 'Dynamic Memory & File I/O',
       7: 'Data Structures in C',
       8: 'Systems Programming & Industry Practices'
+    },
+    'cpp-programming': {
+      1: 'C++ Foundations & Environment Setup',
+      2: 'Control Flow, Functions & References',
+      3: 'OOP — Classes & Objects',
+      4: 'Inheritance & Polymorphism',
+      5: 'Templates & Generic Programming',
+      6: 'STL — Containers, Iterators & Algorithms',
+      7: 'Memory Management & Smart Pointers',
+      8: 'Concurrency & Modern C++'
     }
   };
   const partTitles = partTitlesByHandbook[handbookSlug];
@@ -149,7 +223,9 @@ function initHandbookGlobalIndex() {
     ? 'Python Index'
     : handbookSlug === 'html-css'
       ? 'HTML/CSS Index'
-      : 'C Programming Index';
+      : handbookSlug === 'c-programming'
+        ? 'C Programming Index'
+        : 'C++ Programming Index';
   links.appendChild(indexLink);
 
   for (let i = 1; i <= 8; i++) {

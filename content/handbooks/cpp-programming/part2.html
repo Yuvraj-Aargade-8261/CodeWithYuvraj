@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Part 2: Control Flow, Functions & References — C++ Programming Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 2: Operators, conditionals, loops, function overloading, references, namespaces, and exception handling in modern C++.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/handbook.css">
+</head>
+<body class="handbook-wrapper">
+  <nav class="navbar"><div class="container"><a href="../../../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../../../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
+
+  <div class="handbook-page">
+    <div class="hb-topbar">
+      <div class="hb-topbar-inner">
+        <div class="hb-breadcrumbs">
+          <a href="index.html">C++ Programming Handbook</a>
+          <span class="hb-muted">/</span><span>Part 2</span><span class="hb-muted">·</span>
+          <a href="#m2-1">2.1</a> <a href="#m2-2">2.2</a> <a href="#m2-3">2.3</a> <a href="#m2-4">2.4</a> <a href="#m2-5">2.5</a> <a href="#m2-6">2.6</a> <a href="#m2-7">2.7</a>
+        </div>
+        <div class="hb-progress" aria-label="Reading progress"><div class="hb-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="hb-progress-fill"></div></div><div class="hb-progress-label">0%</div></div>
+      </div>
+    </div>
+
+    <div class="chapter-header" data-chapter-num="02">
+      <div class="chapter-part-label">📖 Part 2 — Control Flow, Functions & References</div>
+      <h1 class="chapter-title">Think in <span class="gradient-text">Modern C++</span></h1>
+      <p class="chapter-subtitle">Operators, range-based loops, function overloading, references, namespaces, and exception handling — the tools that make C++ expressive.</p>
+      <div class="chapter-meta"><span>📄 Modules 2.1 – 2.7</span><span>⏱️ 70–100 min read</span><span>💻 60+ Examples</span></div>
+    </div>
+
+    <div class="hb-mini-toc">
+      <div class="hb-mini-title">📍 Part 2 Modules</div>
+      <div class="hb-mini-links">
+        <a href="#m2-1">2.1 Operators</a>
+        <a href="#m2-2">2.2 Conditionals</a>
+        <a href="#m2-3">2.3 Loops</a>
+        <a href="#m2-4">2.4 Functions</a>
+        <a href="#m2-5">2.5 References</a>
+        <a href="#m2-6">2.6 Namespaces</a>
+        <a href="#m2-7">2.7 Exceptions</a>
+      </div>
+    </div>
+
+    <!-- MODULE 2.1 -->
+    <div class="module-section" id="m2-1">
+      <div class="module-header"><div class="module-number">2.1</div><h2 class="module-title">Operators, precedence & the spaceship operator &lt;=&gt; (C++20)</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">C++ operators</h3>
+        <p class="explain-en">C++ inherits all C operators and adds: <code>&lt;=&gt;</code> (three-way comparison, C++20), scope resolution <code>::</code>, <code>new</code>/<code>delete</code>, <code>typeid</code>, <code>dynamic_cast</code>, and the ability to <strong>overload</strong> most operators for custom types.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>C++ me C ke saare operators hain plus: <code>&lt;=&gt;</code> (three-way comparison, C++20), scope resolution <code>::</code>, <code>new</code>/<code>delete</code>, <code>typeid</code>, <code>dynamic_cast</code>, aur custom types ke liye operator overloading.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — Spaceship operator (C++20)</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="preprocessor">#include</span> <span class="string">&lt;compare&gt;</span>   <span class="comment">// C++20</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;iostream&gt;</span>
+
+<span class="keyword">struct</span> <span class="type">Point</span> {
+    <span class="type">int</span> x, y;
+    <span class="comment">// One operator generates ==, !=, &lt;, &gt;, &lt;=, &gt;= automatically!</span>
+    <span class="keyword">auto</span> <span class="keyword">operator</span>&lt;=&gt;(<span class="keyword">const</span> <span class="type">Point</span>&amp;) <span class="keyword">const</span> = <span class="keyword">default</span>;
+};
+
+<span class="type">int</span> <span class="function">main</span>() {
+    <span class="type">Point</span> a{<span class="number">1</span>, <span class="number">2</span>}, b{<span class="number">3</span>, <span class="number">4</span>};
+    std::cout &lt;&lt; (a &lt; b) &lt;&lt; <span class="string">"\n"</span>;    <span class="comment">// 1 (true)</span>
+    std::cout &lt;&lt; (a == b) &lt;&lt; <span class="string">"\n"</span>;   <span class="comment">// 0 (false)</span>
+
+    <span class="comment">// Three-way comparison result</span>
+    <span class="keyword">auto</span> result = <span class="number">5</span> &lt;=&gt; <span class="number">10</span>;
+    <span class="keyword">if</span> (result &lt; <span class="number">0</span>) std::cout &lt;&lt; <span class="string">"less\n"</span>;
+    <span class="keyword">else if</span> (result &gt; <span class="number">0</span>) std::cout &lt;&lt; <span class="string">"greater\n"</span>;
+    <span class="keyword">else</span> std::cout &lt;&lt; <span class="string">"equal\n"</span>;
+}</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Category</th><th>Operators</th><th>C++ addition</th></tr></thead>
+            <tbody>
+              <tr><td>Arithmetic</td><td><code>+ - * / %</code></td><td>Overloadable</td></tr>
+              <tr><td>Comparison</td><td><code>== != &lt; &gt; &lt;= &gt;=</code></td><td><code>&lt;=&gt;</code> (C++20)</td></tr>
+              <tr><td>Logical</td><td><code>&& || !</code></td><td>Overloadable</td></tr>
+              <tr><td>Bitwise</td><td><code>& | ^ ~ &lt;&lt; &gt;&gt;</code></td><td><code>&lt;&lt;</code> used for I/O too</td></tr>
+              <tr><td>Memory</td><td><code>new delete new[] delete[]</code></td><td>C++ only</td></tr>
+              <tr><td>Scope</td><td><code>::</code></td><td>Namespace/class access</td></tr>
+              <tr><td>Cast</td><td><code>static_cast dynamic_cast const_cast reinterpret_cast</code></td><td>Type-safe casts</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 2.2 -->
+    <div class="module-section" id="m2-2">
+      <div class="module-header"><div class="module-number">2.2</div><h2 class="module-title">Conditionals — if/else, switch, if constexpr, init-if</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Modern conditional patterns</h3>
+        <p class="explain-en">C++ adds <code>if constexpr</code> (compile-time branching for templates, C++17) and <strong>init-if</strong> (declare variables inside if statements, C++17). These make code cleaner and reduce scope pollution.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>C++ me <code>if constexpr</code> (compile-time branching templates ke liye, C++17) aur <strong>init-if</strong> (if statement me variables declare, C++17) add hue. Ye code cleaner banate hain aur scope pollution kam karte hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — Conditional patterns</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Standard if/else — same as C</span>
+<span class="keyword">if</span> (x &gt; <span class="number">0</span>) {
+    std::cout &lt;&lt; <span class="string">"positive\n"</span>;
+} <span class="keyword">else if</span> (x &lt; <span class="number">0</span>) {
+    std::cout &lt;&lt; <span class="string">"negative\n"</span>;
+} <span class="keyword">else</span> {
+    std::cout &lt;&lt; <span class="string">"zero\n"</span>;
+}
+
+<span class="comment">// Init-if (C++17) — variable scoped to if block</span>
+<span class="keyword">if</span> (<span class="keyword">auto</span> it = map.find(<span class="string">"key"</span>); it != map.end()) {
+    std::cout &lt;&lt; it-&gt;second &lt;&lt; <span class="string">"\n"</span>;
+}
+<span class="comment">// 'it' doesn't exist here — no scope leak!</span>
+
+<span class="comment">// if constexpr (C++17) — compile-time branching</span>
+<span class="keyword">template</span>&lt;<span class="keyword">typename</span> <span class="type">T</span>&gt;
+<span class="type">void</span> <span class="function">process</span>(<span class="type">T</span> value) {
+    <span class="keyword">if constexpr</span> (std::is_integral_v&lt;<span class="type">T</span>&gt;) {
+        std::cout &lt;&lt; <span class="string">"Integer: "</span> &lt;&lt; value &lt;&lt; <span class="string">"\n"</span>;
+    } <span class="keyword">else if constexpr</span> (std::is_floating_point_v&lt;<span class="type">T</span>&gt;) {
+        std::cout &lt;&lt; <span class="string">"Float: "</span> &lt;&lt; value &lt;&lt; <span class="string">"\n"</span>;
+    } <span class="keyword">else</span> {
+        std::cout &lt;&lt; <span class="string">"Other type\n"</span>;
+    }
+}
+
+<span class="comment">// Switch — same as C but prefer enum class</span>
+<span class="keyword">enum class</span> <span class="type">Color</span> { Red, Green, Blue };
+<span class="type">Color</span> c = <span class="type">Color</span>::Red;
+<span class="keyword">switch</span> (c) {
+    <span class="keyword">case</span> <span class="type">Color</span>::Red:   std::cout &lt;&lt; <span class="string">"Red\n"</span>;   <span class="keyword">break</span>;
+    <span class="keyword">case</span> <span class="type">Color</span>::Green: std::cout &lt;&lt; <span class="string">"Green\n"</span>; <span class="keyword">break</span>;
+    <span class="keyword">case</span> <span class="type">Color</span>::Blue:  std::cout &lt;&lt; <span class="string">"Blue\n"</span>;  <span class="keyword">break</span>;
+}</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 2.3 -->
+    <div class="module-section" id="m2-3">
+      <div class="module-header"><div class="module-number">2.3</div><h2 class="module-title">Loops — range-based for, structured bindings, algorithms</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Modern C++ loops</h3>
+        <p class="explain-en">C++ adds <strong>range-based for</strong> (iterate over any container without indices) and <strong>structured bindings</strong> (C++17, decompose pairs/tuples). In modern C++, prefer range-for over raw index loops, and STL algorithms over manual loops.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>C++ me <strong>range-based for</strong> (kisi bhi container pe iterate bina index ke) aur <strong>structured bindings</strong> (C++17, pairs/tuples decompose) add hue. Modern C++ me range-for prefer karo raw index loops se, aur STL algorithms manual loops se.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — Loop patterns</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="preprocessor">#include</span> <span class="string">&lt;vector&gt;</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;map&gt;</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;iostream&gt;</span>
+
+std::vector&lt;<span class="type">int</span>&gt; nums = {<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>};
+
+<span class="comment">// ❌ C-style — verbose, error-prone</span>
+<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; nums.size(); i++) {
+    std::cout &lt;&lt; nums[i] &lt;&lt; <span class="string">" "</span>;
+}
+
+<span class="comment">// ✅ Range-based for — clean, safe</span>
+<span class="keyword">for</span> (<span class="type">int</span> n : nums) {
+    std::cout &lt;&lt; n &lt;&lt; <span class="string">" "</span>;            <span class="comment">// Copy each element</span>
+}
+
+<span class="comment">// ✅ By const reference — no copy, safe</span>
+<span class="keyword">for</span> (<span class="keyword">const auto</span>&amp; n : nums) {
+    std::cout &lt;&lt; n &lt;&lt; <span class="string">" "</span>;
+}
+
+<span class="comment">// ✅ Modify in-place with reference</span>
+<span class="keyword">for</span> (<span class="keyword">auto</span>&amp; n : nums) {
+    n *= <span class="number">2</span>;                          <span class="comment">// Doubles each element</span>
+}
+
+<span class="comment">// Structured bindings (C++17) — decompose pairs</span>
+std::map&lt;std::string, <span class="type">int</span>&gt; ages = {{<span class="string">"Alice"</span>, <span class="number">25</span>}, {<span class="string">"Bob"</span>, <span class="number">30</span>}};
+<span class="keyword">for</span> (<span class="keyword">const auto</span>&amp; [name, age] : ages) {
+    std::cout &lt;&lt; name &lt;&lt; <span class="string">": "</span> &lt;&lt; age &lt;&lt; <span class="string">"\n"</span>;
+}
+
+<span class="comment">// while and do-while — same as C</span>
+<span class="keyword">while</span> (condition) { <span class="comment">/* ... */</span> }
+<span class="keyword">do</span> { <span class="comment">/* ... */</span> } <span class="keyword">while</span> (condition);</pre></div>
+        </div>
+        <div class="callout callout-important"><strong>Rule:</strong> Use <code>for (const auto&amp; x : container)</code> as your default loop. Use <code>auto&amp;</code> only when modifying. Use index loops only when you need the index.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 2.4 -->
+    <div class="module-section" id="m2-4">
+      <div class="module-header"><div class="module-number">2.4</div><h2 class="module-title">Functions — overloading, default arguments, inline</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Function overloading</h3>
+        <p class="explain-en">C++ allows multiple functions with the <strong>same name</strong> but different parameter types or counts. The compiler chooses the correct one at compile time. This is impossible in C (which uses name mangling differently).</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>C++ me same naam ke multiple functions ho sakte hain agar parameter types ya count alag ho. Compiler compile time pe sahi function choose karta hai. C me ye possible nahi tha.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — Function overloading</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Same name, different parameters — compiler resolves</span>
+<span class="type">int</span> <span class="function">add</span>(<span class="type">int</span> a, <span class="type">int</span> b) { <span class="keyword">return</span> a + b; }
+<span class="type">double</span> <span class="function">add</span>(<span class="type">double</span> a, <span class="type">double</span> b) { <span class="keyword">return</span> a + b; }
+std::string <span class="function">add</span>(std::string a, std::string b) { <span class="keyword">return</span> a + b; }
+
+<span class="function">add</span>(<span class="number">1</span>, <span class="number">2</span>);           <span class="comment">// Calls int version → 3</span>
+<span class="function">add</span>(<span class="number">1.5</span>, <span class="number">2.5</span>);       <span class="comment">// Calls double version → 4.0</span>
+<span class="function">add</span>(<span class="string">"Hi"</span>s, <span class="string">" World"</span>s); <span class="comment">// Calls string version → "Hi World"</span>
+
+<span class="comment">// Default arguments — right to left</span>
+<span class="type">void</span> <span class="function">greet</span>(std::string name, std::string greeting = <span class="string">"Hello"</span>) {
+    std::cout &lt;&lt; greeting &lt;&lt; <span class="string">", "</span> &lt;&lt; name &lt;&lt; <span class="string">"!\n"</span>;
+}
+<span class="function">greet</span>(<span class="string">"Yuvraj"</span>);             <span class="comment">// "Hello, Yuvraj!"</span>
+<span class="function">greet</span>(<span class="string">"Yuvraj"</span>, <span class="string">"Namaste"</span>); <span class="comment">// "Namaste, Yuvraj!"</span>
+
+<span class="comment">// inline — hint to expand at call site (avoid function call overhead)</span>
+<span class="keyword">inline</span> <span class="type">int</span> <span class="function">square</span>(<span class="type">int</span> x) { <span class="keyword">return</span> x * x; }
+
+<span class="comment">// Trailing return type (C++11) — useful with templates</span>
+<span class="keyword">auto</span> <span class="function">multiply</span>(<span class="type">int</span> a, <span class="type">double</span> b) -&gt; <span class="type">double</span> {
+    <span class="keyword">return</span> a * b;
+}
+
+<span class="comment">// auto return type deduction (C++14)</span>
+<span class="keyword">auto</span> <span class="function">divide</span>(<span class="type">double</span> a, <span class="type">double</span> b) {
+    <span class="keyword">return</span> a / b;  <span class="comment">// Compiler deduces → double</span>
+}</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Feature</th><th>C</th><th>C++</th></tr></thead>
+            <tbody>
+              <tr><td>Overloading</td><td>❌ Not supported</td><td>✅ Same name, different params</td></tr>
+              <tr><td>Default args</td><td>❌ Not supported</td><td>✅ Right-to-left defaults</td></tr>
+              <tr><td>Return type deduction</td><td>❌</td><td>✅ <code>auto</code> (C++14)</td></tr>
+              <tr><td>Trailing return</td><td>❌</td><td>✅ <code>auto f() -> int</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 2.5 -->
+    <div class="module-section" id="m2-5">
+      <div class="module-header"><div class="module-number">2.5</div><h2 class="module-title">References vs pointers — &amp;, const&amp;, rvalue refs &amp;&amp;</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">References: the safer alternative to pointers</h3>
+        <p class="explain-en">A <strong>reference</strong> is an alias for an existing variable. Unlike pointers: references can't be null, can't be reassigned, and don't need dereferencing. Use <code>const&amp;</code> to pass large objects without copying. <strong>Rvalue references</strong> (<code>&amp;&amp;</code>) enable move semantics (Part 3).</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Reference ek existing variable ka alias hai. Pointers se different: references null nahi ho sakte, reassign nahi ho sakte, aur dereference ki zaroorat nahi. <code>const&amp;</code> se bade objects bina copy kiye pass karo. Rvalue references (<code>&amp;&amp;</code>) move semantics enable karte hain (Part 3).</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — References</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Lvalue reference — alias for existing variable</span>
+<span class="type">int</span> x = <span class="number">42</span>;
+<span class="type">int</span>&amp; ref = x;    <span class="comment">// ref IS x (not a copy!)</span>
+ref = <span class="number">100</span>;       <span class="comment">// x is now 100</span>
+std::cout &lt;&lt; x;  <span class="comment">// 100</span>
+
+<span class="comment">// ❌ References MUST be initialized</span>
+<span class="comment">// int&amp; bad;     // ERROR — no dangling refs!</span>
+
+<span class="comment">// Pass by reference — modify original</span>
+<span class="type">void</span> <span class="function">doubleIt</span>(<span class="type">int</span>&amp; n) { n *= <span class="number">2</span>; }
+<span class="type">int</span> val = <span class="number">5</span>;
+<span class="function">doubleIt</span>(val);   <span class="comment">// val is now 10</span>
+
+<span class="comment">// Pass by const reference — read-only, no copy</span>
+<span class="type">void</span> <span class="function">print</span>(<span class="keyword">const</span> std::string&amp; s) {
+    std::cout &lt;&lt; s &lt;&lt; <span class="string">"\n"</span>;
+    <span class="comment">// s[0] = 'X';  // ❌ ERROR — const!</span>
+}
+
+<span class="comment">// When to use what:</span>
+<span class="type">void</span> <span class="function">f1</span>(<span class="type">int</span> x);              <span class="comment">// Small types → pass by value</span>
+<span class="type">void</span> <span class="function">f2</span>(<span class="keyword">const</span> std::string&amp; s); <span class="comment">// Large types → const ref</span>
+<span class="type">void</span> <span class="function">f3</span>(<span class="type">int</span>&amp; out);            <span class="comment">// Need to modify → ref</span>
+<span class="type">void</span> <span class="function">f4</span>(<span class="type">int</span>* ptr);            <span class="comment">// Optional/nullable → pointer</span>
+
+<span class="comment">// Rvalue reference (C++11) — binds to temporaries</span>
+<span class="type">int</span>&amp;&amp; rref = <span class="number">42</span>;             <span class="comment">// OK — binds to temporary</span>
+<span class="comment">// int&amp;&amp; bad = x;             // ❌ ERROR — x is lvalue</span>
+<span class="type">int</span>&amp;&amp; moved = std::move(x);  <span class="comment">// Cast lvalue to rvalue</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Feature</th><th>Pointer (<code>*</code>)</th><th>Reference (<code>&amp;</code>)</th></tr></thead>
+            <tbody>
+              <tr><td>Can be null?</td><td>✅ Yes</td><td>❌ No — always valid</td></tr>
+              <tr><td>Reassignable?</td><td>✅ Yes</td><td>❌ No — bound once</td></tr>
+              <tr><td>Needs deref?</td><td>✅ <code>*ptr</code></td><td>❌ Use directly</td></tr>
+              <tr><td>Arithmetic?</td><td>✅ <code>ptr++</code></td><td>❌ Not possible</td></tr>
+              <tr><td>Array decay?</td><td>✅ Common</td><td>❌ Preserves type</td></tr>
+              <tr><td>Use case</td><td>Optional params, ownership</td><td>Aliases, function params</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Modern C++ rule:</strong> Prefer references over pointers. Use <code>const&amp;</code> for input parameters. Use pointers only when the parameter is optional (could be nullptr) or when you need pointer arithmetic.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 2.6 -->
+    <div class="module-section" id="m2-6">
+      <div class="module-header"><div class="module-number">2.6</div><h2 class="module-title">Namespaces — nested, using, anonymous, ADL</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Organizing code with namespaces</h3>
+        <p class="explain-en">Namespaces prevent name collisions in large projects. The standard library lives in <code>std::</code>. You can create your own, nest them, and use anonymous namespaces for file-local scope (replaces C's <code>static</code>).</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Namespaces large projects me name collisions rokne ke liye hain. Standard library <code>std::</code> me rehti hai. Apne namespaces bana sakte ho, nest kar sakte ho, aur anonymous namespaces file-local scope ke liye use karo (C ke <code>static</code> ki jagah).</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — Namespaces</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Custom namespace</span>
+<span class="keyword">namespace</span> <span class="type">math</span> {
+    <span class="type">double</span> <span class="function">pi</span>() { <span class="keyword">return</span> <span class="number">3.14159265</span>; }
+    <span class="type">int</span> <span class="function">square</span>(<span class="type">int</span> x) { <span class="keyword">return</span> x * x; }
+}
+std::cout &lt;&lt; <span class="type">math</span>::<span class="function">pi</span>() &lt;&lt; <span class="string">"\n"</span>;
+
+<span class="comment">// Nested namespaces (C++17 shorthand)</span>
+<span class="keyword">namespace</span> <span class="type">company::project::module</span> {
+    <span class="type">void</span> <span class="function">init</span>() { <span class="comment">/* ... */</span> }
+}
+<span class="type">company::project::module</span>::<span class="function">init</span>();
+
+<span class="comment">// Using declaration — bring specific names</span>
+<span class="keyword">using</span> <span class="type">math</span>::pi;
+std::cout &lt;&lt; <span class="function">pi</span>() &lt;&lt; <span class="string">"\n"</span>;  <span class="comment">// No prefix needed</span>
+
+<span class="comment">// Anonymous namespace — file-local (replaces C static)</span>
+<span class="keyword">namespace</span> {
+    <span class="type">int</span> internal_counter = <span class="number">0</span>;  <span class="comment">// Only visible in this file</span>
+}
+
+<span class="comment">// Namespace alias</span>
+<span class="keyword">namespace</span> fs = std::filesystem;
+fs::path p = <span class="string">"/home/user"</span>;</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 2.7 -->
+    <div class="module-section" id="m2-7">
+      <div class="module-header"><div class="module-number">2.7</div><h2 class="module-title">Error handling — exceptions, try/catch, noexcept</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Exception handling</h3>
+        <p class="explain-en">C++ uses <code>try/catch/throw</code> for error handling. Exceptions separate error-handling code from normal flow. Mark functions that never throw with <code>noexcept</code> — this enables compiler optimizations and is required for move constructors.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>C++ me <code>try/catch/throw</code> error handling ke liye use hota hai. Exceptions error-handling code ko normal flow se separate karte hain. <code>noexcept</code> mark karo un functions pe jo kabhi throw nahi karte — ye compiler optimizations enable karta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — Exception handling</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="preprocessor">#include</span> <span class="string">&lt;stdexcept&gt;</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;iostream&gt;</span>
+
+<span class="type">double</span> <span class="function">divide</span>(<span class="type">double</span> a, <span class="type">double</span> b) {
+    <span class="keyword">if</span> (b == <span class="number">0.0</span>)
+        <span class="keyword">throw</span> std::invalid_argument(<span class="string">"Division by zero!"</span>);
+    <span class="keyword">return</span> a / b;
+}
+
+<span class="type">int</span> <span class="function">main</span>() {
+    <span class="keyword">try</span> {
+        std::cout &lt;&lt; <span class="function">divide</span>(<span class="number">10</span>, <span class="number">0</span>) &lt;&lt; <span class="string">"\n"</span>;
+    }
+    <span class="keyword">catch</span> (<span class="keyword">const</span> std::invalid_argument&amp; e) {
+        std::cerr &lt;&lt; <span class="string">"Error: "</span> &lt;&lt; e.what() &lt;&lt; <span class="string">"\n"</span>;
+    }
+    <span class="keyword">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {
+        std::cerr &lt;&lt; <span class="string">"Unexpected: "</span> &lt;&lt; e.what() &lt;&lt; <span class="string">"\n"</span>;
+    }
+    <span class="keyword">catch</span> (...) {
+        std::cerr &lt;&lt; <span class="string">"Unknown error!\n"</span>;
+    }
+}
+
+<span class="comment">// noexcept — promise this function never throws</span>
+<span class="type">int</span> <span class="function">add</span>(<span class="type">int</span> a, <span class="type">int</span> b) <span class="keyword">noexcept</span> {
+    <span class="keyword">return</span> a + b;
+}
+
+<span class="comment">// Custom exception class</span>
+<span class="keyword">class</span> <span class="type">FileError</span> : <span class="keyword">public</span> std::runtime_error {
+<span class="keyword">public</span>:
+    <span class="function">FileError</span>(<span class="keyword">const</span> std::string&amp; msg)
+        : std::runtime_error(<span class="string">"File error: "</span> + msg) {}
+};
+<span class="keyword">throw</span> <span class="type">FileError</span>(<span class="string">"config.txt not found"</span>);</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Exception class</th><th>Header</th><th>Use case</th></tr></thead>
+            <tbody>
+              <tr><td><code>std::exception</code></td><td><code>&lt;exception&gt;</code></td><td>Base class for all</td></tr>
+              <tr><td><code>std::runtime_error</code></td><td><code>&lt;stdexcept&gt;</code></td><td>Runtime errors</td></tr>
+              <tr><td><code>std::logic_error</code></td><td><code>&lt;stdexcept&gt;</code></td><td>Programming errors</td></tr>
+              <tr><td><code>std::invalid_argument</code></td><td><code>&lt;stdexcept&gt;</code></td><td>Bad function args</td></tr>
+              <tr><td><code>std::out_of_range</code></td><td><code>&lt;stdexcept&gt;</code></td><td>Index out of bounds</td></tr>
+              <tr><td><code>std::bad_alloc</code></td><td><code>&lt;new&gt;</code></td><td>Memory allocation failed</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>RAII + exceptions = safety.</strong> If you use RAII (smart pointers, std::string, std::vector), exceptions are safe — destructors auto-cleanup during stack unwinding. Without RAII, exceptions leak resources!</div>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Part 2 Quick Reference — Parameter Passing</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Passing style</th><th>Syntax</th><th>When to use</th><th>Copies?</th></tr></thead>
+          <tbody>
+            <tr><td>By value</td><td><code>void f(int x)</code></td><td>Small, cheap-to-copy types</td><td>Yes</td></tr>
+            <tr><td>By const ref</td><td><code>void f(const T&amp; x)</code></td><td>Large types, read-only</td><td>No</td></tr>
+            <tr><td>By ref</td><td><code>void f(T&amp; x)</code></td><td>Need to modify caller's variable</td><td>No</td></tr>
+            <tr><td>By pointer</td><td><code>void f(T* x)</code></td><td>Optional (nullable) parameters</td><td>No</td></tr>
+            <tr><td>By rvalue ref</td><td><code>void f(T&amp;&amp; x)</code></td><td>Move semantics (steal resources)</td><td>No (moves)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 C++ Cast Operators Reference</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Cast</th><th>Purpose</th><th>Safe?</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><code>static_cast</code></td><td>Compile-time type conversion</td><td>✅ Mostly</td><td><code>static_cast&lt;int&gt;(3.14)</code></td></tr>
+            <tr><td><code>dynamic_cast</code></td><td>Runtime polymorphic cast</td><td>✅ Yes</td><td><code>dynamic_cast&lt;Derived*&gt;(base)</code></td></tr>
+            <tr><td><code>const_cast</code></td><td>Add/remove const</td><td>⚠️ Careful</td><td><code>const_cast&lt;int*&gt;(cptr)</code></td></tr>
+            <tr><td><code>reinterpret_cast</code></td><td>Bit-level reinterpret</td><td>❌ Dangerous</td><td><code>reinterpret_cast&lt;char*&gt;(&amp;x)</code></td></tr>
+            <tr><td><code>(type)x</code></td><td>C-style cast</td><td>❌ Avoid!</td><td><code>(int)3.14</code> — don't use</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 C++ Keywords Added Over C — Complete Reference</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Keyword</th><th>Standard</th><th>Purpose</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><code>class</code></td><td>C++98</td><td>Define a class</td><td><code>class Dog {};</code></td></tr>
+            <tr><td><code>virtual</code></td><td>C++98</td><td>Runtime polymorphism</td><td><code>virtual void speak();</code></td></tr>
+            <tr><td><code>template</code></td><td>C++98</td><td>Generic programming</td><td><code>template&lt;typename T&gt;</code></td></tr>
+            <tr><td><code>namespace</code></td><td>C++98</td><td>Scope organization</td><td><code>namespace math {}</code></td></tr>
+            <tr><td><code>try/catch/throw</code></td><td>C++98</td><td>Exception handling</td><td><code>throw std::runtime_error()</code></td></tr>
+            <tr><td><code>new/delete</code></td><td>C++98</td><td>Heap allocation</td><td><code>int* p = new int(5);</code></td></tr>
+            <tr><td><code>bool/true/false</code></td><td>C++98</td><td>Boolean type</td><td><code>bool ok = true;</code></td></tr>
+            <tr><td><code>auto</code></td><td>C++11</td><td>Type deduction</td><td><code>auto x = 42;</code></td></tr>
+            <tr><td><code>nullptr</code></td><td>C++11</td><td>Null pointer constant</td><td><code>int* p = nullptr;</code></td></tr>
+            <tr><td><code>constexpr</code></td><td>C++11</td><td>Compile-time computation</td><td><code>constexpr int N = 10;</code></td></tr>
+            <tr><td><code>noexcept</code></td><td>C++11</td><td>No-throw guarantee</td><td><code>void f() noexcept;</code></td></tr>
+            <tr><td><code>override</code></td><td>C++11</td><td>Explicit virtual override</td><td><code>void f() override;</code></td></tr>
+            <tr><td><code>final</code></td><td>C++11</td><td>Prevent further override</td><td><code>void f() final;</code></td></tr>
+            <tr><td><code>decltype</code></td><td>C++11</td><td>Query expression type</td><td><code>decltype(x) y = x;</code></td></tr>
+            <tr><td><code>static_assert</code></td><td>C++11</td><td>Compile-time assertion</td><td><code>static_assert(sizeof(int)==4);</code></td></tr>
+            <tr><td><code>concept</code></td><td>C++20</td><td>Template constraints</td><td><code>concept Integral = ...</code></td></tr>
+            <tr><td><code>co_await/co_yield</code></td><td>C++20</td><td>Coroutines</td><td><code>co_await async_op();</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Loop Patterns — When to Use What</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Pattern</th><th>Syntax</th><th>Best for</th></tr></thead>
+          <tbody>
+            <tr><td>Range-for (read)</td><td><code>for (const auto&amp; x : v)</code></td><td>Iterate without index</td></tr>
+            <tr><td>Range-for (modify)</td><td><code>for (auto&amp; x : v)</code></td><td>Modify elements in-place</td></tr>
+            <tr><td>Index loop</td><td><code>for (size_t i = 0; i &lt; v.size(); ++i)</code></td><td>Need index for logic</td></tr>
+            <tr><td>Iterator loop</td><td><code>for (auto it = v.begin(); it != v.end(); ++it)</code></td><td>Erase during iteration</td></tr>
+            <tr><td>Structured binding</td><td><code>for (auto&amp; [k, v] : map)</code></td><td>Iterate key-value pairs</td></tr>
+            <tr><td>Algorithm</td><td><code>std::for_each(v.begin(), v.end(), f)</code></td><td>Functional style</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="practice-box">
+      <div class="practice-title">✏️ Practice Exercises — Part 2</div>
+      <ol>
+        <li>Write three overloaded <code>print()</code> functions for int, double, and string. Call each.</li>
+        <li>Create a function that uses <code>const&amp;</code> to accept a vector and print its sum without copying.</li>
+        <li>Use <code>if constexpr</code> in a template function to handle int vs string differently.</li>
+        <li>Write a range-based for loop with structured bindings to iterate a <code>std::map</code>.</li>
+        <li>Create a namespace <code>geometry</code> with <code>area()</code> functions for circle and rectangle.</li>
+        <li>Write a function that throws <code>std::out_of_range</code> and catch it in main with a meaningful message.</li>
+        <li>Create a custom exception class <code>NetworkError</code> inheriting from <code>std::runtime_error</code>.</li>
+      </ol>
+    </div>
+
+    <div class="handbook-nav">
+      <a href="part1.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Part 1: C++ Foundations & Environment Setup</div></div></a>
+      <a href="part3.html" class="nav-btn next"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Part 3: OOP — Classes & Objects →</div></div><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+
+  </div>
+
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
+  <script src="../../../js/main.js"></script>
+  <script>
+    (() => {
+      document.querySelectorAll('.code-block').forEach((block) => { const pre = block.querySelector('.code-body pre'), header = block.querySelector('.code-header'); if (!pre || !header) return; let actions = header.querySelector('.code-actions'); if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); } const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'code-copy-btn'; btn.textContent = 'Copy'; btn.addEventListener('click', async () => { try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; } catch { btn.textContent = 'Failed'; } finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); } }); actions.prepend(btn); });
+      const fill = document.querySelector('.hb-progress-fill'), label = document.querySelector('.hb-progress-label');
+      if (fill && label) { const update = () => { const h = document.documentElement, d = (h.scrollHeight - h.clientHeight) || 1, p = Math.max(0, Math.min(1, h.scrollTop / d)); fill.style.width = (p*100).toFixed(0)+'%'; label.textContent = (p*100).toFixed(0)+'%'; }; document.addEventListener('scroll', update, { passive: true }); update(); }
+    })();
+  </script>
+</body>
+</html>

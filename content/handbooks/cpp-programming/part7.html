@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Part 7: Memory Management & Smart Pointers — C++ Programming Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 7: Stack vs heap, new/delete, unique_ptr, shared_ptr, weak_ptr, memory leaks, ownership models, and allocators in C++.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/handbook.css">
+</head>
+<body class="handbook-wrapper">
+  <nav class="navbar"><div class="container"><a href="../../../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../../../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
+
+  <div class="handbook-page">
+    <div class="hb-topbar"><div class="hb-topbar-inner"><div class="hb-breadcrumbs"><a href="index.html">C++ Programming Handbook</a><span class="hb-muted">/</span><span>Part 7</span><span class="hb-muted">·</span><a href="#m7-1">7.1</a> <a href="#m7-2">7.2</a> <a href="#m7-3">7.3</a> <a href="#m7-4">7.4</a> <a href="#m7-5">7.5</a> <a href="#m7-6">7.6</a> <a href="#m7-7">7.7</a></div><div class="hb-progress" aria-label="Reading progress"><div class="hb-progress-track" role="progressbar"><div class="hb-progress-fill"></div></div><div class="hb-progress-label">0%</div></div></div></div>
+
+    <div class="chapter-header" data-chapter-num="07">
+      <div class="chapter-part-label">📖 Part 7 — Memory Management & Smart Pointers</div>
+      <h1 class="chapter-title">Own Your <span class="gradient-text">Memory</span></h1>
+      <p class="chapter-subtitle">Stack vs heap, raw pointers vs smart pointers, unique_ptr, shared_ptr, weak_ptr — master memory ownership and never leak again.</p>
+      <div class="chapter-meta"><span>📄 Modules 7.1 – 7.7</span><span>⏱️ 80–110 min read</span><span>💻 55+ Examples</span></div>
+    </div>
+
+    <div class="hb-mini-toc"><div class="hb-mini-title">📍 Part 7 Modules</div><div class="hb-mini-links"><a href="#m7-1">7.1 Stack/Heap</a><a href="#m7-2">7.2 unique_ptr</a><a href="#m7-3">7.3 shared_ptr</a><a href="#m7-4">7.4 weak_ptr</a><a href="#m7-5">7.5 Ownership</a><a href="#m7-6">7.6 Leaks</a><a href="#m7-7">7.7 Allocators</a></div></div>
+
+    <!-- MODULE 7.1 -->
+    <div class="module-section" id="m7-1">
+      <div class="module-header"><div class="module-number">7.1</div><h2 class="module-title">Stack vs heap — memory layout, new/delete</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Where objects live</h3>
+        <p class="explain-en">The <strong>stack</strong> is fast, automatic memory for local variables (LIFO). The <strong>heap</strong> is dynamic memory managed with <code>new</code>/<code>delete</code>. Stack objects are destroyed automatically; heap objects require explicit cleanup (or smart pointers).</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Stack</strong> local variables ke liye fast, automatic memory hai (LIFO). <strong>Heap</strong> dynamic memory hai jo <code>new</code>/<code>delete</code> se manage hoti hai. Stack objects automatically destroy hote hain; heap objects ko explicit cleanup chahiye (ya smart pointers).</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — Stack vs heap</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Stack — automatic lifetime</span>
+<span class="type">void</span> <span class="function">stackExample</span>() {
+    <span class="type">int</span> x = <span class="number">42</span>;                   <span class="comment">// Stack</span>
+    std::string s = <span class="string">"hello"</span>;      <span class="comment">// Stack (internal buffer may be heap)</span>
+    std::vector&lt;<span class="type">int</span>&gt; v = {<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>}; <span class="comment">// Stack (elements on heap)</span>
+}  <span class="comment">// x, s, v all destroyed here automatically</span>
+
+<span class="comment">// Heap — manual lifetime (DANGEROUS)</span>
+<span class="type">void</span> <span class="function">heapExample</span>() {
+    <span class="type">int</span>* p = <span class="keyword">new</span> <span class="type">int</span>(<span class="number">42</span>);        <span class="comment">// Allocate on heap</span>
+    <span class="type">int</span>* arr = <span class="keyword">new</span> <span class="type">int</span>[<span class="number">100</span>];     <span class="comment">// Array on heap</span>
+    <span class="comment">// ... use p and arr ...</span>
+    <span class="keyword">delete</span> p;                    <span class="comment">// Free single object</span>
+    <span class="keyword">delete</span>[] arr;                <span class="comment">// Free array — MUST use []</span>
+}
+
+<span class="comment">// ❌ Common mistakes</span>
+<span class="comment">// delete p; delete p;   // Double free!</span>
+<span class="comment">// p = new int(5);       // Leak old memory!</span>
+<span class="comment">// Forgot delete         // Memory leak!</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Feature</th><th>Stack</th><th>Heap</th></tr></thead>
+            <tbody>
+              <tr><td>Speed</td><td>Very fast (pointer bump)</td><td>Slower (allocator)</td></tr>
+              <tr><td>Size</td><td>Small (1-8 MB typical)</td><td>Large (GBs)</td></tr>
+              <tr><td>Lifetime</td><td>Automatic (scope-based)</td><td>Manual (new/delete)</td></tr>
+              <tr><td>Fragmentation</td><td>None</td><td>Possible</td></tr>
+              <tr><td>Thread safety</td><td>Each thread has own stack</td><td>Shared — needs sync</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>Never use raw new/delete in modern C++.</strong> Use <code>std::make_unique</code> and <code>std::make_shared</code> instead. Raw memory management is the #1 source of bugs in C++ code.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 7.2 -->
+    <div class="module-section" id="m7-2">
+      <div class="module-header"><div class="module-number">7.2</div><h2 class="module-title">std::unique_ptr — exclusive ownership</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">One owner, automatic cleanup</h3>
+        <p class="explain-en"><code>std::unique_ptr</code> owns a heap object exclusively. When it goes out of scope, it automatically deletes the object. It cannot be copied (only moved). This is the <strong>default smart pointer</strong> — use it unless you need shared ownership.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>std::unique_ptr</code> heap object ka exclusive owner hai. Scope se bahar jaane pe automatically delete karta hai. Copy nahi ho sakta (sirf move). Ye <strong>default smart pointer</strong> hai — shared ownership na chahiye to isi ko use karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — std::unique_ptr</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="preprocessor">#include</span> <span class="string">&lt;memory&gt;</span>
+
+<span class="comment">// Create with make_unique (preferred — exception safe)</span>
+<span class="keyword">auto</span> p = std::make_unique&lt;<span class="type">int</span>&gt;(<span class="number">42</span>);
+std::cout &lt;&lt; *p &lt;&lt; <span class="string">"\n"</span>;  <span class="comment">// 42</span>
+
+<span class="comment">// Unique ownership — only ONE pointer</span>
+<span class="comment">// auto p2 = p;       // ❌ ERROR — can't copy!</span>
+<span class="keyword">auto</span> p2 = std::move(p);  <span class="comment">// ✅ Transfer ownership</span>
+<span class="comment">// p is now nullptr</span>
+
+<span class="comment">// Custom class</span>
+<span class="keyword">auto</span> dog = std::make_unique&lt;<span class="type">Dog</span>&gt;(<span class="string">"Rex"</span>, <span class="number">3</span>);
+dog-&gt;<span class="function">bark</span>();
+
+<span class="comment">// Array of objects</span>
+<span class="keyword">auto</span> arr = std::make_unique&lt;<span class="type">int</span>[]&gt;(<span class="number">100</span>);
+arr[<span class="number">0</span>] = <span class="number">42</span>;
+
+<span class="comment">// Factory function returning unique_ptr</span>
+std::unique_ptr&lt;<span class="type">Shape</span>&gt; <span class="function">createShape</span>(std::string type) {
+    <span class="keyword">if</span> (type == <span class="string">"circle"</span>) <span class="keyword">return</span> std::make_unique&lt;<span class="type">Circle</span>&gt;(<span class="number">5</span>);
+    <span class="keyword">return</span> std::make_unique&lt;<span class="type">Rectangle</span>&gt;(<span class="number">3</span>, <span class="number">4</span>);
+}
+
+<span class="comment">// Custom deleter</span>
+<span class="keyword">auto</span> fileDeleter = [](FILE* f) { <span class="keyword">if</span>(f) fclose(f); };
+std::unique_ptr&lt;FILE, <span class="keyword">decltype</span>(fileDeleter)&gt;
+    file(fopen(<span class="string">"data.txt"</span>, <span class="string">"r"</span>), fileDeleter);</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 7.3 -->
+    <div class="module-section" id="m7-3">
+      <div class="module-header"><div class="module-number">7.3</div><h2 class="module-title">std::shared_ptr — reference-counted ownership</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Multiple owners, last one cleans up</h3>
+        <p class="explain-en"><code>std::shared_ptr</code> uses <strong>reference counting</strong>. Multiple shared_ptrs can own the same object. The object is deleted when the last owner is destroyed. Use <code>std::make_shared</code> for efficiency (single allocation).</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>std::shared_ptr</code> <strong>reference counting</strong> use karta hai. Multiple shared_ptrs same object own kar sakte hain. Object tab delete hota hai jab last owner destroy hota hai. Efficiency ke liye <code>std::make_shared</code> use karo (single allocation).</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — std::shared_ptr</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">auto</span> p1 = std::make_shared&lt;<span class="type">int</span>&gt;(<span class="number">42</span>);
+std::cout &lt;&lt; p1.use_count() &lt;&lt; <span class="string">"\n"</span>;  <span class="comment">// 1</span>
+
+<span class="keyword">auto</span> p2 = p1;  <span class="comment">// ✅ Copy — both own it</span>
+std::cout &lt;&lt; p1.use_count() &lt;&lt; <span class="string">"\n"</span>;  <span class="comment">// 2</span>
+
+p1.reset();    <span class="comment">// p1 releases — count drops to 1</span>
+<span class="comment">// Object still alive (p2 owns it)</span>
+
+p2.reset();    <span class="comment">// p2 releases — count drops to 0</span>
+<span class="comment">// Object DELETED now</span>
+
+<span class="comment">// Shared ownership in data structures</span>
+<span class="keyword">class</span> <span class="type">Node</span> {
+<span class="keyword">public</span>:
+    <span class="type">int</span> value;
+    std::shared_ptr&lt;<span class="type">Node</span>&gt; next;
+    <span class="function">Node</span>(<span class="type">int</span> v) : value(v) {}
+};
+
+<span class="keyword">auto</span> n1 = std::make_shared&lt;<span class="type">Node</span>&gt;(<span class="number">1</span>);
+<span class="keyword">auto</span> n2 = std::make_shared&lt;<span class="type">Node</span>&gt;(<span class="number">2</span>);
+n1-&gt;next = n2;  <span class="comment">// n2 has 2 owners now</span></pre></div>
+        </div>
+        <div class="callout callout-important"><strong>shared_ptr overhead:</strong> Reference count (atomic increment/decrement) + control block allocation. Prefer <code>unique_ptr</code> when shared ownership isn't needed.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 7.4 -->
+    <div class="module-section" id="m7-4">
+      <div class="module-header"><div class="module-number">7.4</div><h2 class="module-title">std::weak_ptr — breaking circular references</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Non-owning observer</h3>
+        <p class="explain-en"><code>std::weak_ptr</code> observes a <code>shared_ptr</code> without incrementing the reference count. It breaks <strong>circular references</strong> that would otherwise leak memory. Use <code>lock()</code> to get a temporary shared_ptr.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>std::weak_ptr</code> shared_ptr ko observe karta hai bina reference count badhaye. Ye <strong>circular references</strong> todta hai jo nahi to memory leak karenge. <code>lock()</code> se temporary shared_ptr milta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — weak_ptr & circular reference fix</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// ❌ Circular reference — MEMORY LEAK!</span>
+<span class="keyword">struct</span> <span class="type">BadNode</span> {
+    std::shared_ptr&lt;<span class="type">BadNode</span>&gt; next;  <span class="comment">// Both own each other</span>
+    ~<span class="function">BadNode</span>() { std::cout &lt;&lt; <span class="string">"~BadNode\n"</span>; }
+};
+{
+    <span class="keyword">auto</span> a = std::make_shared&lt;<span class="type">BadNode</span>&gt;();
+    <span class="keyword">auto</span> b = std::make_shared&lt;<span class="type">BadNode</span>&gt;();
+    a-&gt;next = b;
+    b-&gt;next = a;  <span class="comment">// Circular! Neither destroyed!</span>
+}  <span class="comment">// LEAK — destructors never called</span>
+
+<span class="comment">// ✅ Fix with weak_ptr</span>
+<span class="keyword">struct</span> <span class="type">GoodNode</span> {
+    std::shared_ptr&lt;<span class="type">GoodNode</span>&gt; next;
+    std::weak_ptr&lt;<span class="type">GoodNode</span>&gt; prev;  <span class="comment">// Non-owning!</span>
+    ~<span class="function">GoodNode</span>() { std::cout &lt;&lt; <span class="string">"~GoodNode\n"</span>; }
+};
+
+<span class="comment">// Using weak_ptr</span>
+std::weak_ptr&lt;<span class="type">int</span>&gt; weak;
+{
+    <span class="keyword">auto</span> shared = std::make_shared&lt;<span class="type">int</span>&gt;(<span class="number">42</span>);
+    weak = shared;
+    <span class="keyword">if</span> (<span class="keyword">auto</span> locked = weak.lock()) {
+        std::cout &lt;&lt; *locked &lt;&lt; <span class="string">"\n"</span>;  <span class="comment">// 42</span>
+    }
+}  <span class="comment">// shared destroyed</span>
+std::cout &lt;&lt; weak.expired();  <span class="comment">// true — object gone</span></pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 7.5 -->
+    <div class="module-section" id="m7-5">
+      <div class="module-header"><div class="module-number">7.5</div><h2 class="module-title">Ownership semantics — passing, returning, storing</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Who owns what?</h3>
+        <p class="explain-en">The key to safe C++ is clear <strong>ownership</strong>. Function signatures communicate intent: raw pointer/reference = non-owning, unique_ptr = exclusive transfer, shared_ptr = shared ownership.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Safe C++ ki key clear <strong>ownership</strong> hai. Function signatures intent communicate karti hain: raw pointer/reference = non-owning, unique_ptr = exclusive transfer, shared_ptr = shared ownership.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — Ownership patterns</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// 1. Factory — return unique_ptr (give ownership)</span>
+std::unique_ptr&lt;<span class="type">Widget</span>&gt; <span class="function">createWidget</span>() {
+    <span class="keyword">return</span> std::make_unique&lt;<span class="type">Widget</span>&gt;();
+}
+
+<span class="comment">// 2. Sink — take unique_ptr (take ownership)</span>
+<span class="type">void</span> <span class="function">addWidget</span>(std::unique_ptr&lt;<span class="type">Widget</span>&gt; w) {
+    widgets_.push_back(std::move(w));
+}
+
+<span class="comment">// 3. Use — take raw ptr/ref (don't own)</span>
+<span class="type">void</span> <span class="function">process</span>(<span class="keyword">const</span> <span class="type">Widget</span>&amp; w) {  <span class="comment">// Just reading</span>
+    w.<span class="function">doWork</span>();
+}
+<span class="type">void</span> <span class="function">modify</span>(<span class="type">Widget</span>&amp; w) {          <span class="comment">// Modifying, not owning</span>
+    w.<span class="function">setName</span>(<span class="string">"updated"</span>);
+}
+
+<span class="comment">// 4. Share — take shared_ptr (shared ownership)</span>
+<span class="type">void</span> <span class="function">observe</span>(std::shared_ptr&lt;<span class="type">Widget</span>&gt; w) {
+    observers_.push_back(w);  <span class="comment">// Keep alive</span>
+}
+
+<span class="comment">// 5. Optional — take raw pointer (nullable, non-owning)</span>
+<span class="type">void</span> <span class="function">maybeProcess</span>(<span class="type">Widget</span>* w) {
+    <span class="keyword">if</span> (w) w-&gt;<span class="function">doWork</span>();
+}</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Parameter type</th><th>Meaning</th><th>Caller does</th></tr></thead>
+            <tbody>
+              <tr><td><code>const T&amp;</code></td><td>Use, don't own or modify</td><td>Pass normally</td></tr>
+              <tr><td><code>T&amp;</code></td><td>Modify, don't own</td><td>Pass normally</td></tr>
+              <tr><td><code>T*</code></td><td>Optional use, don't own</td><td>Pass <code>&amp;obj</code> or <code>nullptr</code></td></tr>
+              <tr><td><code>unique_ptr&lt;T&gt;</code></td><td>Transfer ownership</td><td><code>std::move(ptr)</code></td></tr>
+              <tr><td><code>shared_ptr&lt;T&gt;</code></td><td>Share ownership</td><td>Pass copy</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 7.6 -->
+    <div class="module-section" id="m7-6">
+      <div class="module-header"><div class="module-number">7.6</div><h2 class="module-title">Common memory bugs — leaks, dangling, double-free</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Memory bugs and how to prevent them</h3>
+        <p class="explain-en">Memory bugs are the most dangerous in C++: <strong>leaks</strong> (forgot to free), <strong>dangling pointers</strong> (use after free), <strong>double-free</strong> (free twice), <strong>buffer overflow</strong> (write past end). Smart pointers and STL containers prevent most of these.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Memory bugs C++ me sabse dangerous hain: <strong>leaks</strong> (free bhool gaye), <strong>dangling pointers</strong> (free ke baad use), <strong>double-free</strong> (do baar free), <strong>buffer overflow</strong> (end ke baad write). Smart pointers aur STL containers inse bachate hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — Memory bugs & fixes</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// ❌ Memory leak</span>
+<span class="type">void</span> <span class="function">leak</span>() {
+    <span class="type">int</span>* p = <span class="keyword">new</span> <span class="type">int</span>(<span class="number">42</span>);
+    <span class="keyword">if</span> (error) <span class="keyword">return</span>;  <span class="comment">// p never freed!</span>
+    <span class="keyword">delete</span> p;
+}
+<span class="comment">// ✅ Fix: auto p = std::make_unique&lt;int&gt;(42);</span>
+
+<span class="comment">// ❌ Dangling pointer</span>
+<span class="type">int</span>* <span class="function">dangle</span>() {
+    <span class="type">int</span> x = <span class="number">42</span>;
+    <span class="keyword">return</span> &amp;x;  <span class="comment">// x destroyed! Pointer is invalid</span>
+}
+
+<span class="comment">// ❌ Use after free</span>
+<span class="type">int</span>* p = <span class="keyword">new</span> <span class="type">int</span>(<span class="number">42</span>);
+<span class="keyword">delete</span> p;
+*p = <span class="number">10</span>;  <span class="comment">// UNDEFINED BEHAVIOR!</span>
+
+<span class="comment">// Tools to detect:</span>
+<span class="comment">// - Valgrind (Linux)</span>
+<span class="comment">// - AddressSanitizer: g++ -fsanitize=address</span>
+<span class="comment">// - Visual Studio CRT Debug Heap</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Bug</th><th>Cause</th><th>Prevention</th><th>Detection tool</th></tr></thead>
+            <tbody>
+              <tr><td>Memory leak</td><td>Forgot delete</td><td>Smart pointers</td><td>Valgrind, ASan</td></tr>
+              <tr><td>Dangling ptr</td><td>Use after free/scope</td><td>RAII, weak_ptr</td><td>ASan, MSan</td></tr>
+              <tr><td>Double free</td><td>Delete twice</td><td>unique_ptr</td><td>ASan</td></tr>
+              <tr><td>Buffer overflow</td><td>Write past array end</td><td>vector, at()</td><td>ASan, Valgrind</td></tr>
+              <tr><td>Uninitialized</td><td>Read before write</td><td>Always initialize</td><td>MSan, -Wall</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 7.7 -->
+    <div class="module-section" id="m7-7">
+      <div class="module-header"><div class="module-number">7.7</div><h2 class="module-title">Custom allocators & placement new</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Advanced memory control</h3>
+        <p class="explain-en"><strong>Placement new</strong> constructs an object at a specific memory address. <strong>Custom allocators</strong> replace the default heap allocator for STL containers — used in game engines, embedded systems, and high-frequency trading for deterministic performance.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Placement new</strong> specific memory address pe object construct karta hai. <strong>Custom allocators</strong> STL containers ke default heap allocator ko replace karte hain — game engines, embedded systems me deterministic performance ke liye use hote hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — Placement new</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="preprocessor">#include</span> <span class="string">&lt;new&gt;</span>  <span class="comment">// for placement new</span>
+
+<span class="comment">// Pre-allocated buffer</span>
+<span class="keyword">alignas</span>(<span class="type">int</span>) <span class="type">char</span> buffer[<span class="keyword">sizeof</span>(<span class="type">int</span>) * <span class="number">10</span>];
+
+<span class="comment">// Construct int at specific address</span>
+<span class="type">int</span>* p = <span class="keyword">new</span> (buffer) <span class="type">int</span>(<span class="number">42</span>);
+std::cout &lt;&lt; *p &lt;&lt; <span class="string">"\n"</span>;  <span class="comment">// 42</span>
+<span class="comment">// Don't delete! Memory is on stack</span>
+p-&gt;~<span class="type">int</span>();  <span class="comment">// Explicit destructor call</span>
+
+<span class="comment">// Pool allocator concept</span>
+<span class="keyword">class</span> <span class="type">PoolAllocator</span> {
+    <span class="type">char</span>* pool_;
+    <span class="type">size_t</span> offset_ = <span class="number">0</span>;
+<span class="keyword">public</span>:
+    <span class="keyword">explicit</span> <span class="function">PoolAllocator</span>(<span class="type">size_t</span> size)
+        : pool_(<span class="keyword">new</span> <span class="type">char</span>[size]) {}
+    ~<span class="function">PoolAllocator</span>() { <span class="keyword">delete</span>[] pool_; }
+
+    <span class="type">void</span>* <span class="function">allocate</span>(<span class="type">size_t</span> bytes) {
+        <span class="type">void</span>* ptr = pool_ + offset_;
+        offset_ += bytes;
+        <span class="keyword">return</span> ptr;
+    }
+    <span class="type">void</span> <span class="function">reset</span>() { offset_ = <span class="number">0</span>; }
+};</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Smart Pointer Decision Guide</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Smart pointer</th><th>Ownership</th><th>Copyable?</th><th>Overhead</th><th>Use when</th></tr></thead>
+          <tbody>
+            <tr><td><code>unique_ptr</code></td><td>Exclusive</td><td>❌ Move only</td><td>Zero (same as raw ptr)</td><td>Default choice</td></tr>
+            <tr><td><code>shared_ptr</code></td><td>Shared</td><td>✅ Yes</td><td>Ref count + control block</td><td>Multiple owners needed</td></tr>
+            <tr><td><code>weak_ptr</code></td><td>Observer</td><td>✅ Yes</td><td>Uses shared's control block</td><td>Break cycles, caches</td></tr>
+            <tr><td>Raw pointer</td><td>None</td><td>✅ Yes</td><td>Zero</td><td>Non-owning refs only</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 make_unique vs make_shared vs new</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Method</th><th>Exception safe?</th><th>Allocations</th><th>Recommended?</th></tr></thead>
+          <tbody>
+            <tr><td><code>make_unique&lt;T&gt;(args)</code></td><td>✅ Yes</td><td>1 (object)</td><td>✅ Always</td></tr>
+            <tr><td><code>make_shared&lt;T&gt;(args)</code></td><td>✅ Yes</td><td>1 (object + control)</td><td>✅ Usually</td></tr>
+            <tr><td><code>unique_ptr(new T)</code></td><td>⚠️ Risky</td><td>1 (object)</td><td>❌ Avoid</td></tr>
+            <tr><td><code>shared_ptr(new T)</code></td><td>⚠️ Risky</td><td>2 (object + control)</td><td>❌ Avoid</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 C++ Memory Layout — Process Memory Map</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Segment</th><th>Contains</th><th>Lifetime</th><th>Growth</th></tr></thead>
+          <tbody>
+            <tr><td>Text / Code</td><td>Compiled instructions</td><td>Entire program</td><td>Fixed</td></tr>
+            <tr><td>Data (initialized)</td><td>Global/static with values</td><td>Entire program</td><td>Fixed</td></tr>
+            <tr><td>BSS (uninitialized)</td><td>Global/static zero-init</td><td>Entire program</td><td>Fixed</td></tr>
+            <tr><td>Stack</td><td>Local vars, return addrs</td><td>Scope-based (LIFO)</td><td>↓ Downward</td></tr>
+            <tr><td>Heap</td><td>Dynamic allocations</td><td>Manual (new/delete)</td><td>↑ Upward</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 RAII — Resource Acquisition Is Initialization</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Resource</th><th>RAII wrapper</th><th>Acquires in</th><th>Releases in</th></tr></thead>
+          <tbody>
+            <tr><td>Heap memory</td><td><code>unique_ptr / shared_ptr</code></td><td>Constructor (new)</td><td>Destructor (delete)</td></tr>
+            <tr><td>File handle</td><td><code>std::fstream</code></td><td>Constructor (open)</td><td>Destructor (close)</td></tr>
+            <tr><td>Mutex lock</td><td><code>std::lock_guard</code></td><td>Constructor (lock)</td><td>Destructor (unlock)</td></tr>
+            <tr><td>Network socket</td><td>Custom RAII class</td><td>Constructor (connect)</td><td>Destructor (disconnect)</td></tr>
+            <tr><td>Database conn</td><td>Custom RAII class</td><td>Constructor (open)</td><td>Destructor (close)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Memory Management — C++ vs Other Languages</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Feature</th><th>C++</th><th>Java/C#</th><th>Rust</th><th>Python</th></tr></thead>
+          <tbody>
+            <tr><td>Model</td><td>Manual + RAII</td><td>Garbage collector</td><td>Ownership + borrow</td><td>Reference counting + GC</td></tr>
+            <tr><td>Deterministic?</td><td>✅ Yes (destructors)</td><td>❌ No (GC pauses)</td><td>✅ Yes (drop)</td><td>❌ No</td></tr>
+            <tr><td>Overhead</td><td>Zero (smart ptrs)</td><td>GC pause latency</td><td>Zero (compile-time)</td><td>High (interpreter)</td></tr>
+            <tr><td>Safety</td><td>Programmer's job</td><td>Runtime guaranteed</td><td>Compile-time enforced</td><td>Runtime guaranteed</td></tr>
+            <tr><td>Null safety</td><td><code>optional</code> (C++17)</td><td>Nullable types</td><td><code>Option&lt;T&gt;</code></td><td><code>None</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 sizeof — Common Type Sizes (64-bit systems)</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Type</th><th>Bytes</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td><code>char</code></td><td>1</td><td>Always 1 byte</td></tr>
+            <tr><td><code>int</code></td><td>4</td><td>Usually 4 bytes</td></tr>
+            <tr><td><code>long long</code></td><td>8</td><td>Guaranteed ≥ 64-bit</td></tr>
+            <tr><td><code>double</code></td><td>8</td><td>IEEE 754</td></tr>
+            <tr><td><code>pointer (T*)</code></td><td>8</td><td>On 64-bit systems</td></tr>
+            <tr><td><code>unique_ptr&lt;T&gt;</code></td><td>8</td><td>Same as raw pointer!</td></tr>
+            <tr><td><code>shared_ptr&lt;T&gt;</code></td><td>16</td><td>Ptr + control block ptr</td></tr>
+            <tr><td><code>std::string</code></td><td>32</td><td>SSO buffer + ptr + size + cap</td></tr>
+            <tr><td><code>std::vector&lt;T&gt;</code></td><td>24</td><td>Ptr + size + capacity</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 new/delete — Operator Overloading for Custom Allocation</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Operator</th><th>Signature</th><th>Called when</th></tr></thead>
+          <tbody>
+            <tr><td><code>operator new</code></td><td><code>void* operator new(size_t)</code></td><td><code>new T</code></td></tr>
+            <tr><td><code>operator delete</code></td><td><code>void operator delete(void*)</code></td><td><code>delete p</code></td></tr>
+            <tr><td><code>operator new[]</code></td><td><code>void* operator new[](size_t)</code></td><td><code>new T[n]</code></td></tr>
+            <tr><td><code>operator delete[]</code></td><td><code>void operator delete[](void*)</code></td><td><code>delete[] p</code></td></tr>
+            <tr><td>Placement new</td><td><code>void* operator new(size_t, void*)</code></td><td><code>new (buf) T</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Polymorphic Memory Resources (PMR) — C++17</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>PMR Resource</th><th>Behavior</th><th>Use case</th></tr></thead>
+          <tbody>
+            <tr><td><code>monotonic_buffer_resource</code></td><td>Never deallocates until destroyed</td><td>Fast temporary allocations</td></tr>
+            <tr><td><code>unsynchronized_pool_resource</code></td><td>Pool of fixed-size blocks</td><td>Single-threaded pools</td></tr>
+            <tr><td><code>synchronized_pool_resource</code></td><td>Thread-safe pool</td><td>Multi-threaded pools</td></tr>
+            <tr><td><code>null_memory_resource</code></td><td>Always throws bad_alloc</td><td>Testing</td></tr>
+            <tr><td><code>new_delete_resource</code></td><td>Default new/delete</td><td>Fallback</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Memory Interview Questions — Quick Answers</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Question</th><th>Answer</th></tr></thead>
+          <tbody>
+            <tr><td>What's the difference between stack and heap?</td><td>Stack = automatic, fast, limited; Heap = manual, large, slower</td></tr>
+            <tr><td>What is RAII?</td><td>Acquire in constructor, release in destructor — automatic cleanup</td></tr>
+            <tr><td>unique_ptr vs shared_ptr?</td><td>unique = exclusive, zero overhead; shared = ref-counted, overhead</td></tr>
+            <tr><td>When to use weak_ptr?</td><td>Break circular references, caches, observer patterns</td></tr>
+            <tr><td>What is a memory leak?</td><td>Allocated memory that's never freed — use smart pointers to prevent</td></tr>
+            <tr><td>What is a dangling pointer?</td><td>Pointer to freed/invalid memory — UB if dereferenced</td></tr>
+            <tr><td>Why use make_unique over new?</td><td>Exception safe, cleaner syntax, no raw new/delete</td></tr>
+            <tr><td>What's the Rule of 5?</td><td>If custom dtor, define copy ctor/assign + move ctor/assign</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="concept-block">
+      <h3 class="concept-heading">Ownership design playbook (team-level standard)</h3>
+      <p class="explain-en">Most C++ memory bugs are ownership ambiguity bugs. Industrial C++ teams define ownership in API contracts: who creates, who releases, and whether sharing is allowed. If ownership is unclear in code review, design is considered incomplete.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>C++ memory bugs ka major reason hota hai unclear ownership. Professional teams API contracts me clear define karti hain: object ka creator kaun hai, release kaun karega, aur sharing allowed hai ya nahi. Agar ownership clear nahi hai, to design incomplete maana jata hai.</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>API intent</th><th>Recommended type</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td>Exclusive ownership transfer</td><td><code>std::unique_ptr&lt;T&gt;</code></td><td>Caller gives ownership to callee</td></tr>
+            <tr><td>Shared lifetime</td><td><code>std::shared_ptr&lt;T&gt;</code></td><td>Multiple owners with ref count</td></tr>
+            <tr><td>Non-owning optional observer</td><td><code>std::weak_ptr&lt;T&gt;</code></td><td>Observe shared object safely</td></tr>
+            <tr><td>Non-owning required access</td><td><code>T&amp;</code> or <code>const T&amp;</code></td><td>No null, no ownership transfer</td></tr>
+            <tr><td>Nullable non-owning access</td><td><code>T*</code> (documented non-owning)</td><td>May be null; ownership external</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="concept-block">
+      <h3 class="concept-heading">Memory debugging workflow (ASan, UBSan, Valgrind)</h3>
+      <p class="explain-en">A robust workflow is: strict warning build, sanitizer build for fast feedback, stress tests with randomized paths, then Valgrind for deep heap diagnostics when needed. This layered process catches both deterministic and intermittent memory issues.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Best memory debugging flow: warnings-clean build, sanitizer build for quick feedback, randomized stress runs, aur zarurat ho to Valgrind se deep heap analysis. Is layered process se deterministic aur intermittent dono bugs pakadte hain.</div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">💻 Shell — Memory debug pipeline</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+        <div class="code-body"><pre><span class="comment"># 1) Compile with strict warnings + sanitizers</span>
+g++ -std=c++20 -O0 -g -Wall -Wextra -Werror \
+  -fsanitize=address,undefined src/*.cpp -o app-debug
+
+<span class="comment"># 2) Run regression + stress suite</span>
+./app-debug --run-tests
+./app-debug --stress --iterations=2000
+
+<span class="comment"># 3) Optional deep leak analysis</span>
+valgrind --leak-check=full --show-leak-kinds=all ./app-debug --run-tests
+
+<span class="comment"># 4) Release build verification</span>
+g++ -std=c++20 -O2 -DNDEBUG -Wall -Wextra src/*.cpp -o app
+./app --smoke</pre></div>
+      </div>
+    </div>
+
+    <div class="concept-block">
+      <h3 class="concept-heading">Memory-safe release checklist</h3>
+      <p class="explain-en">Release readiness for memory-heavy C++ systems requires verifiable guarantees: no leaks in critical paths, no lifetime hazards, no UB reports, and explicit ownership documentation for public interfaces.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Memory-heavy C++ release ke liye verifiable guarantees chahiye: critical paths me leaks nahi, lifetime hazards nahi, UB reports clean, aur public interfaces me explicit ownership docs.</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Criterion</th><th>Validation</th><th>Release rule</th></tr></thead>
+          <tbody>
+            <tr><td>Leak safety</td><td>ASan/Valgrind reports on test suite</td><td>No unresolved leak in supported flows</td></tr>
+            <tr><td>Lifetime safety</td><td>Review for dangling refs/pointers</td><td>No unsafe post-free access paths</td></tr>
+            <tr><td>Ownership clarity</td><td>Public API ownership docs</td><td>Every owning boundary is explicit</td></tr>
+            <tr><td>Exception safety</td><td>Strong/basic guarantee per module</td><td>No partial-state corruption risks</td></tr>
+            <tr><td>Toolchain confidence</td><td>GCC/Clang/MSVC parity build</td><td>No compiler-specific memory regressions</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="practice-box">
+      <div class="practice-title">✏️ Practice Exercises — Part 7</div>
+      <ol>
+        <li>Create a <code>unique_ptr&lt;Dog&gt;</code>, call methods, then transfer ownership to another unique_ptr.</li>
+        <li>Create 3 <code>shared_ptr&lt;int&gt;</code> pointing to the same object. Print <code>use_count()</code> after each copy.</li>
+        <li>Demonstrate the circular reference problem with shared_ptr. Fix it with weak_ptr.</li>
+        <li>Write a factory function returning <code>unique_ptr&lt;Shape&gt;</code> for different shape types.</li>
+        <li>Use <code>weak_ptr::lock()</code> to safely access an object that may have been destroyed.</li>
+        <li>Compile with <code>-fsanitize=address</code> and trigger a use-after-free to see ASan output.</li>
+        <li>Write a simple arena/pool allocator that allocates from a pre-allocated buffer.</li>
+      </ol>
+    </div>
+
+    <div class="handbook-nav">
+      <a href="part6.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Part 6: STL — Containers, Iterators & Algorithms</div></div></a>
+      <a href="part8.html" class="nav-btn next"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Part 8: Concurrency & Modern C++ →</div></div><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+
+  </div>
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
+  <script src="../../../js/main.js"></script>
+  <script>
+    (() => {
+      document.querySelectorAll('.code-block').forEach((block) => { const pre = block.querySelector('.code-body pre'), header = block.querySelector('.code-header'); if (!pre || !header) return; let actions = header.querySelector('.code-actions'); if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); } const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'code-copy-btn'; btn.textContent = 'Copy'; btn.addEventListener('click', async () => { try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; } catch { btn.textContent = 'Failed'; } finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); } }); actions.prepend(btn); });
+      const fill = document.querySelector('.hb-progress-fill'), label = document.querySelector('.hb-progress-label');
+      if (fill && label) { const update = () => { const h = document.documentElement, d = (h.scrollHeight - h.clientHeight) || 1, p = Math.max(0, Math.min(1, h.scrollTop / d)); fill.style.width = (p*100).toFixed(0)+'%'; label.textContent = (p*100).toFixed(0)+'%'; }; document.addEventListener('scroll', update, { passive: true }); update(); }
+    })();
+  </script>
+</body>
+</html>

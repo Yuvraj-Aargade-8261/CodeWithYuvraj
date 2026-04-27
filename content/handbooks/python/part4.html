@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>Part 4: Functions & Modules — Python Handbook | CodeWithYuvraj</title>
-  <meta name="description" content="Part 4 of Python Handbook: functions, arguments, scope, lambda, map/filter, modules and virtual environments with bilingual explanations.">
+  <title>Part 4: Functions & Modules — Python Programming Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 4: Functions, arguments, lambda, scope, modules, packages, virtual environments in Python.">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="../../../css/style.css">
   <link rel="stylesheet" href="../../../css/handbook.css">
@@ -13,381 +13,556 @@
   <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
 
   <div class="handbook-page">
-    <div class="hb-topbar">
-      <div class="hb-topbar-inner">
-        <div class="hb-breadcrumbs">
-          <a href="index.html">Python Handbook</a>
-          <span class="hb-muted">/</span>
-          <span>Part 4</span>
-          <span class="hb-muted">·</span>
-          <a href="#m4-1">4.1</a><a href="#m4-2">4.2</a><a href="#m4-3">4.3</a><a href="#m4-4">4.4</a><a href="#m4-5">4.5</a><a href="#m4-6">4.6</a><a href="#m4-7">4.7</a>
-        </div>
-        <div class="hb-progress" aria-label="Reading progress">
-          <div class="hb-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="hb-progress-fill"></div></div>
-          <div class="hb-progress-label">0%</div>
-        </div>
-      </div>
-    </div>
+    <div class="hb-topbar"><div class="hb-topbar-inner"><div class="hb-breadcrumbs"><a href="index.html">Python Programming Handbook</a><span class="hb-muted">/</span><span>Part 4</span><span class="hb-muted">·</span><a href="#m4-1">4.1</a> <a href="#m4-2">4.2</a> <a href="#m4-3">4.3</a> <a href="#m4-4">4.4</a> <a href="#m4-5">4.5</a> <a href="#m4-6">4.6</a> <a href="#m4-7">4.7</a></div><div class="hb-progress" aria-label="Reading progress"><div class="hb-progress-track" role="progressbar"><div class="hb-progress-fill"></div></div><div class="hb-progress-label">0%</div></div></div></div>
 
     <div class="chapter-header" data-chapter-num="04">
       <div class="chapter-part-label">📖 Part 4 — Functions & Modules</div>
-      <h1 class="chapter-title">Reusable Logic with <span class="gradient-text">Functions</span></h1>
-      <p class="chapter-subtitle">Write clean, modular, and reusable Python code like professional developers.</p>
-      <div class="chapter-meta"><span>📄 Modules 4.1 – 4.7</span><span>⏱️ 65–100 min read</span><span>💻 35+ Examples</span></div>
+      <h1 class="chapter-title">Reusable <span class="gradient-text">Code</span></h1>
+      <p class="chapter-subtitle">Functions, arguments, lambda, scope, modules, packages, virtual environments — write DRY, modular Python.</p>
+      <div class="chapter-meta"><span>📄 Modules 4.1 – 4.7</span><span>⏱️ 80–100 min read</span><span>💻 55+ Examples</span></div>
     </div>
 
-    <div class="callout callout-tip"><strong>How to study Part 4:</strong> Convert repetitive code into functions and test each function with multiple input cases.</div>
+    <div class="hb-mini-toc"><div class="hb-mini-title">📍 Part 4 Modules</div><div class="hb-mini-links"><a href="#m4-1">4.1 def</a><a href="#m4-2">4.2 Args</a><a href="#m4-3">4.3 Lambda</a><a href="#m4-4">4.4 Scope</a><a href="#m4-5">4.5 Modules</a><a href="#m4-6">4.6 venv</a><a href="#m4-7">4.7 functools</a></div></div>
 
-    <div class="hb-mini-toc">
-      <div class="hb-mini-title">📍 Part 4 Modules</div>
-      <div class="hb-mini-links">
-        <a href="#m4-1">4.1 Functions basics</a>
-        <a href="#m4-2">4.2 Arguments types</a>
-        <a href="#m4-3">4.3 Return values</a>
-        <a href="#m4-4">4.4 Scope</a>
-        <a href="#m4-5">4.5 Lambda / map / filter</a>
-        <a href="#m4-6">4.6 Modules & imports</a>
-        <a href="#m4-7">4.7 Virtual environments</a>
-      </div>
-    </div>
-
-    <div class="quick-ref">
-      <div class="qr-title">🚀 Advanced Lens — Part 4</div>
-      <p class="explain-en">
-        Professional function design emphasizes API clarity: predictable inputs, explicit outputs, and testable behavior.
-        Move from "works on my machine" scripts to reusable modules with clear contracts, defensive argument handling, and isolated environments.
-      </p>
-      <div class="explain-hi">
-        <span class="hi-label">Hindi mein samjho</span>
-        Part 4 ka advanced outcome hai clean reusable code. Function ka interface clear ho, module boundaries clear ho, aur environment isolated ho.
-        Isi se production-level maintainable projects bante hain.
-      </div>
-    </div>
-
+    <!-- MODULE 4.1 -->
     <div class="module-section" id="m4-1">
-      <div class="module-header"><div class="module-number">4.1</div><h2 class="module-title">Functions — Definition, Calling, Parameters</h2></div>
+      <div class="module-header"><div class="module-number">4.1</div><h2 class="module-title">Defining functions — def, return, type hints</h2></div>
       <div class="concept-block">
-        <h3 class="concept-heading">Why functions matter</h3>
-        <p class="explain-en">
-          Functions package logic into reusable blocks, reducing duplication and improving testing, readability, and maintainability.
-          They are the primary unit of modular design in Python and act as contracts between parts of a system.
-          Good function boundaries make debugging faster and refactoring safer.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Function reusable code ka base hai, lekin advanced level par ye modular architecture ka unit ban jata hai. Sahi function boundaries se code maintain aur debug karna bahut easy ho jata hai.</div>
-      </div>
-      <div class="concept-block">
-        <h3 class="concept-heading">Define and call a function</h3>
-        <p class="explain-en">
-          A function is created with <code>def</code> and executed by calling its name with parentheses.
-          During invocation, arguments are mapped to parameters and a new local scope is created for execution.
-          This scope isolation is one of the key reasons functions help avoid accidental state collisions.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>def</code> se function define hota hai aur call ke time parameters ko values milti hain. Har call ka apna local scope hota hai, jo unintended variable conflicts ko prevent karta hai.</div>
+        <h3 class="concept-heading">Building blocks of reusable code</h3>
+        <p class="explain-en">Functions are defined with <code>def</code>, return values with <code>return</code> (returns <code>None</code> if omitted). <strong>Type hints</strong> (Python 3.5+) document expected types but are <em>not enforced</em> at runtime. Functions are <strong>first-class objects</strong> — they can be assigned, passed, and returned.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Functions <code>def</code> se define hote hain, values <code>return</code> se return hoti hain (<code>None</code> return hota hai agar omit karo). <strong>Type hints</strong> (Python 3.5+) expected types document karte hain par runtime pe <em>enforce nahi</em> hote. Functions <strong>first-class objects</strong> hain — assign, pass, aur return ho sakte hain.</div>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — basic function</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre><span class="keyword">def</span> <span class="function">greet</span>(name):
-    <span class="builtin">print</span>(<span class="string">f"Hello, {name}!"</span>)
+          <div class="code-header"><span class="code-lang">💻 Python — Defining functions</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># Basic function</span>
+<span class="keyword">def</span> <span class="function">greet</span>(name):
+    <span class="string">"""Greet a person by name."""</span>
+    <span class="keyword">return</span> <span class="string">f"Hello, </span>{name}<span class="string">!"</span>
 
-greet(<span class="string">"Yuvraj"</span>)</pre></div>
-          <div class="code-output">Hello, Yuvraj!</div>
+result = greet(<span class="string">"Yuvraj"</span>)  <span class="comment"># "Hello, Yuvraj!"</span>
+
+<span class="comment"># With type hints (Python 3.5+)</span>
+<span class="keyword">def</span> <span class="function">add</span>(a: <span class="type">int</span>, b: <span class="type">int</span>) -> <span class="type">int</span>:
+    <span class="string">"""Add two numbers."""</span>
+    <span class="keyword">return</span> a + b
+
+<span class="comment"># Multiple return values (returns tuple)</span>
+<span class="keyword">def</span> <span class="function">min_max</span>(numbers: <span class="type">list</span>[<span class="type">int</span>]) -> <span class="type">tuple</span>[<span class="type">int</span>, <span class="type">int</span>]:
+    <span class="keyword">return</span> <span class="function">min</span>(numbers), <span class="function">max</span>(numbers)
+
+lo, hi = min_max([<span class="number">3</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">1</span>, <span class="number">5</span>])  <span class="comment"># lo=1, hi=5</span>
+
+<span class="comment"># No return → returns None</span>
+<span class="keyword">def</span> <span class="function">say_hello</span>():
+    <span class="function">print</span>(<span class="string">"Hello!"</span>)  <span class="comment"># Side effect, no return</span>
+
+x = say_hello()  <span class="comment"># x is None</span>
+
+<span class="comment"># Functions are objects!</span>
+<span class="keyword">def</span> <span class="function">square</span>(x): <span class="keyword">return</span> x ** <span class="number">2</span>
+fn = square            <span class="comment"># Assign to variable</span>
+fn(<span class="number">5</span>)                  <span class="comment"># 25</span>
+ops = [square, <span class="function">abs</span>]   <span class="comment"># Store in list</span></pre></div>
         </div>
-        <div class="callout callout-note"><strong>Example explained:</strong> Function takes input <code>name</code> and prints a formatted greeting.</div>
+        <div class="callout callout-tip"><strong>Type hints are documentation, not enforcement.</strong> Use <code>mypy</code> for static type checking: <code>pip install mypy && mypy script.py</code></div>
       </div>
     </div>
 
+    <!-- MODULE 4.2 -->
     <div class="module-section" id="m4-2">
-      <div class="module-header"><div class="module-number">4.2</div><h2 class="module-title">Arguments — Positional, Keyword, Default, Variable-length</h2></div>
+      <div class="module-header"><div class="module-number">4.2</div><h2 class="module-title">Arguments — positional, keyword, *args, **kwargs, / and *</h2></div>
       <div class="concept-block">
-        <h3 class="concept-heading">Types of arguments</h3>
-        <p class="explain-en">
-          Python supports multiple argument styles to make APIs flexible: positional, keyword, default, <code>*args</code>, and <code>**kwargs</code>.
-          Choosing the right style is not only syntactic; it defines API ergonomics and caller clarity.
-          In production libraries, keyword arguments are often preferred for readability and safer call sites.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Argument styles function ka interface define karte hain. Keyword style readability badhata hai, default values optional behavior handle karte hain, aur variable args dynamic inputs ke liye useful hote hain.</div>
-      </div>
-      <div class="concept-block">
-        <h3 class="concept-heading">Practical argument usage</h3>
-        <p class="explain-en">
-          Use default values for optional behavior, and <code>*args</code>/<code>**kwargs</code> for extensible function signatures.
-          This pattern helps you design backward-compatible APIs that evolve without breaking old call sites.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Default + keyword argument strategy se function future-proof banta hai. Aap new options add kar sakte ho bina purane usage ko todhe.</div>
+        <h3 class="concept-heading">Flexible function signatures</h3>
+        <p class="explain-en">Python supports positional, keyword, default, <code>*args</code> (variable positional), and <code>**kwargs</code> (variable keyword) arguments. <code>/</code> forces positional-only, <code>*</code> forces keyword-only (Python 3.8+).</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Python positional, keyword, default, <code>*args</code> (variable positional), aur <code>**kwargs</code> (variable keyword) arguments support karta hai. <code>/</code> positional-only force karta hai, <code>*</code> keyword-only force karta hai (Python 3.8+).</div>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — argument patterns</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre><span class="keyword">def</span> <span class="function">bill</span>(amount, tax=<span class="number">0.18</span>, discount=<span class="number">0</span>):
-    <span class="keyword">return</span> amount + amount * tax - discount
+          <div class="code-header"><span class="code-lang">💻 Python — Arguments</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># Default arguments</span>
+<span class="keyword">def</span> <span class="function">greet</span>(name, greeting=<span class="string">"Hello"</span>):
+    <span class="keyword">return</span> <span class="string">f"</span>{greeting}<span class="string">, </span>{name}<span class="string">!"</span>
 
-<span class="builtin">print</span>(bill(<span class="number">1000</span>))
-<span class="builtin">print</span>(bill(amount=<span class="number">1000</span>, discount=<span class="number">50</span>))</pre></div>
+greet(<span class="string">"Yuvraj"</span>)              <span class="comment"># "Hello, Yuvraj!"</span>
+greet(<span class="string">"Yuvraj"</span>, <span class="string">"Hi"</span>)       <span class="comment"># "Hi, Yuvraj!"</span>
+greet(greeting=<span class="string">"Hey"</span>, name=<span class="string">"Bob"</span>)  <span class="comment"># Keyword args</span>
+
+<span class="comment"># *args — variable positional</span>
+<span class="keyword">def</span> <span class="function">total</span>(*numbers):
+    <span class="keyword">return</span> <span class="function">sum</span>(numbers)
+
+total(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)     <span class="comment"># 6</span>
+total(<span class="number">10</span>, <span class="number">20</span>)       <span class="comment"># 30</span>
+
+<span class="comment"># **kwargs — variable keyword</span>
+<span class="keyword">def</span> <span class="function">build_profile</span>(**info):
+    <span class="keyword">return</span> info
+
+build_profile(name=<span class="string">"Yuvraj"</span>, age=<span class="number">21</span>)
+<span class="comment"># {'name': 'Yuvraj', 'age': 21}</span>
+
+<span class="comment"># Combined (order matters!)</span>
+<span class="keyword">def</span> <span class="function">func</span>(a, b, *args, key=<span class="string">"x"</span>, **kwargs):
+    <span class="function">print</span>(a, b, args, key, kwargs)
+
+<span class="comment"># Positional-only (/) and keyword-only (*)</span>
+<span class="keyword">def</span> <span class="function">safe</span>(x, /, *, mode=<span class="string">"r"</span>):
+    <span class="keyword">pass</span>
+<span class="comment"># safe(10, mode="w")  ✅</span>
+<span class="comment"># safe(x=10)          ❌ x is positional-only</span>
+
+<span class="comment"># ⚠️ MUTABLE DEFAULT TRAP!</span>
+<span class="comment"># ❌ Bad:</span>
+<span class="keyword">def</span> <span class="function">add_item</span>(item, lst=[]):  <span class="comment"># Shared across calls!</span>
+    lst.append(item)
+    <span class="keyword">return</span> lst
+
+<span class="comment"># ✅ Good:</span>
+<span class="keyword">def</span> <span class="function">add_item</span>(item, lst=<span class="keyword">None</span>):
+    <span class="keyword">if</span> lst <span class="keyword">is</span> <span class="keyword">None</span>:
+        lst = []
+    lst.append(item)
+    <span class="keyword">return</span> lst</pre></div>
         </div>
-        <div class="callout callout-note"><strong>Example explained:</strong> Same function supports basic and customized billing through defaults and keyword args.</div>
+        <div class="callout callout-warning"><strong>Never use mutable defaults!</strong> <code>def f(x=[])</code> creates ONE list shared across all calls. Always use <code>None</code> as default and create inside the function.</div>
       </div>
     </div>
 
+    <!-- MODULE 4.3 -->
     <div class="module-section" id="m4-3">
-      <div class="module-header"><div class="module-number">4.3</div><h2 class="module-title">Return Values — Multiple returns, tuple unpacking</h2></div>
+      <div class="module-header"><div class="module-number">4.3</div><h2 class="module-title">Lambda, map(), filter(), reduce()</h2></div>
       <div class="concept-block">
-        <h3 class="concept-heading">return keyword and output flow</h3>
-        <p class="explain-en">
-          <code>return</code> sends computed values back to the caller; without it, function returns <code>None</code>.
-          Return design directly impacts composability: well-structured return values can be chained, tested, and reused cleanly.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>return</code> function ko reusable banata hai. Agar function sirf print kare aur value return na kare, to uska result aage pipeline me use karna mushkil ho jata hai.</div>
-      </div>
-      <div class="concept-block">
-        <h3 class="concept-heading">Multiple return values</h3>
-        <p class="explain-en">Python can return multiple values (as a tuple), useful for grouped outputs from one computation.</p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Ek function se multiple outputs chahiye ho to tuple return kar sakte ho.</div>
+        <h3 class="concept-heading">Functional programming tools</h3>
+        <p class="explain-en"><code>lambda</code> creates anonymous one-expression functions. <code>map()</code> transforms, <code>filter()</code> selects, <code>reduce()</code> aggregates. In modern Python, comprehensions are often preferred over map/filter.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>lambda</code> anonymous one-expression functions banata hai. <code>map()</code> transform karta hai, <code>filter()</code> select karta hai, <code>reduce()</code> aggregate karta hai. Modern Python me comprehensions map/filter se zyada prefer hote hain.</div>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — multi return</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre><span class="keyword">def</span> <span class="function">stats</span>(numbers):
-    total = <span class="builtin">sum</span>(numbers)
-    avg = total / <span class="builtin">len</span>(numbers)
-    <span class="keyword">return</span> total, avg
+          <div class="code-header"><span class="code-lang">💻 Python — Lambda & functional</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># Lambda — anonymous function</span>
+square = <span class="keyword">lambda</span> x: x ** <span class="number">2</span>
+square(<span class="number">5</span>)  <span class="comment"># 25</span>
 
-t, a = stats([<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>])
-<span class="builtin">print</span>(t, a)</pre></div>
-          <div class="code-output">60 20.0</div>
+<span class="comment"># Useful as sort key</span>
+students = [(<span class="string">"Alice"</span>, <span class="number">85</span>), (<span class="string">"Bob"</span>, <span class="number">92</span>), (<span class="string">"Charlie"</span>, <span class="number">78</span>)]
+students.sort(key=<span class="keyword">lambda</span> s: s[<span class="number">1</span>], reverse=<span class="keyword">True</span>)
+<span class="comment"># [('Bob', 92), ('Alice', 85), ('Charlie', 78)]</span>
+
+<span class="comment"># map() — transform each item</span>
+nums = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]
+squared = <span class="function">list</span>(<span class="function">map</span>(<span class="keyword">lambda</span> x: x**<span class="number">2</span>, nums))
+<span class="comment"># [1, 4, 9, 16]</span>
+<span class="comment"># Comprehension equivalent: [x**2 for x in nums]</span>
+
+<span class="comment"># filter() — keep matching items</span>
+evens = <span class="function">list</span>(<span class="function">filter</span>(<span class="keyword">lambda</span> x: x % <span class="number">2</span> == <span class="number">0</span>, nums))
+<span class="comment"># [2, 4]</span>
+<span class="comment"># Comprehension equivalent: [x for x in nums if x % 2 == 0]</span>
+
+<span class="comment"># reduce() — aggregate to single value</span>
+<span class="keyword">from</span> functools <span class="keyword">import</span> reduce
+total = reduce(<span class="keyword">lambda</span> a, b: a + b, nums)
+<span class="comment"># 10 (equivalent: sum(nums))</span>
+
+product = reduce(<span class="keyword">lambda</span> a, b: a * b, nums)
+<span class="comment"># 24 (1 × 2 × 3 × 4)</span></pre></div>
         </div>
-        <div class="callout callout-note"><strong>Example explained:</strong> Tuple return gets unpacked into two variables in a single line.</div>
       </div>
     </div>
 
+    <!-- MODULE 4.4 -->
     <div class="module-section" id="m4-4">
-      <div class="module-header"><div class="module-number">4.4</div><h2 class="module-title">Scope — Local, Global, and LEGB mindset</h2></div>
+      <div class="module-header"><div class="module-number">4.4</div><h2 class="module-title">Scope — LEGB rule, global, nonlocal</h2></div>
       <div class="concept-block">
-        <h3 class="concept-heading">Variable scope basics</h3>
-        <p class="explain-en">
-          Scope defines where a variable can be accessed. Python resolves names using LEGB: Local, Enclosing, Global, Built-in.
-          Scope awareness is critical for avoiding hidden bugs where the wrong variable is read or overwritten.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Scope confusion se subtle bugs aate hain. LEGB rule samajhne se aap clearly predict kar sakte ho ki name resolution kis variable pe resolve hoga.</div>
-      </div>
-      <div class="concept-block">
-        <h3 class="concept-heading">Global keyword and caution</h3>
-        <p class="explain-en">
-          Use <code>global</code> sparingly; excessive global state makes programs hard to test and debug.
-          Prefer explicit parameter passing and return values whenever practical so data flow remains transparent.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>global</code> emergency tool ki tarah use karo, default strategy nahi. Clear parameter/return flow maintainability aur testability dono improve karta hai.</div>
+        <h3 class="concept-heading">Where variables live</h3>
+        <p class="explain-en">Python resolves variable names using the <strong>LEGB rule</strong>: <strong>L</strong>ocal → <strong>E</strong>nclosing → <strong>G</strong>lobal → <strong>B</strong>uilt-in. Use <code>global</code> to modify module-level variables, <code>nonlocal</code> for enclosing scope (closures).</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Python variable names <strong>LEGB rule</strong> se resolve karta hai: <strong>L</strong>ocal → <strong>E</strong>nclosing → <strong>G</strong>lobal → <strong>B</strong>uilt-in. Module-level variables modify karne ke liye <code>global</code>, enclosing scope (closures) ke liye <code>nonlocal</code> use karo.</div>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — local vs global</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre>count = <span class="number">0</span>
+          <div class="code-header"><span class="code-lang">💻 Python — LEGB scope</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># LEGB — Local, Enclosing, Global, Built-in</span>
+x = <span class="string">"global"</span>      <span class="comment"># G — global scope</span>
+
+<span class="keyword">def</span> <span class="function">outer</span>():
+    x = <span class="string">"enclosing"</span>  <span class="comment"># E — enclosing scope</span>
+
+    <span class="keyword">def</span> <span class="function">inner</span>():
+        x = <span class="string">"local"</span>    <span class="comment"># L — local scope</span>
+        <span class="function">print</span>(x)       <span class="comment"># "local"</span>
+
+    inner()
+    <span class="function">print</span>(x)  <span class="comment"># "enclosing"</span>
+
+outer()
+<span class="function">print</span>(x)  <span class="comment"># "global"</span>
+
+<span class="comment"># global — modify module-level variable</span>
+count = <span class="number">0</span>
 <span class="keyword">def</span> <span class="function">increment</span>():
     <span class="keyword">global</span> count
     count += <span class="number">1</span>
 
 increment()
-<span class="builtin">print</span>(count)</pre></div>
-          <div class="code-output">1</div>
+<span class="function">print</span>(count)  <span class="comment"># 1</span>
+
+<span class="comment"># nonlocal — modify enclosing variable</span>
+<span class="keyword">def</span> <span class="function">counter</span>():
+    n = <span class="number">0</span>
+    <span class="keyword">def</span> <span class="function">inc</span>():
+        <span class="keyword">nonlocal</span> n
+        n += <span class="number">1</span>
+        <span class="keyword">return</span> n
+    <span class="keyword">return</span> inc
+
+c = counter()
+c()  <span class="comment"># 1</span>
+c()  <span class="comment"># 2</span>
+c()  <span class="comment"># 3 — closure remembers n!</span></pre></div>
         </div>
-        <div class="callout callout-note"><strong>Example explained:</strong> <code>global</code> allows modification of module-level variable inside function.</div>
-      </div>
-    </div>
-
-    <div class="module-section" id="m4-5">
-      <div class="module-header"><div class="module-number">4.5</div><h2 class="module-title">Lambda, map(), filter() — Functional-style helpers</h2></div>
-      <div class="concept-block">
-        <h3 class="concept-heading">Lambda expressions</h3>
-        <p class="explain-en">
-          Lambda creates short anonymous functions for simple transformations.
-          It is best for lightweight one-expression operations, especially in functional pipelines.
-          For multi-step logic, regular <code>def</code> remains more readable and maintainable.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Lambda concise syntax deta hai, lekin readability first rule hai. Simple expression ke liye lambda perfect hai, complex logic ke liye named function better hota hai.</div>
-      </div>
-      <div class="concept-block">
-        <h3 class="concept-heading">map and filter in practice</h3>
-        <p class="explain-en">
-          <code>map()</code> transforms each item, while <code>filter()</code> keeps items matching a condition.
-          Together they express transformation pipelines declaratively, which can reduce loop boilerplate in data-heavy code.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>map</code> aur <code>filter</code> se transformation pipeline clean tarike se likh sakte ho. Ye approach especially tab useful hai jab data processing repetitive ho.</div>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — lambda/map/filter</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre>nums = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]
-squares = <span class="builtin">list</span>(<span class="builtin">map</span>(<span class="keyword">lambda</span> x: x * x, nums))
-evens = <span class="builtin">list</span>(<span class="builtin">filter</span>(<span class="keyword">lambda</span> x: x % <span class="number">2</span> == <span class="number">0</span>, nums))
-<span class="builtin">print</span>(squares)
-<span class="builtin">print</span>(evens)</pre></div>
-          <div class="code-output">[1, 4, 9, 16, 25]\n[2, 4]</div>
-        </div>
-        <div class="callout callout-note"><strong>Example explained:</strong> One pipeline transforms values, second pipeline selects values.</div>
-      </div>
-    </div>
-
-    <div class="module-section" id="m4-6">
-      <div class="module-header"><div class="module-number">4.6</div><h2 class="module-title">Modules and Imports — Reuse code across files</h2></div>
-      <div class="concept-block">
-        <h3 class="concept-heading">Why modules?</h3>
-        <p class="explain-en">
-          Modules split large programs into smaller files, making code easier to organize, test, and reuse.
-          They create clear ownership boundaries and enable parallel development in teams.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Modules se codebase structured hota hai. Har file ka clear responsibility area hota hai, jisse team collaboration aur debugging fast hota hai.</div>
-      </div>
-      <div class="concept-block">
-        <h3 class="concept-heading">Import patterns</h3>
-        <p class="explain-en">
-          Use explicit imports for clarity; avoid wildcard imports in production projects.
-          Explicit imports improve traceability, prevent name collisions, and simplify static analysis.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Explicit import se clear hota hai kaunsa symbol kahan se aaya hai. Wildcard import readability aur debugging dono ko weak karta hai.</div>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — module usage</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre><span class="keyword">import</span> math
-<span class="keyword">from</span> datetime <span class="keyword">import</span> datetime
-
-<span class="builtin">print</span>(math.sqrt(<span class="number">49</span>))
-<span class="builtin">print</span>(datetime.now())</pre></div>
-        </div>
-        <div class="callout callout-note"><strong>Example explained:</strong> Standard-library modules add powerful functionality without external packages.</div>
-      </div>
-
-      <div class="concept-block">
-        <h3 class="concept-heading">Package structure and <code>__init__.py</code> (real project layout)</h3>
-        <p class="explain-en">
-          When your code grows beyond a single file, you should organize it into a <strong>package</strong> (a folder of modules).
-          A package is a unit of reuse and deployment. In Python, packages are typically identified by an <code>__init__.py</code> file (traditional style),
-          and most real projects still keep it for clarity and compatibility.
-          The goal is discoverability: anyone can guess where code lives by convention.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Jab project grow karta hai to code ko package/folders me organize karna zaruri hota hai. <code>__init__.py</code> se folder package behave karta hai (traditional way). Real projects me structure follow karne se onboarding aur maintenance easy hota hai.</div>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-solid fa-folder"></i> Example layout</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre>my_app/
-  app/
-    __init__.py
-    main.py
-    services/
-      __init__.py
-      billing.py
-  tests/
-    test_billing.py</pre></div>
-        </div>
-        <div class="callout callout-note"><strong>Example explained:</strong> Split by responsibility (services/tests). This makes refactors safer and imports predictable.</div>
-      </div>
-
-      <div class="concept-block">
-        <h3 class="concept-heading">Absolute vs relative imports (industry best practice)</h3>
-        <p class="explain-en">
-          Prefer <strong>absolute imports</strong> inside applications because they are clearer and more stable when files move.
-          Relative imports can be useful inside a package, but they often confuse beginners and can break when scripts are executed from different working directories.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Industry me mostly absolute imports prefer kiye jate hain because they are readable and stable. Relative imports kabhi-kabhi useful hote hain, but beginners ke liye confusing ho sakte hain.</div>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Import styles</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre><span class="comment"># absolute import (preferred)</span>
-<span class="keyword">from</span> app.services.billing <span class="keyword">import</span> calculate_total
-
-<span class="comment"># relative import (only inside packages)</span>
-<span class="keyword">from</span> .billing <span class="keyword">import</span> calculate_total</pre></div>
-        </div>
-        <div class="callout callout-note"><strong>Example explained:</strong> Absolute imports are explicit. Relative imports rely on package context and can be sensitive to execution mode.</div>
-      </div>
-    </div>
-
-    <div class="module-section" id="m4-7">
-      <div class="module-header"><div class="module-number">4.7</div><h2 class="module-title">Virtual Environments — Project isolation with venv</h2></div>
-      <div class="concept-block">
-        <h3 class="concept-heading">Why virtual environments are essential</h3>
-        <p class="explain-en">
-          Virtual environments isolate dependencies per project, preventing version conflicts between different applications.
-          They are essential for reproducible builds, CI stability, and safer project upgrades.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Virtual environment se project dependencies isolate hoti hain, jisse conflicts avoid hote hain aur setup reproducible banta hai. Team aur CI environments mein ye mandatory best practice hai.</div>
-      </div>
-      <div class="concept-block">
-        <h3 class="concept-heading">Create and activate venv</h3>
-        <p class="explain-en">
-          Create once per project, activate before installation, and track dependencies via <code>requirements.txt</code>.
-          This workflow ensures other developers and deployment systems can recreate exactly the same environment.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Venv workflow ka objective reproducibility hai. Jo packages aapke system pe run kar rahe hain, wahi exact versions dusre system pe bhi run hone chahiye.</div>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-solid fa-terminal"></i> venv workflow</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre>python -m venv .venv
-.venv\Scripts\activate
-pip install requests
-pip freeze &gt; requirements.txt</pre></div>
-        </div>
-        <div class="callout callout-note"><strong>Example explained:</strong> This flow creates isolated environment and records exact package versions.</div>
-      </div>
-
-      <div class="concept-block">
-        <h3 class="concept-heading">Reproducibility checklist (dev → CI → production)</h3>
-        <p class="explain-en">
-          Industry reliability depends on reproducibility. Your program should run the same across machines.
-          Use a virtual environment, pin dependencies, and keep a single “setup path” documented.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Real industry problems ka big reason hota hai inconsistent environments. Venv + dependency pinning + clear setup docs se ye issue solve hota hai.</div>
         <div class="hb-table-wrap">
           <table class="hb-table">
-            <thead><tr><th>Item</th><th>Why</th><th>Minimum action</th></tr></thead>
+            <thead><tr><th>Scope</th><th>Where</th><th>Keyword to modify</th></tr></thead>
             <tbody>
-              <tr><td>Isolated env</td><td>avoid conflicts</td><td><code>python -m venv .venv</code></td></tr>
-              <tr><td>Pinned deps</td><td>repeatable builds</td><td><code>pip freeze &gt; requirements.txt</code></td></tr>
-              <tr><td>Clean install</td><td>catch missing deps</td><td>recreate venv occasionally</td></tr>
-              <tr><td>Docs</td><td>onboarding speed</td><td>README setup steps</td></tr>
+              <tr><td><strong>L</strong>ocal</td><td>Inside current function</td><td>Direct assignment</td></tr>
+              <tr><td><strong>E</strong>nclosing</td><td>Inside outer function</td><td><code>nonlocal</code></td></tr>
+              <tr><td><strong>G</strong>lobal</td><td>Module level</td><td><code>global</code></td></tr>
+              <tr><td><strong>B</strong>uilt-in</td><td><code>builtins</code> module</td><td>Don't modify!</td></tr>
             </tbody>
           </table>
         </div>
       </div>
+    </div>
 
-      <div class="practice-box">
-        <div class="practice-title">✏️ Practice Exercises — Part 4</div>
-        <ol>
-          <li>Create a calculator module with add/subtract/multiply/divide functions and import it in another file.</li>
-          <li>Write a function that accepts <code>*args</code> and returns min, max, and average.</li>
-          <li>Build a data cleaner using <code>map()</code> and <code>filter()</code> on user records.</li>
-          <li>Refactor repeated logic from an old script into reusable functions.</li>
-          <li>Create a project venv and generate <code>requirements.txt</code> after installing two packages.</li>
-        </ol>
+    <!-- MODULE 4.5 -->
+    <div class="module-section" id="m4-5">
+      <div class="module-header"><div class="module-number">4.5</div><h2 class="module-title">Modules & packages — import, __init__, __all__</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Organizing code into files</h3>
+        <p class="explain-en">A <strong>module</strong> is any <code>.py</code> file. A <strong>package</strong> is a directory with <code>__init__.py</code>. Use <code>import</code> to load modules, <code>from...import</code> for specific items. <code>__all__</code> controls what <code>from module import *</code> exports.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Ek <strong>module</strong> koi bhi <code>.py</code> file hai. Ek <strong>package</strong> ek directory hai jisme <code>__init__.py</code> ho. Modules load karne ke liye <code>import</code>, specific items ke liye <code>from...import</code> use karo. <code>__all__</code> control karta hai ki <code>from module import *</code> kya export kare.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Python — Modules & imports</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># Import styles</span>
+<span class="keyword">import</span> math
+<span class="keyword">import</span> math <span class="keyword">as</span> m
+<span class="keyword">from</span> math <span class="keyword">import</span> sqrt, pi
+<span class="keyword">from</span> math <span class="keyword">import</span> *  <span class="comment"># ❌ Avoid — pollutes namespace</span>
+
+<span class="comment"># Using imported modules</span>
+math.sqrt(<span class="number">16</span>)   <span class="comment"># 4.0</span>
+m.pi            <span class="comment"># 3.14159...</span>
+sqrt(<span class="number">25</span>)        <span class="comment"># 5.0</span>
+
+<span class="comment"># __name__ — script vs module detection</span>
+<span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:
+    <span class="comment"># Only runs when script is executed directly</span>
+    <span class="comment"># NOT when imported as a module</span>
+    main()
+
+<span class="comment"># Package structure:</span>
+<span class="comment"># mypackage/</span>
+<span class="comment">#   __init__.py     ← makes it a package</span>
+<span class="comment">#   module_a.py</span>
+<span class="comment">#   module_b.py</span>
+<span class="comment">#   subpkg/</span>
+<span class="comment">#     __init__.py</span>
+<span class="comment">#     module_c.py</span>
+
+<span class="comment"># __all__ in __init__.py</span>
+__all__ = [<span class="string">"module_a"</span>, <span class="string">"module_b"</span>]</pre></div>
+        </div>
+        <div class="callout callout-important"><strong><code>if __name__ == "__main__"</code></strong> is the standard Python idiom. It ensures code only runs when the file is executed directly, not when imported.</div>
       </div>
+    </div>
+
+    <!-- MODULE 4.6 -->
+    <div class="module-section" id="m4-6">
+      <div class="module-header"><div class="module-number">4.6</div><h2 class="module-title">Virtual environments — venv, pip, requirements.txt</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Isolated dependency management</h3>
+        <p class="explain-en"><strong>Virtual environments</strong> create isolated Python installations per project. Each venv has its own <code>pip</code> and packages. Use <code>requirements.txt</code> to reproduce environments. This prevents dependency conflicts between projects.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Virtual environments</strong> har project ke liye isolated Python installations banate hain. Har venv ka apna <code>pip</code> aur packages hota hai. Environments reproduce karne ke liye <code>requirements.txt</code> use karo. Ye projects ke beech dependency conflicts prevent karta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Terminal — venv workflow</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># Create virtual environment</span>
+python -m venv .venv
+
+<span class="comment"># Activate</span>
+.venv\Scripts\activate      <span class="comment"># Windows</span>
+source .venv/bin/activate   <span class="comment"># macOS/Linux</span>
+
+<span class="comment"># Install packages (inside venv)</span>
+pip install requests flask numpy
+
+<span class="comment"># See installed packages</span>
+pip list
+pip show requests
+
+<span class="comment"># Save dependencies</span>
+pip freeze > requirements.txt
+
+<span class="comment"># Reproduce on another machine</span>
+pip install -r requirements.txt
+
+<span class="comment"># Upgrade pip</span>
+pip install --upgrade pip
+
+<span class="comment"># Deactivate</span>
+deactivate</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>pip command</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td><code>pip install pkg</code></td><td>Install a package</td></tr>
+              <tr><td><code>pip install pkg==1.2</code></td><td>Install specific version</td></tr>
+              <tr><td><code>pip uninstall pkg</code></td><td>Remove a package</td></tr>
+              <tr><td><code>pip list</code></td><td>List installed packages</td></tr>
+              <tr><td><code>pip freeze</code></td><td>Output requirements format</td></tr>
+              <tr><td><code>pip show pkg</code></td><td>Package info</td></tr>
+              <tr><td><code>pip install -r req.txt</code></td><td>Install from requirements</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 4.7 -->
+    <div class="module-section" id="m4-7">
+      <div class="module-header"><div class="module-number">4.7</div><h2 class="module-title">First-class functions, higher-order, functools</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Functions as values</h3>
+        <p class="explain-en">Functions are <strong>first-class objects</strong> — assigned to variables, stored in data structures, passed as arguments, returned from functions. <code>functools</code> provides <code>partial()</code>, <code>lru_cache()</code>, <code>wraps()</code>, and more.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Functions <strong>first-class objects</strong> hain — variables me assign ho sakte hain, data structures me store, arguments me pass, aur functions se return ho sakte hain. <code>functools</code> me <code>partial()</code>, <code>lru_cache()</code>, <code>wraps()</code> jaise tools hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Python — Higher-order & functools</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># Higher-order: function takes function</span>
+<span class="keyword">def</span> <span class="function">apply</span>(func, value):
+    <span class="keyword">return</span> func(value)
+
+apply(<span class="function">abs</span>, -<span class="number">5</span>)       <span class="comment"># 5</span>
+apply(<span class="function">str</span>.upper, <span class="string">"hi"</span>)  <span class="comment"># "HI"</span>
+
+<span class="comment"># Function factory — returns a function</span>
+<span class="keyword">def</span> <span class="function">multiplier</span>(n):
+    <span class="keyword">def</span> <span class="function">multiply</span>(x):
+        <span class="keyword">return</span> x * n
+    <span class="keyword">return</span> multiply
+
+double = multiplier(<span class="number">2</span>)
+triple = multiplier(<span class="number">3</span>)
+double(<span class="number">5</span>)   <span class="comment"># 10</span>
+triple(<span class="number">5</span>)   <span class="comment"># 15</span>
+
+<span class="comment"># functools.partial — pre-fill arguments</span>
+<span class="keyword">from</span> functools <span class="keyword">import</span> partial
+
+base2_log = partial(math.log, base=<span class="number">2</span>)
+base2_log(<span class="number">8</span>)   <span class="comment"># 3.0</span>
+
+<span class="comment"># functools.lru_cache — memoization</span>
+<span class="keyword">from</span> functools <span class="keyword">import</span> lru_cache
+
+@lru_cache(maxsize=<span class="number">128</span>)
+<span class="keyword">def</span> <span class="function">fib</span>(n):
+    <span class="keyword">if</span> n &lt; <span class="number">2</span>: <span class="keyword">return</span> n
+    <span class="keyword">return</span> fib(n-<span class="number">1</span>) + fib(n-<span class="number">2</span>)
+
+fib(<span class="number">100</span>)  <span class="comment"># Instant! Without cache: heat death of universe</span></pre></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Function Argument Order</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Position</th><th>Type</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>1st</td><td>Positional-only (before <code>/</code>)</td><td><code>def f(x, /)</code></td></tr>
+            <tr><td>2nd</td><td>Regular positional/keyword</td><td><code>def f(x, y)</code></td></tr>
+            <tr><td>3rd</td><td>*args (variable positional)</td><td><code>def f(*args)</code></td></tr>
+            <tr><td>4th</td><td>Keyword-only (after <code>*</code>)</td><td><code>def f(*, key)</code></td></tr>
+            <tr><td>5th</td><td>**kwargs (variable keyword)</td><td><code>def f(**kwargs)</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="color:var(--hb-text2);font-size:0.85rem;margin-top:6px;">Full signature: <code>def f(pos_only, /, normal, *args, kw_only, **kwargs)</code></p>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 functools Module — Key Functions</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Function</th><th>Purpose</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><code>partial()</code></td><td>Pre-fill arguments</td><td><code>partial(pow, 2)</code></td></tr>
+            <tr><td><code>lru_cache()</code></td><td>Memoize function results</td><td><code>@lru_cache(128)</code></td></tr>
+            <tr><td><code>reduce()</code></td><td>Aggregate iterable</td><td><code>reduce(add, [1,2,3])</code></td></tr>
+            <tr><td><code>wraps()</code></td><td>Preserve function metadata</td><td><code>@wraps(func)</code></td></tr>
+            <tr><td><code>cache()</code></td><td>Unbounded memoization (3.9+)</td><td><code>@cache</code></td></tr>
+            <tr><td><code>total_ordering()</code></td><td>Generate comparison methods</td><td><code>@total_ordering</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Popular Standard Library Modules</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Module</th><th>Purpose</th><th>Key items</th></tr></thead>
+          <tbody>
+            <tr><td><code>math</code></td><td>Math functions</td><td><code>sqrt, pi, log, ceil</code></td></tr>
+            <tr><td><code>random</code></td><td>Random numbers</td><td><code>randint, choice, shuffle</code></td></tr>
+            <tr><td><code>os</code></td><td>OS interaction</td><td><code>listdir, path, environ</code></td></tr>
+            <tr><td><code>sys</code></td><td>System config</td><td><code>argv, path, exit</code></td></tr>
+            <tr><td><code>datetime</code></td><td>Dates & times</td><td><code>datetime, timedelta</code></td></tr>
+            <tr><td><code>json</code></td><td>JSON encode/decode</td><td><code>dumps, loads</code></td></tr>
+            <tr><td><code>pathlib</code></td><td>File paths (modern)</td><td><code>Path, glob</code></td></tr>
+            <tr><td><code>collections</code></td><td>Specialized containers</td><td><code>Counter, deque</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Docstring Styles — Industry Standard</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Style</th><th>Used by</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>Google</td><td>Google projects, popular</td><td><code>Args:</code>, <code>Returns:</code>, <code>Raises:</code></td></tr>
+            <tr><td>NumPy/SciPy</td><td>Scientific Python</td><td><code>Parameters</code>, <code>Returns</code> sections</td></tr>
+            <tr><td>Sphinx/reST</td><td>Python docs, Sphinx</td><td><code>:param name:</code>, <code>:returns:</code></td></tr>
+            <tr><td>Epytext</td><td>Legacy Java-style</td><td><code>@param name:</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Closure vs Class — When to Use What</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Feature</th><th>Closure</th><th>Class</th></tr></thead>
+          <tbody>
+            <tr><td>State</td><td>Captured via <code>nonlocal</code></td><td><code>self.attr</code></td></tr>
+            <tr><td>Methods</td><td>Single callable</td><td>Multiple methods</td></tr>
+            <tr><td>Syntax</td><td>Lightweight</td><td>Verbose but clear</td></tr>
+            <tr><td>Best for</td><td>Callbacks, factories</td><td>Complex state, many operations</td></tr>
+            <tr><td>Serializable</td><td>❌ No (usually)</td><td>✅ Yes (pickle)</td></tr>
+            <tr><td>Testable</td><td>Harder</td><td>Easier (inspect attrs)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Import Best Practices</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Style</th><th>Example</th><th>Verdict</th></tr></thead>
+          <tbody>
+            <tr><td>Absolute import</td><td><code>import os</code></td><td>✅ Preferred</td></tr>
+            <tr><td>Selective import</td><td><code>from os import path</code></td><td>✅ Good for specific items</td></tr>
+            <tr><td>Aliased import</td><td><code>import numpy as np</code></td><td>✅ Standard aliases only</td></tr>
+            <tr><td>Wildcard import</td><td><code>from os import *</code></td><td>❌ Pollutes namespace</td></tr>
+            <tr><td>Relative import</td><td><code>from . import utils</code></td><td>✅ Within packages only</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="color:var(--hb-text2);font-size:0.85rem;margin-top:6px;"><strong>PEP 8 order:</strong> 1) Standard library → 2) Third-party → 3) Local imports — each group separated by a blank line.</p>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 math Module — Key Functions</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Function</th><th>Purpose</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><code>math.sqrt(x)</code></td><td>Square root</td><td><code>sqrt(16) → 4.0</code></td></tr>
+            <tr><td><code>math.pow(x, y)</code></td><td>Power (float)</td><td><code>pow(2, 10) → 1024.0</code></td></tr>
+            <tr><td><code>math.ceil(x)</code></td><td>Round up</td><td><code>ceil(4.1) → 5</code></td></tr>
+            <tr><td><code>math.floor(x)</code></td><td>Round down</td><td><code>floor(4.9) → 4</code></td></tr>
+            <tr><td><code>math.log(x, base)</code></td><td>Logarithm</td><td><code>log(8, 2) → 3.0</code></td></tr>
+            <tr><td><code>math.factorial(n)</code></td><td>n!</td><td><code>factorial(5) → 120</code></td></tr>
+            <tr><td><code>math.gcd(a, b)</code></td><td>Greatest common divisor</td><td><code>gcd(12, 8) → 4</code></td></tr>
+            <tr><td><code>math.pi</code></td><td>π constant</td><td><code>3.14159...</code></td></tr>
+            <tr><td><code>math.e</code></td><td>Euler's number</td><td><code>2.71828...</code></td></tr>
+            <tr><td><code>math.inf</code></td><td>Infinity</td><td><code>float('inf')</code></td></tr>
+            <tr><td><code>math.isnan(x)</code></td><td>Check NaN</td><td><code>isnan(float('nan'))</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 random Module — Key Functions</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Function</th><th>Purpose</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><code>random.randint(a, b)</code></td><td>Random int [a, b]</td><td><code>randint(1, 6)</code></td></tr>
+            <tr><td><code>random.random()</code></td><td>Float [0.0, 1.0)</td><td><code>0.7234...</code></td></tr>
+            <tr><td><code>random.uniform(a, b)</code></td><td>Float [a, b]</td><td><code>uniform(1.0, 10.0)</code></td></tr>
+            <tr><td><code>random.choice(seq)</code></td><td>Random element</td><td><code>choice(['a','b','c'])</code></td></tr>
+            <tr><td><code>random.choices(seq, k)</code></td><td>k random (with replacement)</td><td><code>choices(lst, k=3)</code></td></tr>
+            <tr><td><code>random.sample(seq, k)</code></td><td>k random (no replacement)</td><td><code>sample(lst, k=3)</code></td></tr>
+            <tr><td><code>random.shuffle(lst)</code></td><td>Shuffle in-place</td><td><code>shuffle(deck)</code></td></tr>
+            <tr><td><code>random.seed(n)</code></td><td>Set seed (reproducible)</td><td><code>seed(42)</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 sys Module — Key Attributes</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Attribute</th><th>Purpose</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><code>sys.argv</code></td><td>Command-line args</td><td><code>['script.py', 'arg1']</code></td></tr>
+            <tr><td><code>sys.path</code></td><td>Module search paths</td><td>List of directories</td></tr>
+            <tr><td><code>sys.version</code></td><td>Python version string</td><td><code>'3.12.0'</code></td></tr>
+            <tr><td><code>sys.platform</code></td><td>OS identifier</td><td><code>'win32'</code> / <code>'linux'</code></td></tr>
+            <tr><td><code>sys.exit(n)</code></td><td>Exit with code</td><td><code>sys.exit(0)</code></td></tr>
+            <tr><td><code>sys.stdin/stdout/stderr</code></td><td>Standard streams</td><td>I/O redirection</td></tr>
+            <tr><td><code>sys.getsizeof(obj)</code></td><td>Object memory size</td><td><code>sys.getsizeof([])</code></td></tr>
+            <tr><td><code>sys.maxsize</code></td><td>Max int for platform</td><td><code>9223372036854775807</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+    <div class="callout callout-tip"><strong>🏭 Industry insight:</strong> In production Python, you'll typically use <code>logging</code> instead of <code>print()</code>, <code>pathlib</code> instead of <code>os.path</code>, <code>dataclasses</code> or <code>pydantic</code> instead of plain dicts, and type hints on all public APIs. Functions should be short (under 30 lines), with clear docstrings and well-named parameters.</div>
+
+    <div class="practice-box">
+      <div class="practice-title">✏️ Practice Exercises — Part 4</div>
+      <ol>
+        <li>Write a function that accepts <code>*args</code> and returns the average.</li>
+        <li>Create a <code>build_html_tag</code> function using <code>**kwargs</code> for attributes.</li>
+        <li>Use <code>lambda</code> + <code>sorted()</code> to sort a list of dicts by a specific key.</li>
+        <li>Demonstrate the LEGB rule with nested functions and <code>nonlocal</code>.</li>
+        <li>Create a Python package with <code>__init__.py</code> and import from it.</li>
+        <li>Use <code>functools.lru_cache</code> to optimize a recursive Fibonacci function.</li>
+        <li>Write a function factory that creates validators (e.g., <code>is_positive</code>, <code>is_even</code>).</li>
+      </ol>
     </div>
 
     <div class="handbook-nav">
       <a href="part3.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Part 3: Strings & Data Structures</div></div></a>
       <a href="part5.html" class="nav-btn next"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Part 5: Object-Oriented Programming →</div></div><i class="fa-solid fa-arrow-right"></i></a>
     </div>
-  </div>
 
+  </div>
   <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
   <script src="../../../js/main.js"></script>
   <script>
     (() => {
-      document.querySelectorAll('.code-block').forEach((block) => {
-        const pre = block.querySelector('.code-body pre');
-        const header = block.querySelector('.code-header');
-        if (!pre || !header) return;
-        let actions = header.querySelector('.code-actions');
-        if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); }
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'code-copy-btn';
-        btn.textContent = 'Copy';
-        btn.addEventListener('click', async () => {
-          try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; }
-          catch { btn.textContent = 'Failed'; }
-          finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); }
-        });
-        actions.prepend(btn);
-      });
-      const fill = document.querySelector('.hb-progress-fill');
-      const label = document.querySelector('.hb-progress-label');
-      if (fill && label) {
-        const update = () => {
-          const h = document.documentElement;
-          const denom = (h.scrollHeight - h.clientHeight) || 1;
-          const pct = Math.max(0, Math.min(1, h.scrollTop / denom));
-          fill.style.width = (pct * 100).toFixed(0) + '%';
-          label.textContent = (pct * 100).toFixed(0) + '%';
-        };
-        document.addEventListener('scroll', update, { passive: true });
-        update();
-      }
+      document.querySelectorAll('.code-block').forEach((block) => { const pre = block.querySelector('.code-body pre'), header = block.querySelector('.code-header'); if (!pre || !header) return; let actions = header.querySelector('.code-actions'); if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); } const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'code-copy-btn'; btn.textContent = 'Copy'; btn.addEventListener('click', async () => { try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; } catch { btn.textContent = 'Failed'; } finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); } }); actions.prepend(btn); });
+      const fill = document.querySelector('.hb-progress-fill'), label = document.querySelector('.hb-progress-label');
+      if (fill && label) { const update = () => { const h = document.documentElement, d = (h.scrollHeight - h.clientHeight) || 1, p = Math.max(0, Math.min(1, h.scrollTop / d)); fill.style.width = (p*100).toFixed(0)+'%'; label.textContent = (p*100).toFixed(0)+'%'; }; document.addEventListener('scroll', update, { passive: true }); update(); }
     })();
   </script>
 </body>
 </html>
+
+

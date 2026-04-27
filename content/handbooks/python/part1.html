@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>Part 1: Python Foundations — Python Handbook | CodeWithYuvraj</title>
-  <meta name="description" content="Part 1 of Python Handbook: Introduction, setup, variables, data types, operators, input/output, comments and docstrings with bilingual explanations.">
+  <title>Part 1: Python Foundations & Setup — Python Programming Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 1: Python history, setup, variables, data types, operators, I/O, PEP 8 style guide.">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="../../../css/style.css">
   <link rel="stylesheet" href="../../../css/handbook.css">
@@ -13,422 +13,506 @@
   <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
 
   <div class="handbook-page">
-    <div class="hb-topbar">
-      <div class="hb-topbar-inner">
-        <div class="hb-breadcrumbs">
-          <a href="index.html">Python Handbook</a>
-          <span class="hb-muted">/</span>
-          <span>Part 1</span>
-          <span class="hb-muted">·</span>
-          <a href="#m1-1">1.1</a>
-          <a href="#m1-2">1.2</a>
-          <a href="#m1-3">1.3</a>
-          <a href="#m1-4">1.4</a>
-          <a href="#m1-5">1.5</a>
-          <a href="#m1-6">1.6</a>
+    <div class="hb-topbar"><div class="hb-topbar-inner"><div class="hb-breadcrumbs"><a href="index.html">Python Programming Handbook</a><span class="hb-muted">/</span><span>Part 1</span><span class="hb-muted">·</span><a href="#m1-1">1.1</a> <a href="#m1-2">1.2</a> <a href="#m1-3">1.3</a> <a href="#m1-4">1.4</a> <a href="#m1-5">1.5</a> <a href="#m1-6">1.6</a> <a href="#m1-7">1.7</a></div><div class="hb-progress" aria-label="Reading progress"><div class="hb-progress-track" role="progressbar"><div class="hb-progress-fill"></div></div><div class="hb-progress-label">0%</div></div></div></div>
+
+    <div class="chapter-header" data-chapter-num="01">
+      <div class="chapter-part-label">📖 Part 1 — Python Foundations & Setup</div>
+      <h1 class="chapter-title">Getting <span class="gradient-text">Started</span></h1>
+      <p class="chapter-subtitle">What is Python, how to set it up, variables, data types, operators, I/O — everything you need to write your first programs.</p>
+      <div class="chapter-meta"><span>📄 Modules 1.1 – 1.7</span><span>⏱️ 60–90 min read</span><span>💻 50+ Examples</span></div>
+    </div>
+
+    <div class="hb-mini-toc"><div class="hb-mini-title">📍 Part 1 Modules</div><div class="hb-mini-links"><a href="#m1-1">1.1 What is Python</a><a href="#m1-2">1.2 Setup</a><a href="#m1-3">1.3 Variables</a><a href="#m1-4">1.4 Operators</a><a href="#m1-5">1.5 I/O</a><a href="#m1-6">1.6 Type Conv</a><a href="#m1-7">1.7 PEP 8</a></div></div>
+
+    <!-- MODULE 1.1 -->
+    <div class="module-section" id="m1-1">
+      <div class="module-header"><div class="module-number">1.1</div><h2 class="module-title">What is Python — history, CPython, PyPy, versions</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">The world's most popular programming language</h3>
+        <p class="explain-en"><strong>Python</strong> was created by <strong>Guido van Rossum</strong> in 1991. It's a high-level, interpreted, dynamically-typed language with clean syntax. Python emphasizes <em>readability</em> — code should read like English. Used in web dev, AI/ML, data science, automation, and scripting.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Python</strong> Guido van Rossum ne 1991 me banaya tha. Ye high-level, interpreted, dynamically-typed language hai jiska syntax clean hai. Python <em>readability</em> pe focus karta hai — code English jaisa padha jaaye. Web dev, AI/ML, data science, automation me use hota hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Python — Hello World</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># Your first Python program</span>
+<span class="function">print</span>(<span class="string">"Hello, World!"</span>)
+
+<span class="comment"># Python is interpreted — no compilation needed!</span>
+<span class="comment"># Just run: python hello.py</span>
+
+<span class="comment"># Check your Python version</span>
+<span class="keyword">import</span> sys
+<span class="function">print</span>(sys.version)  <span class="comment"># 3.12.0 (or whatever you have)</span></pre></div>
         </div>
-        <div class="hb-progress" aria-label="Reading progress">
-          <div class="hb-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-            <div class="hb-progress-fill"></div>
-          </div>
-          <div class="hb-progress-label">0%</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Feature</th><th>Python</th><th>C/C++</th><th>Java</th></tr></thead>
+            <tbody>
+              <tr><td>Typing</td><td>Dynamic</td><td>Static</td><td>Static</td></tr>
+              <tr><td>Execution</td><td>Interpreted</td><td>Compiled</td><td>JIT compiled</td></tr>
+              <tr><td>Syntax</td><td>Clean, minimal</td><td>Verbose</td><td>Verbose</td></tr>
+              <tr><td>Speed</td><td>Slower</td><td>Fastest</td><td>Fast</td></tr>
+              <tr><td>Memory mgmt</td><td>Garbage collected</td><td>Manual</td><td>Garbage collected</td></tr>
+              <tr><td>Use case</td><td>AI, web, scripting</td><td>Systems, games</td><td>Enterprise</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>CPython</strong> is the default Python interpreter (written in C). <strong>PyPy</strong> is a faster alternative with JIT compilation (2–10x faster for some workloads).</div>
+      </div>
+    </div>
+
+    <!-- MODULE 1.2 -->
+    <div class="module-section" id="m1-2">
+      <div class="module-header"><div class="module-number">1.2</div><h2 class="module-title">Setup & IDE — pip, venv, VS Code, Jupyter</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Setting up your development environment</h3>
+        <p class="explain-en">Install Python from <strong>python.org</strong> (always check "Add to PATH"). Use <code>pip</code> for packages, <code>venv</code> for isolated environments. VS Code with the Python extension is the best free IDE. Jupyter Notebooks are great for data science.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Python <strong>python.org</strong> se install karo (hamesha "Add to PATH" check karo). Packages ke liye <code>pip</code>, isolated environments ke liye <code>venv</code> use karo. VS Code Python extension ke saath best free IDE hai. Data science ke liye Jupyter Notebooks best hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Terminal — Setup commands</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># Check Python installation</span>
+python --version        <span class="comment"># Python 3.12.0</span>
+pip --version           <span class="comment"># pip 24.0</span>
+
+<span class="comment"># Create virtual environment</span>
+python -m venv myproject
+myproject\Scripts\activate   <span class="comment"># Windows</span>
+source myproject/bin/activate <span class="comment"># macOS/Linux</span>
+
+<span class="comment"># Install packages</span>
+pip install requests
+pip install numpy pandas matplotlib
+pip freeze > requirements.txt
+
+<span class="comment"># Install from requirements</span>
+pip install -r requirements.txt
+
+<span class="comment"># Jupyter Notebook</span>
+pip install jupyter
+jupyter notebook</pre></div>
         </div>
       </div>
     </div>
 
-    <div class="chapter-header" data-chapter-num="01">
-      <div class="chapter-part-label">📖 Part 1 — Python Foundations</div>
-      <h1 class="chapter-title">Start Strong with <span class="gradient-text">Python Basics</span></h1>
-      <p class="chapter-subtitle">From zero to confident beginner with industry-style fundamentals.</p>
-      <div class="chapter-meta"><span>📄 Modules 1.1 – 1.6</span><span>⏱️ 65–100 min read</span><span>💻 40+ Examples</span></div>
+    <!-- MODULE 1.3 -->
+    <div class="module-section" id="m1-3">
+      <div class="module-header"><div class="module-number">1.3</div><h2 class="module-title">Variables & data types — int, float, str, bool, None</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">No type declarations needed</h3>
+        <p class="explain-en">In Python, you don't declare types — the interpreter infers them. Variables are just names pointing to objects. Python has <code>int</code>, <code>float</code>, <code>str</code>, <code>bool</code>, <code>None</code>, <code>complex</code>, <code>bytes</code> as built-in types. Everything in Python is an object.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Python me type declare nahi karna padta — interpreter khud samajh leta hai. Variables sirf names hain jo objects ko point karte hain. Built-in types: <code>int</code>, <code>float</code>, <code>str</code>, <code>bool</code>, <code>None</code>. Python me sab kuch object hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Python — Variables & types</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># No type declaration needed</span>
+name = <span class="string">"Yuvraj"</span>          <span class="comment"># str</span>
+age = <span class="number">21</span>                  <span class="comment"># int</span>
+gpa = <span class="number">9.5</span>                 <span class="comment"># float</span>
+is_student = <span class="keyword">True</span>         <span class="comment"># bool</span>
+nothing = <span class="keyword">None</span>            <span class="comment"># NoneType</span>
+
+<span class="comment"># Check type</span>
+<span class="function">print</span>(<span class="function">type</span>(name))   <span class="comment"># &lt;class 'str'&gt;</span>
+<span class="function">print</span>(<span class="function">type</span>(age))    <span class="comment"># &lt;class 'int'&gt;</span>
+
+<span class="comment"># Multiple assignment</span>
+x, y, z = <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>
+a = b = c = <span class="number">0</span>
+
+<span class="comment"># Python integers have unlimited precision!</span>
+big = <span class="number">10</span> ** <span class="number">100</span>  <span class="comment"># No overflow — works fine</span>
+
+<span class="comment"># id() — memory address of object</span>
+<span class="function">print</span>(<span class="function">id</span>(name))   <span class="comment"># e.g., 140234567890</span>
+
+<span class="comment"># Variables are references, not boxes</span>
+a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]
+b = a              <span class="comment"># b points to SAME list</span>
+b.append(<span class="number">4</span>)
+<span class="function">print</span>(a)           <span class="comment"># [1, 2, 3, 4] — both changed!</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Type</th><th>Example</th><th>Mutable?</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td><code>int</code></td><td><code>42</code>, <code>0xff</code>, <code>0b1010</code></td><td>❌</td><td>Unlimited precision</td></tr>
+              <tr><td><code>float</code></td><td><code>3.14</code>, <code>2.5e10</code></td><td>❌</td><td>IEEE 754 double</td></tr>
+              <tr><td><code>str</code></td><td><code>"hello"</code>, <code>'hi'</code></td><td>❌</td><td>Unicode by default</td></tr>
+              <tr><td><code>bool</code></td><td><code>True</code>, <code>False</code></td><td>❌</td><td>Subclass of int</td></tr>
+              <tr><td><code>None</code></td><td><code>None</code></td><td>❌</td><td>Singleton null value</td></tr>
+              <tr><td><code>complex</code></td><td><code>3+4j</code></td><td>❌</td><td>Real + imaginary</td></tr>
+              <tr><td><code>bytes</code></td><td><code>b"hello"</code></td><td>❌</td><td>Binary data</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
 
-    <div class="callout callout-tip">
-      <strong>How to study Part 1:</strong> Read each concept, run each snippet, and then modify values yourself. Active practice gives permanent understanding.
+    <!-- MODULE 1.4 -->
+    <div class="module-section" id="m1-4">
+      <div class="module-header"><div class="module-number">1.4</div><h2 class="module-title">Operators — arithmetic, comparison, logical, bitwise, walrus</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Building expressions</h3>
+        <p class="explain-en">Python has all standard operators plus some unique ones: <code>//</code> for integer division, <code>**</code> for power, <code>:=</code> (walrus operator, Python 3.8+) for assignment expressions, and <code>is</code> for identity comparison.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Python me standard operators ke saath kuch unique bhi hain: <code>//</code> integer division ke liye, <code>**</code> power ke liye, <code>:=</code> (walrus operator) assignment expressions ke liye, aur <code>is</code> identity comparison ke liye.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Python — Operators</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># Arithmetic</span>
+<span class="number">10</span> + <span class="number">3</span>    <span class="comment"># 13</span>
+<span class="number">10</span> - <span class="number">3</span>    <span class="comment"># 7</span>
+<span class="number">10</span> * <span class="number">3</span>    <span class="comment"># 30</span>
+<span class="number">10</span> / <span class="number">3</span>    <span class="comment"># 3.3333 (true division)</span>
+<span class="number">10</span> // <span class="number">3</span>   <span class="comment"># 3 (floor division)</span>
+<span class="number">10</span> % <span class="number">3</span>    <span class="comment"># 1 (modulo)</span>
+<span class="number">2</span> ** <span class="number">10</span>   <span class="comment"># 1024 (power)</span>
+
+<span class="comment"># Comparison</span>
+<span class="number">5</span> == <span class="number">5</span>    <span class="comment"># True (equality)</span>
+<span class="number">5</span> != <span class="number">3</span>    <span class="comment"># True</span>
+<span class="number">5</span> &gt; <span class="number">3</span>     <span class="comment"># True</span>
+
+<span class="comment"># Logical</span>
+<span class="keyword">True</span> <span class="keyword">and</span> <span class="keyword">False</span>   <span class="comment"># False</span>
+<span class="keyword">True</span> <span class="keyword">or</span> <span class="keyword">False</span>    <span class="comment"># True</span>
+<span class="keyword">not</span> <span class="keyword">True</span>         <span class="comment"># False</span>
+
+<span class="comment"># Identity & Membership</span>
+a <span class="keyword">is</span> b         <span class="comment"># Same object in memory?</span>
+x <span class="keyword">in</span> [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]   <span class="comment"># Membership check</span>
+
+<span class="comment"># Walrus operator := (Python 3.8+)</span>
+<span class="keyword">if</span> (n := <span class="function">len</span>(data)) &gt; <span class="number">10</span>:
+    <span class="function">print</span>(<span class="string">f"Too long: </span>{n}<span class="string"> items"</span>)</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Category</th><th>Operators</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td>Arithmetic</td><td><code>+ - * / // % **</code></td><td><code>2 ** 10 → 1024</code></td></tr>
+              <tr><td>Comparison</td><td><code>== != &lt; &gt; &lt;= &gt;=</code></td><td><code>5 &gt;= 3 → True</code></td></tr>
+              <tr><td>Logical</td><td><code>and or not</code></td><td><code>True and False → False</code></td></tr>
+              <tr><td>Bitwise</td><td><code>&amp; | ^ ~ &lt;&lt; &gt;&gt;</code></td><td><code>5 &amp; 3 → 1</code></td></tr>
+              <tr><td>Assignment</td><td><code>= += -= *= /= //= **=</code></td><td><code>x += 1</code></td></tr>
+              <tr><td>Identity</td><td><code>is, is not</code></td><td><code>x is None</code></td></tr>
+              <tr><td>Membership</td><td><code>in, not in</code></td><td><code>"a" in "abc"</code></td></tr>
+              <tr><td>Walrus</td><td><code>:=</code></td><td><code>if (n := len(x)) > 0</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
 
-    <div class="hb-mini-toc">
-      <div class="hb-mini-title">📍 Part 1 Modules</div>
-      <div class="hb-mini-links">
-        <a href="#m1-1">1.1 Introduction</a>
-        <a href="#m1-2">1.2 Environment Setup</a>
-        <a href="#m1-3">1.3 Variables & Types</a>
-        <a href="#m1-4">1.4 Operators</a>
-        <a href="#m1-5">1.5 Input / Output</a>
-        <a href="#m1-6">1.6 Comments & Docs</a>
+    <!-- MODULE 1.5 -->
+    <div class="module-section" id="m1-5">
+      <div class="module-header"><div class="module-number">1.5</div><h2 class="module-title">Input/Output — print(), input(), f-strings, formatting</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Talking to the user</h3>
+        <p class="explain-en"><code>print()</code> outputs to console, <code>input()</code> reads from keyboard (always returns <code>str</code>). <strong>f-strings</strong> (Python 3.6+) are the fastest and cleanest way to format strings. Use format specifiers for numbers.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>print()</code> console pe output deta hai, <code>input()</code> keyboard se padta hai (hamesha <code>str</code> return karta hai). <strong>f-strings</strong> (Python 3.6+) sabse fast aur clean string formatting hai. Numbers ke liye format specifiers use karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Python — I/O & f-strings</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># Basic print</span>
+<span class="function">print</span>(<span class="string">"Hello"</span>)
+<span class="function">print</span>(<span class="string">"A"</span>, <span class="string">"B"</span>, <span class="string">"C"</span>, sep=<span class="string">"-"</span>)  <span class="comment"># A-B-C</span>
+<span class="function">print</span>(<span class="string">"No newline"</span>, end=<span class="string">" "</span>)
+
+<span class="comment"># Input (always returns str!)</span>
+name = <span class="function">input</span>(<span class="string">"Enter name: "</span>)
+age = <span class="function">int</span>(<span class="function">input</span>(<span class="string">"Enter age: "</span>))  <span class="comment"># Must convert!</span>
+
+<span class="comment"># f-strings — the modern way (Python 3.6+)</span>
+name = <span class="string">"Yuvraj"</span>
+age = <span class="number">21</span>
+<span class="function">print</span>(<span class="string">f"Name: </span>{name}<span class="string">, Age: </span>{age}<span class="string">"</span>)
+
+<span class="comment"># f-string expressions</span>
+<span class="function">print</span>(<span class="string">f"2 + 3 = </span>{<span class="number">2</span> + <span class="number">3</span>}<span class="string">"</span>)
+<span class="function">print</span>(<span class="string">f"</span>{name.upper()}<span class="string">"</span>)       <span class="comment"># YUVRAJ</span>
+<span class="function">print</span>(<span class="string">f"</span>{name!r}<span class="string">"</span>)             <span class="comment"># 'Yuvraj' (repr)</span>
+
+<span class="comment"># Number formatting</span>
+pi = <span class="number">3.14159</span>
+<span class="function">print</span>(<span class="string">f"Pi: </span>{pi:.2f}<span class="string">"</span>)          <span class="comment"># Pi: 3.14</span>
+<span class="function">print</span>(<span class="string">f"Big: </span>{<span class="number">1000000</span>:,}<span class="string">"</span>)     <span class="comment"># Big: 1,000,000</span>
+<span class="function">print</span>(<span class="string">f"Pct: </span>{<span class="number">0.85</span>:.1%}<span class="string">"</span>)      <span class="comment"># Pct: 85.0%</span>
+<span class="function">print</span>(<span class="string">f"Hex: </span>{<span class="number">255</span>:#x}<span class="string">"</span>)        <span class="comment"># Hex: 0xff</span>
+<span class="function">print</span>(<span class="string">f"Pad: </span>{<span class="number">42</span>:05d}<span class="string">"</span>)        <span class="comment"># Pad: 00042</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Format</th><th>Example</th><th>Output</th></tr></thead>
+            <tbody>
+              <tr><td><code>:.2f</code></td><td><code>f"{3.14159:.2f}"</code></td><td>3.14</td></tr>
+              <tr><td><code>:,</code></td><td><code>f"{1000000:,}"</code></td><td>1,000,000</td></tr>
+              <tr><td><code>:.1%</code></td><td><code>f"{0.85:.1%}"</code></td><td>85.0%</td></tr>
+              <tr><td><code>:05d</code></td><td><code>f"{42:05d}"</code></td><td>00042</td></tr>
+              <tr><td><code>:&gt;10</code></td><td><code>f"{'hi':&gt;10}"</code></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hi</td></tr>
+              <tr><td><code>:#x</code></td><td><code>f"{255:#x}"</code></td><td>0xff</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 1.6 -->
+    <div class="module-section" id="m1-6">
+      <div class="module-header"><div class="module-number">1.6</div><h2 class="module-title">Type conversion & type checking — int(), str(), isinstance()</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Converting between types</h3>
+        <p class="explain-en">Python provides built-in functions for <strong>explicit type conversion</strong>: <code>int()</code>, <code>float()</code>, <code>str()</code>, <code>bool()</code>, <code>list()</code>, <code>tuple()</code>. Use <code>isinstance()</code> for type checking (preferred over <code>type()</code>).</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Python me <strong>explicit type conversion</strong> ke liye built-in functions hain: <code>int()</code>, <code>float()</code>, <code>str()</code>, <code>bool()</code>. Type checking ke liye <code>isinstance()</code> use karo (<code>type()</code> se better hai).</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Python — Type conversion</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># Explicit conversion</span>
+<span class="function">int</span>(<span class="string">"42"</span>)        <span class="comment"># 42</span>
+<span class="function">float</span>(<span class="string">"3.14"</span>)    <span class="comment"># 3.14</span>
+<span class="function">str</span>(<span class="number">42</span>)          <span class="comment"># "42"</span>
+<span class="function">bool</span>(<span class="number">0</span>)          <span class="comment"># False</span>
+<span class="function">bool</span>(<span class="string">""</span>)         <span class="comment"># False</span>
+<span class="function">bool</span>(<span class="string">"hello"</span>)    <span class="comment"># True</span>
+<span class="function">list</span>(<span class="string">"abc"</span>)      <span class="comment"># ['a', 'b', 'c']</span>
+
+<span class="comment"># Falsy values in Python</span>
+<span class="comment"># False, 0, 0.0, "", [], {}, (), set(), None, range(0)</span>
+
+<span class="comment"># Type checking</span>
+<span class="function">isinstance</span>(<span class="number">42</span>, <span class="type">int</span>)           <span class="comment"># True</span>
+<span class="function">isinstance</span>(<span class="string">"hi"</span>, (<span class="type">str</span>, <span class="type">bytes</span>)) <span class="comment"># True (tuple = OR)</span>
+<span class="function">type</span>(<span class="number">42</span>) == <span class="type">int</span>               <span class="comment"># True (but less flexible)</span>
+<span class="function">type</span>(<span class="number">42</span>).__name__              <span class="comment"># "int"</span></pre></div>
+        </div>
+        <div class="callout callout-tip"><strong>Prefer <code>isinstance()</code> over <code>type()</code></strong> — it respects inheritance. <code>isinstance(True, int)</code> is <code>True</code> because <code>bool</code> is a subclass of <code>int</code>.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 1.7 -->
+    <div class="module-section" id="m1-7">
+      <div class="module-header"><div class="module-number">1.7</div><h2 class="module-title">Comments, docstrings, PEP 8 style guide</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Writing clean, readable code</h3>
+        <p class="explain-en"><strong>PEP 8</strong> is Python's official style guide. Use <code>#</code> for comments, triple-quotes for docstrings. Follow 4-space indentation, snake_case naming, and 79-char line limit. Clean code is professional code.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>PEP 8</strong> Python ka official style guide hai. Comments ke liye <code>#</code>, docstrings ke liye triple-quotes use karo. 4-space indentation, snake_case naming, aur 79-char line limit follow karo. Clean code = professional code.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Python — PEP 8 style</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># Single-line comment</span>
+
+<span class="string">"""
+Multi-line docstring.
+Used for modules, classes, and functions.
+"""</span>
+
+<span class="keyword">def</span> <span class="function">calculate_area</span>(radius: <span class="type">float</span>) -> <span class="type">float</span>:
+    <span class="string">"""Calculate the area of a circle.
+
+    Args:
+        radius: The radius of the circle.
+
+    Returns:
+        The area as a float.
+    """</span>
+    <span class="keyword">import</span> math
+    <span class="keyword">return</span> math.pi * radius ** <span class="number">2</span>
+
+<span class="comment"># ✅ PEP 8 naming conventions</span>
+my_variable = <span class="number">42</span>          <span class="comment"># snake_case for variables</span>
+MY_CONSTANT = <span class="number">3.14</span>        <span class="comment"># UPPER_CASE for constants</span>
+<span class="keyword">class</span> <span class="type">MyClass</span>:             <span class="comment"># PascalCase for classes</span>
+    <span class="keyword">pass</span>
+<span class="keyword">def</span> <span class="function">my_function</span>():        <span class="comment"># snake_case for functions</span>
+    <span class="keyword">pass</span>
+_private_var = <span class="number">10</span>         <span class="comment"># leading _ for "private"</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>PEP 8 Rule</th><th>✅ Good</th><th>❌ Bad</th></tr></thead>
+            <tbody>
+              <tr><td>Indentation</td><td>4 spaces</td><td>Tabs or 2 spaces</td></tr>
+              <tr><td>Variable names</td><td><code>my_var</code></td><td><code>myVar</code>, <code>MyVar</code></td></tr>
+              <tr><td>Class names</td><td><code>MyClass</code></td><td><code>my_class</code>, <code>myclass</code></td></tr>
+              <tr><td>Constants</td><td><code>MAX_SIZE</code></td><td><code>maxSize</code>, <code>max_size</code></td></tr>
+              <tr><td>Line length</td><td>≤ 79 chars</td><td>200+ char lines</td></tr>
+              <tr><td>Imports</td><td>One per line, top of file</td><td>Mixed, inline</td></tr>
+              <tr><td>Blank lines</td><td>2 before class/function</td><td>Random spacing</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
     <div class="quick-ref">
-      <div class="qr-title">🚀 Advanced Lens — Part 1</div>
-      <p class="explain-en">
-        To master foundations at an industry level, do not stop at syntax. For each topic, ask: what runtime behavior happens, what failure cases appear,
-        and how this concept scales in a real codebase. Example: with variables, think mutability and object identity; with input/output, think validation and
-        user-error handling; with comments/docstrings, think maintainability across teams.
-      </p>
-      <div class="explain-hi">
-        <span class="hi-label">Hindi mein samjho</span>
-        Part 1 ko advanced level par samajhne ke liye sirf syntax yaad mat karo. Har concept ke saath runtime behavior, edge cases, aur real project usage samjho.
-        Isi mindset se aap beginner se professional direction mein move karte ho.
+      <div class="qr-title">📋 Python Built-in Functions — Essential Quick Reference</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Function</th><th>Purpose</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><code>print()</code></td><td>Output to console</td><td><code>print("hi")</code></td></tr>
+            <tr><td><code>input()</code></td><td>Read from keyboard</td><td><code>input("Name: ")</code></td></tr>
+            <tr><td><code>type()</code></td><td>Get type of object</td><td><code>type(42) → int</code></td></tr>
+            <tr><td><code>isinstance()</code></td><td>Check type (+ inheritance)</td><td><code>isinstance(x, int)</code></td></tr>
+            <tr><td><code>len()</code></td><td>Length of sequence</td><td><code>len("abc") → 3</code></td></tr>
+            <tr><td><code>id()</code></td><td>Memory address</td><td><code>id(x)</code></td></tr>
+            <tr><td><code>help()</code></td><td>Interactive docs</td><td><code>help(print)</code></td></tr>
+            <tr><td><code>dir()</code></td><td>List attributes</td><td><code>dir(str)</code></td></tr>
+            <tr><td><code>range()</code></td><td>Number sequence</td><td><code>range(1, 10, 2)</code></td></tr>
+            <tr><td><code>abs()</code></td><td>Absolute value</td><td><code>abs(-5) → 5</code></td></tr>
+            <tr><td><code>round()</code></td><td>Round number</td><td><code>round(3.7) → 4</code></td></tr>
+            <tr><td><code>min() / max()</code></td><td>Minimum / maximum</td><td><code>max(1,5,3) → 5</code></td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
-    <div class="module-section" id="m1-1">
-      <div class="module-header"><div class="module-number">1.1</div><h2 class="module-title">Introduction to Python — History, Features, Why Python, Python 2 vs 3</h2></div>
-
-      <div class="concept-block">
-        <h3 class="concept-heading">What is Python?</h3>
-        <p class="explain-en">
-          Python is a high-level, interpreted, general-purpose programming language designed to prioritize readability and developer productivity.
-          It allows developers to build scripts, web apps, automation tools, data pipelines, AI systems, and backend services with clear syntax and fast development speed.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Python ek readable aur powerful language hai jise beginner se lekar professional teams tak sab use karte hain. Iski syntax clean hai, isliye code samajhna aur maintain karna easy hota hai.</div>
-      </div>
-
-      <div class="concept-block">
-        <h3 class="concept-heading">Quick history and growth</h3>
-        <p class="explain-en">
-          Python was created by Guido van Rossum and first released in 1991.
-          Over time, it became one of the most adopted languages due to simplicity, huge library ecosystem, and strong community support.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Python 1991 se exist karta hai, aur aaj AI, web, data, automation har jagah use hota hai. Iski popularity ka reason hai simplicity + powerful ecosystem.</div>
-      </div>
-
-      <div class="concept-block">
-        <h3 class="concept-heading">Why Python in 2026?</h3>
-        <p class="explain-en">
-          Python remains relevant because of versatile use-cases and strong job demand.
-          Learning Python gives a practical base for full-stack development, data science, automation, cloud scripting, and interview preparation.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Python seekhne se aap multiple domains me switch kar sakte ho: web dev, data science, scripting, testing, AI. Career flexibility ke liye ye best language hai.</div>
-      </div>
-
-      <div class="concept-block">
-        <h3 class="concept-heading">Python 2 vs Python 3</h3>
-        <p class="explain-en">
-          Python 2 is officially discontinued; modern development uses Python 3 only.
-          Python 3 brings cleaner Unicode handling, better libraries, improved syntax features, and long-term ecosystem support.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Python 2 obsolete ho chuka hai. Hamesha Python 3 use karo, kyunki wahi supported hai aur industry standard bhi wahi hai.</div>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python 3 print style</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre><span class="builtin">print</span>(<span class="string">"Hello, Python 3!"</span>)</pre></div>
-          <div class="code-output">Hello, Python 3!</div>
-        </div>
-        <div class="callout callout-note"><strong>Example explained:</strong> In Python 3, <code>print</code> is a function and must use parentheses.</div>
+    <div class="quick-ref">
+      <div class="qr-title">📋 Python vs Other Languages — Quick Comparison</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Feature</th><th>Python</th><th>JavaScript</th><th>Java</th></tr></thead>
+          <tbody>
+            <tr><td>Indentation</td><td>Mandatory (syntax)</td><td>Optional (style)</td><td>Optional (style)</td></tr>
+            <tr><td>Semicolons</td><td>None</td><td>Optional</td><td>Required</td></tr>
+            <tr><td>Braces</td><td>None (uses indentation)</td><td>Required</td><td>Required</td></tr>
+            <tr><td>Variable decl</td><td><code>x = 5</code></td><td><code>let x = 5</code></td><td><code>int x = 5;</code></td></tr>
+            <tr><td>String format</td><td>f-string</td><td>Template literal</td><td>String.format()</td></tr>
+            <tr><td>Null value</td><td><code>None</code></td><td><code>null/undefined</code></td><td><code>null</code></td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
-    <div class="module-section" id="m1-2">
-      <div class="module-header"><div class="module-number">1.2</div><h2 class="module-title">Environment Setup — Installation, IDE setup, first run</h2></div>
-
-      <div class="concept-block">
-        <h3 class="concept-heading">Install Python correctly</h3>
-        <p class="explain-en">
-          Correct installation ensures your terminal and IDE both use the same interpreter.
-          Always verify with version commands immediately after installation.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Install ke baad verify karna mandatory hai. Agar terminal aur IDE alag interpreter use karenge to confusion aur errors aayenge.</div>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-solid fa-terminal"></i> Verify installation</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre>python --version
-pip --version</pre></div>
-        </div>
-        <div class="callout callout-note"><strong>Example explained:</strong> If commands return version numbers, installation is successful and PATH is configured.</div>
-      </div>
-
-      <div class="concept-block">
-        <h3 class="concept-heading">Choose and configure IDE</h3>
-        <p class="explain-en">
-          VS Code and PyCharm are both good options. What matters most is selecting the correct interpreter and running code consistently.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>IDE koi bhi use karo, but correct Python interpreter select karna sabse important step hai.</div>
-      </div>
-
-      <div class="concept-block">
-        <h3 class="concept-heading">First Python program</h3>
-        <p class="explain-en">
-          Your first program validates the complete setup flow: file creation, script execution, output rendering.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Pehla program run karke aap confirm karte ho ki environment properly setup hai.</div>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> hello.py</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre><span class="builtin">print</span>(<span class="string">"Welcome to CodeWithYuvraj Python Handbook!"</span>)</pre></div>
-        </div>
-        <div class="callout callout-note"><strong>Example explained:</strong> Save as <code>hello.py</code> and run via terminal using <code>python hello.py</code>.</div>
+    <div class="quick-ref">
+      <div class="qr-title">📋 Python Keywords — Complete List (35 keywords)</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Category</th><th>Keywords</th></tr></thead>
+          <tbody>
+            <tr><td>Values</td><td><code>True</code> <code>False</code> <code>None</code></td></tr>
+            <tr><td>Logic</td><td><code>and</code> <code>or</code> <code>not</code> <code>is</code> <code>in</code></td></tr>
+            <tr><td>Control flow</td><td><code>if</code> <code>elif</code> <code>else</code> <code>for</code> <code>while</code> <code>break</code> <code>continue</code> <code>pass</code></td></tr>
+            <tr><td>Functions</td><td><code>def</code> <code>return</code> <code>lambda</code> <code>yield</code> <code>global</code> <code>nonlocal</code></td></tr>
+            <tr><td>Classes</td><td><code>class</code></td></tr>
+            <tr><td>Exceptions</td><td><code>try</code> <code>except</code> <code>finally</code> <code>raise</code> <code>assert</code></td></tr>
+            <tr><td>Import</td><td><code>import</code> <code>from</code> <code>as</code></td></tr>
+            <tr><td>Context</td><td><code>with</code></td></tr>
+            <tr><td>Async</td><td><code>async</code> <code>await</code></td></tr>
+            <tr><td>Delete</td><td><code>del</code></td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
-    <div class="module-section" id="m1-3">
-      <div class="module-header"><div class="module-number">1.3</div><h2 class="module-title">Variables & Data Types — int, float, str, bool, type(), casting</h2></div>
-
-      <div class="concept-block">
-        <h3 class="concept-heading">Variables and assignment</h3>
-        <p class="explain-en">
-          A variable is a named reference to a value object in memory.
-          Clear naming and purposeful assignment are essential for maintainable code.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Variable ek label hai jo value ko hold karta hai. Meaningful names use karne se code readable banta hai.</div>
-      </div>
-
-      <div class="concept-block">
-        <h3 class="concept-heading">Reference vs value (the mental model professionals use)</h3>
-        <p class="explain-en">
-          In Python, variables do not “store the value inside”; they store a <strong>reference</strong> to an object.
-          This distinction explains many real bugs: when two variables refer to the same mutable object, a change through one name is visible through the other.
-          This is why teams talk about <em>shared state</em> and <em>side effects</em>.
-        </p>
-        <div class="explain-hi">
-          <span class="hi-label">Hindi mein samjho</span>
-          Python me variable value ko “andar” store nahi karta — variable object ka reference store karta hai.
-          Agar 2 variables same mutable object ko point kar rahe hain, to ek se change karoge to dusre me bhi change dikhega.
-          Isi ko shared state / side effects bolte hain.
-        </div>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — shared reference example</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre>a = [<span class="number">1</span>, <span class="number">2</span>]
-b = a
-b.append(<span class="number">3</span>)
-<span class="builtin">print</span>(a, b)</pre></div>
-          <div class="code-output">[1, 2, 3] [1, 2, 3]</div>
-        </div>
-        <div class="callout callout-note"><strong>Example explained:</strong> <code>b = a</code> copies the reference, not the list. Both names point to the same list object.</div>
-      </div>
-
-      <div class="concept-block">
-        <h3 class="concept-heading">Core data types</h3>
-        <p class="explain-en">
-          Python includes numeric types (<code>int</code>, <code>float</code>), text type (<code>str</code>), and logical type (<code>bool</code>).
-          Choosing the correct type improves validation and prevents logic bugs.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Data type decide karta hai value ka behavior kya hoga. Sahi type choose karna bug prevention ka basic rule hai.</div>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — basic types</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre>age = <span class="number">21</span>
-price = <span class="number">99.5</span>
-name = <span class="string">"Yuvraj"</span>
-is_active = <span class="keyword">True</span>
-<span class="builtin">print</span>(<span class="builtin">type</span>(age), <span class="builtin">type</span>(price), <span class="builtin">type</span>(name), <span class="builtin">type</span>(is_active))</pre></div>
-        </div>
-        <div class="callout callout-note"><strong>Example explained:</strong> <code>type()</code> shows the runtime data type of each variable.</div>
-      </div>
-
-      <div class="concept-block">
-        <h3 class="concept-heading">Type casting</h3>
-        <p class="explain-en">
-          Type casting converts values from one type to another when required for computation or formatting.
-          Always validate values before conversion to avoid runtime errors.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Casting ka matlab type convert karna. User input string aata hai, use number banane ke liye <code>int()</code> ya <code>float()</code> use hota hai.</div>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — casting</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre>raw = <span class="string">"42"</span>
-num = <span class="builtin">int</span>(raw)
-<span class="builtin">print</span>(num + <span class="number">8</span>)</pre></div>
-          <div class="code-output">50</div>
-        </div>
-        <div class="callout callout-note"><strong>Example explained:</strong> String <code>"42"</code> becomes integer <code>42</code>, so arithmetic works correctly.</div>
+    <div class="quick-ref">
+      <div class="qr-title">📋 String Escape Sequences</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Escape</th><th>Meaning</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><code>\n</code></td><td>Newline</td><td><code>"line1\nline2"</code></td></tr>
+            <tr><td><code>\t</code></td><td>Tab</td><td><code>"col1\tcol2"</code></td></tr>
+            <tr><td><code>\\</code></td><td>Backslash</td><td><code>"C:\\Users"</code></td></tr>
+            <tr><td><code>\'</code></td><td>Single quote</td><td><code>'it\'s'</code></td></tr>
+            <tr><td><code>\"</code></td><td>Double quote</td><td><code>"say \"hi\""</code></td></tr>
+            <tr><td><code>\0</code></td><td>Null character</td><td><code>"\0"</code></td></tr>
+            <tr><td><code>r"..."</code></td><td>Raw string (no escapes)</td><td><code>r"C:\new"</code></td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
-    <div class="module-section" id="m1-4">
-      <div class="module-header"><div class="module-number">1.4</div><h2 class="module-title">Operators — Arithmetic, Comparison, Logical, Assignment, Identity, Membership</h2></div>
-
-      <div class="concept-block">
-        <h3 class="concept-heading">Arithmetic and comparison operators</h3>
-        <p class="explain-en">
-          Arithmetic operators perform calculations while comparison operators produce boolean outputs for decisions.
-          Together they power scoring, billing, eligibility, and validation logic.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Arithmetic operators se calculation hota hai, comparison operators se decision ke liye True/False milta hai.</div>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — arithmetic + comparison</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre>a, b = <span class="number">10</span>, <span class="number">3</span>
-<span class="builtin">print</span>(a + b, a // b, a % b)
-<span class="builtin">print</span>(a &gt; b, a == b)</pre></div>
-        </div>
-        <div class="callout callout-note"><strong>Example explained:</strong> First line computes values; second line checks relationships and returns booleans.</div>
+    <div class="quick-ref">
+      <div class="qr-title">📋 Number Systems in Python</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>System</th><th>Prefix</th><th>Example</th><th>Decimal value</th></tr></thead>
+          <tbody>
+            <tr><td>Decimal</td><td>(none)</td><td><code>42</code></td><td>42</td></tr>
+            <tr><td>Binary</td><td><code>0b</code></td><td><code>0b101010</code></td><td>42</td></tr>
+            <tr><td>Octal</td><td><code>0o</code></td><td><code>0o52</code></td><td>42</td></tr>
+            <tr><td>Hexadecimal</td><td><code>0x</code></td><td><code>0x2A</code></td><td>42</td></tr>
+          </tbody>
+        </table>
       </div>
+      <p style="color:var(--hb-text2);font-size:0.85rem;margin-top:8px;">Convert: <code>bin(42)</code> → <code>'0b101010'</code>, <code>hex(42)</code> → <code>'0x2a'</code>, <code>oct(42)</code> → <code>'0o52'</code>, <code>int('0x2A', 16)</code> → <code>42</code></p>
+    </div>
 
-      <div class="concept-block">
-        <h3 class="concept-heading">Logical, identity, membership operators</h3>
-        <p class="explain-en">
-          Logical operators combine conditions, identity checks object reference equality, and membership checks value existence in a collection.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>and/or/not</code> conditions combine karte hain, <code>is</code> object identity check karta hai, aur <code>in</code> collection membership check karta hai.</div>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — logical / identity / membership</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre>age = <span class="number">22</span>
-is_verified = <span class="keyword">True</span>
-<span class="builtin">print</span>(age &gt;= <span class="number">18</span> <span class="keyword">and</span> is_verified)
 
-roles = [<span class="string">"user"</span>, <span class="string">"editor"</span>]
-<span class="builtin">print</span>(<span class="string">"admin"</span> <span class="keyword">in</span> roles)</pre></div>
-        </div>
-        <div class="callout callout-note"><strong>Example explained:</strong> First check ensures both conditions are true; second checks if value exists inside list.</div>
+    <div class="quick-ref">
+      <div class="qr-title">📋 Built-in Functions — Most Used</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Function</th><th>Purpose</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><code>print()</code></td><td>Output to console</td><td><code>print("Hello")</code></td></tr>
+            <tr><td><code>input()</code></td><td>Read user input (str)</td><td><code>name = input("Name: ")</code></td></tr>
+            <tr><td><code>len()</code></td><td>Length of sequence</td><td><code>len([1,2,3]) → 3</code></td></tr>
+            <tr><td><code>type()</code></td><td>Get type of object</td><td><code>type(42) → int</code></td></tr>
+            <tr><td><code>int()</code></td><td>Convert to integer</td><td><code>int("42") → 42</code></td></tr>
+            <tr><td><code>float()</code></td><td>Convert to float</td><td><code>float("3.14") → 3.14</code></td></tr>
+            <tr><td><code>str()</code></td><td>Convert to string</td><td><code>str(42) → "42"</code></td></tr>
+            <tr><td><code>bool()</code></td><td>Convert to boolean</td><td><code>bool(0) → False</code></td></tr>
+            <tr><td><code>range()</code></td><td>Sequence of numbers</td><td><code>range(5) → 0,1,2,3,4</code></td></tr>
+            <tr><td><code>abs()</code></td><td>Absolute value</td><td><code>abs(-5) → 5</code></td></tr>
+            <tr><td><code>round()</code></td><td>Round number</td><td><code>round(3.14, 1) → 3.1</code></td></tr>
+            <tr><td><code>min()</code> / <code>max()</code></td><td>Minimum / Maximum</td><td><code>max(1,5,3) → 5</code></td></tr>
+            <tr><td><code>sum()</code></td><td>Sum of iterable</td><td><code>sum([1,2,3]) → 6</code></td></tr>
+            <tr><td><code>sorted()</code></td><td>Return sorted list</td><td><code>sorted([3,1,2]) → [1,2,3]</code></td></tr>
+            <tr><td><code>enumerate()</code></td><td>Index + value pairs</td><td><code>enumerate(["a","b"])</code></td></tr>
+            <tr><td><code>zip()</code></td><td>Pair elements</td><td><code>zip([1,2], ["a","b"])</code></td></tr>
+            <tr><td><code>map()</code></td><td>Apply function to all</td><td><code>map(str, [1,2,3])</code></td></tr>
+            <tr><td><code>filter()</code></td><td>Filter by predicate</td><td><code>filter(bool, [0,1,2])</code></td></tr>
+            <tr><td><code>isinstance()</code></td><td>Check type</td><td><code>isinstance(5, int)</code></td></tr>
+            <tr><td><code>id()</code></td><td>Object identity</td><td><code>id(x) → memory address</code></td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
-    <div class="module-section" id="m1-5">
-      <div class="module-header"><div class="module-number">1.5</div><h2 class="module-title">Input / Output — print(), input(), f-strings, formatting</h2></div>
-
-      <div class="concept-block">
-        <h3 class="concept-heading">print() and output formatting</h3>
-        <p class="explain-en">
-          <code>print()</code> is used to show output, logs, and debug values.
-          Parameters like <code>sep</code> and <code>end</code> allow better output control.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>print()</code> sirf text dikhane ke liye nahi, debugging aur readable output formatting ke liye bhi use hota hai.</div>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — print formatting</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre><span class="builtin">print</span>(<span class="string">"Python"</span>, <span class="string">"Handbook"</span>, sep=<span class="string">" | "</span>)
-<span class="builtin">print</span>(<span class="string">"Loading"</span>, end=<span class="string">"..."</span>)
-<span class="builtin">print</span>(<span class="string">"Done"</span>)</pre></div>
-        </div>
-        <div class="callout callout-note"><strong>Example explained:</strong> <code>sep</code> sets separator between values, and <code>end</code> changes line ending behavior.</div>
-      </div>
-
-      <div class="concept-block">
-        <h3 class="concept-heading">input() and parsing</h3>
-        <p class="explain-en">
-          <code>input()</code> always returns a string, so numeric operations require parsing using <code>int()</code> or <code>float()</code>.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>User se liya gaya input default string hota hai. Number calculations se pehle convert karna jaruri hai.</div>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — input parsing</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre>name = <span class="builtin">input</span>(<span class="string">"Enter name: "</span>)
-age = <span class="builtin">int</span>(<span class="builtin">input</span>(<span class="string">"Enter age: "</span>))
-<span class="builtin">print</span>(<span class="string">f"Hello {name}, next year you will be {age + 1}."</span>)</pre></div>
-        </div>
-        <div class="callout callout-note"><strong>Example explained:</strong> Name stays string, but age is converted to integer for arithmetic use.</div>
-      </div>
-
-      <div class="concept-block">
-        <h3 class="concept-heading">Input validation mindset (industry pattern)</h3>
-        <p class="explain-en">
-          Real applications must treat user input as unreliable. Industry-grade programs validate format, range, and business rules before using values.
-          A good pattern is: normalize → validate → convert → handle errors gracefully.
-        </p>
-        <div class="explain-hi">
-          <span class="hi-label">Hindi mein samjho</span>
-          Real apps me input ko trust nahi karte. Pehle normalize (strip/lower), phir validate (empty/range), phir convert, aur error ko gracefully handle karte hain.
-          Yehi production-ready input handling pattern hai.
-        </div>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — safe input loop</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre><span class="keyword">while</span> <span class="keyword">True</span>:
-    raw = <span class="builtin">input</span>(<span class="string">"Enter age (18-99): "</span>).strip()
-    <span class="keyword">if</span> <span class="keyword">not</span> raw.isdigit():
-        <span class="builtin">print</span>(<span class="string">"Please enter a number."</span>)
-        <span class="keyword">continue</span>
-    age = <span class="builtin">int</span>(raw)
-    <span class="keyword">if</span> age &lt; <span class="number">18</span> <span class="keyword">or</span> age &gt; <span class="number">99</span>:
-        <span class="builtin">print</span>(<span class="string">"Age out of allowed range."</span>)
-        <span class="keyword">continue</span>
-    <span class="builtin">print</span>(<span class="string">"Accepted age:"</span>, age)
-    <span class="keyword">break</span></pre></div>
-        </div>
-        <div class="callout callout-note"><strong>Example explained:</strong> Program validates numeric input and range before using the value.</div>
-      </div>
-    </div>
-
-    <div class="module-section" id="m1-6">
-      <div class="module-header"><div class="module-number">1.6</div><h2 class="module-title">Comments & Documentation — single-line, block style, docstrings</h2></div>
-
-      <div class="concept-block">
-        <h3 class="concept-heading">Comments for maintainability</h3>
-        <p class="explain-en">
-          Comments explain intent and context where code alone is not enough.
-          Good comments reduce onboarding time and prevent misunderstandings in team collaboration.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Comments ka use code ka logic explain karne ke liye karo, especially tricky places par. Ye team work me bahut helpful hota hai.</div>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — comments</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre><span class="comment"># Calculate final amount after GST</span>
-price = <span class="number">1200</span>
-gst = <span class="number">0.18</span>
-final_amount = price + (price * gst)</pre></div>
-        </div>
-        <div class="callout callout-note"><strong>Example explained:</strong> The comment explains business purpose of the formula before code execution.</div>
-      </div>
-
-      <div class="concept-block">
-        <h3 class="concept-heading">Docstrings and help()</h3>
-        <p class="explain-en">
-          Docstrings are structured documentation strings attached to modules, classes, and functions.
-          Tools and developers use them via <code>help()</code> and autogenerated documentation workflows.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Docstring professional documentation hota hai jo function/class ke purpose aur usage ko clear karta hai.</div>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — docstring</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre><span class="keyword">def</span> <span class="function">calculate_gst</span>(amount, rate):
-    <span class="string">"""Return total amount after GST.
-
-    Args:
-        amount (float): base amount
-        rate (float): GST rate in decimal form
-    """</span>
-    <span class="keyword">return</span> amount + amount * rate
-
-<span class="builtin">print</span>(calculate_gst(<span class="number">1000</span>, <span class="number">0.18</span>))</pre></div>
-          <div class="code-output">1180.0</div>
-        </div>
-        <div class="callout callout-note"><strong>Example explained:</strong> Function behavior is documented inside docstring, making the function easier to use and review.</div>
+    <div class="quick-ref">
+      <div class="qr-title">📋 PEP 8 Naming Conventions</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Item</th><th>Convention</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>Variable</td><td><code>snake_case</code></td><td><code>user_name</code></td></tr>
+            <tr><td>Function</td><td><code>snake_case</code></td><td><code>get_user()</code></td></tr>
+            <tr><td>Class</td><td><code>PascalCase</code></td><td><code>UserProfile</code></td></tr>
+            <tr><td>Constant</td><td><code>UPPER_SNAKE</code></td><td><code>MAX_RETRIES</code></td></tr>
+            <tr><td>Module</td><td><code>snake_case</code></td><td><code>my_module.py</code></td></tr>
+            <tr><td>Package</td><td><code>lowercase</code></td><td><code>mypackage</code></td></tr>
+            <tr><td>Private</td><td><code>_leading_underscore</code></td><td><code>_internal_var</code></td></tr>
+            <tr><td>Name-mangled</td><td><code>__double_leading</code></td><td><code>__secret</code></td></tr>
+            <tr><td>Dunder</td><td><code>__double_both__</code></td><td><code>__init__</code></td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
     <div class="practice-box">
       <div class="practice-title">✏️ Practice Exercises — Part 1</div>
       <ol>
-        <li>Write a profile script that prints name, age, city, and one career goal using f-string.</li>
-        <li>Take 3 marks as input and print total + average with proper type conversion.</li>
-        <li>Create a simple billing snippet using arithmetic and comparison operators.</li>
-        <li>Write a function with a proper docstring and test using <code>help()</code>.</li>
-        <li>Convert messy text input into clean lowercase tags using string methods.</li>
+        <li>Write a program that asks for name and age, then prints a greeting using f-strings.</li>
+        <li>Calculate the area and circumference of a circle given the radius (use <code>math.pi</code>).</li>
+        <li>Use the walrus operator <code>:=</code> in a while loop to read input until user types "quit".</li>
+        <li>Write a temperature converter: Celsius ↔ Fahrenheit (both directions).</li>
+        <li>Demonstrate all falsy values in Python by printing <code>bool()</code> for each.</li>
+        <li>Format a receipt: item name (left-aligned 20 chars), price (right-aligned, 2 decimals).</li>
+        <li>Write a function with a proper docstring following PEP 257 conventions.</li>
       </ol>
     </div>
 
     <div class="handbook-nav">
-      <a href="index.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Python Handbook Index</div></div></a>
+      <a href="syllabus.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">📋 Master Syllabus</div></div></a>
       <a href="part2.html" class="nav-btn next"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Part 2: Control Flow & Loops →</div></div><i class="fa-solid fa-arrow-right"></i></a>
     </div>
-  </div>
 
+  </div>
   <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
   <script src="../../../js/main.js"></script>
   <script>
     (() => {
-      document.querySelectorAll('.code-block').forEach((block) => {
-        const pre = block.querySelector('.code-body pre');
-        const header = block.querySelector('.code-header');
-        if (!pre || !header) return;
-        let actions = header.querySelector('.code-actions');
-        if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); }
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'code-copy-btn';
-        btn.textContent = 'Copy';
-        btn.addEventListener('click', async () => {
-          try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; }
-          catch { btn.textContent = 'Failed'; }
-          finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); }
-        });
-        actions.prepend(btn);
-      });
-      const fill = document.querySelector('.hb-progress-fill');
-      const label = document.querySelector('.hb-progress-label');
-      if (fill && label) {
-        const update = () => {
-          const h = document.documentElement;
-          const denom = (h.scrollHeight - h.clientHeight) || 1;
-          const pct = Math.max(0, Math.min(1, h.scrollTop / denom));
-          fill.style.width = (pct * 100).toFixed(0) + '%';
-          label.textContent = (pct * 100).toFixed(0) + '%';
-        };
-        document.addEventListener('scroll', update, { passive: true });
-        update();
-      }
+      document.querySelectorAll('.code-block').forEach((block) => { const pre = block.querySelector('.code-body pre'), header = block.querySelector('.code-header'); if (!pre || !header) return; let actions = header.querySelector('.code-actions'); if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); } const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'code-copy-btn'; btn.textContent = 'Copy'; btn.addEventListener('click', async () => { try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; } catch { btn.textContent = 'Failed'; } finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); } }); actions.prepend(btn); });
+      const fill = document.querySelector('.hb-progress-fill'), label = document.querySelector('.hb-progress-label');
+      if (fill && label) { const update = () => { const h = document.documentElement, d = (h.scrollHeight - h.clientHeight) || 1, p = Math.max(0, Math.min(1, h.scrollTop / d)); fill.style.width = (p*100).toFixed(0)+'%'; label.textContent = (p*100).toFixed(0)+'%'; }; document.addEventListener('scroll', update, { passive: true }); update(); }
     })();
   </script>
 </body>
 </html>
+
+

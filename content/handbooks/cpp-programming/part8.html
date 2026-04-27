@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Part 8: Concurrency & Modern C++ — C++ Programming Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 8: Threads, mutex, async/future, atomics, coroutines, modules, and C++20/23 features.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/handbook.css">
+</head>
+<body class="handbook-wrapper">
+  <nav class="navbar"><div class="container"><a href="../../../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../../../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
+
+  <div class="handbook-page">
+    <div class="hb-topbar"><div class="hb-topbar-inner"><div class="hb-breadcrumbs"><a href="index.html">C++ Programming Handbook</a><span class="hb-muted">/</span><span>Part 8</span><span class="hb-muted">·</span><a href="#m8-1">8.1</a> <a href="#m8-2">8.2</a> <a href="#m8-3">8.3</a> <a href="#m8-4">8.4</a> <a href="#m8-5">8.5</a> <a href="#m8-6">8.6</a> <a href="#m8-7">8.7</a></div><div class="hb-progress" aria-label="Reading progress"><div class="hb-progress-track" role="progressbar"><div class="hb-progress-fill"></div></div><div class="hb-progress-label">0%</div></div></div></div>
+
+    <div class="chapter-header" data-chapter-num="08">
+      <div class="chapter-part-label">📖 Part 8 — Concurrency & Modern C++</div>
+      <h1 class="chapter-title">Parallel <span class="gradient-text">Power</span></h1>
+      <p class="chapter-subtitle">Threads, mutexes, async/future, atomics, coroutines, modules — harness modern hardware with modern C++20/23 features.</p>
+      <div class="chapter-meta"><span>📄 Modules 8.1 – 8.7</span><span>⏱️ 90–120 min read</span><span>💻 50+ Examples</span></div>
+    </div>
+
+    <div class="hb-mini-toc"><div class="hb-mini-title">📍 Part 8 Modules</div><div class="hb-mini-links"><a href="#m8-1">8.1 Threads</a><a href="#m8-2">8.2 Mutex</a><a href="#m8-3">8.3 Async</a><a href="#m8-4">8.4 Atomics</a><a href="#m8-5">8.5 Coroutines</a><a href="#m8-6">8.6 Modules</a><a href="#m8-7">8.7 C++23</a></div></div>
+
+    <!-- MODULE 8.1 -->
+    <div class="module-section" id="m8-1">
+      <div class="module-header"><div class="module-number">8.1</div><h2 class="module-title">std::thread — creating and managing threads</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Run code in parallel</h3>
+        <p class="explain-en"><code>std::thread</code> launches a function in a new OS thread. You MUST either <code>join()</code> (wait) or <code>detach()</code> (let it run independently) before the thread object is destroyed.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>std::thread</code> ek function ko naye OS thread me launch karta hai. Thread object destroy hone se pehle aapko <code>join()</code> (wait) ya <code>detach()</code> (independently run) karna ZAROORI hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — std::thread basics</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="preprocessor">#include</span> <span class="string">&lt;thread&gt;</span>
+
+<span class="type">void</span> <span class="function">work</span>(<span class="type">int</span> id) {
+    std::cout &lt;&lt; <span class="string">"Thread "</span> &lt;&lt; id &lt;&lt; <span class="string">" running\n"</span>;
+}
+
+<span class="comment">// Launch threads</span>
+std::thread t1(<span class="function">work</span>, <span class="number">1</span>);
+std::thread t2(<span class="function">work</span>, <span class="number">2</span>);
+
+t1.join();  <span class="comment">// Wait for t1 to finish</span>
+t2.join();  <span class="comment">// Wait for t2 to finish</span>
+
+<span class="comment">// Lambda threads</span>
+std::thread t3([]() {
+    std::cout &lt;&lt; <span class="string">"Lambda thread\n"</span>;
+});
+t3.join();
+
+<span class="comment">// Hardware concurrency</span>
+<span class="type">unsigned</span> cores = std::thread::hardware_concurrency();
+std::cout &lt;&lt; <span class="string">"CPU cores: "</span> &lt;&lt; cores &lt;&lt; <span class="string">"\n"</span>;</pre></div>
+        </div>
+        <div class="callout callout-warning"><strong>Always join or detach!</strong> If a <code>std::thread</code> object is destroyed while joinable, <code>std::terminate()</code> is called — your program crashes.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 8.2 -->
+    <div class="module-section" id="m8-2">
+      <div class="module-header"><div class="module-number">8.2</div><h2 class="module-title">Mutex & locks — preventing data races</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Protect shared data</h3>
+        <p class="explain-en">A <strong>data race</strong> occurs when two threads access shared data and at least one writes. <code>std::mutex</code> provides mutual exclusion. Always use RAII lock guards — never lock/unlock manually.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Data race</strong> tab hota hai jab do threads shared data access karte hain aur kam se kam ek write karta hai. <code>std::mutex</code> mutual exclusion provide karta hai. Hamesha RAII lock guards use karo — manually lock/unlock kabhi mat karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — Mutex & lock_guard</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="preprocessor">#include</span> <span class="string">&lt;mutex&gt;</span>
+
+std::mutex mtx;
+<span class="type">int</span> counter = <span class="number">0</span>;
+
+<span class="type">void</span> <span class="function">increment</span>(<span class="type">int</span> times) {
+    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; times; i++) {
+        std::lock_guard&lt;std::mutex&gt; lock(mtx);  <span class="comment">// RAII lock</span>
+        counter++;
+    }  <span class="comment">// Automatically unlocked here</span>
+}
+
+std::thread t1(<span class="function">increment</span>, <span class="number">100000</span>);
+std::thread t2(<span class="function">increment</span>, <span class="number">100000</span>);
+t1.join(); t2.join();
+std::cout &lt;&lt; counter;  <span class="comment">// Always 200000</span>
+
+<span class="comment">// scoped_lock (C++17) — lock multiple mutexes</span>
+std::mutex m1, m2;
+{
+    std::scoped_lock lock(m1, m2);  <span class="comment">// Deadlock-free!</span>
+    <span class="comment">// ... access both resources ...</span>
+}</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 8.3 -->
+    <div class="module-section" id="m8-3">
+      <div class="module-header"><div class="module-number">8.3</div><h2 class="module-title">async, future, promise — high-level concurrency</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Get results from async work</h3>
+        <p class="explain-en"><code>std::async</code> launches work and returns a <code>std::future</code> — a handle to the result. Call <code>future.get()</code> to wait and retrieve the value. This is simpler than managing threads manually.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>std::async</code> kaam launch karta hai aur <code>std::future</code> return karta hai — result ka handle. <code>future.get()</code> se wait karke value retrieve karo. Ye manually threads manage karne se simple hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — async & future</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="preprocessor">#include</span> <span class="string">&lt;future&gt;</span>
+
+<span class="type">int</span> <span class="function">compute</span>(<span class="type">int</span> x) {
+    std::this_thread::sleep_for(std::chrono::seconds(<span class="number">1</span>));
+    <span class="keyword">return</span> x * x;
+}
+
+<span class="comment">// Launch async — may run in new thread</span>
+std::future&lt;<span class="type">int</span>&gt; f = std::async(std::launch::async, <span class="function">compute</span>, <span class="number">42</span>);
+
+<span class="comment">// Do other work while compute() runs...</span>
+std::cout &lt;&lt; <span class="string">"Working...\n"</span>;
+
+<span class="comment">// Get result — blocks until ready</span>
+<span class="type">int</span> result = f.get();  <span class="comment">// 1764</span>
+
+<span class="comment">// Multiple async tasks</span>
+<span class="keyword">auto</span> f1 = std::async(std::launch::async, <span class="function">compute</span>, <span class="number">10</span>);
+<span class="keyword">auto</span> f2 = std::async(std::launch::async, <span class="function">compute</span>, <span class="number">20</span>);
+std::cout &lt;&lt; f1.get() + f2.get();  <span class="comment">// 100 + 400 = 500</span></pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 8.4 -->
+    <div class="module-section" id="m8-4">
+      <div class="module-header"><div class="module-number">8.4</div><h2 class="module-title">Atomics — lock-free concurrency</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Hardware-level thread safety</h3>
+        <p class="explain-en"><code>std::atomic&lt;T&gt;</code> provides lock-free, thread-safe operations on single variables. The CPU guarantees atomicity — no mutex needed. Use for counters, flags, and simple shared state.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>std::atomic&lt;T&gt;</code> single variables pe lock-free, thread-safe operations provide karta hai. CPU atomicity guarantee karta hai — mutex ki zaroorat nahi. Counters, flags, aur simple shared state ke liye use karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — std::atomic</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="preprocessor">#include</span> <span class="string">&lt;atomic&gt;</span>
+
+std::atomic&lt;<span class="type">int</span>&gt; counter{<span class="number">0</span>};
+
+<span class="type">void</span> <span class="function">increment</span>(<span class="type">int</span> times) {
+    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; times; i++) {
+        counter.fetch_add(<span class="number">1</span>, std::memory_order_relaxed);
+        <span class="comment">// Or simply: counter++;</span>
+    }
+}
+
+std::thread t1(<span class="function">increment</span>, <span class="number">100000</span>);
+std::thread t2(<span class="function">increment</span>, <span class="number">100000</span>);
+t1.join(); t2.join();
+std::cout &lt;&lt; counter.load();  <span class="comment">// Always 200000 — no mutex!</span>
+
+<span class="comment">// Atomic flag — simplest atomic</span>
+std::atomic_flag spinlock = ATOMIC_FLAG_INIT;
+
+<span class="comment">// Compare-and-swap (CAS) — foundation of lock-free</span>
+std::atomic&lt;<span class="type">int</span>&gt; val{<span class="number">5</span>};
+<span class="type">int</span> expected = <span class="number">5</span>;
+val.compare_exchange_strong(expected, <span class="number">10</span>);
+<span class="comment">// If val == 5, set to 10; else expected = current val</span></pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 8.5 -->
+    <div class="module-section" id="m8-5">
+      <div class="module-header"><div class="module-number">8.5</div><h2 class="module-title">Coroutines (C++20) — co_await, co_yield, co_return</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Suspendable functions</h3>
+        <p class="explain-en"><strong>Coroutines</strong> are functions that can suspend and resume. <code>co_await</code> suspends until a value is ready. <code>co_yield</code> produces a value and suspends. <code>co_return</code> completes. They enable async I/O and lazy generators without callbacks.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Coroutines</strong> aise functions hain jo suspend aur resume ho sakte hain. <code>co_await</code> value ready hone tak suspend karta hai. <code>co_yield</code> value produce karke suspend karta hai. <code>co_return</code> complete karta hai. Ye async I/O aur lazy generators callbacks ke bina enable karte hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — Generator coroutine (C++20)</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="preprocessor">#include</span> <span class="string">&lt;coroutine&gt;</span>
+
+<span class="comment">// Generator — yields values lazily</span>
+<span class="keyword">template</span>&lt;<span class="keyword">typename</span> <span class="type">T</span>&gt;
+<span class="keyword">struct</span> <span class="type">Generator</span> {
+    <span class="keyword">struct</span> promise_type {
+        <span class="type">T</span> value_;
+        <span class="type">Generator</span> <span class="function">get_return_object</span>() {
+            <span class="keyword">return</span> {std::coroutine_handle&lt;promise_type&gt;::from_promise(*<span class="keyword">this</span>)};
+        }
+        std::suspend_always <span class="function">initial_suspend</span>() { <span class="keyword">return</span> {}; }
+        std::suspend_always <span class="function">final_suspend</span>() <span class="keyword">noexcept</span> { <span class="keyword">return</span> {}; }
+        std::suspend_always <span class="function">yield_value</span>(<span class="type">T</span> val) {
+            value_ = val; <span class="keyword">return</span> {};
+        }
+        <span class="type">void</span> <span class="function">return_void</span>() {}
+        <span class="type">void</span> <span class="function">unhandled_exception</span>() { std::terminate(); }
+    };
+
+    std::coroutine_handle&lt;promise_type&gt; handle_;
+    <span class="type">bool</span> <span class="function">next</span>() { handle_.resume(); <span class="keyword">return</span> !handle_.done(); }
+    <span class="type">T</span> <span class="function">value</span>() { <span class="keyword">return</span> handle_.promise().value_; }
+    ~<span class="function">Generator</span>() { <span class="keyword">if</span>(handle_) handle_.destroy(); }
+};
+
+<span class="comment">// Usage — infinite fibonacci generator</span>
+<span class="type">Generator</span>&lt;<span class="type">int</span>&gt; <span class="function">fibonacci</span>() {
+    <span class="type">int</span> a = <span class="number">0</span>, b = <span class="number">1</span>;
+    <span class="keyword">while</span> (<span class="keyword">true</span>) {
+        <span class="keyword">co_yield</span> a;
+        <span class="keyword">auto</span> next = a + b;
+        a = b; b = next;
+    }
+}
+
+<span class="keyword">auto</span> gen = <span class="function">fibonacci</span>();
+<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) {
+    gen.<span class="function">next</span>();
+    std::cout &lt;&lt; gen.<span class="function">value</span>() &lt;&lt; <span class="string">" "</span>;
+}
+<span class="comment">// 0 1 1 2 3 5 8 13 21 34</span></pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 8.6 -->
+    <div class="module-section" id="m8-6">
+      <div class="module-header"><div class="module-number">8.6</div><h2 class="module-title">Modules (C++20) — replacing #include</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Modern compilation units</h3>
+        <p class="explain-en"><strong>Modules</strong> replace <code>#include</code> with <code>import</code>. They compile faster (parsed once, not per-translation-unit), avoid macro pollution, and have explicit export control. The future of C++ code organization.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Modules</strong> <code>#include</code> ko <code>import</code> se replace karte hain. Ye faster compile hote hain (ek baar parse, har translation unit me nahi), macro pollution avoid karte hain, aur explicit export control hota hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — Modules (C++20)</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// math.cppm — module interface</span>
+<span class="keyword">export module</span> math;
+
+<span class="keyword">export</span> <span class="type">int</span> <span class="function">add</span>(<span class="type">int</span> a, <span class="type">int</span> b) { <span class="keyword">return</span> a + b; }
+<span class="keyword">export</span> <span class="type">int</span> <span class="function">multiply</span>(<span class="type">int</span> a, <span class="type">int</span> b) { <span class="keyword">return</span> a * b; }
+
+<span class="comment">// Not exported — private to module</span>
+<span class="type">int</span> <span class="function">helper</span>() { <span class="keyword">return</span> <span class="number">42</span>; }
+
+<span class="comment">// main.cpp — import module</span>
+<span class="keyword">import</span> math;
+<span class="keyword">import</span> &lt;iostream&gt;;  <span class="comment">// Header units</span>
+
+<span class="type">int</span> <span class="function">main</span>() {
+    std::cout &lt;&lt; <span class="function">add</span>(<span class="number">3</span>, <span class="number">4</span>) &lt;&lt; <span class="string">"\n"</span>;  <span class="comment">// 7</span>
+    <span class="comment">// helper();  // ❌ Not exported!</span>
+}</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Feature</th><th>#include (old)</th><th>import (modules)</th></tr></thead>
+            <tbody>
+              <tr><td>Parsing</td><td>Every translation unit</td><td>Once, then cached</td></tr>
+              <tr><td>Macros</td><td>Leak across files</td><td>Isolated</td></tr>
+              <tr><td>Build speed</td><td>Slow (redundant parsing)</td><td>Much faster</td></tr>
+              <tr><td>API control</td><td>Everything visible</td><td>Only exported symbols</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 8.7 -->
+    <div class="module-section" id="m8-7">
+      <div class="module-header"><div class="module-number">8.7</div><h2 class="module-title">C++23 & beyond — what's next</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">The evolving standard</h3>
+        <p class="explain-en">C++ evolves on a 3-year cycle. C++23 brings <code>std::print</code>, <code>std::expected</code>, <code>std::generator</code>, <code>std::flat_map</code>, and more. C++26 is in development with contracts, reflection, and pattern matching.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>C++ 3 saal ke cycle pe evolve hota hai. C++23 <code>std::print</code>, <code>std::expected</code>, <code>std::generator</code>, <code>std::flat_map</code> laata hai. C++26 me contracts, reflection, aur pattern matching development me hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — C++23 features</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// std::print — Python-style formatting (C++23)</span>
+std::print(<span class="string">"Hello, {}! You are {} years old.\n"</span>, <span class="string">"Alice"</span>, <span class="number">25</span>);
+
+<span class="comment">// std::expected — error handling without exceptions</span>
+std::expected&lt;<span class="type">int</span>, std::string&gt; <span class="function">divide</span>(<span class="type">int</span> a, <span class="type">int</span> b) {
+    <span class="keyword">if</span> (b == <span class="number">0</span>) <span class="keyword">return</span> std::unexpected(<span class="string">"division by zero"</span>);
+    <span class="keyword">return</span> a / b;
+}
+
+<span class="keyword">auto</span> result = <span class="function">divide</span>(<span class="number">10</span>, <span class="number">3</span>);
+<span class="keyword">if</span> (result) std::cout &lt;&lt; *result;  <span class="comment">// 3</span>
+
+<span class="comment">// Deducing this (C++23) — CRTP replacement</span>
+<span class="keyword">struct</span> <span class="type">Base</span> {
+    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> <span class="type">Self</span>&gt;
+    <span class="keyword">auto</span>&amp; <span class="function">value</span>(<span class="keyword">this</span> <span class="type">Self</span>&amp;&amp; self) { <span class="keyword">return</span> self.val_; }
+};
+
+<span class="comment">// std::ranges::to — convert ranges to containers</span>
+<span class="keyword">auto</span> vec = std::views::iota(<span class="number">1</span>, <span class="number">11</span>)
+    | std::views::filter([](<span class="type">int</span> n){ <span class="keyword">return</span> n % <span class="number">2</span> == <span class="number">0</span>; })
+    | std::ranges::to&lt;std::vector&gt;();
+<span class="comment">// vec = {2, 4, 6, 8, 10}</span></pre></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Concurrency Primitives — Quick Reference</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Primitive</th><th>Header</th><th>Use case</th><th>Overhead</th></tr></thead>
+          <tbody>
+            <tr><td><code>std::thread</code></td><td><code>&lt;thread&gt;</code></td><td>Launch OS thread</td><td>Thread creation (~μs)</td></tr>
+            <tr><td><code>std::mutex</code></td><td><code>&lt;mutex&gt;</code></td><td>Protect shared data</td><td>Lock/unlock (~ns)</td></tr>
+            <tr><td><code>std::lock_guard</code></td><td><code>&lt;mutex&gt;</code></td><td>RAII mutex lock</td><td>Zero (wrapper)</td></tr>
+            <tr><td><code>std::scoped_lock</code></td><td><code>&lt;mutex&gt;</code></td><td>Multi-mutex lock (C++17)</td><td>Zero (wrapper)</td></tr>
+            <tr><td><code>std::atomic&lt;T&gt;</code></td><td><code>&lt;atomic&gt;</code></td><td>Lock-free single variable</td><td>Hardware CAS</td></tr>
+            <tr><td><code>std::async</code></td><td><code>&lt;future&gt;</code></td><td>Launch and get result</td><td>May create thread</td></tr>
+            <tr><td><code>std::future</code></td><td><code>&lt;future&gt;</code></td><td>Get async result</td><td>Shared state</td></tr>
+            <tr><td><code>std::condition_variable</code></td><td><code>&lt;condition_variable&gt;</code></td><td>Wait for condition</td><td>Kernel call</td></tr>
+            <tr><td><code>std::jthread</code></td><td><code>&lt;thread&gt;</code></td><td>Auto-joining thread (C++20)</td><td>Same as thread</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 C++ Standard Evolution Timeline</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Standard</th><th>Year</th><th>Key features</th></tr></thead>
+          <tbody>
+            <tr><td>C++98/03</td><td>1998/2003</td><td>STL, templates, exceptions, namespaces</td></tr>
+            <tr><td>C++11</td><td>2011</td><td>auto, move, lambda, threads, smart ptrs</td></tr>
+            <tr><td>C++14</td><td>2014</td><td>Generic lambdas, make_unique, variable templates</td></tr>
+            <tr><td>C++17</td><td>2017</td><td>if constexpr, structured bindings, optional, variant, filesystem</td></tr>
+            <tr><td>C++20</td><td>2020</td><td>Concepts, ranges, coroutines, modules, spaceship</td></tr>
+            <tr><td>C++23</td><td>2023</td><td>std::print, expected, deducing this, flat_map</td></tr>
+            <tr><td>C++26</td><td>2026</td><td>Contracts, reflection, pattern matching (planned)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Thread Safety Patterns</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Pattern</th><th>Mechanism</th><th>When to use</th></tr></thead>
+          <tbody>
+            <tr><td>Mutex + lock_guard</td><td>Mutual exclusion</td><td>Protect complex shared state</td></tr>
+            <tr><td>Atomic variables</td><td>Hardware CAS</td><td>Single counters, flags</td></tr>
+            <tr><td>Thread-local storage</td><td><code>thread_local</code></td><td>Per-thread data, no sharing</td></tr>
+            <tr><td>Immutable data</td><td><code>const</code> everywhere</td><td>Read-only shared data</td></tr>
+            <tr><td>Message passing</td><td>Queues between threads</td><td>Producer-consumer</td></tr>
+            <tr><td>Copy per thread</td><td>Clone data before spawn</td><td>Independent computation</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 std::memory_order — Atomic Ordering</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Order</th><th>Guarantee</th><th>Performance</th><th>Use when</th></tr></thead>
+          <tbody>
+            <tr><td><code>relaxed</code></td><td>Atomicity only</td><td>Fastest</td><td>Counters (no ordering needed)</td></tr>
+            <tr><td><code>acquire</code></td><td>Reads after this see prior writes</td><td>Fast</td><td>Loading shared state</td></tr>
+            <tr><td><code>release</code></td><td>Writes before this visible to acquirers</td><td>Fast</td><td>Publishing shared state</td></tr>
+            <tr><td><code>acq_rel</code></td><td>Both acquire + release</td><td>Medium</td><td>Read-modify-write</td></tr>
+            <tr><td><code>seq_cst</code></td><td>Total ordering (default)</td><td>Slowest</td><td>When unsure — safest</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 condition_variable — Producer-Consumer Pattern</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Operation</th><th>Producer</th><th>Consumer</th></tr></thead>
+          <tbody>
+            <tr><td>1. Lock mutex</td><td><code>lock_guard lk(mtx)</code></td><td><code>unique_lock lk(mtx)</code></td></tr>
+            <tr><td>2. Modify state</td><td><code>queue.push(item)</code></td><td>—</td></tr>
+            <tr><td>3. Notify</td><td><code>cv.notify_one()</code></td><td>—</td></tr>
+            <tr><td>4. Wait</td><td>—</td><td><code>cv.wait(lk, pred)</code></td></tr>
+            <tr><td>5. Consume</td><td>—</td><td><code>queue.pop()</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Modern C++ Best Practices — Industry Summary</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>#</th><th>Practice</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Use <code>auto</code> for complex types</td><td>Readability, DRY</td></tr>
+            <tr><td>2</td><td>Prefer <code>const</code> by default</td><td>Immutability = fewer bugs</td></tr>
+            <tr><td>3</td><td>Use smart pointers, never raw <code>new</code></td><td>Automatic memory management</td></tr>
+            <tr><td>4</td><td>Prefer <code>std::vector</code> as default container</td><td>Cache-friendly, fastest</td></tr>
+            <tr><td>5</td><td>Use algorithms over raw loops</td><td>Optimized, expressive</td></tr>
+            <tr><td>6</td><td>Use <code>std::string_view</code> for read-only strings</td><td>Zero-copy, no allocation</td></tr>
+            <tr><td>7</td><td>Mark move operations <code>noexcept</code></td><td>STL container optimization</td></tr>
+            <tr><td>8</td><td>Follow Rule of 0 (prefer STL members)</td><td>Compiler generates correct ops</td></tr>
+            <tr><td>9</td><td>Use <code>[[nodiscard]]</code> on important returns</td><td>Catch ignored errors</td></tr>
+            <tr><td>10</td><td>Compile with <code>-Wall -Wextra -Werror</code></td><td>Catch bugs at compile time</td></tr>
+            <tr><td>11</td><td>Use <code>constexpr</code> for compile-time work</td><td>Zero runtime cost</td></tr>
+            <tr><td>12</td><td>Prefer <code>enum class</code> over <code>enum</code></td><td>Type safety, no pollution</td></tr>
+            <tr><td>13</td><td>Use structured bindings</td><td>Clean, readable destructuring</td></tr>
+            <tr><td>14</td><td>Use Concepts to constrain templates</td><td>Clear error messages</td></tr>
+            <tr><td>15</td><td>Never use <code>using namespace std;</code></td><td>Avoid name collisions</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Compiler Flags Cheat Sheet</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Flag</th><th>Compiler</th><th>Purpose</th></tr></thead>
+          <tbody>
+            <tr><td><code>-std=c++20</code></td><td>GCC/Clang</td><td>Use C++20 standard</td></tr>
+            <tr><td><code>-Wall -Wextra</code></td><td>GCC/Clang</td><td>Enable all warnings</td></tr>
+            <tr><td><code>-Werror</code></td><td>GCC/Clang</td><td>Warnings become errors</td></tr>
+            <tr><td><code>-O2</code> / <code>-O3</code></td><td>GCC/Clang</td><td>Optimization level</td></tr>
+            <tr><td><code>-fsanitize=address</code></td><td>GCC/Clang</td><td>AddressSanitizer (memory bugs)</td></tr>
+            <tr><td><code>-fsanitize=thread</code></td><td>GCC/Clang</td><td>ThreadSanitizer (data races)</td></tr>
+            <tr><td><code>-g</code></td><td>GCC/Clang</td><td>Debug symbols</td></tr>
+            <tr><td><code>/std:c++20</code></td><td>MSVC</td><td>Use C++20 standard</td></tr>
+            <tr><td><code>/W4</code></td><td>MSVC</td><td>High warning level</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="concept-block">
+      <h3 class="concept-heading">Secure C++ checklist (production mindset)</h3>
+      <p class="explain-en">Concurrency bugs and memory bugs in C++ are often security bugs. Professional teams treat safety rules as non-negotiable engineering constraints: strict ownership, bounds-safe access, sanitized builds, and explicit error handling. Use this checklist during development, code review, and release validation.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Concurrency aur memory bugs C++ me sirf crash issues nahi, security issues bhi ban sakte hain. Isliye production teams safety rules ko mandatory rakhti hain: clear ownership, bounds-safe access, sanitizer builds, aur explicit error handling. Har PR aur release se pehle is checklist se validate karo.</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Area</th><th>Rule</th><th>Practical standard</th></tr></thead>
+          <tbody>
+            <tr><td>Ownership</td><td>Avoid raw owning pointers</td><td>Prefer <code>std::unique_ptr</code>; document shared ownership with <code>std::shared_ptr</code></td></tr>
+            <tr><td>Bounds safety</td><td>No unchecked indexing on external input</td><td>Prefer <code>.at()</code>, range checks, and validated indices</td></tr>
+            <tr><td>Thread safety</td><td>No unsynchronized shared writes</td><td>Use <code>std::mutex</code>, <code>std::scoped_lock</code>, or atomics with clear memory order</td></tr>
+            <tr><td>Error handling</td><td>Do not ignore return values</td><td>Use <code>[[nodiscard]]</code>, <code>std::expected</code>, and explicit failure paths</td></tr>
+            <tr><td>Undefined behavior</td><td>Never rely on UB</td><td>Run UBSan/ASan/TSan in CI and treat findings as release blockers</td></tr>
+            <tr><td>API contracts</td><td>State pre/post conditions</td><td>Validate inputs at boundaries; fail fast with meaningful logs</td></tr>
+            <tr><td>Build hardening</td><td>Ship hardened builds</td><td>Warnings-as-errors + compiler hardening flags + reproducible release profile</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="concept-block">
+      <h3 class="concept-heading">Concurrency debugging workflow (real-world)</h3>
+      <p class="explain-en">A reliable debugging loop for multithreaded C++ code is: reproduce deterministically, instrument thread behavior, run race/memory sanitizers, and isolate shared-state edges. This workflow reduces "heisenbugs" that disappear in normal debug sessions.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Multithreaded C++ debugging me best workflow hota hai: deterministic repro banao, thread behavior instrument karo, sanitizers chalao, aur shared-state boundaries isolate karo. Isse woh "heisenbugs" pakadna easy hota hai jo normal debug me disappear ho jaate hain.</div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">💻 Shell — Concurrency debug pipeline</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+        <div class="code-body"><pre><span class="comment"># 1) Build debug + sanitizers</span>
+g++ -std=c++20 -O0 -g -Wall -Wextra -Werror \
+  -fsanitize=address,undefined,thread \
+  src/*.cpp -o app-debug
+
+<span class="comment"># 2) Run deterministic test loop</span>
+<span class="keyword">for</span> i in {1..50}; <span class="keyword">do</span> ./app-debug --stress; <span class="keyword">done</span>
+
+<span class="comment"># 3) Capture stack traces on crash</span>
+ASAN_OPTIONS=abort_on_error=1:halt_on_error=1 ./app-debug --stress
+
+<span class="comment"># 4) GDB postmortem</span>
+gdb ./app-debug core
+<span class="comment"># (gdb) bt</span>
+<span class="comment"># (gdb) thread apply all bt</span>
+
+<span class="comment"># 5) Fix race/shared state, rerun stress suite</span></pre></div>
+      </div>
+    </div>
+
+    <div class="concept-block">
+      <h3 class="concept-heading">Release workflow (development to production)</h3>
+      <p class="explain-en">High-quality C++ releases follow strict gates: warnings clean, sanitizer clean, unit/integration tests green, reproducible optimized binaries, and smoke tests on target runtime. This process avoids late-stage regressions and production firefighting.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Professional C++ release me clear quality gates hote hain: warnings zero, sanitizers clean, tests pass, optimized reproducible binaries, aur target environment smoke tests. Is process se production regressions ka risk kaafi kam ho jata hai.</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Release gate</th><th>Expected check</th><th>Decision</th></tr></thead>
+          <tbody>
+            <tr><td>Compile quality</td><td><code>-Wall -Wextra -Werror</code> clean on all supported compilers</td><td>Fail build on warnings</td></tr>
+            <tr><td>Safety</td><td>ASan/UBSan/TSan pipelines pass</td><td>No known sanitizer issue allowed</td></tr>
+            <tr><td>Correctness</td><td>Unit + integration + stress tests pass</td><td>Block release on flaky suites</td></tr>
+            <tr><td>Performance</td><td>Benchmark threshold regressions checked</td><td>Reject significant regressions</td></tr>
+            <tr><td>Packaging</td><td>Versioned artifacts + changelog + symbols</td><td>Publish only reproducible builds</td></tr>
+            <tr><td>Runtime validation</td><td>Smoke tests on target OS/arch</td><td>Promote only after green smoke tests</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="concept-block">
+      <h3 class="concept-heading">Project evaluation rubric (interview/client readiness)</h3>
+      <p class="explain-en">Before showcasing a C++ project in interviews or client proposals, evaluate it using an objective rubric: memory safety, concurrency correctness, API design clarity, test depth, and operational readiness.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Interview ya client demo se pehle C++ project ko rubric se evaluate karo: memory safety, thread-safety, API clarity, tests, aur deployment readiness. Isse project professional level par present hota hai.</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Criterion</th><th>Strong signal</th><th>Weak signal</th></tr></thead>
+          <tbody>
+            <tr><td>Memory discipline</td><td>RAII + smart pointers + zero leaks under ASan</td><td>Raw <code>new/delete</code> scattered, leaks unresolved</td></tr>
+            <tr><td>Concurrency quality</td><td>No races under TSan, lock strategy documented</td><td>Ad-hoc thread usage, intermittent race reports</td></tr>
+            <tr><td>API design</td><td>Clear ownership contracts, <code>const</code>-correct interfaces</td><td>Ambiguous ownership, mutability by default</td></tr>
+            <tr><td>Testing depth</td><td>Unit + integration + stress coverage</td><td>Only happy-path manual testing</td></tr>
+            <tr><td>Build engineering</td><td>Portable builds (CMake), warnings-as-errors, CI checks</td><td>Machine-specific build scripts, no CI</td></tr>
+            <tr><td>Observability</td><td>Structured logs, failure diagnostics, reproducible reports</td><td>Minimal logging, hard-to-debug failures</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="practice-box">
+      <div class="practice-title">✏️ Practice Exercises — Part 8</div>
+      <ol>
+        <li>Create 4 threads that each increment a shared counter 100,000 times. Use <code>std::mutex</code>.</li>
+        <li>Redo the above with <code>std::atomic&lt;int&gt;</code> instead of mutex. Compare performance.</li>
+        <li>Use <code>std::async</code> to compute factorial of 3 numbers in parallel, sum the results.</li>
+        <li>Write a producer-consumer pattern using <code>std::condition_variable</code>.</li>
+        <li>Create a simple coroutine generator that yields squares: 1, 4, 9, 16, ...</li>
+        <li>Create a C++20 module that exports math utilities (add, multiply, power).</li>
+        <li>Use <code>std::jthread</code> with a stop_token to create a cancellable background task.</li>
+      </ol>
+    </div>
+
+    <div class="handbook-nav">
+      <a href="part7.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Part 7: Memory Management & Smart Pointers</div></div></a>
+      <a href="syllabus.html" class="nav-btn next"><div><div class="nav-btn-label">Complete!</div><div class="nav-btn-title">📋 View Full Syllabus →</div></div><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+
+  </div>
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
+  <script src="../../../js/main.js"></script>
+  <script>
+    (() => {
+      document.querySelectorAll('.code-block').forEach((block) => { const pre = block.querySelector('.code-body pre'), header = block.querySelector('.code-header'); if (!pre || !header) return; let actions = header.querySelector('.code-actions'); if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); } const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'code-copy-btn'; btn.textContent = 'Copy'; btn.addEventListener('click', async () => { try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; } catch { btn.textContent = 'Failed'; } finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); } }); actions.prepend(btn); });
+      const fill = document.querySelector('.hb-progress-fill'), label = document.querySelector('.hb-progress-label');
+      if (fill && label) { const update = () => { const h = document.documentElement, d = (h.scrollHeight - h.clientHeight) || 1, p = Math.max(0, Math.min(1, h.scrollTop / d)); fill.style.width = (p*100).toFixed(0)+'%'; label.textContent = (p*100).toFixed(0)+'%'; }; document.addEventListener('scroll', update, { passive: true }); update(); }
+    })();
+  </script>
+</body>
+</html>

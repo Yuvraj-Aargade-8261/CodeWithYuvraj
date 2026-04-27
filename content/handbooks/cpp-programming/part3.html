@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Part 3: OOP — Classes & Objects — C++ Programming Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 3: Classes, constructors, destructors, operator overloading, copy/move semantics, Rule of 5, RAII in modern C++.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/handbook.css">
+</head>
+<body class="handbook-wrapper">
+  <nav class="navbar"><div class="container"><a href="../../../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../../../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
+
+  <div class="handbook-page">
+    <div class="hb-topbar"><div class="hb-topbar-inner"><div class="hb-breadcrumbs"><a href="index.html">C++ Programming Handbook</a><span class="hb-muted">/</span><span>Part 3</span><span class="hb-muted">·</span><a href="#m3-1">3.1</a> <a href="#m3-2">3.2</a> <a href="#m3-3">3.3</a> <a href="#m3-4">3.4</a> <a href="#m3-5">3.5</a> <a href="#m3-6">3.6</a> <a href="#m3-7">3.7</a></div><div class="hb-progress" aria-label="Reading progress"><div class="hb-progress-track" role="progressbar"><div class="hb-progress-fill"></div></div><div class="hb-progress-label">0%</div></div></div></div>
+
+    <div class="chapter-header" data-chapter-num="03">
+      <div class="chapter-part-label">📖 Part 3 — OOP — Classes & Objects</div>
+      <h1 class="chapter-title">Object-Oriented <span class="gradient-text">Mastery</span></h1>
+      <p class="chapter-subtitle">Classes are the heart of C++. Master constructors, destructors, copy/move semantics, operator overloading, and RAII — the idiom that makes C++ unique.</p>
+      <div class="chapter-meta"><span>📄 Modules 3.1 – 3.7</span><span>⏱️ 80–120 min read</span><span>💻 65+ Examples</span></div>
+    </div>
+
+    <div class="hb-mini-toc"><div class="hb-mini-title">📍 Part 3 Modules</div><div class="hb-mini-links"><a href="#m3-1">3.1 Classes</a><a href="#m3-2">3.2 Access</a><a href="#m3-3">3.3 Operators</a><a href="#m3-4">3.4 Copy</a><a href="#m3-5">3.5 Move</a><a href="#m3-6">3.6 Static</a><a href="#m3-7">3.7 RAII</a></div></div>
+
+    <!-- MODULE 3.1 -->
+    <div class="module-section" id="m3-1">
+      <div class="module-header"><div class="module-number">3.1</div><h2 class="module-title">Classes & objects — constructors, destructors, this pointer</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Defining a class</h3>
+        <p class="explain-en">A <strong>class</strong> bundles data (member variables) and behavior (member functions) together. The <strong>constructor</strong> initializes objects, the <strong>destructor</strong> cleans up. Use <strong>member initializer lists</strong> for efficient construction.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Class data (member variables) aur behavior (member functions) ko ek saath bundle karta hai. Constructor objects initialize karta hai, destructor cleanup karta hai. Efficient construction ke liye member initializer lists use karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — Class fundamentals</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">class</span> <span class="type">Student</span> {
+<span class="keyword">private</span>:
+    std::string name_;
+    <span class="type">int</span> age_;
+    <span class="type">double</span> gpa_;
+
+<span class="keyword">public</span>:
+    <span class="comment">// Default constructor</span>
+    <span class="function">Student</span>() : name_(<span class="string">"Unknown"</span>), age_(<span class="number">0</span>), gpa_(<span class="number">0.0</span>) {
+        std::cout &lt;&lt; <span class="string">"Default ctor\n"</span>;
+    }
+
+    <span class="comment">// Parameterized constructor — use initializer list!</span>
+    <span class="function">Student</span>(std::string name, <span class="type">int</span> age, <span class="type">double</span> gpa)
+        : name_(std::move(name)), age_(age), gpa_(gpa) {
+        std::cout &lt;&lt; <span class="string">"Param ctor: "</span> &lt;&lt; name_ &lt;&lt; <span class="string">"\n"</span>;
+    }
+
+    <span class="comment">// Destructor — called when object goes out of scope</span>
+    ~<span class="function">Student</span>() {
+        std::cout &lt;&lt; <span class="string">"Destructor: "</span> &lt;&lt; name_ &lt;&lt; <span class="string">"\n"</span>;
+    }
+
+    <span class="comment">// Getter</span>
+    <span class="keyword">const</span> std::string&amp; <span class="function">name</span>() <span class="keyword">const</span> { <span class="keyword">return</span> name_; }
+    <span class="type">int</span> <span class="function">age</span>() <span class="keyword">const</span> { <span class="keyword">return</span> age_; }
+
+    <span class="comment">// Setter</span>
+    <span class="type">void</span> <span class="function">set_gpa</span>(<span class="type">double</span> g) { gpa_ = g; }
+
+    <span class="comment">// Method using 'this' pointer</span>
+    <span class="type">Student</span>&amp; <span class="function">set_name</span>(<span class="keyword">const</span> std::string&amp; n) {
+        <span class="keyword">this</span>-&gt;name_ = n;
+        <span class="keyword">return</span> *<span class="keyword">this</span>;  <span class="comment">// Return *this for chaining</span>
+    }
+
+    <span class="type">void</span> <span class="function">print</span>() <span class="keyword">const</span> {
+        std::cout &lt;&lt; name_ &lt;&lt; <span class="string">", "</span> &lt;&lt; age_ &lt;&lt; <span class="string">", GPA: "</span> &lt;&lt; gpa_ &lt;&lt; <span class="string">"\n"</span>;
+    }
+};
+
+<span class="comment">// Usage</span>
+<span class="type">Student</span> s1;                           <span class="comment">// Default ctor</span>
+<span class="type">Student</span> s2(<span class="string">"Yuvraj"</span>, <span class="number">21</span>, <span class="number">9.2</span>);       <span class="comment">// Param ctor</span>
+<span class="type">Student</span> s3{<span class="string">"Alice"</span>, <span class="number">20</span>, <span class="number">8.5</span>};       <span class="comment">// Uniform init ✅</span>
+s2.<span class="function">set_name</span>(<span class="string">"Yuvraj A"</span>).<span class="function">set_gpa</span>(<span class="number">9.5</span>); <span class="comment">// Method chaining</span></pre></div>
+        </div>
+        <div class="callout callout-important"><strong>Always use member initializer lists</strong> (the <code>: name_(n), age_(a)</code> syntax) instead of assignment in the constructor body. It's more efficient — avoids default-construct-then-assign.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 3.2 -->
+    <div class="module-section" id="m3-2">
+      <div class="module-header"><div class="module-number">3.2</div><h2 class="module-title">Access control — public, private, protected, friend</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Encapsulation</h3>
+        <p class="explain-en"><strong>Encapsulation</strong> hides internal data and exposes only a controlled interface. <code>private</code> = only this class, <code>protected</code> = this class + derived, <code>public</code> = everyone. <code>friend</code> grants private access to specific functions/classes.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Encapsulation internal data hide karta hai aur sirf controlled interface expose karta hai. <code>private</code> = sirf ye class, <code>protected</code> = ye class + derived, <code>public</code> = sabke liye. <code>friend</code> specific functions/classes ko private access deta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — Access control & friend</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">class</span> <span class="type">BankAccount</span> {
+<span class="keyword">private</span>:
+    std::string owner_;
+    <span class="type">double</span> balance_;   <span class="comment">// Only accessible inside class</span>
+
+<span class="keyword">public</span>:
+    <span class="function">BankAccount</span>(std::string owner, <span class="type">double</span> bal)
+        : owner_(std::move(owner)), balance_(bal) {}
+
+    <span class="type">void</span> <span class="function">deposit</span>(<span class="type">double</span> amt) {
+        <span class="keyword">if</span> (amt &gt; <span class="number">0</span>) balance_ += amt;
+    }
+
+    <span class="type">bool</span> <span class="function">withdraw</span>(<span class="type">double</span> amt) {
+        <span class="keyword">if</span> (amt &gt; <span class="number">0</span> &amp;&amp; amt &lt;= balance_) {
+            balance_ -= amt;
+            <span class="keyword">return</span> <span class="keyword">true</span>;
+        }
+        <span class="keyword">return</span> <span class="keyword">false</span>;
+    }
+
+    <span class="type">double</span> <span class="function">balance</span>() <span class="keyword">const</span> { <span class="keyword">return</span> balance_; }
+
+    <span class="comment">// Friend function — can access private members</span>
+    <span class="keyword">friend</span> <span class="type">void</span> <span class="function">audit</span>(<span class="keyword">const</span> <span class="type">BankAccount</span>&amp; acc);
+
+    <span class="comment">// Friend class</span>
+    <span class="keyword">friend class</span> <span class="type">Auditor</span>;
+};
+
+<span class="type">void</span> <span class="function">audit</span>(<span class="keyword">const</span> <span class="type">BankAccount</span>&amp; acc) {
+    std::cout &lt;&lt; acc.owner_ &lt;&lt; <span class="string">": $"</span> &lt;&lt; acc.balance_ &lt;&lt; <span class="string">"\n"</span>;
+    <span class="comment">// Direct access to private members! (because friend)</span>
+}</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Specifier</th><th>Same class</th><th>Derived class</th><th>Outside</th></tr></thead>
+            <tbody>
+              <tr><td><code>public</code></td><td>✅</td><td>✅</td><td>✅</td></tr>
+              <tr><td><code>protected</code></td><td>✅</td><td>✅</td><td>❌</td></tr>
+              <tr><td><code>private</code></td><td>✅</td><td>❌</td><td>❌</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 3.3 -->
+    <div class="module-section" id="m3-3">
+      <div class="module-header"><div class="module-number">3.3</div><h2 class="module-title">Operator overloading — +, &lt;&lt;, [], (), ==</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Making custom types feel native</h3>
+        <p class="explain-en">C++ lets you define how operators work with your classes. This makes custom types feel like built-in types: <code>vec1 + vec2</code>, <code>cout &lt;&lt; obj</code>, <code>obj[i]</code>. Overload as member functions or free functions.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>C++ me custom types ke liye operators define kar sakte ho. Isse custom types built-in types jaise lagti hain: <code>vec1 + vec2</code>, <code>cout &lt;&lt; obj</code>, <code>obj[i]</code>. Member functions ya free functions se overload karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — Operator overloading</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">class</span> <span class="type">Vec2</span> {
+<span class="keyword">public</span>:
+    <span class="type">double</span> x, y;
+
+    <span class="function">Vec2</span>(<span class="type">double</span> x = <span class="number">0</span>, <span class="type">double</span> y = <span class="number">0</span>) : x(x), y(y) {}
+
+    <span class="comment">// + operator (member function)</span>
+    <span class="type">Vec2</span> <span class="keyword">operator</span>+(<span class="keyword">const</span> <span class="type">Vec2</span>&amp; other) <span class="keyword">const</span> {
+        <span class="keyword">return</span> {x + other.x, y + other.y};
+    }
+
+    <span class="comment">// == operator (C++20: auto-generates !=)</span>
+    <span class="type">bool</span> <span class="keyword">operator</span>==(<span class="keyword">const</span> <span class="type">Vec2</span>&amp; other) <span class="keyword">const</span> = <span class="keyword">default</span>;
+
+    <span class="comment">// [] operator</span>
+    <span class="type">double</span>&amp; <span class="keyword">operator</span>[](<span class="type">int</span> i) {
+        <span class="keyword">return</span> i == <span class="number">0</span> ? x : y;
+    }
+
+    <span class="comment">// () operator — functor</span>
+    <span class="type">double</span> <span class="keyword">operator</span>()() <span class="keyword">const</span> {
+        <span class="keyword">return</span> std::sqrt(x*x + y*y);  <span class="comment">// Magnitude</span>
+    }
+};
+
+<span class="comment">// &lt;&lt; operator — must be free function (cout is left operand)</span>
+std::ostream&amp; <span class="keyword">operator</span>&lt;&lt;(std::ostream&amp; os, <span class="keyword">const</span> <span class="type">Vec2</span>&amp; v) {
+    <span class="keyword">return</span> os &lt;&lt; <span class="string">"("</span> &lt;&lt; v.x &lt;&lt; <span class="string">", "</span> &lt;&lt; v.y &lt;&lt; <span class="string">")"</span>;
+}
+
+<span class="comment">// Usage</span>
+<span class="type">Vec2</span> a{<span class="number">1</span>, <span class="number">2</span>}, b{<span class="number">3</span>, <span class="number">4</span>};
+<span class="type">Vec2</span> c = a + b;               <span class="comment">// (4, 6)</span>
+std::cout &lt;&lt; c &lt;&lt; <span class="string">"\n"</span>;       <span class="comment">// (4, 6)</span>
+std::cout &lt;&lt; c() &lt;&lt; <span class="string">"\n"</span>;     <span class="comment">// 7.211 (magnitude)</span>
+std::cout &lt;&lt; c[<span class="number">0</span>] &lt;&lt; <span class="string">"\n"</span>;    <span class="comment">// 4</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Operator</th><th>Where to define</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td><code>+ - * /</code></td><td>Member or free</td><td>Return by value</td></tr>
+              <tr><td><code>+= -= *= /=</code></td><td>Member</td><td>Return <code>*this</code> by reference</td></tr>
+              <tr><td><code>== != &lt; &gt;</code></td><td>Member or free</td><td>C++20: <code>= default</code> generates all</td></tr>
+              <tr><td><code>&lt;&lt; &gt;&gt;</code></td><td>Free function</td><td>For stream I/O</td></tr>
+              <tr><td><code>[] ()</code></td><td>Member only</td><td>For container/functor types</td></tr>
+              <tr><td><code>= (assignment)</code></td><td>Member only</td><td>Must be member</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 3.4 -->
+    <div class="module-section" id="m3-4">
+      <div class="module-header"><div class="module-number">3.4</div><h2 class="module-title">Copy semantics — copy constructor, copy assignment, Rule of 3</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">How objects get copied</h3>
+        <p class="explain-en">When you copy an object, the <strong>copy constructor</strong> creates a new one, and <strong>copy assignment</strong> replaces an existing one. If your class manages a resource (raw pointer, file handle), you MUST define both — otherwise you get <strong>double-free bugs</strong>. This is the <strong>Rule of 3</strong>: if you define any of destructor/copy ctor/copy assign, define all three.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Object copy hone pe copy constructor naya banata hai, copy assignment existing replace karta hai. Agar class resource manage karti hai (raw pointer, file handle), to dono define karna zaroori hai — nahi to double-free bugs aayenge. <strong>Rule of 3</strong>: destructor/copy ctor/copy assign me se koi ek define karo to teeno define karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — Copy semantics & Rule of 3</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">class</span> <span class="type">Buffer</span> {
+<span class="keyword">private</span>:
+    <span class="type">int</span>* data_;
+    <span class="type">size_t</span> size_;
+
+<span class="keyword">public</span>:
+    <span class="comment">// Constructor</span>
+    <span class="keyword">explicit</span> <span class="function">Buffer</span>(<span class="type">size_t</span> size)
+        : data_(<span class="keyword">new</span> <span class="type">int</span>[size]{}), size_(size) {}
+
+    <span class="comment">// Destructor</span>
+    ~<span class="function">Buffer</span>() { <span class="keyword">delete</span>[] data_; }
+
+    <span class="comment">// Copy constructor — DEEP copy</span>
+    <span class="function">Buffer</span>(<span class="keyword">const</span> <span class="type">Buffer</span>&amp; other)
+        : data_(<span class="keyword">new</span> <span class="type">int</span>[other.size_]), size_(other.size_) {
+        std::copy(other.data_, other.data_ + size_, data_);
+    }
+
+    <span class="comment">// Copy assignment — copy-and-swap idiom</span>
+    <span class="type">Buffer</span>&amp; <span class="keyword">operator</span>=(<span class="type">Buffer</span> other) {  <span class="comment">// Pass by value!</span>
+        std::swap(data_, other.data_);
+        std::swap(size_, other.size_);
+        <span class="keyword">return</span> *<span class="keyword">this</span>;
+    }  <span class="comment">// old data destroyed when 'other' goes out of scope</span>
+
+    <span class="type">size_t</span> <span class="function">size</span>() <span class="keyword">const</span> { <span class="keyword">return</span> size_; }
+    <span class="type">int</span>&amp; <span class="keyword">operator</span>[](<span class="type">size_t</span> i) { <span class="keyword">return</span> data_[i]; }
+};
+
+<span class="type">Buffer</span> a(<span class="number">10</span>);
+a[<span class="number">0</span>] = <span class="number">42</span>;
+<span class="type">Buffer</span> b = a;       <span class="comment">// Copy ctor — b has its own memory</span>
+<span class="type">Buffer</span> c(<span class="number">5</span>);
+c = a;             <span class="comment">// Copy assign — c's old memory freed, new copy</span></pre></div>
+        </div>
+        <div class="callout callout-warning"><strong>Without custom copy:</strong> the default copy does a shallow (memberwise) copy. Two objects point to the same memory → first destructor frees it → second destructor = <strong>undefined behavior!</strong></div>
+      </div>
+    </div>
+
+    <!-- MODULE 3.5 -->
+    <div class="module-section" id="m3-5">
+      <div class="module-header"><div class="module-number">3.5</div><h2 class="module-title">Move semantics — move constructor, std::move, Rule of 5/0</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Stealing resources instead of copying</h3>
+        <p class="explain-en"><strong>Move semantics</strong> (C++11) let you transfer ownership of resources from one object to another without copying. The <strong>move constructor</strong> and <strong>move assignment</strong> "steal" the internals of a temporary. This is a massive performance win for containers and strings.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Move semantics (C++11) se resources ka ownership ek object se dusre me bina copy kiye transfer hota hai. Move constructor aur move assignment temporary ke internals "chura" lete hain. Containers aur strings ke liye massive performance win hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — Move semantics (Rule of 5)</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">class</span> <span class="type">Buffer</span> {
+    <span class="type">int</span>* data_;
+    <span class="type">size_t</span> size_;
+<span class="keyword">public</span>:
+    <span class="comment">// ... (constructor, destructor, copy ctor, copy assign from 3.4)</span>
+
+    <span class="comment">// Move constructor — steal resources</span>
+    <span class="function">Buffer</span>(<span class="type">Buffer</span>&amp;&amp; other) <span class="keyword">noexcept</span>
+        : data_(other.data_), size_(other.size_) {
+        other.data_ = <span class="keyword">nullptr</span>;  <span class="comment">// Leave source in valid state</span>
+        other.size_ = <span class="number">0</span>;
+    }
+
+    <span class="comment">// Move assignment</span>
+    <span class="type">Buffer</span>&amp; <span class="keyword">operator</span>=(<span class="type">Buffer</span>&amp;&amp; other) <span class="keyword">noexcept</span> {
+        <span class="keyword">if</span> (<span class="keyword">this</span> != &amp;other) {
+            <span class="keyword">delete</span>[] data_;           <span class="comment">// Free old resource</span>
+            data_ = other.data_;      <span class="comment">// Steal</span>
+            size_ = other.size_;
+            other.data_ = <span class="keyword">nullptr</span>;   <span class="comment">// Nullify source</span>
+            other.size_ = <span class="number">0</span>;
+        }
+        <span class="keyword">return</span> *<span class="keyword">this</span>;
+    }
+};
+
+<span class="comment">// std::move — cast lvalue to rvalue reference</span>
+<span class="type">Buffer</span> a(<span class="number">1000000</span>);
+<span class="type">Buffer</span> b = std::move(a);  <span class="comment">// Move ctor — near instant!</span>
+<span class="comment">// 'a' is now empty (valid but unspecified state)</span>
+
+<span class="comment">// Move is automatic for temporaries</span>
+<span class="type">Buffer</span> <span class="function">createBuffer</span>() {
+    <span class="type">Buffer</span> temp(<span class="number">100</span>);
+    <span class="keyword">return</span> temp;  <span class="comment">// Moved (or RVO eliminates copy entirely)</span>
+}</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Rule</th><th>What to define</th><th>When</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Rule of 0</strong></td><td>Nothing — use smart ptrs/STL</td><td>Prefer this! No raw resources</td></tr>
+              <tr><td><strong>Rule of 3</strong></td><td>Destructor + Copy ctor + Copy assign</td><td>C++98 resource management</td></tr>
+              <tr><td><strong>Rule of 5</strong></td><td>Rule of 3 + Move ctor + Move assign</td><td>C++11+ with raw resources</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Prefer Rule of 0!</strong> Use <code>std::vector</code>, <code>std::string</code>, <code>std::unique_ptr</code> as members. The compiler generates correct copy/move/destruct automatically. Only use Rule of 5 when writing low-level containers.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 3.6 -->
+    <div class="module-section" id="m3-6">
+      <div class="module-header"><div class="module-number">3.6</div><h2 class="module-title">Static members, const methods, mutable keyword</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Class-level vs instance-level</h3>
+        <p class="explain-en"><code>static</code> members belong to the class, not individual objects. <code>const</code> methods promise not to modify the object. <code>mutable</code> allows modification even in const methods (useful for caching).</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>static</code> members class ke hain, individual objects ke nahi. <code>const</code> methods promise karte hain ki object modify nahi karenge. <code>mutable</code> const methods me bhi modification allow karta hai (caching ke liye useful).</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — Static, const, mutable</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">class</span> <span class="type">Connection</span> {
+<span class="keyword">private</span>:
+    <span class="keyword">static</span> <span class="type">int</span> count_;           <span class="comment">// Shared across ALL objects</span>
+    std::string host_;
+    <span class="keyword">mutable</span> <span class="type">int</span> access_count_;   <span class="comment">// Can change even in const methods</span>
+
+<span class="keyword">public</span>:
+    <span class="function">Connection</span>(std::string host) : host_(std::move(host)), access_count_(<span class="number">0</span>) {
+        count_++;
+    }
+    ~<span class="function">Connection</span>() { count_--; }
+
+    <span class="comment">// const method — cannot modify members (except mutable)</span>
+    std::string <span class="function">host</span>() <span class="keyword">const</span> {
+        access_count_++;   <span class="comment">// OK — mutable!</span>
+        <span class="keyword">return</span> host_;
+    }
+
+    <span class="comment">// Static method — no 'this', access only static members</span>
+    <span class="keyword">static</span> <span class="type">int</span> <span class="function">active_count</span>() { <span class="keyword">return</span> count_; }
+};
+<span class="type">int</span> <span class="type">Connection</span>::count_ = <span class="number">0</span>;  <span class="comment">// Define static outside class</span>
+
+<span class="type">Connection</span>::<span class="function">active_count</span>();  <span class="comment">// Call without object</span></pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 3.7 -->
+    <div class="module-section" id="m3-7">
+      <div class="module-header"><div class="module-number">3.7</div><h2 class="module-title">RAII — Resource Acquisition Is Initialization</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">The most important C++ idiom</h3>
+        <p class="explain-en"><strong>RAII</strong> ties resource lifetime to object lifetime. Acquire in the constructor, release in the destructor. When the object goes out of scope, cleanup is <strong>automatic and guaranteed</strong> — even if exceptions are thrown. This is why C++ doesn't need a garbage collector.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>RAII</strong> resource lifetime ko object lifetime se tie karta hai. Constructor me acquire karo, destructor me release karo. Jab object scope se bahar jaata hai, cleanup <strong>automatic aur guaranteed</strong> hai — exceptions throw hone pe bhi. Isliye C++ ko garbage collector ki zaroorat nahi.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — RAII pattern</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// RAII file wrapper</span>
+<span class="keyword">class</span> <span class="type">FileHandle</span> {
+<span class="keyword">private</span>:
+    FILE* file_;
+<span class="keyword">public</span>:
+    <span class="keyword">explicit</span> <span class="function">FileHandle</span>(<span class="keyword">const</span> <span class="type">char</span>* path, <span class="keyword">const</span> <span class="type">char</span>* mode)
+        : file_(<span class="function">fopen</span>(path, mode)) {
+        <span class="keyword">if</span> (!file_) <span class="keyword">throw</span> std::runtime_error(<span class="string">"Cannot open file"</span>);
+    }
+    ~<span class="function">FileHandle</span>() {
+        <span class="keyword">if</span> (file_) <span class="function">fclose</span>(file_);  <span class="comment">// Always closed!</span>
+    }
+
+    <span class="comment">// Delete copy (file handle is unique resource)</span>
+    <span class="function">FileHandle</span>(<span class="keyword">const</span> <span class="type">FileHandle</span>&amp;) = <span class="keyword">delete</span>;
+    <span class="type">FileHandle</span>&amp; <span class="keyword">operator</span>=(<span class="keyword">const</span> <span class="type">FileHandle</span>&amp;) = <span class="keyword">delete</span>;
+
+    <span class="comment">// Allow move</span>
+    <span class="function">FileHandle</span>(<span class="type">FileHandle</span>&amp;&amp; other) <span class="keyword">noexcept</span> : file_(other.file_) {
+        other.file_ = <span class="keyword">nullptr</span>;
+    }
+
+    FILE* <span class="function">get</span>() { <span class="keyword">return</span> file_; }
+};
+
+<span class="comment">// Usage — file is ALWAYS closed, no matter what</span>
+<span class="type">void</span> <span class="function">process</span>() {
+    <span class="type">FileHandle</span> f(<span class="string">"data.txt"</span>, <span class="string">"r"</span>);
+    <span class="comment">// ... use f.get() ...</span>
+    <span class="keyword">if</span> (error) <span class="keyword">throw</span> std::runtime_error(<span class="string">"oops"</span>);
+    <span class="comment">// f's destructor STILL runs — file closed!</span>
+}</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Resource</th><th>RAII wrapper</th><th>Acquire</th><th>Release</th></tr></thead>
+            <tbody>
+              <tr><td>Heap memory</td><td><code>std::unique_ptr</code></td><td><code>new</code></td><td><code>delete</code></td></tr>
+              <tr><td>Shared memory</td><td><code>std::shared_ptr</code></td><td><code>new</code></td><td>ref count → delete</td></tr>
+              <tr><td>File</td><td><code>std::fstream</code></td><td>open()</td><td>close()</td></tr>
+              <tr><td>Mutex lock</td><td><code>std::lock_guard</code></td><td>lock()</td><td>unlock()</td></tr>
+              <tr><td>Dynamic array</td><td><code>std::vector</code></td><td>allocate</td><td>deallocate</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>RAII is THE reason C++ doesn't need GC.</strong> Every standard library type (string, vector, fstream, unique_ptr) uses RAII. Your custom classes should too. If you find yourself writing manual cleanup, wrap it in RAII.</div>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Special Member Functions — Complete Reference</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Function</th><th>Signature</th><th>When called</th><th>Default behavior</th></tr></thead>
+          <tbody>
+            <tr><td>Default ctor</td><td><code>T()</code></td><td><code>T obj;</code></td><td>Default-init members</td></tr>
+            <tr><td>Destructor</td><td><code>~T()</code></td><td>Object goes out of scope</td><td>Destroy members</td></tr>
+            <tr><td>Copy ctor</td><td><code>T(const T&amp;)</code></td><td><code>T b = a;</code></td><td>Memberwise copy</td></tr>
+            <tr><td>Copy assign</td><td><code>T&amp; operator=(const T&amp;)</code></td><td><code>b = a;</code></td><td>Memberwise copy</td></tr>
+            <tr><td>Move ctor</td><td><code>T(T&amp;&amp;)</code></td><td><code>T b = std::move(a);</code></td><td>Memberwise move</td></tr>
+            <tr><td>Move assign</td><td><code>T&amp; operator=(T&amp;&amp;)</code></td><td><code>b = std::move(a);</code></td><td>Memberwise move</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 struct vs class in C++</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Feature</th><th><code>struct</code></th><th><code>class</code></th></tr></thead>
+          <tbody>
+            <tr><td>Default access</td><td><code>public</code></td><td><code>private</code></td></tr>
+            <tr><td>Default inheritance</td><td><code>public</code></td><td><code>private</code></td></tr>
+            <tr><td>Can have methods?</td><td>✅ Yes</td><td>✅ Yes</td></tr>
+            <tr><td>Can have constructors?</td><td>✅ Yes</td><td>✅ Yes</td></tr>
+            <tr><td>Convention</td><td>POD / plain data bundles</td><td>Objects with invariants</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 explicit, delete, default — Control Compiler Generation</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Keyword</th><th>Meaning</th><th>Example</th><th>Why use it</th></tr></thead>
+          <tbody>
+            <tr><td><code>explicit</code></td><td>Prevent implicit conversions</td><td><code>explicit Buffer(int n)</code></td><td>Avoid accidental <code>Buffer b = 5;</code></td></tr>
+            <tr><td><code>= default</code></td><td>Use compiler-generated version</td><td><code>~Buffer() = default;</code></td><td>Be explicit about intent</td></tr>
+            <tr><td><code>= delete</code></td><td>Prevent usage entirely</td><td><code>Buffer(const Buffer&amp;) = delete;</code></td><td>Make non-copyable</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Class Design Checklist</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>✓</th><th>Guideline</th><th>Reason</th></tr></thead>
+          <tbody>
+            <tr><td>☐</td><td>Make data members private</td><td>Encapsulation — control access</td></tr>
+            <tr><td>☐</td><td>Use initializer lists in constructors</td><td>Avoid default-construct-then-assign</td></tr>
+            <tr><td>☐</td><td>Mark single-arg constructors <code>explicit</code></td><td>Prevent implicit type conversions</td></tr>
+            <tr><td>☐</td><td>Mark non-modifying methods <code>const</code></td><td>Enforce immutability contracts</td></tr>
+            <tr><td>☐</td><td>Follow Rule of 0 (prefer STL members)</td><td>Compiler generates correct special members</td></tr>
+            <tr><td>☐</td><td>Follow Rule of 5 if managing raw resources</td><td>Prevent double-free and leaks</td></tr>
+            <tr><td>☐</td><td>Mark move ops <code>noexcept</code></td><td>Required for STL container optimization</td></tr>
+            <tr><td>☐</td><td>Use <code>= delete</code> to prevent unwanted ops</td><td>Make intent explicit</td></tr>
+            <tr><td>☐</td><td>Prefer composition over inheritance</td><td>Simpler, more flexible design</td></tr>
+            <tr><td>☐</td><td>Use trailing underscore for private members</td><td>Convention: <code>name_</code>, <code>size_</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 enum vs enum class — Use enum class in Modern C++</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Feature</th><th><code>enum</code> (C-style)</th><th><code>enum class</code> (C++11)</th></tr></thead>
+          <tbody>
+            <tr><td>Scoped?</td><td>❌ No — pollutes namespace</td><td>✅ Yes — <code>Color::Red</code></td></tr>
+            <tr><td>Implicit int conversion?</td><td>✅ Yes (dangerous)</td><td>❌ No — type-safe</td></tr>
+            <tr><td>Underlying type?</td><td>Implementation defined</td><td>Specify: <code>enum class Color : uint8_t</code></td></tr>
+            <tr><td>Comparison across types?</td><td>⚠️ Compiles (wrong)</td><td>❌ Compile error (correct)</td></tr>
+            <tr><td>Forward declarable?</td><td>❌ Not always</td><td>✅ Always</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="practice-box">
+      <div class="practice-title">✏️ Practice Exercises — Part 3</div>
+      <ol>
+        <li>Create a <code>Rectangle</code> class with width/height, getters, and an <code>area()</code> const method.</li>
+        <li>Overload <code>+</code> and <code>&lt;&lt;</code> operators for a <code>Vec3</code> class (x, y, z).</li>
+        <li>Implement a <code>DynamicArray</code> class with Rule of 5: constructor, destructor, copy ctor, copy assign, move ctor, move assign.</li>
+        <li>Create a <code>Counter</code> class with a static member tracking total instances. Verify count goes up/down.</li>
+        <li>Write an RAII wrapper for a database connection (simulate with cout messages in ctor/dtor).</li>
+        <li>Use <code>= delete</code> to make a class non-copyable. Try to copy it and observe the compiler error.</li>
+        <li>Demonstrate the copy-and-swap idiom for exception-safe assignment.</li>
+      </ol>
+    </div>
+
+    <div class="handbook-nav">
+      <a href="part2.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Part 2: Control Flow, Functions & References</div></div></a>
+      <a href="part4.html" class="nav-btn next"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Part 4: Inheritance & Polymorphism →</div></div><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+
+  </div>
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
+  <script src="../../../js/main.js"></script>
+  <script>
+    (() => {
+      document.querySelectorAll('.code-block').forEach((block) => { const pre = block.querySelector('.code-body pre'), header = block.querySelector('.code-header'); if (!pre || !header) return; let actions = header.querySelector('.code-actions'); if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); } const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'code-copy-btn'; btn.textContent = 'Copy'; btn.addEventListener('click', async () => { try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; } catch { btn.textContent = 'Failed'; } finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); } }); actions.prepend(btn); });
+      const fill = document.querySelector('.hb-progress-fill'), label = document.querySelector('.hb-progress-label');
+      if (fill && label) { const update = () => { const h = document.documentElement, d = (h.scrollHeight - h.clientHeight) || 1, p = Math.max(0, Math.min(1, h.scrollTop / d)); fill.style.width = (p*100).toFixed(0)+'%'; label.textContent = (p*100).toFixed(0)+'%'; }; document.addEventListener('scroll', update, { passive: true }); update(); }
+    })();
+  </script>
+</body>
+</html>

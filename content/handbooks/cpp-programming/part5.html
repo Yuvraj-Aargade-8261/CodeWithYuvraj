@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Part 5: Templates & Generic Programming — C++ Programming Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 5: Function/class templates, specialization, variadic templates, constexpr, concepts, SFINAE in modern C++.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/handbook.css">
+</head>
+<body class="handbook-wrapper">
+  <nav class="navbar"><div class="container"><a href="../../../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../../../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
+
+  <div class="handbook-page">
+    <div class="hb-topbar"><div class="hb-topbar-inner"><div class="hb-breadcrumbs"><a href="index.html">C++ Programming Handbook</a><span class="hb-muted">/</span><span>Part 5</span><span class="hb-muted">·</span><a href="#m5-1">5.1</a> <a href="#m5-2">5.2</a> <a href="#m5-3">5.3</a> <a href="#m5-4">5.4</a> <a href="#m5-5">5.5</a> <a href="#m5-6">5.6</a> <a href="#m5-7">5.7</a></div><div class="hb-progress" aria-label="Reading progress"><div class="hb-progress-track" role="progressbar"><div class="hb-progress-fill"></div></div><div class="hb-progress-label">0%</div></div></div></div>
+
+    <div class="chapter-header" data-chapter-num="05">
+      <div class="chapter-part-label">📖 Part 5 — Templates & Generic Programming</div>
+      <h1 class="chapter-title">Zero-Cost <span class="gradient-text">Abstractions</span></h1>
+      <p class="chapter-subtitle">Templates are C++'s superpower — write once, works for any type, with zero runtime overhead. Master function/class templates, concepts, and compile-time programming.</p>
+      <div class="chapter-meta"><span>📄 Modules 5.1 – 5.7</span><span>⏱️ 90–120 min read</span><span>💻 55+ Examples</span></div>
+    </div>
+
+    <div class="hb-mini-toc"><div class="hb-mini-title">📍 Part 5 Modules</div><div class="hb-mini-links"><a href="#m5-1">5.1 Function</a><a href="#m5-2">5.2 Class</a><a href="#m5-3">5.3 Specialize</a><a href="#m5-4">5.4 Variadic</a><a href="#m5-5">5.5 constexpr</a><a href="#m5-6">5.6 Concepts</a><a href="#m5-7">5.7 SFINAE</a></div></div>
+
+    <!-- MODULE 5.1 -->
+    <div class="module-section" id="m5-1">
+      <div class="module-header"><div class="module-number">5.1</div><h2 class="module-title">Function templates — deduction, instantiation, specialization</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Write once, works for any type</h3>
+        <p class="explain-en">A <strong>function template</strong> is a blueprint — the compiler generates a concrete function for each type you use. Template argument deduction means you usually don't need to specify types explicitly. This is C++'s answer to Java generics, but with <strong>zero overhead</strong> — code is generated at compile time.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Function template ek blueprint hai — compiler har type ke liye concrete function generate karta hai. Template argument deduction ka matlab hai ki aapko explicitly types specify karne ki zaroorat nahi. Ye Java generics ka C++ answer hai, par <strong>zero overhead</strong> ke saath — code compile time pe generate hota hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — Function templates</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Basic function template</span>
+<span class="keyword">template</span>&lt;<span class="keyword">typename</span> <span class="type">T</span>&gt;
+<span class="type">T</span> <span class="function">maximum</span>(<span class="type">T</span> a, <span class="type">T</span> b) {
+    <span class="keyword">return</span> (a &gt; b) ? a : b;
+}
+
+<span class="comment">// Compiler generates separate functions:</span>
+<span class="function">maximum</span>(<span class="number">3</span>, <span class="number">7</span>);         <span class="comment">// maximum&lt;int&gt;(3, 7) → 7</span>
+<span class="function">maximum</span>(<span class="number">3.14</span>, <span class="number">2.71</span>);   <span class="comment">// maximum&lt;double&gt;(3.14, 2.71) → 3.14</span>
+<span class="function">maximum</span>(<span class="string">'a'</span>, <span class="string">'z'</span>);     <span class="comment">// maximum&lt;char&gt;('a', 'z') → 'z'</span>
+
+<span class="comment">// Explicit type specification</span>
+<span class="function">maximum</span>&lt;<span class="type">double</span>&gt;(<span class="number">3</span>, <span class="number">7.5</span>);  <span class="comment">// Force double comparison</span>
+
+<span class="comment">// Multiple template parameters</span>
+<span class="keyword">template</span>&lt;<span class="keyword">typename</span> <span class="type">T</span>, <span class="keyword">typename</span> <span class="type">U</span>&gt;
+<span class="keyword">auto</span> <span class="function">add</span>(<span class="type">T</span> a, <span class="type">U</span> b) {
+    <span class="keyword">return</span> a + b;  <span class="comment">// Return type deduced</span>
+}
+<span class="function">add</span>(<span class="number">3</span>, <span class="number">4.5</span>);   <span class="comment">// int + double → double (7.5)</span>
+
+<span class="comment">// Non-type template parameter</span>
+<span class="keyword">template</span>&lt;<span class="keyword">typename</span> <span class="type">T</span>, <span class="type">int</span> N&gt;
+<span class="type">T</span> <span class="function">sum_array</span>(<span class="keyword">const</span> <span class="type">T</span> (&amp;arr)[N]) {
+    <span class="type">T</span> total{};
+    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; N; i++) total += arr[i];
+    <span class="keyword">return</span> total;
+}
+<span class="type">int</span> a[] = {<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>};
+<span class="function">sum_array</span>(a);  <span class="comment">// N deduced as 3 → returns 6</span></pre></div>
+        </div>
+        <div class="callout callout-important"><strong>Templates are NOT compiled until used.</strong> The compiler only generates code when you call <code>maximum&lt;int&gt;</code>. Errors only appear at instantiation. Template definitions must be in header files (or use explicit instantiation).</div>
+      </div>
+    </div>
+
+    <!-- MODULE 5.2 -->
+    <div class="module-section" id="m5-2">
+      <div class="module-header"><div class="module-number">5.2</div><h2 class="module-title">Class templates — member functions, friends, static</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Generic containers and types</h3>
+        <p class="explain-en">Class templates let you create generic containers like <code>std::vector&lt;T&gt;</code>. The entire class is parameterized by one or more types. Member functions can be defined inline or outside the class.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Class templates se generic containers bana sakte ho jaise <code>std::vector&lt;T&gt;</code>. Poori class ek ya zyada types se parameterized hoti hai. Member functions inline ya class ke bahar define ho sakte hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — Class template</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">template</span>&lt;<span class="keyword">typename</span> <span class="type">T</span>&gt;
+<span class="keyword">class</span> <span class="type">Stack</span> {
+<span class="keyword">private</span>:
+    std::vector&lt;<span class="type">T</span>&gt; data_;
+
+<span class="keyword">public</span>:
+    <span class="type">void</span> <span class="function">push</span>(<span class="keyword">const</span> <span class="type">T</span>&amp; val) { data_.push_back(val); }
+
+    <span class="type">void</span> <span class="function">pop</span>() {
+        <span class="keyword">if</span> (data_.empty()) <span class="keyword">throw</span> std::out_of_range(<span class="string">"Empty stack"</span>);
+        data_.pop_back();
+    }
+
+    <span class="keyword">const</span> <span class="type">T</span>&amp; <span class="function">top</span>() <span class="keyword">const</span> {
+        <span class="keyword">if</span> (data_.empty()) <span class="keyword">throw</span> std::out_of_range(<span class="string">"Empty stack"</span>);
+        <span class="keyword">return</span> data_.back();
+    }
+
+    <span class="type">bool</span> <span class="function">empty</span>() <span class="keyword">const</span> { <span class="keyword">return</span> data_.empty(); }
+    <span class="type">size_t</span> <span class="function">size</span>() <span class="keyword">const</span> { <span class="keyword">return</span> data_.size(); }
+
+    <span class="comment">// Friend — stream operator for printing</span>
+    <span class="keyword">friend</span> std::ostream&amp; <span class="keyword">operator</span>&lt;&lt;(std::ostream&amp; os, <span class="keyword">const</span> <span class="type">Stack</span>&amp; s) {
+        <span class="keyword">for</span> (<span class="keyword">const auto</span>&amp; elem : s.data_)
+            os &lt;&lt; elem &lt;&lt; <span class="string">" "</span>;
+        <span class="keyword">return</span> os;
+    }
+};
+
+<span class="comment">// Usage — each instantiation is a separate class</span>
+<span class="type">Stack</span>&lt;<span class="type">int</span>&gt; intStack;
+intStack.<span class="function">push</span>(<span class="number">1</span>);
+intStack.<span class="function">push</span>(<span class="number">2</span>);
+std::cout &lt;&lt; intStack.<span class="function">top</span>() &lt;&lt; <span class="string">"\n"</span>;  <span class="comment">// 2</span>
+
+<span class="type">Stack</span>&lt;std::string&gt; strStack;
+strStack.<span class="function">push</span>(<span class="string">"Hello"</span>);
+
+<span class="comment">// C++17 CTAD — class template argument deduction</span>
+<span class="type">Stack</span> s2 = intStack;  <span class="comment">// Deduces Stack&lt;int&gt;</span></pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 5.3 -->
+    <div class="module-section" id="m5-3">
+      <div class="module-header"><div class="module-number">5.3</div><h2 class="module-title">Template specialization — full & partial</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Custom behavior for specific types</h3>
+        <p class="explain-en"><strong>Full specialization</strong> provides a completely different implementation for a specific type. <strong>Partial specialization</strong> (class templates only) specializes for a pattern (e.g., all pointer types). This is how <code>std::vector&lt;bool&gt;</code> is optimized differently.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Full specialization</strong> specific type ke liye completely different implementation deta hai. <strong>Partial specialization</strong> (sirf class templates) pattern ke liye specialize karta hai (jaise saare pointer types). Aise hi <code>std::vector&lt;bool&gt;</code> alag optimize hota hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — Template specialization</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Primary template</span>
+<span class="keyword">template</span>&lt;<span class="keyword">typename</span> <span class="type">T</span>&gt;
+<span class="keyword">class</span> <span class="type">Formatter</span> {
+<span class="keyword">public</span>:
+    <span class="keyword">static</span> std::string <span class="function">format</span>(<span class="keyword">const</span> <span class="type">T</span>&amp; val) {
+        <span class="keyword">return</span> std::to_string(val);
+    }
+};
+
+<span class="comment">// Full specialization for std::string</span>
+<span class="keyword">template</span>&lt;&gt;
+<span class="keyword">class</span> <span class="type">Formatter</span>&lt;std::string&gt; {
+<span class="keyword">public</span>:
+    <span class="keyword">static</span> std::string <span class="function">format</span>(<span class="keyword">const</span> std::string&amp; val) {
+        <span class="keyword">return</span> <span class="string">"\""</span> + val + <span class="string">"\""</span>;
+    }
+};
+
+<span class="comment">// Partial specialization for pointer types</span>
+<span class="keyword">template</span>&lt;<span class="keyword">typename</span> <span class="type">T</span>&gt;
+<span class="keyword">class</span> <span class="type">Formatter</span>&lt;<span class="type">T</span>*&gt; {
+<span class="keyword">public</span>:
+    <span class="keyword">static</span> std::string <span class="function">format</span>(<span class="keyword">const</span> <span class="type">T</span>* val) {
+        <span class="keyword">return</span> val ? <span class="type">Formatter</span>&lt;<span class="type">T</span>&gt;::<span class="function">format</span>(*val) : <span class="string">"nullptr"</span>;
+    }
+};
+
+<span class="type">Formatter</span>&lt;<span class="type">int</span>&gt;::<span class="function">format</span>(<span class="number">42</span>);           <span class="comment">// "42"</span>
+<span class="type">Formatter</span>&lt;std::string&gt;::<span class="function">format</span>(<span class="string">"Hi"</span>); <span class="comment">// "\"Hi\""</span>
+<span class="type">int</span> x = <span class="number">10</span>;
+<span class="type">Formatter</span>&lt;<span class="type">int</span>*&gt;::<span class="function">format</span>(&amp;x);         <span class="comment">// "10"</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Type</th><th>Syntax</th><th>Applies to</th></tr></thead>
+            <tbody>
+              <tr><td>Primary template</td><td><code>template&lt;typename T&gt; class X {}</code></td><td>All types (default)</td></tr>
+              <tr><td>Full specialization</td><td><code>template&lt;&gt; class X&lt;int&gt; {}</code></td><td>One specific type</td></tr>
+              <tr><td>Partial specialization</td><td><code>template&lt;typename T&gt; class X&lt;T*&gt; {}</code></td><td>Pattern of types</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 5.4 -->
+    <div class="module-section" id="m5-4">
+      <div class="module-header"><div class="module-number">5.4</div><h2 class="module-title">Variadic templates & fold expressions (C++17)</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Accept any number of arguments, type-safely</h3>
+        <p class="explain-en"><strong>Variadic templates</strong> accept any number of template parameters using <code>...</code> (parameter pack). <strong>Fold expressions</strong> (C++17) apply operators across all arguments in one line. This replaces C's <code>va_args</code> with full type safety and zero overhead.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Variadic templates <code>...</code> (parameter pack) se kisi bhi number ke template parameters accept karte hain. Fold expressions (C++17) ek line me saare arguments pe operators apply karte hain. C ke <code>va_args</code> ka type-safe, zero overhead replacement hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — Variadic templates & fold expressions</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Fold expression — sum any number of args (C++17)</span>
+<span class="keyword">template</span>&lt;<span class="keyword">typename</span>... <span class="type">Args</span>&gt;
+<span class="keyword">auto</span> <span class="function">sum</span>(<span class="type">Args</span>... args) {
+    <span class="keyword">return</span> (args + ...);  <span class="comment">// Unary right fold</span>
+}
+<span class="function">sum</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>);       <span class="comment">// 10</span>
+<span class="function">sum</span>(<span class="number">1.5</span>, <span class="number">2.5</span>);          <span class="comment">// 4.0</span>
+
+<span class="comment">// Print any number of values</span>
+<span class="keyword">template</span>&lt;<span class="keyword">typename</span>... <span class="type">Args</span>&gt;
+<span class="type">void</span> <span class="function">print</span>(<span class="type">Args</span>... args) {
+    ((std::cout &lt;&lt; args &lt;&lt; <span class="string">" "</span>), ...);  <span class="comment">// Comma fold</span>
+    std::cout &lt;&lt; <span class="string">"\n"</span>;
+}
+<span class="function">print</span>(<span class="number">1</span>, <span class="string">"hello"</span>, <span class="number">3.14</span>);  <span class="comment">// 1 hello 3.14</span>
+
+<span class="comment">// Count arguments</span>
+<span class="keyword">template</span>&lt;<span class="keyword">typename</span>... <span class="type">Args</span>&gt;
+<span class="keyword">constexpr</span> <span class="type">size_t</span> <span class="function">count</span>() {
+    <span class="keyword">return</span> <span class="keyword">sizeof</span>...(<span class="type">Args</span>);
+}
+<span class="function">count</span>&lt;<span class="type">int</span>, <span class="type">double</span>, <span class="type">char</span>&gt;();  <span class="comment">// 3</span>
+
+<span class="comment">// Type-safe make_unique implementation sketch</span>
+<span class="keyword">template</span>&lt;<span class="keyword">typename</span> <span class="type">T</span>, <span class="keyword">typename</span>... <span class="type">Args</span>&gt;
+std::unique_ptr&lt;<span class="type">T</span>&gt; <span class="function">make</span>(<span class="type">Args</span>&amp;&amp;... args) {
+    <span class="keyword">return</span> std::unique_ptr&lt;<span class="type">T</span>&gt;(
+        <span class="keyword">new</span> <span class="type">T</span>(std::forward&lt;<span class="type">Args</span>&gt;(args)...)
+    );
+}</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Fold type</th><th>Syntax</th><th>Expansion</th></tr></thead>
+            <tbody>
+              <tr><td>Unary right</td><td><code>(args + ...)</code></td><td><code>a + (b + (c + d))</code></td></tr>
+              <tr><td>Unary left</td><td><code>(... + args)</code></td><td><code>((a + b) + c) + d</code></td></tr>
+              <tr><td>Binary right</td><td><code>(args + ... + init)</code></td><td><code>a + (b + (c + init))</code></td></tr>
+              <tr><td>Binary left</td><td><code>(init + ... + args)</code></td><td><code>((init + a) + b) + c</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 5.5 -->
+    <div class="module-section" id="m5-5">
+      <div class="module-header"><div class="module-number">5.5</div><h2 class="module-title">constexpr, consteval — compile-time computation</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Shift work from runtime to compile time</h3>
+        <p class="explain-en"><code>constexpr</code> functions CAN execute at compile time if given constant arguments. <code>consteval</code> (C++20) MUST execute at compile time. This enables zero-cost computations — the result is baked into the binary.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>constexpr</code> functions constant arguments milne pe compile time pe execute HO SAKTE hain. <code>consteval</code> (C++20) compile time pe execute HONE CHAHIYE. Ye zero-cost computations enable karta hai — result binary me bake ho jaata hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — constexpr programming</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// constexpr function — can run at compile OR runtime</span>
+<span class="keyword">constexpr</span> <span class="type">long long</span> <span class="function">factorial</span>(<span class="type">int</span> n) {
+    <span class="type">long long</span> result = <span class="number">1</span>;
+    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">2</span>; i &lt;= n; i++)
+        result *= i;
+    <span class="keyword">return</span> result;
+}
+
+<span class="comment">// Compile-time — result baked into binary</span>
+<span class="keyword">constexpr</span> <span class="keyword">auto</span> f10 = <span class="function">factorial</span>(<span class="number">10</span>);  <span class="comment">// 3628800 at compile time!</span>
+<span class="keyword">static_assert</span>(<span class="function">factorial</span>(<span class="number">5</span>) == <span class="number">120</span>);   <span class="comment">// Compile-time assertion</span>
+
+<span class="comment">// Also works at runtime</span>
+<span class="type">int</span> n;
+std::cin &gt;&gt; n;
+std::cout &lt;&lt; <span class="function">factorial</span>(n);  <span class="comment">// Runtime computation</span>
+
+<span class="comment">// constexpr if (C++17) — compile-time branching</span>
+<span class="keyword">template</span>&lt;<span class="keyword">typename</span> <span class="type">T</span>&gt;
+<span class="keyword">auto</span> <span class="function">process</span>(<span class="type">T</span> value) {
+    <span class="keyword">if constexpr</span> (std::is_integral_v&lt;<span class="type">T</span>&gt;) {
+        <span class="keyword">return</span> value * <span class="number">2</span>;      <span class="comment">// Only compiled for int</span>
+    } <span class="keyword">else</span> {
+        <span class="keyword">return</span> value + <span class="number">0.5</span>;    <span class="comment">// Only compiled for float</span>
+    }
+}
+
+<span class="comment">// consteval (C++20) — MUST be compile-time</span>
+<span class="keyword">consteval</span> <span class="type">int</span> <span class="function">square</span>(<span class="type">int</span> n) {
+    <span class="keyword">return</span> n * n;
+}
+<span class="keyword">constexpr</span> <span class="type">int</span> val = <span class="function">square</span>(<span class="number">7</span>);  <span class="comment">// OK: 49 at compile time</span>
+<span class="comment">// int x = 5; square(x);          // ❌ ERROR — not constexpr!</span>
+
+<span class="comment">// constexpr containers (C++20)</span>
+<span class="keyword">constexpr</span> std::array&lt;<span class="type">int</span>, <span class="number">5</span>&gt; arr = {<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>};
+<span class="keyword">static_assert</span>(arr[<span class="number">2</span>] == <span class="number">3</span>);  <span class="comment">// Compile-time array access!</span></pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 5.6 -->
+    <div class="module-section" id="m5-6">
+      <div class="module-header"><div class="module-number">5.6</div><h2 class="module-title">Concepts & constraints (C++20)</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Readable template error messages</h3>
+        <p class="explain-en"><strong>Concepts</strong> (C++20) let you specify what a template type must support. Before concepts, wrong types produced walls of incomprehensible errors. With concepts, you get clear messages like "type T does not satisfy Sortable".</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Concepts</strong> (C++20) se specify kar sakte ho ki template type ko kya support karna chahiye. Concepts se pehle wrong types pe incomprehensible errors aati thi. Ab clear messages milti hain jaise "type T does not satisfy Sortable".</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — Concepts (C++20)</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="preprocessor">#include</span> <span class="string">&lt;concepts&gt;</span>
+
+<span class="comment">// Define a concept</span>
+<span class="keyword">template</span>&lt;<span class="keyword">typename</span> <span class="type">T</span>&gt;
+<span class="keyword">concept</span> <span class="type">Numeric</span> = std::integral&lt;<span class="type">T</span>&gt; || std::floating_point&lt;<span class="type">T</span>&gt;;
+
+<span class="comment">// Use concept as constraint — 3 syntaxes:</span>
+
+<span class="comment">// 1. requires clause</span>
+<span class="keyword">template</span>&lt;<span class="keyword">typename</span> <span class="type">T</span>&gt;
+    <span class="keyword">requires</span> <span class="type">Numeric</span>&lt;<span class="type">T</span>&gt;
+<span class="type">T</span> <span class="function">square</span>(<span class="type">T</span> x) { <span class="keyword">return</span> x * x; }
+
+<span class="comment">// 2. Constrained template parameter</span>
+<span class="keyword">template</span>&lt;<span class="type">Numeric</span> <span class="type">T</span>&gt;
+<span class="type">T</span> <span class="function">cube</span>(<span class="type">T</span> x) { <span class="keyword">return</span> x * x * x; }
+
+<span class="comment">// 3. Abbreviated function template</span>
+<span class="keyword">auto</span> <span class="function">half</span>(<span class="type">Numeric</span> <span class="keyword">auto</span> x) { <span class="keyword">return</span> x / <span class="number">2</span>; }
+
+<span class="function">square</span>(<span class="number">5</span>);       <span class="comment">// OK</span>
+<span class="function">square</span>(<span class="number">3.14</span>);    <span class="comment">// OK</span>
+<span class="comment">// square("hi");  // ❌ Clear error: "hi" doesn't satisfy Numeric</span>
+
+<span class="comment">// Custom concept with requires expression</span>
+<span class="keyword">template</span>&lt;<span class="keyword">typename</span> <span class="type">T</span>&gt;
+<span class="keyword">concept</span> <span class="type">Printable</span> = <span class="keyword">requires</span>(<span class="type">T</span> t) {
+    { std::cout &lt;&lt; t } -&gt; std::same_as&lt;std::ostream&amp;&gt;;
+};</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 5.7 -->
+    <div class="module-section" id="m5-7">
+      <div class="module-header"><div class="module-number">5.7</div><h2 class="module-title">SFINAE, enable_if, type traits — pre-C++20 constraints</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Substitution Failure Is Not An Error</h3>
+        <p class="explain-en"><strong>SFINAE</strong> is the pre-C++20 way to constrain templates. If substituting a type into a template causes an error, the compiler silently removes that overload. <code>std::enable_if</code> and type traits (<code>&lt;type_traits&gt;</code>) use this mechanism.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>SFINAE</strong> C++20 se pehle templates constrain karne ka tarika hai. Agar type substitution me error aaye, compiler silently us overload ko hata deta hai. <code>std::enable_if</code> aur type traits (<code>&lt;type_traits&gt;</code>) ye mechanism use karte hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — SFINAE & type traits</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="preprocessor">#include</span> <span class="string">&lt;type_traits&gt;</span>
+
+<span class="comment">// enable_if — only enable for integral types</span>
+<span class="keyword">template</span>&lt;<span class="keyword">typename</span> <span class="type">T</span>&gt;
+std::enable_if_t&lt;std::is_integral_v&lt;<span class="type">T</span>&gt;, <span class="type">T</span>&gt;
+<span class="function">double_it</span>(<span class="type">T</span> x) {
+    <span class="keyword">return</span> x * <span class="number">2</span>;
+}
+
+<span class="function">double_it</span>(<span class="number">5</span>);     <span class="comment">// OK → 10</span>
+<span class="comment">// double_it(3.14); // ❌ SFINAE removes this overload</span>
+
+<span class="comment">// Common type traits</span>
+std::is_integral_v&lt;<span class="type">int</span>&gt;;         <span class="comment">// true</span>
+std::is_floating_point_v&lt;<span class="type">double</span>&gt;; <span class="comment">// true</span>
+std::is_pointer_v&lt;<span class="type">int</span>*&gt;;         <span class="comment">// true</span>
+std::is_same_v&lt;<span class="type">int</span>, <span class="type">int</span>&gt;;       <span class="comment">// true</span>
+std::is_base_of_v&lt;<span class="type">Base</span>, <span class="type">Der</span>&gt;;    <span class="comment">// true if Der inherits Base</span>
+
+<span class="comment">// Type transformations</span>
+std::remove_const_t&lt;<span class="keyword">const</span> <span class="type">int</span>&gt;;   <span class="comment">// int</span>
+std::remove_reference_t&lt;<span class="type">int</span>&amp;&gt;;   <span class="comment">// int</span>
+std::decay_t&lt;<span class="keyword">const</span> <span class="type">int</span>&amp;&gt;;        <span class="comment">// int</span></pre></div>
+        </div>
+        <div class="callout callout-tip"><strong>Use Concepts (C++20) when possible.</strong> SFINAE/<code>enable_if</code> is the old way — hard to read. Concepts give the same power with readable syntax. Use SFINAE only when targeting C++17 or earlier.</div>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Template Feature Timeline</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Feature</th><th>Standard</th><th>Replaces</th></tr></thead>
+          <tbody>
+            <tr><td>Basic templates</td><td>C++98</td><td>void*, macros</td></tr>
+            <tr><td>Variadic templates</td><td>C++11</td><td>va_args</td></tr>
+            <tr><td>constexpr functions</td><td>C++11</td><td>#define macros</td></tr>
+            <tr><td>Variable templates</td><td>C++14</td><td>Static const members</td></tr>
+            <tr><td>if constexpr</td><td>C++17</td><td>SFINAE tag dispatch</td></tr>
+            <tr><td>Fold expressions</td><td>C++17</td><td>Recursive variadic</td></tr>
+            <tr><td>CTAD</td><td>C++17</td><td>make_* helpers</td></tr>
+            <tr><td>Concepts</td><td>C++20</td><td>SFINAE / enable_if</td></tr>
+            <tr><td>consteval</td><td>C++20</td><td>Template metaprogramming</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Common Type Traits — &lt;type_traits&gt; Reference</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Category</th><th>Trait</th><th>Returns true when</th></tr></thead>
+          <tbody>
+            <tr><td rowspan="4">Primary</td><td><code>is_integral_v&lt;T&gt;</code></td><td>int, char, bool, long, etc.</td></tr>
+            <tr><td><code>is_floating_point_v&lt;T&gt;</code></td><td>float, double, long double</td></tr>
+            <tr><td><code>is_pointer_v&lt;T&gt;</code></td><td>Any pointer type</td></tr>
+            <tr><td><code>is_reference_v&lt;T&gt;</code></td><td>Lvalue or rvalue reference</td></tr>
+            <tr><td rowspan="3">Composite</td><td><code>is_arithmetic_v&lt;T&gt;</code></td><td>Integral or floating point</td></tr>
+            <tr><td><code>is_fundamental_v&lt;T&gt;</code></td><td>Arithmetic, void, nullptr_t</td></tr>
+            <tr><td><code>is_compound_v&lt;T&gt;</code></td><td>Array, function, pointer, etc.</td></tr>
+            <tr><td rowspan="3">Properties</td><td><code>is_const_v&lt;T&gt;</code></td><td>T is const-qualified</td></tr>
+            <tr><td><code>is_trivially_copyable_v&lt;T&gt;</code></td><td>Safe to memcpy</td></tr>
+            <tr><td><code>is_default_constructible_v&lt;T&gt;</code></td><td>Has default constructor</td></tr>
+            <tr><td rowspan="3">Relationships</td><td><code>is_same_v&lt;T, U&gt;</code></td><td>T and U are identical types</td></tr>
+            <tr><td><code>is_base_of_v&lt;B, D&gt;</code></td><td>B is base class of D</td></tr>
+            <tr><td><code>is_convertible_v&lt;From, To&gt;</code></td><td>From implicitly converts to To</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 C++ Templates vs Java/C# Generics</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Feature</th><th>C++ Templates</th><th>Java Generics</th></tr></thead>
+          <tbody>
+            <tr><td>When resolved</td><td>Compile time (code generation)</td><td>Compile time (type erasure)</td></tr>
+            <tr><td>Runtime overhead</td><td>Zero — fully inlined</td><td>Boxing/unboxing for primitives</td></tr>
+            <tr><td>Non-type params</td><td>✅ <code>template&lt;int N&gt;</code></td><td>❌ Not supported</td></tr>
+            <tr><td>Specialization</td><td>✅ Full + partial</td><td>❌ Not supported</td></tr>
+            <tr><td>Constraints</td><td>Concepts (C++20)</td><td>Bounded wildcards</td></tr>
+            <tr><td>Code bloat risk</td><td>Yes (each instantiation = new code)</td><td>No (single implementation)</td></tr>
+            <tr><td>Primitive support</td><td>✅ <code>vector&lt;int&gt;</code></td><td>❌ Must use <code>Integer</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Template Pitfalls & Best Practices</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Pitfall</th><th>Problem</th><th>Solution</th></tr></thead>
+          <tbody>
+            <tr><td>Definition in .cpp</td><td>Linker error — template not instantiated</td><td>Put definitions in headers</td></tr>
+            <tr><td>No constraints</td><td>Incomprehensible error messages</td><td>Use Concepts (C++20)</td></tr>
+            <tr><td>Code bloat</td><td>Too many instantiations → large binary</td><td>Use <code>extern template</code></td></tr>
+            <tr><td>Dependent names</td><td><code>T::value_type</code> ambiguous</td><td>Use <code>typename T::value_type</code></td></tr>
+            <tr><td>Two-phase lookup</td><td>Names not found in phase 1</td><td>Use <code>this-></code> in dependent base</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="practice-box">
+      <div class="practice-title">✏️ Practice Exercises — Part 5</div>
+      <ol>
+        <li>Write a function template <code>maximum(a, b)</code> that works for int, double, and string.</li>
+        <li>Create a class template <code>Pair&lt;T, U&gt;</code> with <code>first()</code>, <code>second()</code>, and <code>operator&lt;&lt;</code>.</li>
+        <li>Write a full specialization of <code>Formatter&lt;bool&gt;</code> that prints "yes"/"no".</li>
+        <li>Use fold expressions to write a <code>all_positive(args...)</code> that returns true if all are &gt; 0.</li>
+        <li>Write a <code>constexpr fibonacci(n)</code> and verify with <code>static_assert</code>.</li>
+        <li>Define a <code>Sortable</code> concept and use it to constrain a <code>sort_and_print</code> function.</li>
+        <li>Use <code>std::is_integral_v</code> with <code>if constexpr</code> to handle int vs string differently.</li>
+      </ol>
+    </div>
+
+    <div class="handbook-nav">
+      <a href="part4.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Part 4: Inheritance & Polymorphism</div></div></a>
+      <a href="part6.html" class="nav-btn next"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Part 6: STL — Containers, Iterators & Algorithms →</div></div><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+
+  </div>
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
+  <script src="../../../js/main.js"></script>
+  <script>
+    (() => {
+      document.querySelectorAll('.code-block').forEach((block) => { const pre = block.querySelector('.code-body pre'), header = block.querySelector('.code-header'); if (!pre || !header) return; let actions = header.querySelector('.code-actions'); if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); } const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'code-copy-btn'; btn.textContent = 'Copy'; btn.addEventListener('click', async () => { try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; } catch { btn.textContent = 'Failed'; } finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); } }); actions.prepend(btn); });
+      const fill = document.querySelector('.hb-progress-fill'), label = document.querySelector('.hb-progress-label');
+      if (fill && label) { const update = () => { const h = document.documentElement, d = (h.scrollHeight - h.clientHeight) || 1, p = Math.max(0, Math.min(1, h.scrollTop / d)); fill.style.width = (p*100).toFixed(0)+'%'; label.textContent = (p*100).toFixed(0)+'%'; }; document.addEventListener('scroll', update, { passive: true }); update(); }
+    })();
+  </script>
+</body>
+</html>

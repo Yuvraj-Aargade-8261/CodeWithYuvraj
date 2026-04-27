@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>Part 8: Standard Library & Industry Practices — Python Handbook | CodeWithYuvraj</title>
-  <meta name="description" content="Part 8 of Python Handbook: standard library essentials, type hints, testing, async, databases, web frameworks, and production best practices with bilingual explanations.">
+  <title>Part 8: Standard Library & Industry Practices — Python Programming Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 8: pathlib, datetime, subprocess, packaging, project structure, code quality, Python ecosystem in Python.">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="../../../css/style.css">
   <link rel="stylesheet" href="../../../css/handbook.css">
@@ -13,442 +13,656 @@
   <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
 
   <div class="handbook-page">
-    <div class="hb-topbar">
-      <div class="hb-topbar-inner">
-        <div class="hb-breadcrumbs">
-          <a href="index.html">Python Handbook</a>
-          <span class="hb-muted">/</span>
-          <span>Part 8</span>
-          <span class="hb-muted">·</span>
-          <a href="#m8-1">8.1</a><a href="#m8-2">8.2</a><a href="#m8-3">8.3</a><a href="#m8-4">8.4</a><a href="#m8-5">8.5</a><a href="#m8-6">8.6</a><a href="#m8-7">8.7</a><a href="#m8-8">8.8</a>
-        </div>
-        <div class="hb-progress" aria-label="Reading progress">
-          <div class="hb-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="hb-progress-fill"></div></div>
-          <div class="hb-progress-label">0%</div>
+    <div class="hb-topbar"><div class="hb-topbar-inner"><div class="hb-breadcrumbs"><a href="index.html">Python Programming Handbook</a><span class="hb-muted">/</span><span>Part 8</span><span class="hb-muted">·</span><a href="#m8-1">8.1</a> <a href="#m8-2">8.2</a> <a href="#m8-3">8.3</a> <a href="#m8-4">8.4</a> <a href="#m8-5">8.5</a> <a href="#m8-6">8.6</a> <a href="#m8-7">8.7</a></div><div class="hb-progress" aria-label="Reading progress"><div class="hb-progress-track" role="progressbar"><div class="hb-progress-fill"></div></div><div class="hb-progress-label">0%</div></div></div></div>
+
+    <div class="chapter-header" data-chapter-num="08">
+      <div class="chapter-part-label">📖 Part 8 — Standard Library & Industry Practices</div>
+      <h1 class="chapter-title">Ship <span class="gradient-text">Production</span> Code</h1>
+      <p class="chapter-subtitle">pathlib, datetime, subprocess, packaging, project structure, code quality — build real-world Python applications.</p>
+      <div class="chapter-meta"><span>📄 Modules 8.1 – 8.7</span><span>⏱️ 80–100 min read</span><span>💻 50+ Examples</span></div>
+    </div>
+
+    <div class="hb-mini-toc"><div class="hb-mini-title">📍 Part 8 Modules</div><div class="hb-mini-links"><a href="#m8-1">8.1 pathlib</a><a href="#m8-2">8.2 datetime</a><a href="#m8-3">8.3 subprocess</a><a href="#m8-4">8.4 Packaging</a><a href="#m8-5">8.5 Project</a><a href="#m8-6">8.6 Quality</a><a href="#m8-7">8.7 Ecosystem</a></div></div>
+
+    <!-- MODULE 8.1 -->
+    <div class="module-section" id="m8-1">
+      <div class="module-header"><div class="module-number">8.1</div><h2 class="module-title">pathlib — modern file paths, glob, traversal</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Object-oriented file system paths</h3>
+        <p class="explain-en"><code>pathlib.Path</code> replaces <code>os.path</code> with an object-oriented API. Paths support <code>/</code> operator for joining, <code>.glob()</code> for pattern matching, and methods for reading, writing, and checking existence. Always prefer <code>pathlib</code> over <code>os.path</code>.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>pathlib.Path</code> <code>os.path</code> ko object-oriented API se replace karta hai. Paths <code>/</code> operator se join hote hain, <code>.glob()</code> pattern matching ke liye, aur reading, writing, existence check ke methods hain. Hamesha <code>pathlib</code> prefer karo <code>os.path</code> se.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Python — pathlib</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">from</span> pathlib <span class="keyword">import</span> Path
+
+<span class="comment"># Create paths</span>
+p = Path(<span class="string">"src"</span>) / <span class="string">"models"</span> / <span class="string">"user.py"</span>
+home = Path.home()          <span class="comment"># C:\Users\Yuvraj</span>
+cwd = Path.cwd()            <span class="comment"># Current directory</span>
+
+<span class="comment"># Path properties</span>
+p.name       <span class="comment"># 'user.py'</span>
+p.stem       <span class="comment"># 'user'</span>
+p.suffix     <span class="comment"># '.py'</span>
+p.parent     <span class="comment"># Path('src/models')</span>
+p.parts      <span class="comment"># ('src', 'models', 'user.py')</span>
+
+<span class="comment"># Check existence</span>
+p.exists()     <span class="comment"># True/False</span>
+p.is_file()    <span class="comment"># True if file</span>
+p.is_dir()     <span class="comment"># True if directory</span>
+
+<span class="comment"># Read/Write</span>
+text = Path(<span class="string">"data.txt"</span>).read_text(encoding=<span class="string">"utf-8"</span>)
+Path(<span class="string">"out.txt"</span>).write_text(<span class="string">"Hello"</span>, encoding=<span class="string">"utf-8"</span>)
+data = Path(<span class="string">"image.png"</span>).read_bytes()
+
+<span class="comment"># Glob — find files by pattern</span>
+<span class="keyword">for</span> py_file <span class="keyword">in</span> Path(<span class="string">"src"</span>).glob(<span class="string">"**/*.py"</span>):
+    <span class="function">print</span>(py_file)  <span class="comment"># Recursive!</span>
+
+<span class="comment"># Create directories</span>
+Path(<span class="string">"output/reports"</span>).mkdir(parents=<span class="keyword">True</span>, exist_ok=<span class="keyword">True</span>)
+
+<span class="comment"># Rename / Delete</span>
+Path(<span class="string">"old.txt"</span>).rename(<span class="string">"new.txt"</span>)
+Path(<span class="string">"temp.txt"</span>).unlink(missing_ok=<span class="keyword">True</span>)</pre></div>
         </div>
       </div>
     </div>
 
-    <div class="chapter-header" data-chapter-num="08">
-      <div class="chapter-part-label">📖 Part 8 — Standard Library & Industry Practices</div>
-      <h1 class="chapter-title">From Learning Python to <span class="gradient-text">Professional Python</span></h1>
-      <p class="chapter-subtitle">Build production mindset with testing, typing, async, databases, frameworks, and quality workflows.</p>
-      <div class="chapter-meta"><span>📄 Modules 8.1 – 8.8</span><span>⏱️ 80–120 min read</span><span>💻 45+ Examples</span></div>
+    <!-- MODULE 8.2 -->
+    <div class="module-section" id="m8-2">
+      <div class="module-header"><div class="module-number">8.2</div><h2 class="module-title">datetime — dates, times, timedelta, timezones</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Working with dates and times</h3>
+        <p class="explain-en">The <code>datetime</code> module handles dates, times, and durations. <code>datetime.now()</code> gets current time. <code>timedelta</code> represents durations. Always use timezone-aware datetimes in production. <code>strftime()</code> formats, <code>strptime()</code> parses.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>datetime</code> module dates, times, aur durations handle karta hai. <code>datetime.now()</code> current time deta hai. <code>timedelta</code> durations represent karta hai. Production me hamesha timezone-aware datetimes use karo. <code>strftime()</code> format karta hai, <code>strptime()</code> parse karta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Python — datetime</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime, date, time, timedelta
+<span class="keyword">from</span> zoneinfo <span class="keyword">import</span> ZoneInfo  <span class="comment"># Python 3.9+</span>
+
+<span class="comment"># Current date/time</span>
+now = datetime.now()               <span class="comment"># Local time (naive)</span>
+utc = datetime.now(ZoneInfo(<span class="string">"UTC"</span>))  <span class="comment"># UTC (aware)</span>
+today = date.today()               <span class="comment"># Just the date</span>
+
+<span class="comment"># Create specific dates</span>
+d = date(<span class="number">2026</span>, <span class="number">4</span>, <span class="number">27</span>)
+dt = datetime(<span class="number">2026</span>, <span class="number">4</span>, <span class="number">27</span>, <span class="number">14</span>, <span class="number">30</span>)
+
+<span class="comment"># Formatting — datetime → string</span>
+now.strftime(<span class="string">"%Y-%m-%d %H:%M:%S"</span>)  <span class="comment"># 2026-04-27 14:30:00</span>
+now.strftime(<span class="string">"%d/%m/%Y"</span>)           <span class="comment"># 27/04/2026</span>
+
+<span class="comment"># Parsing — string → datetime</span>
+parsed = datetime.strptime(<span class="string">"2026-04-27"</span>, <span class="string">"%Y-%m-%d"</span>)
+
+<span class="comment"># Arithmetic with timedelta</span>
+tomorrow = today + timedelta(days=<span class="number">1</span>)
+next_week = now + timedelta(weeks=<span class="number">1</span>)
+diff = date(<span class="number">2026</span>, <span class="number">12</span>, <span class="number">31</span>) - today
+<span class="function">print</span>(<span class="string">f"</span>{diff.days}<span class="string"> days left in 2026"</span>)
+
+<span class="comment"># ISO format</span>
+now.isoformat()  <span class="comment"># '2026-04-27T14:30:00'</span>
+
+<span class="comment"># Timezone-aware</span>
+ist = ZoneInfo(<span class="string">"Asia/Kolkata"</span>)
+now_ist = datetime.now(ist)</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Code</th><th>Meaning</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td><code>%Y</code></td><td>4-digit year</td><td>2026</td></tr>
+              <tr><td><code>%m</code></td><td>Month (01–12)</td><td>04</td></tr>
+              <tr><td><code>%d</code></td><td>Day (01–31)</td><td>27</td></tr>
+              <tr><td><code>%H</code></td><td>Hour 24h (00–23)</td><td>14</td></tr>
+              <tr><td><code>%M</code></td><td>Minute (00–59)</td><td>30</td></tr>
+              <tr><td><code>%S</code></td><td>Second (00–59)</td><td>00</td></tr>
+              <tr><td><code>%A</code></td><td>Weekday name</td><td>Monday</td></tr>
+              <tr><td><code>%B</code></td><td>Month name</td><td>April</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
 
-    <div class="callout callout-tip"><strong>How to study Part 8:</strong> Treat these topics as workflow habits, not theory. Apply them in a mini project while reading.</div>
+    <!-- MODULE 8.3 -->
+    <div class="module-section" id="m8-3">
+      <div class="module-header"><div class="module-number">8.3</div><h2 class="module-title">subprocess — running external commands, pipes</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Execute system commands from Python</h3>
+        <p class="explain-en"><code>subprocess.run()</code> executes external commands. Use <code>capture_output=True</code> to get stdout/stderr. <code>check=True</code> raises on non-zero exit. <strong>Never use <code>shell=True</code> with user input</strong> (security risk!).</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>subprocess.run()</code> external commands execute karta hai. stdout/stderr get karne ke liye <code>capture_output=True</code> use karo. <code>check=True</code> non-zero exit pe error raise karta hai. <strong>User input ke saath kabhi <code>shell=True</code> mat use karo</strong> (security risk!).</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Python — subprocess</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">import</span> subprocess
 
-    <div class="hb-mini-toc">
-      <div class="hb-mini-title">📍 Part 8 Modules</div>
-      <div class="hb-mini-links">
-        <a href="#m8-1">8.1 Standard library</a>
-        <a href="#m8-2">8.2 Type hints</a>
-        <a href="#m8-3">8.3 Testing</a>
-        <a href="#m8-4">8.4 Async basics</a>
-        <a href="#m8-5">8.5 Databases</a>
-        <a href="#m8-6">8.6 Web frameworks</a>
-        <a href="#m8-7">8.7 Project structure</a>
-        <a href="#m8-8">8.8 Industry checklist</a>
+<span class="comment"># Run command and capture output</span>
+result = subprocess.run(
+    [<span class="string">"python"</span>, <span class="string">"--version"</span>],
+    capture_output=<span class="keyword">True</span>,
+    text=<span class="keyword">True</span>
+)
+<span class="function">print</span>(result.stdout)      <span class="comment"># "Python 3.12.0\n"</span>
+<span class="function">print</span>(result.returncode)  <span class="comment"># 0</span>
+
+<span class="comment"># Check for errors</span>
+<span class="keyword">try</span>:
+    subprocess.run(
+        [<span class="string">"git"</span>, <span class="string">"status"</span>],
+        check=<span class="keyword">True</span>,           <span class="comment"># Raises on error</span>
+        capture_output=<span class="keyword">True</span>,
+        text=<span class="keyword">True</span>
+    )
+<span class="keyword">except</span> subprocess.CalledProcessError <span class="keyword">as</span> e:
+    <span class="function">print</span>(<span class="string">f"Error: </span>{e.stderr}<span class="string">"</span>)
+
+<span class="comment"># Run with timeout</span>
+result = subprocess.run(
+    [<span class="string">"ping"</span>, <span class="string">"google.com"</span>],
+    timeout=<span class="number">5</span>,
+    capture_output=<span class="keyword">True</span>
+)
+
+<span class="comment"># ⚠️ NEVER do this with user input!</span>
+<span class="comment"># subprocess.run(user_input, shell=True)  # INJECTION RISK!</span></pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 8.4 -->
+    <div class="module-section" id="m8-4">
+      <div class="module-header"><div class="module-number">8.4</div><h2 class="module-title">Packaging — pyproject.toml, setuptools, publishing</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Distributing your code</h3>
+        <p class="explain-en"><code>pyproject.toml</code> is the modern standard for Python project configuration (PEP 518/621). It replaces <code>setup.py</code> and <code>setup.cfg</code>. Use <code>build</code> to create distributions and <code>twine</code> to upload to PyPI.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>pyproject.toml</code> Python project configuration ka modern standard hai (PEP 518/621). Ye <code>setup.py</code> aur <code>setup.cfg</code> replace karta hai. Distributions banane ke liye <code>build</code> aur PyPI pe upload karne ke liye <code>twine</code> use karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 pyproject.toml</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># pyproject.toml — modern Python project config</span>
+[build-system]
+requires = [<span class="string">"setuptools>=68.0"</span>, <span class="string">"wheel"</span>]
+build-backend = <span class="string">"setuptools.build_meta"</span>
+
+[project]
+name = <span class="string">"my-package"</span>
+version = <span class="string">"1.0.0"</span>
+description = <span class="string">"A useful Python package"</span>
+authors = [{name = <span class="string">"Yuvraj"</span>, email = <span class="string">"y@mail.com"</span>}]
+requires-python = <span class="string">">=3.10"</span>
+dependencies = [
+    <span class="string">"requests>=2.28"</span>,
+    <span class="string">"click>=8.0"</span>,
+]
+
+[project.optional-dependencies]
+dev = [<span class="string">"pytest"</span>, <span class="string">"mypy"</span>, <span class="string">"ruff"</span>]
+
+[project.scripts]
+my-cli = <span class="string">"my_package.cli:main"</span></pre></div>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Terminal — Build & publish</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># Build distribution</span>
+pip install build
+python -m build  <span class="comment"># Creates dist/*.whl and dist/*.tar.gz</span>
+
+<span class="comment"># Upload to PyPI</span>
+pip install twine
+twine upload dist/*
+
+<span class="comment"># Install in editable mode (development)</span>
+pip install -e .</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 8.5 -->
+    <div class="module-section" id="m8-5">
+      <div class="module-header"><div class="module-number">8.5</div><h2 class="module-title">Project structure — src layout, config, .gitignore</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Industry-standard project layout</h3>
+        <p class="explain-en">Use the <strong>src layout</strong> for distributable packages. Keep tests separate, config in <code>pyproject.toml</code>, and always include <code>.gitignore</code>, <code>README.md</code>, and <code>LICENSE</code>. Use <code>.env</code> for secrets (never commit!).</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Distributable packages ke liye <strong>src layout</strong> use karo. Tests alag rakho, config <code>pyproject.toml</code> me, aur hamesha <code>.gitignore</code>, <code>README.md</code>, <code>LICENSE</code> include karo. Secrets ke liye <code>.env</code> use karo (commit mat karo!).</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">📁 Standard Python project layout</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre>my-project/
+├── src/
+│   └── my_package/
+│       ├── __init__.py
+│       ├── core.py
+│       ├── models/
+│       │   ├── __init__.py
+│       │   └── user.py
+│       └── utils.py
+├── tests/
+│   ├── __init__.py
+│   ├── test_core.py
+│   └── test_utils.py
+├── docs/
+│   └── index.md
+├── .github/
+│   └── workflows/
+│       └── ci.yml
+├── .venv/                <span class="comment"># NOT committed</span>
+├── .env                  <span class="comment"># NOT committed (secrets)</span>
+├── .gitignore
+├── pyproject.toml
+├── README.md
+└── LICENSE</pre></div>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 .gitignore for Python</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># Virtual environment</span>
+.venv/
+venv/
+
+<span class="comment"># Python cache</span>
+__pycache__/
+*.pyc
+*.pyo
+
+<span class="comment"># Distribution</span>
+dist/
+build/
+*.egg-info/
+
+<span class="comment"># IDE</span>
+.vscode/
+.idea/
+
+<span class="comment"># Environment variables</span>
+.env
+
+<span class="comment"># OS files</span>
+.DS_Store
+Thumbs.db</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 8.6 -->
+    <div class="module-section" id="m8-6">
+      <div class="module-header"><div class="module-number">8.6</div><h2 class="module-title">Code quality — linting (ruff), formatting (black), pre-commit</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Automated code standards</h3>
+        <p class="explain-en"><strong>Ruff</strong> is the fastest Python linter (replaces flake8, isort, pyupgrade). <strong>Black</strong> is the opinionated formatter — zero config, consistent output. <strong>pre-commit</strong> runs checks before every git commit automatically.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Ruff</strong> sabse fast Python linter hai (flake8, isort, pyupgrade replace karta hai). <strong>Black</strong> opinionated formatter hai — zero config, consistent output. <strong>pre-commit</strong> har git commit se pehle automatically checks run karta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Terminal — Code quality tools</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># Install tools</span>
+pip install ruff black mypy pre-commit
+
+<span class="comment"># Ruff — lint & fix</span>
+ruff check .           <span class="comment"># Find issues</span>
+ruff check . --fix     <span class="comment"># Auto-fix issues</span>
+ruff format .          <span class="comment"># Format (like black)</span>
+
+<span class="comment"># Black — format code</span>
+black .                <span class="comment"># Format all files</span>
+black --check .        <span class="comment"># Check without modifying</span>
+
+<span class="comment"># Mypy — type checking</span>
+mypy src/              <span class="comment"># Static type check</span>
+
+<span class="comment"># Pre-commit — auto-check on git commit</span>
+pre-commit install     <span class="comment"># Setup hooks</span>
+pre-commit run --all-files</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Tool</th><th>Purpose</th><th>Speed</th></tr></thead>
+            <tbody>
+              <tr><td><code>ruff</code></td><td>Linting + formatting</td><td>⚡ Extremely fast (Rust)</td></tr>
+              <tr><td><code>black</code></td><td>Code formatting</td><td>🔥 Fast</td></tr>
+              <tr><td><code>mypy</code></td><td>Static type checking</td><td>🐢 Moderate</td></tr>
+              <tr><td><code>isort</code></td><td>Sort imports</td><td>🔥 Fast</td></tr>
+              <tr><td><code>bandit</code></td><td>Security analysis</td><td>🔥 Fast</td></tr>
+              <tr><td><code>pre-commit</code></td><td>Git hook automation</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 8.7 -->
+    <div class="module-section" id="m8-7">
+      <div class="module-header"><div class="module-number">8.7</div><h2 class="module-title">Python ecosystem — web, data, ML, automation, CLI</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Where to go from here</h3>
+        <p class="explain-en">Python powers web apps (Django, Flask, FastAPI), data science (pandas, NumPy), machine learning (TensorFlow, PyTorch), automation (Selenium, BeautifulSoup), CLIs (Click, Typer), and more. Choose your path based on your goals.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Python web apps (Django, Flask, FastAPI), data science (pandas, NumPy), machine learning (TensorFlow, PyTorch), automation (Selenium, BeautifulSoup), CLIs (Click, Typer), aur bahut kuch power karta hai. Apne goals ke hisaab se path choose karo.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Domain</th><th>Key Libraries</th><th>Learn Next</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Web Backend</strong></td><td>Django, Flask, FastAPI</td><td>REST APIs, authentication, databases</td></tr>
+              <tr><td><strong>Data Science</strong></td><td>pandas, NumPy, matplotlib</td><td>EDA, visualization, statistics</td></tr>
+              <tr><td><strong>Machine Learning</strong></td><td>scikit-learn, TensorFlow, PyTorch</td><td>Models, training, deployment</td></tr>
+              <tr><td><strong>Web Scraping</strong></td><td>BeautifulSoup, Scrapy, Selenium</td><td>HTML parsing, browser automation</td></tr>
+              <tr><td><strong>CLI Tools</strong></td><td>Click, Typer, argparse</td><td>Terminal apps, scripts</td></tr>
+              <tr><td><strong>DevOps</strong></td><td>Fabric, Ansible, Docker SDK</td><td>Deployment, CI/CD</td></tr>
+              <tr><td><strong>Desktop GUI</strong></td><td>Tkinter, PyQt, Kivy</td><td>Cross-platform apps</td></tr>
+              <tr><td><strong>Game Dev</strong></td><td>Pygame, Arcade</td><td>2D games, simulations</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>🎯 Recommended learning path:</strong> This handbook → FastAPI (web) or pandas (data) → Build a real project → Contribute to open source.</div>
       </div>
     </div>
 
     <div class="quick-ref">
-      <div class="qr-title">🚀 Advanced Lens — Part 8</div>
-      <p class="explain-en">
-        Part 8 is your transition from coder to engineer. The advanced focus is end-to-end quality: typed APIs, tested behavior,
-        reproducible environments, structured logging, and deployment readiness. Measure success by maintainability and reliability, not only feature completion.
-      </p>
-      <div class="explain-hi">
-        <span class="hi-label">Hindi mein samjho</span>
-        Ye part aapko professional workflow sikhata hai. Advanced level par aapka code testable, observable, maintainable aur deployable hona chahiye.
-        Industry me quality process bhi utna hi important hai jitna feature development.
+      <div class="qr-title">📋 Python Version Features — Quick Reference</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Version</th><th>Key Feature</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>3.6</td><td>f-strings</td><td><code>f"Hello {name}"</code></td></tr>
+            <tr><td>3.7</td><td>dataclasses, breakpoint()</td><td><code>@dataclass</code></td></tr>
+            <tr><td>3.8</td><td>Walrus operator, pos-only params</td><td><code>:=</code>, <code>def f(x, /)</code></td></tr>
+            <tr><td>3.9</td><td>Dict merge, type hints in builtins</td><td><code>d1 | d2</code>, <code>list[int]</code></td></tr>
+            <tr><td>3.10</td><td>match/case, better errors</td><td><code>match x: case 1:</code></td></tr>
+            <tr><td>3.11</td><td>Exception groups, faster CPython</td><td><code>except* TypeError</code></td></tr>
+            <tr><td>3.12</td><td>Type parameter syntax, f-string nesting</td><td><code>type Alias = int</code></td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
-    <div class="module-section" id="m8-1">
-      <div class="module-header"><div class="module-number">8.1</div><h2 class="module-title">Python Standard Library Essentials</h2></div>
-      <div class="concept-block">
-        <h3 class="concept-heading">Why standard library first?</h3>
-        <p class="explain-en">
-          Before installing third-party packages, check standard library modules. They are stable, tested, and available by default.
-          In production, fewer dependencies usually means fewer security risks, fewer version conflicts, and simpler deployments.
-          A professional habit is to “default to standard library” unless a third-party library provides significant value.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Standard library use karne ka benefit hai dependency kam, security surface kam, aur deployment simple. Industry habit: pehle built-in solution dekho, phir third-party tab use karo jab real benefit ho.</div>
-      </div>
-      <div class="concept-block">
-        <h3 class="concept-heading">Commonly used modules</h3>
-        <p class="explain-en">Modules like <code>datetime</code>, <code>pathlib</code>, <code>collections</code>, <code>itertools</code>, and <code>statistics</code> solve many real tasks.</p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Daily coding me built-in modules se kaafi problems solve ho jati hain bina extra install ke.</div>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — standard library usage</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime
-<span class="keyword">from</span> pathlib <span class="keyword">import</span> Path
-
-<span class="builtin">print</span>(datetime.now())
-<span class="builtin">print</span>(Path(<span class="string">"data/report.csv"</span>).suffix)</pre></div>
-        </div>
-        <div class="callout callout-note"><strong>Example explained:</strong> One module handles timestamps; another handles cross-platform file paths.</div>
-      </div>
-
-      <div class="concept-block">
-        <h3 class="concept-heading">Professional CLI: argparse (industry-friendly scripts)</h3>
-        <p class="explain-en">
-          In production, scripts should be repeatable and configurable without editing code. That’s why professional Python tooling uses CLI flags.
-          The standard library’s <code>argparse</code> provides structured arguments, type conversion, help messages, and validation.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Industry scripts me values hardcode nahi karte. CLI flags se script reusable banta hai. <code>argparse</code> se proper help/validation milta hai.</div>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — argparse CLI</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre><span class="keyword">import</span> argparse
-
-parser = argparse.ArgumentParser(prog=<span class="string">"gst_calc"</span>)
-parser.add_argument(<span class="string">"--amount"</span>, type=<span class="builtin">float</span>, required=<span class="keyword">True</span>)
-parser.add_argument(<span class="string">"--rate"</span>, type=<span class="builtin">float</span>, default=<span class="number">0.18</span>)
-args = parser.parse_args()
-
-total = args.amount + (args.amount * args.rate)
-<span class="builtin">print</span>(<span class="string">f"Total: {total:.2f}"</span>)</pre></div>
-        </div>
-        <div class="callout callout-note"><strong>Example explained:</strong> Script becomes configurable: <code>python app.py --amount 1000 --rate 0.18</code>.</div>
-      </div>
-
-      <div class="concept-block">
-        <h3 class="concept-heading">Dataclasses: clean data containers (stdlib)</h3>
-        <p class="explain-en">
-          Many systems pass around structured records (User, Product, Order). Writing boilerplate constructors and repr methods is error-prone.
-          <code>dataclasses</code> (standard library) generates this boilerplate safely and improves readability.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Structured data ko represent karne ke liye dataclasses best hai. Boilerplate code kam hota hai aur model readable banta hai.</div>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — dataclass model</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre><span class="keyword">from</span> dataclasses <span class="keyword">import</span> dataclass
-
-@dataclass
-<span class="keyword">class</span> <span class="function">Product</span>:
-    name: <span class="builtin">str</span>
-    price: <span class="builtin">float</span>
-    in_stock: <span class="builtin">bool</span> = <span class="keyword">True</span>
-
-p = Product(<span class="string">"Keyboard"</span>, <span class="number">1499.0</span>)
-<span class="builtin">print</span>(p)</pre></div>
-          <div class="code-output">Product(name='Keyboard', price=1499.0, in_stock=True)</div>
-        </div>
-        <div class="callout callout-note"><strong>Example explained:</strong> Dataclass auto-creates <code>__init__</code> and readable <code>__repr__</code> so your models stay clean.</div>
+    <div class="quick-ref">
+      <div class="qr-title">📋 Essential Terminal Commands</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Command</th><th>Purpose</th></tr></thead>
+          <tbody>
+            <tr><td><code>python -m venv .venv</code></td><td>Create virtual environment</td></tr>
+            <tr><td><code>pip install -r requirements.txt</code></td><td>Install dependencies</td></tr>
+            <tr><td><code>pip freeze > requirements.txt</code></td><td>Save dependencies</td></tr>
+            <tr><td><code>python -m pytest</code></td><td>Run tests</td></tr>
+            <tr><td><code>python -m mypy src/</code></td><td>Type check</td></tr>
+            <tr><td><code>python -m build</code></td><td>Build package</td></tr>
+            <tr><td><code>python -c "print('hi')"</code></td><td>Run one-liner</td></tr>
+            <tr><td><code>python -i script.py</code></td><td>Run then open REPL</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
-    <div class="module-section" id="m8-2">
-      <div class="module-header"><div class="module-number">8.2</div><h2 class="module-title">Type Hinting — Better Readability and Tooling</h2></div>
-      <div class="concept-block">
-        <h3 class="concept-heading">What type hints solve</h3>
-        <p class="explain-en">
-          Type hints improve code clarity, autocomplete quality, static analysis, and team communication.
-          In large codebases, typing is a documentation and correctness tool: it clarifies “what this function expects” and reduces runtime surprises.
-          Modern teams often enforce typing progressively (critical modules first) rather than rewriting everything.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Typing ka real advantage big projects me dikhta hai: input/output expectations clear hote hain, IDE better autocomplete deta hai, aur bugs early catch hote hain. Advanced approach: gradually adopt typing, ek saath pura codebase rewrite mat karo.</div>
-      </div>
-      <div class="concept-block">
-        <h3 class="concept-heading">Function annotations</h3>
-        <p class="explain-en">Annotate parameters and return type to make contracts explicit.</p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Type annotations function ka expected data format clear karte hain.</div>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — type hints</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre><span class="keyword">def</span> <span class="function">calculate_total</span>(amount: <span class="builtin">float</span>, tax_rate: <span class="builtin">float</span>) -&gt; <span class="builtin">float</span>:
-    <span class="keyword">return</span> amount + amount * tax_rate
 
-<span class="builtin">print</span>(calculate_total(<span class="number">1000.0</span>, <span class="number">0.18</span>))</pre></div>
-          <div class="code-output">1180.0</div>
-        </div>
-        <div class="callout callout-note"><strong>Example explained:</strong> Type hints document intent and support static checking tools like mypy/pyright.</div>
-      </div>
-
-      <div class="concept-block">
-        <h3 class="concept-heading">Modern typing patterns (Optional, Union, generics)</h3>
-        <p class="explain-en">
-          Real systems use richer types: optional values, constrained unions, and generic containers.
-          These patterns improve correctness and self-documentation for APIs that evolve over time.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Real projects me typing sirf <code>int</code>/<code>str</code> tak limited nahi hoti. Optional, Union aur generics se complex data contracts clear hote hain.</div>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — typing basics</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre><span class="keyword">from</span> typing <span class="keyword">import</span> Optional
-
-<span class="keyword">def</span> <span class="function">find_user_email</span>(user_id: <span class="builtin">int</span>) -&gt; Optional[<span class="builtin">str</span>]:
-    <span class="comment"># returns email or None if not found</span>
-    <span class="keyword">return</span> <span class="keyword">None</span></pre></div>
-        </div>
-        <div class="callout callout-note"><strong>Example explained:</strong> <code>Optional[str]</code> explicitly means “string or None”, so callers must handle missing values.</div>
+    <div class="quick-ref">
+      <div class="qr-title">📋 Important PEPs — Every Python Dev Should Know</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>PEP</th><th>Title</th><th>Why it matters</th></tr></thead>
+          <tbody>
+            <tr><td><strong>PEP 8</strong></td><td>Style Guide</td><td>The Python coding standard</td></tr>
+            <tr><td><strong>PEP 20</strong></td><td>The Zen of Python</td><td><code>import this</code> — design principles</td></tr>
+            <tr><td><strong>PEP 257</strong></td><td>Docstring Conventions</td><td>How to document code</td></tr>
+            <tr><td><strong>PEP 484</strong></td><td>Type Hints</td><td>Static typing support</td></tr>
+            <tr><td><strong>PEP 518</strong></td><td>pyproject.toml</td><td>Build system specification</td></tr>
+            <tr><td><strong>PEP 621</strong></td><td>Project metadata in pyproject.toml</td><td>Standard project config</td></tr>
+            <tr><td><strong>PEP 634</strong></td><td>Structural Pattern Matching</td><td>match/case (3.10+)</td></tr>
+            <tr><td><strong>PEP 3107</strong></td><td>Function Annotations</td><td>Type hints foundation</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
-    <div class="module-section" id="m8-3">
-      <div class="module-header"><div class="module-number">8.3</div><h2 class="module-title">Testing Basics — Unit Tests and Assertions</h2></div>
-      <div class="concept-block">
-        <h3 class="concept-heading">Why testing matters</h3>
-        <p class="explain-en">
-          Tests protect existing behavior during refactors and reduce production bugs.
-          They act as executable documentation and enable safe change in fast-moving teams.
-          A mature test mindset focuses on critical business logic, boundary conditions, and failure scenarios.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Tests sirf correctness verify nahi karte, wo future changes ke against safety net bhi hote hain. Advanced testing me boundary cases aur failure scenarios cover karna important hota hai.</div>
+    <div class="quick-ref">
+      <div class="qr-title">📋 Environment Variables — Best Practices</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Method</th><th>Code</th><th>When to use</th></tr></thead>
+          <tbody>
+            <tr><td>Read env var</td><td><code>os.environ["KEY"]</code></td><td>Required vars (raises if missing)</td></tr>
+            <tr><td>Read with default</td><td><code>os.environ.get("KEY", "default")</code></td><td>Optional config</td></tr>
+            <tr><td>Set env var</td><td><code>os.environ["KEY"] = "value"</code></td><td>Runtime config</td></tr>
+            <tr><td>.env file</td><td><code>python-dotenv</code></td><td>Local development secrets</td></tr>
+            <tr><td>Check if set</td><td><code>"KEY" in os.environ</code></td><td>Feature flags</td></tr>
+          </tbody>
+        </table>
       </div>
-      <div class="concept-block">
-        <h3 class="concept-heading"><code>unittest</code> example</h3>
-        <p class="explain-en">Write small, isolated tests for business functions.</p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Unit test ek function ka expected output verify karta hai.</div>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — unittest</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre><span class="keyword">import</span> unittest
+      <p style="color:var(--hb-text2);font-size:0.85rem;margin-top:6px;"><strong>Rule:</strong> Never hardcode secrets. Use <code>.env</code> files locally and environment variables in production.</p>
+    </div>
 
-<span class="keyword">def</span> <span class="function">add</span>(a, b):
-    <span class="keyword">return</span> a + b
-
-<span class="keyword">class</span> <span class="function">TestMath</span>(unittest.TestCase):
-    <span class="keyword">def</span> <span class="function">test_add</span>(self):
-        self.assertEqual(add(<span class="number">2</span>, <span class="number">3</span>), <span class="number">5</span>)</pre></div>
-        </div>
-        <div class="callout callout-note"><strong>Example explained:</strong> Test defines expected output for known input and fails if behavior changes unexpectedly.</div>
-      </div>
-
-      <div class="concept-block">
-        <h3 class="concept-heading">Industry testing stack: pytest + mocking (conceptual)</h3>
-        <p class="explain-en">
-          Many teams prefer <code>pytest</code> for readability and fixtures. For external dependencies (APIs, databases),
-          mocking isolates unit tests so they stay fast and deterministic.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Real projects me tests fast aur deterministic hone chahiye. External systems ko mock karke unit tests reliable bante hain. Pytest widely used tool hai.</div>
-        <div class="callout callout-note">
-          <strong>Example explained:</strong> Unit tests should not depend on network/DB availability. Mocking simulates those dependencies.
-        </div>
+    <div class="quick-ref">
+      <div class="qr-title">📋 pathlib vs os.path — Migration Guide</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>os.path (old)</th><th>pathlib (modern)</th></tr></thead>
+          <tbody>
+            <tr><td><code>os.path.join("a","b")</code></td><td><code>Path("a") / "b"</code></td></tr>
+            <tr><td><code>os.path.basename(p)</code></td><td><code>p.name</code></td></tr>
+            <tr><td><code>os.path.dirname(p)</code></td><td><code>p.parent</code></td></tr>
+            <tr><td><code>os.path.splitext(p)</code></td><td><code>p.stem</code>, <code>p.suffix</code></td></tr>
+            <tr><td><code>os.path.exists(p)</code></td><td><code>p.exists()</code></td></tr>
+            <tr><td><code>os.path.isfile(p)</code></td><td><code>p.is_file()</code></td></tr>
+            <tr><td><code>os.path.isdir(p)</code></td><td><code>p.is_dir()</code></td></tr>
+            <tr><td><code>os.path.abspath(p)</code></td><td><code>p.resolve()</code></td></tr>
+            <tr><td><code>os.listdir(d)</code></td><td><code>d.iterdir()</code></td></tr>
+            <tr><td><code>os.makedirs(d)</code></td><td><code>d.mkdir(parents=True)</code></td></tr>
+            <tr><td><code>glob.glob("*.py")</code></td><td><code>Path(".").glob("*.py")</code></td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
-    <div class="module-section" id="m8-4">
-      <div class="module-header"><div class="module-number">8.4</div><h2 class="module-title">Async Programming Basics — <code>async</code> / <code>await</code></h2></div>
-      <div class="concept-block">
-        <h3 class="concept-heading">When async helps</h3>
-        <p class="explain-en">
-          Async is useful for I/O-bound tasks like network calls, APIs, and concurrent waiting operations.
-          It does not magically speed up CPU-heavy computations, but it improves throughput when programs spend time waiting on external systems.
-          The engineering goal is better concurrency with predictable resource usage.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Async CPU speed nahi badhata. Ye mainly waiting tasks (network/IO) ko parallel-like handle karta hai, jisse throughput improve hota hai. CPU-heavy kaam ke liye generally other strategies (multiprocessing, optimized libs) use hote hain.</div>
-      </div>
-      <div class="concept-block">
-        <h3 class="concept-heading">Simple coroutine example</h3>
-        <p class="explain-en">Coroutines run cooperatively using event loop.</p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>async def</code> se coroutine banti hai jo await points pe control release karti hai.</div>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — async sample</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre><span class="keyword">import</span> asyncio
-
-<span class="keyword">async</span> <span class="keyword">def</span> <span class="function">fetch_data</span>():
-    <span class="keyword">await</span> asyncio.sleep(<span class="number">1</span>)
-    <span class="keyword">return</span> <span class="string">"done"</span>
-
-<span class="keyword">async</span> <span class="keyword">def</span> <span class="function">main</span>():
-    result = <span class="keyword">await</span> fetch_data()
-    <span class="builtin">print</span>(result)</pre></div>
-        </div>
-        <div class="callout callout-note"><strong>Example explained:</strong> Coroutine yields control during wait, allowing other async tasks to progress.</div>
+    <div class="quick-ref">
+      <div class="qr-title">📋 strftime / strptime Format Codes — Complete Reference</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Code</th><th>Meaning</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><code>%Y</code></td><td>4-digit year</td><td>2026</td></tr>
+            <tr><td><code>%y</code></td><td>2-digit year</td><td>26</td></tr>
+            <tr><td><code>%m</code></td><td>Month zero-padded (01–12)</td><td>04</td></tr>
+            <tr><td><code>%B</code></td><td>Full month name</td><td>April</td></tr>
+            <tr><td><code>%b</code></td><td>Abbreviated month</td><td>Apr</td></tr>
+            <tr><td><code>%d</code></td><td>Day zero-padded (01–31)</td><td>27</td></tr>
+            <tr><td><code>%A</code></td><td>Full weekday name</td><td>Monday</td></tr>
+            <tr><td><code>%a</code></td><td>Abbreviated weekday</td><td>Mon</td></tr>
+            <tr><td><code>%H</code></td><td>Hour 24h (00–23)</td><td>14</td></tr>
+            <tr><td><code>%I</code></td><td>Hour 12h (01–12)</td><td>02</td></tr>
+            <tr><td><code>%p</code></td><td>AM/PM</td><td>PM</td></tr>
+            <tr><td><code>%M</code></td><td>Minute (00–59)</td><td>30</td></tr>
+            <tr><td><code>%S</code></td><td>Second (00–59)</td><td>45</td></tr>
+            <tr><td><code>%f</code></td><td>Microsecond (000000–999999)</td><td>123456</td></tr>
+            <tr><td><code>%z</code></td><td>UTC offset</td><td>+0530</td></tr>
+            <tr><td><code>%Z</code></td><td>Timezone name</td><td>IST</td></tr>
+            <tr><td><code>%j</code></td><td>Day of year (001–366)</td><td>117</td></tr>
+            <tr><td><code>%W</code></td><td>Week number (Mon=first)</td><td>17</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
-    <div class="module-section" id="m8-5">
-      <div class="module-header"><div class="module-number">8.5</div><h2 class="module-title">Database Connectivity — SQLite and Query Basics</h2></div>
-      <div class="concept-block">
-        <h3 class="concept-heading">Database role in Python apps</h3>
-        <p class="explain-en">
-          Databases store structured persistent data for users, products, orders, and analytics.
-          They provide indexing, constraints, transactions, and concurrent access guarantees that files cannot safely provide at scale.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Database ka advantage hai: indexing, constraints, transactions, aur concurrency support. File-based storage limited hota hai, isliye real systems me database essential hota hai.</div>
-      </div>
-      <div class="concept-block">
-        <h3 class="concept-heading">SQLite starter workflow</h3>
-        <p class="explain-en">Use parameterized queries to prevent SQL injection and keep writes safe.</p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Query me direct string concatenation avoid karo; placeholders use karo for safety.</div>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — sqlite3 basics</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre><span class="keyword">import</span> sqlite3
-
-conn = sqlite3.connect(<span class="string">"app.db"</span>)
-cur = conn.cursor()
-cur.execute(<span class="string">"CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT)"</span>)
-cur.execute(<span class="string">"INSERT INTO users(name) VALUES (?)"</span>, (<span class="string">"Yuvraj"</span>,))
-conn.commit()
-conn.close()</pre></div>
-        </div>
-        <div class="callout callout-note"><strong>Example explained:</strong> Table is created safely and data inserted using placeholder binding.</div>
+    <div class="quick-ref">
+      <div class="qr-title">📋 The Zen of Python (import this)</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>#</th><th>Principle</th><th>Industry Application</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Beautiful is better than ugly</td><td>Clean code, consistent style</td></tr>
+            <tr><td>2</td><td>Explicit is better than implicit</td><td>Clear variable names, type hints</td></tr>
+            <tr><td>3</td><td>Simple is better than complex</td><td>KISS principle in architecture</td></tr>
+            <tr><td>4</td><td>Flat is better than nested</td><td>Avoid deep nesting, early returns</td></tr>
+            <tr><td>5</td><td>Readability counts</td><td>Code is read 10× more than written</td></tr>
+            <tr><td>6</td><td>Errors should never pass silently</td><td>Proper exception handling</td></tr>
+            <tr><td>7</td><td>There should be one obvious way</td><td>Follow conventions, PEP 8</td></tr>
+            <tr><td>8</td><td>Now is better than never</td><td>Ship MVP, iterate later</td></tr>
+            <tr><td>9</td><td>Namespaces are a honking great idea</td><td>Modules, packages, classes</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
-    <div class="module-section" id="m8-6">
-      <div class="module-header"><div class="module-number">8.6</div><h2 class="module-title">Web Framework Landscape — Flask vs Django Fast Overview</h2></div>
-      <div class="concept-block">
-        <h3 class="concept-heading">Choosing a framework</h3>
-        <p class="explain-en">
-          Flask is lightweight and flexible; Django is full-featured and opinionated for larger applications.
-          Choose based on team needs: speed of prototyping vs built-in batteries (ORM, auth, admin), and long-term maintainability.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Flask minimal framework hai, jisme aap jo chaho add kar sakte ho. Django heavy but complete ecosystem deta hai (auth, ORM, admin). Choice aapke project scope aur team needs pe depend karti hai.</div>
-      </div>
-      <div class="concept-block">
-        <h3 class="concept-heading">Minimal Flask route</h3>
-        <p class="explain-en">A simple route demonstrates request-response server behavior.</p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Route define karke browser request ka response return kar sakte ho.</div>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — flask hello route</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre><span class="keyword">from</span> flask <span class="keyword">import</span> Flask
-
-app = Flask(__name__)
-
-@app.route(<span class="string">"/"</span>)
-<span class="keyword">def</span> <span class="function">home</span>():
-    <span class="keyword">return</span> <span class="string">"Hello from Flask"</span></pre></div>
-        </div>
-        <div class="callout callout-note"><strong>Example explained:</strong> Visiting root URL triggers <code>home()</code> and returns plain text response.</div>
+    <div class="quick-ref">
+      <div class="qr-title">📋 Production Readiness Checklist</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Category</th><th>Item</th><th>Tool/Standard</th></tr></thead>
+          <tbody>
+            <tr><td>Code Quality</td><td>Linting passes</td><td><code>ruff check .</code></td></tr>
+            <tr><td>Code Quality</td><td>Formatting consistent</td><td><code>black --check .</code></td></tr>
+            <tr><td>Code Quality</td><td>Type hints validated</td><td><code>mypy src/</code></td></tr>
+            <tr><td>Testing</td><td>Unit tests pass</td><td><code>pytest</code></td></tr>
+            <tr><td>Testing</td><td>Coverage &gt; 80%</td><td><code>pytest --cov</code></td></tr>
+            <tr><td>Security</td><td>No hardcoded secrets</td><td><code>.env</code> + <code>.gitignore</code></td></tr>
+            <tr><td>Security</td><td>Dependencies audited</td><td><code>pip-audit</code></td></tr>
+            <tr><td>Docs</td><td>README.md complete</td><td>Install, usage, API docs</td></tr>
+            <tr><td>Docs</td><td>Docstrings on public API</td><td>Google/NumPy style</td></tr>
+            <tr><td>Packaging</td><td>pyproject.toml valid</td><td>PEP 621 compliant</td></tr>
+            <tr><td>CI/CD</td><td>GitHub Actions configured</td><td>Test + lint on every PR</td></tr>
+            <tr><td>Versioning</td><td>Semantic versioning</td><td>MAJOR.MINOR.PATCH</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
-    <div class="module-section" id="m8-7">
-      <div class="module-header"><div class="module-number">8.7</div><h2 class="module-title">Project Structure, Tooling, and Code Quality Workflow</h2></div>
-      <div class="concept-block">
-        <h3 class="concept-heading">Why project structure matters</h3>
-        <p class="explain-en">
-          A clean folder layout improves collaboration, readability, and deployment reliability.
-          It reduces “tribal knowledge” dependency by making code discoverable through convention.
-          Industry projects optimize for long-term maintainability rather than short-term speed.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Project structure ka goal hai discoverability: naya developer jaldi samajh sake files kahan hain. Long-term maintainability industry me top priority hoti hai.</div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 pip Commands — Complete Reference</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Command</th><th>Purpose</th></tr></thead>
+          <tbody>
+            <tr><td><code>pip install package</code></td><td>Install latest version</td></tr>
+            <tr><td><code>pip install package==1.0</code></td><td>Install specific version</td></tr>
+            <tr><td><code>pip install -r requirements.txt</code></td><td>Install from file</td></tr>
+            <tr><td><code>pip install -e .</code></td><td>Install in editable/dev mode</td></tr>
+            <tr><td><code>pip uninstall package</code></td><td>Remove package</td></tr>
+            <tr><td><code>pip list</code></td><td>Show installed packages</td></tr>
+            <tr><td><code>pip freeze</code></td><td>Output installed in requirements format</td></tr>
+            <tr><td><code>pip show package</code></td><td>Package info &amp; location</td></tr>
+            <tr><td><code>pip install --upgrade package</code></td><td>Upgrade to latest</td></tr>
+            <tr><td><code>pip cache purge</code></td><td>Clear download cache</td></tr>
+          </tbody>
+        </table>
       </div>
-      <div class="concept-block">
-        <h3 class="concept-heading">Essential tooling stack</h3>
-        <p class="explain-en">Use formatter (Black), linter (Ruff/Flake8), tests (pytest), and pre-commit hooks for quality consistency.</p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Automation tools code quality maintain karte hain aur team standards consistent rakhte hain.</div>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-solid fa-terminal"></i> Quality workflow</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre>pip install black pytest ruff
-black .
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Virtual Environments — Tool Comparison</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Tool</th><th>Built-in?</th><th>Best for</th></tr></thead>
+          <tbody>
+            <tr><td><code>venv</code></td><td>✅ Yes</td><td>Simple projects</td></tr>
+            <tr><td><code>virtualenv</code></td><td>❌ pip</td><td>Faster venv alternative</td></tr>
+            <tr><td><code>conda</code></td><td>❌ Anaconda</td><td>Data science, non-Python deps</td></tr>
+            <tr><td><code>poetry</code></td><td>❌ pip</td><td>Full project management</td></tr>
+            <tr><td><code>pipenv</code></td><td>❌ pip</td><td>Pipfile-based workflow</td></tr>
+            <tr><td><code>uv</code></td><td>❌ pip</td><td>⚡ Ultra-fast Rust-based</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+    <div class="callout callout-tip"><strong>🏭 Industry insight:</strong> Every professional Python project should have: <code>pyproject.toml</code> for config, <code>.gitignore</code> for exclusions, <code>README.md</code> for docs, <code>tests/</code> for testing, and CI/CD (GitHub Actions) for automated testing on every push. Use <code>uv</code> or <code>poetry</code> for modern dependency management — they're faster and more reliable than raw pip. Always pin your dependencies in production.</div>
+
+    <div class="callout callout-warning"><strong>Security reminder:</strong> Never commit <code>.env</code> files, API keys, database passwords, or any credentials to version control. Use environment variables in production. Run <code>pip-audit</code> regularly to check for known vulnerabilities in your dependencies. Use <code>bandit</code> to scan your code for common security issues.</div>
+
+    <div class="concept-block">
+      <h3 class="concept-heading">Secure Python checklist (production baseline)</h3>
+      <p class="explain-en">Production Python security is mostly about discipline at boundaries: validate all external input, sanitize subprocess/database/file operations, protect secrets, and lock dependency risk. Treat security checks as standard CI gates, not optional tasks.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Production Python security ka core rule hai boundary discipline: external input validate karo, subprocess/database/file operations sanitize karo, secrets protect karo, aur dependencies secure rakho. Security checks ko CI gate ka mandatory part banao.</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Area</th><th>Rule</th><th>Practical implementation</th></tr></thead>
+          <tbody>
+            <tr><td>Input validation</td><td>Never trust user/API/file input directly</td><td>Schema validation with <code>pydantic</code> or custom validators</td></tr>
+            <tr><td>Secrets</td><td>No hardcoded credentials</td><td>Use env vars + secret managers + rotate keys</td></tr>
+            <tr><td>Dependencies</td><td>Audit third-party packages</td><td>Use <code>pip-audit</code>, pin versions, update regularly</td></tr>
+            <tr><td>Subprocess safety</td><td>Avoid command injection vectors</td><td>Use list args, avoid untrusted <code>shell=True</code></td></tr>
+            <tr><td>File safety</td><td>Prevent path traversal and unsafe writes</td><td>Resolve/normalize paths with <code>pathlib</code>, enforce allowed roots</td></tr>
+            <tr><td>Serialization</td><td>Avoid unsafe deserialization</td><td>Prefer JSON over pickle for untrusted data</td></tr>
+            <tr><td>Error handling</td><td>No sensitive data in logs</td><td>Mask tokens/passwords, structured sanitized logging</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="concept-block">
+      <h3 class="concept-heading">Release workflow (dev to production)</h3>
+      <p class="explain-en">A strong Python release process is repeatable: lint/type/test/security checks pass, lockfile is deterministic, and deployment artifacts are versioned. This reduces regressions and makes rollbacks predictable.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Reliable Python release process repeatable hota hai: lint/type/test/security checks pass, dependencies deterministic hoti hain, aur artifacts versioned hote hain. Isse regressions kam hote hain aur rollback easy hota hai.</div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">💻 Shell — Professional Python release pipeline</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+        <div class="code-body"><pre><span class="comment"># 1) Quality gates</span>
 ruff check .
-pytest</pre></div>
-        </div>
-        <div class="callout callout-note"><strong>Example explained:</strong> Format, lint, and test commands create a repeatable quality gate before commit.</div>
-      </div>
+ruff format --check .
+mypy src/
+pytest -q --maxfail=1 --disable-warnings
 
-      <div class="concept-block">
-        <h3 class="concept-heading">Packaging mindset: pyproject.toml and dependency pinning</h3>
-        <p class="explain-en">
-          Industry projects standardize configuration in <code>pyproject.toml</code> and pin dependencies so builds are reproducible.
-          Even if you don’t publish packages, the packaging mindset improves reliability for deployment and collaboration.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>pyproject.toml</code> modern Python projects ka standard config file hai. Dependencies pin karne se setup reproducible rehta hai aur “works on my machine” problems reduce hote hain.</div>
-        <div class="callout callout-note"><strong>Example explained:</strong> The goal is predictable environments across developer machines, CI, and production.</div>
+<span class="comment"># 2) Security gates</span>
+pip-audit
+bandit -r src/
+
+<span class="comment"># 3) Build artifact</span>
+python -m build
+
+<span class="comment"># 4) Smoke test install</span>
+pip install dist/*.whl
+python -c "import my_package; print('ok')"
+
+<span class="comment"># 5) Publish (if all gates green)</span>
+twine upload dist/*</pre></div>
       </div>
     </div>
 
-    <div class="module-section" id="m8-8">
-      <div class="module-header"><div class="module-number">8.8</div><h2 class="module-title">Industry Readiness Checklist & Next Roadmap</h2></div>
-      <div class="concept-block">
-        <h3 class="concept-heading">Professional readiness signals</h3>
-        <p class="explain-en">
-          You are industry-ready when you can build, test, debug, document, and deploy maintainable Python applications.
-          The real signal is reliability under change: you can modify features while keeping behavior stable through tests, typing, and observability.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Industry readiness ka real sign hai “change handle karna”: aap features change karo aur system stable rahe. Iske liye tests, typing, logs, aur clean structure zaruri hota hai.</div>
+    <div class="concept-block">
+      <h3 class="concept-heading">Project evaluation rubric (interview/client readiness)</h3>
+      <p class="explain-en">Before showing a Python project in interviews or client proposals, score it on objective engineering criteria: code quality, reliability, observability, security, and deployment readiness.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Interview ya client proposal se pehle Python project ko objective rubric se evaluate karo: code quality, reliability, observability, security, aur deployment readiness. Isse project professional level par present hota hai.</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Criterion</th><th>Strong signal</th><th>Weak signal</th></tr></thead>
+          <tbody>
+            <tr><td>Code quality</td><td>Lint/type checks clean, clear module boundaries</td><td>Inconsistent style, no static checks</td></tr>
+            <tr><td>Testing</td><td>Unit + integration coverage on critical paths</td><td>Only manual happy-path testing</td></tr>
+            <tr><td>Error resilience</td><td>Explicit exceptions, retries/timeouts where needed</td><td>Unhandled exceptions in runtime flows</td></tr>
+            <tr><td>Security</td><td>Secret hygiene + dependency audits + safe I/O</td><td>Hardcoded credentials, no dependency review</td></tr>
+            <tr><td>Observability</td><td>Structured logs + useful diagnostics</td><td>Print-debugging only</td></tr>
+            <tr><td>Deployment</td><td>Reproducible build + documented runbook</td><td>Ad-hoc local setup only</td></tr>
+          </tbody>
+        </table>
       </div>
-      <div class="concept-block">
-        <h3 class="concept-heading">Next learning roadmap</h3>
-        <p class="explain-en">After this handbook, choose a specialization path: backend APIs, data science, automation, or AI engineering.</p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Ab fundamentals complete hain, next step specialization hai — jisme aap projects banakar portfolio strong karo.</div>
-        <div class="hb-table-wrap">
-          <table class="hb-table">
-            <thead><tr><th>Track</th><th>Focus</th><th>Recommended next step</th></tr></thead>
-            <tbody>
-              <tr><td>Backend</td><td>APIs, auth, DB</td><td>Build Flask/Django CRUD project</td></tr>
-              <tr><td>Data Science</td><td>Pandas, ML basics</td><td>Analyze dataset + deploy notebook report</td></tr>
-              <tr><td>Automation</td><td>Scripting, bots</td><td>Create file/email automation tools</td></tr>
-              <tr><td>AI/LLM</td><td>Prompting, pipelines</td><td>Build small RAG or assistant workflow</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+    </div>
 
-      <div class="concept-block">
-        <h3 class="concept-heading">Security + performance basics (industry expectations)</h3>
-        <p class="explain-en">
-          Entry-level industry expectations include basic security hygiene (safe input handling, avoiding secret leaks, dependency awareness)
-          and performance hygiene (profiling before optimizing, choosing correct data structures).
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Industry me security aur performance ka basic mindset expected hota hai: secrets leak na ho, input safe ho, dependencies updated ho, aur optimize karne se pehle measure kiya jaye.</div>
-        <div class="hb-table-wrap">
-          <table class="hb-table">
-            <thead><tr><th>Area</th><th>Do</th><th>Avoid</th></tr></thead>
-            <tbody>
-              <tr><td>Secrets</td><td>Use env vars / .env (not committed)</td><td>Hardcoding API keys</td></tr>
-              <tr><td>Input</td><td>Validate + sanitize</td><td>Trusting raw user input</td></tr>
-              <tr><td>Dependencies</td><td>Pin + update periodically</td><td>Unbounded “latest” in prod</td></tr>
-              <tr><td>Performance</td><td>Profile first</td><td>Premature optimization</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="practice-box">
-        <div class="practice-title">🏁 Final Practice Capstone</div>
-        <ol>
-          <li>Create a mini production-ready Python app with config file, logging, and tests.</li>
-          <li>Apply type hints and enforce lint + format checks.</li>
-          <li>Persist data in SQLite and export reports as CSV/JSON.</li>
-          <li>Add robust exception handling and meaningful custom exceptions.</li>
-          <li>Document setup and usage clearly in README format.</li>
-        </ol>
-      </div>
+    <div class="practice-box">
+      <div class="practice-title">✏️ Practice Exercises — Part 8</div>
+      <ol>
+        <li>Use <code>pathlib</code> to recursively find all <code>.py</code> files in a directory and count total lines.</li>
+        <li>Build a birthday countdown: calculate days until a given date using <code>datetime</code>.</li>
+        <li>Use <code>subprocess</code> to run <code>git log</code> and parse the output in Python.</li>
+        <li>Create a proper <code>pyproject.toml</code> for a package with dependencies and scripts.</li>
+        <li>Set up a project with the src layout, tests directory, and <code>.gitignore</code>.</li>
+        <li>Configure <code>ruff</code> and <code>black</code> to auto-format your code on save.</li>
+        <li>Build a CLI tool using <code>Click</code> or <code>argparse</code> that processes files.</li>
+      </ol>
     </div>
 
     <div class="handbook-nav">
       <a href="part7.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Part 7: Advanced Python</div></div></a>
-      <a href="index.html" class="nav-btn next"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Back to Handbook Index →</div></div><i class="fa-solid fa-arrow-right"></i></a>
+      <a href="syllabus.html" class="nav-btn next"><div><div class="nav-btn-label">🎓 Complete!</div><div class="nav-btn-title">Back to Syllabus →</div></div><i class="fa-solid fa-arrow-right"></i></a>
     </div>
-  </div>
 
+  </div>
   <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
   <script src="../../../js/main.js"></script>
   <script>
     (() => {
-      document.querySelectorAll('.code-block').forEach((block) => {
-        const pre = block.querySelector('.code-body pre');
-        const header = block.querySelector('.code-header');
-        if (!pre || !header) return;
-        let actions = header.querySelector('.code-actions');
-        if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); }
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'code-copy-btn';
-        btn.textContent = 'Copy';
-        btn.addEventListener('click', async () => {
-          try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; }
-          catch { btn.textContent = 'Failed'; }
-          finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); }
-        });
-        actions.prepend(btn);
-      });
-      const fill = document.querySelector('.hb-progress-fill');
-      const label = document.querySelector('.hb-progress-label');
-      if (fill && label) {
-        const update = () => {
-          const h = document.documentElement;
-          const denom = (h.scrollHeight - h.clientHeight) || 1;
-          const pct = Math.max(0, Math.min(1, h.scrollTop / denom));
-          fill.style.width = (pct * 100).toFixed(0) + '%';
-          label.textContent = (pct * 100).toFixed(0) + '%';
-        };
-        document.addEventListener('scroll', update, { passive: true });
-        update();
-      }
+      document.querySelectorAll('.code-block').forEach((block) => { const pre = block.querySelector('.code-body pre'), header = block.querySelector('.code-header'); if (!pre || !header) return; let actions = header.querySelector('.code-actions'); if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); } const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'code-copy-btn'; btn.textContent = 'Copy'; btn.addEventListener('click', async () => { try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; } catch { btn.textContent = 'Failed'; } finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); } }); actions.prepend(btn); });
+      const fill = document.querySelector('.hb-progress-fill'), label = document.querySelector('.hb-progress-label');
+      if (fill && label) { const update = () => { const h = document.documentElement, d = (h.scrollHeight - h.clientHeight) || 1, p = Math.max(0, Math.min(1, h.scrollTop / d)); fill.style.width = (p*100).toFixed(0)+'%'; label.textContent = (p*100).toFixed(0)+'%'; }; document.addEventListener('scroll', update, { passive: true }); update(); }
     })();
   </script>
 </body>
 </html>
+
+

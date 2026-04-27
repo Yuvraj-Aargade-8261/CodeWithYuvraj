@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Part 6: STL — Containers, Iterators & Algorithms — C++ Programming Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 6: vector, map, set, unordered containers, iterators, STL algorithms, lambdas, and ranges in modern C++.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/handbook.css">
+</head>
+<body class="handbook-wrapper">
+  <nav class="navbar"><div class="container"><a href="../../../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../../../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
+
+  <div class="handbook-page">
+    <div class="hb-topbar"><div class="hb-topbar-inner"><div class="hb-breadcrumbs"><a href="index.html">C++ Programming Handbook</a><span class="hb-muted">/</span><span>Part 6</span><span class="hb-muted">·</span><a href="#m6-1">6.1</a> <a href="#m6-2">6.2</a> <a href="#m6-3">6.3</a> <a href="#m6-4">6.4</a> <a href="#m6-5">6.5</a> <a href="#m6-6">6.6</a> <a href="#m6-7">6.7</a></div><div class="hb-progress" aria-label="Reading progress"><div class="hb-progress-track" role="progressbar"><div class="hb-progress-fill"></div></div><div class="hb-progress-label">0%</div></div></div></div>
+
+    <div class="chapter-header" data-chapter-num="06">
+      <div class="chapter-part-label">📖 Part 6 — STL: Containers, Iterators & Algorithms</div>
+      <h1 class="chapter-title">The Standard <span class="gradient-text">Library</span></h1>
+      <p class="chapter-subtitle">vector, map, set, algorithms, iterators, lambdas, and ranges — the tools every C++ developer uses daily. Don't reinvent what the STL already provides.</p>
+      <div class="chapter-meta"><span>📄 Modules 6.1 – 6.7</span><span>⏱️ 90–120 min read</span><span>💻 70+ Examples</span></div>
+    </div>
+
+    <div class="hb-mini-toc"><div class="hb-mini-title">📍 Part 6 Modules</div><div class="hb-mini-links"><a href="#m6-1">6.1 Sequence</a><a href="#m6-2">6.2 Associative</a><a href="#m6-3">6.3 Unordered</a><a href="#m6-4">6.4 Iterators</a><a href="#m6-5">6.5 Algorithms</a><a href="#m6-6">6.6 Lambdas</a><a href="#m6-7">6.7 Ranges</a></div></div>
+
+    <!-- MODULE 6.1 -->
+    <div class="module-section" id="m6-1">
+      <div class="module-header"><div class="module-number">6.1</div><h2 class="module-title">Sequence containers — vector, array, deque, list</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">The containers you'll use most</h3>
+        <p class="explain-en"><code>std::vector</code> is the default container — dynamic array, contiguous memory, cache-friendly. Use <code>std::array</code> for fixed-size. <code>std::deque</code> for front+back insertion. <code>std::list</code> for frequent mid-insertions (rare in practice).</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>std::vector</code> default container hai — dynamic array, contiguous memory, cache-friendly. Fixed-size ke liye <code>std::array</code>. Front+back insertion ke liye <code>std::deque</code>. Frequent mid-insertions ke liye <code>std::list</code> (practice me rare).</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — std::vector (the workhorse)</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="preprocessor">#include</span> <span class="string">&lt;vector&gt;</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;algorithm&gt;</span>
+
+std::vector&lt;<span class="type">int</span>&gt; v = {<span class="number">5</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">2</span>};
+
+v.push_back(<span class="number">6</span>);        <span class="comment">// Add to end — O(1) amortized</span>
+v.emplace_back(<span class="number">7</span>);     <span class="comment">// Construct in-place (prefer this!)</span>
+v.pop_back();          <span class="comment">// Remove last — O(1)</span>
+v[<span class="number">0</span>];                  <span class="comment">// Access — O(1), no bounds check</span>
+v.at(<span class="number">0</span>);               <span class="comment">// Access — O(1), throws if out of range</span>
+v.size();              <span class="comment">// Number of elements</span>
+v.capacity();          <span class="comment">// Allocated space</span>
+v.reserve(<span class="number">100</span>);        <span class="comment">// Pre-allocate (avoid reallocations!)</span>
+
+<span class="comment">// Iterate</span>
+<span class="keyword">for</span> (<span class="keyword">const auto</span>&amp; x : v) std::cout &lt;&lt; x &lt;&lt; <span class="string">" "</span>;
+
+<span class="comment">// Sort</span>
+std::sort(v.begin(), v.end());
+
+<span class="comment">// Erase-remove idiom (C++17 with std::erase)</span>
+std::erase(v, <span class="number">3</span>);     <span class="comment">// Remove all 3s — C++20</span>
+
+<span class="comment">// std::array — fixed size, stack-allocated</span>
+std::array&lt;<span class="type">int</span>, <span class="number">5</span>&gt; a = {<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>};
+<span class="keyword">static_assert</span>(a.size() == <span class="number">5</span>);  <span class="comment">// Compile-time!</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Container</th><th>Access</th><th>Insert back</th><th>Insert front</th><th>Insert mid</th><th>Memory</th></tr></thead>
+            <tbody>
+              <tr><td><code>vector</code></td><td>O(1)</td><td>O(1)*</td><td>O(n)</td><td>O(n)</td><td>Contiguous</td></tr>
+              <tr><td><code>array</code></td><td>O(1)</td><td>—</td><td>—</td><td>—</td><td>Contiguous, stack</td></tr>
+              <tr><td><code>deque</code></td><td>O(1)</td><td>O(1)*</td><td>O(1)*</td><td>O(n)</td><td>Segmented</td></tr>
+              <tr><td><code>list</code></td><td>O(n)</td><td>O(1)</td><td>O(1)</td><td>O(1)</td><td>Nodes (heap)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>Default to <code>std::vector</code>.</strong> It's the fastest in practice due to cache locality. Use other containers only when you have a specific performance need (measured, not assumed).</div>
+      </div>
+    </div>
+
+    <!-- MODULE 6.2 -->
+    <div class="module-section" id="m6-2">
+      <div class="module-header"><div class="module-number">6.2</div><h2 class="module-title">Associative containers — map, set, multimap</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Sorted key-value and key-only containers</h3>
+        <p class="explain-en"><code>std::map</code> stores sorted key-value pairs (red-black tree). <code>std::set</code> stores unique sorted keys. Both guarantee O(log n) lookup. Use <code>multi</code> variants for duplicate keys.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>std::map</code> sorted key-value pairs store karta hai (red-black tree). <code>std::set</code> unique sorted keys store karta hai. Dono O(log n) lookup guarantee karte hain. Duplicate keys ke liye <code>multi</code> variants use karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — std::map & std::set</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="preprocessor">#include</span> <span class="string">&lt;map&gt;</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;set&gt;</span>
+
+<span class="comment">// std::map — sorted key-value pairs</span>
+std::map&lt;std::string, <span class="type">int</span>&gt; ages;
+ages[<span class="string">"Alice"</span>] = <span class="number">25</span>;
+ages[<span class="string">"Bob"</span>] = <span class="number">30</span>;
+ages.insert({<span class="string">"Charlie"</span>, <span class="number">35</span>});
+ages.emplace(<span class="string">"Diana"</span>, <span class="number">28</span>);
+
+<span class="comment">// Lookup</span>
+<span class="keyword">if</span> (<span class="keyword">auto</span> it = ages.find(<span class="string">"Alice"</span>); it != ages.end()) {
+    std::cout &lt;&lt; it-&gt;second &lt;&lt; <span class="string">"\n"</span>;  <span class="comment">// 25</span>
+}
+
+<span class="comment">// Iterate — always sorted by key!</span>
+<span class="keyword">for</span> (<span class="keyword">const auto</span>&amp; [name, age] : ages) {
+    std::cout &lt;&lt; name &lt;&lt; <span class="string">": "</span> &lt;&lt; age &lt;&lt; <span class="string">"\n"</span>;
+}
+
+<span class="comment">// std::set — unique sorted values</span>
+std::set&lt;<span class="type">int</span>&gt; s = {<span class="number">3</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">1</span>, <span class="number">5</span>};  <span class="comment">// {1, 3, 4, 5} — no dups!</span>
+s.contains(<span class="number">3</span>);   <span class="comment">// true (C++20)</span>
+s.count(<span class="number">3</span>);      <span class="comment">// 1 (pre-C++20 way)</span></pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 6.3 -->
+    <div class="module-section" id="m6-3">
+      <div class="module-header"><div class="module-number">6.3</div><h2 class="module-title">Unordered containers — hash maps & sets</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">O(1) average lookup with hash tables</h3>
+        <p class="explain-en"><code>unordered_map</code> and <code>unordered_set</code> use hash tables for O(1) average lookup. Faster than sorted containers for most use cases. No ordering guarantee.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>unordered_map</code> aur <code>unordered_set</code> hash tables use karte hain O(1) average lookup ke liye. Sorted containers se zyada fast hain. Ordering ki koi guarantee nahi.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — unordered containers</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="preprocessor">#include</span> <span class="string">&lt;unordered_map&gt;</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;unordered_set&gt;</span>
+
+std::unordered_map&lt;std::string, <span class="type">int</span>&gt; freq;
+std::string text = <span class="string">"hello world hello"</span>;
+std::istringstream iss(text);
+std::string word;
+<span class="keyword">while</span> (iss &gt;&gt; word) freq[word]++;
+<span class="comment">// freq = {"hello": 2, "world": 1}</span>
+
+<span class="comment">// Performance comparison</span>
+<span class="comment">//   map lookup:           O(log n)</span>
+<span class="comment">//   unordered_map lookup: O(1) average, O(n) worst</span>
+
+std::unordered_set&lt;<span class="type">int</span>&gt; seen;
+seen.insert(<span class="number">42</span>);
+seen.contains(<span class="number">42</span>);  <span class="comment">// true — O(1)</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Container</th><th>Ordered?</th><th>Lookup</th><th>Insert</th><th>Underlying</th></tr></thead>
+            <tbody>
+              <tr><td><code>map</code></td><td>✅ Sorted</td><td>O(log n)</td><td>O(log n)</td><td>Red-black tree</td></tr>
+              <tr><td><code>unordered_map</code></td><td>❌ No</td><td>O(1) avg</td><td>O(1) avg</td><td>Hash table</td></tr>
+              <tr><td><code>set</code></td><td>✅ Sorted</td><td>O(log n)</td><td>O(log n)</td><td>Red-black tree</td></tr>
+              <tr><td><code>unordered_set</code></td><td>❌ No</td><td>O(1) avg</td><td>O(1) avg</td><td>Hash table</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 6.4 -->
+    <div class="module-section" id="m6-4">
+      <div class="module-header"><div class="module-number">6.4</div><h2 class="module-title">Iterators — the glue between containers and algorithms</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Generalized pointers</h3>
+        <p class="explain-en"><strong>Iterators</strong> abstract the concept of "position in a container." STL algorithms work with iterators, not containers directly — so one <code>std::sort</code> works for vector, deque, array, etc. Iterator categories determine what operations are allowed.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Iterators "container me position" ka concept abstract karte hain. STL algorithms iterators ke saath kaam karte hain, directly containers ke saath nahi — isliye ek <code>std::sort</code> vector, deque, array sabke liye kaam karta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — Iterators</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre>std::vector&lt;<span class="type">int</span>&gt; v = {<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>, <span class="number">50</span>};
+
+<span class="comment">// Iterator types</span>
+<span class="keyword">auto</span> it = v.begin();    <span class="comment">// Points to first element</span>
+<span class="keyword">auto</span> end = v.end();     <span class="comment">// Points PAST last element</span>
+
+<span class="comment">// Traverse</span>
+<span class="keyword">for</span> (<span class="keyword">auto</span> it = v.begin(); it != v.end(); ++it) {
+    std::cout &lt;&lt; *it &lt;&lt; <span class="string">" "</span>;  <span class="comment">// Dereference like pointer</span>
+}
+
+<span class="comment">// Reverse iterators</span>
+<span class="keyword">for</span> (<span class="keyword">auto</span> it = v.rbegin(); it != v.rend(); ++it) {
+    std::cout &lt;&lt; *it &lt;&lt; <span class="string">" "</span>;  <span class="comment">// 50 40 30 20 10</span>
+}
+
+<span class="comment">// Const iterators — read-only</span>
+<span class="keyword">for</span> (<span class="keyword">auto</span> it = v.cbegin(); it != v.cend(); ++it) {
+    <span class="comment">// *it = 99;  // ❌ ERROR — const!</span>
+}
+
+<span class="comment">// Iterator arithmetic (random access only)</span>
+<span class="keyword">auto</span> mid = v.begin() + v.size() / <span class="number">2</span>;  <span class="comment">// Middle element</span>
+<span class="type">int</span> dist = std::distance(v.begin(), mid);  <span class="comment">// 2</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Category</th><th>Operations</th><th>Containers</th></tr></thead>
+            <tbody>
+              <tr><td>Input</td><td><code>++, *, ==</code></td><td>istream_iterator</td></tr>
+              <tr><td>Forward</td><td>Input + multi-pass</td><td>forward_list, unordered_*</td></tr>
+              <tr><td>Bidirectional</td><td>Forward + <code>--</code></td><td>list, map, set</td></tr>
+              <tr><td>Random Access</td><td>Bidirectional + <code>+n, [], &lt;</code></td><td>vector, deque, array</td></tr>
+              <tr><td>Contiguous (C++20)</td><td>Random + guaranteed memory</td><td>vector, array, string</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 6.5 -->
+    <div class="module-section" id="m6-5">
+      <div class="module-header"><div class="module-number">6.5</div><h2 class="module-title">STL Algorithms — sort, find, transform, accumulate</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Don't write loops — use algorithms</h3>
+        <p class="explain-en">The <code>&lt;algorithm&gt;</code> header has 100+ ready-made algorithms. They work with any container via iterators. Prefer algorithms over raw loops — they're optimized, tested, and express intent clearly.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>&lt;algorithm&gt;</code> header me 100+ ready-made algorithms hain. Ye kisi bhi container ke saath iterators se kaam karte hain. Raw loops ke bajay algorithms prefer karo — optimized, tested, aur intent clearly express karte hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — Essential algorithms</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="preprocessor">#include</span> <span class="string">&lt;algorithm&gt;</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;numeric&gt;</span>
+
+std::vector&lt;<span class="type">int</span>&gt; v = {<span class="number">5</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">2</span>};
+
+<span class="comment">// Sorting</span>
+std::sort(v.begin(), v.end());            <span class="comment">// {1,2,3,4,5}</span>
+std::sort(v.begin(), v.end(), std::greater&lt;&gt;()); <span class="comment">// {5,4,3,2,1}</span>
+
+<span class="comment">// Searching</span>
+<span class="keyword">auto</span> it = std::find(v.begin(), v.end(), <span class="number">3</span>);
+<span class="keyword">bool</span> found = std::binary_search(v.begin(), v.end(), <span class="number">3</span>); <span class="comment">// O(log n)</span>
+
+<span class="comment">// Counting & checking</span>
+<span class="type">int</span> cnt = std::count_if(v.begin(), v.end(), [](<span class="type">int</span> x){ <span class="keyword">return</span> x &gt; <span class="number">3</span>; });
+<span class="type">bool</span> all = std::all_of(v.begin(), v.end(), [](<span class="type">int</span> x){ <span class="keyword">return</span> x &gt; <span class="number">0</span>; });
+
+<span class="comment">// Transform — apply function to each element</span>
+std::vector&lt;<span class="type">int</span>&gt; doubled(v.size());
+std::transform(v.begin(), v.end(), doubled.begin(), [](<span class="type">int</span> x){ <span class="keyword">return</span> x * <span class="number">2</span>; });
+
+<span class="comment">// Accumulate (in &lt;numeric&gt;)</span>
+<span class="type">int</span> sum = std::accumulate(v.begin(), v.end(), <span class="number">0</span>);
+
+<span class="comment">// Min/Max</span>
+<span class="keyword">auto</span> [mn, mx] = std::minmax_element(v.begin(), v.end());
+
+<span class="comment">// Remove duplicates (must be sorted first)</span>
+<span class="keyword">auto</span> last = std::unique(v.begin(), v.end());
+v.erase(last, v.end());</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 6.6 -->
+    <div class="module-section" id="m6-6">
+      <div class="module-header"><div class="module-number">6.6</div><h2 class="module-title">Lambda expressions — closures, captures, generic</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Inline function objects</h3>
+        <p class="explain-en">A <strong>lambda</strong> is an anonymous function you define inline. It can <strong>capture</strong> variables from the enclosing scope. Lambdas are the glue between algorithms and custom logic. Generic lambdas (C++14) use <code>auto</code> parameters.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Lambda ek anonymous function hai jo inline define hota hai. Ye enclosing scope se variables <strong>capture</strong> kar sakta hai. Lambdas algorithms aur custom logic ke beech ka glue hain. Generic lambdas (C++14) me <code>auto</code> parameters use hote hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — Lambda expressions</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Basic lambda</span>
+<span class="keyword">auto</span> greet = []() { std::cout &lt;&lt; <span class="string">"Hello!\n"</span>; };
+<span class="function">greet</span>();
+
+<span class="comment">// With parameters and return</span>
+<span class="keyword">auto</span> add = [](<span class="type">int</span> a, <span class="type">int</span> b) -&gt; <span class="type">int</span> { <span class="keyword">return</span> a + b; };
+<span class="function">add</span>(<span class="number">3</span>, <span class="number">4</span>);  <span class="comment">// 7</span>
+
+<span class="comment">// Capture modes</span>
+<span class="type">int</span> x = <span class="number">10</span>, y = <span class="number">20</span>;
+<span class="keyword">auto</span> byVal  = [x]()  { <span class="keyword">return</span> x; };       <span class="comment">// Copy of x</span>
+<span class="keyword">auto</span> byRef  = [&amp;x]() { x++; };           <span class="comment">// Reference to x</span>
+<span class="keyword">auto</span> allVal = [=]()  { <span class="keyword">return</span> x + y; };  <span class="comment">// Copy all</span>
+<span class="keyword">auto</span> allRef = [&amp;]()  { x++; y++; };      <span class="comment">// Reference all</span>
+<span class="keyword">auto</span> mixed  = [x, &amp;y]() { y += x; };    <span class="comment">// Mix</span>
+
+<span class="comment">// Mutable lambda — modify captured copies</span>
+<span class="keyword">auto</span> counter = [n = <span class="number">0</span>]() <span class="keyword">mutable</span> { <span class="keyword">return</span> ++n; };
+counter();  <span class="comment">// 1</span>
+counter();  <span class="comment">// 2</span>
+
+<span class="comment">// Generic lambda (C++14) — auto parameters</span>
+<span class="keyword">auto</span> print = [](<span class="keyword">const auto</span>&amp; x) { std::cout &lt;&lt; x &lt;&lt; <span class="string">"\n"</span>; };
+<span class="function">print</span>(<span class="number">42</span>);
+<span class="function">print</span>(<span class="string">"Hello"</span>);
+
+<span class="comment">// Lambda with algorithms</span>
+std::vector&lt;<span class="type">int</span>&gt; v = {<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>};
+std::sort(v.begin(), v.end(), [](<span class="type">int</span> a, <span class="type">int</span> b) {
+    <span class="keyword">return</span> a &gt; b;  <span class="comment">// Sort descending</span>
+});</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Capture</th><th>Syntax</th><th>Effect</th></tr></thead>
+            <tbody>
+              <tr><td>Nothing</td><td><code>[]</code></td><td>No access to outer scope</td></tr>
+              <tr><td>By value</td><td><code>[x]</code> or <code>[=]</code></td><td>Copy at lambda creation</td></tr>
+              <tr><td>By reference</td><td><code>[&amp;x]</code> or <code>[&amp;]</code></td><td>Reference — can modify</td></tr>
+              <tr><td>Mixed</td><td><code>[x, &amp;y]</code></td><td>x by value, y by reference</td></tr>
+              <tr><td>Init capture</td><td><code>[n = 0]</code></td><td>Create new variable (C++14)</td></tr>
+              <tr><td>Move capture</td><td><code>[p = std::move(ptr)]</code></td><td>Move into lambda (C++14)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 6.7 -->
+    <div class="module-section" id="m6-7">
+      <div class="module-header"><div class="module-number">6.7</div><h2 class="module-title">Ranges & views (C++20) — composable pipelines</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">The future of STL algorithms</h3>
+        <p class="explain-en"><strong>Ranges</strong> (C++20) let you chain transformations with the <code>|</code> pipe operator. Views are lazy — they don't allocate memory. This replaces verbose iterator pairs with clean, readable pipelines.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Ranges</strong> (C++20) <code>|</code> pipe operator se transformations chain kar sakte ho. Views lazy hain — memory allocate nahi karte. Verbose iterator pairs ki jagah clean, readable pipelines aate hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — Ranges (C++20)</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="preprocessor">#include</span> <span class="string">&lt;ranges&gt;</span>
+
+std::vector&lt;<span class="type">int</span>&gt; nums = {<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">10</span>};
+
+<span class="comment">// Pipeline: filter evens → square → take 3</span>
+<span class="keyword">auto</span> result = nums
+    | std::views::filter([](<span class="type">int</span> n) { <span class="keyword">return</span> n % <span class="number">2</span> == <span class="number">0</span>; })
+    | std::views::transform([](<span class="type">int</span> n) { <span class="keyword">return</span> n * n; })
+    | std::views::take(<span class="number">3</span>);
+
+<span class="keyword">for</span> (<span class="type">int</span> x : result) std::cout &lt;&lt; x &lt;&lt; <span class="string">" "</span>;
+<span class="comment">// Output: 4 16 36</span>
+
+<span class="comment">// Ranges algorithms — no begin()/end() needed!</span>
+std::ranges::sort(nums);
+std::ranges::reverse(nums);
+<span class="keyword">auto</span> it = std::ranges::find(nums, <span class="number">5</span>);
+
+<span class="comment">// Useful views</span>
+std::views::iota(<span class="number">1</span>, <span class="number">11</span>);    <span class="comment">// {1,2,...,10} — lazy range</span>
+std::views::reverse(nums);  <span class="comment">// Reversed view — no copy!</span>
+std::views::drop(nums, <span class="number">3</span>);  <span class="comment">// Skip first 3</span></pre></div>
+        </div>
+        <div class="callout callout-tip"><strong>Ranges vs iterator pairs:</strong> <code>std::ranges::sort(v)</code> replaces <code>std::sort(v.begin(), v.end())</code>. Cleaner, safer (no mismatched iterators), and composable with views.</div>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Container Selection Cheat Sheet</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Need</th><th>Container</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td>Dynamic array (default)</td><td><code>std::vector</code></td><td>Cache-friendly, fastest</td></tr>
+            <tr><td>Fixed-size array</td><td><code>std::array</code></td><td>Stack-allocated, no overhead</td></tr>
+            <tr><td>Key-value, sorted</td><td><code>std::map</code></td><td>Ordered iteration</td></tr>
+            <tr><td>Key-value, fast</td><td><code>std::unordered_map</code></td><td>O(1) lookup</td></tr>
+            <tr><td>Unique values, sorted</td><td><code>std::set</code></td><td>Auto dedup + order</td></tr>
+            <tr><td>Unique values, fast</td><td><code>std::unordered_set</code></td><td>O(1) contains</td></tr>
+            <tr><td>FIFO queue</td><td><code>std::queue</code></td><td>Push back, pop front</td></tr>
+            <tr><td>LIFO stack</td><td><code>std::stack</code></td><td>Push/pop top</td></tr>
+            <tr><td>Priority queue</td><td><code>std::priority_queue</code></td><td>Heap-based max/min</td></tr>
+            <tr><td>String</td><td><code>std::string</code></td><td>Dynamic char array + methods</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Essential Algorithms Quick Reference</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Algorithm</th><th>Header</th><th>What it does</th><th>Complexity</th></tr></thead>
+          <tbody>
+            <tr><td><code>sort</code></td><td><code>&lt;algorithm&gt;</code></td><td>Sort a range</td><td>O(n log n)</td></tr>
+            <tr><td><code>find</code></td><td><code>&lt;algorithm&gt;</code></td><td>Find first match</td><td>O(n)</td></tr>
+            <tr><td><code>binary_search</code></td><td><code>&lt;algorithm&gt;</code></td><td>Check if exists (sorted)</td><td>O(log n)</td></tr>
+            <tr><td><code>count_if</code></td><td><code>&lt;algorithm&gt;</code></td><td>Count matching elements</td><td>O(n)</td></tr>
+            <tr><td><code>transform</code></td><td><code>&lt;algorithm&gt;</code></td><td>Apply function to each</td><td>O(n)</td></tr>
+            <tr><td><code>accumulate</code></td><td><code>&lt;numeric&gt;</code></td><td>Reduce to single value</td><td>O(n)</td></tr>
+            <tr><td><code>for_each</code></td><td><code>&lt;algorithm&gt;</code></td><td>Apply function (no output)</td><td>O(n)</td></tr>
+            <tr><td><code>unique</code></td><td><code>&lt;algorithm&gt;</code></td><td>Remove consecutive dups</td><td>O(n)</td></tr>
+            <tr><td><code>lower_bound</code></td><td><code>&lt;algorithm&gt;</code></td><td>First ≥ value (sorted)</td><td>O(log n)</td></tr>
+            <tr><td><code>nth_element</code></td><td><code>&lt;algorithm&gt;</code></td><td>Partial sort (nth in place)</td><td>O(n) avg</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 std::string — Essential Methods</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Method</th><th>What it does</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><code>size()</code> / <code>length()</code></td><td>Number of characters</td><td><code>s.size()</code></td></tr>
+            <tr><td><code>empty()</code></td><td>True if no characters</td><td><code>if (s.empty())</code></td></tr>
+            <tr><td><code>find(str)</code></td><td>Find substring position</td><td><code>s.find("hello")</code></td></tr>
+            <tr><td><code>substr(pos, len)</code></td><td>Extract substring</td><td><code>s.substr(0, 5)</code></td></tr>
+            <tr><td><code>append(str)</code> / <code>+=</code></td><td>Concatenate</td><td><code>s += " world"</code></td></tr>
+            <tr><td><code>compare(str)</code></td><td>Lexicographic compare</td><td><code>s.compare("abc")</code></td></tr>
+            <tr><td><code>starts_with()</code> (C++20)</td><td>Check prefix</td><td><code>s.starts_with("he")</code></td></tr>
+            <tr><td><code>ends_with()</code> (C++20)</td><td>Check suffix</td><td><code>s.ends_with("lo")</code></td></tr>
+            <tr><td><code>contains()</code> (C++23)</td><td>Check substring exists</td><td><code>s.contains("ell")</code></td></tr>
+            <tr><td><code>c_str()</code></td><td>Get C-style null-terminated</td><td><code>fopen(s.c_str(), "r")</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Modern Utility Types — optional, variant, any, tuple</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Type</th><th>Header</th><th>Purpose</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><code>std::optional&lt;T&gt;</code></td><td><code>&lt;optional&gt;</code></td><td>Nullable value (replaces pointers)</td><td><code>optional&lt;int&gt; age = 25;</code></td></tr>
+            <tr><td><code>std::variant&lt;Ts...&gt;</code></td><td><code>&lt;variant&gt;</code></td><td>Type-safe union</td><td><code>variant&lt;int,string&gt; v = 42;</code></td></tr>
+            <tr><td><code>std::any</code></td><td><code>&lt;any&gt;</code></td><td>Type-erased container</td><td><code>any a = 42; any_cast&lt;int&gt;(a);</code></td></tr>
+            <tr><td><code>std::tuple&lt;Ts...&gt;</code></td><td><code>&lt;tuple&gt;</code></td><td>Heterogeneous fixed-size</td><td><code>tuple&lt;int,string&gt; t{1,"hi"};</code></td></tr>
+            <tr><td><code>std::pair&lt;T,U&gt;</code></td><td><code>&lt;utility&gt;</code></td><td>Two-element tuple</td><td><code>pair p{1, "hello"};</code></td></tr>
+            <tr><td><code>std::string_view</code></td><td><code>&lt;string_view&gt;</code></td><td>Non-owning string reference</td><td><code>void f(string_view sv);</code></td></tr>
+            <tr><td><code>std::span&lt;T&gt;</code></td><td><code>&lt;span&gt;</code></td><td>Non-owning array view (C++20)</td><td><code>void f(span&lt;int&gt; data);</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 STL Header Includes — What's Where</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Header</th><th>Key types/functions</th></tr></thead>
+          <tbody>
+            <tr><td><code>&lt;vector&gt;</code></td><td>std::vector</td></tr>
+            <tr><td><code>&lt;array&gt;</code></td><td>std::array</td></tr>
+            <tr><td><code>&lt;map&gt;</code></td><td>std::map, std::multimap</td></tr>
+            <tr><td><code>&lt;unordered_map&gt;</code></td><td>std::unordered_map</td></tr>
+            <tr><td><code>&lt;set&gt;</code></td><td>std::set, std::multiset</td></tr>
+            <tr><td><code>&lt;string&gt;</code></td><td>std::string, std::stoi, std::to_string</td></tr>
+            <tr><td><code>&lt;algorithm&gt;</code></td><td>sort, find, transform, count_if, etc.</td></tr>
+            <tr><td><code>&lt;numeric&gt;</code></td><td>accumulate, iota, partial_sum</td></tr>
+            <tr><td><code>&lt;ranges&gt;</code></td><td>views::filter, transform, take (C++20)</td></tr>
+            <tr><td><code>&lt;memory&gt;</code></td><td>unique_ptr, shared_ptr, make_unique</td></tr>
+            <tr><td><code>&lt;functional&gt;</code></td><td>std::function, std::bind, std::ref</td></tr>
+            <tr><td><code>&lt;iostream&gt;</code></td><td>cout, cin, cerr</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="concept-block">
+      <h3 class="concept-heading">STL performance engineering (industry perspective)</h3>
+      <p class="explain-en">In production C++ systems, STL choice is a performance decision, not just syntax preference. Most latency and memory regressions come from hidden reallocations, poor locality, unnecessary copies, and suboptimal container selection. Measure with realistic workloads, then optimize hotspots.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Production C++ me STL selection sirf coding style nahi, performance decision hota hai. Real regressions usually hidden reallocations, cache locality issues, extra copies, aur galat container choice se aate hain. Pehle realistic workload par measure karo, phir hotspot optimize karo.</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Performance lever</th><th>Strong practice</th><th>Common anti-pattern</th></tr></thead>
+          <tbody>
+            <tr><td>Dynamic growth</td><td>Use <code>reserve()</code> when size estimate is known</td><td>Repeated push_back without reserve in hot paths</td></tr>
+            <tr><td>Object construction</td><td>Prefer <code>emplace_back()</code> for in-place creation</td><td>Create temp objects then copy into container</td></tr>
+            <tr><td>Lookup strategy</td><td>Choose <code>unordered_map</code> for average O(1) lookups</td><td>Using <code>map</code> where ordering is never used</td></tr>
+            <tr><td>Iteration locality</td><td>Prefer contiguous containers (<code>vector</code>, <code>array</code>)</td><td>Overusing linked structures for sequential scans</td></tr>
+            <tr><td>String handling</td><td>Use <code>string_view</code> for read-only params</td><td>Passing <code>std::string</code> by value in tight loops</td></tr>
+            <tr><td>Algorithm style</td><td>Use STL algorithms/ranges for optimized traversal</td><td>Hand-written loops duplicating standard algorithms</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="concept-block">
+      <h3 class="concept-heading">Allocator strategy (when defaults are not enough)</h3>
+      <p class="explain-en">Default allocators are excellent for general use, but high-throughput systems often need custom strategies: arena allocation for short-lived graphs, pools for fixed-size objects, PMR for configurable memory domains. The key is to align allocation strategy with object lifetime and access pattern.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Default allocator general cases me bahut achha hota hai, lekin high-throughput systems me custom strategy useful hoti hai: short-lived objects ke liye arena, fixed-size objects ke liye pool, aur configurable memory domains ke liye PMR. Golden rule: allocation strategy ko object lifetime aur access pattern ke according align karo.</div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">💻 C++ — PMR example with monotonic resource</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+        <div class="code-body"><pre><span class="preprocessor">#include</span> <span class="string">&lt;memory_resource&gt;</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;vector&gt;</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;string&gt;</span>
+
+std::array&lt;<span class="type">std::byte</span>, <span class="number">4096</span>&gt; buffer{};
+std::pmr::monotonic_buffer_resource pool(buffer.data(), buffer.size());
+
+std::pmr::vector&lt;std::pmr::string&gt; events{&amp;pool};
+events.emplace_back(<span class="string">"request.start"</span>);
+events.emplace_back(<span class="string">"auth.ok"</span>);
+events.emplace_back(<span class="string">"response.sent"</span>);
+
+<span class="comment">// All allocations come from the local pool; fast reset pattern per request scope.</span></pre></div>
+      </div>
+    </div>
+
+    <div class="concept-block">
+      <h3 class="concept-heading">STL release readiness checklist</h3>
+      <p class="explain-en">Before shipping performance-sensitive C++ code that heavily uses STL, validate allocation behavior, algorithmic complexity under load, iterator invalidation safety, and benchmark stability across target compilers.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>STL-heavy C++ code release karne se pehle allocation behavior, load ke under algorithm complexity, iterator invalidation safety, aur target compilers par benchmark stability verify karna mandatory hai.</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Gate</th><th>What to validate</th><th>Pass criteria</th></tr></thead>
+          <tbody>
+            <tr><td>Complexity</td><td>Expected Big-O matches observed trend</td><td>No unexpected superlinear growth</td></tr>
+            <tr><td>Allocation profile</td><td>Peak allocations in hot path measured</td><td>No avoidable reallocation spikes</td></tr>
+            <tr><td>Iterator safety</td><td>Mutating operations audited for invalidation</td><td>No use-after-invalidate patterns</td></tr>
+            <tr><td>Throughput</td><td>Benchmarks on representative dataset</td><td>Meets SLA/latency budget</td></tr>
+            <tr><td>Portability</td><td>Build and tests on GCC/Clang/MSVC</td><td>Consistent behavior across toolchains</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="practice-box">
+      <div class="practice-title">✏️ Practice Exercises — Part 6</div>
+      <ol>
+        <li>Create a <code>vector&lt;int&gt;</code>, populate with 10 random numbers, sort, and print.</li>
+        <li>Use <code>std::map</code> to count word frequencies in a paragraph (structured bindings to iterate).</li>
+        <li>Use <code>std::unordered_set</code> to find duplicate elements in a vector.</li>
+        <li>Write a lambda that captures a threshold and filters a vector to only elements above it.</li>
+        <li>Use <code>std::transform</code> + lambda to convert a <code>vector&lt;string&gt;</code> to uppercase.</li>
+        <li>Chain <code>std::views::filter</code>, <code>transform</code>, and <code>take</code> in a ranges pipeline.</li>
+        <li>Implement a simple "todo list" using <code>vector&lt;string&gt;</code> with add, remove, search, sort operations.</li>
+      </ol>
+    </div>
+
+    <div class="handbook-nav">
+      <a href="part5.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Part 5: Templates & Generic Programming</div></div></a>
+      <a href="part7.html" class="nav-btn next"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Part 7: Memory Management & Smart Pointers →</div></div><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+
+  </div>
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
+  <script src="../../../js/main.js"></script>
+  <script>
+    (() => {
+      document.querySelectorAll('.code-block').forEach((block) => { const pre = block.querySelector('.code-body pre'), header = block.querySelector('.code-header'); if (!pre || !header) return; let actions = header.querySelector('.code-actions'); if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); } const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'code-copy-btn'; btn.textContent = 'Copy'; btn.addEventListener('click', async () => { try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; } catch { btn.textContent = 'Failed'; } finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); } }); actions.prepend(btn); });
+      const fill = document.querySelector('.hb-progress-fill'), label = document.querySelector('.hb-progress-label');
+      if (fill && label) { const update = () => { const h = document.documentElement, d = (h.scrollHeight - h.clientHeight) || 1, p = Math.max(0, Math.min(1, h.scrollTop / d)); fill.style.width = (p*100).toFixed(0)+'%'; label.textContent = (p*100).toFixed(0)+'%'; }; document.addEventListener('scroll', update, { passive: true }); update(); }
+    })();
+  </script>
+</body>
+</html>

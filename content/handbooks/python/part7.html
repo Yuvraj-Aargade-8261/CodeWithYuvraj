@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>Part 7: Advanced Python — Python Handbook | CodeWithYuvraj</title>
-  <meta name="description" content="Part 7 of Python Handbook: decorators, generators, iterators, closures, regex, recursion, and memory concepts with bilingual explanations.">
+  <title>Part 7: Advanced Python — Python Programming Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 7: Decorators, generators, async/await, regular expressions, type hints, testing in Python.">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="../../../css/style.css">
   <link rel="stylesheet" href="../../../css/handbook.css">
@@ -13,375 +13,615 @@
   <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
 
   <div class="handbook-page">
-    <div class="hb-topbar">
-      <div class="hb-topbar-inner">
-        <div class="hb-breadcrumbs">
-          <a href="index.html">Python Handbook</a>
-          <span class="hb-muted">/</span>
-          <span>Part 7</span>
-          <span class="hb-muted">·</span>
-          <a href="#m7-1">7.1</a><a href="#m7-2">7.2</a><a href="#m7-3">7.3</a><a href="#m7-4">7.4</a><a href="#m7-5">7.5</a><a href="#m7-6">7.6</a><a href="#m7-7">7.7</a>
+    <div class="hb-topbar"><div class="hb-topbar-inner"><div class="hb-breadcrumbs"><a href="index.html">Python Programming Handbook</a><span class="hb-muted">/</span><span>Part 7</span><span class="hb-muted">·</span><a href="#m7-1">7.1</a> <a href="#m7-2">7.2</a> <a href="#m7-3">7.3</a> <a href="#m7-4">7.4</a> <a href="#m7-5">7.5</a> <a href="#m7-6">7.6</a> <a href="#m7-7">7.7</a></div><div class="hb-progress" aria-label="Reading progress"><div class="hb-progress-track" role="progressbar"><div class="hb-progress-fill"></div></div><div class="hb-progress-label">0%</div></div></div></div>
+
+    <div class="chapter-header" data-chapter-num="07">
+      <div class="chapter-part-label">📖 Part 7 — Advanced Python</div>
+      <h1 class="chapter-title">Master the <span class="gradient-text">Language</span></h1>
+      <p class="chapter-subtitle">Decorators, generators, async/await, regex, type hints, testing — unlock Python's full power.</p>
+      <div class="chapter-meta"><span>📄 Modules 7.1 – 7.7</span><span>⏱️ 90–120 min read</span><span>💻 55+ Examples</span></div>
+    </div>
+
+    <div class="hb-mini-toc"><div class="hb-mini-title">📍 Part 7 Modules</div><div class="hb-mini-links"><a href="#m7-1">7.1 Decorators</a><a href="#m7-2">7.2 Generators</a><a href="#m7-3">7.3 Async</a><a href="#m7-4">7.4 Regex</a><a href="#m7-5">7.5 Type Hints</a><a href="#m7-6">7.6 Testing</a><a href="#m7-7">7.7 Debugging</a></div></div>
+
+    <!-- MODULE 7.1 -->
+    <div class="module-section" id="m7-1">
+      <div class="module-header"><div class="module-number">7.1</div><h2 class="module-title">Decorators — @syntax, wraps, parameterized decorators</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Functions that modify functions</h3>
+        <p class="explain-en">A <strong>decorator</strong> wraps a function to add behavior without modifying it. The <code>@decorator</code> syntax is syntactic sugar for <code>func = decorator(func)</code>. Always use <code>@functools.wraps</code> to preserve metadata.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Ek <strong>decorator</strong> function ko wrap karke bina modify kiye behavior add karta hai. <code>@decorator</code> syntax <code>func = decorator(func)</code> ka shortcut hai. Metadata preserve karne ke liye hamesha <code>@functools.wraps</code> use karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Python — Decorators</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">import</span> functools
+<span class="keyword">import</span> time
+
+<span class="comment"># Basic decorator</span>
+<span class="keyword">def</span> <span class="function">timer</span>(func):
+    @functools.wraps(func)
+    <span class="keyword">def</span> <span class="function">wrapper</span>(*args, **kwargs):
+        start = time.time()
+        result = func(*args, **kwargs)
+        elapsed = time.time() - start
+        <span class="function">print</span>(<span class="string">f"</span>{func.__name__}<span class="string"> took </span>{elapsed:.3f}<span class="string">s"</span>)
+        <span class="keyword">return</span> result
+    <span class="keyword">return</span> wrapper
+
+@timer
+<span class="keyword">def</span> <span class="function">slow_func</span>():
+    time.sleep(<span class="number">1</span>)
+    <span class="keyword">return</span> <span class="string">"done"</span>
+
+slow_func()  <span class="comment"># slow_func took 1.001s</span>
+
+<span class="comment"># Decorator with arguments</span>
+<span class="keyword">def</span> <span class="function">repeat</span>(n):
+    <span class="keyword">def</span> <span class="function">decorator</span>(func):
+        @functools.wraps(func)
+        <span class="keyword">def</span> <span class="function">wrapper</span>(*args, **kwargs):
+            <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="function">range</span>(n):
+                result = func(*args, **kwargs)
+            <span class="keyword">return</span> result
+        <span class="keyword">return</span> wrapper
+    <span class="keyword">return</span> decorator
+
+@repeat(<span class="number">3</span>)
+<span class="keyword">def</span> <span class="function">greet</span>(name):
+    <span class="function">print</span>(<span class="string">f"Hello, </span>{name}<span class="string">!"</span>)
+
+greet(<span class="string">"Yuvraj"</span>)  <span class="comment"># Prints 3 times</span>
+
+<span class="comment"># Stacking decorators (bottom-up)</span>
+@timer
+@repeat(<span class="number">2</span>)
+<span class="keyword">def</span> <span class="function">task</span>(): <span class="keyword">pass</span>
+<span class="comment"># Equivalent: task = timer(repeat(2)(task))</span></pre></div>
         </div>
-        <div class="hb-progress" aria-label="Reading progress">
-          <div class="hb-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="hb-progress-fill"></div></div>
-          <div class="hb-progress-label">0%</div>
+        <div class="callout callout-tip"><strong>Common built-in decorators:</strong> <code>@property</code>, <code>@staticmethod</code>, <code>@classmethod</code>, <code>@functools.lru_cache</code>, <code>@functools.wraps</code>, <code>@dataclass</code>.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 7.2 -->
+    <div class="module-section" id="m7-2">
+      <div class="module-header"><div class="module-number">7.2</div><h2 class="module-title">Generators & iterators — yield, send(), iterator protocol</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Lazy sequences on demand</h3>
+        <p class="explain-en"><strong>Generators</strong> use <code>yield</code> to produce values lazily — one at a time, on demand. They're memory-efficient for huge datasets. <code>yield from</code> delegates to sub-generators. The <strong>iterator protocol</strong> requires <code>__iter__()</code> and <code>__next__()</code>.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Generators</strong> <code>yield</code> se values lazily produce karte hain — ek ek karke, demand pe. Ye huge datasets ke liye memory-efficient hain. <code>yield from</code> sub-generators ko delegate karta hai. <strong>Iterator protocol</strong> me <code>__iter__()</code> aur <code>__next__()</code> chahiye.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Python — Generators</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># Generator function</span>
+<span class="keyword">def</span> <span class="function">countdown</span>(n):
+    <span class="keyword">while</span> n &gt; <span class="number">0</span>:
+        <span class="keyword">yield</span> n
+        n -= <span class="number">1</span>
+
+<span class="keyword">for</span> i <span class="keyword">in</span> countdown(<span class="number">5</span>):
+    <span class="function">print</span>(i)  <span class="comment"># 5, 4, 3, 2, 1</span>
+
+<span class="comment"># Generator expression</span>
+squares = (x**<span class="number">2</span> <span class="keyword">for</span> x <span class="keyword">in</span> <span class="function">range</span>(<span class="number">1000000</span>))
+<span class="function">next</span>(squares)  <span class="comment"># 0</span>
+<span class="function">next</span>(squares)  <span class="comment"># 1</span>
+
+<span class="comment"># Infinite generator</span>
+<span class="keyword">def</span> <span class="function">fibonacci</span>():
+    a, b = <span class="number">0</span>, <span class="number">1</span>
+    <span class="keyword">while</span> <span class="keyword">True</span>:
+        <span class="keyword">yield</span> a
+        a, b = b, a + b
+
+<span class="keyword">from</span> itertools <span class="keyword">import</span> islice
+<span class="function">list</span>(islice(fibonacci(), <span class="number">10</span>))
+<span class="comment"># [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]</span>
+
+<span class="comment"># yield from — delegate to sub-generator</span>
+<span class="keyword">def</span> <span class="function">flatten</span>(nested):
+    <span class="keyword">for</span> item <span class="keyword">in</span> nested:
+        <span class="keyword">if</span> <span class="function">isinstance</span>(item, <span class="type">list</span>):
+            <span class="keyword">yield from</span> flatten(item)
+        <span class="keyword">else</span>:
+            <span class="keyword">yield</span> item
+
+<span class="function">list</span>(flatten([[<span class="number">1</span>,[<span class="number">2</span>]],<span class="number">3</span>,[<span class="number">4</span>,[<span class="number">5</span>,<span class="number">6</span>]]]))
+<span class="comment"># [1, 2, 3, 4, 5, 6]</span>
+
+<span class="comment"># send() — send values into generator</span>
+<span class="keyword">def</span> <span class="function">accumulator</span>():
+    total = <span class="number">0</span>
+    <span class="keyword">while</span> <span class="keyword">True</span>:
+        value = <span class="keyword">yield</span> total
+        total += value
+
+acc = accumulator()
+<span class="function">next</span>(acc)        <span class="comment"># Initialize (returns 0)</span>
+acc.send(<span class="number">10</span>)    <span class="comment"># 10</span>
+acc.send(<span class="number">20</span>)    <span class="comment"># 30</span></pre></div>
         </div>
       </div>
     </div>
 
-    <div class="chapter-header" data-chapter-num="07">
-      <div class="chapter-part-label">📖 Part 7 — Advanced Python</div>
-      <h1 class="chapter-title">Write Smarter with <span class="gradient-text">Advanced Constructs</span></h1>
-      <p class="chapter-subtitle">Level up with decorators, generators, regex, recursion, and memory-aware coding.</p>
-      <div class="chapter-meta"><span>📄 Modules 7.1 – 7.7</span><span>⏱️ 75–115 min read</span><span>💻 42+ Examples</span></div>
+    <!-- MODULE 7.3 -->
+    <div class="module-section" id="m7-3">
+      <div class="module-header"><div class="module-number">7.3</div><h2 class="module-title">Async/Await — asyncio, coroutines, tasks, event loop</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Concurrent I/O operations</h3>
+        <p class="explain-en"><strong>asyncio</strong> enables concurrent execution for I/O-bound tasks (network, disk). <code>async def</code> creates coroutines, <code>await</code> pauses until result is ready. <code>asyncio.gather()</code> runs multiple coroutines concurrently. Not parallel — uses a single thread!</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>asyncio</strong> I/O-bound tasks (network, disk) ke liye concurrent execution enable karta hai. <code>async def</code> coroutines banata hai, <code>await</code> result ready hone tak pause karta hai. <code>asyncio.gather()</code> multiple coroutines concurrently chalata hai. Parallel nahi — single thread use karta hai!</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Python — async/await</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">import</span> asyncio
+
+<span class="comment"># Coroutine — async function</span>
+<span class="keyword">async def</span> <span class="function">fetch_data</span>(url, delay):
+    <span class="function">print</span>(<span class="string">f"Fetching </span>{url}<span class="string">..."</span>)
+    <span class="keyword">await</span> asyncio.sleep(delay)  <span class="comment"># Non-blocking wait</span>
+    <span class="keyword">return</span> <span class="string">f"Data from </span>{url}<span class="string">"</span>
+
+<span class="comment"># Run single coroutine</span>
+<span class="keyword">async def</span> <span class="function">main</span>():
+    result = <span class="keyword">await</span> fetch_data(<span class="string">"api.com"</span>, <span class="number">2</span>)
+    <span class="function">print</span>(result)
+
+asyncio.run(main())
+
+<span class="comment"># Run multiple concurrently with gather()</span>
+<span class="keyword">async def</span> <span class="function">main_concurrent</span>():
+    results = <span class="keyword">await</span> asyncio.gather(
+        fetch_data(<span class="string">"api1.com"</span>, <span class="number">2</span>),
+        fetch_data(<span class="string">"api2.com"</span>, <span class="number">1</span>),
+        fetch_data(<span class="string">"api3.com"</span>, <span class="number">3</span>),
+    )
+    <span class="comment"># All 3 run concurrently — total ~3s, not 6s!</span>
+    <span class="function">print</span>(results)
+
+asyncio.run(main_concurrent())
+
+<span class="comment"># Async context manager</span>
+<span class="keyword">async def</span> <span class="function">read_async</span>():
+    <span class="keyword">async with</span> aiohttp.ClientSession() <span class="keyword">as</span> session:
+        <span class="keyword">async with</span> session.get(<span class="string">"https://api.com"</span>) <span class="keyword">as</span> resp:
+            <span class="keyword">return await</span> resp.json()</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Concept</th><th>Sync</th><th>Async</th></tr></thead>
+            <tbody>
+              <tr><td>Define function</td><td><code>def func()</code></td><td><code>async def func()</code></td></tr>
+              <tr><td>Call</td><td><code>func()</code></td><td><code>await func()</code></td></tr>
+              <tr><td>Sleep</td><td><code>time.sleep(n)</code></td><td><code>await asyncio.sleep(n)</code></td></tr>
+              <tr><td>Context mgr</td><td><code>with</code></td><td><code>async with</code></td></tr>
+              <tr><td>Iteration</td><td><code>for x in</code></td><td><code>async for x in</code></td></tr>
+              <tr><td>Run</td><td>Direct call</td><td><code>asyncio.run()</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
 
-    <div class="callout callout-tip"><strong>How to study Part 7:</strong> Focus on "why this concept exists" before syntax. Advanced Python becomes easy when purpose is clear.</div>
+    <!-- MODULE 7.4 -->
+    <div class="module-section" id="m7-4">
+      <div class="module-header"><div class="module-number">7.4</div><h2 class="module-title">Regular expressions — re module, patterns, groups</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Pattern matching in text</h3>
+        <p class="explain-en">The <code>re</code> module provides regular expression matching. Use raw strings <code>r"..."</code> for patterns. <code>re.search()</code> finds first match, <code>re.findall()</code> finds all, <code>re.sub()</code> replaces. <code>re.compile()</code> pre-compiles for reuse.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>re</code> module regular expression matching provide karta hai. Patterns ke liye raw strings <code>r"..."</code> use karo. <code>re.search()</code> pehla match dhundhta hai, <code>re.findall()</code> sab dhundhta hai, <code>re.sub()</code> replace karta hai. <code>re.compile()</code> reuse ke liye pre-compile karta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Python — Regex</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">import</span> re
 
-    <div class="hb-mini-toc">
-      <div class="hb-mini-title">📍 Part 7 Modules</div>
-      <div class="hb-mini-links">
-        <a href="#m7-1">7.1 Decorators</a>
-        <a href="#m7-2">7.2 Generators</a>
-        <a href="#m7-3">7.3 Iterators</a>
-        <a href="#m7-4">7.4 Closures</a>
-        <a href="#m7-5">7.5 Regex</a>
-        <a href="#m7-6">7.6 Recursion</a>
-        <a href="#m7-7">7.7 Memory basics</a>
+<span class="comment"># search — first match</span>
+m = re.search(<span class="string">r"\d+"</span>, <span class="string">"age: 21, score: 95"</span>)
+m.group()  <span class="comment"># '21'</span>
+
+<span class="comment"># findall — all matches</span>
+re.findall(<span class="string">r"\d+"</span>, <span class="string">"age: 21, score: 95"</span>)
+<span class="comment"># ['21', '95']</span>
+
+<span class="comment"># sub — replace</span>
+re.sub(<span class="string">r"\d+"</span>, <span class="string">"X"</span>, <span class="string">"age: 21, score: 95"</span>)
+<span class="comment"># 'age: X, score: X'</span>
+
+<span class="comment"># Groups — capture parts</span>
+m = re.search(<span class="string">r"(\w+)@(\w+)\.(\w+)"</span>, <span class="string">"user@mail.com"</span>)
+m.group(<span class="number">0</span>)  <span class="comment"># 'user@mail.com' (full match)</span>
+m.group(<span class="number">1</span>)  <span class="comment"># 'user'</span>
+m.group(<span class="number">2</span>)  <span class="comment"># 'mail'</span>
+
+<span class="comment"># Named groups</span>
+pattern = <span class="string">r"(?P&lt;year&gt;\d{4})-(?P&lt;month&gt;\d{2})-(?P&lt;day&gt;\d{2})"</span>
+m = re.search(pattern, <span class="string">"2026-04-27"</span>)
+m.group(<span class="string">"year"</span>)  <span class="comment"># '2026'</span>
+
+<span class="comment"># Compile for reuse</span>
+email_re = re.compile(<span class="string">r"[\w.+-]+@[\w-]+\.[\w.]+"</span>)
+email_re.findall(<span class="string">"Contact: a@b.com, c@d.org"</span>)
+<span class="comment"># ['a@b.com', 'c@d.org']</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Pattern</th><th>Matches</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td><code>.</code></td><td>Any char (except \n)</td><td><code>a.c</code> → abc</td></tr>
+              <tr><td><code>\d</code></td><td>Digit [0-9]</td><td><code>\d+</code> → 123</td></tr>
+              <tr><td><code>\w</code></td><td>Word char [a-zA-Z0-9_]</td><td><code>\w+</code> → hello</td></tr>
+              <tr><td><code>\s</code></td><td>Whitespace</td><td><code>\s+</code> → spaces</td></tr>
+              <tr><td><code>*</code></td><td>0 or more</td><td><code>ab*c</code> → ac, abc</td></tr>
+              <tr><td><code>+</code></td><td>1 or more</td><td><code>ab+c</code> → abc, abbc</td></tr>
+              <tr><td><code>?</code></td><td>0 or 1</td><td><code>colou?r</code></td></tr>
+              <tr><td><code>{n,m}</code></td><td>n to m times</td><td><code>\d{2,4}</code></td></tr>
+              <tr><td><code>^</code> / <code>$</code></td><td>Start / End</td><td><code>^Hello</code></td></tr>
+              <tr><td><code>[abc]</code></td><td>Character class</td><td><code>[aeiou]</code></td></tr>
+              <tr><td><code>(..)</code></td><td>Capture group</td><td><code>(\d+)-(\d+)</code></td></tr>
+              <tr><td><code>|</code></td><td>Alternation (OR)</td><td><code>cat|dog</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 7.5 -->
+    <div class="module-section" id="m7-5">
+      <div class="module-header"><div class="module-number">7.5</div><h2 class="module-title">Type hints — typing module, Union, Optional, generics</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Static typing for dynamic Python</h3>
+        <p class="explain-en"><strong>Type hints</strong> document expected types for functions, variables, and classes. Python 3.10+ supports <code>X | Y</code> union syntax. Use <code>mypy</code> for static analysis. Hints are <strong>not enforced at runtime</strong> — they're for tools and humans.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Type hints</strong> functions, variables, aur classes ke expected types document karte hain. Python 3.10+ <code>X | Y</code> union syntax support karta hai. Static analysis ke liye <code>mypy</code> use karo. Hints <strong>runtime pe enforce nahi</strong> hote — ye tools aur humans ke liye hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Python — Type hints</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">from</span> typing <span class="keyword">import</span> Optional, Union, Any
+<span class="keyword">from</span> collections.abc <span class="keyword">import</span> Callable, Iterator
+
+<span class="comment"># Basic hints</span>
+name: <span class="type">str</span> = <span class="string">"Yuvraj"</span>
+age: <span class="type">int</span> = <span class="number">21</span>
+scores: <span class="type">list</span>[<span class="type">int</span>] = [<span class="number">95</span>, <span class="number">87</span>, <span class="number">92</span>]
+config: <span class="type">dict</span>[<span class="type">str</span>, <span class="type">Any</span>] = {<span class="string">"debug"</span>: <span class="keyword">True</span>}
+
+<span class="comment"># Function annotations</span>
+<span class="keyword">def</span> <span class="function">greet</span>(name: <span class="type">str</span>, times: <span class="type">int</span> = <span class="number">1</span>) -> <span class="type">str</span>:
+    <span class="keyword">return</span> <span class="string">f"Hello, </span>{name}<span class="string">!"</span> * times
+
+<span class="comment"># Union types (Python 3.10+)</span>
+<span class="keyword">def</span> <span class="function">process</span>(value: <span class="type">int</span> | <span class="type">str</span>) -> <span class="type">str</span>:
+    <span class="keyword">return</span> <span class="function">str</span>(value)
+
+<span class="comment"># Optional = X | None</span>
+<span class="keyword">def</span> <span class="function">find_user</span>(user_id: <span class="type">int</span>) -> <span class="type">str</span> | <span class="keyword">None</span>:
+    <span class="keyword">return</span> <span class="keyword">None</span>
+
+<span class="comment"># Callable type</span>
+<span class="keyword">def</span> <span class="function">apply</span>(func: Callable[[<span class="type">int</span>], <span class="type">int</span>], val: <span class="type">int</span>) -> <span class="type">int</span>:
+    <span class="keyword">return</span> func(val)
+
+<span class="comment"># TypeAlias (Python 3.10+)</span>
+<span class="type">type</span> Matrix = <span class="type">list</span>[<span class="type">list</span>[<span class="type">float</span>]]
+<span class="keyword">def</span> <span class="function">transpose</span>(m: Matrix) -> Matrix: ...</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 7.6 -->
+    <div class="module-section" id="m7-6">
+      <div class="module-header"><div class="module-number">7.6</div><h2 class="module-title">Testing — unittest, pytest, fixtures, mocking</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Writing reliable code</h3>
+        <p class="explain-en"><strong>pytest</strong> is the de-facto testing framework. Tests are functions starting with <code>test_</code>. Use <code>assert</code> for checks, <code>@pytest.fixture</code> for setup, <code>@pytest.mark.parametrize</code> for data-driven tests, <code>unittest.mock</code> for mocking.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>pytest</strong> testing ka standard framework hai. Tests <code>test_</code> se shuru hone wale functions hain. Checks ke liye <code>assert</code>, setup ke liye <code>@pytest.fixture</code>, data-driven tests ke liye <code>@pytest.mark.parametrize</code>, mocking ke liye <code>unittest.mock</code> use karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Python — pytest</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># test_math.py</span>
+<span class="keyword">import</span> pytest
+
+<span class="keyword">def</span> <span class="function">add</span>(a, b):
+    <span class="keyword">return</span> a + b
+
+<span class="comment"># Basic test</span>
+<span class="keyword">def</span> <span class="function">test_add</span>():
+    <span class="keyword">assert</span> add(<span class="number">2</span>, <span class="number">3</span>) == <span class="number">5</span>
+    <span class="keyword">assert</span> add(-<span class="number">1</span>, <span class="number">1</span>) == <span class="number">0</span>
+
+<span class="comment"># Test exceptions</span>
+<span class="keyword">def</span> <span class="function">test_divide_by_zero</span>():
+    <span class="keyword">with</span> pytest.raises(<span class="type">ZeroDivisionError</span>):
+        <span class="number">1</span> / <span class="number">0</span>
+
+<span class="comment"># Parametrize — data-driven testing</span>
+@pytest.mark.parametrize(<span class="string">"a, b, expected"</span>, [
+    (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>),
+    (<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>),
+    (-<span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>),
+])
+<span class="keyword">def</span> <span class="function">test_add_params</span>(a, b, expected):
+    <span class="keyword">assert</span> add(a, b) == expected
+
+<span class="comment"># Fixture — reusable setup</span>
+@pytest.fixture
+<span class="keyword">def</span> <span class="function">sample_list</span>():
+    <span class="keyword">return</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]
+
+<span class="keyword">def</span> <span class="function">test_sum</span>(sample_list):
+    <span class="keyword">assert</span> <span class="function">sum</span>(sample_list) == <span class="number">15</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>pytest command</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td><code>pytest</code></td><td>Run all tests</td></tr>
+              <tr><td><code>pytest test_file.py</code></td><td>Run specific file</td></tr>
+              <tr><td><code>pytest -v</code></td><td>Verbose output</td></tr>
+              <tr><td><code>pytest -k "test_add"</code></td><td>Run matching tests</td></tr>
+              <tr><td><code>pytest --cov</code></td><td>Coverage report</td></tr>
+              <tr><td><code>pytest -x</code></td><td>Stop on first failure</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 7.7 -->
+    <div class="module-section" id="m7-7">
+      <div class="module-header"><div class="module-number">7.7</div><h2 class="module-title">Debugging — pdb, breakpoint(), profiling, traceback</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Finding and fixing bugs</h3>
+        <p class="explain-en"><code>breakpoint()</code> (Python 3.7+) drops into the debugger. <code>pdb</code> commands: <code>n</code> (next), <code>s</code> (step into), <code>c</code> (continue), <code>p expr</code> (print). <code>cProfile</code> identifies performance bottlenecks. <code>traceback</code> module formats exceptions.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>breakpoint()</code> (Python 3.7+) debugger me drop karta hai. <code>pdb</code> commands: <code>n</code> (next), <code>s</code> (step into), <code>c</code> (continue), <code>p expr</code> (print). <code>cProfile</code> performance bottlenecks identify karta hai. <code>traceback</code> module exceptions format karta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Python — Debugging</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># breakpoint() — built-in debugger (3.7+)</span>
+<span class="keyword">def</span> <span class="function">buggy_function</span>(data):
+    <span class="keyword">for</span> i, item <span class="keyword">in</span> <span class="function">enumerate</span>(data):
+        <span class="keyword">if</span> item &lt; <span class="number">0</span>:
+            <span class="function">breakpoint</span>()  <span class="comment"># Drops into pdb</span>
+        process(item)
+
+<span class="comment"># pdb commands:</span>
+<span class="comment"># n  → next line</span>
+<span class="comment"># s  → step into function</span>
+<span class="comment"># c  → continue to next breakpoint</span>
+<span class="comment"># p x → print variable x</span>
+<span class="comment"># l  → list source code</span>
+<span class="comment"># q  → quit debugger</span>
+
+<span class="comment"># Profiling — find bottlenecks</span>
+<span class="keyword">import</span> cProfile
+
+<span class="keyword">def</span> <span class="function">slow</span>():
+    <span class="keyword">return</span> <span class="function">sum</span>(i**<span class="number">2</span> <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">1000000</span>))
+
+cProfile.run(<span class="string">"slow()"</span>)
+<span class="comment"># Shows function call counts and timing</span>
+
+<span class="comment"># timeit — micro-benchmarks</span>
+<span class="keyword">import</span> timeit
+timeit.timeit(<span class="string">"[x**2 for x in range(100)]"</span>, number=<span class="number">10000</span>)
+<span class="comment"># Returns total seconds for 10000 runs</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>pdb Command</th><th>Action</th></tr></thead>
+            <tbody>
+              <tr><td><code>n</code> (next)</td><td>Execute next line</td></tr>
+              <tr><td><code>s</code> (step)</td><td>Step into function call</td></tr>
+              <tr><td><code>c</code> (continue)</td><td>Continue to next breakpoint</td></tr>
+              <tr><td><code>p expr</code></td><td>Print expression value</td></tr>
+              <tr><td><code>pp expr</code></td><td>Pretty-print expression</td></tr>
+              <tr><td><code>l</code> (list)</td><td>Show source code around current line</td></tr>
+              <tr><td><code>w</code> (where)</td><td>Show call stack</td></tr>
+              <tr><td><code>b N</code></td><td>Set breakpoint at line N</td></tr>
+              <tr><td><code>q</code> (quit)</td><td>Quit debugger</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
     <div class="quick-ref">
-      <div class="qr-title">🚀 Advanced Lens — Part 7</div>
-      <p class="explain-en">
-        Advanced Python is about abstraction power and performance mindset. Use decorators for cross-cutting concerns, generators for memory-efficient streams,
-        regex for precise text operations, and recursion only where it improves expressiveness with clear base cases.
-      </p>
-      <div class="explain-hi">
-        <span class="hi-label">Hindi mein samjho</span>
-        Part 7 me focus advanced constructs pe hai, lekin goal readable aur efficient code hi hona chahiye.
-        Har advanced feature tab use karo jab wo complexity kam kare aur design better banaye.
+      <div class="qr-title">📋 Decorator Patterns — Quick Reference</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Pattern</th><th>Use case</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>Timer</td><td>Measure execution time</td><td><code>@timer</code></td></tr>
+            <tr><td>Logger</td><td>Log function calls</td><td><code>@log_calls</code></td></tr>
+            <tr><td>Cache/Memoize</td><td>Cache return values</td><td><code>@lru_cache</code></td></tr>
+            <tr><td>Retry</td><td>Retry on failure</td><td><code>@retry(max=3)</code></td></tr>
+            <tr><td>Auth</td><td>Check permissions</td><td><code>@login_required</code></td></tr>
+            <tr><td>Validate</td><td>Validate arguments</td><td><code>@validate_types</code></td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
-    <div class="module-section" id="m7-1">
-      <div class="module-header"><div class="module-number">7.1</div><h2 class="module-title">Decorators — Behavior Extension Without Editing Core Function</h2></div>
-      <div class="concept-block">
-        <h3 class="concept-heading">What is a decorator?</h3>
-        <p class="explain-en">
-          A decorator wraps a function and adds extra behavior like logging, timing, validation, caching, or authentication.
-          Conceptually, decorators are a clean way to implement <strong>cross-cutting concerns</strong> — features that apply across many functions without duplicating code.
-          In industry, decorators power frameworks (routing, permissions), observability (timing/logging), and policy enforcement (rate limits, retries).
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Decorator ka use tab hota hai jab aap same “extra behavior” multiple functions pe apply karna chahte ho, bina har function me copy-paste ke. Real projects me logging, auth checks, caching jaise features decorators se cleanly implement hote hain.</div>
-      </div>
-      <div class="concept-block">
-        <h3 class="concept-heading">Basic decorator pattern</h3>
-        <p class="explain-en">
-          Use a nested wrapper function and return it from the decorator. Apply using <code>@decorator_name</code>.
-          The wrapper must accept <code>*args</code> and <code>**kwargs</code> to stay compatible with many function signatures.
-          A common professional improvement is using <code>functools.wraps</code> to preserve original function metadata like name and docstring.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Decorator ke andar wrapper function hota hai jo original function ko call karta hai. Wrapper me <code>*args</code> aur <code>**kwargs</code> rakhna best practice hai. Professional code me <code>functools.wraps</code> se original function ka name/docstring preserve kiya jata hai.</div>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — wraps (professional)</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre><span class="keyword">from</span> functools <span class="keyword">import</span> wraps
 
-<span class="keyword">def</span> <span class="function">log_call</span>(func):
-    @wraps(func)
-    <span class="keyword">def</span> <span class="function">wrapper</span>(*args, **kwargs):
-        <span class="builtin">print</span>(<span class="string">f"Calling: {func.__name__}"</span>)
-        <span class="keyword">return</span> func(*args, **kwargs)
-    <span class="keyword">return</span> wrapper</pre></div>
-        </div>
-        <div class="callout callout-note"><strong>Example explained:</strong> <code>@wraps</code> preserves metadata (name/docstring), which helps debugging and tools like help().</div>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — simple decorator</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre><span class="keyword">def</span> <span class="function">log_call</span>(func):
-    <span class="keyword">def</span> <span class="function">wrapper</span>(*args, **kwargs):
-        <span class="builtin">print</span>(<span class="string">f"Calling: {func.__name__}"</span>)
-        <span class="keyword">return</span> func(*args, **kwargs)
-    <span class="keyword">return</span> wrapper
-
-@log_call
-<span class="keyword">def</span> <span class="function">add</span>(a, b):
-    <span class="keyword">return</span> a + b
-
-<span class="builtin">print</span>(add(<span class="number">2</span>, <span class="number">3</span>))</pre></div>
-          <div class="code-output">Calling: add\n5</div>
-        </div>
-        <div class="callout callout-note"><strong>Example explained:</strong> <code>@log_call</code> injects logging before original function execution.</div>
+    <div class="quick-ref">
+      <div class="qr-title">📋 Generator vs List — Memory Comparison</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Aspect</th><th>List</th><th>Generator</th></tr></thead>
+          <tbody>
+            <tr><td>Syntax</td><td><code>[x for x in range(N)]</code></td><td><code>(x for x in range(N))</code></td></tr>
+            <tr><td>Memory (N=1M)</td><td>~8 MB</td><td>~120 bytes</td></tr>
+            <tr><td>Reusable</td><td>✅ Multiple iterations</td><td>❌ Single use</td></tr>
+            <tr><td>Indexable</td><td>✅ <code>lst[5]</code></td><td>❌ No indexing</td></tr>
+            <tr><td>Lazy</td><td>❌ All computed upfront</td><td>✅ On-demand</td></tr>
+            <tr><td>Best for</td><td>Small data, random access</td><td>Large/infinite data, pipelines</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
-    <div class="module-section" id="m7-2">
-      <div class="module-header"><div class="module-number">7.2</div><h2 class="module-title">Generators — Lazy Data Production with <code>yield</code></h2></div>
-      <div class="concept-block">
-        <h3 class="concept-heading">Why generators?</h3>
-        <p class="explain-en">
-          Generators produce values one by one, saving memory compared to storing full lists.
-          They are ideal for large data streams (logs, files, API pagination) where you want to process items incrementally.
-          A generator helps you build “pipeline-style” programs: transform, filter, and consume data without loading everything at once.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Generator streaming processing ke liye best hota hai. Jab data bahut large ho (file lines, logs, paginated API results), tab generator memory efficient solution deta hai kyunki ye one-by-one values produce karta hai.</div>
-      </div>
-      <div class="concept-block">
-        <h3 class="concept-heading"><code>yield</code> based function</h3>
-        <p class="explain-en">
-          <code>yield</code> pauses function state and resumes later, making stream-style processing efficient.
-          Unlike <code>return</code>, which ends the function, <code>yield</code> produces a value and “remembers” the execution position.
-          This is why generators are the foundation behind Python’s lazy iteration patterns.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>yield</code> function ko stop nahi karta; ye ek value dekar function state ko preserve karta hai. Next call par function wahi se resume hota hai. Isi behavior ki wajah se generators lazy aur memory efficient hote hain.</div>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — generator</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre><span class="keyword">def</span> <span class="function">count_up_to</span>(n):
-    i = <span class="number">1</span>
-    <span class="keyword">while</span> i &lt;= n:
-        <span class="keyword">yield</span> i
-        i += <span class="number">1</span>
-
-<span class="keyword">for</span> x <span class="keyword">in</span> count_up_to(<span class="number">4</span>):
-    <span class="builtin">print</span>(x)</pre></div>
-          <div class="code-output">1\n2\n3\n4</div>
-        </div>
-        <div class="callout callout-note"><strong>Example explained:</strong> Each iteration requests next value; full sequence is never stored at once.</div>
-      </div>
-
-      <div class="concept-block">
-        <h3 class="concept-heading">Generator expressions (one-liner pipelines)</h3>
-        <p class="explain-en">
-          Generator expressions are like list comprehensions but lazy: they generate values on demand.
-          They are ideal for streaming transforms, especially when combined with <code>sum()</code>, <code>any()</code>, <code>all()</code>, and file iteration.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Generator expression list comprehension jaisa hota hai, but memory me list create nahi karta. Ye streaming pipelines ke liye best choice hai.</div>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — generator expression</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre>nums = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]
-total_even_squares = <span class="builtin">sum</span>(n*n <span class="keyword">for</span> n <span class="keyword">in</span> nums <span class="keyword">if</span> n % <span class="number">2</span> == <span class="number">0</span>)
-<span class="builtin">print</span>(total_even_squares)</pre></div>
-          <div class="code-output">20</div>
-        </div>
-        <div class="callout callout-note"><strong>Example explained:</strong> Squares are generated lazily and consumed by <code>sum()</code> without creating an intermediate list.</div>
+    <div class="quick-ref">
+      <div class="qr-title">📋 Type Hint Cheat Sheet</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Type</th><th>Hint syntax</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>Integer</td><td><code>int</code></td><td><code>x: int = 5</code></td></tr>
+            <tr><td>Float</td><td><code>float</code></td><td><code>x: float = 3.14</code></td></tr>
+            <tr><td>String</td><td><code>str</code></td><td><code>x: str = "hi"</code></td></tr>
+            <tr><td>Boolean</td><td><code>bool</code></td><td><code>x: bool = True</code></td></tr>
+            <tr><td>List of ints</td><td><code>list[int]</code></td><td><code>x: list[int] = [1,2]</code></td></tr>
+            <tr><td>Dict str→int</td><td><code>dict[str, int]</code></td><td><code>x: dict[str, int]</code></td></tr>
+            <tr><td>Tuple (fixed)</td><td><code>tuple[int, str]</code></td><td><code>x: tuple[int, str]</code></td></tr>
+            <tr><td>Set</td><td><code>set[str]</code></td><td><code>x: set[str]</code></td></tr>
+            <tr><td>Optional</td><td><code>X | None</code></td><td><code>x: str | None</code></td></tr>
+            <tr><td>Union</td><td><code>X | Y</code></td><td><code>x: int | str</code></td></tr>
+            <tr><td>Any</td><td><code>Any</code></td><td><code>x: Any</code></td></tr>
+            <tr><td>Callable</td><td><code>Callable[[args], ret]</code></td><td><code>f: Callable[[int], str]</code></td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
-    <div class="module-section" id="m7-3">
-      <div class="module-header"><div class="module-number">7.3</div><h2 class="module-title">Iterators — <code>iter()</code>, <code>next()</code>, Iteration Protocol</h2></div>
-      <div class="concept-block">
-        <h3 class="concept-heading">Iterator fundamentals</h3>
-        <p class="explain-en">
-          An iterator is an object that yields one value at a time via <code>next()</code> until exhausted.
-          Python’s <code>for</code> loop is built on the iterator protocol: it calls <code>iter()</code> to get an iterator and then repeatedly calls <code>next()</code>.
-          Understanding this protocol makes generators, comprehensions, and many standard-library tools easier to reason about.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Iterator ek object hota hai jo sequentially values deta hai. <code>for</code> loop internally <code>iter()</code> aur <code>next()</code> hi use karta hai. Ye concept samajhne se generators aur lazy iteration deeply clear ho jati hai.</div>
-      </div>
-      <div class="concept-block">
-        <h3 class="concept-heading">Manual iteration</h3>
-        <p class="explain-en">Use <code>iter()</code> to create iterator and <code>next()</code> to consume values manually.</p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>for</code> loop internally iterator use karta hai; yahan hum manually wahi process dekhte hain.</div>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — iter/next</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre>nums = [<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>]
-it = <span class="builtin">iter</span>(nums)
-<span class="builtin">print</span>(<span class="builtin">next</span>(it))
-<span class="builtin">print</span>(<span class="builtin">next</span>(it))
-<span class="builtin">print</span>(<span class="builtin">next</span>(it))</pre></div>
-          <div class="code-output">10\n20\n30</div>
-        </div>
-        <div class="callout callout-note"><strong>Example explained:</strong> Iterator state advances after each <code>next()</code> call.</div>
+    <div class="quick-ref">
+      <div class="qr-title">📋 Concurrency Models — Comparison</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Model</th><th>Module</th><th>Best for</th><th>GIL?</th></tr></thead>
+          <tbody>
+            <tr><td>Threading</td><td><code>threading</code></td><td>I/O-bound (network, disk)</td><td>Yes (limited parallelism)</td></tr>
+            <tr><td>Async/Await</td><td><code>asyncio</code></td><td>I/O-bound (high concurrency)</td><td>Yes (single thread)</td></tr>
+            <tr><td>Multiprocessing</td><td><code>multiprocessing</code></td><td>CPU-bound (math, ML)</td><td>No (separate processes)</td></tr>
+            <tr><td>Concurrent futures</td><td><code>concurrent.futures</code></td><td>Thread/process pool</td><td>Depends on executor</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
-    <div class="module-section" id="m7-4">
-      <div class="module-header"><div class="module-number">7.4</div><h2 class="module-title">Closures — Capturing Outer Scope State</h2></div>
-      <div class="concept-block">
-        <h3 class="concept-heading">Closure concept</h3>
-        <p class="explain-en">
-          A closure is an inner function that remembers variables from its enclosing scope even after the outer function finishes.
-          Closures enable configuration “baked into” functions, which is powerful for building small reusable tools without needing a full class.
-          They also power decorators internally.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Closure me inner function outer variables ko remember karta hai. Isse aap configuration-based functions bana sakte ho (factory style). Decorators ka base concept bhi closures hi hote hain.</div>
-      </div>
-      <div class="concept-block">
-        <h3 class="concept-heading">Factory-style closure example</h3>
-        <p class="explain-en">Closures are useful for generating configured functions without creating full classes.</p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Closure se customizable function factory ban sakti hai.</div>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — closure</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre><span class="keyword">def</span> <span class="function">make_multiplier</span>(factor):
-    <span class="keyword">def</span> <span class="function">multiply</span>(value):
-        <span class="keyword">return</span> value * factor
-    <span class="keyword">return</span> multiply
-
-double = make_multiplier(<span class="number">2</span>)
-<span class="builtin">print</span>(double(<span class="number">9</span>))</pre></div>
-          <div class="code-output">18</div>
-        </div>
-        <div class="callout callout-note"><strong>Example explained:</strong> Returned function remembers <code>factor=2</code> from outer scope.</div>
+    <div class="quick-ref">
+      <div class="qr-title">📋 re Module Flags</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Flag</th><th>Purpose</th></tr></thead>
+          <tbody>
+            <tr><td><code>re.IGNORECASE</code> / <code>re.I</code></td><td>Case-insensitive matching</td></tr>
+            <tr><td><code>re.MULTILINE</code> / <code>re.M</code></td><td><code>^</code>/<code>$</code> match line boundaries</td></tr>
+            <tr><td><code>re.DOTALL</code> / <code>re.S</code></td><td><code>.</code> matches <code>\n</code> too</td></tr>
+            <tr><td><code>re.VERBOSE</code> / <code>re.X</code></td><td>Allow comments in pattern</td></tr>
+            <tr><td><code>re.ASCII</code> / <code>re.A</code></td><td>ASCII-only matching</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
-    <div class="module-section" id="m7-5">
-      <div class="module-header"><div class="module-number">7.5</div><h2 class="module-title">Regular Expressions — Pattern Matching and Text Extraction</h2></div>
-      <div class="concept-block">
-        <h3 class="concept-heading">Why regex?</h3>
-        <p class="explain-en">
-          Regex helps validate and extract structured text like emails, phone numbers, IDs, and logs.
-          In production pipelines, regex is commonly used for log parsing, input validation, data extraction, and sanitization.
-          The key skill is balancing power with readability — overly complex patterns become maintenance risks.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Regex text se patterns extract/validate karne ka powerful tool hai. Real apps me log parsing aur validation me use hota hai. Advanced rule: regex ko readable rakho, warna future maintenance hard ho jati hai.</div>
-      </div>
-      <div class="concept-block">
-        <h3 class="concept-heading">Basic regex matching</h3>
-        <p class="explain-en">Use <code>re.findall</code>, <code>re.search</code>, and predefined character classes for common tasks.</p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>re</code> module se multiple matches nikalna aur specific pattern detect karna easy hota hai.</div>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — regex findall</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre><span class="keyword">import</span> re
 
-text = <span class="string">"Contacts: yuvraj@gmail.com, team@codewithyuvraj.in"</span>
-emails = re.findall(<span class="string">r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"</span>, text)
-<span class="builtin">print</span>(emails)</pre></div>
-          <div class="code-output">['yuvraj@gmail.com', 'team@codewithyuvraj.in']</div>
-        </div>
-        <div class="callout callout-note"><strong>Example explained:</strong> Pattern extracts all email-like strings from raw text.</div>
+    <div class="quick-ref">
+      <div class="qr-title">📋 unittest vs pytest — Framework Comparison</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Feature</th><th>unittest</th><th>pytest</th></tr></thead>
+          <tbody>
+            <tr><td>Style</td><td>Class-based (<code>TestCase</code>)</td><td>Function-based</td></tr>
+            <tr><td>Assertions</td><td><code>self.assertEqual()</code></td><td><code>assert x == y</code></td></tr>
+            <tr><td>Fixtures</td><td><code>setUp/tearDown</code></td><td><code>@pytest.fixture</code></td></tr>
+            <tr><td>Parametrize</td><td>Requires subTest</td><td><code>@pytest.mark.parametrize</code></td></tr>
+            <tr><td>Plugins</td><td>Limited</td><td>500+ plugins</td></tr>
+            <tr><td>Built-in?</td><td>✅ Standard library</td><td>❌ pip install</td></tr>
+            <tr><td>Industry pick</td><td>Legacy projects</td><td>✅ De facto standard</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
-    <div class="module-section" id="m7-6">
-      <div class="module-header"><div class="module-number">7.6</div><h2 class="module-title">Recursion — Function Calling Itself</h2></div>
-      <div class="concept-block">
-        <h3 class="concept-heading">Recursion mindset</h3>
-        <p class="explain-en">
-          Recursion solves a problem by reducing it into smaller subproblems until a base condition is reached.
-          It is most natural for tree-like structures (folders, JSON trees) and divide-and-conquer algorithms.
-          Always reason about: base case, progress toward base case, and maximum recursion depth.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Recursion tab best hota hai jab problem naturally “smaller same problem” me break hota ho (tree, folders). Advanced mindset: base case, progress (har call me input smaller), aur depth limit hamesha consider karo.</div>
-      </div>
-      <div class="concept-block">
-        <h3 class="concept-heading">Factorial recursive example</h3>
-        <p class="explain-en">Always define clear base case to avoid infinite recursion and stack overflow.</p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Base case recursion ka brake hai; bina base case function endlessly call hota rahega.</div>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — recursion</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre><span class="keyword">def</span> <span class="function">factorial</span>(n):
-    <span class="keyword">if</span> n == <span class="number">0</span> <span class="keyword">or</span> n == <span class="number">1</span>:
-        <span class="keyword">return</span> <span class="number">1</span>
-    <span class="keyword">return</span> n * factorial(n - <span class="number">1</span>)
 
-<span class="builtin">print</span>(factorial(<span class="number">5</span>))</pre></div>
-          <div class="code-output">120</div>
-        </div>
-        <div class="callout callout-note"><strong>Example explained:</strong> Function multiplies current <code>n</code> with factorial of smaller input until base case.</div>
+    <div class="callout callout-tip"><strong>🏭 Industry insight:</strong> Decorators power Flask/Django routing (<code>@app.route</code>), pytest fixtures (<code>@pytest.fixture</code>), and caching (<code>@lru_cache</code>). Async is essential for web servers (FastAPI, aiohttp) handling thousands of concurrent requests. Type hints are now standard in all major Python projects — they catch bugs early and serve as living documentation.</div>
+
+    <div class="concept-block">
+      <h3 class="concept-heading">Async production checklist (reliability first)</h3>
+      <p class="explain-en">Async Python apps fail in production mainly due to timeout misuse, unbounded concurrency, and poor cancellation handling. Production-grade async code must enforce backpressure, explicit timeouts, graceful cancellation, and structured observability.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Async Python apps production me mostly timeout mistakes, unbounded concurrency, aur cancellation handling issues ki wajah se fail hote hain. Reliable async code ke liye backpressure, explicit timeouts, graceful cancellation, aur proper observability mandatory hai.</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Area</th><th>Strong practice</th><th>Anti-pattern</th></tr></thead>
+          <tbody>
+            <tr><td>Timeouts</td><td>Use per-call + global request timeout</td><td>Network calls without timeout</td></tr>
+            <tr><td>Concurrency limits</td><td>Use semaphores/pools for bounded parallelism</td><td><code>gather()</code> on unbounded task lists</td></tr>
+            <tr><td>Cancellation</td><td>Handle <code>asyncio.CancelledError</code> and cleanup resources</td><td>Ignoring cancellation and leaving dangling tasks</td></tr>
+            <tr><td>Retries</td><td>Retry only idempotent operations with backoff/jitter</td><td>Blind retries on all exceptions</td></tr>
+            <tr><td>Observability</td><td>Structured logs + trace IDs + latency metrics</td><td>Print-based debugging in production paths</td></tr>
+            <tr><td>Event loop hygiene</td><td>Offload CPU-heavy work to executor/workers</td><td>Blocking CPU work inside async handlers</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
-    <div class="module-section" id="m7-7">
-      <div class="module-header"><div class="module-number">7.7</div><h2 class="module-title">Memory and Performance Basics — References, Mutability, Optimization Mindset</h2></div>
-      <div class="concept-block">
-        <h3 class="concept-heading">Memory model essentials</h3>
-        <p class="explain-en">
-          Python variables hold references to objects, not the objects themselves.
-          Understanding mutability prevents accidental side effects in large programs, especially when passing lists/dicts between functions.
-          When two variables reference the same mutable object, changes through one reference appear in the other.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Python me variables references hold karte hain. Mutable objects (list/dict) shared reference ke through change ho sakte hain, jisse side effects aate hain. Advanced practice: copy vs reference ka difference clearly samjho.</div>
-      </div>
-      <div class="concept-block">
-        <h3 class="concept-heading">Simple performance habits</h3>
-        <p class="explain-en">Use appropriate data structures, avoid premature optimization, and profile before making performance changes.</p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Optimization tab karo jab bottleneck clear ho. Pehle correct aur readable code likho, phir measure karke optimize karo.</div>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — mutability check</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre>a = [<span class="number">1</span>, <span class="number">2</span>]
-b = a
-b.append(<span class="number">3</span>)
-<span class="builtin">print</span>(a, b)</pre></div>
-          <div class="code-output">[1, 2, 3] [1, 2, 3]</div>
-        </div>
-        <div class="callout callout-note"><strong>Example explained:</strong> Both variables point to same list object, so mutation appears through both references.</div>
-      </div>
+    <div class="concept-block">
+      <h3 class="concept-heading">Advanced debugging workflow (performance + correctness)</h3>
+      <p class="explain-en">High-quality Python debugging combines profile-driven optimization with correctness checks. Start by locating hot paths with profilers, then validate behavior with tests and type checks so speed improvements do not break correctness.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Professional Python debugging ka best approach hai profile-driven optimization + correctness validation. Pehle profiler se hotspots identify karo, phir tests/type checks se confirm karo ki optimization se behavior break na ho.</div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">💻 Shell — Advanced Python debug pipeline</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+        <div class="code-body"><pre><span class="comment"># 1) Static correctness gates</span>
+ruff check .
+mypy src/
+pytest -q
 
-      <div class="concept-block">
-        <h3 class="concept-heading">Copy vs reference (practical bug prevention)</h3>
-        <p class="explain-en">
-          When sharing mutable objects, decide whether you want shared state or independent state.
-          Use <code>copy()</code> for shallow copies (top-level), and <code>copy.deepcopy()</code> for nested structures.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Mutable objects share karte waqt decide karo: shared state chahiye ya independent. Shallow copy top-level copy karta hai, deep copy nested objects bhi copy karta hai.</div>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-python"></i> Python — shallow vs deep copy</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre><span class="keyword">import</span> copy
+<span class="comment"># 2) Runtime profiling (CPU)</span>
+python -m cProfile -o profile.out src/main.py
+python -m pstats profile.out
 
-data = [[<span class="number">1</span>, <span class="number">2</span>], [<span class="number">3</span>, <span class="number">4</span>]]
-shallow = data.copy()
-deep = copy.deepcopy(data)
+<span class="comment"># 3) Line-level profiling (optional)</span>
+pip install line_profiler
+kernprof -l -v src/main.py
 
-data[<span class="number">0</span>].append(<span class="number">99</span>)
-<span class="builtin">print</span>(shallow)  <span class="comment"># changed</span>
-<span class="builtin">print</span>(deep)     <span class="comment"># unchanged</span></pre></div>
-        </div>
-        <div class="callout callout-note"><strong>Example explained:</strong> Shallow copy shares nested lists; deep copy creates fully independent nested objects.</div>
+<span class="comment"># 4) Memory profiling</span>
+pip install memory-profiler
+python -m memory_profiler src/main.py
+
+<span class="comment"># 5) Re-run tests after optimization</span>
+pytest -q --maxfail=1</pre></div>
       </div>
+    </div>
 
-      <div class="practice-box">
-        <div class="practice-title">✏️ Practice Exercises — Part 7</div>
-        <ol>
-          <li>Create a timing decorator to measure execution time of a function.</li>
-          <li>Build a generator that yields prime numbers up to N.</li>
-          <li>Write regex validators for email, phone, and PIN code.</li>
-          <li>Implement recursive functions for Fibonacci and digit sum.</li>
-          <li>Demonstrate mutable vs immutable behavior using custom examples.</li>
-        </ol>
+    <div class="concept-block">
+      <h3 class="concept-heading">Project evaluation rubric (advanced Python readiness)</h3>
+      <p class="explain-en">Before presenting an advanced Python project in interviews or client demos, evaluate async reliability, type safety, test discipline, and runtime performance with objective criteria.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Advanced Python project ko interview/client demo se pehle objective rubric se evaluate karo: async reliability, type safety, test quality, aur runtime performance. Isse project professional quality me present hota hai.</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Criterion</th><th>Strong signal</th><th>Weak signal</th></tr></thead>
+          <tbody>
+            <tr><td>Type discipline</td><td>Public interfaces fully typed and checked with mypy</td><td>Inconsistent typing, no type gate</td></tr>
+            <tr><td>Async robustness</td><td>Timeouts, bounded concurrency, cancellation-safe code</td><td>Unbounded gathers and hanging tasks</td></tr>
+            <tr><td>Testing maturity</td><td>Unit + integration tests with deterministic fixtures</td><td>Manual tests only</td></tr>
+            <tr><td>Performance clarity</td><td>Profiler-backed optimizations with benchmark notes</td><td>Guess-based optimizations</td></tr>
+            <tr><td>Maintainability</td><td>Clear module boundaries + docs + lint clean</td><td>Tight coupling, unclear responsibilities</td></tr>
+            <tr><td>Failure handling</td><td>Meaningful exceptions + resilient fallback paths</td><td>Generic catch-all exception blocks</td></tr>
+          </tbody>
+        </table>
       </div>
+    </div>
+
+    <div class="practice-box">
+      <div class="practice-title">✏️ Practice Exercises — Part 7</div>
+      <ol>
+        <li>Write a <code>@timer</code> decorator that prints how long a function takes to execute.</li>
+        <li>Create a generator that yields prime numbers infinitely.</li>
+        <li>Use <code>asyncio.gather()</code> to fetch 5 URLs concurrently (simulate with <code>asyncio.sleep</code>).</li>
+        <li>Write a regex to validate email addresses, phone numbers, and dates.</li>
+        <li>Add complete type hints to a small project and validate with <code>mypy</code>.</li>
+        <li>Write pytest tests for a calculator module with <code>@pytest.mark.parametrize</code>.</li>
+        <li>Use <code>cProfile</code> to find the bottleneck in a slow function and optimize it.</li>
+      </ol>
     </div>
 
     <div class="handbook-nav">
       <a href="part6.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Part 6: File Handling & Error Management</div></div></a>
       <a href="part8.html" class="nav-btn next"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Part 8: Standard Library & Industry Practices →</div></div><i class="fa-solid fa-arrow-right"></i></a>
     </div>
-  </div>
 
+  </div>
   <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
   <script src="../../../js/main.js"></script>
   <script>
     (() => {
-      document.querySelectorAll('.code-block').forEach((block) => {
-        const pre = block.querySelector('.code-body pre');
-        const header = block.querySelector('.code-header');
-        if (!pre || !header) return;
-        let actions = header.querySelector('.code-actions');
-        if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); }
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'code-copy-btn';
-        btn.textContent = 'Copy';
-        btn.addEventListener('click', async () => {
-          try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; }
-          catch { btn.textContent = 'Failed'; }
-          finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); }
-        });
-        actions.prepend(btn);
-      });
-      const fill = document.querySelector('.hb-progress-fill');
-      const label = document.querySelector('.hb-progress-label');
-      if (fill && label) {
-        const update = () => {
-          const h = document.documentElement;
-          const denom = (h.scrollHeight - h.clientHeight) || 1;
-          const pct = Math.max(0, Math.min(1, h.scrollTop / denom));
-          fill.style.width = (pct * 100).toFixed(0) + '%';
-          label.textContent = (pct * 100).toFixed(0) + '%';
-        };
-        document.addEventListener('scroll', update, { passive: true });
-        update();
-      }
+      document.querySelectorAll('.code-block').forEach((block) => { const pre = block.querySelector('.code-body pre'), header = block.querySelector('.code-header'); if (!pre || !header) return; let actions = header.querySelector('.code-actions'); if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); } const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'code-copy-btn'; btn.textContent = 'Copy'; btn.addEventListener('click', async () => { try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; } catch { btn.textContent = 'Failed'; } finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); } }); actions.prepend(btn); });
+      const fill = document.querySelector('.hb-progress-fill'), label = document.querySelector('.hb-progress-label');
+      if (fill && label) { const update = () => { const h = document.documentElement, d = (h.scrollHeight - h.clientHeight) || 1, p = Math.max(0, Math.min(1, h.scrollTop / d)); fill.style.width = (p*100).toFixed(0)+'%'; label.textContent = (p*100).toFixed(0)+'%'; }; document.addEventListener('scroll', update, { passive: true }); update(); }
     })();
   </script>
 </body>
 </html>
+
+

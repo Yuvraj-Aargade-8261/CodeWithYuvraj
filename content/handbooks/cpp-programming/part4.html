@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Part 4: Inheritance & Polymorphism — C++ Programming Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 4: Inheritance, virtual functions, vtable, abstract classes, CRTP, RTTI, and design patterns in C++.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/handbook.css">
+</head>
+<body class="handbook-wrapper">
+  <nav class="navbar"><div class="container"><a href="../../../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../../../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
+
+  <div class="handbook-page">
+    <div class="hb-topbar"><div class="hb-topbar-inner"><div class="hb-breadcrumbs"><a href="index.html">C++ Programming Handbook</a><span class="hb-muted">/</span><span>Part 4</span><span class="hb-muted">·</span><a href="#m4-1">4.1</a> <a href="#m4-2">4.2</a> <a href="#m4-3">4.3</a> <a href="#m4-4">4.4</a> <a href="#m4-5">4.5</a> <a href="#m4-6">4.6</a> <a href="#m4-7">4.7</a></div><div class="hb-progress" aria-label="Reading progress"><div class="hb-progress-track" role="progressbar"><div class="hb-progress-fill"></div></div><div class="hb-progress-label">0%</div></div></div></div>
+
+    <div class="chapter-header" data-chapter-num="04">
+      <div class="chapter-part-label">📖 Part 4 — Inheritance & Polymorphism</div>
+      <h1 class="chapter-title">Design Through <span class="gradient-text">Polymorphism</span></h1>
+      <p class="chapter-subtitle">Virtual functions, vtable mechanics, abstract interfaces, CRTP, and industry design patterns — the backbone of extensible C++ architectures.</p>
+      <div class="chapter-meta"><span>📄 Modules 4.1 – 4.7</span><span>⏱️ 80–110 min read</span><span>💻 60+ Examples</span></div>
+    </div>
+
+    <div class="hb-mini-toc"><div class="hb-mini-title">📍 Part 4 Modules</div><div class="hb-mini-links"><a href="#m4-1">4.1 Inheritance</a><a href="#m4-2">4.2 Virtual</a><a href="#m4-3">4.3 Abstract</a><a href="#m4-4">4.4 Multiple</a><a href="#m4-5">4.5 CRTP</a><a href="#m4-6">4.6 RTTI</a><a href="#m4-7">4.7 Patterns</a></div></div>
+
+    <!-- MODULE 4.1 -->
+    <div class="module-section" id="m4-1">
+      <div class="module-header"><div class="module-number">4.1</div><h2 class="module-title">Inheritance — single, multilevel, access specifiers</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Reusing code through inheritance</h3>
+        <p class="explain-en">Inheritance lets a <strong>derived class</strong> reuse and extend a <strong>base class</strong>. The derived class inherits all members and can add new ones or override existing behavior. Access specifiers (<code>public</code>/<code>protected</code>/<code>private</code>) control what the derived class can see.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Inheritance se derived class base class ka code reuse aur extend kar sakti hai. Derived class saare members inherit karti hai aur naye add ya existing override kar sakti hai. Access specifiers control karte hain ki derived class kya dekh sakti hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — Inheritance basics</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">class</span> <span class="type">Animal</span> {
+<span class="keyword">protected</span>:
+    std::string name_;
+    <span class="type">int</span> age_;
+<span class="keyword">public</span>:
+    <span class="function">Animal</span>(std::string name, <span class="type">int</span> age)
+        : name_(std::move(name)), age_(age) {}
+
+    <span class="type">void</span> <span class="function">info</span>() <span class="keyword">const</span> {
+        std::cout &lt;&lt; name_ &lt;&lt; <span class="string">", age "</span> &lt;&lt; age_ &lt;&lt; <span class="string">"\n"</span>;
+    }
+};
+
+<span class="comment">// Public inheritance — "is-a" relationship</span>
+<span class="keyword">class</span> <span class="type">Dog</span> : <span class="keyword">public</span> <span class="type">Animal</span> {
+<span class="keyword">private</span>:
+    std::string breed_;
+<span class="keyword">public</span>:
+    <span class="function">Dog</span>(std::string name, <span class="type">int</span> age, std::string breed)
+        : <span class="type">Animal</span>(std::move(name), age), breed_(std::move(breed)) {}
+
+    <span class="type">void</span> <span class="function">bark</span>() <span class="keyword">const</span> {
+        std::cout &lt;&lt; name_ &lt;&lt; <span class="string">" says Woof!\n"</span>;  <span class="comment">// Can access protected</span>
+    }
+};
+
+<span class="comment">// Multilevel inheritance</span>
+<span class="keyword">class</span> <span class="type">GuideDog</span> : <span class="keyword">public</span> <span class="type">Dog</span> {
+<span class="keyword">public</span>:
+    <span class="keyword">using</span> <span class="type">Dog</span>::<span class="type">Dog</span>;  <span class="comment">// Inherit constructors</span>
+    <span class="type">void</span> <span class="function">guide</span>() <span class="keyword">const</span> {
+        std::cout &lt;&lt; name_ &lt;&lt; <span class="string">" is guiding\n"</span>;
+    }
+};
+
+<span class="type">Dog</span> d(<span class="string">"Rex"</span>, <span class="number">3</span>, <span class="string">"Labrador"</span>);
+d.<span class="function">info</span>();   <span class="comment">// Inherited from Animal</span>
+d.<span class="function">bark</span>();   <span class="comment">// Own method</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Inheritance type</th><th>public members become</th><th>protected become</th><th>private become</th></tr></thead>
+            <tbody>
+              <tr><td><code>public</code> (most common)</td><td>public</td><td>protected</td><td>inaccessible</td></tr>
+              <tr><td><code>protected</code></td><td>protected</td><td>protected</td><td>inaccessible</td></tr>
+              <tr><td><code>private</code></td><td>private</td><td>private</td><td>inaccessible</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 4.2 -->
+    <div class="module-section" id="m4-2">
+      <div class="module-header"><div class="module-number">4.2</div><h2 class="module-title">Virtual functions & vtable — dynamic dispatch</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Runtime polymorphism</h3>
+        <p class="explain-en">A <code>virtual</code> function enables <strong>dynamic dispatch</strong> — the correct function is called based on the actual object type at runtime, not the pointer/reference type. This is implemented via a <strong>vtable</strong> (virtual function table). Always use <code>override</code> in derived classes.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>virtual</code> function <strong>dynamic dispatch</strong> enable karta hai — sahi function runtime pe actual object type ke basis pe call hota hai, pointer type ke basis pe nahi. Ye <strong>vtable</strong> ke through implement hota hai. Derived classes me hamesha <code>override</code> use karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — Virtual functions</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">class</span> <span class="type">Shape</span> {
+<span class="keyword">public</span>:
+    <span class="keyword">virtual</span> <span class="type">double</span> <span class="function">area</span>() <span class="keyword">const</span> { <span class="keyword">return</span> <span class="number">0</span>; }
+    <span class="keyword">virtual</span> <span class="type">void</span> <span class="function">draw</span>() <span class="keyword">const</span> {
+        std::cout &lt;&lt; <span class="string">"Drawing shape\n"</span>;
+    }
+    <span class="keyword">virtual</span> ~<span class="function">Shape</span>() = <span class="keyword">default</span>;  <span class="comment">// ALWAYS virtual destructor!</span>
+};
+
+<span class="keyword">class</span> <span class="type">Circle</span> : <span class="keyword">public</span> <span class="type">Shape</span> {
+    <span class="type">double</span> radius_;
+<span class="keyword">public</span>:
+    <span class="keyword">explicit</span> <span class="function">Circle</span>(<span class="type">double</span> r) : radius_(r) {}
+
+    <span class="type">double</span> <span class="function">area</span>() <span class="keyword">const override</span> {   <span class="comment">// override = compiler checks!</span>
+        <span class="keyword">return</span> <span class="number">3.14159</span> * radius_ * radius_;
+    }
+    <span class="type">void</span> <span class="function">draw</span>() <span class="keyword">const override</span> {
+        std::cout &lt;&lt; <span class="string">"Drawing circle r="</span> &lt;&lt; radius_ &lt;&lt; <span class="string">"\n"</span>;
+    }
+};
+
+<span class="keyword">class</span> <span class="type">Rectangle</span> : <span class="keyword">public</span> <span class="type">Shape</span> {
+    <span class="type">double</span> w_, h_;
+<span class="keyword">public</span>:
+    <span class="function">Rectangle</span>(<span class="type">double</span> w, <span class="type">double</span> h) : w_(w), h_(h) {}
+    <span class="type">double</span> <span class="function">area</span>() <span class="keyword">const override</span> { <span class="keyword">return</span> w_ * h_; }
+    <span class="type">void</span> <span class="function">draw</span>() <span class="keyword">const override</span> {
+        std::cout &lt;&lt; <span class="string">"Drawing rect "</span> &lt;&lt; w_ &lt;&lt; <span class="string">"x"</span> &lt;&lt; h_ &lt;&lt; <span class="string">"\n"</span>;
+    }
+};
+
+<span class="comment">// Polymorphism in action — base pointer, derived behavior</span>
+std::vector&lt;std::unique_ptr&lt;<span class="type">Shape</span>&gt;&gt; shapes;
+shapes.push_back(std::make_unique&lt;<span class="type">Circle</span>&gt;(<span class="number">5</span>));
+shapes.push_back(std::make_unique&lt;<span class="type">Rectangle</span>&gt;(<span class="number">3</span>, <span class="number">4</span>));
+
+<span class="keyword">for</span> (<span class="keyword">const auto</span>&amp; s : shapes) {
+    s-&gt;<span class="function">draw</span>();   <span class="comment">// Calls correct draw() at runtime!</span>
+    std::cout &lt;&lt; <span class="string">"Area: "</span> &lt;&lt; s-&gt;<span class="function">area</span>() &lt;&lt; <span class="string">"\n"</span>;
+}</pre></div>
+        </div>
+        <div class="callout callout-warning"><strong>Always make base class destructors virtual!</strong> Without it, <code>delete basePtr</code> only calls the base destructor — derived resources leak. Rule: if a class has ANY virtual function, its destructor must be virtual.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 4.3 -->
+    <div class="module-section" id="m4-3">
+      <div class="module-header"><div class="module-number">4.3</div><h2 class="module-title">Abstract classes & pure virtual — interfaces in C++</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Defining contracts with pure virtual functions</h3>
+        <p class="explain-en">A <strong>pure virtual function</strong> (<code>= 0</code>) has no implementation in the base class. A class with any pure virtual function is <strong>abstract</strong> — you can't instantiate it. Derived classes MUST override all pure virtual functions. This is how C++ implements interfaces.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Pure virtual function (<code>= 0</code>) ka base class me koi implementation nahi hota. Agar class me koi bhi pure virtual function hai to wo <strong>abstract</strong> hai — uska object nahi ban sakta. Derived classes ko saare pure virtual functions override karne hi padenge. C++ me interfaces aise bante hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — Abstract classes & interfaces</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Interface — all pure virtual</span>
+<span class="keyword">class</span> <span class="type">ISerializable</span> {
+<span class="keyword">public</span>:
+    <span class="keyword">virtual</span> std::string <span class="function">serialize</span>() <span class="keyword">const</span> = <span class="number">0</span>;     <span class="comment">// Pure virtual</span>
+    <span class="keyword">virtual</span> <span class="type">void</span> <span class="function">deserialize</span>(<span class="keyword">const</span> std::string&amp;) = <span class="number">0</span>;
+    <span class="keyword">virtual</span> ~<span class="function">ISerializable</span>() = <span class="keyword">default</span>;
+};
+
+<span class="comment">// Abstract base with some implementation</span>
+<span class="keyword">class</span> <span class="type">Shape</span> {
+<span class="keyword">public</span>:
+    <span class="keyword">virtual</span> <span class="type">double</span> <span class="function">area</span>() <span class="keyword">const</span> = <span class="number">0</span>;   <span class="comment">// Must override</span>
+    <span class="keyword">virtual</span> <span class="type">void</span> <span class="function">draw</span>() <span class="keyword">const</span> = <span class="number">0</span>;     <span class="comment">// Must override</span>
+
+    <span class="comment">// Concrete method — shared by all derived</span>
+    <span class="type">void</span> <span class="function">describe</span>() <span class="keyword">const</span> {
+        std::cout &lt;&lt; <span class="string">"Shape with area "</span> &lt;&lt; <span class="function">area</span>() &lt;&lt; <span class="string">"\n"</span>;
+    }
+    <span class="keyword">virtual</span> ~<span class="function">Shape</span>() = <span class="keyword">default</span>;
+};
+
+<span class="comment">// Shape s;  // ❌ ERROR — abstract, can't instantiate!</span>
+
+<span class="keyword">class</span> <span class="type">Triangle</span> : <span class="keyword">public</span> <span class="type">Shape</span> {
+    <span class="type">double</span> base_, height_;
+<span class="keyword">public</span>:
+    <span class="function">Triangle</span>(<span class="type">double</span> b, <span class="type">double</span> h) : base_(b), height_(h) {}
+    <span class="type">double</span> <span class="function">area</span>() <span class="keyword">const override</span> { <span class="keyword">return</span> <span class="number">0.5</span> * base_ * height_; }
+    <span class="type">void</span> <span class="function">draw</span>() <span class="keyword">const override</span> { std::cout &lt;&lt; <span class="string">"△\n"</span>; }
+};
+
+<span class="type">Triangle</span> t(<span class="number">10</span>, <span class="number">5</span>);
+t.<span class="function">describe</span>();  <span class="comment">// "Shape with area 25" — uses concrete base method</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Concept</th><th>C++ syntax</th><th>Java equivalent</th></tr></thead>
+            <tbody>
+              <tr><td>Abstract class</td><td>Class with <code>= 0</code> methods</td><td><code>abstract class</code></td></tr>
+              <tr><td>Interface</td><td>All methods <code>= 0</code></td><td><code>interface</code></td></tr>
+              <tr><td>Concrete class</td><td>All virtuals overridden</td><td>Normal class</td></tr>
+              <tr><td>Override check</td><td><code>override</code> keyword</td><td><code>@Override</code></td></tr>
+              <tr><td>Prevent override</td><td><code>final</code></td><td><code>final</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 4.4 -->
+    <div class="module-section" id="m4-4">
+      <div class="module-header"><div class="module-number">4.4</div><h2 class="module-title">Multiple inheritance — diamond problem, virtual inheritance</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Inheriting from multiple bases</h3>
+        <p class="explain-en">C++ allows a class to inherit from <strong>multiple base classes</strong>. The <strong>diamond problem</strong> occurs when two bases share a common grandparent — the derived class gets two copies. Solve with <strong>virtual inheritance</strong>.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>C++ me ek class multiple base classes se inherit kar sakti hai. <strong>Diamond problem</strong> tab hota hai jab do bases ka ek common grandparent ho — derived class ko do copies milti hain. <strong>Virtual inheritance</strong> se solve karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — Diamond problem & virtual inheritance</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Diamond problem</span>
+<span class="keyword">class</span> <span class="type">Animal</span> {
+<span class="keyword">public</span>:
+    std::string name_;
+    <span class="function">Animal</span>(std::string n) : name_(std::move(n)) {}
+};
+
+<span class="comment">// Virtual inheritance — only ONE Animal subobject</span>
+<span class="keyword">class</span> <span class="type">Mammal</span> : <span class="keyword">virtual public</span> <span class="type">Animal</span> {
+<span class="keyword">public</span>:
+    <span class="function">Mammal</span>(std::string n) : <span class="type">Animal</span>(std::move(n)) {}
+    <span class="type">void</span> <span class="function">breathe</span>() { std::cout &lt;&lt; <span class="string">"Breathing\n"</span>; }
+};
+
+<span class="keyword">class</span> <span class="type">WingedAnimal</span> : <span class="keyword">virtual public</span> <span class="type">Animal</span> {
+<span class="keyword">public</span>:
+    <span class="function">WingedAnimal</span>(std::string n) : <span class="type">Animal</span>(std::move(n)) {}
+    <span class="type">void</span> <span class="function">fly</span>() { std::cout &lt;&lt; <span class="string">"Flying\n"</span>; }
+};
+
+<span class="comment">// Bat inherits both — only ONE copy of Animal</span>
+<span class="keyword">class</span> <span class="type">Bat</span> : <span class="keyword">public</span> <span class="type">Mammal</span>, <span class="keyword">public</span> <span class="type">WingedAnimal</span> {
+<span class="keyword">public</span>:
+    <span class="comment">// Must initialize virtual base directly!</span>
+    <span class="function">Bat</span>(std::string n)
+        : <span class="type">Animal</span>(std::move(n)), <span class="type">Mammal</span>(<span class="string">""</span>), <span class="type">WingedAnimal</span>(<span class="string">""</span>) {}
+};
+
+<span class="type">Bat</span> b(<span class="string">"Bruce"</span>);
+b.<span class="function">breathe</span>();           <span class="comment">// From Mammal</span>
+b.<span class="function">fly</span>();               <span class="comment">// From WingedAnimal</span>
+std::cout &lt;&lt; b.name_;  <span class="comment">// ONE name_ — no ambiguity!</span></pre></div>
+        </div>
+        <div class="diagram-box">
+          <div class="diagram-title">📐 Diamond Inheritance — Without vs With virtual</div>
+          <div class="diagram-flow">
+            <div class="diagram-node primary">Animal</div>
+            <div class="diagram-arrow">↙ virtual ↘</div>
+            <div class="diagram-node secondary">Mammal</div>
+            <div class="diagram-node secondary">WingedAnimal</div>
+            <div class="diagram-arrow">↘ ↙</div>
+            <div class="diagram-node accent">Bat (1 Animal)</div>
+          </div>
+        </div>
+        <div class="callout callout-tip"><strong>Industry advice:</strong> Avoid multiple inheritance of concrete classes. Use it mainly for mixing in interfaces (abstract classes with <code>= 0</code> methods). Prefer composition over complex inheritance hierarchies.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 4.5 -->
+    <div class="module-section" id="m4-5">
+      <div class="module-header"><div class="module-number">4.5</div><h2 class="module-title">CRTP — Curiously Recurring Template Pattern</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Static polymorphism — zero overhead</h3>
+        <p class="explain-en"><strong>CRTP</strong> is when a class inherits from a template instantiated with itself: <code>class Dog : Base&lt;Dog&gt;</code>. This enables <strong>static polymorphism</strong> — the correct function is resolved at compile time with zero vtable overhead. Used in Eigen, ATL, and high-performance libraries.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>CRTP</strong> me class apne aap ko template parameter ke roop me pass karti hai: <code>class Dog : Base&lt;Dog&gt;</code>. Ye <strong>static polymorphism</strong> enable karta hai — sahi function compile time pe resolve hota hai bina vtable overhead ke. Eigen, ATL jaise libraries me use hota hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — CRTP pattern</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// CRTP base — knows derived type at compile time</span>
+<span class="keyword">template</span>&lt;<span class="keyword">typename</span> <span class="type">Derived</span>&gt;
+<span class="keyword">class</span> <span class="type">Shape</span> {
+<span class="keyword">public</span>:
+    <span class="type">void</span> <span class="function">draw</span>() <span class="keyword">const</span> {
+        <span class="comment">// Call derived's implementation — NO virtual!</span>
+        <span class="keyword">static_cast</span>&lt;<span class="keyword">const</span> <span class="type">Derived</span>*&gt;(<span class="keyword">this</span>)-&gt;<span class="function">draw_impl</span>();
+    }
+
+    <span class="type">double</span> <span class="function">area</span>() <span class="keyword">const</span> {
+        <span class="keyword">return</span> <span class="keyword">static_cast</span>&lt;<span class="keyword">const</span> <span class="type">Derived</span>*&gt;(<span class="keyword">this</span>)-&gt;<span class="function">area_impl</span>();
+    }
+};
+
+<span class="keyword">class</span> <span class="type">Circle</span> : <span class="keyword">public</span> <span class="type">Shape</span>&lt;<span class="type">Circle</span>&gt; {
+    <span class="type">double</span> r_;
+<span class="keyword">public</span>:
+    <span class="keyword">explicit</span> <span class="function">Circle</span>(<span class="type">double</span> r) : r_(r) {}
+    <span class="type">void</span> <span class="function">draw_impl</span>() <span class="keyword">const</span> { std::cout &lt;&lt; <span class="string">"Circle\n"</span>; }
+    <span class="type">double</span> <span class="function">area_impl</span>() <span class="keyword">const</span> { <span class="keyword">return</span> <span class="number">3.14159</span> * r_ * r_; }
+};
+
+<span class="comment">// Usage — resolved at compile time, zero overhead!</span>
+<span class="type">Circle</span> c(<span class="number">5</span>);
+c.<span class="function">draw</span>();   <span class="comment">// "Circle" — no vtable lookup!</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Feature</th><th>Virtual (runtime)</th><th>CRTP (compile-time)</th></tr></thead>
+            <tbody>
+              <tr><td>Dispatch</td><td>Runtime (vtable)</td><td>Compile-time (inlined)</td></tr>
+              <tr><td>Overhead</td><td>Pointer indirection per call</td><td>Zero — fully inlined</td></tr>
+              <tr><td>Heterogeneous containers?</td><td>✅ Yes (<code>vector&lt;Base*&gt;</code>)</td><td>❌ No (each type is different)</td></tr>
+              <tr><td>Use when</td><td>Need runtime flexibility</td><td>Need maximum performance</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 4.6 -->
+    <div class="module-section" id="m4-6">
+      <div class="module-header"><div class="module-number">4.6</div><h2 class="module-title">dynamic_cast, typeid, RTTI — runtime type identification</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Inspecting types at runtime</h3>
+        <p class="explain-en"><code>dynamic_cast</code> safely casts base pointers to derived at runtime (returns nullptr on failure). <code>typeid</code> gives the type name. Both require <strong>RTTI</strong> and at least one virtual function. Use sparingly — prefer virtual dispatch.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>dynamic_cast</code> runtime pe base pointer ko safely derived me cast karta hai (fail pe nullptr return). <code>typeid</code> type ka naam deta hai. Dono ke liye RTTI aur kam se kam ek virtual function chahiye. Kam use karo — virtual dispatch prefer karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — RTTI & dynamic_cast</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">class</span> <span class="type">Base</span> {
+<span class="keyword">public</span>:
+    <span class="keyword">virtual</span> ~<span class="function">Base</span>() = <span class="keyword">default</span>;
+};
+<span class="keyword">class</span> <span class="type">Derived</span> : <span class="keyword">public</span> <span class="type">Base</span> {
+<span class="keyword">public</span>:
+    <span class="type">void</span> <span class="function">special</span>() { std::cout &lt;&lt; <span class="string">"Special!\n"</span>; }
+};
+
+<span class="type">Base</span>* ptr = <span class="keyword">new</span> <span class="type">Derived</span>();
+
+<span class="comment">// dynamic_cast — safe downcasting</span>
+<span class="keyword">if</span> (<span class="keyword">auto</span>* d = <span class="keyword">dynamic_cast</span>&lt;<span class="type">Derived</span>*&gt;(ptr)) {
+    d-&gt;<span class="function">special</span>();  <span class="comment">// Safe — only if ptr IS a Derived</span>
+} <span class="keyword">else</span> {
+    std::cout &lt;&lt; <span class="string">"Not a Derived\n"</span>;
+}
+
+<span class="comment">// typeid — get type info</span>
+std::cout &lt;&lt; <span class="keyword">typeid</span>(*ptr).name() &lt;&lt; <span class="string">"\n"</span>;  <span class="comment">// "Derived" (mangled)</span>
+
+<span class="comment">// Compare types</span>
+<span class="keyword">if</span> (<span class="keyword">typeid</span>(*ptr) == <span class="keyword">typeid</span>(<span class="type">Derived</span>)) {
+    std::cout &lt;&lt; <span class="string">"It's a Derived!\n"</span>;
+}
+<span class="keyword">delete</span> ptr;</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 4.7 -->
+    <div class="module-section" id="m4-7">
+      <div class="module-header"><div class="module-number">4.7</div><h2 class="module-title">Design patterns — Factory, Singleton, Observer in C++</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Industry patterns using polymorphism</h3>
+        <p class="explain-en">Design patterns are reusable solutions to common problems. <strong>Factory</strong> creates objects without exposing creation logic. <strong>Singleton</strong> ensures one instance. <strong>Observer</strong> implements publish-subscribe. These are interview favorites.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Design patterns common problems ke reusable solutions hain. <strong>Factory</strong> creation logic hide karke objects banata hai. <strong>Singleton</strong> ek hi instance ensure karta hai. <strong>Observer</strong> publish-subscribe implement karta hai. Ye interview favorites hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — Factory pattern</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Factory — create objects by type string</span>
+<span class="keyword">class</span> <span class="type">Shape</span> {
+<span class="keyword">public</span>:
+    <span class="keyword">virtual</span> <span class="type">void</span> <span class="function">draw</span>() <span class="keyword">const</span> = <span class="number">0</span>;
+    <span class="keyword">virtual</span> ~<span class="function">Shape</span>() = <span class="keyword">default</span>;
+
+    <span class="comment">// Static factory method</span>
+    <span class="keyword">static</span> std::unique_ptr&lt;<span class="type">Shape</span>&gt; <span class="function">create</span>(<span class="keyword">const</span> std::string&amp; type);
+};
+
+<span class="keyword">class</span> <span class="type">Circle</span> : <span class="keyword">public</span> <span class="type">Shape</span> {
+<span class="keyword">public</span>:
+    <span class="type">void</span> <span class="function">draw</span>() <span class="keyword">const override</span> { std::cout &lt;&lt; <span class="string">"●\n"</span>; }
+};
+<span class="keyword">class</span> <span class="type">Square</span> : <span class="keyword">public</span> <span class="type">Shape</span> {
+<span class="keyword">public</span>:
+    <span class="type">void</span> <span class="function">draw</span>() <span class="keyword">const override</span> { std::cout &lt;&lt; <span class="string">"■\n"</span>; }
+};
+
+std::unique_ptr&lt;<span class="type">Shape</span>&gt; <span class="type">Shape</span>::<span class="function">create</span>(<span class="keyword">const</span> std::string&amp; type) {
+    <span class="keyword">if</span> (type == <span class="string">"circle"</span>) <span class="keyword">return</span> std::make_unique&lt;<span class="type">Circle</span>&gt;();
+    <span class="keyword">if</span> (type == <span class="string">"square"</span>) <span class="keyword">return</span> std::make_unique&lt;<span class="type">Square</span>&gt;();
+    <span class="keyword">throw</span> std::invalid_argument(<span class="string">"Unknown: "</span> + type);
+}
+
+<span class="keyword">auto</span> s = <span class="type">Shape</span>::<span class="function">create</span>(<span class="string">"circle"</span>);
+s-&gt;<span class="function">draw</span>();  <span class="comment">// ●</span></pre></div>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C++ — Meyer's Singleton (thread-safe)</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">class</span> <span class="type">Logger</span> {
+<span class="keyword">public</span>:
+    <span class="keyword">static</span> <span class="type">Logger</span>&amp; <span class="function">instance</span>() {
+        <span class="keyword">static</span> <span class="type">Logger</span> inst;  <span class="comment">// Thread-safe in C++11!</span>
+        <span class="keyword">return</span> inst;
+    }
+
+    <span class="type">void</span> <span class="function">log</span>(<span class="keyword">const</span> std::string&amp; msg) {
+        std::cout &lt;&lt; <span class="string">"[LOG] "</span> &lt;&lt; msg &lt;&lt; <span class="string">"\n"</span>;
+    }
+
+    <span class="comment">// Delete copy/move to enforce single instance</span>
+    <span class="function">Logger</span>(<span class="keyword">const</span> <span class="type">Logger</span>&amp;) = <span class="keyword">delete</span>;
+    <span class="type">Logger</span>&amp; <span class="keyword">operator</span>=(<span class="keyword">const</span> <span class="type">Logger</span>&amp;) = <span class="keyword">delete</span>;
+
+<span class="keyword">private</span>:
+    <span class="function">Logger</span>() = <span class="keyword">default</span>;
+};
+
+<span class="type">Logger</span>::<span class="function">instance</span>().<span class="function">log</span>(<span class="string">"App started"</span>);</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Pattern</th><th>Intent</th><th>C++ features used</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Factory</strong></td><td>Create objects without exposing class</td><td>Virtual, unique_ptr, static method</td></tr>
+              <tr><td><strong>Singleton</strong></td><td>One global instance</td><td>Static local, <code>= delete</code></td></tr>
+              <tr><td><strong>Observer</strong></td><td>Notify subscribers of events</td><td>Virtual, vector of ptrs, callbacks</td></tr>
+              <tr><td><strong>Strategy</strong></td><td>Swap algorithms at runtime</td><td>Virtual or std::function</td></tr>
+              <tr><td><strong>RAII Wrapper</strong></td><td>Automatic resource cleanup</td><td>Constructor/destructor pair</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Polymorphism Decision Guide</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Need</th><th>Solution</th><th>Mechanism</th></tr></thead>
+          <tbody>
+            <tr><td>Different behavior per type at runtime</td><td>Virtual functions</td><td>vtable dispatch</td></tr>
+            <tr><td>Max performance, types known at compile time</td><td>CRTP</td><td>Static dispatch</td></tr>
+            <tr><td>Type-safe containers of mixed types</td><td><code>std::variant</code> + <code>std::visit</code></td><td>Compile-time visitor</td></tr>
+            <tr><td>Optional type checking at runtime</td><td><code>dynamic_cast</code></td><td>RTTI</td></tr>
+            <tr><td>Define interface contract</td><td>Abstract base class (all <code>= 0</code>)</td><td>Pure virtual</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 vtable Internals — How Virtual Functions Work</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Component</th><th>What it is</th><th>Cost</th></tr></thead>
+          <tbody>
+            <tr><td>vptr</td><td>Hidden pointer in each object → vtable</td><td>+8 bytes per object</td></tr>
+            <tr><td>vtable</td><td>Array of function pointers, one per class</td><td>One per class (static)</td></tr>
+            <tr><td>Virtual call</td><td><code>obj->vptr->vtable[slot]()</code></td><td>One indirection (~1ns)</td></tr>
+            <tr><td>Non-virtual call</td><td>Direct function address</td><td>Zero overhead (inlined)</td></tr>
+            <tr><td><code>final</code></td><td>Prevents override → compiler can devirtualize</td><td>Can eliminate vtable lookup</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 OOP Terminology Quick Reference</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Term</th><th>C++ mechanism</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>Encapsulation</td><td>private/protected + public interface</td><td>BankAccount hides balance_</td></tr>
+            <tr><td>Inheritance</td><td><code>class Dog : public Animal</code></td><td>Code reuse, is-a relationship</td></tr>
+            <tr><td>Polymorphism</td><td>virtual functions</td><td>Shape* → Circle::draw()</td></tr>
+            <tr><td>Abstraction</td><td>Pure virtual / interfaces</td><td><code>= 0</code> methods</td></tr>
+            <tr><td>Composition</td><td>Member objects</td><td>Car has-a Engine</td></tr>
+            <tr><td>Aggregation</td><td>Pointer/reference members</td><td>Team has-a vector&lt;Player*&gt;</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="practice-box">
+      <div class="practice-title">✏️ Practice Exercises — Part 4</div>
+      <ol>
+        <li>Create a <code>Shape</code> hierarchy (Circle, Rectangle, Triangle) with virtual <code>area()</code> and <code>perimeter()</code>.</li>
+        <li>Store shapes in a <code>vector&lt;unique_ptr&lt;Shape&gt;&gt;</code> and print all areas using polymorphism.</li>
+        <li>Implement the diamond problem with <code>Animal → Mammal/Bird → Bat</code>, solve with virtual inheritance.</li>
+        <li>Write a CRTP-based <code>Printable</code> base that auto-generates <code>operator&lt;&lt;</code> for derived classes.</li>
+        <li>Create a Factory that returns <code>unique_ptr&lt;Vehicle&gt;</code> for "car", "truck", "bike" strings.</li>
+        <li>Implement Meyer's Singleton for a <code>ConfigManager</code> class. Verify only one instance exists.</li>
+        <li>Use <code>dynamic_cast</code> to safely downcast and call a derived-only method. Handle the failure case.</li>
+      </ol>
+    </div>
+
+    <div class="handbook-nav">
+      <a href="part3.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Part 3: OOP — Classes & Objects</div></div></a>
+      <a href="part5.html" class="nav-btn next"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Part 5: Templates & Generic Programming →</div></div><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+
+  </div>
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
+  <script src="../../../js/main.js"></script>
+  <script>
+    (() => {
+      document.querySelectorAll('.code-block').forEach((block) => { const pre = block.querySelector('.code-body pre'), header = block.querySelector('.code-header'); if (!pre || !header) return; let actions = header.querySelector('.code-actions'); if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); } const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'code-copy-btn'; btn.textContent = 'Copy'; btn.addEventListener('click', async () => { try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; } catch { btn.textContent = 'Failed'; } finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); } }); actions.prepend(btn); });
+      const fill = document.querySelector('.hb-progress-fill'), label = document.querySelector('.hb-progress-label');
+      if (fill && label) { const update = () => { const h = document.documentElement, d = (h.scrollHeight - h.clientHeight) || 1, p = Math.max(0, Math.min(1, h.scrollTop / d)); fill.style.width = (p*100).toFixed(0)+'%'; label.textContent = (p*100).toFixed(0)+'%'; }; document.addEventListener('scroll', update, { passive: true }); update(); }
+    })();
+  </script>
+</body>
+</html>
