@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Part 7: Modules & Tooling — JavaScript Programming Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 7: ES Modules, npm, bundlers, linting, testing, TypeScript intro in JavaScript.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/handbook.css">
+</head>
+<body class="handbook-wrapper">
+  <nav class="navbar"><div class="container"><a href="../../../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../../../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
+
+  <div class="handbook-page">
+    <div class="hb-topbar"><div class="hb-topbar-inner"><div class="hb-breadcrumbs"><a href="index.html">JavaScript Programming Handbook</a><span class="hb-muted">/</span><span>Part 7</span><span class="hb-muted">·</span><a href="#m7-1">7.1</a> <a href="#m7-2">7.2</a> <a href="#m7-3">7.3</a> <a href="#m7-4">7.4</a> <a href="#m7-5">7.5</a> <a href="#m7-6">7.6</a> <a href="#m7-7">7.7</a></div><div class="hb-progress" aria-label="Reading progress"><div class="hb-progress-track" role="progressbar"><div class="hb-progress-fill"></div></div><div class="hb-progress-label">0%</div></div></div></div>
+
+    <div class="chapter-header" data-chapter-num="07">
+      <div class="chapter-part-label">📖 Part 7 — Modules & Tooling</div>
+      <h1 class="chapter-title">Modules & <span class="gradient-text">Tooling</span></h1>
+      <p class="chapter-subtitle">ES Modules, npm, bundlers, linting, testing, TypeScript — the modern JS development ecosystem.</p>
+      <div class="chapter-meta"><span>📄 Modules 7.1 – 7.7</span><span>⏱️ 60–80 min read</span><span>💻 55+ Examples</span></div>
+    </div>
+
+    <div class="hb-mini-toc"><div class="hb-mini-title">📍 Part 7 Modules</div><div class="hb-mini-links"><a href="#m7-1">7.1 ES Modules</a><a href="#m7-2">7.2 npm</a><a href="#m7-3">7.3 Bundlers</a><a href="#m7-4">7.4 Linting</a><a href="#m7-5">7.5 Testing</a><a href="#m7-6">7.6 TypeScript</a><a href="#m7-7">7.7 DevTools</a></div></div>
+
+    <div class="quick-ref">
+      <div class="qr-title">🚀 Advanced Lens — Part 7</div>
+      <p class="explain-en">Professional JavaScript delivery depends on tooling maturity: module boundaries, build correctness, lint/test automation, and type-assisted development. This layer turns feature code into maintainable product code.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Part 7 ka focus professional workflow hai. ESM, linting, testing, aur TypeScript adoption se codebase maintainable aur team-friendly banta hai.</div>
+    </div>
+
+    <div class="concept-block">
+      <h3>Tooling and quality checklist (Part 7)</h3>
+      <table>
+        <thead><tr><th>Focus</th><th>Industry baseline</th></tr></thead>
+        <tbody>
+          <tr><td>Module architecture</td><td>Keep import graph clear and avoid circular dependencies.</td></tr>
+          <tr><td>Build integrity</td><td>Use reproducible builds and inspect production bundle output.</td></tr>
+          <tr><td>Code quality gates</td><td>Run lint + format + test in CI and pre-commit hooks.</td></tr>
+          <tr><td>Type safety</td><td>Adopt TypeScript incrementally at risky interfaces first.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- MODULE 7.1 -->
+    <div class="module-section" id="m7-1">
+      <div class="module-header"><div class="module-number">7.1</div><h2 class="module-title">ES Modules — import/export, named, default, dynamic import()</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Organizing code into files</h3>
+        <p class="explain-en"><strong>ES Modules</strong> (ESM) are the standard module system. <code>export</code> exposes values, <code>import</code> consumes them. <strong>Named exports</strong> for multiple values, <strong>default export</strong> for the primary value. <code>import()</code> enables <strong>dynamic/lazy loading</strong>. Use <code>type="module"</code> in <code>&lt;script&gt;</code> tags.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>ES Modules</strong> standard module system hai. <code>export</code> values expose karta hai, <code>import</code> consume karta hai. <strong>Named exports</strong> multiple values ke liye, <strong>default export</strong> primary value ke liye. <code>import()</code> se dynamic/lazy loading hoti hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — ES Modules</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// ── utils.js ──</span>
+<span class="comment">// Named exports</span>
+<span class="keyword">export const</span> PI = <span class="number">3.14159</span>;
+<span class="keyword">export function</span> <span class="function">add</span>(a, b) { <span class="keyword">return</span> a + b; }
+<span class="keyword">export class</span> <span class="type">Vector</span> {
+    <span class="function">constructor</span>(x, y) { <span class="keyword">this</span>.x = x; <span class="keyword">this</span>.y = y; }
+}
+
+<span class="comment">// Default export (one per file)</span>
+<span class="keyword">export default class</span> <span class="type">Calculator</span> {
+    <span class="function">add</span>(a, b) { <span class="keyword">return</span> a + b; }
+}
+
+<span class="comment">// ── app.js ──</span>
+<span class="comment">// Named imports (must match export names)</span>
+<span class="keyword">import</span> { PI, add, <span class="type">Vector</span> } <span class="keyword">from</span> <span class="string">"./utils.js"</span>;
+<span class="keyword">import</span> { add <span class="keyword">as</span> sum } <span class="keyword">from</span> <span class="string">"./utils.js"</span>; <span class="comment">// Rename</span>
+
+<span class="comment">// Default import (any name)</span>
+<span class="keyword">import</span> <span class="type">Calculator</span> <span class="keyword">from</span> <span class="string">"./utils.js"</span>;
+<span class="keyword">import</span> <span class="type">Calc</span>, { PI } <span class="keyword">from</span> <span class="string">"./utils.js"</span>; <span class="comment">// Both</span>
+
+<span class="comment">// Import all as namespace</span>
+<span class="keyword">import</span> * <span class="keyword">as</span> Utils <span class="keyword">from</span> <span class="string">"./utils.js"</span>;
+Utils.add(<span class="number">1</span>, <span class="number">2</span>); Utils.PI;
+
+<span class="comment">// ✅ Dynamic import — lazy loading</span>
+<span class="keyword">const</span> btn = document.querySelector(<span class="string">"#chart-btn"</span>);
+btn.addEventListener(<span class="string">"click"</span>, <span class="keyword">async</span> () => {
+    <span class="keyword">const</span> { renderChart } = <span class="keyword">await import</span>(<span class="string">"./chart.js"</span>);
+    renderChart(data); <span class="comment">// Loaded only when needed!</span>
+});
+
+<span class="comment">// In HTML</span>
+<span class="comment">// &lt;script type="module" src="app.js"&gt;&lt;/script&gt;</span></pre></div>
+        </div>
+        <div class="callout callout-tip"><strong>Best practice:</strong> Prefer named exports — they enable tree-shaking (bundlers remove unused code). Reserve default exports for React components or single-class files.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 7.2 -->
+    <div class="module-section" id="m7-2">
+      <div class="module-header"><div class="module-number">7.2</div><h2 class="module-title">npm — package.json, dependencies, scripts, semantic versioning</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">The JavaScript package manager</h3>
+        <p class="explain-en"><code>npm</code> manages dependencies. <code>package.json</code> defines your project. <code>npm install</code> adds packages. <strong>Semantic versioning</strong>: <code>^1.2.3</code> means ≥1.2.3 &lt;2.0.0. <code>devDependencies</code> are build-time only. <code>scripts</code> automate tasks. <code>npx</code> runs packages without installing.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>npm</code> dependencies manage karta hai. <code>package.json</code> project define karta hai. <strong>Semantic versioning</strong>: <code>^1.2.3</code> matlab ≥1.2.3 &lt;2.0.0. <code>scripts</code> se tasks automate hote hain. <code>npx</code> bina install kiye packages run karta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Terminal / package.json</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># Initialize project</span>
+npm init -y
+
+<span class="comment"># Install dependencies</span>
+npm install express        <span class="comment"># Production dependency</span>
+npm install -D vitest      <span class="comment"># Dev dependency</span>
+npm install -g typescript  <span class="comment"># Global</span>
+
+<span class="comment"># package.json</span>
+{
+    <span class="string">"name"</span>: <span class="string">"my-app"</span>,
+    <span class="string">"version"</span>: <span class="string">"1.0.0"</span>,
+    <span class="string">"type"</span>: <span class="string">"module"</span>,  <span class="comment">// Enable ESM</span>
+    <span class="string">"scripts"</span>: {
+        <span class="string">"dev"</span>: <span class="string">"vite"</span>,
+        <span class="string">"build"</span>: <span class="string">"vite build"</span>,
+        <span class="string">"test"</span>: <span class="string">"vitest"</span>,
+        <span class="string">"lint"</span>: <span class="string">"eslint ."</span>
+    },
+    <span class="string">"dependencies"</span>: {
+        <span class="string">"express"</span>: <span class="string">"^4.18.0"</span>
+    },
+    <span class="string">"devDependencies"</span>: {
+        <span class="string">"vitest"</span>: <span class="string">"^1.0.0"</span>
+    }
+}
+
+<span class="comment"># Run scripts</span>
+npm run dev     <span class="comment"># Run dev script</span>
+npm test        <span class="comment"># Shorthand for npm run test</span>
+npx create-vite <span class="comment"># Run without installing</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Version</th><th>Meaning</th><th>Example range</th></tr></thead>
+            <tbody>
+              <tr><td><code>^1.2.3</code></td><td>Compatible (minor+patch)</td><td>≥1.2.3 &lt;2.0.0</td></tr>
+              <tr><td><code>~1.2.3</code></td><td>Patch only</td><td>≥1.2.3 &lt;1.3.0</td></tr>
+              <tr><td><code>1.2.3</code></td><td>Exact version</td><td>Only 1.2.3</td></tr>
+              <tr><td><code>*</code></td><td>Any version</td><td>Latest</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 7.3 -->
+    <div class="module-section" id="m7-3">
+      <div class="module-header"><div class="module-number">7.3</div><h2 class="module-title">Bundlers — Vite, Webpack concepts, tree-shaking, code splitting</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Building for production</h3>
+        <p class="explain-en"><strong>Bundlers</strong> combine modules into optimized files. <strong>Vite</strong> (fastest) uses native ESM in dev, Rollup for production. <strong>Tree-shaking</strong> removes unused exports. <strong>Code splitting</strong> creates chunks loaded on demand. <strong>HMR</strong> (Hot Module Replacement) updates without refresh.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Bundlers</strong> modules ko optimized files me combine karte hain. <strong>Vite</strong> (fastest) dev me native ESM use karta hai. <strong>Tree-shaking</strong> unused exports remove karta hai. <strong>Code splitting</strong> on-demand chunks banata hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Terminal — Vite Setup</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># Create Vite project</span>
+npm create vite@latest my-app -- --template vanilla
+<span class="keyword">cd</span> my-app
+npm install
+npm run dev    <span class="comment"># Dev server with HMR</span>
+npm run build  <span class="comment"># Production build</span>
+
+<span class="comment"># Output: dist/</span>
+<span class="comment"># ├── index.html</span>
+<span class="comment"># ├── assets/</span>
+<span class="comment"># │   ├── index-abc123.js   (minified + tree-shaken)</span>
+<span class="comment"># │   └── index-def456.css  (minified)</span>
+
+<span class="comment"># vite.config.js</span>
+<span class="keyword">import</span> { defineConfig } <span class="keyword">from</span> <span class="string">"vite"</span>;
+
+<span class="keyword">export default</span> defineConfig({
+    build: {
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    vendor: [<span class="string">"lodash"</span>, <span class="string">"axios"</span>]
+                }
+            }
+        }
+    }
+});</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Tool</th><th>Speed</th><th>Best for</th></tr></thead>
+            <tbody>
+              <tr><td><code>Vite</code></td><td>⚡ Fastest</td><td>Modern projects, SPAs</td></tr>
+              <tr><td><code>Webpack</code></td><td>🐢 Slower</td><td>Legacy, complex configs</td></tr>
+              <tr><td><code>Rollup</code></td><td>⚡ Fast</td><td>Libraries</td></tr>
+              <tr><td><code>esbuild</code></td><td>⚡⚡ Fastest</td><td>Build tool (used by Vite)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 7.4 -->
+    <div class="module-section" id="m7-4">
+      <div class="module-header"><div class="module-number">7.4</div><h2 class="module-title">Linting & Formatting — ESLint, Prettier, editor integration</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Consistent, error-free code</h3>
+        <p class="explain-en"><strong>ESLint</strong> catches bugs and enforces coding standards. <strong>Prettier</strong> auto-formats code. Together they ensure consistent style across teams. Use <code>eslint.config.js</code> (flat config) with recommended rules. Integrate with your editor for real-time feedback.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>ESLint</strong> bugs pakadta hai aur coding standards enforce karta hai. <strong>Prettier</strong> code auto-format karta hai. Dono milke team me consistent style ensure karte hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Terminal / Config</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># Install ESLint + Prettier</span>
+npm install -D eslint prettier eslint-config-prettier
+
+<span class="comment"># eslint.config.js (flat config — ESLint 9+)</span>
+<span class="keyword">import</span> js <span class="keyword">from</span> <span class="string">"@eslint/js"</span>;
+<span class="keyword">export default</span> [
+    js.configs.recommended,
+    {
+        rules: {
+            <span class="string">"no-unused-vars"</span>: <span class="string">"warn"</span>,
+            <span class="string">"no-console"</span>: <span class="string">"warn"</span>,
+            <span class="string">"prefer-const"</span>: <span class="string">"error"</span>,
+            <span class="string">"eqeqeq"</span>: <span class="string">"error"</span>  <span class="comment">// Force ===</span>
+        }
+    }
+];
+
+<span class="comment"># .prettierrc</span>
+{
+    <span class="string">"semi"</span>: <span class="keyword">true</span>,
+    <span class="string">"singleQuote"</span>: <span class="keyword">false</span>,
+    <span class="string">"tabWidth"</span>: <span class="number">4</span>,
+    <span class="string">"printWidth"</span>: <span class="number">100</span>
+}
+
+<span class="comment"># Run</span>
+npx eslint .           <span class="comment"># Check</span>
+npx eslint --fix .     <span class="comment"># Auto-fix</span>
+npx prettier --write . <span class="comment"># Format all</span></pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 7.5 -->
+    <div class="module-section" id="m7-5">
+      <div class="module-header"><div class="module-number">7.5</div><h2 class="module-title">Testing — Vitest, unit tests, test structure, assertions, mocking</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Writing reliable code</h3>
+        <p class="explain-en"><strong>Vitest</strong> is the modern test runner (compatible with Jest API). Use <code>describe</code>/<code>it</code>/<code>expect</code> structure. <strong>Unit tests</strong> test individual functions. <strong>Mocking</strong> replaces dependencies. <strong>Test-Driven Development</strong> (TDD): write tests first, then code.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Vitest</strong> modern test runner hai. <code>describe</code>/<code>it</code>/<code>expect</code> structure use karo. <strong>Unit tests</strong> individual functions test karte hain. <strong>TDD</strong>: pehle tests likho, phir code likho.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — Testing with Vitest</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// math.js</span>
+<span class="keyword">export function</span> <span class="function">add</span>(a, b) { <span class="keyword">return</span> a + b; }
+<span class="keyword">export function</span> <span class="function">divide</span>(a, b) {
+    <span class="keyword">if</span> (b === <span class="number">0</span>) <span class="keyword">throw new</span> <span class="type">Error</span>(<span class="string">"Division by zero"</span>);
+    <span class="keyword">return</span> a / b;
+}
+
+<span class="comment">// math.test.js</span>
+<span class="keyword">import</span> { describe, it, expect } <span class="keyword">from</span> <span class="string">"vitest"</span>;
+<span class="keyword">import</span> { add, divide } <span class="keyword">from</span> <span class="string">"./math.js"</span>;
+
+describe(<span class="string">"add"</span>, () => {
+    it(<span class="string">"adds two numbers"</span>, () => {
+        expect(add(<span class="number">1</span>, <span class="number">2</span>)).toBe(<span class="number">3</span>);
+    });
+    it(<span class="string">"handles negative numbers"</span>, () => {
+        expect(add(<span class="number">-1</span>, <span class="number">-2</span>)).toBe(<span class="number">-3</span>);
+    });
+});
+
+describe(<span class="string">"divide"</span>, () => {
+    it(<span class="string">"divides correctly"</span>, () => {
+        expect(divide(<span class="number">10</span>, <span class="number">2</span>)).toBe(<span class="number">5</span>);
+    });
+    it(<span class="string">"throws on zero"</span>, () => {
+        expect(() => divide(<span class="number">1</span>, <span class="number">0</span>)).toThrow(<span class="string">"Division by zero"</span>);
+    });
+});
+
+<span class="comment">// Common assertions</span>
+expect(value).toBe(exact);
+expect(value).toEqual(deepEqual);
+expect(arr).toContain(item);
+expect(obj).toHaveProperty(<span class="string">"key"</span>);
+expect(fn).toHaveBeenCalledWith(args);</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 7.6 -->
+    <div class="module-section" id="m7-6">
+      <div class="module-header"><div class="module-number">7.6</div><h2 class="module-title">TypeScript Intro — types, interfaces, generics, why TypeScript</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">JavaScript with superpowers</h3>
+        <p class="explain-en"><strong>TypeScript</strong> adds <strong>static types</strong> to JavaScript. Catches bugs at compile time, enables better IDE support, and documents your code. <strong>Interfaces</strong> define object shapes. <strong>Generics</strong> create reusable typed code. All valid JS is valid TS.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>TypeScript</strong> JavaScript me <strong>static types</strong> add karta hai. Compile time pe bugs pakadta hai, better IDE support deta hai. <strong>Interfaces</strong> object shapes define karte hain. Sab valid JS valid TS hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 TypeScript — Basics</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Basic types</span>
+<span class="keyword">let</span> name: <span class="type">string</span> = <span class="string">"Alice"</span>;
+<span class="keyword">let</span> age: <span class="type">number</span> = <span class="number">25</span>;
+<span class="keyword">let</span> active: <span class="type">boolean</span> = <span class="keyword">true</span>;
+<span class="keyword">let</span> items: <span class="type">string</span>[] = [<span class="string">"a"</span>, <span class="string">"b"</span>];
+
+<span class="comment">// Function types</span>
+<span class="keyword">function</span> <span class="function">greet</span>(name: <span class="type">string</span>, age?: <span class="type">number</span>): <span class="type">string</span> {
+    <span class="keyword">return</span> <span class="string">`Hi </span><span class="keyword">${</span>name<span class="keyword">}</span><span class="string">`</span>;
+}
+
+<span class="comment">// Interface — define object shape</span>
+<span class="keyword">interface</span> <span class="type">User</span> {
+    id: <span class="type">number</span>;
+    name: <span class="type">string</span>;
+    email: <span class="type">string</span>;
+    role?: <span class="string">"admin"</span> | <span class="string">"user"</span>; <span class="comment">// Optional + union</span>
+}
+
+<span class="keyword">function</span> <span class="function">createUser</span>(data: <span class="type">User</span>): <span class="type">User</span> {
+    <span class="keyword">return</span> { ...data, role: data.role ?? <span class="string">"user"</span> };
+}
+
+<span class="comment">// Generics — reusable typed code</span>
+<span class="keyword">function</span> <span class="function">first</span>&lt;T&gt;(arr: T[]): T | <span class="type">undefined</span> {
+    <span class="keyword">return</span> arr[<span class="number">0</span>];
+}
+first([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]);        <span class="comment">// type: number</span>
+first([<span class="string">"a"</span>,<span class="string">"b"</span>]);      <span class="comment">// type: string</span></pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 7.7 -->
+    <div class="module-section" id="m7-7">
+      <div class="module-header"><div class="module-number">7.7</div><h2 class="module-title">DevTools — debugging, breakpoints, network tab, performance profiling</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Debug like a pro</h3>
+        <p class="explain-en"><strong>Chrome DevTools</strong> is your best friend. <strong>Console</strong>: <code>console.table()</code>, <code>console.group()</code>, <code>console.time()</code>. <strong>Debugger</strong>: set breakpoints, step through code, inspect variables. <strong>Network tab</strong>: analyze requests. <strong>Performance tab</strong>: find bottlenecks.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Chrome DevTools</strong> tumhara best friend hai. <strong>Console</strong> me <code>console.table()</code>, <code>console.group()</code> use karo. <strong>Debugger</strong> me breakpoints lagao, step through karo. <strong>Network tab</strong> se requests analyze karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — DevTools Tips</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// ✅ Advanced console methods</span>
+console.table([{name:<span class="string">"Alice"</span>,age:<span class="number">25</span>},{name:<span class="string">"Bob"</span>,age:<span class="number">30</span>}]);
+console.group(<span class="string">"User Data"</span>);
+  console.log(<span class="string">"Name:"</span>, name);
+  console.log(<span class="string">"Age:"</span>, age);
+console.groupEnd();
+
+<span class="comment">// Timing</span>
+console.time(<span class="string">"fetch"</span>);
+<span class="keyword">await</span> fetch(<span class="string">"/api/data"</span>);
+console.timeEnd(<span class="string">"fetch"</span>); <span class="comment">// "fetch: 234ms"</span>
+
+<span class="comment">// Conditional logging</span>
+console.assert(x > <span class="number">0</span>, <span class="string">"x must be positive"</span>);
+
+<span class="comment">// ✅ debugger statement — pause execution</span>
+<span class="keyword">function</span> <span class="function">buggyFunction</span>(data) {
+    <span class="keyword">debugger</span>; <span class="comment">// Pauses here in DevTools!</span>
+    <span class="keyword">return</span> data.map(x => x.value);
+}
+
+<span class="comment">// Styled console</span>
+console.log(<span class="string">"%cSuccess!"</span>, <span class="string">"color:green;font-size:20px"</span>);</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="practice-box">
+      <div class="practice-title">✏️ Practice Exercises — Part 7</div>
+      <ol>
+        <li>Refactor a single-file script into 3+ modules with named and default exports.</li>
+        <li>Create a <code>package.json</code> with scripts for dev, build, test, and lint.</li>
+        <li>Set up a Vite project and verify tree-shaking removes unused exports.</li>
+        <li>Configure ESLint with <code>prefer-const</code> and <code>eqeqeq</code> rules. Fix all violations.</li>
+        <li>Write 5 unit tests for a utility function using Vitest's <code>describe/it/expect</code>.</li>
+        <li>Convert a JS file to TypeScript: add types, interfaces, and fix type errors.</li>
+        <li>Use <code>console.table()</code>, <code>console.time()</code>, and <code>debugger</code> to profile a slow function.</li>
+      </ol>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 npm Commands Cheat Sheet</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Command</th><th>Alias</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr><td><code>npm init -y</code></td><td>—</td><td>Create package.json with defaults</td></tr>
+            <tr><td><code>npm install pkg</code></td><td><code>npm i pkg</code></td><td>Add production dependency</td></tr>
+            <tr><td><code>npm install -D pkg</code></td><td><code>npm i -D pkg</code></td><td>Add dev dependency</td></tr>
+            <tr><td><code>npm install -g pkg</code></td><td>—</td><td>Install globally</td></tr>
+            <tr><td><code>npm uninstall pkg</code></td><td><code>npm un pkg</code></td><td>Remove dependency</td></tr>
+            <tr><td><code>npm update</code></td><td>—</td><td>Update all packages</td></tr>
+            <tr><td><code>npm run script</code></td><td>—</td><td>Run named script</td></tr>
+            <tr><td><code>npm test</code></td><td><code>npm t</code></td><td>Run test script</td></tr>
+            <tr><td><code>npx pkg</code></td><td>—</td><td>Run package without installing</td></tr>
+            <tr><td><code>npm ls</code></td><td>—</td><td>List installed packages</td></tr>
+            <tr><td><code>npm outdated</code></td><td>—</td><td>Check for outdated packages</td></tr>
+            <tr><td><code>npm audit</code></td><td>—</td><td>Check for vulnerabilities</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 ES Modules vs CommonJS</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Feature</th><th>ESM (ES Modules)</th><th>CJS (CommonJS)</th></tr></thead>
+          <tbody>
+            <tr><td>Syntax</td><td><code>import/export</code></td><td><code>require()/module.exports</code></td></tr>
+            <tr><td>Loading</td><td>Static (compile-time)</td><td>Dynamic (runtime)</td></tr>
+            <tr><td>Tree-shaking</td><td>✅ Yes</td><td>❌ No</td></tr>
+            <tr><td>Top-level await</td><td>✅ Yes</td><td>❌ No</td></tr>
+            <tr><td>Browser support</td><td>✅ Native</td><td>❌ Requires bundler</td></tr>
+            <tr><td>Node.js</td><td><code>"type": "module"</code> or <code>.mjs</code></td><td>Default in Node.js</td></tr>
+            <tr><td><code>this</code> at top level</td><td><code>undefined</code></td><td><code>module.exports</code></td></tr>
+            <tr><td>File extensions</td><td><code>.js</code>, <code>.mjs</code></td><td><code>.js</code>, <code>.cjs</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Vitest Assertion Methods</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Matcher</th><th>Checks</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><code>.toBe(v)</code></td><td>Strict equality (===)</td><td><code>expect(1+1).toBe(2)</code></td></tr>
+            <tr><td><code>.toEqual(v)</code></td><td>Deep equality</td><td><code>expect({a:1}).toEqual({a:1})</code></td></tr>
+            <tr><td><code>.toBeTruthy()</code></td><td>Truthy value</td><td><code>expect("hi").toBeTruthy()</code></td></tr>
+            <tr><td><code>.toBeFalsy()</code></td><td>Falsy value</td><td><code>expect(0).toBeFalsy()</code></td></tr>
+            <tr><td><code>.toBeNull()</code></td><td>Is null</td><td><code>expect(null).toBeNull()</code></td></tr>
+            <tr><td><code>.toContain(v)</code></td><td>Array/string contains</td><td><code>expect([1,2]).toContain(1)</code></td></tr>
+            <tr><td><code>.toThrow(msg?)</code></td><td>Throws error</td><td><code>expect(fn).toThrow("err")</code></td></tr>
+            <tr><td><code>.toHaveLength(n)</code></td><td>Array/string length</td><td><code>expect([1,2]).toHaveLength(2)</code></td></tr>
+            <tr><td><code>.toHaveProperty(k)</code></td><td>Object has key</td><td><code>expect(obj).toHaveProperty("id")</code></td></tr>
+            <tr><td><code>.toMatch(regex)</code></td><td>String matches pattern</td><td><code>expect(s).toMatch(/hello/)</code></td></tr>
+            <tr><td><code>.toBeGreaterThan(n)</code></td><td>Number comparison</td><td><code>expect(5).toBeGreaterThan(3)</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="concept-block">
+      <h3 class="concept-heading">TypeScript Utility Types</h3>
+      <p class="explain-en">TypeScript provides built-in <strong>utility types</strong> to transform types: <code>Partial</code> makes all properties optional, <code>Required</code> makes all required, <code>Pick</code> selects specific properties, <code>Omit</code> excludes properties. These eliminate repetitive type definitions.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>TypeScript built-in <strong>utility types</strong> deta hai types transform karne ke liye: <code>Partial</code> sab properties optional banata hai, <code>Pick</code> specific properties select karta hai, <code>Omit</code> properties exclude karta hai.</div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">💻 TypeScript — Utility Types</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+        <div class="code-body"><pre><span class="keyword">interface</span> <span class="type">User</span> {
+    id: <span class="type">number</span>;
+    name: <span class="type">string</span>;
+    email: <span class="type">string</span>;
+    age: <span class="type">number</span>;
+}
+
+<span class="comment">// Partial — all optional</span>
+<span class="keyword">type</span> <span class="type">UpdateUser</span> = <span class="type">Partial</span>&lt;<span class="type">User</span>&gt;;
+<span class="comment">// { id?: number; name?: string; email?: string; age?: number }</span>
+
+<span class="comment">// Required — all required</span>
+<span class="keyword">type</span> <span class="type">StrictUser</span> = <span class="type">Required</span>&lt;<span class="type">User</span>&gt;;
+
+<span class="comment">// Pick — select specific properties</span>
+<span class="keyword">type</span> <span class="type">UserPreview</span> = <span class="type">Pick</span>&lt;<span class="type">User</span>, <span class="string">"id"</span> | <span class="string">"name"</span>&gt;;
+<span class="comment">// { id: number; name: string }</span>
+
+<span class="comment">// Omit — exclude properties</span>
+<span class="keyword">type</span> <span class="type">CreateUser</span> = <span class="type">Omit</span>&lt;<span class="type">User</span>, <span class="string">"id"</span>&gt;;
+<span class="comment">// { name: string; email: string; age: number }</span>
+
+<span class="comment">// Record — key-value mapping</span>
+<span class="keyword">type</span> <span class="type">UserRoles</span> = <span class="type">Record</span>&lt;<span class="type">string</span>, <span class="string">"admin"</span> | <span class="string">"user"</span>&gt;;
+
+<span class="comment">// ReturnType — infer return type</span>
+<span class="keyword">function</span> <span class="function">getUser</span>() { <span class="keyword">return</span> { id: <span class="number">1</span>, name: <span class="string">"Alice"</span> }; }
+<span class="keyword">type</span> <span class="type">UserResult</span> = <span class="type">ReturnType</span>&lt;<span class="keyword">typeof</span> getUser&gt;;
+<span class="comment">// { id: number; name: string }</span></pre></div>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 TypeScript Utility Types Quick Reference</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Utility</th><th>Description</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><code>Partial&lt;T&gt;</code></td><td>All properties optional</td><td>Update/patch payloads</td></tr>
+            <tr><td><code>Required&lt;T&gt;</code></td><td>All properties required</td><td>Strict validation</td></tr>
+            <tr><td><code>Pick&lt;T, K&gt;</code></td><td>Select specific keys</td><td>API preview responses</td></tr>
+            <tr><td><code>Omit&lt;T, K&gt;</code></td><td>Remove specific keys</td><td>Create payloads (no ID)</td></tr>
+            <tr><td><code>Record&lt;K, V&gt;</code></td><td>Key-value map type</td><td>Lookup tables, configs</td></tr>
+            <tr><td><code>Readonly&lt;T&gt;</code></td><td>All properties readonly</td><td>Immutable data</td></tr>
+            <tr><td><code>ReturnType&lt;F&gt;</code></td><td>Infer function return type</td><td>Type-safe wrappers</td></tr>
+            <tr><td><code>Parameters&lt;F&gt;</code></td><td>Infer function params</td><td>Decorator patterns</td></tr>
+            <tr><td><code>Exclude&lt;T, U&gt;</code></td><td>Remove types from union</td><td>Filter union members</td></tr>
+            <tr><td><code>NonNullable&lt;T&gt;</code></td><td>Remove null/undefined</td><td>Strict non-null values</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="concept-block">
+      <h3 class="concept-heading">Project folder structure</h3>
+      <p class="explain-en">A well-organized project structure makes code maintainable. Separate <strong>source code</strong>, <strong>tests</strong>, <strong>configs</strong>, and <strong>build output</strong>. Group by feature, not file type, for larger projects.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Achi project structure code ko maintainable banati hai. <strong>Source code</strong>, <strong>tests</strong>, <strong>configs</strong> aur <strong>build output</strong> alag rakho. Bade projects me feature ke hisaab se group karo.</div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">📁 Project Structure</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+        <div class="code-body"><pre>my-project/
+├── src/                  <span class="comment"># Source code</span>
+│   ├── index.js          <span class="comment"># Entry point</span>
+│   ├── utils/            <span class="comment"># Utility functions</span>
+│   │   ├── math.js
+│   │   └── string.js
+│   ├── components/       <span class="comment"># UI components</span>
+│   │   ├── Button.js
+│   │   └── Modal.js
+│   └── services/         <span class="comment"># API/business logic</span>
+│       ├── api.js
+│       └── auth.js
+├── tests/                <span class="comment"># Test files</span>
+│   ├── math.test.js
+│   └── api.test.js
+├── public/               <span class="comment"># Static assets</span>
+│   └── index.html
+├── dist/                 <span class="comment"># Build output (gitignored)</span>
+├── package.json
+├── vite.config.js
+├── eslint.config.js
+├── .prettierrc
+├── .gitignore
+└── README.md</pre></div>
+      </div>
+    </div>
+
+    <div class="concept-block">
+      <h3 class="concept-heading">Git workflow for JS projects</h3>
+      <p class="explain-en">Use <strong>.gitignore</strong> to exclude <code>node_modules/</code>, <code>dist/</code>, and env files. <strong>Conventional commits</strong> standardize commit messages. Use <strong>husky</strong> for pre-commit hooks to run lint and tests automatically.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>.gitignore</strong> me <code>node_modules/</code>, <code>dist/</code> exclude karo. <strong>Conventional commits</strong> se commit messages standard rahte hain. <strong>Husky</strong> se pre-commit hooks laga ke lint aur tests automatically run karo.</div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">💻 Git — JS Project Setup</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+        <div class="code-body"><pre><span class="comment"># .gitignore — essential for JS projects</span>
+node_modules/
+dist/
+.env
+.env.local
+*.log
+.DS_Store
+coverage/
+
+<span class="comment"># Conventional commit format</span>
+<span class="comment"># type(scope): description</span>
+git commit -m <span class="string">"feat(auth): add login with Google OAuth"</span>
+git commit -m <span class="string">"fix(api): handle 404 responses correctly"</span>
+git commit -m <span class="string">"refactor(utils): extract validation helpers"</span>
+git commit -m <span class="string">"test(cart): add unit tests for addItem"</span>
+git commit -m <span class="string">"docs(readme): update installation guide"</span>
+
+<span class="comment"># Pre-commit hooks with husky</span>
+npm install -D husky lint-staged
+npx husky init
+<span class="comment"># .husky/pre-commit runs: npx lint-staged</span>
+<span class="comment"># lint-staged config in package.json:</span>
+<span class="comment"># "lint-staged": { "*.js": ["eslint --fix", "prettier --write"] }</span></pre></div>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 DevTools Keyboard Shortcuts</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Shortcut</th><th>Action</th><th>Tab</th></tr></thead>
+          <tbody>
+            <tr><td><code>F12</code> / <code>Ctrl+Shift+I</code></td><td>Open DevTools</td><td>—</td></tr>
+            <tr><td><code>Ctrl+Shift+J</code></td><td>Open Console directly</td><td>Console</td></tr>
+            <tr><td><code>Ctrl+Shift+C</code></td><td>Inspect element mode</td><td>Elements</td></tr>
+            <tr><td><code>F8</code></td><td>Pause/Resume execution</td><td>Sources</td></tr>
+            <tr><td><code>F10</code></td><td>Step over</td><td>Sources</td></tr>
+            <tr><td><code>F11</code></td><td>Step into</td><td>Sources</td></tr>
+            <tr><td><code>Shift+F11</code></td><td>Step out</td><td>Sources</td></tr>
+            <tr><td><code>Ctrl+P</code></td><td>Open file (quick open)</td><td>Sources</td></tr>
+            <tr><td><code>Ctrl+Shift+P</code></td><td>Run DevTools command</td><td>Any</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Console Methods Reference</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Method</th><th>Purpose</th><th>Pro tip</th></tr></thead>
+          <tbody>
+            <tr><td><code>console.log()</code></td><td>General output</td><td>Use template literals for clarity</td></tr>
+            <tr><td><code>console.error()</code></td><td>Error output (red)</td><td>Shows stack trace</td></tr>
+            <tr><td><code>console.warn()</code></td><td>Warning output (yellow)</td><td>For deprecations</td></tr>
+            <tr><td><code>console.table()</code></td><td>Display array/object as table</td><td>Best for arrays of objects</td></tr>
+            <tr><td><code>console.group()</code></td><td>Collapsible group</td><td>Organize related logs</td></tr>
+            <tr><td><code>console.time()</code></td><td>Start timer</td><td>Pair with <code>timeEnd()</code></td></tr>
+            <tr><td><code>console.assert()</code></td><td>Log only if false</td><td>Conditional debugging</td></tr>
+            <tr><td><code>console.dir()</code></td><td>Interactive object tree</td><td>DOM elements as objects</td></tr>
+            <tr><td><code>console.trace()</code></td><td>Print call stack</td><td>Find who called function</td></tr>
+            <tr><td><code>console.count()</code></td><td>Count calls</td><td>Track function invocations</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="handbook-nav">
+      <a href="part6.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Part 6: DOM & Browser APIs</div></div></a>
+      <a href="part8.html" class="nav-btn next"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Part 8: Advanced Patterns & Modern JS →</div></div><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+  </div>
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
+  <script src="../../../js/main.js"></script>
+  <script>
+    (() => {
+      document.querySelectorAll('.code-block').forEach((block) => { const pre = block.querySelector('.code-body pre'), header = block.querySelector('.code-header'); if (!pre || !header) return; let actions = header.querySelector('.code-actions'); if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); } const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'code-copy-btn'; btn.textContent = 'Copy'; btn.addEventListener('click', async () => { try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; } catch { btn.textContent = 'Failed'; } finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); } }); actions.prepend(btn); });
+      const fill = document.querySelector('.hb-progress-fill'), label = document.querySelector('.hb-progress-label');
+      if (fill && label) { const update = () => { const h = document.documentElement, d = (h.scrollHeight - h.clientHeight) || 1, p = Math.max(0, Math.min(1, h.scrollTop / d)); fill.style.width = (p*100).toFixed(0)+'%'; label.textContent = (p*100).toFixed(0)+'%'; }; document.addEventListener('scroll', update, { passive: true }); update(); }
+    })();
+  </script>
+</body>
+</html>

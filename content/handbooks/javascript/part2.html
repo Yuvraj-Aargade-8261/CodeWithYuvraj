@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Part 2: Control Flow & Functions — JavaScript Programming Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 2: Conditionals, loops, functions, closures, HOFs, error handling in JavaScript.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/handbook.css">
+</head>
+<body class="handbook-wrapper">
+  <nav class="navbar"><div class="container"><a href="../../../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../../../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
+
+  <div class="handbook-page">
+    <div class="hb-topbar"><div class="hb-topbar-inner"><div class="hb-breadcrumbs"><a href="index.html">JavaScript Programming Handbook</a><span class="hb-muted">/</span><span>Part 2</span><span class="hb-muted">·</span><a href="#m2-1">2.1</a> <a href="#m2-2">2.2</a> <a href="#m2-3">2.3</a> <a href="#m2-4">2.4</a> <a href="#m2-5">2.5</a> <a href="#m2-6">2.6</a> <a href="#m2-7">2.7</a></div><div class="hb-progress" aria-label="Reading progress"><div class="hb-progress-track" role="progressbar"><div class="hb-progress-fill"></div></div><div class="hb-progress-label">0%</div></div></div></div>
+
+    <div class="chapter-header" data-chapter-num="02">
+      <div class="chapter-part-label">📖 Part 2 — Control Flow & Functions</div>
+      <h1 class="chapter-title">Control Flow & <span class="gradient-text">Functions</span></h1>
+      <p class="chapter-subtitle">Conditionals, loops, arrow functions, closures, higher-order functions, error handling — the logic engine of JavaScript.</p>
+      <div class="chapter-meta"><span>📄 Modules 2.1 – 2.7</span><span>⏱️ 70–90 min read</span><span>💻 75+ Examples</span></div>
+    </div>
+
+    <div class="hb-mini-toc"><div class="hb-mini-title">📍 Part 2 Modules</div><div class="hb-mini-links"><a href="#m2-1">2.1 Conditionals</a><a href="#m2-2">2.2 Loops</a><a href="#m2-3">2.3 Functions</a><a href="#m2-4">2.4 Closures</a><a href="#m2-5">2.5 HOFs</a><a href="#m2-6">2.6 Strings</a><a href="#m2-7">2.7 Errors</a></div></div>
+
+    <div class="quick-ref">
+      <div class="qr-title">🚀 Advanced Lens — Part 2</div>
+      <p class="explain-en">Production JavaScript logic is function-first: clear branching, closure-aware design, and predictable error surfaces. These decisions improve debuggability, testability, and team-level maintainability.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Real-world JS me Part 2 ka main focus hota hai clean logic aur closure-safe function design. Isse bugs kam hote hain aur testing/debugging fast hoti hai.</div>
+    </div>
+
+    <div class="concept-block">
+      <h3>Control-flow and function checklist (Part 2)</h3>
+      <table>
+        <thead><tr><th>Signal</th><th>Production expectation</th></tr></thead>
+        <tbody>
+          <tr><td>Branch clarity</td><td>Prefer guard clauses over deeply nested condition blocks.</td></tr>
+          <tr><td>Function contracts</td><td>Keep function inputs/outputs explicit and side effects controlled.</td></tr>
+          <tr><td>Closure safety</td><td>Avoid stale closure bugs in async callbacks and event handlers.</td></tr>
+          <tr><td>Error handling</td><td>Use structured `try/catch` and consistent custom error semantics.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- MODULE 2.1 -->
+    <div class="module-section" id="m2-1">
+      <div class="module-header"><div class="module-number">2.1</div><h2 class="module-title">Conditionals — if/else, ternary, switch, switch(true)</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Making decisions</h3>
+        <p class="explain-en"><code>if/else</code> is the basic conditional. <strong>Ternary</strong> (<code>? :</code>) is a one-line if/else for expressions. <code>switch</code> matches values with strict equality (<code>===</code>). <strong>Pro pattern:</strong> <code>switch(true)</code> evaluates conditions like if/else chains — cleaner for range checks.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>if/else</code> basic conditional hai. <strong>Ternary</strong> (<code>? :</code>) one-line if/else hai expressions ke liye. <code>switch</code> strict equality (<code>===</code>) se match karta hai. <strong>Pro pattern:</strong> <code>switch(true)</code> se range checks clean hote hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — Conditionals</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// if / else if / else</span>
+<span class="keyword">const</span> score = <span class="number">85</span>;
+<span class="keyword">if</span> (score >= <span class="number">90</span>) {
+    console.log(<span class="string">"A grade"</span>);
+} <span class="keyword">else if</span> (score >= <span class="number">80</span>) {
+    console.log(<span class="string">"B grade"</span>);  <span class="comment">// ← This runs</span>
+} <span class="keyword">else if</span> (score >= <span class="number">70</span>) {
+    console.log(<span class="string">"C grade"</span>);
+} <span class="keyword">else</span> {
+    console.log(<span class="string">"Below C"</span>);
+}
+
+<span class="comment">// ✅ Ternary — expression (returns a value)</span>
+<span class="keyword">const</span> age = <span class="number">20</span>;
+<span class="keyword">const</span> status = age >= <span class="number">18</span> ? <span class="string">"Adult"</span> : <span class="string">"Minor"</span>;
+<span class="comment">// Nested ternary (use sparingly!)</span>
+<span class="keyword">const</span> tier = score >= <span class="number">90</span> ? <span class="string">"A"</span> : score >= <span class="number">80</span> ? <span class="string">"B"</span> : <span class="string">"C"</span>;
+
+<span class="comment">// ✅ switch — strict equality matching</span>
+<span class="keyword">const</span> day = <span class="string">"Monday"</span>;
+<span class="keyword">switch</span> (day) {
+    <span class="keyword">case</span> <span class="string">"Saturday"</span>:
+    <span class="keyword">case</span> <span class="string">"Sunday"</span>:
+        console.log(<span class="string">"Weekend! 🎉"</span>);
+        <span class="keyword">break</span>;
+    <span class="keyword">case</span> <span class="string">"Monday"</span>:
+        console.log(<span class="string">"Start of week"</span>);
+        <span class="keyword">break</span>;
+    <span class="keyword">default</span>:
+        console.log(<span class="string">"Midweek"</span>);
+}
+
+<span class="comment">// ✅ switch(true) — clean range checking</span>
+<span class="keyword">switch</span> (<span class="keyword">true</span>) {
+    <span class="keyword">case</span> score >= <span class="number">90</span>: console.log(<span class="string">"A"</span>); <span class="keyword">break</span>;
+    <span class="keyword">case</span> score >= <span class="number">80</span>: console.log(<span class="string">"B"</span>); <span class="keyword">break</span>;
+    <span class="keyword">case</span> score >= <span class="number">70</span>: console.log(<span class="string">"C"</span>); <span class="keyword">break</span>;
+    <span class="keyword">default</span>: console.log(<span class="string">"F"</span>);
+}
+
+<span class="comment">// Guard clause pattern — return early</span>
+<span class="keyword">function</span> <span class="function">processUser</span>(user) {
+    <span class="keyword">if</span> (!user) <span class="keyword">return</span> <span class="string">"No user"</span>;
+    <span class="keyword">if</span> (!user.active) <span class="keyword">return</span> <span class="string">"Inactive"</span>;
+    <span class="keyword">return</span> <span class="string">`Processing </span><span class="keyword">${</span>user.name<span class="keyword">}</span><span class="string">`</span>;
+}</pre></div>
+        </div>
+        <div class="callout callout-tip"><strong>Guard clauses</strong> eliminate nested if/else. Return early for invalid cases, then handle the "happy path" at the end. This is the #1 pattern for cleaner JS code.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 2.2 -->
+    <div class="module-section" id="m2-2">
+      <div class="module-header"><div class="module-number">2.2</div><h2 class="module-title">Loops — for, for...in, for...of, while, do-while, break/continue</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Iterating through data</h3>
+        <p class="explain-en"><code>for</code> is the classic counter loop. <code>for...of</code> iterates <strong>values</strong> (arrays, strings, maps). <code>for...in</code> iterates <strong>keys</strong> (objects — avoid for arrays!). <code>while</code>/<code>do-while</code> for condition-based loops. <code>break</code> exits, <code>continue</code> skips to next iteration.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>for</code> classic counter loop hai. <code>for...of</code> <strong>values</strong> iterate karta hai (arrays, strings). <code>for...in</code> <strong>keys</strong> iterate karta hai (objects ke liye — arrays me avoid karo!). <code>break</code> loop exit karta hai, <code>continue</code> next iteration pe skip karta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — Loops</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Classic for loop</span>
+<span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i < <span class="number">5</span>; i++) {
+    console.log(i); <span class="comment">// 0, 1, 2, 3, 4</span>
+}
+
+<span class="comment">// ✅ for...of — iterate VALUES (arrays, strings, maps, sets)</span>
+<span class="keyword">const</span> fruits = [<span class="string">"apple"</span>, <span class="string">"banana"</span>, <span class="string">"cherry"</span>];
+<span class="keyword">for</span> (<span class="keyword">const</span> fruit <span class="keyword">of</span> fruits) {
+    console.log(fruit); <span class="comment">// "apple", "banana", "cherry"</span>
+}
+
+<span class="comment">// for...of with index (using entries())</span>
+<span class="keyword">for</span> (<span class="keyword">const</span> [i, fruit] <span class="keyword">of</span> fruits.entries()) {
+    console.log(<span class="string">`</span><span class="keyword">${</span>i<span class="keyword">}</span><span class="string">: </span><span class="keyword">${</span>fruit<span class="keyword">}</span><span class="string">`</span>); <span class="comment">// "0: apple", etc.</span>
+}
+
+<span class="comment">// for...of with strings</span>
+<span class="keyword">for</span> (<span class="keyword">const</span> char <span class="keyword">of</span> <span class="string">"Hello"</span>) {
+    console.log(char); <span class="comment">// "H", "e", "l", "l", "o"</span>
+}
+
+<span class="comment">// ✅ for...in — iterate KEYS (objects only!)</span>
+<span class="keyword">const</span> user = { name: <span class="string">"Alice"</span>, age: <span class="number">25</span>, city: <span class="string">"Mumbai"</span> };
+<span class="keyword">for</span> (<span class="keyword">const</span> key <span class="keyword">in</span> user) {
+    console.log(<span class="string">`</span><span class="keyword">${</span>key<span class="keyword">}</span><span class="string">: </span><span class="keyword">${</span>user[key]<span class="keyword">}</span><span class="string">`</span>);
+}
+<span class="comment">// ❌ Don't use for...in on arrays! (iterates indices as strings)</span>
+
+<span class="comment">// while loop</span>
+<span class="keyword">let</span> count = <span class="number">0</span>;
+<span class="keyword">while</span> (count < <span class="number">3</span>) {
+    console.log(count++); <span class="comment">// 0, 1, 2</span>
+}
+
+<span class="comment">// do-while — runs at least once</span>
+<span class="keyword">let</span> input;
+<span class="keyword">do</span> {
+    input = prompt(<span class="string">"Enter 'yes':"</span>);
+} <span class="keyword">while</span> (input !== <span class="string">"yes"</span>);
+
+<span class="comment">// break and continue</span>
+<span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i < <span class="number">10</span>; i++) {
+    <span class="keyword">if</span> (i === <span class="number">3</span>) <span class="keyword">continue</span>; <span class="comment">// Skip 3</span>
+    <span class="keyword">if</span> (i === <span class="number">7</span>) <span class="keyword">break</span>;    <span class="comment">// Stop at 7</span>
+    console.log(i); <span class="comment">// 0,1,2,4,5,6</span>
+}
+
+<span class="comment">// Labeled statements (rare but useful)</span>
+outer: <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i < <span class="number">3</span>; i++) {
+    <span class="keyword">for</span> (<span class="keyword">let</span> j = <span class="number">0</span>; j < <span class="number">3</span>; j++) {
+        <span class="keyword">if</span> (i === <span class="number">1</span> && j === <span class="number">1</span>) <span class="keyword">break</span> outer;
+        console.log(i, j);
+    }
+}</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Loop</th><th>Iterates</th><th>Best for</th><th>Avoid for</th></tr></thead>
+            <tbody>
+              <tr><td><code>for</code></td><td>Counter</td><td>Known count, index needed</td><td>—</td></tr>
+              <tr><td><code>for...of</code></td><td>Values</td><td>✅ Arrays, strings, maps</td><td>Plain objects</td></tr>
+              <tr><td><code>for...in</code></td><td>Keys (strings)</td><td>Object properties</td><td>❌ Arrays!</td></tr>
+              <tr><td><code>while</code></td><td>Condition</td><td>Unknown iterations</td><td>—</td></tr>
+              <tr><td><code>do-while</code></td><td>Condition (1+ run)</td><td>User input validation</td><td>—</td></tr>
+              <tr><td><code>.forEach()</code></td><td>Array values</td><td>Side effects</td><td>No break/return</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 2.3 -->
+    <div class="module-section" id="m2-3">
+      <div class="module-header"><div class="module-number">2.3</div><h2 class="module-title">Functions — declaration, expression, arrow, IIFE, defaults, rest</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">JavaScript's most powerful feature</h3>
+        <p class="explain-en"><strong>Function declarations</strong> are hoisted. <strong>Function expressions</strong> are not. <strong>Arrow functions</strong> (<code>=></code>) are concise, don't have their own <code>this</code>, and can't be used as constructors. Use <strong>default parameters</strong> for fallbacks. <strong>Rest parameters</strong> (<code>...args</code>) collect extra arguments into an array.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Function declarations</strong> hoisted hote hain. <strong>Arrow functions</strong> (<code>=></code>) concise hain, apna <code>this</code> nahi hota. <strong>Default parameters</strong> se fallback values de sakte ho. <strong>Rest parameters</strong> (<code>...args</code>) extra arguments ko array me collect karte hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — Functions</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// ✅ Function Declaration — hoisted!</span>
+console.log(greet(<span class="string">"Alice"</span>)); <span class="comment">// Works! (hoisted)</span>
+<span class="keyword">function</span> <span class="function">greet</span>(name) {
+    <span class="keyword">return</span> <span class="string">`Hello, </span><span class="keyword">${</span>name<span class="keyword">}</span><span class="string">!`</span>;
+}
+
+<span class="comment">// Function Expression — NOT hoisted</span>
+<span class="comment">// sayHi("Bob"); // ❌ ReferenceError</span>
+<span class="keyword">const</span> sayHi = <span class="keyword">function</span>(name) {
+    <span class="keyword">return</span> <span class="string">`Hi, </span><span class="keyword">${</span>name<span class="keyword">}</span><span class="string">!`</span>;
+};
+
+<span class="comment">// ✅ Arrow Functions (ES6+)</span>
+<span class="keyword">const</span> add = (a, b) => a + b;           <span class="comment">// Implicit return</span>
+<span class="keyword">const</span> square = x => x * x;             <span class="comment">// Single param: no parens</span>
+<span class="keyword">const</span> log = () => console.log(<span class="string">"Hi"</span>);   <span class="comment">// No params</span>
+<span class="keyword">const</span> multiLine = (a, b) => {          <span class="comment">// Multi-line: needs return</span>
+    <span class="keyword">const</span> sum = a + b;
+    <span class="keyword">return</span> sum * <span class="number">2</span>;
+};
+
+<span class="comment">// Arrow returning object (wrap in parens!)</span>
+<span class="keyword">const</span> makeUser = (name, age) => ({ name, age });
+
+<span class="comment">// ✅ Default Parameters</span>
+<span class="keyword">function</span> <span class="function">createUser</span>(name, role = <span class="string">"viewer"</span>, active = <span class="keyword">true</span>) {
+    <span class="keyword">return</span> { name, role, active };
+}
+createUser(<span class="string">"Alice"</span>);              <span class="comment">// {name:"Alice", role:"viewer", active:true}</span>
+createUser(<span class="string">"Bob"</span>, <span class="string">"admin"</span>);      <span class="comment">// {name:"Bob", role:"admin", active:true}</span>
+
+<span class="comment">// ✅ Rest Parameters (...args)</span>
+<span class="keyword">function</span> <span class="function">sum</span>(...numbers) {
+    <span class="keyword">return</span> numbers.reduce((a, b) => a + b, <span class="number">0</span>);
+}
+sum(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>); <span class="comment">// 10</span>
+
+<span class="keyword">function</span> <span class="function">first</span>(a, b, ...rest) {
+    console.log(a, b, rest); <span class="comment">// 1, 2, [3, 4, 5]</span>
+}
+
+<span class="comment">// IIFE — Immediately Invoked Function Expression</span>
+(<span class="keyword">function</span>() {
+    <span class="keyword">const</span> secret = <span class="string">"hidden"</span>;
+    console.log(secret);
+})(); <span class="comment">// Runs immediately, creates private scope</span>
+
+<span class="comment">// Arrow IIFE</span>
+(() => {
+    console.log(<span class="string">"Arrow IIFE!"</span>);
+})();
+
+<span class="comment">// Functions are first-class citizens!</span>
+<span class="keyword">const</span> ops = { add: (a,b) => a+b, sub: (a,b) => a-b };
+<span class="keyword">const</span> calc = (fn, a, b) => fn(a, b);
+calc(ops.add, <span class="number">5</span>, <span class="number">3</span>); <span class="comment">// 8</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Feature</th><th>Declaration</th><th>Expression</th><th>Arrow</th></tr></thead>
+            <tbody>
+              <tr><td>Hoisted?</td><td>✅ Yes</td><td>❌ No</td><td>❌ No</td></tr>
+              <tr><td>Own <code>this</code>?</td><td>✅ Yes</td><td>✅ Yes</td><td>❌ Lexical</td></tr>
+              <tr><td><code>arguments</code>?</td><td>✅ Yes</td><td>✅ Yes</td><td>❌ No</td></tr>
+              <tr><td>Constructor?</td><td>✅ <code>new</code></td><td>✅ <code>new</code></td><td>❌ Cannot</td></tr>
+              <tr><td>Named?</td><td>Always</td><td>Optional</td><td>Anonymous</td></tr>
+              <tr><td>Best for</td><td>Standalone fns</td><td>Callbacks</td><td>✅ Short callbacks</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>Arrow function gotcha:</strong> Arrow functions don't have their own <code>this</code> — they inherit from the enclosing scope. This is great for callbacks but breaks event handlers and object methods. Use regular functions for methods.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 2.4 -->
+    <div class="module-section" id="m2-4">
+      <div class="module-header"><div class="module-number">2.4</div><h2 class="module-title">Scope & Closures — lexical scope, closure pattern, module pattern</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">The most important concept in JavaScript</h3>
+        <p class="explain-en"><strong>Scope</strong> determines where variables are accessible. JS uses <strong>lexical (static) scoping</strong> — scope is determined at write-time, not run-time. A <strong>closure</strong> is when a function "remembers" variables from its outer scope even after the outer function has returned. This enables data privacy, memoization, and the module pattern.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Scope</strong> decide karta hai ki variables kahan accessible hain. JS me <strong>lexical scoping</strong> hota hai — scope code likhte waqt decide hota hai. <strong>Closure</strong> tab hota hai jab function outer scope ke variables ko "yaad" rakhta hai even after outer function return ho chuka ho. Ye data privacy aur memoization ke liye use hota hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — Scope & Closures</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Scope chain: Inner → Outer → Global</span>
+<span class="keyword">const</span> global = <span class="string">"I'm global"</span>;
+
+<span class="keyword">function</span> <span class="function">outer</span>() {
+    <span class="keyword">const</span> outerVar = <span class="string">"I'm outer"</span>;
+
+    <span class="keyword">function</span> <span class="function">inner</span>() {
+        <span class="keyword">const</span> innerVar = <span class="string">"I'm inner"</span>;
+        console.log(innerVar);  <span class="comment">// ✅ Own scope</span>
+        console.log(outerVar);  <span class="comment">// ✅ Outer scope</span>
+        console.log(global);    <span class="comment">// ✅ Global scope</span>
+    }
+    inner();
+    <span class="comment">// console.log(innerVar); // ❌ Not accessible</span>
+}
+
+<span class="comment">// ✅ CLOSURE — function remembers its scope</span>
+<span class="keyword">function</span> <span class="function">createCounter</span>() {
+    <span class="keyword">let</span> count = <span class="number">0</span>; <span class="comment">// Private! Only accessible via returned functions</span>
+    <span class="keyword">return</span> {
+        increment: () => ++count,
+        decrement: () => --count,
+        getCount: () => count
+    };
+}
+<span class="keyword">const</span> counter = createCounter();
+counter.increment(); <span class="comment">// 1</span>
+counter.increment(); <span class="comment">// 2</span>
+counter.decrement(); <span class="comment">// 1</span>
+counter.getCount();  <span class="comment">// 1</span>
+<span class="comment">// counter.count → undefined (private!)</span>
+
+<span class="comment">// ✅ Closure for data privacy</span>
+<span class="keyword">function</span> <span class="function">createWallet</span>(initial) {
+    <span class="keyword">let</span> balance = initial;
+    <span class="keyword">return</span> {
+        deposit: (amt) => { balance += amt; <span class="keyword">return</span> balance; },
+        withdraw: (amt) => {
+            <span class="keyword">if</span> (amt > balance) <span class="keyword">throw new</span> <span class="type">Error</span>(<span class="string">"Insufficient funds"</span>);
+            balance -= amt; <span class="keyword">return</span> balance;
+        },
+        getBalance: () => balance
+    };
+}
+
+<span class="comment">// ✅ Closure with loops — classic interview question</span>
+<span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i < <span class="number">3</span>; i++) {
+    setTimeout(() => console.log(i), <span class="number">100</span>); <span class="comment">// 3, 3, 3 (var!)  </span>
+}
+<span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i < <span class="number">3</span>; i++) {
+    setTimeout(() => console.log(i), <span class="number">100</span>); <span class="comment">// 0, 1, 2 (let!)</span>
+}
+
+<span class="comment">// ✅ Memoization via closure</span>
+<span class="keyword">function</span> <span class="function">memoize</span>(fn) {
+    <span class="keyword">const</span> cache = <span class="keyword">new</span> <span class="type">Map</span>();
+    <span class="keyword">return</span> (...args) => {
+        <span class="keyword">const</span> key = <span class="type">JSON</span>.stringify(args);
+        <span class="keyword">if</span> (cache.has(key)) <span class="keyword">return</span> cache.get(key);
+        <span class="keyword">const</span> result = fn(...args);
+        cache.set(key, result);
+        <span class="keyword">return</span> result;
+    };
+}
+<span class="keyword">const</span> fastFib = memoize((n) => n <= <span class="number">1</span> ? n : fastFib(n-<span class="number">1</span>) + fastFib(n-<span class="number">2</span>));</pre></div>
+        </div>
+        <div class="callout callout-tip"><strong>Interview gold:</strong> Closures are asked in 90% of JS interviews. The counter pattern and the <code>var</code>-in-loop bug are the two most common questions.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 2.5 -->
+    <div class="module-section" id="m2-5">
+      <div class="module-header"><div class="module-number">2.5</div><h2 class="module-title">Higher-Order Functions — callbacks, map/filter/reduce, composition</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Functions that work with functions</h3>
+        <p class="explain-en">A <strong>higher-order function (HOF)</strong> takes a function as argument OR returns a function. <code>map</code>, <code>filter</code>, <code>reduce</code> are the big three. <strong>Function composition</strong> chains transformations. This is the foundation of functional programming in JS.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Higher-order function</strong> wo function hai jo function ko argument me leta hai ya function return karta hai. <code>map</code>, <code>filter</code>, <code>reduce</code> sabse important hain. Ye functional programming ka base hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — Higher-Order Functions</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Callback pattern</span>
+<span class="keyword">function</span> <span class="function">fetchData</span>(url, callback) {
+    <span class="comment">// Simulate async...</span>
+    setTimeout(() => callback({ data: <span class="string">"result"</span> }), <span class="number">1000</span>);
+}
+fetchData(<span class="string">"/api/users"</span>, (res) => console.log(res));
+
+<span class="comment">// ✅ Array.map — transform each element</span>
+<span class="keyword">const</span> nums = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];
+<span class="keyword">const</span> doubled = nums.map(n => n * <span class="number">2</span>);     <span class="comment">// [2, 4, 6, 8, 10]</span>
+<span class="keyword">const</span> names = users.map(u => u.name);     <span class="comment">// Extract names</span>
+
+<span class="comment">// ✅ Array.filter — keep matching elements</span>
+<span class="keyword">const</span> evens = nums.filter(n => n % <span class="number">2</span> === <span class="number">0</span>); <span class="comment">// [2, 4]</span>
+<span class="keyword">const</span> adults = users.filter(u => u.age >= <span class="number">18</span>);
+
+<span class="comment">// ✅ Array.reduce — accumulate into single value</span>
+<span class="keyword">const</span> sum = nums.reduce((acc, n) => acc + n, <span class="number">0</span>); <span class="comment">// 15</span>
+<span class="keyword">const</span> max = nums.reduce((a, b) => a > b ? a : b); <span class="comment">// 5</span>
+
+<span class="comment">// reduce to build objects</span>
+<span class="keyword">const</span> freq = [<span class="string">"a"</span>,<span class="string">"b"</span>,<span class="string">"a"</span>,<span class="string">"c"</span>,<span class="string">"b"</span>,<span class="string">"a"</span>].reduce((acc, ch) => {
+    acc[ch] = (acc[ch] || <span class="number">0</span>) + <span class="number">1</span>;
+    <span class="keyword">return</span> acc;
+}, {}); <span class="comment">// { a: 3, b: 2, c: 1 }</span>
+
+<span class="comment">// ✅ Chaining — map → filter → reduce</span>
+<span class="keyword">const</span> result = nums
+    .filter(n => n % <span class="number">2</span> !== <span class="number">0</span>)    <span class="comment">// [1, 3, 5]</span>
+    .map(n => n ** <span class="number">2</span>)             <span class="comment">// [1, 9, 25]</span>
+    .reduce((a, b) => a + b, <span class="number">0</span>); <span class="comment">// 35</span>
+
+<span class="comment">// ✅ Function composition</span>
+<span class="keyword">const</span> compose = (...fns) => x => fns.reduceRight((v, f) => f(v), x);
+<span class="keyword">const</span> pipe = (...fns) => x => fns.reduce((v, f) => f(v), x);
+
+<span class="keyword">const</span> addOne = x => x + <span class="number">1</span>;
+<span class="keyword">const</span> double = x => x * <span class="number">2</span>;
+<span class="keyword">const</span> transform = pipe(addOne, double); <span class="comment">// (x+1) * 2</span>
+transform(<span class="number">5</span>); <span class="comment">// 12</span>
+
+<span class="comment">// forEach — side effects only (no return value!)</span>
+nums.forEach((n, i) => console.log(<span class="string">`</span><span class="keyword">${</span>i<span class="keyword">}</span><span class="string">: </span><span class="keyword">${</span>n<span class="keyword">}</span><span class="string">`</span>));</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Method</th><th>Returns</th><th>Purpose</th><th>Mutates?</th></tr></thead>
+            <tbody>
+              <tr><td><code>.map(fn)</code></td><td>New array</td><td>Transform each element</td><td>❌</td></tr>
+              <tr><td><code>.filter(fn)</code></td><td>New array</td><td>Keep matching elements</td><td>❌</td></tr>
+              <tr><td><code>.reduce(fn, init)</code></td><td>Single value</td><td>Accumulate</td><td>❌</td></tr>
+              <tr><td><code>.find(fn)</code></td><td>Element or undefined</td><td>First match</td><td>❌</td></tr>
+              <tr><td><code>.some(fn)</code></td><td>boolean</td><td>Any match?</td><td>❌</td></tr>
+              <tr><td><code>.every(fn)</code></td><td>boolean</td><td>All match?</td><td>❌</td></tr>
+              <tr><td><code>.forEach(fn)</code></td><td>undefined</td><td>Side effects</td><td>❌</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 2.6 -->
+    <div class="module-section" id="m2-6">
+      <div class="module-header"><div class="module-number">2.6</div><h2 class="module-title">Strings in depth — tagged templates, regex basics, advanced methods</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Beyond basic strings</h3>
+        <p class="explain-en"><strong>Tagged templates</strong> let you process template literal strings with a function — used in libraries like <code>styled-components</code>, <code>graphql</code>, and <code>html</code> literals. <strong>Regex</strong> basics: <code>/pattern/flags</code> for matching and replacing text. Know <code>.match()</code>, <code>.search()</code>, <code>.matchAll()</code>.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Tagged templates</strong> se template literal strings ko function se process kar sakte ho — <code>styled-components</code> jaise libraries me use hota hai. <strong>Regex</strong> pattern matching ke liye hai: <code>/pattern/flags</code> format hota hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — Advanced Strings</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// ✅ Tagged Templates</span>
+<span class="keyword">function</span> <span class="function">highlight</span>(strings, ...values) {
+    <span class="keyword">return</span> strings.reduce((result, str, i) =>
+        <span class="string">`</span><span class="keyword">${</span>result<span class="keyword">}</span><span class="string"></span><span class="keyword">${</span>str<span class="keyword">}</span><span class="string">&lt;mark&gt;</span><span class="keyword">${</span>values[i] || <span class="string">""</span><span class="keyword">}</span><span class="string">&lt;/mark&gt;`</span>
+    , <span class="string">""</span>);
+}
+<span class="keyword">const</span> name = <span class="string">"Alice"</span>, role = <span class="string">"admin"</span>;
+highlight<span class="string">`User </span><span class="keyword">${</span>name<span class="keyword">}</span><span class="string"> is </span><span class="keyword">${</span>role<span class="keyword">}</span><span class="string">`</span>;
+<span class="comment">// "User &lt;mark&gt;Alice&lt;/mark&gt; is &lt;mark&gt;admin&lt;/mark&gt;"</span>
+
+<span class="comment">// ✅ Regex basics</span>
+<span class="keyword">const</span> email = <span class="string">"user@example.com"</span>;
+<span class="keyword">const</span> emailRegex = <span class="type">/^[\w.-]+@[\w.-]+\.\w{2,}$/</span>;
+emailRegex.test(email); <span class="comment">// true</span>
+
+<span class="comment">// Common regex patterns</span>
+<span class="type">/\d+/</span>.test(<span class="string">"abc123"</span>);     <span class="comment">// true (has digits)</span>
+<span class="type">/^[A-Z]/</span>.test(<span class="string">"Hello"</span>);   <span class="comment">// true (starts with uppercase)</span>
+
+<span class="comment">// .match() — returns matches</span>
+<span class="string">"Price: $42.99"</span>.match(<span class="type">/\d+\.\d+/</span>); <span class="comment">// ["42.99"]</span>
+
+<span class="comment">// .replace() with regex</span>
+<span class="string">"Hello World"</span>.replace(<span class="type">/\w+/g</span>, w => w.toUpperCase()); <span class="comment">// "HELLO WORLD"</span>
+
+<span class="comment">// .matchAll() — all matches with groups</span>
+<span class="keyword">const</span> text = <span class="string">"dates: 2024-01-15, 2024-06-20"</span>;
+<span class="keyword">const</span> dates = [...text.matchAll(<span class="type">/(\d{4})-(\d{2})-(\d{2})/g</span>)];
+
+<span class="comment">// String.raw — no escape processing</span>
+<span class="type">String</span>.raw<span class="string">`C:\new\test`</span>; <span class="comment">// "C:\new\test" (no \n)</span></pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 2.7 -->
+    <div class="module-section" id="m2-7">
+      <div class="module-header"><div class="module-number">2.7</div><h2 class="module-title">Error Handling — try/catch/finally, throw, custom errors</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Handling the unexpected</h3>
+        <p class="explain-en"><code>try/catch/finally</code> catches runtime errors. <code>throw</code> creates custom errors. Always throw <code>Error</code> objects (not strings!). Create <strong>custom error classes</strong> for domain-specific errors. <code>finally</code> always runs — perfect for cleanup.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>try/catch/finally</code> runtime errors catch karta hai. <code>throw</code> se custom errors banao. Hamesha <code>Error</code> objects throw karo (strings nahi!). <strong>Custom error classes</strong> domain-specific errors ke liye use karo. <code>finally</code> hamesha run hota hai — cleanup ke liye perfect hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — Error Handling</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// ✅ try / catch / finally</span>
+<span class="keyword">try</span> {
+    <span class="keyword">const</span> data = <span class="type">JSON</span>.parse(<span class="string">"invalid json"</span>);
+} <span class="keyword">catch</span> (error) {
+    console.error(error.message); <span class="comment">// "Unexpected token i..."</span>
+    console.error(error.name);    <span class="comment">// "SyntaxError"</span>
+    console.error(error.stack);   <span class="comment">// Full stack trace</span>
+} <span class="keyword">finally</span> {
+    console.log(<span class="string">"Always runs!"</span>); <span class="comment">// Cleanup code</span>
+}
+
+<span class="comment">// ✅ throw — always throw Error objects</span>
+<span class="keyword">function</span> <span class="function">divide</span>(a, b) {
+    <span class="keyword">if</span> (b === <span class="number">0</span>) <span class="keyword">throw new</span> <span class="type">Error</span>(<span class="string">"Division by zero"</span>);
+    <span class="keyword">if</span> (<span class="keyword">typeof</span> a !== <span class="string">"number"</span>) <span class="keyword">throw new</span> <span class="type">TypeError</span>(<span class="string">"Expected number"</span>);
+    <span class="keyword">return</span> a / b;
+}
+
+<span class="comment">// ✅ Custom Error classes</span>
+<span class="keyword">class</span> <span class="type">ValidationError</span> <span class="keyword">extends</span> <span class="type">Error</span> {
+    <span class="function">constructor</span>(field, message) {
+        <span class="keyword">super</span>(message);
+        <span class="keyword">this</span>.name = <span class="string">"ValidationError"</span>;
+        <span class="keyword">this</span>.field = field;
+    }
+}
+
+<span class="keyword">class</span> <span class="type">NotFoundError</span> <span class="keyword">extends</span> <span class="type">Error</span> {
+    <span class="function">constructor</span>(resource) {
+        <span class="keyword">super</span>(<span class="string">`</span><span class="keyword">${</span>resource<span class="keyword">}</span><span class="string"> not found`</span>);
+        <span class="keyword">this</span>.name = <span class="string">"NotFoundError"</span>;
+        <span class="keyword">this</span>.statusCode = <span class="number">404</span>;
+    }
+}
+
+<span class="comment">// Catching specific error types</span>
+<span class="keyword">try</span> {
+    <span class="keyword">throw new</span> <span class="type">ValidationError</span>(<span class="string">"email"</span>, <span class="string">"Invalid email"</span>);
+} <span class="keyword">catch</span> (e) {
+    <span class="keyword">if</span> (e <span class="keyword">instanceof</span> <span class="type">ValidationError</span>) {
+        console.log(<span class="string">`Field: </span><span class="keyword">${</span>e.field<span class="keyword">}</span><span class="string">, Message: </span><span class="keyword">${</span>e.message<span class="keyword">}</span><span class="string">`</span>);
+    } <span class="keyword">else</span> {
+        <span class="keyword">throw</span> e; <span class="comment">// Re-throw unknown errors</span>
+    }
+}
+
+<span class="comment">// Built-in Error types</span>
+<span class="comment">// TypeError — wrong type operation</span>
+<span class="comment">// ReferenceError — undefined variable</span>
+<span class="comment">// SyntaxError — invalid code</span>
+<span class="comment">// RangeError — value out of range</span>
+<span class="comment">// URIError — invalid URI</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Error type</th><th>When it occurs</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td><code>TypeError</code></td><td>Wrong type operation</td><td><code>null.prop</code>, <code>"str"()</code></td></tr>
+              <tr><td><code>ReferenceError</code></td><td>Undefined variable</td><td><code>console.log(x)</code> (undeclared)</td></tr>
+              <tr><td><code>SyntaxError</code></td><td>Invalid code</td><td><code>JSON.parse("{")</code></td></tr>
+              <tr><td><code>RangeError</code></td><td>Out of range</td><td><code>new Array(-1)</code></td></tr>
+              <tr><td><code>URIError</code></td><td>Invalid URI</td><td><code>decodeURI("%")</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>Never catch and swallow:</strong> <code>catch(e) {}</code> hides bugs. Always log or re-throw. Only catch errors you can meaningfully handle.</div>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Scope Chain Visualization</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Scope level</th><th>Created by</th><th>Accessible from</th></tr></thead>
+          <tbody>
+            <tr><td>Global</td><td>Top-level code</td><td>Everywhere</td></tr>
+            <tr><td>Module</td><td><code>import/export</code> files</td><td>Within module only</td></tr>
+            <tr><td>Function</td><td>Function declaration/expression</td><td>Inside function + nested</td></tr>
+            <tr><td>Block</td><td><code>{}</code>, <code>if</code>, <code>for</code>, <code>while</code></td><td>Inside block (let/const only)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Closure Patterns Cheat Sheet</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Pattern</th><th>Use case</th><th>How it works</th></tr></thead>
+          <tbody>
+            <tr><td>Counter</td><td>Stateful functions</td><td>Enclosed <code>let count</code></td></tr>
+            <tr><td>Memoization</td><td>Cache expensive results</td><td>Enclosed <code>Map</code> cache</td></tr>
+            <tr><td>Module pattern</td><td>Data privacy</td><td>IIFE returns public API</td></tr>
+            <tr><td>Partial application</td><td>Pre-fill arguments</td><td>Return function with args</td></tr>
+            <tr><td>Event handler</td><td>Remember state</td><td>Closure over config</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="practice-box">
+      <div class="practice-title">✏️ Practice Exercises — Part 2</div>
+      <ol>
+        <li>Write a <code>switch(true)</code> grading system: input score → output grade (A/B/C/D/F) with 10-point ranges.</li>
+        <li>Use <code>for...of</code> with <code>.entries()</code> to print an array of objects with index.</li>
+        <li>Create a function that accepts any number of arguments (rest) and returns their average.</li>
+        <li>Build a <code>createCounter(start, step)</code> closure that returns <code>increment</code>, <code>reset</code>, and <code>getCount</code>.</li>
+        <li>Use <code>map → filter → reduce</code> chain: from an array of products, get total price of items over ₹100.</li>
+        <li>Create a <code>ValidationError</code> class with <code>field</code> and <code>code</code> properties. Use it in a form validator function.</li>
+        <li>Write a <code>memoize</code> higher-order function and test it with a fibonacci function — compare performance with <code>console.time()</code>.</li>
+      </ol>
+    </div>
+
+    <div class="handbook-nav">
+      <a href="part1.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Part 1: JavaScript Foundations & Setup</div></div></a>
+      <a href="part3.html" class="nav-btn next"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Part 3: Arrays & Objects →</div></div><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+
+  </div>
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
+  <script src="../../../js/main.js"></script>
+  <script>
+    (() => {
+      document.querySelectorAll('.code-block').forEach((block) => { const pre = block.querySelector('.code-body pre'), header = block.querySelector('.code-header'); if (!pre || !header) return; let actions = header.querySelector('.code-actions'); if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); } const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'code-copy-btn'; btn.textContent = 'Copy'; btn.addEventListener('click', async () => { try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; } catch { btn.textContent = 'Failed'; } finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); } }); actions.prepend(btn); });
+      const fill = document.querySelector('.hb-progress-fill'), label = document.querySelector('.hb-progress-label');
+      if (fill && label) { const update = () => { const h = document.documentElement, d = (h.scrollHeight - h.clientHeight) || 1, p = Math.max(0, Math.min(1, h.scrollTop / d)); fill.style.width = (p*100).toFixed(0)+'%'; label.textContent = (p*100).toFixed(0)+'%'; }; document.addEventListener('scroll', update, { passive: true }); update(); }
+    })();
+  </script>
+</body>
+</html>

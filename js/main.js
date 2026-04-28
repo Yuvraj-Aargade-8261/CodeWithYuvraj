@@ -154,7 +154,7 @@ function initHandbookGlobalIndex() {
   if (!page) return;
 
   const path = window.location.pathname.replace(/\\/g, '/');
-  const partMatch = path.match(/\/content\/handbooks\/(python|html-css|c-programming|cpp-programming|java)\/part([1-8])\.html$/);
+  const partMatch = path.match(/\/content\/handbooks\/(python|html-css|c-programming|cpp-programming|java|javascript)\/part([1-8])\.html$/);
   if (!partMatch) return;
 
   const handbookSlug = partMatch[1];
@@ -223,6 +223,16 @@ function initHandbookGlobalIndex() {
       6: 'Exceptions & File I/O',
       7: 'Functional Java & Streams',
       8: 'Concurrency, Testing & Industry'
+    },
+    javascript: {
+      1: 'JavaScript Foundations & Setup',
+      2: 'Control Flow & Functions',
+      3: 'Arrays & Objects',
+      4: 'Object-Oriented JavaScript',
+      5: 'Asynchronous JavaScript',
+      6: 'DOM & Browser APIs',
+      7: 'Modules, Tooling & Testing',
+      8: 'Advanced Patterns & Modern JS'
     }
   };
   const partTitles = partTitlesByHandbook[handbookSlug];
@@ -237,7 +247,9 @@ function initHandbookGlobalIndex() {
         ? 'C Programming Index'
         : handbookSlug === 'cpp-programming'
           ? 'C++ Programming Index'
-          : 'Java Programming Index';
+          : handbookSlug === 'java'
+            ? 'Java Programming Index'
+            : 'JavaScript Programming Index';
   links.appendChild(indexLink);
 
   for (let i = 1; i <= 8; i++) {

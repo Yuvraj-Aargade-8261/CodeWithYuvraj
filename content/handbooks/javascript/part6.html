@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Part 6: DOM & Browser APIs — JavaScript Programming Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 6: DOM manipulation, events, localStorage, Web APIs, forms in JavaScript.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/handbook.css">
+</head>
+<body class="handbook-wrapper">
+  <nav class="navbar"><div class="container"><a href="../../../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../../../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
+
+  <div class="handbook-page">
+    <div class="hb-topbar"><div class="hb-topbar-inner"><div class="hb-breadcrumbs"><a href="index.html">JavaScript Programming Handbook</a><span class="hb-muted">/</span><span>Part 6</span><span class="hb-muted">·</span><a href="#m6-1">6.1</a> <a href="#m6-2">6.2</a> <a href="#m6-3">6.3</a> <a href="#m6-4">6.4</a> <a href="#m6-5">6.5</a> <a href="#m6-6">6.6</a> <a href="#m6-7">6.7</a></div><div class="hb-progress" aria-label="Reading progress"><div class="hb-progress-track" role="progressbar"><div class="hb-progress-fill"></div></div><div class="hb-progress-label">0%</div></div></div></div>
+
+    <div class="chapter-header" data-chapter-num="06">
+      <div class="chapter-part-label">📖 Part 6 — DOM & Browser APIs</div>
+      <h1 class="chapter-title">DOM & <span class="gradient-text">Browser APIs</span></h1>
+      <p class="chapter-subtitle">DOM manipulation, event handling, storage, forms, Intersection Observer — building interactive web pages.</p>
+      <div class="chapter-meta"><span>📄 Modules 6.1 – 6.7</span><span>⏱️ 70–90 min read</span><span>💻 65+ Examples</span></div>
+    </div>
+
+    <div class="hb-mini-toc"><div class="hb-mini-title">📍 Part 6 Modules</div><div class="hb-mini-links"><a href="#m6-1">6.1 Selectors</a><a href="#m6-2">6.2 Manipulation</a><a href="#m6-3">6.3 Events</a><a href="#m6-4">6.4 Event Deep</a><a href="#m6-5">6.5 Forms</a><a href="#m6-6">6.6 Storage</a><a href="#m6-7">6.7 Web APIs</a></div></div>
+
+    <div class="quick-ref">
+      <div class="qr-title">🚀 Advanced Lens — Part 6</div>
+      <p class="explain-en">DOM work in production is about state consistency, event architecture, and browser API safety. Teams that handle DOM updates, form flows, and storage boundaries carefully ship more reliable frontend experiences.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Real frontend projects me DOM knowledge ka matlab sirf selectors nahi hota. Event architecture, form handling, aur storage safety sahi hona chahiye taaki UI reliable rahe.</div>
+    </div>
+
+    <div class="concept-block">
+      <h3>DOM and browser API checklist (Part 6)</h3>
+      <table>
+        <thead><tr><th>Area</th><th>Production baseline</th></tr></thead>
+        <tbody>
+          <tr><td>DOM updates</td><td>Batch updates and avoid unnecessary reflow/repaint churn.</td></tr>
+          <tr><td>Event strategy</td><td>Use delegation for dynamic lists and clean listener lifecycles.</td></tr>
+          <tr><td>Form safety</td><td>Validate input at client and server boundaries consistently.</td></tr>
+          <tr><td>Storage discipline</td><td>Treat local/session storage as untrusted and schema-validate reads.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- MODULE 6.1 -->
+    <div class="module-section" id="m6-1">
+      <div class="module-header"><div class="module-number">6.1</div><h2 class="module-title">DOM Selectors — querySelector, querySelectorAll, traversal</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Finding elements</h3>
+        <p class="explain-en"><code>querySelector()</code> returns the <strong>first match</strong>. <code>querySelectorAll()</code> returns a <strong>NodeList</strong> (not a live HTMLCollection!). Use CSS selectors. <strong>Traversal</strong>: <code>parentElement</code>, <code>children</code>, <code>nextElementSibling</code>, <code>closest()</code>. Avoid <code>getElementById</code> — <code>querySelector</code> does everything.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>querySelector()</code> <strong>pehla match</strong> return karta hai. <code>querySelectorAll()</code> <strong>NodeList</strong> return karta hai. CSS selectors use karo. <code>closest()</code> parent direction me search karta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — DOM Selectors</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// ✅ querySelector — first match</span>
+<span class="keyword">const</span> header = document.querySelector(<span class="string">"h1"</span>);
+<span class="keyword">const</span> btn = document.querySelector(<span class="string">".btn-primary"</span>);
+<span class="keyword">const</span> nav = document.querySelector(<span class="string">"#main-nav"</span>);
+<span class="keyword">const</span> item = document.querySelector(<span class="string">"[data-id='42']"</span>);
+
+<span class="comment">// querySelectorAll — all matches (NodeList)</span>
+<span class="keyword">const</span> cards = document.querySelectorAll(<span class="string">".card"</span>);
+cards.forEach(card => console.log(card.textContent));
+<span class="comment">// Convert to array for full array methods</span>
+[...cards].filter(c => c.classList.contains(<span class="string">"active"</span>));
+
+<span class="comment">// ✅ Traversal</span>
+<span class="keyword">const</span> el = document.querySelector(<span class="string">".item"</span>);
+el.parentElement;           <span class="comment">// Direct parent</span>
+el.children;                <span class="comment">// Child elements (HTMLCollection)</span>
+el.firstElementChild;       <span class="comment">// First child element</span>
+el.lastElementChild;        <span class="comment">// Last child element</span>
+el.nextElementSibling;      <span class="comment">// Next sibling element</span>
+el.previousElementSibling;  <span class="comment">// Previous sibling</span>
+
+<span class="comment">// closest() — find nearest ancestor matching selector</span>
+<span class="keyword">const</span> card = btn.closest(<span class="string">".card"</span>); <span class="comment">// Find parent .card</span>
+
+<span class="comment">// matches() — test if element matches selector</span>
+el.matches(<span class="string">".active"</span>); <span class="comment">// true/false</span></pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 6.2 -->
+    <div class="module-section" id="m6-2">
+      <div class="module-header"><div class="module-number">6.2</div><h2 class="module-title">DOM Manipulation — create, modify, remove, classList, attributes, styles</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Changing the page dynamically</h3>
+        <p class="explain-en"><code>createElement()</code> + <code>append()</code> adds elements. <code>textContent</code> for text (safe), <code>innerHTML</code> for HTML (XSS risk!). <code>classList</code> manages CSS classes. <code>dataset</code> accesses <code>data-*</code> attributes. Use <code>insertAdjacentHTML()</code> for fast HTML insertion.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>createElement()</code> + <code>append()</code> se elements add karo. <code>textContent</code> text ke liye (safe), <code>innerHTML</code> HTML ke liye (XSS risk!). <code>classList</code> se CSS classes manage karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — DOM Manipulation</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// ✅ Create and append elements</span>
+<span class="keyword">const</span> div = document.createElement(<span class="string">"div"</span>);
+div.textContent = <span class="string">"Hello!"</span>;
+div.className = <span class="string">"card"</span>;
+document.body.append(div);
+
+<span class="comment">// Multiple elements at once</span>
+<span class="keyword">const</span> fragment = document.createDocumentFragment();
+<span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i < <span class="number">100</span>; i++) {
+    <span class="keyword">const</span> li = document.createElement(<span class="string">"li"</span>);
+    li.textContent = <span class="string">`Item </span><span class="keyword">${</span>i<span class="keyword">}</span><span class="string">`</span>;
+    fragment.append(li);
+}
+document.querySelector(<span class="string">"ul"</span>).append(fragment); <span class="comment">// Single reflow!</span>
+
+<span class="comment">// ✅ classList — manage classes</span>
+el.classList.add(<span class="string">"active"</span>, <span class="string">"visible"</span>);
+el.classList.remove(<span class="string">"hidden"</span>);
+el.classList.toggle(<span class="string">"dark-mode"</span>);
+el.classList.replace(<span class="string">"old"</span>, <span class="string">"new"</span>);
+el.classList.contains(<span class="string">"active"</span>); <span class="comment">// true</span>
+
+<span class="comment">// ✅ Attributes & data attributes</span>
+el.setAttribute(<span class="string">"aria-label"</span>, <span class="string">"Close"</span>);
+el.getAttribute(<span class="string">"href"</span>);
+el.removeAttribute(<span class="string">"disabled"</span>);
+el.dataset.userId = <span class="string">"42"</span>;   <span class="comment">// Sets data-user-id="42"</span>
+el.dataset.userId;           <span class="comment">// "42"</span>
+
+<span class="comment">// ✅ Styles</span>
+el.style.color = <span class="string">"red"</span>;
+el.style.backgroundColor = <span class="string">"#000"</span>; <span class="comment">// camelCase!</span>
+<span class="comment">// Better: use classes instead of inline styles</span>
+getComputedStyle(el).fontSize; <span class="comment">// Read computed style</span>
+
+<span class="comment">// ✅ Remove elements</span>
+el.remove();                    <span class="comment">// Remove self</span>
+parent.removeChild(child);      <span class="comment">// Remove child</span>
+el.replaceWith(newEl);          <span class="comment">// Replace</span>
+
+<span class="comment">// insertAdjacentHTML — fast insertion</span>
+el.insertAdjacentHTML(<span class="string">"beforeend"</span>, <span class="string">`&lt;span&gt;Hi&lt;/span&gt;`</span>);
+<span class="comment">// Positions: beforebegin, afterbegin, beforeend, afterend</span></pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 6.3 -->
+    <div class="module-section" id="m6-3">
+      <div class="module-header"><div class="module-number">6.3</div><h2 class="module-title">Events — addEventListener, event object, bubbling, delegation</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Making things interactive</h3>
+        <p class="explain-en"><code>addEventListener()</code> attaches handlers. The <strong>event object</strong> has <code>target</code>, <code>currentTarget</code>, <code>type</code>, <code>preventDefault()</code>. Events <strong>bubble up</strong> from child to parent. <strong>Event delegation</strong> attaches ONE handler to a parent instead of many to children — essential for dynamic content.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>addEventListener()</code> handlers attach karta hai. Events child se parent tak <strong>bubble</strong> karte hain. <strong>Event delegation</strong> me parent pe ek handler laga ke sab children handle karte hain — dynamic content ke liye essential.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — Events</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// ✅ addEventListener</span>
+<span class="keyword">const</span> btn = document.querySelector(<span class="string">"#myBtn"</span>);
+btn.addEventListener(<span class="string">"click"</span>, (e) => {
+    console.log(e.target);        <span class="comment">// Element clicked</span>
+    console.log(e.currentTarget); <span class="comment">// Element handler is on</span>
+    console.log(e.type);          <span class="comment">// "click"</span>
+});
+
+<span class="comment">// Remove listener (needs reference!)</span>
+<span class="keyword">const</span> handler = () => console.log(<span class="string">"clicked"</span>);
+btn.addEventListener(<span class="string">"click"</span>, handler);
+btn.removeEventListener(<span class="string">"click"</span>, handler);
+
+<span class="comment">// Options</span>
+btn.addEventListener(<span class="string">"click"</span>, handler, { once: <span class="keyword">true</span> }); <span class="comment">// Fire once</span>
+btn.addEventListener(<span class="string">"scroll"</span>, handler, { passive: <span class="keyword">true</span> }); <span class="comment">// Performance</span>
+
+<span class="comment">// preventDefault — stop default behavior</span>
+document.querySelector(<span class="string">"form"</span>).addEventListener(<span class="string">"submit"</span>, (e) => {
+    e.preventDefault(); <span class="comment">// Stop form submission</span>
+    <span class="comment">// Handle with JS instead</span>
+});
+
+<span class="comment">// ✅ Event Delegation — ONE handler for many elements</span>
+document.querySelector(<span class="string">".todo-list"</span>).addEventListener(<span class="string">"click"</span>, (e) => {
+    <span class="keyword">const</span> item = e.target.closest(<span class="string">".todo-item"</span>);
+    <span class="keyword">if</span> (!item) <span class="keyword">return</span>; <span class="comment">// Clicked outside item</span>
+
+    <span class="keyword">if</span> (e.target.matches(<span class="string">".delete-btn"</span>)) {
+        item.remove();
+    } <span class="keyword">else if</span> (e.target.matches(<span class="string">".toggle"</span>)) {
+        item.classList.toggle(<span class="string">"done"</span>);
+    }
+});
+<span class="comment">// Works even for dynamically added items!</span>
+
+<span class="comment">// stopPropagation — stop bubbling</span>
+inner.addEventListener(<span class="string">"click"</span>, (e) => {
+    e.stopPropagation(); <span class="comment">// Parent won't receive this</span>
+});</pre></div>
+        </div>
+        <div class="callout callout-tip"><strong>Always use event delegation</strong> for lists, tables, and dynamic content. It's more performant (one handler vs hundreds) and automatically works for new elements.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 6.4 -->
+    <div class="module-section" id="m6-4">
+      <div class="module-header"><div class="module-number">6.4</div><h2 class="module-title">Advanced Events — keyboard, mouse, touch, custom events, IntersectionObserver</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Beyond click handlers</h3>
+        <p class="explain-en"><strong>Keyboard events</strong>: <code>keydown</code>/<code>keyup</code> with <code>e.key</code>. <strong>Mouse</strong>: <code>mouseenter</code>/<code>mouseleave</code> (no bubbling). <strong>Custom events</strong>: <code>new CustomEvent()</code> with <code>detail</code> data. <strong>IntersectionObserver</strong> detects visibility — replaces scroll-based lazy loading.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Keyboard events</strong>: <code>keydown</code>/<code>keyup</code> me <code>e.key</code> use karo. <strong>Custom events</strong>: <code>new CustomEvent()</code> se apne events banao. <strong>IntersectionObserver</strong> element visibility detect karta hai — lazy loading ke liye use karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — Advanced Events</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Keyboard events</span>
+document.addEventListener(<span class="string">"keydown"</span>, (e) => {
+    <span class="keyword">if</span> (e.key === <span class="string">"Escape"</span>) closeModal();
+    <span class="keyword">if</span> (e.ctrlKey && e.key === <span class="string">"s"</span>) { e.preventDefault(); save(); }
+});
+
+<span class="comment">// ✅ Custom Events — component communication</span>
+<span class="keyword">const</span> event = <span class="keyword">new</span> <span class="type">CustomEvent</span>(<span class="string">"user-login"</span>, {
+    detail: { userId: <span class="number">42</span>, name: <span class="string">"Alice"</span> },
+    bubbles: <span class="keyword">true</span>
+});
+document.dispatchEvent(event);
+document.addEventListener(<span class="string">"user-login"</span>, (e) => {
+    console.log(e.detail.name); <span class="comment">// "Alice"</span>
+});
+
+<span class="comment">// ✅ IntersectionObserver — lazy loading, animations</span>
+<span class="keyword">const</span> observer = <span class="keyword">new</span> <span class="type">IntersectionObserver</span>((entries) => {
+    entries.forEach(entry => {
+        <span class="keyword">if</span> (entry.isIntersecting) {
+            entry.target.classList.add(<span class="string">"visible"</span>);
+            <span class="keyword">const</span> img = entry.target;
+            img.src = img.dataset.src; <span class="comment">// Lazy load!</span>
+            observer.unobserve(img);
+        }
+    });
+}, { threshold: <span class="number">0.1</span> });
+
+document.querySelectorAll(<span class="string">"img[data-src]"</span>)
+    .forEach(img => observer.observe(img));</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 6.5 -->
+    <div class="module-section" id="m6-5">
+      <div class="module-header"><div class="module-number">6.5</div><h2 class="module-title">Forms — FormData, validation, submit handling, input events</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Professional form handling</h3>
+        <p class="explain-en"><code>FormData</code> extracts all form values instantly. Use <code>input</code>/<code>change</code> events for real-time validation. The <strong>Constraint Validation API</strong> (<code>checkValidity()</code>, <code>setCustomValidity()</code>) provides native validation without libraries.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>FormData</code> se sab form values instantly mil jaati hain. <code>input</code>/<code>change</code> events se real-time validation karo. <strong>Constraint Validation API</strong> se native validation bina library ke ho jaata hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — Form Handling</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// ✅ FormData — extract all values</span>
+<span class="keyword">const</span> form = document.querySelector(<span class="string">"#signup"</span>);
+form.addEventListener(<span class="string">"submit"</span>, <span class="keyword">async</span> (e) => {
+    e.preventDefault();
+    <span class="keyword">const</span> data = <span class="keyword">new</span> <span class="type">FormData</span>(form);
+    <span class="keyword">const</span> obj = <span class="type">Object</span>.fromEntries(data);
+    <span class="comment">// { name: "Alice", email: "a@b.com", age: "25" }</span>
+
+    <span class="keyword">await</span> fetch(<span class="string">"/api/signup"</span>, {
+        method: <span class="string">"POST"</span>,
+        body: <span class="type">JSON</span>.stringify(obj),
+        headers: { <span class="string">"Content-Type"</span>: <span class="string">"application/json"</span> }
+    });
+});
+
+<span class="comment">// ✅ Real-time validation</span>
+<span class="keyword">const</span> emailInput = document.querySelector(<span class="string">"#email"</span>);
+emailInput.addEventListener(<span class="string">"input"</span>, (e) => {
+    <span class="keyword">const</span> valid = <span class="type">/^[\w.-]+@[\w.-]+\.\w{2,}$/</span>.test(e.target.value);
+    e.target.setCustomValidity(valid ? <span class="string">""</span> : <span class="string">"Invalid email"</span>);
+    e.target.reportValidity();
+});
+
+<span class="comment">// checkValidity before submit</span>
+<span class="keyword">if</span> (form.checkValidity()) { <span class="comment">/* submit */</span> }</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 6.6 -->
+    <div class="module-section" id="m6-6">
+      <div class="module-header"><div class="module-number">6.6</div><h2 class="module-title">Storage — localStorage, sessionStorage, cookies, IndexedDB basics</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Persisting data client-side</h3>
+        <p class="explain-en"><code>localStorage</code> persists across sessions (5-10MB). <code>sessionStorage</code> clears on tab close. Both store <strong>strings only</strong> — use <code>JSON.stringify/parse</code>. Cookies are for server communication. <code>IndexedDB</code> handles large structured data.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>localStorage</code> sessions ke across persist karta hai. <code>sessionStorage</code> tab close pe clear ho jaata hai. Dono sirf <strong>strings</strong> store karte hain — <code>JSON.stringify/parse</code> use karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — Web Storage</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// ✅ localStorage — persists forever (until cleared)</span>
+localStorage.setItem(<span class="string">"theme"</span>, <span class="string">"dark"</span>);
+localStorage.getItem(<span class="string">"theme"</span>); <span class="comment">// "dark"</span>
+localStorage.removeItem(<span class="string">"theme"</span>);
+localStorage.clear(); <span class="comment">// Remove ALL</span>
+
+<span class="comment">// Store objects — must serialize!</span>
+<span class="keyword">const</span> user = { name: <span class="string">"Alice"</span>, prefs: { theme: <span class="string">"dark"</span> } };
+localStorage.setItem(<span class="string">"user"</span>, <span class="type">JSON</span>.stringify(user));
+<span class="keyword">const</span> loaded = <span class="type">JSON</span>.parse(localStorage.getItem(<span class="string">"user"</span>));
+
+<span class="comment">// ✅ Reusable storage helper</span>
+<span class="keyword">const</span> storage = {
+    get(key, fallback = <span class="keyword">null</span>) {
+        <span class="keyword">try</span> { <span class="keyword">return</span> <span class="type">JSON</span>.parse(localStorage.getItem(key)) ?? fallback; }
+        <span class="keyword">catch</span> { <span class="keyword">return</span> fallback; }
+    },
+    set(key, value) { localStorage.setItem(key, <span class="type">JSON</span>.stringify(value)); },
+    remove(key) { localStorage.removeItem(key); }
+};
+
+<span class="comment">// Listen for storage changes (cross-tab!)</span>
+window.addEventListener(<span class="string">"storage"</span>, (e) => {
+    console.log(<span class="string">`</span><span class="keyword">${</span>e.key<span class="keyword">}</span><span class="string"> changed from </span><span class="keyword">${</span>e.oldValue<span class="keyword">}</span><span class="string"> to </span><span class="keyword">${</span>e.newValue<span class="keyword">}</span><span class="string">`</span>);
+});</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 6.7 -->
+    <div class="module-section" id="m6-7">
+      <div class="module-header"><div class="module-number">6.7</div><h2 class="module-title">Web APIs — clipboard, geolocation, notifications, history, URL</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Browser superpowers</h3>
+        <p class="explain-en">Modern browsers expose powerful APIs: <strong>Clipboard</strong> for copy/paste, <strong>Geolocation</strong> for location, <strong>Notifications</strong> for alerts, <strong>History API</strong> for SPA routing, <strong>URL/URLSearchParams</strong> for query strings. Most require HTTPS and user permission.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Modern browsers powerful APIs dete hain: <strong>Clipboard</strong> copy/paste ke liye, <strong>History API</strong> SPA routing ke liye, <strong>URL</strong> query strings ke liye. Zyaadatar HTTPS aur user permission chahiye.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — Web APIs</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// ✅ Clipboard API</span>
+<span class="keyword">await</span> navigator.clipboard.writeText(<span class="string">"Copied!"</span>);
+<span class="keyword">const</span> text = <span class="keyword">await</span> navigator.clipboard.readText();
+
+<span class="comment">// ✅ URL & URLSearchParams</span>
+<span class="keyword">const</span> url = <span class="keyword">new</span> <span class="type">URL</span>(<span class="string">"https://example.com/search?q=js&page=2"</span>);
+url.searchParams.get(<span class="string">"q"</span>);      <span class="comment">// "js"</span>
+url.searchParams.set(<span class="string">"page"</span>, <span class="number">3</span>);
+url.searchParams.append(<span class="string">"sort"</span>, <span class="string">"date"</span>);
+url.toString(); <span class="comment">// Full URL with updated params</span>
+
+<span class="comment">// ✅ History API — SPA routing</span>
+history.pushState({ page: <span class="number">2</span> }, <span class="string">""</span>, <span class="string">"/products?page=2"</span>);
+window.addEventListener(<span class="string">"popstate"</span>, (e) => {
+    console.log(e.state); <span class="comment">// Navigate to state</span>
+});
+
+<span class="comment">// ✅ ResizeObserver — responsive JS</span>
+<span class="keyword">const</span> ro = <span class="keyword">new</span> <span class="type">ResizeObserver</span>(entries => {
+    <span class="keyword">for</span> (<span class="keyword">const</span> entry <span class="keyword">of</span> entries) {
+        <span class="keyword">const</span> { width } = entry.contentRect;
+        entry.target.classList.toggle(<span class="string">"compact"</span>, width < <span class="number">400</span>);
+    }
+});
+ro.observe(document.querySelector(<span class="string">".container"</span>));</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="practice-box">
+      <div class="practice-title">✏️ Practice Exercises — Part 6</div>
+      <ol>
+        <li>Build a todo list using <code>createElement</code>, event delegation, and <code>classList.toggle</code>.</li>
+        <li>Implement lazy loading images with <code>IntersectionObserver</code> and <code>data-src</code>.</li>
+        <li>Create a form with real-time validation using <code>setCustomValidity()</code> and <code>FormData</code>.</li>
+        <li>Build a theme toggle that persists to <code>localStorage</code> and syncs across tabs.</li>
+        <li>Use <code>CustomEvent</code> to build a simple pub/sub event bus.</li>
+        <li>Build a "copy to clipboard" button using the Clipboard API.</li>
+        <li>Create a SPA-style navigation using <code>History API</code> and <code>popstate</code>.</li>
+      </ol>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 DOM Selection Methods</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Method</th><th>Returns</th><th>Live?</th><th>Use when</th></tr></thead>
+          <tbody>
+            <tr><td><code>querySelector()</code></td><td>First Element or null</td><td>No</td><td>Single element by any CSS selector</td></tr>
+            <tr><td><code>querySelectorAll()</code></td><td>NodeList</td><td>No</td><td>Multiple elements by CSS selector</td></tr>
+            <tr><td><code>getElementById()</code></td><td>Element or null</td><td>No</td><td>By ID (slightly faster, rarely needed)</td></tr>
+            <tr><td><code>getElementsByClassName()</code></td><td>HTMLCollection</td><td>✅ Yes</td><td>When you need live updates</td></tr>
+            <tr><td><code>getElementsByTagName()</code></td><td>HTMLCollection</td><td>✅ Yes</td><td>When you need live updates</td></tr>
+            <tr><td><code>closest()</code></td><td>Nearest ancestor or null</td><td>No</td><td>Find parent matching selector</td></tr>
+            <tr><td><code>matches()</code></td><td>Boolean</td><td>—</td><td>Test if element matches selector</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 DOM Manipulation Methods</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Method</th><th>Action</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td><code>append()</code></td><td>Add to end (multiple OK)</td><td>Accepts strings + nodes</td></tr>
+            <tr><td><code>prepend()</code></td><td>Add to start</td><td>Accepts strings + nodes</td></tr>
+            <tr><td><code>before()</code></td><td>Insert before element</td><td>Sibling position</td></tr>
+            <tr><td><code>after()</code></td><td>Insert after element</td><td>Sibling position</td></tr>
+            <tr><td><code>remove()</code></td><td>Remove from DOM</td><td>No parent needed</td></tr>
+            <tr><td><code>replaceWith()</code></td><td>Replace with new element</td><td>Accepts strings + nodes</td></tr>
+            <tr><td><code>cloneNode(true)</code></td><td>Deep clone element</td><td><code>true</code> = include children</td></tr>
+            <tr><td><code>insertAdjacentHTML()</code></td><td>Insert HTML string</td><td>4 positions available</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Common Event Types Reference</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Category</th><th>Events</th><th>Common use</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Mouse</strong></td><td><code>click</code>, <code>dblclick</code>, <code>mousedown</code>, <code>mouseup</code>, <code>mousemove</code></td><td>Buttons, drag, tooltips</td></tr>
+            <tr><td><strong>Mouse (no bubble)</strong></td><td><code>mouseenter</code>, <code>mouseleave</code></td><td>Hover menus, tooltips</td></tr>
+            <tr><td><strong>Keyboard</strong></td><td><code>keydown</code>, <code>keyup</code>, <code>keypress</code> ❌</td><td>Shortcuts, text input</td></tr>
+            <tr><td><strong>Form</strong></td><td><code>submit</code>, <code>reset</code>, <code>input</code>, <code>change</code>, <code>focus</code>, <code>blur</code></td><td>Validation, auto-save</td></tr>
+            <tr><td><strong>Window</strong></td><td><code>load</code>, <code>DOMContentLoaded</code>, <code>resize</code>, <code>scroll</code></td><td>Init, responsive, lazy load</td></tr>
+            <tr><td><strong>Touch</strong></td><td><code>touchstart</code>, <code>touchmove</code>, <code>touchend</code></td><td>Mobile gestures</td></tr>
+            <tr><td><strong>Drag</strong></td><td><code>dragstart</code>, <code>dragover</code>, <code>drop</code>, <code>dragend</code></td><td>File upload, reorder</td></tr>
+            <tr><td><strong>Clipboard</strong></td><td><code>copy</code>, <code>cut</code>, <code>paste</code></td><td>Custom paste handling</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Storage Comparison</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Feature</th><th>localStorage</th><th>sessionStorage</th><th>Cookies</th><th>IndexedDB</th></tr></thead>
+          <tbody>
+            <tr><td>Capacity</td><td>5-10 MB</td><td>5-10 MB</td><td>~4 KB</td><td>Unlimited</td></tr>
+            <tr><td>Persistence</td><td>Until cleared</td><td>Tab close</td><td>Expiry date</td><td>Until cleared</td></tr>
+            <tr><td>Sent to server</td><td>❌ No</td><td>❌ No</td><td>✅ Every request</td><td>❌ No</td></tr>
+            <tr><td>Data type</td><td>Strings</td><td>Strings</td><td>Strings</td><td>Any (structured)</td></tr>
+            <tr><td>API</td><td>Sync</td><td>Sync</td><td>Sync (document.cookie)</td><td>Async</td></tr>
+            <tr><td>Cross-tab</td><td>✅ Yes</td><td>❌ No</td><td>✅ Yes</td><td>✅ Yes</td></tr>
+            <tr><td>Best for</td><td>Preferences, cache</td><td>Temp session data</td><td>Auth tokens</td><td>Large offline data</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="concept-block">
+      <h3 class="concept-heading">Drag & Drop API</h3>
+      <p class="explain-en">HTML5 Drag & Drop enables native drag interactions. Set <code>draggable="true"</code> on elements. Listen for <code>dragstart</code>, <code>dragover</code> (must <code>preventDefault</code>!), and <code>drop</code>. Use <code>dataTransfer</code> to pass data between drag source and drop target.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>HTML5 Drag & Drop native drag interactions enable karta hai. Elements pe <code>draggable="true"</code> lagao. <code>dragstart</code>, <code>dragover</code> (<code>preventDefault</code> zaroori!), aur <code>drop</code> events suno. <code>dataTransfer</code> se data pass karo.</div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">💻 JavaScript — Drag & Drop</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+        <div class="code-body"><pre><span class="comment">// ✅ Make element draggable</span>
+<span class="comment">// HTML: &lt;div draggable="true" data-id="42"&gt;Drag me&lt;/div&gt;</span>
+
+<span class="keyword">const</span> draggable = document.querySelector(<span class="string">"[draggable]"</span>);
+draggable.addEventListener(<span class="string">"dragstart"</span>, (e) => {
+    e.dataTransfer.setData(<span class="string">"text/plain"</span>, e.target.dataset.id);
+    e.target.classList.add(<span class="string">"dragging"</span>);
+});
+draggable.addEventListener(<span class="string">"dragend"</span>, (e) => {
+    e.target.classList.remove(<span class="string">"dragging"</span>);
+});
+
+<span class="comment">// ✅ Drop zone</span>
+<span class="keyword">const</span> dropZone = document.querySelector(<span class="string">".drop-zone"</span>);
+dropZone.addEventListener(<span class="string">"dragover"</span>, (e) => {
+    e.preventDefault(); <span class="comment">// REQUIRED to allow drop!</span>
+    dropZone.classList.add(<span class="string">"drag-over"</span>);
+});
+dropZone.addEventListener(<span class="string">"dragleave"</span>, () => {
+    dropZone.classList.remove(<span class="string">"drag-over"</span>);
+});
+dropZone.addEventListener(<span class="string">"drop"</span>, (e) => {
+    e.preventDefault();
+    <span class="keyword">const</span> id = e.dataTransfer.getData(<span class="string">"text/plain"</span>);
+    console.log(<span class="string">"Dropped item:"</span>, id);
+    dropZone.classList.remove(<span class="string">"drag-over"</span>);
+});</pre></div>
+      </div>
+    </div>
+
+    <div class="concept-block">
+      <h3 class="concept-heading">MutationObserver — watching DOM changes</h3>
+      <p class="explain-en"><code>MutationObserver</code> watches for DOM changes: added/removed nodes, attribute changes, text content. Useful for third-party widget integration, accessibility monitoring, and auto-updating UI components.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>MutationObserver</code> DOM changes watch karta hai: added/removed nodes, attribute changes. Third-party widgets aur auto-updating UI ke liye useful.</div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">💻 JavaScript — MutationObserver</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+        <div class="code-body"><pre><span class="comment">// ✅ Watch for child changes</span>
+<span class="keyword">const</span> observer = <span class="keyword">new</span> <span class="type">MutationObserver</span>((mutations) => {
+    <span class="keyword">for</span> (<span class="keyword">const</span> mutation <span class="keyword">of</span> mutations) {
+        <span class="keyword">if</span> (mutation.type === <span class="string">"childList"</span>) {
+            mutation.addedNodes.forEach(node => {
+                console.log(<span class="string">"Added:"</span>, node);
+            });
+        }
+        <span class="keyword">if</span> (mutation.type === <span class="string">"attributes"</span>) {
+            console.log(<span class="string">`Attr </span><span class="keyword">${</span>mutation.attributeName<span class="keyword">}</span><span class="string"> changed`</span>);
+        }
+    }
+});
+
+observer.observe(document.querySelector(<span class="string">"#app"</span>), {
+    childList: <span class="keyword">true</span>,     <span class="comment">// Watch added/removed children</span>
+    attributes: <span class="keyword">true</span>,    <span class="comment">// Watch attribute changes</span>
+    subtree: <span class="keyword">true</span>,       <span class="comment">// Watch all descendants</span>
+    characterData: <span class="keyword">true</span>  <span class="comment">// Watch text changes</span>
+});
+
+<span class="comment">// Stop observing</span>
+observer.disconnect();</pre></div>
+      </div>
+    </div>
+
+    <div class="concept-block">
+      <h3 class="concept-heading">DOM Performance Tips</h3>
+      <p class="explain-en">DOM operations are expensive. <strong>Batch changes</strong> using <code>DocumentFragment</code> or <code>requestAnimationFrame</code>. <strong>Avoid layout thrashing</strong> — don't read and write layout properties in alternating sequence. Use <strong>event delegation</strong> instead of individual handlers.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>DOM operations expensive hain. <strong>Batch changes</strong> karo <code>DocumentFragment</code> ya <code>requestAnimationFrame</code> se. <strong>Layout thrashing avoid</strong> karo — read/write alternate mat karo.</div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">💻 JavaScript — DOM Performance</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+        <div class="code-body"><pre><span class="comment">// ❌ Layout thrashing — forces reflow on every iteration</span>
+<span class="keyword">for</span> (<span class="keyword">const</span> el <span class="keyword">of</span> elements) {
+    el.style.width = el.offsetWidth + <span class="number">10</span> + <span class="string">"px"</span>; <span class="comment">// Read + Write!</span>
+}
+
+<span class="comment">// ✅ Read all, then write all</span>
+<span class="keyword">const</span> widths = [...elements].map(el => el.offsetWidth);
+elements.forEach((el, i) => {
+    el.style.width = widths[i] + <span class="number">10</span> + <span class="string">"px"</span>;
+});
+
+<span class="comment">// ✅ Use DocumentFragment for batch inserts</span>
+<span class="keyword">const</span> fragment = document.createDocumentFragment();
+data.forEach(item => {
+    <span class="keyword">const</span> el = document.createElement(<span class="string">"div"</span>);
+    el.textContent = item.name;
+    fragment.append(el);
+});
+container.append(fragment); <span class="comment">// One DOM update!</span>
+
+<span class="comment">// ✅ Use textContent not innerHTML when possible</span>
+el.textContent = <span class="string">"Safe text"</span>; <span class="comment">// No parsing, no XSS</span>
+
+<span class="comment">// ✅ Cache selectors</span>
+<span class="comment">// ❌ document.querySelector('.btn') inside every click</span>
+<span class="keyword">const</span> btn = document.querySelector(<span class="string">".btn"</span>); <span class="comment">// ✅ Cache once</span></pre></div>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Browser Observer APIs</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Observer</th><th>Watches</th><th>Use case</th></tr></thead>
+          <tbody>
+            <tr><td><code>IntersectionObserver</code></td><td>Element visibility</td><td>Lazy loading, infinite scroll, animations</td></tr>
+            <tr><td><code>MutationObserver</code></td><td>DOM changes</td><td>Third-party integrations, live updates</td></tr>
+            <tr><td><code>ResizeObserver</code></td><td>Element size changes</td><td>Responsive components, charts</td></tr>
+            <tr><td><code>PerformanceObserver</code></td><td>Performance metrics</td><td>Core Web Vitals, monitoring</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 insertAdjacentHTML Positions</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Position</th><th>Inserts</th><th>Relative to</th></tr></thead>
+          <tbody>
+            <tr><td><code>"beforebegin"</code></td><td>Before the element</td><td>As previous sibling</td></tr>
+            <tr><td><code>"afterbegin"</code></td><td>Inside, at the start</td><td>Before first child</td></tr>
+            <tr><td><code>"beforeend"</code></td><td>Inside, at the end</td><td>After last child</td></tr>
+            <tr><td><code>"afterend"</code></td><td>After the element</td><td>As next sibling</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="handbook-nav">
+      <a href="part5.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Part 5: Asynchronous JavaScript</div></div></a>
+      <a href="part7.html" class="nav-btn next"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Part 7: Modules, Tooling & Testing →</div></div><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+  </div>
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
+  <script src="../../../js/main.js"></script>
+  <script>
+    (() => {
+      document.querySelectorAll('.code-block').forEach((block) => { const pre = block.querySelector('.code-body pre'), header = block.querySelector('.code-header'); if (!pre || !header) return; let actions = header.querySelector('.code-actions'); if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); } const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'code-copy-btn'; btn.textContent = 'Copy'; btn.addEventListener('click', async () => { try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; } catch { btn.textContent = 'Failed'; } finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); } }); actions.prepend(btn); });
+      const fill = document.querySelector('.hb-progress-fill'), label = document.querySelector('.hb-progress-label');
+      if (fill && label) { const update = () => { const h = document.documentElement, d = (h.scrollHeight - h.clientHeight) || 1, p = Math.max(0, Math.min(1, h.scrollTop / d)); fill.style.width = (p*100).toFixed(0)+'%'; label.textContent = (p*100).toFixed(0)+'%'; }; document.addEventListener('scroll', update, { passive: true }); update(); }
+    })();
+  </script>
+</body>
+</html>

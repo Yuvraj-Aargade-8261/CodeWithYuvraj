@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Part 1: JavaScript Foundations & Setup — JavaScript Programming Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 1: JavaScript history, var/let/const, data types, coercion, operators, template literals.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/handbook.css">
+</head>
+<body class="handbook-wrapper">
+  <nav class="navbar"><div class="container"><a href="../../../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../../../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
+
+  <div class="handbook-page">
+    <div class="hb-topbar"><div class="hb-topbar-inner"><div class="hb-breadcrumbs"><a href="index.html">JavaScript Programming Handbook</a><span class="hb-muted">/</span><span>Part 1</span><span class="hb-muted">·</span><a href="#m1-1">1.1</a> <a href="#m1-2">1.2</a> <a href="#m1-3">1.3</a> <a href="#m1-4">1.4</a> <a href="#m1-5">1.5</a> <a href="#m1-6">1.6</a> <a href="#m1-7">1.7</a></div><div class="hb-progress" aria-label="Reading progress"><div class="hb-progress-track" role="progressbar"><div class="hb-progress-fill"></div></div><div class="hb-progress-label">0%</div></div></div></div>
+
+    <div class="chapter-header" data-chapter-num="01">
+      <div class="chapter-part-label">📖 Part 1 — JavaScript Foundations & Setup</div>
+      <h1 class="chapter-title">JavaScript <span class="gradient-text">Foundations</span></h1>
+      <p class="chapter-subtitle">History, ECMAScript, var/let/const, data types, coercion, operators, template literals — your first steps into the world's most popular programming language.</p>
+      <div class="chapter-meta"><span>📄 Modules 1.1 – 1.7</span><span>⏱️ 60–80 min read</span><span>💻 65+ Examples</span></div>
+    </div>
+
+    <div class="hb-mini-toc"><div class="hb-mini-title">📍 Part 1 Modules</div><div class="hb-mini-links"><a href="#m1-1">1.1 History</a><a href="#m1-2">1.2 Setup</a><a href="#m1-3">1.3 Variables</a><a href="#m1-4">1.4 Types</a><a href="#m1-5">1.5 Coercion</a><a href="#m1-6">1.6 Operators</a><a href="#m1-7">1.7 I/O</a></div></div>
+
+    <div class="quick-ref">
+      <div class="qr-title">🚀 Advanced Lens — Part 1</div>
+      <p class="explain-en">Professional JavaScript starts with runtime clarity: scope rules, strict equality discipline, predictable coercion, and environment parity between browser and Node.js. Strong foundations here prevent most early production bugs.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Industry JavaScript me Part 1 ka focus sirf basics nahi, balki scope, coercion control, aur browser/Node parity par hota hai. Yeh foundation strong ho to aage ka code reliable banta hai.</div>
+    </div>
+
+    <div class="concept-block">
+      <h3>Foundation readiness checklist (Part 1)</h3>
+      <table>
+        <thead><tr><th>Area</th><th>Industry baseline</th></tr></thead>
+        <tbody>
+          <tr><td>Scope discipline</td><td>Prefer `const` by default, `let` when reassignment is needed, avoid `var`.</td></tr>
+          <tr><td>Comparison safety</td><td>Use strict equality (`===`, `!==`) in application logic.</td></tr>
+          <tr><td>Runtime parity</td><td>Test key scripts in both browser and Node when shared logic exists.</td></tr>
+          <tr><td>Input/output clarity</td><td>Validate external input and use explicit formatting for output/debug logs.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- MODULE 1.1 -->
+    <div class="module-section" id="m1-1">
+      <div class="module-header"><div class="module-number">1.1</div><h2 class="module-title">What is JavaScript — history, ECMAScript, browser vs Node.js</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">The language of the web</h3>
+        <p class="explain-en"><strong>JavaScript</strong> was created in 1995 by Brendan Eich at Netscape in just 10 days. Despite its name, it has no relation to Java. <strong>ECMAScript (ES)</strong> is the standard — JS is the implementation. ES6 (2015) was the biggest update ever. Today JS runs everywhere: browsers (<strong>V8</strong> in Chrome), servers (<strong>Node.js</strong>), mobile (React Native), desktop (Electron), and even IoT.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>JavaScript</strong> 1995 me Brendan Eich ne sirf 10 din me banaya tha. Java se koi relation nahi hai. <strong>ECMAScript (ES)</strong> standard hai — JS uska implementation hai. ES6 (2015) sabse bada update tha. Aaj JS har jagah chalta hai: browsers, servers (Node.js), mobile aur desktop.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — Your First Program</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// JavaScript runs in the browser console or Node.js</span>
+console.log(<span class="string">"Hello, World!"</span>);  <span class="comment">// Output to console</span>
+
+<span class="comment">// JavaScript is dynamically typed</span>
+<span class="keyword">let</span> name = <span class="string">"Yuvraj"</span>;    <span class="comment">// String</span>
+<span class="keyword">let</span> age = <span class="number">20</span>;            <span class="comment">// Number</span>
+<span class="keyword">let</span> isStudent = <span class="keyword">true</span>;   <span class="comment">// Boolean</span>
+
+console.log(<span class="string">`Hi, I'm </span><span class="keyword">${</span>name<span class="keyword">}</span><span class="string"> and I'm </span><span class="keyword">${</span>age<span class="keyword">}</span><span class="string"> years old`</span>);
+
+<span class="comment">// Check your JS engine version</span>
+console.log(<span class="keyword">typeof</span> <span class="string">"hello"</span>); <span class="comment">// "string"</span>
+console.log(<span class="keyword">typeof</span> <span class="number">42</span>);      <span class="comment">// "number"</span>
+console.log(<span class="keyword">typeof</span> <span class="keyword">true</span>);    <span class="comment">// "boolean"</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Year</th><th>Version</th><th>Key features</th></tr></thead>
+            <tbody>
+              <tr><td>1995</td><td>JavaScript 1.0</td><td>Created by Brendan Eich at Netscape</td></tr>
+              <tr><td>1997</td><td>ES1</td><td>First ECMAScript standard</td></tr>
+              <tr><td>2009</td><td>ES5</td><td>strict mode, JSON, Array methods</td></tr>
+              <tr><td>2015</td><td>ES6 (ES2015)</td><td>let/const, arrow functions, classes, promises, modules</td></tr>
+              <tr><td>2017</td><td>ES2017</td><td>async/await, Object.entries()</td></tr>
+              <tr><td>2020</td><td>ES2020</td><td>Optional chaining (?.), nullish coalescing (??), BigInt</td></tr>
+              <tr><td>2023</td><td>ES2023</td><td>toSorted(), toReversed(), findLast(), Array grouping</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Environment</th><th>Engine</th><th>Use case</th></tr></thead>
+            <tbody>
+              <tr><td>Chrome / Edge</td><td>V8</td><td>Frontend web apps</td></tr>
+              <tr><td>Firefox</td><td>SpiderMonkey</td><td>Frontend web apps</td></tr>
+              <tr><td>Safari</td><td>JavaScriptCore</td><td>iOS / macOS apps</td></tr>
+              <tr><td>Node.js</td><td>V8</td><td>Backend servers, CLI tools</td></tr>
+              <tr><td>Deno / Bun</td><td>V8 / JavaScriptCore</td><td>Modern server runtimes</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 1.2 -->
+    <div class="module-section" id="m1-2">
+      <div class="module-header"><div class="module-number">1.2</div><h2 class="module-title">Setup — DevTools, VS Code, Node.js, script tag, defer/async</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Setting up your environment</h3>
+        <p class="explain-en">You need a <strong>browser</strong> (Chrome DevTools) + <strong>editor</strong> (VS Code) + optionally <strong>Node.js</strong> for running JS outside the browser. Use <code>&lt;script&gt;</code> tag to include JS in HTML. <code>defer</code> loads after HTML parsing, <code>async</code> loads independently. <strong>Always use <code>defer</code></strong> for regular scripts.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Aapko <strong>browser</strong> (Chrome DevTools) + <strong>editor</strong> (VS Code) + optionally <strong>Node.js</strong> chahiye. <code>&lt;script&gt;</code> tag se JS HTML me include hoti hai. <code>defer</code> HTML parse hone ke baad load karta hai — hamesha <code>defer</code> use karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 HTML — Including JavaScript</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">&lt;!-- ❌ Old way — blocks HTML parsing --&gt;</span>
+<span class="keyword">&lt;script</span> <span class="type">src</span>=<span class="string">"app.js"</span><span class="keyword">&gt;&lt;/script&gt;</span>
+
+<span class="comment">&lt;!-- ✅ defer — loads after HTML is parsed (RECOMMENDED) --&gt;</span>
+<span class="keyword">&lt;script</span> <span class="type">src</span>=<span class="string">"app.js"</span> <span class="type">defer</span><span class="keyword">&gt;&lt;/script&gt;</span>
+
+<span class="comment">&lt;!-- async — loads independently, executes ASAP --&gt;</span>
+<span class="keyword">&lt;script</span> <span class="type">src</span>=<span class="string">"analytics.js"</span> <span class="type">async</span><span class="keyword">&gt;&lt;/script&gt;</span>
+
+<span class="comment">&lt;!-- ES Module — automatically deferred --&gt;</span>
+<span class="keyword">&lt;script</span> <span class="type">type</span>=<span class="string">"module"</span> <span class="type">src</span>=<span class="string">"app.js"</span><span class="keyword">&gt;&lt;/script&gt;</span>
+
+<span class="comment">&lt;!-- Inline JS --&gt;</span>
+<span class="keyword">&lt;script&gt;</span>
+  console.log(<span class="string">"Inline JS!"</span>);
+<span class="keyword">&lt;/script&gt;</span></pre></div>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Terminal — Node.js Setup</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># Check Node.js version</span>
+node --version       <span class="comment"># v20.x or higher</span>
+npm --version        <span class="comment"># 10.x or higher</span>
+
+<span class="comment"># Run a JS file</span>
+node app.js
+
+<span class="comment"># Interactive REPL</span>
+node                 <span class="comment"># Type JS expressions directly</span>
+> <span class="number">2</span> + <span class="number">3</span>              <span class="comment">// 5</span>
+> <span class="string">"hello"</span>.toUpperCase() <span class="comment">// "HELLO"</span>
+> .exit              <span class="comment">// Exit REPL</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Attribute</th><th>Parsing</th><th>Execution</th><th>Use for</th></tr></thead>
+            <tbody>
+              <tr><td>(none)</td><td>Blocks HTML</td><td>Immediately</td><td>❌ Avoid</td></tr>
+              <tr><td><code>defer</code></td><td>Parallel</td><td>After HTML parsed</td><td>✅ Main scripts</td></tr>
+              <tr><td><code>async</code></td><td>Parallel</td><td>ASAP (any order)</td><td>Analytics, ads</td></tr>
+              <tr><td><code>type="module"</code></td><td>Parallel</td><td>After HTML (strict)</td><td>✅ ESM apps</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>VS Code extensions:</strong> Install <strong>ESLint</strong>, <strong>Prettier</strong>, <strong>Live Server</strong>, and <strong>Error Lens</strong> for the best JS development experience.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 1.3 -->
+    <div class="module-section" id="m1-3">
+      <div class="module-header"><div class="module-number">1.3</div><h2 class="module-title">Variables — var vs let vs const, hoisting, TDZ, block scope</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Declaring variables the modern way</h3>
+        <p class="explain-en"><code>var</code> is function-scoped and hoisted (legacy — avoid). <code>let</code> is block-scoped and reassignable. <code>const</code> is block-scoped and <strong>cannot be reassigned</strong> (but objects/arrays inside can be mutated). <strong>Default to <code>const</code></strong>, use <code>let</code> only when you need to reassign. Never use <code>var</code> in modern JS.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>var</code> function-scoped hai aur hoisted hota hai (legacy — avoid karo). <code>let</code> block-scoped hai aur reassign ho sakta hai. <code>const</code> block-scoped hai aur <strong>reassign nahi ho sakta</strong>. <strong>Default me <code>const</code> use karo</strong>, sirf <code>let</code> jab reassign karna ho.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — var vs let vs const</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// ❌ var — function-scoped, hoisted (AVOID!)</span>
+console.log(x); <span class="comment">// undefined (hoisted!)</span>
+<span class="keyword">var</span> x = <span class="number">10</span>;
+
+<span class="keyword">if</span> (<span class="keyword">true</span>) {
+    <span class="keyword">var</span> leaked = <span class="string">"I leak out!"</span>;
+}
+console.log(leaked); <span class="comment">// "I leak out!" — var ignores block scope!</span>
+
+<span class="comment">// ✅ let — block-scoped, reassignable</span>
+<span class="keyword">let</span> count = <span class="number">0</span>;
+count = <span class="number">1</span>;        <span class="comment">// ✅ Can reassign</span>
+count = <span class="number">2</span>;        <span class="comment">// ✅ Can reassign again</span>
+
+<span class="keyword">if</span> (<span class="keyword">true</span>) {
+    <span class="keyword">let</span> inner = <span class="string">"block scoped"</span>;
+}
+<span class="comment">// console.log(inner); // ❌ ReferenceError — not accessible!</span>
+
+<span class="comment">// ✅ const — block-scoped, NOT reassignable</span>
+<span class="keyword">const</span> PI = <span class="number">3.14159</span>;
+<span class="comment">// PI = 3.14; // ❌ TypeError: Assignment to constant</span>
+
+<span class="comment">// ⚠️ const with objects — reference is constant, content is NOT</span>
+<span class="keyword">const</span> user = { name: <span class="string">"Alice"</span>, age: <span class="number">25</span> };
+user.age = <span class="number">26</span>;     <span class="comment">// ✅ Mutating property is allowed!</span>
+<span class="comment">// user = {};       // ❌ Cannot reassign the reference</span>
+
+<span class="keyword">const</span> nums = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];
+nums.push(<span class="number">4</span>);      <span class="comment">// ✅ [1, 2, 3, 4] — array content can change</span>
+<span class="comment">// nums = [];       // ❌ Cannot reassign</span>
+
+<span class="comment">// TDZ (Temporal Dead Zone) — let/const before declaration</span>
+<span class="comment">// console.log(y);  // ❌ ReferenceError (TDZ!)</span>
+<span class="keyword">let</span> y = <span class="number">42</span>;
+console.log(y);    <span class="comment">// ✅ 42</span>
+
+<span class="comment">// Scope comparison</span>
+<span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i < <span class="number">3</span>; i++) {} console.log(i); <span class="comment">// 3 — var leaks!</span>
+<span class="keyword">for</span> (<span class="keyword">let</span> j = <span class="number">0</span>; j < <span class="number">3</span>; j++) {}
+<span class="comment">// console.log(j); // ❌ ReferenceError — let stays in block</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Feature</th><th><code>var</code></th><th><code>let</code></th><th><code>const</code></th></tr></thead>
+            <tbody>
+              <tr><td>Scope</td><td>Function</td><td>Block</td><td>Block</td></tr>
+              <tr><td>Hoisting</td><td>Yes (undefined)</td><td>Yes (TDZ)</td><td>Yes (TDZ)</td></tr>
+              <tr><td>Reassign</td><td>✅ Yes</td><td>✅ Yes</td><td>❌ No</td></tr>
+              <tr><td>Redeclare</td><td>✅ Yes</td><td>❌ No</td><td>❌ No</td></tr>
+              <tr><td>Global object</td><td>✅ window.x</td><td>❌ No</td><td>❌ No</td></tr>
+              <tr><td>Use in 2024+</td><td>❌ Never</td><td>When reassigning</td><td>✅ Default</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>Golden rule:</strong> Always use <code>const</code> by default. Switch to <code>let</code> only when you need to reassign. Never use <code>var</code> — it causes bugs with scope leaking and hoisting.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 1.4 -->
+    <div class="module-section" id="m1-4">
+      <div class="module-header"><div class="module-number">1.4</div><h2 class="module-title">Data types — primitives, typeof, null vs undefined, BigInt, Symbol</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">JavaScript's 7 primitive types + objects</h3>
+        <p class="explain-en">JavaScript has <strong>7 primitive types</strong>: string, number, bigint, boolean, undefined, null, symbol — and <strong>object</strong> (reference type). Primitives are <strong>immutable and copied by value</strong>. Objects are <strong>copied by reference</strong>. <code>typeof</code> returns a string representing the type — but beware: <code>typeof null === "object"</code> is a famous bug!</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>JavaScript me <strong>7 primitive types</strong> hain: string, number, bigint, boolean, undefined, null, symbol — aur <strong>object</strong> (reference type). Primitives <strong>immutable</strong> hain aur <strong>value se copy</strong> hote hain. Objects <strong>reference se copy</strong> hote hain. <code>typeof null === "object"</code> ek famous bug hai!</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — Data Types</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// ✅ 7 Primitive Types</span>
+<span class="keyword">const</span> str = <span class="string">"Hello"</span>;           <span class="comment">// string</span>
+<span class="keyword">const</span> num = <span class="number">42</span>;                <span class="comment">// number (64-bit float)</span>
+<span class="keyword">const</span> big = <span class="number">9007199254740993n</span>; <span class="comment">// bigint (arbitrary precision)</span>
+<span class="keyword">const</span> bool = <span class="keyword">true</span>;             <span class="comment">// boolean</span>
+<span class="keyword">const</span> undef = <span class="keyword">undefined</span>;       <span class="comment">// undefined (not assigned)</span>
+<span class="keyword">const</span> nul = <span class="keyword">null</span>;              <span class="comment">// null (intentional empty)</span>
+<span class="keyword">const</span> sym = <span class="type">Symbol</span>(<span class="string">"id"</span>);     <span class="comment">// symbol (unique identifier)</span>
+
+<span class="comment">// Object (reference type)</span>
+<span class="keyword">const</span> obj = { name: <span class="string">"Alice"</span> };
+<span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];          <span class="comment">// Array is an object!</span>
+<span class="keyword">const</span> fn = () => {};           <span class="comment">// Function is an object!</span>
+
+<span class="comment">// typeof operator</span>
+<span class="keyword">typeof</span> <span class="string">"hello"</span>    <span class="comment">// "string"</span>
+<span class="keyword">typeof</span> <span class="number">42</span>         <span class="comment">// "number"</span>
+<span class="keyword">typeof</span> <span class="number">42n</span>        <span class="comment">// "bigint"</span>
+<span class="keyword">typeof</span> <span class="keyword">true</span>       <span class="comment">// "boolean"</span>
+<span class="keyword">typeof</span> <span class="keyword">undefined</span>  <span class="comment">// "undefined"</span>
+<span class="keyword">typeof</span> <span class="keyword">null</span>       <span class="comment">// "object" — ⚠️ FAMOUS BUG! (since 1995)</span>
+<span class="keyword">typeof</span> <span class="type">Symbol</span>()   <span class="comment">// "symbol"</span>
+<span class="keyword">typeof</span> {}         <span class="comment">// "object"</span>
+<span class="keyword">typeof</span> []         <span class="comment">// "object" — arrays are objects!</span>
+<span class="keyword">typeof</span> <span class="keyword">function</span>(){} <span class="comment">// "function" — special case</span>
+
+<span class="comment">// ✅ Number quirks</span>
+console.log(<span class="number">0.1</span> + <span class="number">0.2</span>);          <span class="comment">// 0.30000000000000004 ⚠️</span>
+console.log(<span class="number">0.1</span> + <span class="number">0.2</span> === <span class="number">0.3</span>);  <span class="comment">// false! IEEE 754 floating point</span>
+console.log(<span class="type">Number</span>.MAX_SAFE_INTEGER); <span class="comment">// 9007199254740991</span>
+console.log(<span class="type">Number</span>.isNaN(<span class="type">NaN</span>));      <span class="comment">// true</span>
+console.log(<span class="type">Number</span>.isFinite(<span class="type">Infinity</span>)); <span class="comment">// false</span>
+
+<span class="comment">// null vs undefined</span>
+<span class="keyword">let</span> a;              <span class="comment">// undefined — declared but not assigned</span>
+<span class="keyword">let</span> b = <span class="keyword">null</span>;       <span class="comment">// null — intentionally empty</span>
+console.log(a == b);  <span class="comment">// true (loose equality)</span>
+console.log(a === b); <span class="comment">// false (strict equality)</span>
+
+<span class="comment">// BigInt — for numbers beyond MAX_SAFE_INTEGER</span>
+<span class="keyword">const</span> huge = <span class="number">123456789012345678901234567890n</span>;
+console.log(huge + <span class="number">1n</span>); <span class="comment">// 123456789012345678901234567891n</span>
+<span class="comment">// huge + 1; // ❌ TypeError: Cannot mix BigInt and Number</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Type</th><th>Example</th><th><code>typeof</code></th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td>string</td><td><code>"hello"</code>, <code>`hi`</code></td><td><code>"string"</code></td><td>Immutable, UTF-16</td></tr>
+              <tr><td>number</td><td><code>42</code>, <code>3.14</code>, <code>NaN</code></td><td><code>"number"</code></td><td>64-bit float (IEEE 754)</td></tr>
+              <tr><td>bigint</td><td><code>42n</code></td><td><code>"bigint"</code></td><td>Arbitrary precision integers</td></tr>
+              <tr><td>boolean</td><td><code>true</code>, <code>false</code></td><td><code>"boolean"</code></td><td>Logical values</td></tr>
+              <tr><td>undefined</td><td><code>undefined</code></td><td><code>"undefined"</code></td><td>Not assigned</td></tr>
+              <tr><td>null</td><td><code>null</code></td><td><code>"object"</code> ⚠️</td><td>Intentional empty</td></tr>
+              <tr><td>symbol</td><td><code>Symbol("id")</code></td><td><code>"symbol"</code></td><td>Unique identifier</td></tr>
+              <tr><td>object</td><td><code>{}</code>, <code>[]</code>, <code>fn</code></td><td><code>"object"</code></td><td>Reference type</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 1.5 -->
+    <div class="module-section" id="m1-5">
+      <div class="module-header"><div class="module-number">1.5</div><h2 class="module-title">Type coercion — implicit vs explicit, truthy/falsy, == vs ===</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">JavaScript's type magic (and traps)</h3>
+        <p class="explain-en"><strong>Type coercion</strong> is JS auto-converting types. <strong>Implicit</strong>: <code>"5" + 3 = "53"</code> (string wins). <strong>Explicit</strong>: <code>Number("5") = 5</code>. Use <code>===</code> (strict equality — no coercion) instead of <code>==</code> (loose — coerces). Know the <strong>8 falsy values</strong>: <code>false, 0, -0, 0n, "", null, undefined, NaN</code>. Everything else is truthy.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Type coercion</strong> me JS automatically types convert karta hai. <code>"5" + 3 = "53"</code> (string jeet jaata hai). Hamesha <code>===</code> use karo (<code>==</code> nahi). <strong>8 falsy values</strong> yaad rakho: <code>false, 0, -0, 0n, "", null, undefined, NaN</code>.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — Type Coercion</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// ✅ Implicit coercion — JS converts automatically</span>
+<span class="string">"5"</span> + <span class="number">3</span>       <span class="comment">// "53" — number → string (+ concatenates)</span>
+<span class="string">"5"</span> - <span class="number">3</span>       <span class="comment">// 2 — string → number (- is math only)</span>
+<span class="string">"5"</span> * <span class="number">2</span>       <span class="comment">// 10 — string → number</span>
+<span class="keyword">true</span> + <span class="number">1</span>      <span class="comment">// 2 — true becomes 1</span>
+<span class="keyword">false</span> + <span class="number">1</span>     <span class="comment">// 1 — false becomes 0</span>
+<span class="string">""</span> + <span class="number">0</span>        <span class="comment">// "0" — number → string</span>
+<span class="keyword">null</span> + <span class="number">1</span>      <span class="comment">// 1 — null becomes 0</span>
+<span class="keyword">undefined</span> + <span class="number">1</span> <span class="comment">// NaN — undefined can't convert</span>
+
+<span class="comment">// ✅ Explicit coercion — you convert manually</span>
+<span class="type">Number</span>(<span class="string">"42"</span>)      <span class="comment">// 42</span>
+<span class="type">Number</span>(<span class="string">""</span>)        <span class="comment">// 0</span>
+<span class="type">Number</span>(<span class="keyword">true</span>)      <span class="comment">// 1</span>
+<span class="type">Number</span>(<span class="keyword">null</span>)      <span class="comment">// 0</span>
+<span class="type">Number</span>(<span class="keyword">undefined</span>) <span class="comment">// NaN</span>
+<span class="type">Number</span>(<span class="string">"hello"</span>)   <span class="comment">// NaN</span>
+
+<span class="type">String</span>(<span class="number">42</span>)        <span class="comment">// "42"</span>
+<span class="type">String</span>(<span class="keyword">null</span>)      <span class="comment">// "null"</span>
+<span class="type">String</span>(<span class="keyword">undefined</span>) <span class="comment">// "undefined"</span>
+
+<span class="type">Boolean</span>(<span class="number">0</span>)        <span class="comment">// false</span>
+<span class="type">Boolean</span>(<span class="string">""</span>)       <span class="comment">// false</span>
+<span class="type">Boolean</span>(<span class="string">"hello"</span>)  <span class="comment">// true</span>
+<span class="type">Boolean</span>([])       <span class="comment">// true — empty array is truthy!</span>
+<span class="type">Boolean</span>({})       <span class="comment">// true — empty object is truthy!</span>
+
+<span class="comment">// ✅ == vs === (ALWAYS use ===)</span>
+<span class="number">5</span> == <span class="string">"5"</span>        <span class="comment">// true ❌ (coerces!)</span>
+<span class="number">5</span> === <span class="string">"5"</span>       <span class="comment">// false ✅ (no coercion)</span>
+<span class="keyword">null</span> == <span class="keyword">undefined</span>  <span class="comment">// true ❌</span>
+<span class="keyword">null</span> === <span class="keyword">undefined</span> <span class="comment">// false ✅</span>
+<span class="number">0</span> == <span class="keyword">false</span>      <span class="comment">// true ❌</span>
+<span class="number">0</span> === <span class="keyword">false</span>     <span class="comment">// false ✅</span>
+<span class="string">""</span> == <span class="keyword">false</span>     <span class="comment">// true ❌</span>
+<span class="string">""</span> === <span class="keyword">false</span>    <span class="comment">// false ✅</span>
+
+<span class="comment">// ✅ Truthy / Falsy in conditions</span>
+<span class="keyword">const</span> name = <span class="string">""</span>;
+<span class="keyword">if</span> (name) { <span class="comment">/* skipped — "" is falsy */</span> }
+
+<span class="keyword">const</span> list = [];
+<span class="keyword">if</span> (list) { <span class="comment">/* runs — [] is truthy! Check .length instead */</span> }
+<span class="keyword">if</span> (list.length) { <span class="comment">/* skipped — 0 is falsy */</span> }
+
+<span class="comment">// Double-bang (!!) — convert to boolean</span>
+!!<span class="string">"hello"</span>  <span class="comment">// true</span>
+!!<span class="number">0</span>        <span class="comment">// false</span>
+!!<span class="keyword">null</span>     <span class="comment">// false</span>
+!![]      <span class="comment">// true (empty array is truthy!)</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Falsy values (8 total)</th><th>Example</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td><code>false</code></td><td><code>Boolean(false)</code></td><td>The boolean false</td></tr>
+              <tr><td><code>0</code></td><td><code>Boolean(0)</code></td><td>Zero</td></tr>
+              <tr><td><code>-0</code></td><td><code>Boolean(-0)</code></td><td>Negative zero</td></tr>
+              <tr><td><code>0n</code></td><td><code>Boolean(0n)</code></td><td>BigInt zero</td></tr>
+              <tr><td><code>""</code></td><td><code>Boolean("")</code></td><td>Empty string</td></tr>
+              <tr><td><code>null</code></td><td><code>Boolean(null)</code></td><td>Intentional empty</td></tr>
+              <tr><td><code>undefined</code></td><td><code>Boolean(undefined)</code></td><td>Not assigned</td></tr>
+              <tr><td><code>NaN</code></td><td><code>Boolean(NaN)</code></td><td>Not a Number</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>Rule:</strong> Always use <code>===</code> and <code>!==</code>. Never use <code>==</code> — it silently coerces types and causes subtle bugs. The only exception: <code>value == null</code> checks both null and undefined (acceptable shorthand).</div>
+      </div>
+    </div>
+
+    <!-- MODULE 1.6 -->
+    <div class="module-section" id="m1-6">
+      <div class="module-header"><div class="module-number">1.6</div><h2 class="module-title">Operators — arithmetic, comparison, logical, nullish coalescing, optional chaining</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">All the operators you need</h3>
+        <p class="explain-en">JavaScript has standard arithmetic, comparison, and logical operators. Modern additions: <strong>Nullish coalescing (<code>??</code>)</strong> returns the right side only if left is <code>null</code>/<code>undefined</code> (not falsy). <strong>Optional chaining (<code>?.</code>)</strong> safely accesses nested properties without throwing if something is null/undefined.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>JavaScript me standard arithmetic, comparison aur logical operators hain. Modern additions: <strong><code>??</code></strong> sirf <code>null</code>/<code>undefined</code> pe right side return karta hai. <strong><code>?.</code></strong> safely nested properties access karta hai bina error ke.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — Operators</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Arithmetic</span>
+<span class="number">10</span> + <span class="number">3</span>   <span class="comment">// 13 (addition)</span>
+<span class="number">10</span> - <span class="number">3</span>   <span class="comment">// 7 (subtraction)</span>
+<span class="number">10</span> * <span class="number">3</span>   <span class="comment">// 30 (multiplication)</span>
+<span class="number">10</span> / <span class="number">3</span>   <span class="comment">// 3.3333... (division — always float!)</span>
+<span class="number">10</span> % <span class="number">3</span>   <span class="comment">// 1 (remainder)</span>
+<span class="number">2</span> ** <span class="number">10</span>  <span class="comment">// 1024 (exponentiation)</span>
+
+<span class="comment">// Increment / Decrement</span>
+<span class="keyword">let</span> x = <span class="number">5</span>;
+x++;  <span class="comment">// 5 (returns then increments)</span>
+++x;  <span class="comment">// 7 (increments then returns)</span>
+
+<span class="comment">// Comparison (always use === and !==)</span>
+<span class="number">5</span> === <span class="number">5</span>    <span class="comment">// true (strict equal)</span>
+<span class="number">5</span> !== <span class="string">"5"</span>  <span class="comment">// true (strict not equal)</span>
+<span class="number">5</span> > <span class="number">3</span>      <span class="comment">// true</span>
+<span class="number">5</span> >= <span class="number">5</span>     <span class="comment">// true</span>
+
+<span class="comment">// Logical</span>
+<span class="keyword">true</span> && <span class="keyword">false</span>  <span class="comment">// false (AND)</span>
+<span class="keyword">true</span> || <span class="keyword">false</span>  <span class="comment">// true (OR)</span>
+!<span class="keyword">true</span>          <span class="comment">// false (NOT)</span>
+
+<span class="comment">// Short-circuit — && and || return values, not booleans!</span>
+<span class="string">"hello"</span> && <span class="number">42</span>     <span class="comment">// 42 (both truthy → returns last)</span>
+<span class="string">""</span> && <span class="number">42</span>          <span class="comment">// "" (first falsy → returns it)</span>
+<span class="keyword">null</span> || <span class="string">"default"</span> <span class="comment">// "default" (first falsy → try next)</span>
+<span class="string">"value"</span> || <span class="string">"def"</span> <span class="comment">// "value" (first truthy → returns it)</span>
+
+<span class="comment">// ✅ Nullish Coalescing (??) — ES2020</span>
+<span class="comment">// Returns right side ONLY if left is null/undefined</span>
+<span class="keyword">const</span> a = <span class="keyword">null</span> ?? <span class="string">"fallback"</span>;    <span class="comment">// "fallback"</span>
+<span class="keyword">const</span> b = <span class="keyword">undefined</span> ?? <span class="string">"fallback"</span>; <span class="comment">// "fallback"</span>
+<span class="keyword">const</span> c = <span class="number">0</span> ?? <span class="string">"fallback"</span>;       <span class="comment">// 0 ← preserves falsy!</span>
+<span class="keyword">const</span> d = <span class="string">""</span> ?? <span class="string">"fallback"</span>;      <span class="comment">// "" ← preserves falsy!</span>
+<span class="comment">// Compare with ||</span>
+<span class="keyword">const</span> e = <span class="number">0</span> || <span class="string">"fallback"</span>;       <span class="comment">// "fallback" ← 0 is falsy!</span>
+
+<span class="comment">// ✅ Optional Chaining (?.) — ES2020</span>
+<span class="keyword">const</span> user = { address: { city: <span class="string">"Mumbai"</span> } };
+user.address.city         <span class="comment">// "Mumbai"</span>
+user.phone?.number        <span class="comment">// undefined (no error!)</span>
+user.getAge?.()           <span class="comment">// undefined (safe method call)</span>
+user.friends?.[<span class="number">0</span>]         <span class="comment">// undefined (safe array access)</span>
+
+<span class="comment">// Without ?. — would throw!</span>
+<span class="comment">// user.phone.number // ❌ TypeError: Cannot read property of undefined</span>
+
+<span class="comment">// ✅ Logical Assignment (ES2021)</span>
+<span class="keyword">let</span> val = <span class="keyword">null</span>;
+val ??= <span class="string">"default"</span>;  <span class="comment">// val = "default" (only if null/undefined)</span>
+val ||= <span class="string">"backup"</span>;  <span class="comment">// val stays "default" (already truthy)</span>
+val &&= <span class="string">"updated"</span>; <span class="comment">// val = "updated" (because truthy)</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Operator</th><th>Name</th><th>Example</th><th>Result</th></tr></thead>
+            <tbody>
+              <tr><td><code>??</code></td><td>Nullish coalescing</td><td><code>null ?? "hi"</code></td><td><code>"hi"</code></td></tr>
+              <tr><td><code>?.</code></td><td>Optional chaining</td><td><code>obj?.prop</code></td><td>value or <code>undefined</code></td></tr>
+              <tr><td><code>??=</code></td><td>Nullish assign</td><td><code>x ??= 5</code></td><td>Assign if null/undefined</td></tr>
+              <tr><td><code>||=</code></td><td>Logical OR assign</td><td><code>x ||= 5</code></td><td>Assign if falsy</td></tr>
+              <tr><td><code>&&=</code></td><td>Logical AND assign</td><td><code>x &&= 5</code></td><td>Assign if truthy</td></tr>
+              <tr><td><code>**</code></td><td>Exponentiation</td><td><code>2 ** 10</code></td><td><code>1024</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 1.7 -->
+    <div class="module-section" id="m1-7">
+      <div class="module-header"><div class="module-number">1.7</div><h2 class="module-title">I/O — console methods, template literals, string methods</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Output, debugging, and string power</h3>
+        <p class="explain-en"><code>console</code> has many methods beyond <code>.log()</code>: <code>.table()</code>, <code>.time()</code>, <code>.group()</code>, <code>.error()</code>. <strong>Template literals</strong> (<code>`backticks`</code>) support interpolation (<code>${expr}</code>), multi-line strings, and tagged templates. Master the essential <strong>string methods</strong>: <code>includes()</code>, <code>startsWith()</code>, <code>slice()</code>, <code>split()</code>, <code>trim()</code>, <code>replace()</code>, <code>padStart()</code>.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>console</code> me <code>.log()</code> ke alawa bhi bahut methods hain: <code>.table()</code>, <code>.time()</code>, <code>.error()</code>. <strong>Template literals</strong> (<code>`backticks`</code>) me <code>${expr}</code> se interpolation hoti hai. String methods daily use hote hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — Console & Template Literals</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Console methods</span>
+console.log(<span class="string">"Standard output"</span>);
+console.error(<span class="string">"❌ Error message"</span>);  <span class="comment">// Red in DevTools</span>
+console.warn(<span class="string">"⚠️ Warning"</span>);         <span class="comment">// Yellow</span>
+console.info(<span class="string">"ℹ️ Info"</span>);             <span class="comment">// Blue</span>
+
+<span class="comment">// console.table — beautiful for arrays/objects!</span>
+console.table([
+    { name: <span class="string">"Alice"</span>, age: <span class="number">25</span> },
+    { name: <span class="string">"Bob"</span>, age: <span class="number">30</span> }
+]);
+
+<span class="comment">// console.time — measure performance</span>
+console.time(<span class="string">"loop"</span>);
+<span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i < <span class="number">1000000</span>; i++) {}
+console.timeEnd(<span class="string">"loop"</span>); <span class="comment">// loop: 2.5ms</span>
+
+<span class="comment">// console.group — organize output</span>
+console.group(<span class="string">"User Info"</span>);
+console.log(<span class="string">"Name: Alice"</span>);
+console.log(<span class="string">"Age: 25"</span>);
+console.groupEnd();
+
+<span class="comment">// ✅ Template Literals (backticks)</span>
+<span class="keyword">const</span> name = <span class="string">"Yuvraj"</span>, age = <span class="number">20</span>;
+console.log(<span class="string">`Hello, </span><span class="keyword">${</span>name<span class="keyword">}</span><span class="string">! You are </span><span class="keyword">${</span>age<span class="keyword">}</span><span class="string"> years old.`</span>);
+console.log(<span class="string">`2 + 3 = </span><span class="keyword">${</span><span class="number">2</span> + <span class="number">3</span><span class="keyword">}</span><span class="string">`</span>); <span class="comment">// "2 + 3 = 5"</span>
+
+<span class="comment">// Multi-line strings</span>
+<span class="keyword">const</span> html = <span class="string">`
+  &lt;div class="card"&gt;
+    &lt;h2&gt;</span><span class="keyword">${</span>name<span class="keyword">}</span><span class="string">&lt;/h2&gt;
+    &lt;p&gt;Age: </span><span class="keyword">${</span>age<span class="keyword">}</span><span class="string">&lt;/p&gt;
+  &lt;/div&gt;
+`</span>;
+
+<span class="comment">// ✅ Essential String Methods</span>
+<span class="keyword">const</span> str = <span class="string">"  Hello, World!  "</span>;
+str.length          <span class="comment">// 17</span>
+str.trim()          <span class="comment">// "Hello, World!"</span>
+str.toUpperCase()   <span class="comment">// "  HELLO, WORLD!  "</span>
+str.toLowerCase()   <span class="comment">// "  hello, world!  "</span>
+str.includes(<span class="string">"World"</span>)   <span class="comment">// true</span>
+str.startsWith(<span class="string">"  He"</span>)  <span class="comment">// true</span>
+str.endsWith(<span class="string">"!  "</span>)     <span class="comment">// true</span>
+str.indexOf(<span class="string">"World"</span>)    <span class="comment">// 9</span>
+str.slice(<span class="number">2</span>, <span class="number">7</span>)        <span class="comment">// "Hello"</span>
+str.replace(<span class="string">"World"</span>, <span class="string">"JS"</span>) <span class="comment">// "  Hello, JS!  "</span>
+str.split(<span class="string">", "</span>)        <span class="comment">// ["  Hello", "World!  "]</span>
+<span class="string">"42"</span>.padStart(<span class="number">5</span>, <span class="string">"0"</span>)  <span class="comment">// "00042"</span>
+<span class="string">"hi"</span>.repeat(<span class="number">3</span>)         <span class="comment">// "hihihi"</span>
+str.at(<span class="number">-1</span>)              <span class="comment">// " " (last character)</span>
+str.replaceAll(<span class="string">" "</span>, <span class="string">""</span>) <span class="comment">// "Hello,World!"</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Method</th><th>Purpose</th><th>Returns</th></tr></thead>
+            <tbody>
+              <tr><td><code>.includes(str)</code></td><td>Contains substring?</td><td>boolean</td></tr>
+              <tr><td><code>.startsWith(str)</code></td><td>Begins with?</td><td>boolean</td></tr>
+              <tr><td><code>.slice(start, end)</code></td><td>Extract portion</td><td>new string</td></tr>
+              <tr><td><code>.split(delim)</code></td><td>String → array</td><td>array</td></tr>
+              <tr><td><code>.trim()</code></td><td>Remove whitespace</td><td>new string</td></tr>
+              <tr><td><code>.replace(a, b)</code></td><td>Replace first match</td><td>new string</td></tr>
+              <tr><td><code>.replaceAll(a, b)</code></td><td>Replace all matches</td><td>new string</td></tr>
+              <tr><td><code>.padStart(n, ch)</code></td><td>Pad from start</td><td>new string</td></tr>
+              <tr><td><code>.at(index)</code></td><td>Char at index (neg ok)</td><td>string</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Operator Precedence (High → Low)</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Precedence</th><th>Operators</th><th>Associativity</th></tr></thead>
+          <tbody>
+            <tr><td>Highest</td><td><code>()</code> grouping, <code>?.</code></td><td>—</td></tr>
+            <tr><td>Unary</td><td><code>!</code>, <code>typeof</code>, <code>++</code>, <code>--</code></td><td>Right-to-left</td></tr>
+            <tr><td>Exponentiation</td><td><code>**</code></td><td>Right-to-left</td></tr>
+            <tr><td>Multiplicative</td><td><code>*</code>, <code>/</code>, <code>%</code></td><td>Left-to-right</td></tr>
+            <tr><td>Additive</td><td><code>+</code>, <code>-</code></td><td>Left-to-right</td></tr>
+            <tr><td>Comparison</td><td><code><</code>, <code>></code>, <code><=</code>, <code>>=</code>, <code>instanceof</code></td><td>Left-to-right</td></tr>
+            <tr><td>Equality</td><td><code>===</code>, <code>!==</code>, <code>==</code>, <code>!=</code></td><td>Left-to-right</td></tr>
+            <tr><td>Logical AND</td><td><code>&&</code></td><td>Left-to-right</td></tr>
+            <tr><td>Logical OR</td><td><code>||</code></td><td>Left-to-right</td></tr>
+            <tr><td>Nullish</td><td><code>??</code></td><td>Left-to-right</td></tr>
+            <tr><td>Assignment</td><td><code>=</code>, <code>+=</code>, <code>-=</code>, <code>??=</code></td><td>Right-to-left</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 console Methods Cheat Sheet</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Method</th><th>Purpose</th><th>When to use</th></tr></thead>
+          <tbody>
+            <tr><td><code>console.log()</code></td><td>General output</td><td>Default debugging</td></tr>
+            <tr><td><code>console.error()</code></td><td>Error (red)</td><td>Error reporting</td></tr>
+            <tr><td><code>console.warn()</code></td><td>Warning (yellow)</td><td>Deprecation notices</td></tr>
+            <tr><td><code>console.table()</code></td><td>Tabular data</td><td>Arrays of objects</td></tr>
+            <tr><td><code>console.time/End()</code></td><td>Measure time</td><td>Performance profiling</td></tr>
+            <tr><td><code>console.group/End()</code></td><td>Group output</td><td>Organize related logs</td></tr>
+            <tr><td><code>console.dir()</code></td><td>Object tree</td><td>DOM elements, objects</td></tr>
+            <tr><td><code>console.assert()</code></td><td>Assert condition</td><td>Quick sanity checks</td></tr>
+            <tr><td><code>console.clear()</code></td><td>Clear console</td><td>Fresh start</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="practice-box">
+      <div class="practice-title">✏️ Practice Exercises — Part 1</div>
+      <ol>
+        <li>Declare variables using <code>const</code>, <code>let</code>, and <code>var</code>. Demonstrate scope differences with a loop and an if-block.</li>
+        <li>Write a program that shows the <code>typeof</code> for all 7 primitive types + object + function + array.</li>
+        <li>Create a "truth table" showing all 8 falsy values with <code>Boolean()</code> conversions.</li>
+        <li>Use <code>??</code> and <code>||</code> with values <code>0</code>, <code>""</code>, <code>null</code>, <code>undefined</code> — explain the difference in results.</li>
+        <li>Build a string formatter using template literals: takes name, age, city → returns formatted intro card.</li>
+        <li>Use <code>console.table()</code> and <code>console.time()</code> to display and benchmark an array of 10 user objects.</li>
+        <li>Chain 5+ string methods to transform <code>"  Hello, World!  "</code> → <code>"DLROW ,OLLEH"</code> (reversed, trimmed, uppercased).</li>
+      </ol>
+    </div>
+
+    <div class="handbook-nav">
+      <a href="syllabus.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Syllabus</div></div></a>
+      <a href="part2.html" class="nav-btn next"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Part 2: Control Flow & Functions →</div></div><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+
+  </div>
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
+  <script src="../../../js/main.js"></script>
+  <script>
+    (() => {
+      document.querySelectorAll('.code-block').forEach((block) => { const pre = block.querySelector('.code-body pre'), header = block.querySelector('.code-header'); if (!pre || !header) return; let actions = header.querySelector('.code-actions'); if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); } const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'code-copy-btn'; btn.textContent = 'Copy'; btn.addEventListener('click', async () => { try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; } catch { btn.textContent = 'Failed'; } finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); } }); actions.prepend(btn); });
+      const fill = document.querySelector('.hb-progress-fill'), label = document.querySelector('.hb-progress-label');
+      if (fill && label) { const update = () => { const h = document.documentElement, d = (h.scrollHeight - h.clientHeight) || 1, p = Math.max(0, Math.min(1, h.scrollTop / d)); fill.style.width = (p*100).toFixed(0)+'%'; label.textContent = (p*100).toFixed(0)+'%'; }; document.addEventListener('scroll', update, { passive: true }); update(); }
+    })();
+  </script>
+</body>
+</html>

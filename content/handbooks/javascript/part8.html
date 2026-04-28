@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Part 8: Advanced Patterns & Modern JS — JavaScript Programming Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 8: advanced JavaScript patterns, clean code, security, performance, interview readiness, and modern roadmap.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/handbook.css">
+</head>
+<body class="handbook-wrapper">
+  <nav class="navbar"><div class="container"><a href="../../../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../../../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
+
+  <div class="handbook-page">
+    <div class="hb-topbar"><div class="hb-topbar-inner"><div class="hb-breadcrumbs"><a href="index.html">JavaScript Programming Handbook</a><span class="hb-muted">/</span><span>Part 8</span><span class="hb-muted">·</span><a href="#m8-1">8.1</a> <a href="#m8-2">8.2</a> <a href="#m8-3">8.3</a> <a href="#m8-4">8.4</a> <a href="#m8-5">8.5</a> <a href="#m8-6">8.6</a> <a href="#m8-7">8.7</a></div><div class="hb-progress" aria-label="Reading progress"><div class="hb-progress-track" role="progressbar"><div class="hb-progress-fill"></div></div><div class="hb-progress-label">0%</div></div></div></div>
+
+    <div class="chapter-header" data-chapter-num="08">
+      <div class="chapter-part-label">📖 Part 8 — Advanced Patterns & Modern JS</div>
+      <h1 class="chapter-title">Advanced Patterns & <span class="gradient-text">Modern JS</span></h1>
+      <p class="chapter-subtitle">Design patterns, clean code, security, performance, interview strategy, and modern JavaScript career roadmap.</p>
+      <div class="chapter-meta"><span>📄 Modules 8.1 – 8.7</span><span>⏱️ 70–90 min read</span><span>💻 60+ Examples</span></div>
+    </div>
+
+    <div class="hb-mini-toc"><div class="hb-mini-title">📍 Part 8 Modules</div><div class="hb-mini-links"><a href="#m8-1">8.1 Patterns</a><a href="#m8-2">8.2 Clean Code</a><a href="#m8-3">8.3 Functional</a><a href="#m8-4">8.4 Security</a><a href="#m8-5">8.5 Performance</a><a href="#m8-6">8.6 Interview</a><a href="#m8-7">8.7 Next Steps</a></div></div>
+
+    <div class="quick-ref">
+      <div class="qr-title">🚀 Advanced Lens — Part 8</div>
+      <p class="explain-en">Senior JavaScript effectiveness comes from architectural judgment: secure defaults, performance measurement, and pattern selection based on constraints. Part 8 is where implementation skill becomes engineering maturity.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Part 8 me focus senior-level decision making par hota hai: security-by-default, measure-first performance, aur right pattern selection. Yahi coding se engineering maturity tak ka step hai.</div>
+    </div>
+
+    <div class="concept-block">
+      <h3>Advanced JavaScript readiness checklist (Part 8)</h3>
+      <table>
+        <thead><tr><th>Area</th><th>Interview/client-grade standard</th></tr></thead>
+        <tbody>
+          <tr><td>Architecture choices</td><td>Apply patterns by context, not by trend or overengineering.</td></tr>
+          <tr><td>Security posture</td><td>Prevent XSS/CSRF class issues with safe rendering defaults.</td></tr>
+          <tr><td>Performance practice</td><td>Profile first, then optimize critical render/network paths.</td></tr>
+          <tr><td>Career readiness</td><td>Show production-like portfolio with docs, tests, and deploy links.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- MODULE 8.1 -->
+    <div class="module-section" id="m8-1">
+      <div class="module-header"><div class="module-number">8.1</div><h2 class="module-title">Design Patterns — Singleton, Observer, Factory, Module, Strategy</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Proven solutions to common problems</h3>
+        <p class="explain-en"><strong>Design patterns</strong> are reusable solutions to recurring problems. <strong>Singleton</strong>: one instance. <strong>Observer</strong>: pub/sub events. <strong>Factory</strong>: create objects without <code>new</code>. <strong>Module</strong>: encapsulate with closures. <strong>Strategy</strong>: swap algorithms at runtime.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Design patterns</strong> recurring problems ke reusable solutions hain. <strong>Singleton</strong>: ek hi instance. <strong>Observer</strong>: pub/sub events. <strong>Factory</strong>: bina <code>new</code> ke objects banao. <strong>Strategy</strong>: runtime pe algorithms swap karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — Design Patterns</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// ✅ Singleton — one instance only</span>
+<span class="keyword">class</span> <span class="type">Database</span> {
+    <span class="keyword">static</span> #instance;
+    <span class="function">constructor</span>(url) {
+        <span class="keyword">if</span> (<span class="type">Database</span>.#instance) <span class="keyword">return</span> <span class="type">Database</span>.#instance;
+        <span class="keyword">this</span>.url = url;
+        <span class="type">Database</span>.#instance = <span class="keyword">this</span>;
+    }
+}
+<span class="keyword">const</span> db1 = <span class="keyword">new</span> <span class="type">Database</span>(<span class="string">"mongodb://..."</span>);
+<span class="keyword">const</span> db2 = <span class="keyword">new</span> <span class="type">Database</span>(<span class="string">"other"</span>);
+db1 === db2; <span class="comment">// true! Same instance</span>
+
+<span class="comment">// ✅ Observer — event-driven communication</span>
+<span class="keyword">class</span> <span class="type">EventEmitter</span> {
+    #listeners = {};
+    on(event, fn) {
+        (<span class="keyword">this</span>.#listeners[event] ??= []).push(fn);
+    }
+    emit(event, ...args) {
+        (<span class="keyword">this</span>.#listeners[event] ?? []).forEach(fn => fn(...args));
+    }
+    off(event, fn) {
+        <span class="keyword">this</span>.#listeners[event] = (<span class="keyword">this</span>.#listeners[event] ?? [])
+            .filter(f => f !== fn);
+    }
+}
+<span class="keyword">const</span> bus = <span class="keyword">new</span> <span class="type">EventEmitter</span>();
+bus.on(<span class="string">"login"</span>, user => console.log(<span class="string">`Welcome </span><span class="keyword">${</span>user<span class="keyword">}</span><span class="string">`</span>));
+bus.emit(<span class="string">"login"</span>, <span class="string">"Alice"</span>);
+
+<span class="comment">// ✅ Factory — create without new</span>
+<span class="keyword">function</span> <span class="function">createUser</span>(type, name) {
+    <span class="keyword">const</span> roles = {
+        admin: { name, permissions: [<span class="string">"read"</span>,<span class="string">"write"</span>,<span class="string">"delete"</span>] },
+        viewer: { name, permissions: [<span class="string">"read"</span>] }
+    };
+    <span class="keyword">return</span> roles[type] ?? roles.viewer;
+}
+
+<span class="comment">// ✅ Strategy — swap algorithms</span>
+<span class="keyword">const</span> strategies = {
+    percentage: (price, val) => price * (<span class="number">1</span> - val / <span class="number">100</span>),
+    fixed: (price, val) => price - val,
+    bogo: (price) => price / <span class="number">2</span>
+};
+<span class="keyword">function</span> <span class="function">applyDiscount</span>(price, type, value) {
+    <span class="keyword">return</span> strategies[type](price, value);
+}</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 8.2 -->
+    <div class="module-section" id="m8-2">
+      <div class="module-header"><div class="module-number">8.2</div><h2 class="module-title">Clean Code — naming, functions, SOLID principles, refactoring</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Code that humans can read</h3>
+        <p class="explain-en"><strong>Clean code</strong> is readable, maintainable, and testable. Use <strong>descriptive names</strong>. Keep functions <strong>small and focused</strong> (one thing). <strong>DRY</strong>: Don't Repeat Yourself. <strong>SOLID</strong>: Single responsibility, Open/closed, Liskov substitution, Interface segregation, Dependency inversion.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Clean code</strong> readable, maintainable aur testable hota hai. <strong>Descriptive names</strong> use karo. Functions <strong>chhote aur focused</strong> rakho (ek kaam). <strong>DRY</strong>: code repeat mat karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — Clean Code</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// ❌ Bad — unclear names, does too much</span>
+<span class="keyword">function</span> <span class="function">proc</span>(d) {
+    <span class="keyword">let</span> r = [];
+    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i < d.length; i++) {
+        <span class="keyword">if</span> (d[i].a > <span class="number">18</span> && d[i].s === <span class="string">"active"</span>) {
+            r.push(d[i].n.toUpperCase());
+        }
+    }
+    <span class="keyword">return</span> r;
+}
+
+<span class="comment">// ✅ Good — descriptive, composable, readable</span>
+<span class="keyword">const</span> isAdult = (user) => user.age > <span class="number">18</span>;
+<span class="keyword">const</span> isActive = (user) => user.status === <span class="string">"active"</span>;
+<span class="keyword">const</span> toDisplayName = (user) => user.name.toUpperCase();
+
+<span class="keyword">function</span> <span class="function">getActiveAdultNames</span>(users) {
+    <span class="keyword">return</span> users
+        .filter(isAdult)
+        .filter(isActive)
+        .map(toDisplayName);
+}
+
+<span class="comment">// ✅ Guard clauses — avoid deep nesting</span>
+<span class="comment">// ❌ Bad</span>
+<span class="keyword">function</span> <span class="function">processOrder</span>(order) {
+    <span class="keyword">if</span> (order) {
+        <span class="keyword">if</span> (order.items.length > <span class="number">0</span>) {
+            <span class="keyword">if</span> (order.isPaid) { <span class="comment">/* deep logic */</span> }
+        }
+    }
+}
+<span class="comment">// ✅ Good</span>
+<span class="keyword">function</span> <span class="function">processOrder</span>(order) {
+    <span class="keyword">if</span> (!order) <span class="keyword">return</span>;
+    <span class="keyword">if</span> (order.items.length === <span class="number">0</span>) <span class="keyword">return</span>;
+    <span class="keyword">if</span> (!order.isPaid) <span class="keyword">return</span>;
+    <span class="comment">// Main logic here — flat and clear</span>
+}</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 8.3 -->
+    <div class="module-section" id="m8-3">
+      <div class="module-header"><div class="module-number">8.3</div><h2 class="module-title">Functional Patterns — immutability, pure functions, composition, currying</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Think in transformations</h3>
+        <p class="explain-en"><strong>Pure functions</strong>: same input → same output, no side effects. <strong>Immutability</strong>: never mutate data, return new copies. <strong>Composition</strong>: combine small functions into complex ones. <strong>Currying</strong>: transform <code>f(a, b)</code> into <code>f(a)(b)</code>. These patterns reduce bugs dramatically.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Pure functions</strong>: same input → same output, koi side effects nahi. <strong>Immutability</strong>: data kabhi mutate mat karo, new copies return karo. <strong>Composition</strong>: chhoti functions ko combine karke complex banao.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — Functional Patterns</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// ✅ Pure function — no side effects</span>
+<span class="keyword">const</span> add = (a, b) => a + b;         <span class="comment">// Pure ✅</span>
+<span class="keyword">const</span> addTax = (price) => price * <span class="number">1.18</span>; <span class="comment">// Pure ✅</span>
+
+<span class="comment">// ✅ Immutable updates</span>
+<span class="keyword">const</span> addItem = (cart, item) => [...cart, item];
+<span class="keyword">const</span> removeItem = (cart, id) => cart.filter(i => i.id !== id);
+<span class="keyword">const</span> updateQty = (cart, id, qty) =>
+    cart.map(i => i.id === id ? { ...i, qty } : i);
+
+<span class="comment">// ✅ Function composition</span>
+<span class="keyword">const</span> pipe = (...fns) => (x) => fns.reduce((v, f) => f(v), x);
+
+<span class="keyword">const</span> processPrice = pipe(
+    price => price * <span class="number">0.9</span>,      <span class="comment">// 10% discount</span>
+    price => price * <span class="number">1.18</span>,     <span class="comment">// Add 18% tax</span>
+    price => Math.round(price) <span class="comment">// Round</span>
+);
+processPrice(<span class="number">1000</span>); <span class="comment">// 1062</span>
+
+<span class="comment">// ✅ Currying</span>
+<span class="keyword">const</span> multiply = (a) => (b) => a * b;
+<span class="keyword">const</span> double = multiply(<span class="number">2</span>);
+<span class="keyword">const</span> triple = multiply(<span class="number">3</span>);
+double(<span class="number">5</span>);  <span class="comment">// 10</span>
+triple(<span class="number">5</span>);  <span class="comment">// 15</span>
+[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>].map(double); <span class="comment">// [2,4,6]</span>
+
+<span class="comment">// Partial application</span>
+<span class="keyword">const</span> log = (level) => (message) =>
+    console.log(<span class="string">`[</span><span class="keyword">${</span>level<span class="keyword">}</span><span class="string">] </span><span class="keyword">${</span>message<span class="keyword">}</span><span class="string">`</span>);
+<span class="keyword">const</span> info = log(<span class="string">"INFO"</span>);
+<span class="keyword">const</span> error = log(<span class="string">"ERROR"</span>);
+info(<span class="string">"Server started"</span>); <span class="comment">// [INFO] Server started</span></pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 8.4 -->
+    <div class="module-section" id="m8-4">
+      <div class="module-header"><div class="module-number">8.4</div><h2 class="module-title">Security — XSS, CSRF, Content Security Policy, input sanitization</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Writing secure JavaScript</h3>
+        <p class="explain-en"><strong>XSS</strong> (Cross-Site Scripting): never use <code>innerHTML</code> with user input — use <code>textContent</code>. <strong>CSRF</strong>: validate tokens on state-changing requests. <strong>CSP</strong> headers restrict what scripts can run. Always <strong>validate and sanitize</strong> input on both client and server.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>XSS</strong>: user input ke saath kabhi <code>innerHTML</code> mat use karo — <code>textContent</code> use karo. <strong>CSRF</strong>: state-changing requests pe tokens validate karo. Input ko client aur server dono pe <strong>validate aur sanitize</strong> karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — Security</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// ❌ XSS vulnerability — NEVER do this</span>
+el.innerHTML = userInput; <span class="comment">// Attacker can inject &lt;script&gt;</span>
+
+<span class="comment">// ✅ Safe alternatives</span>
+el.textContent = userInput; <span class="comment">// Escaped automatically</span>
+
+<span class="comment">// ✅ Sanitize HTML if you must render it</span>
+<span class="keyword">function</span> <span class="function">sanitize</span>(html) {
+    <span class="keyword">const</span> div = document.createElement(<span class="string">"div"</span>);
+    div.textContent = html;
+    <span class="keyword">return</span> div.innerHTML; <span class="comment">// Entities escaped</span>
+}
+
+<span class="comment">// ✅ Content Security Policy (HTTP header)</span>
+<span class="comment">// Content-Security-Policy: script-src 'self'; style-src 'self'</span>
+
+<span class="comment">// ✅ Avoid eval() — biggest security hole</span>
+<span class="comment">// eval(userInput); // ❌ NEVER</span>
+<span class="comment">// new Function(userInput); // ❌ NEVER</span>
+
+<span class="comment">// ✅ Validate inputs</span>
+<span class="keyword">function</span> <span class="function">validateEmail</span>(email) {
+    <span class="keyword">return</span> <span class="type">/^[\w.-]+@[\w.-]+\.\w{2,}$/</span>.test(email);
+}
+
+<span class="comment">// ✅ Use HttpOnly cookies for auth tokens</span>
+<span class="comment">// Set-Cookie: token=abc; HttpOnly; Secure; SameSite=Strict</span></pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 8.5 -->
+    <div class="module-section" id="m8-5">
+      <div class="module-header"><div class="module-number">8.5</div><h2 class="module-title">Performance — lazy loading, memoization, Web Workers, requestAnimationFrame</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Making apps fast</h3>
+        <p class="explain-en"><strong>Memoization</strong> caches function results. <strong>Web Workers</strong> run heavy computation off the main thread. <strong>requestAnimationFrame</strong> ensures smooth 60fps animations. <strong>Lazy loading</strong> defers non-critical resources. <strong>Virtual scrolling</strong> renders only visible items.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Memoization</strong> function results cache karta hai. <strong>Web Workers</strong> heavy computation main thread se alag run karte hain. <strong>requestAnimationFrame</strong> smooth 60fps animations ensure karta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — Performance</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// ✅ Memoization — cache expensive results</span>
+<span class="keyword">function</span> <span class="function">memoize</span>(fn) {
+    <span class="keyword">const</span> cache = <span class="keyword">new</span> <span class="type">Map</span>();
+    <span class="keyword">return</span> (...args) => {
+        <span class="keyword">const</span> key = <span class="type">JSON</span>.stringify(args);
+        <span class="keyword">if</span> (cache.has(key)) <span class="keyword">return</span> cache.get(key);
+        <span class="keyword">const</span> result = fn(...args);
+        cache.set(key, result);
+        <span class="keyword">return</span> result;
+    };
+}
+<span class="keyword">const</span> expensiveCalc = memoize((n) => {
+    console.log(<span class="string">"Computing..."</span>);
+    <span class="keyword">return</span> n * n;
+});
+expensiveCalc(<span class="number">5</span>); <span class="comment">// Computes</span>
+expensiveCalc(<span class="number">5</span>); <span class="comment">// Cached!</span>
+
+<span class="comment">// ✅ requestAnimationFrame — smooth animations</span>
+<span class="keyword">function</span> <span class="function">animate</span>(timestamp) {
+    element.style.transform = <span class="string">`translateX(</span><span class="keyword">${</span>timestamp / <span class="number">10</span><span class="keyword">}</span><span class="string">px)`</span>;
+    requestAnimationFrame(animate);
+}
+requestAnimationFrame(animate);
+
+<span class="comment">// ✅ Web Worker — off-main-thread</span>
+<span class="comment">// worker.js</span>
+<span class="comment">// self.onmessage = (e) => {</span>
+<span class="comment">//     const result = heavyComputation(e.data);</span>
+<span class="comment">//     self.postMessage(result);</span>
+<span class="comment">// };</span>
+<span class="keyword">const</span> worker = <span class="keyword">new</span> <span class="type">Worker</span>(<span class="string">"worker.js"</span>);
+worker.postMessage(data);
+worker.onmessage = (e) => console.log(e.data);</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 8.6 -->
+    <div class="module-section" id="m8-6">
+      <div class="module-header"><div class="module-number">8.6</div><h2 class="module-title">Interview Prep — common questions, coding challenges, concepts checklist</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Ace the JavaScript interview</h3>
+        <p class="explain-en">Top interview topics: <strong>closures</strong>, <strong>this keyword</strong>, <strong>event loop</strong>, <strong>prototypes vs classes</strong>, <strong>== vs ===</strong>, <strong>hoisting</strong>, <strong>Promise.all vs allSettled</strong>. Know how to implement <code>debounce</code>, <code>throttle</code>, <code>deepClone</code>, <code>flatten</code>, and <code>curry</code> from scratch.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Top interview topics: <strong>closures</strong>, <strong>this keyword</strong>, <strong>event loop</strong>, <strong>prototypes vs classes</strong>. <code>debounce</code>, <code>throttle</code>, <code>deepClone</code>, <code>flatten</code> scratch se likhna aana chahiye.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — Interview Classics</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Q1: What does this output?</span>
+<span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i < <span class="number">3</span>; i++) {
+    setTimeout(() => console.log(i), <span class="number">100</span>);
+}
+<span class="comment">// Answer: 3, 3, 3 (var is function-scoped!)</span>
+<span class="comment">// Fix: use let (block-scoped)</span>
+
+<span class="comment">// Q2: Implement Array.prototype.flat</span>
+<span class="keyword">function</span> <span class="function">flat</span>(arr, depth = <span class="number">1</span>) {
+    <span class="keyword">if</span> (depth === <span class="number">0</span>) <span class="keyword">return</span> [...arr];
+    <span class="keyword">return</span> arr.reduce((acc, val) =>
+        <span class="type">Array</span>.isArray(val)
+            ? [...acc, ...flat(val, depth - <span class="number">1</span>)]
+            : [...acc, val]
+    , []);
+}
+
+<span class="comment">// Q3: Implement curry</span>
+<span class="keyword">function</span> <span class="function">curry</span>(fn) {
+    <span class="keyword">return function</span> <span class="function">curried</span>(...args) {
+        <span class="keyword">if</span> (args.length >= fn.length) <span class="keyword">return</span> fn(...args);
+        <span class="keyword">return</span> (...more) => curried(...args, ...more);
+    };
+}
+<span class="keyword">const</span> sum3 = curry((a, b, c) => a + b + c);
+sum3(<span class="number">1</span>)(<span class="number">2</span>)(<span class="number">3</span>); <span class="comment">// 6</span>
+sum3(<span class="number">1</span>, <span class="number">2</span>)(<span class="number">3</span>); <span class="comment">// 6</span>
+
+<span class="comment">// Q4: Explain event loop output</span>
+console.log(<span class="string">"A"</span>);
+setTimeout(() => console.log(<span class="string">"B"</span>), <span class="number">0</span>);
+<span class="type">Promise</span>.resolve().then(() => console.log(<span class="string">"C"</span>));
+console.log(<span class="string">"D"</span>);
+<span class="comment">// Answer: A, D, C, B</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Topic</th><th>Key concept to know</th></tr></thead>
+            <tbody>
+              <tr><td>Closures</td><td>Function retains access to its lexical scope</td></tr>
+              <tr><td><code>this</code></td><td>Depends on HOW function is called, not where</td></tr>
+              <tr><td>Event Loop</td><td>Call stack → Microtasks → Macrotasks</td></tr>
+              <tr><td>Prototypes</td><td>Objects linked to other objects via [[Prototype]]</td></tr>
+              <tr><td>Hoisting</td><td><code>var</code>/functions hoisted, <code>let</code>/<code>const</code> in TDZ</td></tr>
+              <tr><td><code>==</code> vs <code>===</code></td><td><code>==</code> coerces types, <code>===</code> strict comparison</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 8.7 -->
+    <div class="module-section" id="m8-7">
+      <div class="module-header"><div class="module-number">8.7</div><h2 class="module-title">Next Steps — React/Vue/Angular, Node.js, frameworks, career paths</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Where to go from here</h3>
+        <p class="explain-en">You now have a <strong>solid JavaScript foundation</strong>. Next: learn a <strong>frontend framework</strong> (React, Vue, or Angular), explore <strong>Node.js</strong> for backend, try <strong>TypeScript</strong> for type safety, and build <strong>real projects</strong>. The best way to learn is to build.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Ab tumhare paas <strong>solid JavaScript foundation</strong> hai. Aage: <strong>frontend framework</strong> seekho (React, Vue, Angular), <strong>Node.js</strong> backend ke liye try karo, <strong>TypeScript</strong> seekho, aur <strong>real projects</strong> banao.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Path</th><th>Learn</th><th>Build</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Frontend</strong></td><td>React + Next.js / Vue + Nuxt</td><td>SPAs, dashboards, e-commerce</td></tr>
+              <tr><td><strong>Backend</strong></td><td>Node.js + Express / Fastify</td><td>REST APIs, auth systems</td></tr>
+              <tr><td><strong>Full-Stack</strong></td><td>Next.js / Nuxt / SvelteKit</td><td>Complete web applications</td></tr>
+              <tr><td><strong>Mobile</strong></td><td>React Native / Expo</td><td>Cross-platform mobile apps</td></tr>
+              <tr><td><strong>Desktop</strong></td><td>Electron / Tauri</td><td>Desktop applications</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>🎯 Build these projects:</strong> Todo app with localStorage → Weather app with API → Chat app with WebSockets → Full-stack blog with auth → E-commerce with payment integration. Each project teaches new skills!</div>
+      </div>
+    </div>
+
+    <div class="practice-box">
+      <div class="practice-title">✏️ Practice Exercises — Part 8</div>
+      <ol>
+        <li>Implement an <code>EventEmitter</code> class with <code>on</code>, <code>off</code>, <code>emit</code>, and <code>once</code> methods.</li>
+        <li>Refactor a 50-line function into clean, composable small functions with guard clauses.</li>
+        <li>Build a <code>pipe()</code> function and use it to create a data processing pipeline.</li>
+        <li>Implement <code>curry()</code> and <code>memoize()</code> from scratch.</li>
+        <li>Identify and fix 3 XSS vulnerabilities in a sample HTML page.</li>
+        <li>Solve the classic <code>var</code> loop closure bug and explain why <code>let</code> fixes it.</li>
+        <li>Build a todo app using only vanilla JS: DOM manipulation, localStorage, event delegation.</li>
+      </ol>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Design Patterns Quick Reference</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Pattern</th><th>Category</th><th>Problem it solves</th><th>JS Example</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Singleton</strong></td><td>Creational</td><td>One instance only</td><td>Database connection, app config</td></tr>
+            <tr><td><strong>Factory</strong></td><td>Creational</td><td>Create objects without <code>new</code></td><td>User roles, UI components</td></tr>
+            <tr><td><strong>Builder</strong></td><td>Creational</td><td>Step-by-step construction</td><td>Query builder, form builder</td></tr>
+            <tr><td><strong>Observer</strong></td><td>Behavioral</td><td>Event-driven communication</td><td>EventEmitter, pub/sub</td></tr>
+            <tr><td><strong>Strategy</strong></td><td>Behavioral</td><td>Swap algorithms at runtime</td><td>Discount types, sort methods</td></tr>
+            <tr><td><strong>Iterator</strong></td><td>Behavioral</td><td>Sequential access to collection</td><td><code>Symbol.iterator</code>, generators</td></tr>
+            <tr><td><strong>Decorator</strong></td><td>Structural</td><td>Add behavior without modifying</td><td>Logging wrapper, caching layer</td></tr>
+            <tr><td><strong>Proxy</strong></td><td>Structural</td><td>Control access to object</td><td>Validation, lazy loading</td></tr>
+            <tr><td><strong>Module</strong></td><td>Structural</td><td>Encapsulate + expose API</td><td>ES Modules, IIFE pattern</td></tr>
+            <tr><td><strong>Middleware</strong></td><td>Behavioral</td><td>Pipeline processing</td><td>Express.js middleware chain</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 SOLID Principles in JavaScript</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Principle</th><th>Full name</th><th>JS meaning</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><strong>S</strong></td><td>Single Responsibility</td><td>One function/class = one job</td><td>Separate validation from API calls</td></tr>
+            <tr><td><strong>O</strong></td><td>Open/Closed</td><td>Open for extension, closed for modification</td><td>Strategy pattern for new discount types</td></tr>
+            <tr><td><strong>L</strong></td><td>Liskov Substitution</td><td>Subtypes must be substitutable</td><td>Subclass overrides shouldn't break parent API</td></tr>
+            <tr><td><strong>I</strong></td><td>Interface Segregation</td><td>Small, focused interfaces</td><td>Separate read vs write APIs</td></tr>
+            <tr><td><strong>D</strong></td><td>Dependency Inversion</td><td>Depend on abstractions, not concretions</td><td>Inject logger instead of hardcoding console</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="concept-block">
+      <h3 class="concept-heading">Deep Clone — implement from scratch</h3>
+      <p class="explain-en">Common interview question: implement <code>structuredClone</code> from scratch. Handle objects, arrays, dates, maps, sets, and circular references. Modern JS: just use <code>structuredClone()</code> built-in.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Common interview question: <code>structuredClone</code> scratch se implement karo. Objects, arrays, dates handle karo. Modern JS me: sirf <code>structuredClone()</code> built-in use karo.</div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">💻 JavaScript — Deep Clone</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+        <div class="code-body"><pre><span class="comment">// ✅ Manual deep clone (interview version)</span>
+<span class="keyword">function</span> <span class="function">deepClone</span>(obj, seen = <span class="keyword">new</span> <span class="type">WeakMap</span>()) {
+    <span class="keyword">if</span> (obj === <span class="keyword">null</span> || <span class="keyword">typeof</span> obj !== <span class="string">"object"</span>) <span class="keyword">return</span> obj;
+    <span class="keyword">if</span> (seen.has(obj)) <span class="keyword">return</span> seen.get(obj); <span class="comment">// Circular!</span>
+
+    <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> <span class="type">Date</span>) <span class="keyword">return new</span> <span class="type">Date</span>(obj);
+    <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> <span class="type">RegExp</span>) <span class="keyword">return new</span> <span class="type">RegExp</span>(obj);
+    <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> <span class="type">Map</span>) {
+        <span class="keyword">const</span> map = <span class="keyword">new</span> <span class="type">Map</span>();
+        seen.set(obj, map);
+        obj.forEach((v, k) => map.set(deepClone(k, seen), deepClone(v, seen)));
+        <span class="keyword">return</span> map;
+    }
+    <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> <span class="type">Set</span>) {
+        <span class="keyword">const</span> set = <span class="keyword">new</span> <span class="type">Set</span>();
+        seen.set(obj, set);
+        obj.forEach(v => set.add(deepClone(v, seen)));
+        <span class="keyword">return</span> set;
+    }
+
+    <span class="keyword">const</span> clone = <span class="type">Array</span>.isArray(obj) ? [] : {};
+    seen.set(obj, clone);
+    <span class="keyword">for</span> (<span class="keyword">const</span> key <span class="keyword">of</span> <span class="type">Reflect</span>.ownKeys(obj)) {
+        clone[key] = deepClone(obj[key], seen);
+    }
+    <span class="keyword">return</span> clone;
+}
+
+<span class="comment">// ✅ Modern JS — just use structuredClone()</span>
+<span class="keyword">const</span> copy = structuredClone(original); <span class="comment">// Built-in!</span></pre></div>
+      </div>
+    </div>
+
+    <div class="concept-block">
+      <h3 class="concept-heading">RegExp — pattern matching essentials</h3>
+      <p class="explain-en"><strong>Regular expressions</strong> match patterns in strings. Use <code>test()</code> for boolean, <code>match()</code> for results, <code>replace()</code> for substitution. Master character classes, quantifiers, groups, and lookaheads for interview questions.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Regular expressions</strong> strings me patterns match karte hain. <code>test()</code> boolean ke liye, <code>match()</code> results ke liye, <code>replace()</code> substitution ke liye use karo.</div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">💻 JavaScript — RegExp</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+        <div class="code-body"><pre><span class="comment">// ✅ Common patterns</span>
+<span class="keyword">const</span> email = <span class="type">/^[\w.-]+@[\w.-]+\.\w{2,}$/</span>;
+<span class="keyword">const</span> phone = <span class="type">/^\+?\d{10,15}$/</span>;
+<span class="keyword">const</span> url = <span class="type">/^https?:\/\/[\w.-]+\.\w{2,}/</span>;
+<span class="keyword">const</span> slug = <span class="type">/^[a-z0-9]+(?:-[a-z0-9]+)*$/</span>;
+
+email.test(<span class="string">"alice@example.com"</span>); <span class="comment">// true</span>
+
+<span class="comment">// ✅ Named capture groups (ES2018)</span>
+<span class="keyword">const</span> datePattern = <span class="type">/(?&lt;year&gt;\d{4})-(?&lt;month&gt;\d{2})-(?&lt;day&gt;\d{2})/</span>;
+<span class="keyword">const</span> match = <span class="string">"2024-03-15"</span>.match(datePattern);
+match.groups.year;  <span class="comment">// "2024"</span>
+match.groups.month; <span class="comment">// "03"</span>
+
+<span class="comment">// ✅ Replace with function</span>
+<span class="string">"hello world"</span>.replace(<span class="type">/\b\w/g</span>, c => c.toUpperCase());
+<span class="comment">// "Hello World"</span>
+
+<span class="comment">// ✅ matchAll — iterate all matches</span>
+<span class="keyword">const</span> text = <span class="string">"Call 123-456 or 789-012"</span>;
+<span class="keyword">for</span> (<span class="keyword">const</span> m <span class="keyword">of</span> text.matchAll(<span class="type">/\d{3}-\d{3}/g</span>)) {
+    console.log(m[<span class="number">0</span>]); <span class="comment">// "123-456", "789-012"</span>
+}</pre></div>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 RegExp Cheat Sheet</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Pattern</th><th>Matches</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><code>.</code></td><td>Any character (except newline)</td><td><code>/a.c/</code> → "abc", "a1c"</td></tr>
+            <tr><td><code>\d</code> / <code>\D</code></td><td>Digit / Non-digit</td><td><code>/\d+/</code> → "123"</td></tr>
+            <tr><td><code>\w</code> / <code>\W</code></td><td>Word char / Non-word</td><td><code>/\w+/</code> → "hello"</td></tr>
+            <tr><td><code>\s</code> / <code>\S</code></td><td>Whitespace / Non-space</td><td><code>/\s+/</code> → " "</td></tr>
+            <tr><td><code>^</code> / <code>$</code></td><td>Start / End of string</td><td><code>/^hello$/</code></td></tr>
+            <tr><td><code>*</code> / <code>+</code> / <code>?</code></td><td>0+, 1+, 0 or 1</td><td><code>/\d+/</code> → one or more digits</td></tr>
+            <tr><td><code>{n,m}</code></td><td>Between n and m times</td><td><code>/\d{2,4}/</code></td></tr>
+            <tr><td><code>[abc]</code></td><td>Character class</td><td><code>/[aeiou]/</code> → vowels</td></tr>
+            <tr><td><code>(group)</code></td><td>Capture group</td><td><code>/(\d+)-(\d+)/</code></td></tr>
+            <tr><td><code>(?:group)</code></td><td>Non-capture group</td><td>Group without capturing</td></tr>
+            <tr><td><code>(?=x)</code></td><td>Lookahead</td><td>Match if followed by x</td></tr>
+            <tr><td><code>g</code> / <code>i</code> / <code>m</code></td><td>Flags: global, case-insensitive, multiline</td><td><code>/hello/gi</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Security Checklist</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Vulnerability</th><th>Prevention</th><th>Key rule</th></tr></thead>
+          <tbody>
+            <tr><td><strong>XSS</strong></td><td>Use <code>textContent</code>, sanitize HTML, CSP headers</td><td>Never trust user input in DOM</td></tr>
+            <tr><td><strong>CSRF</strong></td><td>CSRF tokens, SameSite cookies</td><td>Validate state-changing requests</td></tr>
+            <tr><td><strong>Injection</strong></td><td>Parameterized queries, input validation</td><td>Never concatenate user input into queries</td></tr>
+            <tr><td><strong>eval()</strong></td><td>Never use eval/Function constructor</td><td>No dynamic code execution with user data</td></tr>
+            <tr><td><strong>Prototype pollution</strong></td><td>Use <code>Map</code>, <code>Object.create(null)</code></td><td>Don't set properties from user keys</td></tr>
+            <tr><td><strong>Auth tokens</strong></td><td>HttpOnly + Secure + SameSite cookies</td><td>Never store tokens in localStorage</td></tr>
+            <tr><td><strong>Dependencies</strong></td><td><code>npm audit</code>, lock file, minimal deps</td><td>Fewer dependencies = fewer attack vectors</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Performance Optimization Checklist</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Area</th><th>Technique</th><th>Impact</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Loading</strong></td><td>Code splitting, lazy imports, preload</td><td>Faster initial load</td></tr>
+            <tr><td><strong>Rendering</strong></td><td>Virtual DOM, <code>requestAnimationFrame</code></td><td>Smooth 60fps UI</td></tr>
+            <tr><td><strong>Computation</strong></td><td>Memoization, Web Workers</td><td>Responsive main thread</td></tr>
+            <tr><td><strong>Network</strong></td><td>Caching, compression, CDN, HTTP/2</td><td>Reduced latency</td></tr>
+            <tr><td><strong>DOM</strong></td><td>Batch updates, DocumentFragment, delegation</td><td>Fewer reflows/repaints</td></tr>
+            <tr><td><strong>Images</strong></td><td>Lazy loading, WebP/AVIF, responsive</td><td>Smaller payloads</td></tr>
+            <tr><td><strong>Bundle</strong></td><td>Tree-shaking, minification, compression</td><td>Smaller JS files</td></tr>
+            <tr><td><strong>Monitoring</strong></td><td>Lighthouse, Core Web Vitals, <code>PerformanceObserver</code></td><td>Measure and improve</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Essential JS Resources</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Resource</th><th>Type</th><th>Best for</th></tr></thead>
+          <tbody>
+            <tr><td><strong>MDN Web Docs</strong></td><td>Reference</td><td>Complete API documentation</td></tr>
+            <tr><td><strong>javascript.info</strong></td><td>Tutorial</td><td>Deep learning, modern JS</td></tr>
+            <tr><td><strong>Eloquent JavaScript</strong></td><td>Book (free)</td><td>Foundations to advanced</td></tr>
+            <tr><td><strong>You Don't Know JS</strong></td><td>Book series</td><td>Understanding JS internals</td></tr>
+            <tr><td><strong>LeetCode / NeetCode</strong></td><td>Practice</td><td>Data structures + algorithms</td></tr>
+            <tr><td><strong>Frontend Masters</strong></td><td>Video courses</td><td>Expert-level workshops</td></tr>
+            <tr><td><strong>Can I Use</strong></td><td>Compatibility</td><td>Browser support checker</td></tr>
+            <tr><td><strong>Node.js Docs</strong></td><td>Reference</td><td>Server-side JavaScript</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="handbook-nav">
+      <a href="part7.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Part 7: Modules, Tooling & Testing</div></div></a>
+      <a href="index.html" class="nav-btn next"><div><div class="nav-btn-label">Complete!</div><div class="nav-btn-title">Back to Handbook Index →</div></div><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+  </div>
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
+  <script src="../../../js/main.js"></script>
+  <script>
+    (() => {
+      document.querySelectorAll('.code-block').forEach((block) => { const pre = block.querySelector('.code-body pre'), header = block.querySelector('.code-header'); if (!pre || !header) return; let actions = header.querySelector('.code-actions'); if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); } const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'code-copy-btn'; btn.textContent = 'Copy'; btn.addEventListener('click', async () => { try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; } catch { btn.textContent = 'Failed'; } finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); } }); actions.prepend(btn); });
+      const fill = document.querySelector('.hb-progress-fill'), label = document.querySelector('.hb-progress-label');
+      if (fill && label) { const update = () => { const h = document.documentElement, d = (h.scrollHeight - h.clientHeight) || 1, p = Math.max(0, Math.min(1, h.scrollTop / d)); fill.style.width = (p*100).toFixed(0)+'%'; label.textContent = (p*100).toFixed(0)+'%'; }; document.addEventListener('scroll', update, { passive: true }); update(); }
+    })();
+  </script>
+</body>
+</html>

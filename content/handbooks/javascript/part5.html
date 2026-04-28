@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Part 5: Asynchronous JavaScript — JavaScript Programming Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 5: Promises, async/await, Event Loop, fetch API, error handling in asynchronous JavaScript.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/handbook.css">
+</head>
+<body class="handbook-wrapper">
+  <nav class="navbar"><div class="container"><a href="../../../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../../../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
+
+  <div class="handbook-page">
+    <div class="hb-topbar"><div class="hb-topbar-inner"><div class="hb-breadcrumbs"><a href="index.html">JavaScript Programming Handbook</a><span class="hb-muted">/</span><span>Part 5</span><span class="hb-muted">·</span><a href="#m5-1">5.1</a> <a href="#m5-2">5.2</a> <a href="#m5-3">5.3</a> <a href="#m5-4">5.4</a> <a href="#m5-5">5.5</a> <a href="#m5-6">5.6</a> <a href="#m5-7">5.7</a></div><div class="hb-progress" aria-label="Reading progress"><div class="hb-progress-track" role="progressbar"><div class="hb-progress-fill"></div></div><div class="hb-progress-label">0%</div></div></div></div>
+
+    <div class="chapter-header" data-chapter-num="05">
+      <div class="chapter-part-label">📖 Part 5 — Asynchronous JavaScript</div>
+      <h1 class="chapter-title">Asynchronous <span class="gradient-text">JavaScript</span></h1>
+      <p class="chapter-subtitle">Event loop, Promises, async/await, fetch API, parallel execution — mastering non-blocking code.</p>
+      <div class="chapter-meta"><span>📄 Modules 5.1 – 5.7</span><span>⏱️ 80–100 min read</span><span>💻 70+ Examples</span></div>
+    </div>
+
+    <div class="hb-mini-toc"><div class="hb-mini-title">📍 Part 5 Modules</div><div class="hb-mini-links"><a href="#m5-1">5.1 Event Loop</a><a href="#m5-2">5.2 Promises</a><a href="#m5-3">5.3 Async/Await</a><a href="#m5-4">5.4 Fetch</a><a href="#m5-5">5.5 Parallel</a><a href="#m5-6">5.6 Errors</a><a href="#m5-7">5.7 Patterns</a></div></div>
+
+    <div class="quick-ref">
+      <div class="qr-title">🚀 Advanced Lens — Part 5</div>
+      <p class="explain-en">Asynchronous correctness is a core production skill in JavaScript. Event-loop understanding, promise orchestration, cancellation patterns, and resilient network handling separate beginner code from service-grade code.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>JavaScript ka real power async handling me hai. Event loop, promises, aur fetch error recovery pe strong grip se production-level reliability aati hai.</div>
+    </div>
+
+    <div class="concept-block">
+      <h3>Async reliability checklist (Part 5)</h3>
+      <table>
+        <thead><tr><th>Area</th><th>Industry baseline</th></tr></thead>
+        <tbody>
+          <tr><td>Task ordering</td><td>Understand microtask vs macrotask effects in critical flows.</td></tr>
+          <tr><td>Promise orchestration</td><td>Use `all`, `allSettled`, and `race` intentionally by use case.</td></tr>
+          <tr><td>Network robustness</td><td>Add timeout/cancellation and retry strategy for API calls.</td></tr>
+          <tr><td>Error boundaries</td><td>Catch, classify, and surface async errors with user-safe messages.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- MODULE 5.1 -->
+    <div class="module-section" id="m5-1">
+      <div class="module-header"><div class="module-number">5.1</div><h2 class="module-title">Event Loop — call stack, task queue, microtask queue, setTimeout</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">How JavaScript handles async</h3>
+        <p class="explain-en">JS is <strong>single-threaded</strong> but non-blocking via the <strong>Event Loop</strong>. The <strong>Call Stack</strong> executes synchronous code. Async callbacks go to the <strong>Task Queue</strong> (macrotasks: setTimeout, setInterval). Promises go to the <strong>Microtask Queue</strong> (higher priority). Microtasks always run before macrotasks.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>JS <strong>single-threaded</strong> hai lekin non-blocking hai <strong>Event Loop</strong> ki wajah se. <strong>Call Stack</strong> synchronous code run karta hai. Async callbacks <strong>Task Queue</strong> me jaate hain. Promises <strong>Microtask Queue</strong> me jaate hain (higher priority). Microtasks hamesha macrotasks se pehle run hote hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — Event Loop</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// ✅ Event loop order demonstration</span>
+console.log(<span class="string">"1. Synchronous"</span>);
+
+setTimeout(() => console.log(<span class="string">"2. Macrotask (setTimeout)"</span>), <span class="number">0</span>);
+
+<span class="type">Promise</span>.resolve().then(() => console.log(<span class="string">"3. Microtask (Promise)"</span>));
+
+console.log(<span class="string">"4. Synchronous"</span>);
+
+<span class="comment">// Output order:</span>
+<span class="comment">// 1. Synchronous</span>
+<span class="comment">// 4. Synchronous</span>
+<span class="comment">// 3. Microtask (Promise)  ← runs BEFORE setTimeout!</span>
+<span class="comment">// 2. Macrotask (setTimeout)</span>
+
+<span class="comment">// ✅ Why? Execution order:</span>
+<span class="comment">// 1. Call stack runs all synchronous code</span>
+<span class="comment">// 2. Microtask queue is drained (Promises)</span>
+<span class="comment">// 3. One macrotask runs (setTimeout)</span>
+<span class="comment">// 4. Repeat from step 2</span>
+
+<span class="comment">// ✅ More complex example</span>
+setTimeout(() => console.log(<span class="string">"A"</span>), <span class="number">0</span>);
+setTimeout(() => console.log(<span class="string">"B"</span>), <span class="number">0</span>);
+<span class="type">Promise</span>.resolve().then(() => {
+    console.log(<span class="string">"C"</span>);
+    <span class="type">Promise</span>.resolve().then(() => console.log(<span class="string">"D"</span>));
+});
+<span class="type">Promise</span>.resolve().then(() => console.log(<span class="string">"E"</span>));
+console.log(<span class="string">"F"</span>);
+<span class="comment">// Output: F, C, E, D, A, B</span>
+
+<span class="comment">// queueMicrotask — explicitly add microtask</span>
+queueMicrotask(() => console.log(<span class="string">"microtask"</span>));
+
+<span class="comment">// setTimeout(fn, 0) doesn't mean "run immediately"</span>
+<span class="comment">// It means "run after current stack + microtasks clear"</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Queue</th><th>Priority</th><th>Examples</th></tr></thead>
+            <tbody>
+              <tr><td>Call Stack</td><td>Immediate</td><td>Synchronous code</td></tr>
+              <tr><td>Microtask Queue</td><td>High</td><td><code>.then()</code>, <code>queueMicrotask</code>, <code>MutationObserver</code></td></tr>
+              <tr><td>Macrotask Queue</td><td>Low</td><td><code>setTimeout</code>, <code>setInterval</code>, I/O, UI rendering</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 5.2 -->
+    <div class="module-section" id="m5-2">
+      <div class="module-header"><div class="module-number">5.2</div><h2 class="module-title">Promises — new Promise, then/catch/finally, chaining, states</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">The foundation of async JS</h3>
+        <p class="explain-en">A <strong>Promise</strong> represents a future value. Three states: <strong>pending</strong>, <strong>fulfilled</strong>, <strong>rejected</strong>. <code>.then()</code> handles success, <code>.catch()</code> handles errors, <code>.finally()</code> always runs. Promises are <strong>immutable once settled</strong> — can't go back to pending. Chain <code>.then()</code> for sequential async.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Promise</strong> future value represent karta hai. Teen states: <strong>pending</strong>, <strong>fulfilled</strong>, <strong>rejected</strong>. <code>.then()</code> success handle karta hai, <code>.catch()</code> errors, <code>.finally()</code> hamesha run hota hai. Promises settle hone ke baad change nahi hote.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — Promises</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// ✅ Creating a Promise</span>
+<span class="keyword">const</span> promise = <span class="keyword">new</span> <span class="type">Promise</span>((resolve, reject) => {
+    <span class="keyword">const</span> success = <span class="keyword">true</span>;
+    setTimeout(() => {
+        success ? resolve(<span class="string">"Data loaded!"</span>) : reject(<span class="keyword">new</span> <span class="type">Error</span>(<span class="string">"Failed"</span>));
+    }, <span class="number">1000</span>);
+});
+
+<span class="comment">// Consuming</span>
+promise
+    .then(data => console.log(data))
+    .catch(err => console.error(err))
+    .finally(() => console.log(<span class="string">"Done"</span>));
+
+<span class="comment">// ✅ Chaining — each .then returns a new Promise</span>
+fetch(<span class="string">"/api/user/1"</span>)
+    .then(res => res.json())           <span class="comment">// Parse JSON</span>
+    .then(user => fetch(<span class="string">`/api/posts/</span><span class="keyword">${</span>user.id<span class="keyword">}</span><span class="string">`</span>))
+    .then(res => res.json())           <span class="comment">// Parse posts</span>
+    .then(posts => console.log(posts))
+    .catch(err => console.error(err)); <span class="comment">// Catches ANY error</span>
+
+<span class="comment">// ✅ Returning values in .then()</span>
+<span class="type">Promise</span>.resolve(<span class="number">1</span>)
+    .then(x => x + <span class="number">1</span>)   <span class="comment">// 2</span>
+    .then(x => x * <span class="number">3</span>)   <span class="comment">// 6</span>
+    .then(console.log);  <span class="comment">// 6</span>
+
+<span class="comment">// ✅ Promise.resolve / Promise.reject — shortcuts</span>
+<span class="type">Promise</span>.resolve(<span class="string">"instant"</span>).then(console.log);
+<span class="type">Promise</span>.reject(<span class="keyword">new</span> <span class="type">Error</span>(<span class="string">"fail"</span>)).catch(console.error);
+
+<span class="comment">// Wrapping callback APIs into Promises</span>
+<span class="keyword">function</span> <span class="function">delay</span>(ms) {
+    <span class="keyword">return new</span> <span class="type">Promise</span>(resolve => setTimeout(resolve, ms));
+}
+delay(<span class="number">2000</span>).then(() => console.log(<span class="string">"2s later"</span>));</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 5.3 -->
+    <div class="module-section" id="m5-3">
+      <div class="module-header"><div class="module-number">5.3</div><h2 class="module-title">Async/Await — async functions, await, error handling, top-level await</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Promises made beautiful</h3>
+        <p class="explain-en"><code>async</code> functions always return a Promise. <code>await</code> pauses execution until the Promise settles — making async code look synchronous. Use <code>try/catch</code> for error handling. <strong>Top-level await</strong> works in ES modules. <code>await</code> only works inside <code>async</code> functions.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>async</code> functions hamesha Promise return karte hain. <code>await</code> execution pause karta hai jab tak Promise settle na ho — async code synchronous jaisa dikhta hai. Error handling ke liye <code>try/catch</code> use karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — Async/Await</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// ✅ Basic async/await</span>
+<span class="keyword">async function</span> <span class="function">fetchUser</span>(id) {
+    <span class="keyword">const</span> res = <span class="keyword">await</span> fetch(<span class="string">`/api/users/</span><span class="keyword">${</span>id<span class="keyword">}</span><span class="string">`</span>);
+    <span class="keyword">const</span> user = <span class="keyword">await</span> res.json();
+    <span class="keyword">return</span> user;
+}
+
+<span class="comment">// Arrow async</span>
+<span class="keyword">const</span> getUser = <span class="keyword">async</span> (id) => {
+    <span class="keyword">const</span> res = <span class="keyword">await</span> fetch(<span class="string">`/api/users/</span><span class="keyword">${</span>id<span class="keyword">}</span><span class="string">`</span>);
+    <span class="keyword">return</span> res.json();
+};
+
+<span class="comment">// ✅ Error handling with try/catch</span>
+<span class="keyword">async function</span> <span class="function">loadData</span>() {
+    <span class="keyword">try</span> {
+        <span class="keyword">const</span> res = <span class="keyword">await</span> fetch(<span class="string">"/api/data"</span>);
+        <span class="keyword">if</span> (!res.ok) <span class="keyword">throw new</span> <span class="type">Error</span>(<span class="string">`HTTP </span><span class="keyword">${</span>res.status<span class="keyword">}</span><span class="string">`</span>);
+        <span class="keyword">return await</span> res.json();
+    } <span class="keyword">catch</span> (err) {
+        console.error(<span class="string">"Failed:"</span>, err.message);
+        <span class="keyword">return</span> <span class="keyword">null</span>; <span class="comment">// Fallback</span>
+    } <span class="keyword">finally</span> {
+        console.log(<span class="string">"Request complete"</span>);
+    }
+}
+
+<span class="comment">// Sequential vs Parallel</span>
+<span class="keyword">async function</span> <span class="function">sequential</span>() {
+    <span class="keyword">const</span> a = <span class="keyword">await</span> fetch(<span class="string">"/api/a"</span>); <span class="comment">// Wait...</span>
+    <span class="keyword">const</span> b = <span class="keyword">await</span> fetch(<span class="string">"/api/b"</span>); <span class="comment">// Then wait... SLOW!</span>
+}
+
+<span class="keyword">async function</span> <span class="function">parallel</span>() {
+    <span class="keyword">const</span> [a, b] = <span class="keyword">await</span> <span class="type">Promise</span>.all([
+        fetch(<span class="string">"/api/a"</span>),
+        fetch(<span class="string">"/api/b"</span>)
+    ]); <span class="comment">// Both at once! FAST!</span>
+}
+
+<span class="comment">// async always returns a Promise</span>
+<span class="keyword">async function</span> <span class="function">getValue</span>() { <span class="keyword">return</span> <span class="number">42</span>; }
+getValue().then(console.log); <span class="comment">// 42</span></pre></div>
+        </div>
+        <div class="callout callout-warning"><strong>Common mistake:</strong> Using <code>await</code> in a loop creates sequential execution. Use <code>Promise.all()</code> with <code>.map()</code> for parallel execution instead.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 5.4 -->
+    <div class="module-section" id="m5-4">
+      <div class="module-header"><div class="module-number">5.4</div><h2 class="module-title">Fetch API — GET, POST, headers, AbortController, response handling</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Modern HTTP requests</h3>
+        <p class="explain-en"><code>fetch()</code> is the modern replacement for XMLHttpRequest. Returns a Promise. <strong>Important:</strong> <code>fetch</code> only rejects on network errors — HTTP 404/500 are NOT errors! Always check <code>res.ok</code>. Use <code>AbortController</code> to cancel requests and implement timeouts.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>fetch()</code> XMLHttpRequest ka modern replacement hai. <strong>Important:</strong> <code>fetch</code> sirf network errors pe reject hota hai — HTTP 404/500 errors nahi hain! Hamesha <code>res.ok</code> check karo. <code>AbortController</code> se requests cancel kar sakte ho.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — Fetch API</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// ✅ GET request</span>
+<span class="keyword">async function</span> <span class="function">getUsers</span>() {
+    <span class="keyword">const</span> res = <span class="keyword">await</span> fetch(<span class="string">"https://api.example.com/users"</span>);
+    <span class="keyword">if</span> (!res.ok) <span class="keyword">throw new</span> <span class="type">Error</span>(<span class="string">`HTTP </span><span class="keyword">${</span>res.status<span class="keyword">}</span><span class="string">`</span>);
+    <span class="keyword">return</span> res.json();
+}
+
+<span class="comment">// ✅ POST request with JSON body</span>
+<span class="keyword">async function</span> <span class="function">createUser</span>(userData) {
+    <span class="keyword">const</span> res = <span class="keyword">await</span> fetch(<span class="string">"/api/users"</span>, {
+        method: <span class="string">"POST"</span>,
+        headers: { <span class="string">"Content-Type"</span>: <span class="string">"application/json"</span> },
+        body: <span class="type">JSON</span>.stringify(userData)
+    });
+    <span class="keyword">if</span> (!res.ok) <span class="keyword">throw new</span> <span class="type">Error</span>(<span class="string">`Failed: </span><span class="keyword">${</span>res.status<span class="keyword">}</span><span class="string">`</span>);
+    <span class="keyword">return</span> res.json();
+}
+
+<span class="comment">// ✅ AbortController — cancel requests</span>
+<span class="keyword">const</span> controller = <span class="keyword">new</span> <span class="type">AbortController</span>();
+fetch(<span class="string">"/api/data"</span>, { signal: controller.signal })
+    .then(res => res.json())
+    .catch(err => {
+        <span class="keyword">if</span> (err.name === <span class="string">"AbortError"</span>) console.log(<span class="string">"Cancelled"</span>);
+    });
+controller.abort(); <span class="comment">// Cancel!</span>
+
+<span class="comment">// ✅ Timeout wrapper</span>
+<span class="keyword">async function</span> <span class="function">fetchWithTimeout</span>(url, ms = <span class="number">5000</span>) {
+    <span class="keyword">const</span> controller = <span class="keyword">new</span> <span class="type">AbortController</span>();
+    <span class="keyword">const</span> timeout = setTimeout(() => controller.abort(), ms);
+    <span class="keyword">try</span> {
+        <span class="keyword">const</span> res = <span class="keyword">await</span> fetch(url, { signal: controller.signal });
+        <span class="keyword">return await</span> res.json();
+    } <span class="keyword">finally</span> {
+        clearTimeout(timeout);
+    }
+}</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 5.5 -->
+    <div class="module-section" id="m5-5">
+      <div class="module-header"><div class="module-number">5.5</div><h2 class="module-title">Parallel execution — Promise.all, allSettled, race, any</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Running things concurrently</h3>
+        <p class="explain-en"><code>Promise.all()</code> waits for ALL (fails fast). <code>Promise.allSettled()</code> waits for ALL (never fails). <code>Promise.race()</code> returns first to settle. <code>Promise.any()</code> returns first to fulfill. Choose based on your failure strategy.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>Promise.all()</code> sab ka wait karta hai (ek fail = sab fail). <code>Promise.allSettled()</code> sab ka wait karta hai (koi fail nahi). <code>Promise.race()</code> pehla settle hone wala return karta hai. <code>Promise.any()</code> pehla fulfill hone wala return karta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — Parallel Promises</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// ✅ Promise.all — all must succeed</span>
+<span class="keyword">const</span> [users, posts, comments] = <span class="keyword">await</span> <span class="type">Promise</span>.all([
+    fetch(<span class="string">"/api/users"</span>).then(r => r.json()),
+    fetch(<span class="string">"/api/posts"</span>).then(r => r.json()),
+    fetch(<span class="string">"/api/comments"</span>).then(r => r.json())
+]);
+<span class="comment">// If ANY fails → entire Promise.all rejects!</span>
+
+<span class="comment">// ✅ Promise.allSettled — get all results, even failures</span>
+<span class="keyword">const</span> results = <span class="keyword">await</span> <span class="type">Promise</span>.allSettled([
+    fetch(<span class="string">"/api/a"</span>),
+    fetch(<span class="string">"/api/b"</span>),
+    <span class="type">Promise</span>.reject(<span class="string">"error"</span>)
+]);
+<span class="comment">// [</span>
+<span class="comment">//   { status: "fulfilled", value: Response },</span>
+<span class="comment">//   { status: "fulfilled", value: Response },</span>
+<span class="comment">//   { status: "rejected", reason: "error" }</span>
+<span class="comment">// ]</span>
+
+<span class="comment">// ✅ Promise.race — first to settle wins</span>
+<span class="keyword">const</span> fastest = <span class="keyword">await</span> <span class="type">Promise</span>.race([
+    fetch(<span class="string">"/api/server1"</span>),
+    fetch(<span class="string">"/api/server2"</span>),
+    <span class="keyword">new</span> <span class="type">Promise</span>((_, reject) =>
+        setTimeout(() => reject(<span class="string">"Timeout"</span>), <span class="number">5000</span>)
+    )
+]);
+
+<span class="comment">// ✅ Promise.any — first to FULFILL wins</span>
+<span class="keyword">const</span> first = <span class="keyword">await</span> <span class="type">Promise</span>.any([
+    fetch(<span class="string">"/cdn1/data"</span>),
+    fetch(<span class="string">"/cdn2/data"</span>),
+    fetch(<span class="string">"/cdn3/data"</span>)
+]); <span class="comment">// Fastest successful response</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Method</th><th>Resolves when</th><th>Rejects when</th><th>Use case</th></tr></thead>
+            <tbody>
+              <tr><td><code>Promise.all()</code></td><td>All fulfill</td><td>Any rejects</td><td>Load all required data</td></tr>
+              <tr><td><code>Promise.allSettled()</code></td><td>All settle</td><td>Never</td><td>Best-effort loading</td></tr>
+              <tr><td><code>Promise.race()</code></td><td>First settles</td><td>First rejects</td><td>Timeout patterns</td></tr>
+              <tr><td><code>Promise.any()</code></td><td>First fulfills</td><td>All reject</td><td>Fastest mirror/CDN</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 5.6 -->
+    <div class="module-section" id="m5-6">
+      <div class="module-header"><div class="module-number">5.6</div><h2 class="module-title">Async error handling — patterns, retry logic, graceful degradation</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Production-grade error handling</h3>
+        <p class="explain-en">Wrap fetch calls in reusable error-handling wrappers. Implement <strong>retry with exponential backoff</strong> for flaky APIs. Use <strong>graceful degradation</strong> with fallback data. Never let unhandled rejections crash your app.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Fetch calls ko reusable error-handling wrappers me wrap karo. Flaky APIs ke liye <strong>retry with exponential backoff</strong> implement karo. <strong>Graceful degradation</strong> se fallback data use karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — Async Error Patterns</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// ✅ Reusable fetch wrapper</span>
+<span class="keyword">async function</span> <span class="function">api</span>(url, options = {}) {
+    <span class="keyword">const</span> res = <span class="keyword">await</span> fetch(url, options);
+    <span class="keyword">if</span> (!res.ok) {
+        <span class="keyword">const</span> error = <span class="keyword">new</span> <span class="type">Error</span>(<span class="string">`HTTP </span><span class="keyword">${</span>res.status<span class="keyword">}</span><span class="string">`</span>);
+        error.status = res.status;
+        error.response = <span class="keyword">await</span> res.json().catch(() => <span class="keyword">null</span>);
+        <span class="keyword">throw</span> error;
+    }
+    <span class="keyword">return</span> res.json();
+}
+
+<span class="comment">// ✅ Retry with exponential backoff</span>
+<span class="keyword">async function</span> <span class="function">retry</span>(fn, maxRetries = <span class="number">3</span>, delay = <span class="number">1000</span>) {
+    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i <= maxRetries; i++) {
+        <span class="keyword">try</span> {
+            <span class="keyword">return await</span> fn();
+        } <span class="keyword">catch</span> (err) {
+            <span class="keyword">if</span> (i === maxRetries) <span class="keyword">throw</span> err;
+            <span class="keyword">await new</span> <span class="type">Promise</span>(r => setTimeout(r, delay * <span class="number">2</span> ** i));
+        }
+    }
+}
+<span class="comment">// Usage: await retry(() => api("/flaky-endpoint"));</span>
+
+<span class="comment">// ✅ Graceful degradation</span>
+<span class="keyword">async function</span> <span class="function">loadWithFallback</span>() {
+    <span class="keyword">try</span> {
+        <span class="keyword">return await</span> api(<span class="string">"/api/live-data"</span>);
+    } <span class="keyword">catch</span> {
+        console.warn(<span class="string">"Using cached data"</span>);
+        <span class="keyword">return</span> <span class="type">JSON</span>.parse(localStorage.getItem(<span class="string">"cache"</span>)) ?? [];
+    }
+}</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 5.7 -->
+    <div class="module-section" id="m5-7">
+      <div class="module-header"><div class="module-number">5.7</div><h2 class="module-title">Advanced patterns — async generators, for-await-of, debounce/throttle</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Real-world async patterns</h3>
+        <p class="explain-en"><strong>Async generators</strong> (<code>async function*</code>) yield Promises, consumed with <code>for await...of</code>. <strong>Debounce</strong> delays execution until input stops. <strong>Throttle</strong> limits execution frequency. These are essential for search inputs, scroll handlers, and API rate limiting.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Async generators</strong> (<code>async function*</code>) Promises yield karte hain, <code>for await...of</code> se consume hote hain. <strong>Debounce</strong> execution delay karta hai jab tak input band na ho. <strong>Throttle</strong> execution frequency limit karta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — Advanced Async</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// ✅ Async generator — paginated API</span>
+<span class="keyword">async function*</span> <span class="function">fetchPages</span>(url) {
+    <span class="keyword">let</span> page = <span class="number">1</span>;
+    <span class="keyword">while</span> (<span class="keyword">true</span>) {
+        <span class="keyword">const</span> res = <span class="keyword">await</span> fetch(<span class="string">`</span><span class="keyword">${</span>url<span class="keyword">}</span><span class="string">?page=</span><span class="keyword">${</span>page<span class="keyword">}</span><span class="string">`</span>);
+        <span class="keyword">const</span> data = <span class="keyword">await</span> res.json();
+        <span class="keyword">if</span> (data.length === <span class="number">0</span>) <span class="keyword">return</span>;
+        <span class="keyword">yield</span> data;
+        page++;
+    }
+}
+<span class="keyword">for await</span> (<span class="keyword">const</span> page <span class="keyword">of</span> fetchPages(<span class="string">"/api/items"</span>)) {
+    console.log(<span class="string">"Page:"</span>, page);
+}
+
+<span class="comment">// ✅ Debounce — wait until user stops typing</span>
+<span class="keyword">function</span> <span class="function">debounce</span>(fn, delay = <span class="number">300</span>) {
+    <span class="keyword">let</span> timer;
+    <span class="keyword">return</span> (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn(...args), delay);
+    };
+}
+<span class="keyword">const</span> search = debounce(query => fetch(<span class="string">`/search?q=</span><span class="keyword">${</span>query<span class="keyword">}</span><span class="string">`</span>), <span class="number">300</span>);
+
+<span class="comment">// ✅ Throttle — max once per interval</span>
+<span class="keyword">function</span> <span class="function">throttle</span>(fn, limit = <span class="number">100</span>) {
+    <span class="keyword">let</span> waiting = <span class="keyword">false</span>;
+    <span class="keyword">return</span> (...args) => {
+        <span class="keyword">if</span> (waiting) <span class="keyword">return</span>;
+        fn(...args);
+        waiting = <span class="keyword">true</span>;
+        setTimeout(() => waiting = <span class="keyword">false</span>, limit);
+    };
+}
+window.addEventListener(<span class="string">"scroll"</span>, throttle(handleScroll, <span class="number">100</span>));</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="practice-box">
+      <div class="practice-title">✏️ Practice Exercises — Part 5</div>
+      <ol>
+        <li>Predict the output of a console.log/setTimeout/Promise.then puzzle (Event Loop).</li>
+        <li>Write a <code>delay(ms)</code> Promise wrapper and chain 3 sequential delays.</li>
+        <li>Convert a callback-based function to return a Promise.</li>
+        <li>Build a <code>fetchWithTimeout(url, ms)</code> using AbortController.</li>
+        <li>Use <code>Promise.all()</code> to fetch 3 APIs in parallel, then use <code>Promise.allSettled()</code> for the same but handle partial failures.</li>
+        <li>Implement <code>retry(fn, n, delay)</code> with exponential backoff.</li>
+        <li>Create a <code>debounce</code> function and use it on an input field's search handler.</li>
+      </ol>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Promise Methods Cheat Sheet</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Method</th><th>Input</th><th>Resolves</th><th>Rejects</th><th>Use case</th></tr></thead>
+          <tbody>
+            <tr><td><code>Promise.all()</code></td><td>Array of Promises</td><td>When ALL fulfill → array of values</td><td>When ANY rejects (fail-fast)</td><td>Load all required data at once</td></tr>
+            <tr><td><code>Promise.allSettled()</code></td><td>Array of Promises</td><td>When ALL settle → array of results</td><td>Never rejects</td><td>Best-effort, partial results OK</td></tr>
+            <tr><td><code>Promise.race()</code></td><td>Array of Promises</td><td>First to settle (fulfill or reject)</td><td>First to settle (reject)</td><td>Timeout patterns, fastest response</td></tr>
+            <tr><td><code>Promise.any()</code></td><td>Array of Promises</td><td>First to fulfill</td><td>All reject → AggregateError</td><td>Fastest CDN, mirror selection</td></tr>
+            <tr><td><code>Promise.resolve(v)</code></td><td>Any value</td><td>Immediately with value</td><td>—</td><td>Wrap sync values as Promises</td></tr>
+            <tr><td><code>Promise.reject(e)</code></td><td>Error/value</td><td>—</td><td>Immediately with reason</td><td>Create rejected Promise</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Fetch Response Methods</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Method</th><th>Returns</th><th>Use case</th></tr></thead>
+          <tbody>
+            <tr><td><code>res.json()</code></td><td>Promise → parsed JSON object</td><td>API responses (most common)</td></tr>
+            <tr><td><code>res.text()</code></td><td>Promise → string</td><td>HTML, plain text, CSV</td></tr>
+            <tr><td><code>res.blob()</code></td><td>Promise → Blob</td><td>Images, PDFs, files</td></tr>
+            <tr><td><code>res.arrayBuffer()</code></td><td>Promise → ArrayBuffer</td><td>Binary data</td></tr>
+            <tr><td><code>res.formData()</code></td><td>Promise → FormData</td><td>Multipart form responses</td></tr>
+            <tr><td><code>res.clone()</code></td><td>Response copy</td><td>Read body multiple times</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Fetch Response Properties</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Property</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>res.ok</code></td><td>boolean</td><td><code>true</code> if status 200-299</td></tr>
+            <tr><td><code>res.status</code></td><td>number</td><td>HTTP status code (200, 404, 500...)</td></tr>
+            <tr><td><code>res.statusText</code></td><td>string</td><td>"OK", "Not Found", etc.</td></tr>
+            <tr><td><code>res.headers</code></td><td>Headers</td><td>Response headers object</td></tr>
+            <tr><td><code>res.url</code></td><td>string</td><td>Final URL (after redirects)</td></tr>
+            <tr><td><code>res.redirected</code></td><td>boolean</td><td>Whether response was redirected</td></tr>
+            <tr><td><code>res.type</code></td><td>string</td><td>"basic", "cors", "opaque"</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="concept-block">
+      <h3 class="concept-heading">Callback to Promise conversion (Promisification)</h3>
+      <p class="explain-en">Many older Node.js APIs use <strong>callback patterns</strong> (error-first callbacks). Wrap them in Promises to use with async/await. Node.js also provides <code>util.promisify()</code> for automatic conversion.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Purani Node.js APIs <strong>callback patterns</strong> (error-first callbacks) use karti hain. Unhe Promises me wrap karo taaki async/await ke saath use kar sako. Node.js me <code>util.promisify()</code> bhi hai automatic conversion ke liye.</div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">💻 JavaScript — Promisification</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+        <div class="code-body"><pre><span class="comment">// ✅ Manual promisification</span>
+<span class="keyword">function</span> <span class="function">readFileAsync</span>(path) {
+    <span class="keyword">return new</span> <span class="type">Promise</span>((resolve, reject) => {
+        fs.readFile(path, <span class="string">"utf8"</span>, (err, data) => {
+            <span class="keyword">if</span> (err) reject(err);
+            <span class="keyword">else</span> resolve(data);
+        });
+    });
+}
+<span class="keyword">const</span> content = <span class="keyword">await</span> readFileAsync(<span class="string">"./data.json"</span>);
+
+<span class="comment">// ✅ Generic promisify helper</span>
+<span class="keyword">function</span> <span class="function">promisify</span>(fn) {
+    <span class="keyword">return</span> (...args) => <span class="keyword">new</span> <span class="type">Promise</span>((resolve, reject) => {
+        fn(...args, (err, result) => {
+            err ? reject(err) : resolve(result);
+        });
+    });
+}
+
+<span class="comment">// ✅ Node.js built-in</span>
+<span class="keyword">import</span> { promisify } <span class="keyword">from</span> <span class="string">"node:util"</span>;
+<span class="keyword">const</span> readFile = promisify(fs.readFile);
+<span class="keyword">const</span> data = <span class="keyword">await</span> readFile(<span class="string">"./config.json"</span>, <span class="string">"utf8"</span>);
+
+<span class="comment">// ✅ Or use fs/promises directly (modern Node.js)</span>
+<span class="keyword">import</span> { readFile } <span class="keyword">from</span> <span class="string">"node:fs/promises"</span>;
+<span class="keyword">const</span> file = <span class="keyword">await</span> readFile(<span class="string">"./data.txt"</span>, <span class="string">"utf8"</span>);</pre></div>
+      </div>
+    </div>
+
+    <div class="concept-block">
+      <h3 class="concept-heading">Concurrency limiter — controlled parallelism</h3>
+      <p class="explain-en"><code>Promise.all()</code> fires ALL requests at once. For 1000 URLs, that overwhelms the server. A <strong>concurrency limiter</strong> restricts how many run simultaneously. Essential for web scraping, batch processing, and API rate limits.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>Promise.all()</code> sab requests ek saath fire karta hai. 1000 URLs ke liye server overwhelm ho jaata hai. <strong>Concurrency limiter</strong> restrict karta hai kitne simultaneously run hain.</div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">💻 JavaScript — Concurrency Control</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+        <div class="code-body"><pre><span class="comment">// ✅ Process items with max concurrency</span>
+<span class="keyword">async function</span> <span class="function">pMap</span>(items, fn, concurrency = <span class="number">5</span>) {
+    <span class="keyword">const</span> results = [];
+    <span class="keyword">const</span> executing = <span class="keyword">new</span> <span class="type">Set</span>();
+
+    <span class="keyword">for</span> (<span class="keyword">const</span> [i, item] <span class="keyword">of</span> items.entries()) {
+        <span class="keyword">const</span> p = <span class="type">Promise</span>.resolve().then(() => fn(item, i));
+        results.push(p);
+        executing.add(p);
+
+        <span class="keyword">const</span> clean = () => executing.delete(p);
+        p.then(clean, clean);
+
+        <span class="keyword">if</span> (executing.size >= concurrency) {
+            <span class="keyword">await</span> <span class="type">Promise</span>.race(executing);
+        }
+    }
+    <span class="keyword">return</span> <span class="type">Promise</span>.all(results);
+}
+
+<span class="comment">// Usage: fetch 100 URLs, max 5 at a time</span>
+<span class="keyword">const</span> urls = <span class="type">Array</span>.from({ length: <span class="number">100</span> }, (_, i) =>
+    <span class="string">`/api/item/</span><span class="keyword">${</span>i<span class="keyword">}</span><span class="string">`</span>
+);
+<span class="keyword">const</span> data = <span class="keyword">await</span> pMap(urls, url => fetch(url).then(r => r.json()), <span class="number">5</span>);</pre></div>
+      </div>
+    </div>
+
+    <div class="concept-block">
+      <h3 class="concept-heading">Event Loop puzzles — test your understanding</h3>
+      <p class="explain-en">These puzzles test deep understanding of the event loop. The key is remembering: <strong>sync first → microtasks (all) → one macrotask → repeat</strong>. Microtasks scheduled during microtask processing run in the same cycle.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Ye puzzles event loop ki deep understanding test karte hain. Key yaad rakho: <strong>sync pehle → microtasks (sab) → ek macrotask → repeat</strong>.</div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">💻 JavaScript — Event Loop Puzzles</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+        <div class="code-body"><pre><span class="comment">// Puzzle 1: What's the output?</span>
+console.log(<span class="string">"start"</span>);
+setTimeout(() => console.log(<span class="string">"timeout1"</span>), <span class="number">0</span>);
+<span class="type">Promise</span>.resolve()
+    .then(() => console.log(<span class="string">"promise1"</span>))
+    .then(() => console.log(<span class="string">"promise2"</span>));
+setTimeout(() => console.log(<span class="string">"timeout2"</span>), <span class="number">0</span>);
+console.log(<span class="string">"end"</span>);
+<span class="comment">// Answer: start, end, promise1, promise2, timeout1, timeout2</span>
+
+<span class="comment">// Puzzle 2: async/await ordering</span>
+<span class="keyword">async function</span> <span class="function">foo</span>() {
+    console.log(<span class="string">"foo start"</span>);
+    <span class="keyword">await</span> <span class="type">Promise</span>.resolve();
+    console.log(<span class="string">"foo end"</span>); <span class="comment">// This is a microtask!</span>
+}
+console.log(<span class="string">"script start"</span>);
+foo();
+console.log(<span class="string">"script end"</span>);
+<span class="comment">// Answer: script start, foo start, script end, foo end</span>
+<span class="comment">// Because await pauses foo, rest of script runs first</span>
+
+<span class="comment">// Puzzle 3: Nested promises</span>
+<span class="type">Promise</span>.resolve().then(() => {
+    console.log(<span class="string">"1"</span>);
+    <span class="type">Promise</span>.resolve().then(() => console.log(<span class="string">"2"</span>));
+}).then(() => console.log(<span class="string">"3"</span>));
+<span class="type">Promise</span>.resolve().then(() => console.log(<span class="string">"4"</span>));
+<span class="comment">// Answer: 1, 4, 2, 3</span>
+<span class="comment">// Microtasks: [then1, then4] → run 1, schedule 2 → run 4</span>
+<span class="comment">// Microtasks: [then2, then3] → run 2, run 3</span></pre></div>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Async Patterns Decision Guide</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Scenario</th><th>Pattern</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>Wait for one thing</td><td><code>await fetch(url)</code></td><td>Single API call</td></tr>
+            <tr><td>Wait for all (all required)</td><td><code>Promise.all([...])</code></td><td>Load user + posts + comments</td></tr>
+            <tr><td>Wait for all (partial OK)</td><td><code>Promise.allSettled([...])</code></td><td>Load widgets, some may fail</td></tr>
+            <tr><td>Fastest response wins</td><td><code>Promise.race([...])</code></td><td>Timeout pattern</td></tr>
+            <tr><td>First success wins</td><td><code>Promise.any([...])</code></td><td>Try multiple CDNs</td></tr>
+            <tr><td>Sequential steps</td><td><code>await a; await b;</code></td><td>Step-by-step wizard</td></tr>
+            <tr><td>Batch with limit</td><td>Concurrency limiter</td><td>Process 1000 items, 10 at a time</td></tr>
+            <tr><td>Retry on failure</td><td><code>retry(fn, n, delay)</code></td><td>Flaky network requests</td></tr>
+            <tr><td>Cancel request</td><td><code>AbortController</code></td><td>User navigates away</td></tr>
+            <tr><td>Stream results</td><td><code>async function*</code></td><td>Paginated API</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Common Async Mistakes & Fixes</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>❌ Mistake</th><th>✅ Fix</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td><code>await</code> in <code>forEach</code></td><td>Use <code>for...of</code> or <code>Promise.all(arr.map(...))</code></td><td><code>forEach</code> doesn't await</td></tr>
+            <tr><td>Not checking <code>res.ok</code></td><td><code>if (!res.ok) throw new Error()</code></td><td>fetch doesn't reject on 404/500</td></tr>
+            <tr><td>Sequential when parallel OK</td><td><code>Promise.all([a(), b()])</code></td><td>Independent requests should be parallel</td></tr>
+            <tr><td>Unhandled rejections</td><td>Always <code>.catch()</code> or <code>try/catch</code></td><td>Crashes app in Node.js</td></tr>
+            <tr><td>Forgetting <code>await</code></td><td>Check return type is Promise</td><td>Function returns Promise, not value</td></tr>
+            <tr><td>Memory leaks from listeners</td><td>Use <code>AbortController</code> signal</td><td>Clean up on component unmount</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="handbook-nav">
+      <a href="part4.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Part 4: Object-Oriented JavaScript</div></div></a>
+      <a href="part6.html" class="nav-btn next"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Part 6: DOM & Browser APIs →</div></div><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+  </div>
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
+  <script src="../../../js/main.js"></script>
+  <script>
+    (() => {
+      document.querySelectorAll('.code-block').forEach((block) => { const pre = block.querySelector('.code-body pre'), header = block.querySelector('.code-header'); if (!pre || !header) return; let actions = header.querySelector('.code-actions'); if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); } const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'code-copy-btn'; btn.textContent = 'Copy'; btn.addEventListener('click', async () => { try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; } catch { btn.textContent = 'Failed'; } finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); } }); actions.prepend(btn); });
+      const fill = document.querySelector('.hb-progress-fill'), label = document.querySelector('.hb-progress-label');
+      if (fill && label) { const update = () => { const h = document.documentElement, d = (h.scrollHeight - h.clientHeight) || 1, p = Math.max(0, Math.min(1, h.scrollTop / d)); fill.style.width = (p*100).toFixed(0)+'%'; label.textContent = (p*100).toFixed(0)+'%'; }; document.addEventListener('scroll', update, { passive: true }); update(); }
+    })();
+  </script>
+</body>
+</html>

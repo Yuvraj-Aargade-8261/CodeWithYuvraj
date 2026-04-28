@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Part 4: OOP in JavaScript — JavaScript Programming Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 4: Prototypes, classes, inheritance, encapsulation, iterators, Map/Set in JavaScript.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/handbook.css">
+</head>
+<body class="handbook-wrapper">
+  <nav class="navbar"><div class="container"><a href="../../../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../../../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
+
+  <div class="handbook-page">
+    <div class="hb-topbar"><div class="hb-topbar-inner"><div class="hb-breadcrumbs"><a href="index.html">JavaScript Programming Handbook</a><span class="hb-muted">/</span><span>Part 4</span><span class="hb-muted">·</span><a href="#m4-1">4.1</a> <a href="#m4-2">4.2</a> <a href="#m4-3">4.3</a> <a href="#m4-4">4.4</a> <a href="#m4-5">4.5</a> <a href="#m4-6">4.6</a> <a href="#m4-7">4.7</a></div><div class="hb-progress" aria-label="Reading progress"><div class="hb-progress-track" role="progressbar"><div class="hb-progress-fill"></div></div><div class="hb-progress-label">0%</div></div></div></div>
+
+    <div class="chapter-header" data-chapter-num="04">
+      <div class="chapter-part-label">📖 Part 4 — Object-Oriented JavaScript</div>
+      <h1 class="chapter-title">Object-Oriented <span class="gradient-text">JavaScript</span></h1>
+      <p class="chapter-subtitle">Prototypes, classes, inheritance, encapsulation, Map/Set, iterators — mastering JS's object system.</p>
+      <div class="chapter-meta"><span>📄 Modules 4.1 – 4.7</span><span>⏱️ 70–90 min read</span><span>💻 70+ Examples</span></div>
+    </div>
+
+    <div class="hb-mini-toc"><div class="hb-mini-title">📍 Part 4 Modules</div><div class="hb-mini-links"><a href="#m4-1">4.1 Prototypes</a><a href="#m4-2">4.2 Classes</a><a href="#m4-3">4.3 Inheritance</a><a href="#m4-4">4.4 Encapsulation</a><a href="#m4-5">4.5 this</a><a href="#m4-6">4.6 Map/Set</a><a href="#m4-7">4.7 Iterators</a></div></div>
+
+    <div class="quick-ref">
+      <div class="qr-title">🚀 Advanced Lens — Part 4</div>
+      <p class="explain-en">Enterprise JavaScript architecture depends on object modeling choices: prototype understanding, class boundaries, and `this` semantics. Correct modeling here prevents brittle abstractions in React/Node codebases.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Part 4 ka strong understanding architecture quality decide karta hai. Prototypes, classes aur `this` ki clarity se large JS codebase maintainable banta hai.</div>
+    </div>
+
+    <div class="concept-block">
+      <h3>OOP and object-model checklist (Part 4)</h3>
+      <table>
+        <thead><tr><th>Design point</th><th>Production expectation</th></tr></thead>
+        <tbody>
+          <tr><td>Prototype awareness</td><td>Understand lookup chain to avoid hidden behavior bugs.</td></tr>
+          <tr><td>Class boundaries</td><td>Keep constructors simple and behavior methods cohesive.</td></tr>
+          <tr><td>`this` correctness</td><td>Use arrow vs function intentionally in callbacks and methods.</td></tr>
+          <tr><td>Collections fit</td><td>Choose Map/Set when keys/membership semantics demand it.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- MODULE 4.1 -->
+    <div class="module-section" id="m4-1">
+      <div class="module-header"><div class="module-number">4.1</div><h2 class="module-title">Prototypes — prototype chain, __proto__, Object.create()</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">JavaScript's inheritance model</h3>
+        <p class="explain-en">JS uses <strong>prototypal inheritance</strong>, not classical. Every object has an internal <code>[[Prototype]]</code> link. When you access a property, JS walks up the <strong>prototype chain</strong> until it finds it or hits <code>null</code>. <code>Object.create()</code> creates objects with a specific prototype. <code>Object.getPrototypeOf()</code> inspects the chain.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>JS <strong>prototypal inheritance</strong> use karta hai, classical nahi. Har object ka ek internal <code>[[Prototype]]</code> link hota hai. Property access pe JS <strong>prototype chain</strong> pe upar jaata hai. <code>Object.create()</code> se specific prototype wale objects banate hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — Prototypes</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Every object has a prototype</span>
+<span class="keyword">const</span> obj = { name: <span class="string">"Alice"</span> };
+<span class="type">Object</span>.getPrototypeOf(obj) === <span class="type">Object</span>.prototype; <span class="comment">// true</span>
+
+<span class="comment">// Prototype chain: obj → Object.prototype → null</span>
+obj.toString(); <span class="comment">// Found on Object.prototype!</span>
+obj.hasOwnProperty(<span class="string">"name"</span>); <span class="comment">// true (own property)</span>
+
+<span class="comment">// ✅ Object.create — explicit prototype</span>
+<span class="keyword">const</span> animal = {
+    speak() { <span class="keyword">return</span> <span class="string">`</span><span class="keyword">${</span><span class="keyword">this</span>.name<span class="keyword">}</span><span class="string"> makes a sound`</span>; }
+};
+<span class="keyword">const</span> dog = <span class="type">Object</span>.create(animal);
+dog.name = <span class="string">"Rex"</span>;
+dog.speak(); <span class="comment">// "Rex makes a sound" (found on prototype)</span>
+
+<span class="comment">// Constructor function (pre-class pattern)</span>
+<span class="keyword">function</span> <span class="function">Person</span>(name, age) {
+    <span class="keyword">this</span>.name = name;
+    <span class="keyword">this</span>.age = age;
+}
+<span class="type">Person</span>.prototype.greet = <span class="keyword">function</span>() {
+    <span class="keyword">return</span> <span class="string">`Hi, I'm </span><span class="keyword">${</span><span class="keyword">this</span>.name<span class="keyword">}</span><span class="string">`</span>;
+};
+<span class="keyword">const</span> alice = <span class="keyword">new</span> <span class="type">Person</span>(<span class="string">"Alice"</span>, <span class="number">25</span>);
+alice.greet(); <span class="comment">// "Hi, I'm Alice"</span>
+
+<span class="comment">// Chain: alice → Person.prototype → Object.prototype → null</span>
+alice <span class="keyword">instanceof</span> <span class="type">Person</span>; <span class="comment">// true</span></pre></div>
+        </div>
+        <div class="callout callout-tip"><strong>Modern JS:</strong> Use <code>class</code> syntax (Module 4.2) instead of constructor functions. Classes are syntactic sugar over prototypes but much cleaner.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 4.2 -->
+    <div class="module-section" id="m4-2">
+      <div class="module-header"><div class="module-number">4.2</div><h2 class="module-title">Classes — class syntax, constructor, methods, static, getters/setters</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Modern OOP syntax</h3>
+        <p class="explain-en">ES6 <code>class</code> is <strong>syntactic sugar over prototypes</strong>. <code>constructor()</code> initializes. Methods go on the prototype automatically. <strong>Static</strong> methods belong to the class itself. <strong>Getters/setters</strong> look like properties but run functions. Classes are NOT hoisted.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>ES6 <code>class</code> prototypes ke upar <strong>syntactic sugar</strong> hai. <code>constructor()</code> initialize karta hai. Methods automatically prototype pe jaate hain. <strong>Static</strong> methods class ke hain, instances ke nahi. Classes hoisted nahi hote.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — Classes</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">class</span> <span class="type">User</span> {
+    <span class="comment">// Constructor</span>
+    <span class="function">constructor</span>(name, email) {
+        <span class="keyword">this</span>.name = name;
+        <span class="keyword">this</span>.email = email;
+        <span class="keyword">this</span>.createdAt = <span class="keyword">new</span> <span class="type">Date</span>();
+    }
+
+    <span class="comment">// Instance method (on prototype)</span>
+    <span class="function">greet</span>() {
+        <span class="keyword">return</span> <span class="string">`Hello, I'm </span><span class="keyword">${</span><span class="keyword">this</span>.name<span class="keyword">}</span><span class="string">`</span>;
+    }
+
+    <span class="comment">// Getter — accessed like a property</span>
+    <span class="keyword">get</span> <span class="function">displayName</span>() {
+        <span class="keyword">return</span> <span class="keyword">this</span>.name.toUpperCase();
+    }
+
+    <span class="comment">// Setter — assigned like a property</span>
+    <span class="keyword">set</span> <span class="function">displayName</span>(value) {
+        <span class="keyword">this</span>.name = value.trim();
+    }
+
+    <span class="comment">// Static method — called on class, not instances</span>
+    <span class="keyword">static</span> <span class="function">fromJSON</span>(json) {
+        <span class="keyword">const</span> { name, email } = <span class="type">JSON</span>.parse(json);
+        <span class="keyword">return new</span> <span class="type">User</span>(name, email);
+    }
+
+    <span class="comment">// Static property</span>
+    <span class="keyword">static</span> MAX_USERS = <span class="number">1000</span>;
+}
+
+<span class="keyword">const</span> user = <span class="keyword">new</span> <span class="type">User</span>(<span class="string">"Alice"</span>, <span class="string">"alice@mail.com"</span>);
+user.greet();          <span class="comment">// "Hello, I'm Alice"</span>
+user.displayName;      <span class="comment">// "ALICE" (getter)</span>
+user.displayName = <span class="string">"  Bob  "</span>; <span class="comment">// Setter trims</span>
+<span class="type">User</span>.MAX_USERS;        <span class="comment">// 1000 (static)</span>
+<span class="type">User</span>.fromJSON(<span class="string">'{"name":"Eve","email":"e@m.com"}'</span>);</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 4.3 -->
+    <div class="module-section" id="m4-3">
+      <div class="module-header"><div class="module-number">4.3</div><h2 class="module-title">Inheritance — extends, super, method overriding, instanceof</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Building class hierarchies</h3>
+        <p class="explain-en"><code>extends</code> creates subclasses. <code>super()</code> calls the parent constructor (required in subclass constructors). <code>super.method()</code> calls parent methods. Override methods by redefining them. <code>instanceof</code> checks the prototype chain.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>extends</code> se subclasses banate hain. <code>super()</code> parent constructor call karta hai (subclass me required). Methods ko redefine karke override karo. <code>instanceof</code> prototype chain check karta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — Inheritance</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">class</span> <span class="type">Animal</span> {
+    <span class="function">constructor</span>(name, sound) {
+        <span class="keyword">this</span>.name = name;
+        <span class="keyword">this</span>.sound = sound;
+    }
+    <span class="function">speak</span>() {
+        <span class="keyword">return</span> <span class="string">`</span><span class="keyword">${</span><span class="keyword">this</span>.name<span class="keyword">}</span><span class="string"> says </span><span class="keyword">${</span><span class="keyword">this</span>.sound<span class="keyword">}</span><span class="string">`</span>;
+    }
+}
+
+<span class="keyword">class</span> <span class="type">Dog</span> <span class="keyword">extends</span> <span class="type">Animal</span> {
+    <span class="function">constructor</span>(name, breed) {
+        <span class="keyword">super</span>(name, <span class="string">"Woof"</span>); <span class="comment">// Must call super first!</span>
+        <span class="keyword">this</span>.breed = breed;
+    }
+
+    <span class="comment">// Override parent method</span>
+    <span class="function">speak</span>() {
+        <span class="keyword">return</span> <span class="string">`</span><span class="keyword">${</span><span class="keyword">super</span>.speak()<span class="keyword">}</span><span class="string">! 🐕`</span>; <span class="comment">// Call parent</span>
+    }
+
+    <span class="function">fetch</span>(item) {
+        <span class="keyword">return</span> <span class="string">`</span><span class="keyword">${</span><span class="keyword">this</span>.name<span class="keyword">}</span><span class="string"> fetches </span><span class="keyword">${</span>item<span class="keyword">}</span><span class="string">`</span>;
+    }
+}
+
+<span class="keyword">const</span> rex = <span class="keyword">new</span> <span class="type">Dog</span>(<span class="string">"Rex"</span>, <span class="string">"Labrador"</span>);
+rex.speak();    <span class="comment">// "Rex says Woof! 🐕"</span>
+rex.fetch(<span class="string">"ball"</span>); <span class="comment">// "Rex fetches ball"</span>
+
+rex <span class="keyword">instanceof</span> <span class="type">Dog</span>;    <span class="comment">// true</span>
+rex <span class="keyword">instanceof</span> <span class="type">Animal</span>; <span class="comment">// true</span>
+rex <span class="keyword">instanceof</span> <span class="type">Object</span>; <span class="comment">// true</span>
+
+<span class="comment">// ✅ Practical example: Error hierarchy</span>
+<span class="keyword">class</span> <span class="type">AppError</span> <span class="keyword">extends</span> <span class="type">Error</span> {
+    <span class="function">constructor</span>(message, statusCode) {
+        <span class="keyword">super</span>(message);
+        <span class="keyword">this</span>.statusCode = statusCode;
+        <span class="keyword">this</span>.name = <span class="keyword">this</span>.constructor.name;
+    }
+}
+<span class="keyword">class</span> <span class="type">NotFoundError</span> <span class="keyword">extends</span> <span class="type">AppError</span> {
+    <span class="function">constructor</span>(resource) {
+        <span class="keyword">super</span>(<span class="string">`</span><span class="keyword">${</span>resource<span class="keyword">}</span><span class="string"> not found`</span>, <span class="number">404</span>);
+    }
+}</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 4.4 -->
+    <div class="module-section" id="m4-4">
+      <div class="module-header"><div class="module-number">4.4</div><h2 class="module-title">Encapsulation — private fields (#), WeakRef, FinalizationRegistry</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">True privacy in JavaScript</h3>
+        <p class="explain-en">ES2022 introduced <strong>private fields</strong> with <code>#</code> prefix — truly inaccessible from outside the class. Private methods, getters, and static privates are also supported. <code>WeakRef</code> holds weak references, <code>FinalizationRegistry</code> runs cleanup when objects are GC'd.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>ES2022 me <code>#</code> prefix se <strong>private fields</strong> aaye — class ke bahar bilkul accessible nahi. Private methods, getters aur static privates bhi supported hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — Private Fields</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">class</span> <span class="type">BankAccount</span> {
+    <span class="comment">// Private fields (ES2022)</span>
+    #balance = <span class="number">0</span>;
+    #pin;
+
+    <span class="function">constructor</span>(owner, pin, initial = <span class="number">0</span>) {
+        <span class="keyword">this</span>.owner = owner; <span class="comment">// Public</span>
+        <span class="keyword">this</span>.#pin = pin;
+        <span class="keyword">this</span>.#balance = initial;
+    }
+
+    <span class="comment">// Private method</span>
+    #validatePin(pin) {
+        <span class="keyword">if</span> (pin !== <span class="keyword">this</span>.#pin) <span class="keyword">throw new</span> <span class="type">Error</span>(<span class="string">"Invalid PIN"</span>);
+    }
+
+    deposit(amount) {
+        <span class="keyword">if</span> (amount <= <span class="number">0</span>) <span class="keyword">throw new</span> <span class="type">Error</span>(<span class="string">"Invalid amount"</span>);
+        <span class="keyword">this</span>.#balance += amount;
+        <span class="keyword">return</span> <span class="keyword">this</span>.#balance;
+    }
+
+    withdraw(amount, pin) {
+        <span class="keyword">this</span>.#validatePin(pin);
+        <span class="keyword">if</span> (amount > <span class="keyword">this</span>.#balance) <span class="keyword">throw new</span> <span class="type">Error</span>(<span class="string">"Insufficient"</span>);
+        <span class="keyword">this</span>.#balance -= amount;
+        <span class="keyword">return</span> <span class="keyword">this</span>.#balance;
+    }
+
+    <span class="keyword">get</span> balance() { <span class="keyword">return</span> <span class="keyword">this</span>.#balance; }
+
+    <span class="keyword">static</span> #bankName = <span class="string">"SecureBank"</span>;
+    <span class="keyword">static get</span> bankName() { <span class="keyword">return</span> <span class="type">BankAccount</span>.#bankName; }
+}
+
+<span class="keyword">const</span> acct = <span class="keyword">new</span> <span class="type">BankAccount</span>(<span class="string">"Alice"</span>, <span class="number">1234</span>, <span class="number">1000</span>);
+acct.deposit(<span class="number">500</span>);       <span class="comment">// 1500</span>
+acct.balance;             <span class="comment">// 1500 (getter)</span>
+<span class="comment">// acct.#balance;         // ❌ SyntaxError!</span>
+<span class="comment">// acct.#validatePin();   // ❌ SyntaxError!</span></pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 4.5 -->
+    <div class="module-section" id="m4-5">
+      <div class="module-header"><div class="module-number">4.5</div><h2 class="module-title">The this keyword — binding rules, call/apply/bind, arrow vs regular</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">The most confusing keyword</h3>
+        <p class="explain-en"><code>this</code> depends on <strong>how the function is called</strong>, not where it's defined. Four rules: <strong>1)</strong> Default: <code>window</code>/<code>undefined</code>. <strong>2)</strong> Object method: the object. <strong>3)</strong> <code>new</code>: the new instance. <strong>4)</strong> Explicit: <code>call/apply/bind</code>. Arrow functions have NO own <code>this</code> — they inherit lexically.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>this</code> depend karta hai <strong>function kaise call hua</strong>, kahan likha hai pe nahi. Arrow functions ka apna <code>this</code> nahi hota — parent se inherit karte hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — this Keyword</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Rule 1: Default — window (sloppy) / undefined (strict)</span>
+<span class="keyword">function</span> <span class="function">showThis</span>() { console.log(<span class="keyword">this</span>); }
+showThis(); <span class="comment">// window or undefined</span>
+
+<span class="comment">// Rule 2: Object method — the object</span>
+<span class="keyword">const</span> user = {
+    name: <span class="string">"Alice"</span>,
+    greet() { <span class="keyword">return</span> <span class="keyword">this</span>.name; } <span class="comment">// "Alice"</span>
+};
+
+<span class="comment">// Rule 3: new — the new instance</span>
+<span class="keyword">function</span> <span class="function">Person</span>(name) { <span class="keyword">this</span>.name = name; }
+<span class="keyword">const</span> p = <span class="keyword">new</span> <span class="type">Person</span>(<span class="string">"Bob"</span>); <span class="comment">// this = new object</span>
+
+<span class="comment">// Rule 4: Explicit — call, apply, bind</span>
+<span class="keyword">function</span> <span class="function">greet</span>(greeting) {
+    <span class="keyword">return</span> <span class="string">`</span><span class="keyword">${</span>greeting<span class="keyword">}</span><span class="string">, </span><span class="keyword">${</span><span class="keyword">this</span>.name<span class="keyword">}</span><span class="string">`</span>;
+}
+greet.call({ name: <span class="string">"Alice"</span> }, <span class="string">"Hi"</span>);   <span class="comment">// "Hi, Alice"</span>
+greet.apply({ name: <span class="string">"Bob"</span> }, [<span class="string">"Hey"</span>]); <span class="comment">// "Hey, Bob"</span>
+<span class="keyword">const</span> bound = greet.bind({ name: <span class="string">"Eve"</span> });
+bound(<span class="string">"Hello"</span>); <span class="comment">// "Hello, Eve"</span>
+
+<span class="comment">// ⚠️ Lost this — common bug</span>
+<span class="keyword">const</span> fn = user.greet;
+fn(); <span class="comment">// undefined! (this lost)</span>
+
+<span class="comment">// ✅ Arrow function — inherits this</span>
+<span class="keyword">class</span> <span class="type">Timer</span> {
+    <span class="function">constructor</span>() { <span class="keyword">this</span>.seconds = <span class="number">0</span>; }
+    start() {
+        setInterval(() => { <span class="keyword">this</span>.seconds++; }, <span class="number">1000</span>);
+        <span class="comment">// Arrow inherits this from start()</span>
+    }
+}</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Call style</th><th><code>this</code> is</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td>Plain call</td><td><code>window</code>/undefined</td><td><code>fn()</code></td></tr>
+              <tr><td>Method call</td><td>The object</td><td><code>obj.fn()</code></td></tr>
+              <tr><td><code>new</code></td><td>New instance</td><td><code>new Fn()</code></td></tr>
+              <tr><td><code>call/apply</code></td><td>First argument</td><td><code>fn.call(obj)</code></td></tr>
+              <tr><td><code>bind</code></td><td>Bound object</td><td><code>fn.bind(obj)()</code></td></tr>
+              <tr><td>Arrow</td><td>Lexical (parent)</td><td><code>() => this</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 4.6 -->
+    <div class="module-section" id="m4-6">
+      <div class="module-header"><div class="module-number">4.6</div><h2 class="module-title">Map & Set — Map, Set, WeakMap, WeakSet</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Beyond plain objects</h3>
+        <p class="explain-en"><code>Map</code> stores key-value pairs with <strong>any type as key</strong> (objects, functions). <code>Set</code> stores <strong>unique values</strong>. Both are ordered and iterable. <code>WeakMap</code>/<code>WeakSet</code> hold weak references (keys can be GC'd) — perfect for caching and metadata.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>Map</code> me <strong>koi bhi type key</strong> ho sakta hai (objects bhi). <code>Set</code> me sirf <strong>unique values</strong> hote hain. <code>WeakMap</code>/<code>WeakSet</code> me weak references hote hain — caching ke liye perfect.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — Map & Set</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// ✅ Map — any type as key</span>
+<span class="keyword">const</span> map = <span class="keyword">new</span> <span class="type">Map</span>();
+map.set(<span class="string">"name"</span>, <span class="string">"Alice"</span>);
+map.set(<span class="number">42</span>, <span class="string">"answer"</span>);
+map.set(<span class="keyword">true</span>, <span class="string">"yes"</span>);
+<span class="keyword">const</span> objKey = { id: <span class="number">1</span> };
+map.set(objKey, <span class="string">"user data"</span>);
+
+map.get(<span class="string">"name"</span>);   <span class="comment">// "Alice"</span>
+map.has(<span class="number">42</span>);       <span class="comment">// true</span>
+map.size;          <span class="comment">// 4</span>
+map.delete(<span class="keyword">true</span>);
+
+<span class="comment">// Iterate Map</span>
+<span class="keyword">for</span> (<span class="keyword">const</span> [key, value] <span class="keyword">of</span> map) {
+    console.log(key, value);
+}
+
+<span class="comment">// ✅ Set — unique values only</span>
+<span class="keyword">const</span> set = <span class="keyword">new</span> <span class="type">Set</span>([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">1</span>]);
+<span class="comment">// Set {1, 2, 3} — duplicates removed!</span>
+
+set.add(<span class="number">4</span>);
+set.has(<span class="number">3</span>);    <span class="comment">// true</span>
+set.delete(<span class="number">1</span>);
+set.size;      <span class="comment">// 3</span>
+
+<span class="comment">// Deduplicate arrays</span>
+<span class="keyword">const</span> unique = [...<span class="keyword">new</span> <span class="type">Set</span>([<span class="number">1</span>,<span class="number">2</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">3</span>,<span class="number">3</span>])]; <span class="comment">// [1,2,3]</span>
+
+<span class="comment">// Set operations</span>
+<span class="keyword">const</span> a = <span class="keyword">new</span> <span class="type">Set</span>([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]), b = <span class="keyword">new</span> <span class="type">Set</span>([<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>]);
+<span class="keyword">const</span> union = <span class="keyword">new</span> <span class="type">Set</span>([...a, ...b]); <span class="comment">// {1,2,3,4}</span>
+<span class="keyword">const</span> inter = <span class="keyword">new</span> <span class="type">Set</span>([...a].filter(x => b.has(x))); <span class="comment">// {2,3}</span>
+<span class="keyword">const</span> diff = <span class="keyword">new</span> <span class="type">Set</span>([...a].filter(x => !b.has(x))); <span class="comment">// {1}</span>
+
+<span class="comment">// ✅ WeakMap — keys must be objects, can be GC'd</span>
+<span class="keyword">const</span> cache = <span class="keyword">new</span> <span class="type">WeakMap</span>();
+<span class="keyword">let</span> element = document.querySelector(<span class="string">"#app"</span>);
+cache.set(element, { clicks: <span class="number">0</span> });
+<span class="comment">// When element is removed from DOM, WeakMap entry is GC'd</span></pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 4.7 -->
+    <div class="module-section" id="m4-7">
+      <div class="module-header"><div class="module-number">4.7</div><h2 class="module-title">Iterators & Generators — Symbol.iterator, function*, yield</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Custom iteration protocols</h3>
+        <p class="explain-en">The <strong>iterable protocol</strong> lets any object work with <code>for...of</code>. Implement <code>[Symbol.iterator]()</code> returning <code>{ next() }</code>. <strong>Generators</strong> (<code>function*</code>) produce values lazily with <code>yield</code> — perfect for infinite sequences and async iteration.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Iterable protocol</strong> se koi bhi object <code>for...of</code> ke saath kaam kar sakta hai. <strong>Generators</strong> (<code>function*</code>) lazily values produce karte hain <code>yield</code> se — infinite sequences ke liye perfect.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — Iterators & Generators</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// ✅ Custom iterable</span>
+<span class="keyword">const</span> range = {
+    from: <span class="number">1</span>, to: <span class="number">5</span>,
+    [<span class="type">Symbol</span>.iterator]() {
+        <span class="keyword">let</span> current = <span class="keyword">this</span>.from;
+        <span class="keyword">const</span> last = <span class="keyword">this</span>.to;
+        <span class="keyword">return</span> {
+            next() {
+                <span class="keyword">return</span> current <= last
+                    ? { value: current++, done: <span class="keyword">false</span> }
+                    : { done: <span class="keyword">true</span> };
+            }
+        };
+    }
+};
+<span class="keyword">for</span> (<span class="keyword">const</span> n <span class="keyword">of</span> range) console.log(n); <span class="comment">// 1,2,3,4,5</span>
+[...range]; <span class="comment">// [1,2,3,4,5]</span>
+
+<span class="comment">// ✅ Generator function</span>
+<span class="keyword">function*</span> <span class="function">fibonacci</span>() {
+    <span class="keyword">let</span> a = <span class="number">0</span>, b = <span class="number">1</span>;
+    <span class="keyword">while</span> (<span class="keyword">true</span>) {
+        <span class="keyword">yield</span> a;
+        [a, b] = [b, a + b];
+    }
+}
+
+<span class="keyword">const</span> fib = fibonacci();
+fib.next(); <span class="comment">// { value: 0, done: false }</span>
+fib.next(); <span class="comment">// { value: 1, done: false }</span>
+fib.next(); <span class="comment">// { value: 1, done: false }</span>
+
+<span class="comment">// Take first N from infinite generator</span>
+<span class="keyword">function*</span> <span class="function">take</span>(n, iterable) {
+    <span class="keyword">let</span> i = <span class="number">0</span>;
+    <span class="keyword">for</span> (<span class="keyword">const</span> val <span class="keyword">of</span> iterable) {
+        <span class="keyword">if</span> (i++ >= n) <span class="keyword">return</span>;
+        <span class="keyword">yield</span> val;
+    }
+}
+[...take(<span class="number">10</span>, fibonacci())]; <span class="comment">// [0,1,1,2,3,5,8,13,21,34]</span>
+
+<span class="comment">// yield* — delegate to another generator</span>
+<span class="keyword">function*</span> <span class="function">concat</span>(...iters) {
+    <span class="keyword">for</span> (<span class="keyword">const</span> it <span class="keyword">of</span> iters) <span class="keyword">yield*</span> it;
+}</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="practice-box">
+      <div class="practice-title">✏️ Practice Exercises — Part 4</div>
+      <ol>
+        <li>Create a <code>Vehicle</code> → <code>Car</code> → <code>ElectricCar</code> class hierarchy with <code>extends</code> and <code>super</code>.</li>
+        <li>Implement a <code>BankAccount</code> class with <code>#balance</code> private field and <code>deposit</code>/<code>withdraw</code> with PIN validation.</li>
+        <li>Demonstrate all 4 <code>this</code> binding rules with examples, then fix a "lost this" bug with <code>bind</code>.</li>
+        <li>Use a <code>Map</code> to count word frequency in a string. Use <code>Set</code> to find unique words.</li>
+        <li>Create a custom iterable <code>Range</code> class that works with <code>for...of</code> and spread.</li>
+        <li>Write an infinite <code>fibonacci()</code> generator and a <code>take(n)</code> helper to get first N values.</li>
+        <li>Use <code>WeakMap</code> to cache DOM element metadata that auto-cleans on element removal.</li>
+      </ol>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Classes vs Prototypes Cheat Sheet</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Feature</th><th>Class syntax</th><th>Prototype pattern</th></tr></thead>
+          <tbody>
+            <tr><td>Define constructor</td><td><code>constructor() {}</code></td><td><code>function Foo() {}</code></td></tr>
+            <tr><td>Instance method</td><td><code>method() {}</code> in class body</td><td><code>Foo.prototype.method = function() {}</code></td></tr>
+            <tr><td>Static method</td><td><code>static method() {}</code></td><td><code>Foo.method = function() {}</code></td></tr>
+            <tr><td>Inheritance</td><td><code>class Bar extends Foo</code></td><td><code>Bar.prototype = Object.create(Foo.prototype)</code></td></tr>
+            <tr><td>Call parent</td><td><code>super()</code> / <code>super.method()</code></td><td><code>Foo.call(this)</code> / <code>Foo.prototype.method.call(this)</code></td></tr>
+            <tr><td>Private fields</td><td><code>#field</code> (ES2022)</td><td>Closures (convention: <code>_field</code>)</td></tr>
+            <tr><td>Getter/Setter</td><td><code>get x() {} set x(v) {}</code></td><td><code>Object.defineProperty()</code></td></tr>
+            <tr><td>Hoisted?</td><td>❌ No</td><td>✅ Yes (function declarations)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Map vs Object — When to Use Which</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Feature</th><th>Object</th><th>Map</th></tr></thead>
+          <tbody>
+            <tr><td>Key types</td><td>Strings & Symbols only</td><td>Any type (objects, functions, primitives)</td></tr>
+            <tr><td>Key order</td><td>Not guaranteed (mostly insertion)</td><td>✅ Guaranteed insertion order</td></tr>
+            <tr><td>Size</td><td><code>Object.keys(obj).length</code></td><td><code>map.size</code> (O(1))</td></tr>
+            <tr><td>Iteration</td><td><code>Object.entries()</code></td><td>Direct <code>for...of</code></td></tr>
+            <tr><td>Performance</td><td>Faster for small, static data</td><td>Faster for frequent add/delete</td></tr>
+            <tr><td>Serialization</td><td>✅ <code>JSON.stringify()</code></td><td>❌ Must convert first</td></tr>
+            <tr><td>Prototype pollution</td><td>⚠️ Possible</td><td>✅ Safe</td></tr>
+            <tr><td>Default keys</td><td>Has inherited keys</td><td>No inherited keys</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Set Operations Cheat Sheet</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Operation</th><th>Code</th><th>Result</th></tr></thead>
+          <tbody>
+            <tr><td>Union (A ∪ B)</td><td><code>new Set([...a, ...b])</code></td><td>All elements from both</td></tr>
+            <tr><td>Intersection (A ∩ B)</td><td><code>new Set([...a].filter(x => b.has(x)))</code></td><td>Elements in both</td></tr>
+            <tr><td>Difference (A - B)</td><td><code>new Set([...a].filter(x => !b.has(x)))</code></td><td>Elements only in A</td></tr>
+            <tr><td>Symmetric Diff</td><td><code>new Set([...a].filter(x => !b.has(x)).concat([...b].filter(x => !a.has(x))))</code></td><td>Elements in A or B but not both</td></tr>
+            <tr><td>Is Subset?</td><td><code>[...a].every(x => b.has(x))</code></td><td>true/false</td></tr>
+            <tr><td>Deduplicate</td><td><code>[...new Set(arr)]</code></td><td>Unique values array</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="concept-block">
+      <h3 class="concept-heading">Symbols — unique identifiers</h3>
+      <p class="explain-en"><code>Symbol()</code> creates a <strong>unique, immutable primitive</strong>. Two Symbols are never equal. Used as object keys to avoid name collisions. <strong>Well-known Symbols</strong> customize built-in behavior: <code>Symbol.iterator</code>, <code>Symbol.toPrimitive</code>, <code>Symbol.hasInstance</code>.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>Symbol()</code> ek <strong>unique, immutable primitive</strong> banata hai. Do Symbols kabhi equal nahi hote. Object keys me name collisions avoid karne ke liye use hote hain. <strong>Well-known Symbols</strong> se built-in behavior customize hota hai.</div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">💻 JavaScript — Symbols</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+        <div class="code-body"><pre><span class="comment">// Every Symbol is unique</span>
+<span class="keyword">const</span> id1 = <span class="type">Symbol</span>(<span class="string">"id"</span>);
+<span class="keyword">const</span> id2 = <span class="type">Symbol</span>(<span class="string">"id"</span>);
+id1 === id2; <span class="comment">// false! Always unique</span>
+
+<span class="comment">// Use as object keys — no collisions</span>
+<span class="keyword">const</span> SECRET = <span class="type">Symbol</span>(<span class="string">"secret"</span>);
+<span class="keyword">const</span> user = {
+    name: <span class="string">"Alice"</span>,
+    [SECRET]: <span class="string">"hidden-token-123"</span>
+};
+user[SECRET];           <span class="comment">// "hidden-token-123"</span>
+<span class="type">Object</span>.keys(user);      <span class="comment">// ["name"] — Symbol hidden!</span>
+<span class="type">JSON</span>.stringify(user);   <span class="comment">// '{"name":"Alice"}' — Symbol excluded!</span>
+
+<span class="comment">// Symbol.for() — global registry (shared across realms)</span>
+<span class="keyword">const</span> s1 = <span class="type">Symbol</span>.for(<span class="string">"app.id"</span>);
+<span class="keyword">const</span> s2 = <span class="type">Symbol</span>.for(<span class="string">"app.id"</span>);
+s1 === s2; <span class="comment">// true! Same from registry</span>
+
+<span class="comment">// ✅ Well-known Symbols</span>
+<span class="keyword">class</span> <span class="type">Money</span> {
+    <span class="function">constructor</span>(amount, currency) {
+        <span class="keyword">this</span>.amount = amount;
+        <span class="keyword">this</span>.currency = currency;
+    }
+    [<span class="type">Symbol</span>.toPrimitive](hint) {
+        <span class="keyword">if</span> (hint === <span class="string">"number"</span>) <span class="keyword">return</span> <span class="keyword">this</span>.amount;
+        <span class="keyword">return</span> <span class="string">`</span><span class="keyword">${</span><span class="keyword">this</span>.currency<span class="keyword">}</span><span class="string"> </span><span class="keyword">${</span><span class="keyword">this</span>.amount<span class="keyword">}</span><span class="string">`</span>;
+    }
+}
+<span class="keyword">const</span> price = <span class="keyword">new</span> <span class="type">Money</span>(<span class="number">99</span>, <span class="string">"₹"</span>);
++price;             <span class="comment">// 99 (number hint)</span>
+<span class="string">`Pay: </span><span class="keyword">${</span>price<span class="keyword">}</span><span class="string">`</span>;   <span class="comment">// "Pay: ₹ 99" (string hint)</span></pre></div>
+      </div>
+    </div>
+
+    <div class="concept-block">
+      <h3 class="concept-heading">Proxy & Reflect — meta-programming</h3>
+      <p class="explain-en"><code>Proxy</code> wraps objects and intercepts operations: get, set, delete, has, apply. Used for validation, logging, reactive systems (Vue 3), and auto-population. <code>Reflect</code> provides default behavior inside trap handlers.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>Proxy</code> objects ko wrap karke operations intercept karta hai: get, set, delete. Validation, logging, reactive systems (Vue 3) ke liye use hota hai. <code>Reflect</code> trap handlers me default behavior deta hai.</div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">💻 JavaScript — Proxy</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+        <div class="code-body"><pre><span class="comment">// ✅ Validation proxy</span>
+<span class="keyword">const</span> validator = {
+    set(target, prop, value) {
+        <span class="keyword">if</span> (prop === <span class="string">"age"</span> && (<span class="keyword">typeof</span> value !== <span class="string">"number"</span> || value < <span class="number">0</span>)) {
+            <span class="keyword">throw new</span> <span class="type">TypeError</span>(<span class="string">"Age must be a positive number"</span>);
+        }
+        target[prop] = value;
+        <span class="keyword">return true</span>;
+    },
+    get(target, prop) {
+        <span class="keyword">return</span> prop <span class="keyword">in</span> target ? target[prop] : <span class="string">`Property "</span><span class="keyword">${</span>prop<span class="keyword">}</span><span class="string">" not found`</span>;
+    }
+};
+<span class="keyword">const</span> user = <span class="keyword">new</span> <span class="type">Proxy</span>({}, validator);
+user.name = <span class="string">"Alice"</span>;  <span class="comment">// ✅ Works</span>
+user.age = <span class="number">25</span>;       <span class="comment">// ✅ Works</span>
+<span class="comment">// user.age = -5;     // ❌ TypeError!</span>
+user.missing;         <span class="comment">// 'Property "missing" not found'</span>
+
+<span class="comment">// ✅ Logging proxy — track all property access</span>
+<span class="keyword">function</span> <span class="function">withLogging</span>(obj) {
+    <span class="keyword">return new</span> <span class="type">Proxy</span>(obj, {
+        get(target, prop) {
+            console.log(<span class="string">`GET </span><span class="keyword">${</span>prop<span class="keyword">}</span><span class="string">`</span>);
+            <span class="keyword">return</span> <span class="type">Reflect</span>.get(target, prop);
+        },
+        set(target, prop, value) {
+            console.log(<span class="string">`SET </span><span class="keyword">${</span>prop<span class="keyword">}</span><span class="string"> = </span><span class="keyword">${</span>value<span class="keyword">}</span><span class="string">`</span>);
+            <span class="keyword">return</span> <span class="type">Reflect</span>.set(target, prop, value);
+        }
+    });
+}</pre></div>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 OOP Concepts Quick Reference</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Concept</th><th>JS Implementation</th><th>Purpose</th></tr></thead>
+          <tbody>
+            <tr><td>Encapsulation</td><td><code>#private</code> fields + getters/setters</td><td>Data hiding, controlled access</td></tr>
+            <tr><td>Inheritance</td><td><code>extends</code> + <code>super</code></td><td>Code reuse, hierarchy</td></tr>
+            <tr><td>Polymorphism</td><td>Method overriding</td><td>Same interface, different behavior</td></tr>
+            <tr><td>Abstraction</td><td>Classes + interfaces (via duck typing)</td><td>Hide complexity, expose API</td></tr>
+            <tr><td>Composition</td><td>Object spread, mixins</td><td>Build from smaller pieces (preferred over inheritance)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="handbook-nav">
+      <a href="part3.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Part 3: Arrays & Objects</div></div></a>
+      <a href="part5.html" class="nav-btn next"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Part 5: Asynchronous JavaScript →</div></div><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+  </div>
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
+  <script src="../../../js/main.js"></script>
+  <script>
+    (() => {
+      document.querySelectorAll('.code-block').forEach((block) => { const pre = block.querySelector('.code-body pre'), header = block.querySelector('.code-header'); if (!pre || !header) return; let actions = header.querySelector('.code-actions'); if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); } const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'code-copy-btn'; btn.textContent = 'Copy'; btn.addEventListener('click', async () => { try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; } catch { btn.textContent = 'Failed'; } finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); } }); actions.prepend(btn); });
+      const fill = document.querySelector('.hb-progress-fill'), label = document.querySelector('.hb-progress-label');
+      if (fill && label) { const update = () => { const h = document.documentElement, d = (h.scrollHeight - h.clientHeight) || 1, p = Math.max(0, Math.min(1, h.scrollTop / d)); fill.style.width = (p*100).toFixed(0)+'%'; label.textContent = (p*100).toFixed(0)+'%'; }; document.addEventListener('scroll', update, { passive: true }); update(); }
+    })();
+  </script>
+</body>
+</html>

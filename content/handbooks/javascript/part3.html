@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Part 3: Arrays & Objects — JavaScript Programming Handbook | CodeWithYuvraj</title>
+  <meta name="description" content="Part 3: Arrays, array methods, objects, destructuring, spread/rest, JSON in JavaScript.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/handbook.css">
+</head>
+<body class="handbook-wrapper">
+  <nav class="navbar"><div class="container"><a href="../../../index.html" class="nav-logo">&lt;/&gt; CodeWithYuvraj</a><div class="nav-links"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa-solid fa-sun icon-sun"></i><i class="fa-solid fa-moon icon-moon"></i></button><a href="../../../contact.html" class="nav-cta">Let's Connect →</a><div class="hamburger" id="hamburger"><span></span><span></span><span></span></div></div></nav>
+  <div class="mobile-nav" id="mobileNav"><a href="../../../index.html">Home</a><a href="../../../projects.html">Projects</a><a href="../../../tutorials.html">Tutorials</a><a href="../../../notes.html">Notes</a><a href="../../../blog.html">Blog</a><a href="../../../resources.html">Resources</a><a href="../../../contact.html">Contact</a></div>
+
+  <div class="handbook-page">
+    <div class="hb-topbar"><div class="hb-topbar-inner"><div class="hb-breadcrumbs"><a href="index.html">JavaScript Programming Handbook</a><span class="hb-muted">/</span><span>Part 3</span><span class="hb-muted">·</span><a href="#m3-1">3.1</a> <a href="#m3-2">3.2</a> <a href="#m3-3">3.3</a> <a href="#m3-4">3.4</a> <a href="#m3-5">3.5</a> <a href="#m3-6">3.6</a> <a href="#m3-7">3.7</a></div><div class="hb-progress" aria-label="Reading progress"><div class="hb-progress-track" role="progressbar"><div class="hb-progress-fill"></div></div><div class="hb-progress-label">0%</div></div></div></div>
+
+    <div class="chapter-header" data-chapter-num="03">
+      <div class="chapter-part-label">📖 Part 3 — Arrays & Objects</div>
+      <h1 class="chapter-title">Arrays & <span class="gradient-text">Objects</span></h1>
+      <p class="chapter-subtitle">Array methods, destructuring, spread/rest, JSON — the data manipulation toolkit every JS developer must master.</p>
+      <div class="chapter-meta"><span>📄 Modules 3.1 – 3.7</span><span>⏱️ 70–90 min read</span><span>💻 80+ Examples</span></div>
+    </div>
+
+    <div class="hb-mini-toc"><div class="hb-mini-title">📍 Part 3 Modules</div><div class="hb-mini-links"><a href="#m3-1">3.1 Arrays</a><a href="#m3-2">3.2 Methods</a><a href="#m3-3">3.3 Sorting</a><a href="#m3-4">3.4 Objects</a><a href="#m3-5">3.5 Destructuring</a><a href="#m3-6">3.6 Spread/Rest</a><a href="#m3-7">3.7 JSON</a></div></div>
+
+    <div class="quick-ref">
+      <div class="qr-title">🚀 Advanced Lens — Part 3</div>
+      <p class="explain-en">Most JavaScript business logic is data transformation. Mastering array/object patterns, immutable updates, and safe JSON handling directly improves API integration quality and frontend state consistency.</p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>JavaScript projects me data transform karna daily task hota hai. Arrays/objects ka strong control aur immutable patterns se code robust aur scalable hota hai.</div>
+    </div>
+
+    <div class="concept-block">
+      <h3>Data-handling checklist (Part 3)</h3>
+      <table>
+        <thead><tr><th>Area</th><th>Industry baseline</th></tr></thead>
+        <tbody>
+          <tr><td>Transform pipelines</td><td>Use map/filter/reduce with readable intermediate naming.</td></tr>
+          <tr><td>Immutability</td><td>Prefer spread/object copy patterns over in-place mutation.</td></tr>
+          <tr><td>Schema safety</td><td>Guard object property access and handle missing keys explicitly.</td></tr>
+          <tr><td>JSON boundaries</td><td>Validate parse/stringify boundaries when consuming APIs.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- MODULE 3.1 -->
+    <div class="module-section" id="m3-1">
+      <div class="module-header"><div class="module-number">3.1</div><h2 class="module-title">Arrays — creation, CRUD, spread operator, Array.from(), Array.of()</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">The fundamental data container</h3>
+        <p class="explain-en">Arrays are <strong>ordered, indexed collections</strong> that can hold any type. Create with <code>[]</code> literal (preferred), <code>Array.from()</code> for iterables, or <code>Array.of()</code> for explicit values. Arrays are <strong>objects</strong> — <code>typeof [] === "object"</code>. Check with <code>Array.isArray()</code>.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Arrays <strong>ordered, indexed collections</strong> hain jo kisi bhi type ko hold kar sakte hain. <code>[]</code> literal se banao (best), <code>Array.from()</code> iterables ke liye, <code>Array.of()</code> explicit values ke liye. Arrays objects hain — check karne ke liye <code>Array.isArray()</code> use karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — Arrays</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// ✅ Creating arrays</span>
+<span class="keyword">const</span> fruits = [<span class="string">"apple"</span>, <span class="string">"banana"</span>, <span class="string">"cherry"</span>];
+<span class="keyword">const</span> mixed = [<span class="number">1</span>, <span class="string">"hello"</span>, <span class="keyword">true</span>, <span class="keyword">null</span>, { x: <span class="number">1</span> }];
+<span class="keyword">const</span> empty = [];
+
+<span class="comment">// Array.from() — create from iterables/array-like</span>
+<span class="type">Array</span>.from(<span class="string">"hello"</span>);         <span class="comment">// ["h","e","l","l","o"]</span>
+<span class="type">Array</span>.from({ length: <span class="number">5</span> }, (_, i) => i); <span class="comment">// [0,1,2,3,4]</span>
+<span class="type">Array</span>.from(<span class="keyword">new</span> <span class="type">Set</span>([<span class="number">1</span>,<span class="number">2</span>,<span class="number">2</span>,<span class="number">3</span>])); <span class="comment">// [1,2,3] (dedupe!)</span>
+
+<span class="comment">// Array.of() — explicit values (fixes new Array() quirk)</span>
+<span class="type">Array</span>.of(<span class="number">5</span>);       <span class="comment">// [5] (not 5 empty slots!)</span>
+<span class="type">Array</span>.of(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>);   <span class="comment">// [1,2,3]</span>
+
+<span class="comment">// ✅ CRUD operations</span>
+<span class="keyword">const</span> arr = [<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>];
+
+<span class="comment">// Read</span>
+arr[<span class="number">0</span>];          <span class="comment">// 10</span>
+arr.at(<span class="number">-1</span>);       <span class="comment">// 30 (last element — ES2022)</span>
+arr.length;       <span class="comment">// 3</span>
+
+<span class="comment">// Add</span>
+arr.push(<span class="number">40</span>);      <span class="comment">// [10,20,30,40] — add to end</span>
+arr.unshift(<span class="number">5</span>);    <span class="comment">// [5,10,20,30,40] — add to start</span>
+
+<span class="comment">// Remove</span>
+arr.pop();         <span class="comment">// 40 — remove from end</span>
+arr.shift();       <span class="comment">// 5 — remove from start</span>
+
+<span class="comment">// splice — add/remove at any position</span>
+arr.splice(<span class="number">1</span>, <span class="number">1</span>);           <span class="comment">// Remove 1 item at index 1</span>
+arr.splice(<span class="number">1</span>, <span class="number">0</span>, <span class="number">15</span>, <span class="number">25</span>);  <span class="comment">// Insert 15,25 at index 1</span>
+
+<span class="comment">// ✅ Checking & searching</span>
+<span class="type">Array</span>.isArray([]);         <span class="comment">// true</span>
+<span class="type">Array</span>.isArray(<span class="string">"hello"</span>);    <span class="comment">// false</span>
+fruits.includes(<span class="string">"banana"</span>); <span class="comment">// true</span>
+fruits.indexOf(<span class="string">"cherry"</span>);  <span class="comment">// 2</span>
+
+<span class="comment">// ✅ Spread to clone/merge</span>
+<span class="keyword">const</span> clone = [...fruits];
+<span class="keyword">const</span> merged = [...fruits, ...arr];
+<span class="keyword">const</span> withNew = [...fruits, <span class="string">"dragonfruit"</span>];</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Method</th><th>Mutates?</th><th>Returns</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td><code>.push()</code></td><td>✅ Yes</td><td>New length</td><td>Add to end</td></tr>
+              <tr><td><code>.pop()</code></td><td>✅ Yes</td><td>Removed item</td><td>Remove from end</td></tr>
+              <tr><td><code>.unshift()</code></td><td>✅ Yes</td><td>New length</td><td>Add to start</td></tr>
+              <tr><td><code>.shift()</code></td><td>✅ Yes</td><td>Removed item</td><td>Remove from start</td></tr>
+              <tr><td><code>.splice()</code></td><td>✅ Yes</td><td>Removed items</td><td>Add/remove at index</td></tr>
+              <tr><td><code>[...arr]</code></td><td>❌ No</td><td>New array</td><td>Shallow copy</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 3.2 -->
+    <div class="module-section" id="m3-2">
+      <div class="module-header"><div class="module-number">3.2</div><h2 class="module-title">Array methods — map, filter, reduce, find, findIndex, some, every, flat, flatMap</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">The power methods you'll use daily</h3>
+        <p class="explain-en">These are the <strong>non-mutating</strong> array methods that return new arrays/values. <code>map</code> transforms, <code>filter</code> selects, <code>reduce</code> accumulates. <code>find/findIndex</code> locate elements. <code>some/every</code> test conditions. <code>flat/flatMap</code> handle nested arrays. These replace 90% of manual loops.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Ye <strong>non-mutating</strong> array methods hain jo new arrays/values return karte hain. <code>map</code> transform karta hai, <code>filter</code> select karta hai, <code>reduce</code> accumulate karta hai. Ye methods 90% manual loops replace kar dete hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — Array Methods</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="keyword">const</span> products = [
+    { name: <span class="string">"Laptop"</span>, price: <span class="number">999</span>, inStock: <span class="keyword">true</span> },
+    { name: <span class="string">"Phone"</span>, price: <span class="number">699</span>, inStock: <span class="keyword">true</span> },
+    { name: <span class="string">"Tablet"</span>, price: <span class="number">449</span>, inStock: <span class="keyword">false</span> },
+    { name: <span class="string">"Watch"</span>, price: <span class="number">299</span>, inStock: <span class="keyword">true</span> },
+];
+
+<span class="comment">// map — transform each element</span>
+<span class="keyword">const</span> names = products.map(p => p.name);
+<span class="comment">// ["Laptop", "Phone", "Tablet", "Watch"]</span>
+
+<span class="keyword">const</span> discounted = products.map(p => ({
+    ...p, price: p.price * <span class="number">0.9</span>
+}));
+
+<span class="comment">// filter — keep matching elements</span>
+<span class="keyword">const</span> available = products.filter(p => p.inStock);
+<span class="keyword">const</span> expensive = products.filter(p => p.price > <span class="number">500</span>);
+
+<span class="comment">// find / findIndex — first match</span>
+<span class="keyword">const</span> phone = products.find(p => p.name === <span class="string">"Phone"</span>);
+<span class="keyword">const</span> idx = products.findIndex(p => p.price < <span class="number">300</span>); <span class="comment">// 3</span>
+
+<span class="comment">// findLast / findLastIndex (ES2023)</span>
+<span class="keyword">const</span> lastCheap = products.findLast(p => p.price < <span class="number">500</span>);
+
+<span class="comment">// some / every — boolean tests</span>
+products.some(p => p.price > <span class="number">900</span>);  <span class="comment">// true (at least one)</span>
+products.every(p => p.inStock);     <span class="comment">// false (not all)</span>
+
+<span class="comment">// reduce — accumulate</span>
+<span class="keyword">const</span> total = products.reduce((sum, p) => sum + p.price, <span class="number">0</span>);
+<span class="comment">// 2446</span>
+
+<span class="comment">// reduce to group by category</span>
+<span class="keyword">const</span> grouped = products.reduce((acc, p) => {
+    <span class="keyword">const</span> key = p.inStock ? <span class="string">"available"</span> : <span class="string">"out"</span>;
+    (acc[key] ??= []).push(p);
+    <span class="keyword">return</span> acc;
+}, {});
+
+<span class="comment">// flat — flatten nested arrays</span>
+[<span class="number">1</span>, [<span class="number">2</span>, [<span class="number">3</span>, [<span class="number">4</span>]]]].flat();      <span class="comment">// [1, 2, [3, [4]]] (1 level)</span>
+[<span class="number">1</span>, [<span class="number">2</span>, [<span class="number">3</span>, [<span class="number">4</span>]]]].flat(<span class="type">Infinity</span>); <span class="comment">// [1, 2, 3, 4]</span>
+
+<span class="comment">// flatMap — map + flat(1) in one step</span>
+<span class="keyword">const</span> sentences = [<span class="string">"hello world"</span>, <span class="string">"foo bar"</span>];
+sentences.flatMap(s => s.split(<span class="string">" "</span>));
+<span class="comment">// ["hello", "world", "foo", "bar"]</span>
+
+<span class="comment">// ✅ Chain everything!</span>
+<span class="keyword">const</span> result = products
+    .filter(p => p.inStock)
+    .map(p => ({ ...p, tax: p.price * <span class="number">0.18</span> }))
+    .reduce((sum, p) => sum + p.price + p.tax, <span class="number">0</span>);</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 3.3 -->
+    <div class="module-section" id="m3-3">
+      <div class="module-header"><div class="module-number">3.3</div><h2 class="module-title">Sorting & iteration — sort(), toSorted(), reverse(), entries, at()</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Ordering and traversing</h3>
+        <p class="explain-en"><code>sort()</code> <strong>mutates</strong> the original array and sorts as strings by default (trap!). Always pass a compare function. ES2023 adds <code>toSorted()</code>, <code>toReversed()</code>, <code>toSpliced()</code> — <strong>non-mutating copies</strong>. <code>with(index, value)</code> replaces at index without mutation.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>sort()</code> <strong>original array ko mutate</strong> karta hai aur default me strings jaisa sort karta hai (trap!). Hamesha compare function do. ES2023 me <code>toSorted()</code>, <code>toReversed()</code> aaye — ye <strong>non-mutating copies</strong> banate hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — Sorting & Iteration</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// ⚠️ sort() mutates AND sorts as strings!</span>
+<span class="keyword">const</span> nums = [<span class="number">10</span>, <span class="number">1</span>, <span class="number">21</span>, <span class="number">2</span>];
+nums.sort();  <span class="comment">// [1, 10, 2, 21] ← WRONG! (string comparison)</span>
+
+<span class="comment">// ✅ Always use compare function</span>
+nums.sort((a, b) => a - b); <span class="comment">// [1, 2, 10, 21] ascending</span>
+nums.sort((a, b) => b - a); <span class="comment">// [21, 10, 2, 1] descending</span>
+
+<span class="comment">// Sort strings properly</span>
+<span class="keyword">const</span> words = [<span class="string">"banana"</span>, <span class="string">"Apple"</span>, <span class="string">"cherry"</span>];
+words.sort((a, b) => a.localeCompare(b)); <span class="comment">// Case-insensitive</span>
+
+<span class="comment">// Sort objects by property</span>
+<span class="keyword">const</span> users = [
+    { name: <span class="string">"Charlie"</span>, age: <span class="number">30</span> },
+    { name: <span class="string">"Alice"</span>, age: <span class="number">25</span> },
+    { name: <span class="string">"Bob"</span>, age: <span class="number">35</span> }
+];
+users.sort((a, b) => a.age - b.age); <span class="comment">// By age ascending</span>
+users.sort((a, b) => a.name.localeCompare(b.name)); <span class="comment">// By name</span>
+
+<span class="comment">// ✅ ES2023 — Non-mutating methods</span>
+<span class="keyword">const</span> original = [<span class="number">3</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">1</span>, <span class="number">5</span>];
+<span class="keyword">const</span> sorted = original.toSorted((a, b) => a - b);
+<span class="comment">// sorted: [1, 1, 3, 4, 5] — original unchanged!</span>
+
+<span class="keyword">const</span> reversed = original.toReversed();
+<span class="comment">// reversed: [5, 1, 4, 1, 3] — original unchanged!</span>
+
+<span class="keyword">const</span> spliced = original.toSpliced(<span class="number">1</span>, <span class="number">2</span>, <span class="number">99</span>);
+<span class="comment">// spliced: [3, 99, 1, 5] — original unchanged!</span>
+
+<span class="keyword">const</span> replaced = original.with(<span class="number">2</span>, <span class="number">99</span>);
+<span class="comment">// replaced: [3, 1, 99, 1, 5] — original unchanged!</span>
+
+<span class="comment">// .at() — ES2022 (supports negative indices!)</span>
+original.at(<span class="number">0</span>);   <span class="comment">// 3 (first)</span>
+original.at(<span class="number">-1</span>);  <span class="comment">// 5 (last)</span>
+original.at(<span class="number">-2</span>);  <span class="comment">// 1 (second-to-last)</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Method</th><th>Mutates?</th><th>ES Version</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td><code>.sort()</code></td><td>✅ Yes</td><td>ES1</td><td>Sort in-place</td></tr>
+              <tr><td><code>.reverse()</code></td><td>✅ Yes</td><td>ES1</td><td>Reverse in-place</td></tr>
+              <tr><td><code>.toSorted()</code></td><td>❌ No</td><td>ES2023</td><td>Sort → new array</td></tr>
+              <tr><td><code>.toReversed()</code></td><td>❌ No</td><td>ES2023</td><td>Reverse → new array</td></tr>
+              <tr><td><code>.toSpliced()</code></td><td>❌ No</td><td>ES2023</td><td>Splice → new array</td></tr>
+              <tr><td><code>.with(i, v)</code></td><td>❌ No</td><td>ES2023</td><td>Replace at index</td></tr>
+              <tr><td><code>.at(i)</code></td><td>❌ No</td><td>ES2022</td><td>Access by index (neg ok)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Modern JS:</strong> Always prefer <code>toSorted()</code>/<code>toReversed()</code> over <code>sort()</code>/<code>reverse()</code> when you don't want to mutate. This prevents subtle bugs in React state and functional code.</div>
+      </div>
+    </div>
+
+    <!-- MODULE 3.4 -->
+    <div class="module-section" id="m3-4">
+      <div class="module-header"><div class="module-number">3.4</div><h2 class="module-title">Objects — creation, properties, computed keys, Object methods</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Everything is an object</h3>
+        <p class="explain-en">Objects are <strong>key-value collections</strong>. Keys are strings (or Symbols). Use dot notation for known keys, bracket notation for dynamic keys. <strong>Shorthand properties</strong> and <strong>computed keys</strong> make objects concise. <code>Object.keys()</code>, <code>.values()</code>, <code>.entries()</code> convert to arrays for iteration.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Objects <strong>key-value collections</strong> hain. Keys strings (ya Symbols) hain. Dot notation known keys ke liye, bracket notation dynamic keys ke liye. <code>Object.keys()</code>, <code>.values()</code>, <code>.entries()</code> se arrays me convert karke iterate kar sakte ho.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — Objects</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// Object literal</span>
+<span class="keyword">const</span> user = {
+    name: <span class="string">"Alice"</span>,
+    age: <span class="number">25</span>,
+    <span class="string">"full-name"</span>: <span class="string">"Alice Smith"</span>, <span class="comment">// Needs quotes (has dash)</span>
+    greet() { <span class="keyword">return</span> <span class="string">`Hi, I'm </span><span class="keyword">${</span><span class="keyword">this</span>.name<span class="keyword">}</span><span class="string">`</span>; }
+};
+
+<span class="comment">// Access</span>
+user.name;              <span class="comment">// "Alice" (dot)</span>
+user[<span class="string">"full-name"</span>];      <span class="comment">// "Alice Smith" (bracket)</span>
+<span class="keyword">const</span> key = <span class="string">"age"</span>;
+user[key];              <span class="comment">// 25 (dynamic)</span>
+
+<span class="comment">// ✅ Shorthand properties</span>
+<span class="keyword">const</span> name = <span class="string">"Bob"</span>, age = <span class="number">30</span>;
+<span class="keyword">const</span> bob = { name, age }; <span class="comment">// { name: "Bob", age: 30 }</span>
+
+<span class="comment">// ✅ Computed property keys</span>
+<span class="keyword">const</span> field = <span class="string">"email"</span>;
+<span class="keyword">const</span> obj = { [field]: <span class="string">"a@b.com"</span>, [<span class="string">`</span><span class="keyword">${</span>field<span class="keyword">}</span><span class="string">_verified`</span>]: <span class="keyword">true</span> };
+
+<span class="comment">// ✅ Object methods</span>
+<span class="type">Object</span>.keys(user);      <span class="comment">// ["name", "age", "full-name", "greet"]</span>
+<span class="type">Object</span>.values(user);    <span class="comment">// ["Alice", 25, "Alice Smith", ƒ]</span>
+<span class="type">Object</span>.entries(user);   <span class="comment">// [["name","Alice"], ["age",25], ...]</span>
+<span class="type">Object</span>.fromEntries([[<span class="string">"a"</span>,<span class="number">1</span>],[<span class="string">"b"</span>,<span class="number">2</span>]]); <span class="comment">// {a:1, b:2}</span>
+
+<span class="comment">// Check properties</span>
+<span class="string">"name"</span> <span class="keyword">in</span> user;          <span class="comment">// true</span>
+user.hasOwnProperty(<span class="string">"age"</span>); <span class="comment">// true</span>
+<span class="type">Object</span>.hasOwn(user, <span class="string">"age"</span>); <span class="comment">// true (modern)</span>
+
+<span class="comment">// ✅ Object.assign / spread copy</span>
+<span class="keyword">const</span> copy1 = <span class="type">Object</span>.assign({}, user, { age: <span class="number">26</span> });
+<span class="keyword">const</span> copy2 = { ...user, age: <span class="number">26</span> }; <span class="comment">// Preferred!</span>
+
+<span class="comment">// Freeze & seal</span>
+<span class="keyword">const</span> config = <span class="type">Object</span>.freeze({ port: <span class="number">3000</span> });
+<span class="comment">// config.port = 4000; // ❌ Silently fails (strict: throws)</span>
+
+<span class="comment">// Iterate objects</span>
+<span class="keyword">for</span> (<span class="keyword">const</span> [k, v] <span class="keyword">of</span> <span class="type">Object</span>.entries(user)) {
+    console.log(<span class="string">`</span><span class="keyword">${</span>k<span class="keyword">}</span><span class="string">: </span><span class="keyword">${</span>v<span class="keyword">}</span><span class="string">`</span>);
+}</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 3.5 -->
+    <div class="module-section" id="m3-5">
+      <div class="module-header"><div class="module-number">3.5</div><h2 class="module-title">Destructuring — array, object, nested, defaults, rest pattern</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Unpack values elegantly</h3>
+        <p class="explain-en"><strong>Destructuring</strong> extracts values from arrays/objects into variables. Supports <strong>defaults</strong>, <strong>renaming</strong>, <strong>nesting</strong>, and <strong>rest pattern</strong>. Used everywhere in React (<code>const {useState} = React</code>), API responses, and function parameters.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Destructuring</strong> arrays/objects se values ko variables me extract karta hai. Defaults, renaming, nesting aur rest pattern support karta hai. React me har jagah use hota hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — Destructuring</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// ✅ Array destructuring</span>
+<span class="keyword">const</span> [a, b, c] = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];
+<span class="keyword">const</span> [first, , third] = [<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>]; <span class="comment">// Skip elements</span>
+<span class="keyword">const</span> [x = <span class="number">0</span>, y = <span class="number">0</span>] = [<span class="number">5</span>]; <span class="comment">// Defaults: x=5, y=0</span>
+
+<span class="comment">// Swap variables</span>
+<span class="keyword">let</span> p = <span class="number">1</span>, q = <span class="number">2</span>;
+[p, q] = [q, p]; <span class="comment">// p=2, q=1</span>
+
+<span class="comment">// ✅ Object destructuring</span>
+<span class="keyword">const</span> user = { name: <span class="string">"Alice"</span>, age: <span class="number">25</span>, city: <span class="string">"Mumbai"</span> };
+<span class="keyword">const</span> { name, age } = user;
+<span class="keyword">const</span> { name: userName, age: userAge } = user; <span class="comment">// Rename</span>
+<span class="keyword">const</span> { role = <span class="string">"viewer"</span> } = user; <span class="comment">// Default</span>
+
+<span class="comment">// ✅ Nested destructuring</span>
+<span class="keyword">const</span> data = {
+    user: { name: <span class="string">"Bob"</span>, address: { city: <span class="string">"Delhi"</span>, zip: <span class="string">"110001"</span> } }
+};
+<span class="keyword">const</span> { user: { address: { city } } } = data; <span class="comment">// "Delhi"</span>
+
+<span class="comment">// ✅ Rest pattern</span>
+<span class="keyword">const</span> { name: n, ...rest } = user;
+<span class="comment">// n = "Alice", rest = { age: 25, city: "Mumbai" }</span>
+
+<span class="keyword">const</span> [head, ...tail] = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>];
+<span class="comment">// head = 1, tail = [2, 3, 4]</span>
+
+<span class="comment">// ✅ In function parameters (very common!)</span>
+<span class="keyword">function</span> <span class="function">createUser</span>({ name, age, role = <span class="string">"viewer"</span> }) {
+    <span class="keyword">return</span> { name, age, role };
+}
+createUser({ name: <span class="string">"Charlie"</span>, age: <span class="number">30</span> });
+
+<span class="comment">// Array destructuring in params</span>
+<span class="keyword">const</span> points = [[<span class="number">1</span>,<span class="number">2</span>], [<span class="number">3</span>,<span class="number">4</span>], [<span class="number">5</span>,<span class="number">6</span>]];
+points.forEach(([x, y]) => console.log(x, y));</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 3.6 -->
+    <div class="module-section" id="m3-6">
+      <div class="module-header"><div class="module-number">3.6</div><h2 class="module-title">Spread & Rest — arrays/objects, shallow copy, immutable updates</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Three dots, two meanings</h3>
+        <p class="explain-en"><code>...</code> is <strong>spread</strong> when expanding (arrays/objects into elements) and <strong>rest</strong> when collecting (function params, destructuring). Spread creates <strong>shallow copies</strong> — nested objects are still references! Use <code>structuredClone()</code> for deep copies.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>...</code> <strong>spread</strong> hai jab expand karta hai aur <strong>rest</strong> hai jab collect karta hai. Spread <strong>shallow copies</strong> banata hai — nested objects references hain! Deep copy ke liye <code>structuredClone()</code> use karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — Spread & Rest</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// ✅ Spread in arrays</span>
+<span class="keyword">const</span> a = [<span class="number">1</span>, <span class="number">2</span>], b = [<span class="number">3</span>, <span class="number">4</span>];
+<span class="keyword">const</span> merged = [...a, ...b];          <span class="comment">// [1,2,3,4]</span>
+<span class="keyword">const</span> withItem = [...a, <span class="number">99</span>, ...b];    <span class="comment">// [1,2,99,3,4]</span>
+<span class="keyword">const</span> clone = [...a];                  <span class="comment">// Shallow copy</span>
+
+<span class="comment">// ✅ Spread in objects</span>
+<span class="keyword">const</span> defaults = { theme: <span class="string">"dark"</span>, lang: <span class="string">"en"</span> };
+<span class="keyword">const</span> user = { name: <span class="string">"Alice"</span>, theme: <span class="string">"light"</span> };
+<span class="keyword">const</span> config = { ...defaults, ...user };
+<span class="comment">// { theme: "light", lang: "en", name: "Alice" }</span>
+<span class="comment">// Later spread wins! (theme overridden)</span>
+
+<span class="comment">// Immutable update pattern (React standard)</span>
+<span class="keyword">const</span> state = { count: <span class="number">0</span>, items: [<span class="string">"a"</span>] };
+<span class="keyword">const</span> next = { ...state, count: state.count + <span class="number">1</span> };
+<span class="keyword">const</span> withItem2 = { ...state, items: [...state.items, <span class="string">"b"</span>] };
+
+<span class="comment">// ⚠️ Shallow copy trap</span>
+<span class="keyword">const</span> original = { user: { name: <span class="string">"Alice"</span> } };
+<span class="keyword">const</span> shallow = { ...original };
+shallow.user.name = <span class="string">"Bob"</span>; <span class="comment">// ⚠️ Also changes original!</span>
+
+<span class="comment">// ✅ Deep copy — structuredClone (modern)</span>
+<span class="keyword">const</span> deep = structuredClone(original);
+deep.user.name = <span class="string">"Charlie"</span>; <span class="comment">// ✅ Original unchanged</span>
+
+<span class="comment">// ✅ Rest in functions</span>
+<span class="keyword">function</span> <span class="function">log</span>(level, ...messages) {
+    console.log(<span class="string">`[</span><span class="keyword">${</span>level<span class="keyword">}</span><span class="string">]`</span>, ...messages);
+}
+log(<span class="string">"INFO"</span>, <span class="string">"Server"</span>, <span class="string">"started"</span>, <span class="string">"on port"</span>, <span class="number">3000</span>);</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 3.7 -->
+    <div class="module-section" id="m3-7">
+      <div class="module-header"><div class="module-number">3.7</div><h2 class="module-title">JSON — parse, stringify, structuredClone, reviver/replacer</h2></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">The universal data format</h3>
+        <p class="explain-en"><strong>JSON</strong> (JavaScript Object Notation) is the standard for API data exchange. <code>JSON.parse()</code> converts string → object. <code>JSON.stringify()</code> converts object → string. <strong>reviver</strong> and <strong>replacer</strong> functions customize conversion. <code>structuredClone()</code> is the modern deep-clone solution.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>JSON</strong> API data exchange ka standard hai. <code>JSON.parse()</code> string → object convert karta hai. <code>JSON.stringify()</code> object → string convert karta hai. <code>structuredClone()</code> modern deep-clone solution hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JavaScript — JSON</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">// JSON.parse — string → object</span>
+<span class="keyword">const</span> json = <span class="string">'{"name":"Alice","age":25}'</span>;
+<span class="keyword">const</span> user = <span class="type">JSON</span>.parse(json);
+
+<span class="comment">// JSON.stringify — object → string</span>
+<span class="keyword">const</span> str = <span class="type">JSON</span>.stringify(user);
+<span class="keyword">const</span> pretty = <span class="type">JSON</span>.stringify(user, <span class="keyword">null</span>, <span class="number">2</span>); <span class="comment">// Formatted</span>
+
+<span class="comment">// Replacer — filter/transform during stringify</span>
+<span class="type">JSON</span>.stringify(user, [<span class="string">"name"</span>]); <span class="comment">// '{"name":"Alice"}' (only name)</span>
+<span class="type">JSON</span>.stringify(user, (key, val) =>
+    key === <span class="string">"age"</span> ? <span class="keyword">undefined</span> : val
+); <span class="comment">// Exclude age</span>
+
+<span class="comment">// Reviver — transform during parse</span>
+<span class="keyword">const</span> data = <span class="string">'{"date":"2024-01-15"}'</span>;
+<span class="type">JSON</span>.parse(data, (key, val) =>
+    key === <span class="string">"date"</span> ? <span class="keyword">new</span> <span class="type">Date</span>(val) : val
+);
+
+<span class="comment">// ⚠️ JSON limitations</span>
+<span class="comment">// Cannot serialize: functions, undefined, Symbol, Map, Set, Date</span>
+<span class="type">JSON</span>.stringify({ fn: () => {} }); <span class="comment">// '{}' (fn dropped!)</span>
+<span class="type">JSON</span>.stringify({ d: <span class="keyword">new</span> <span class="type">Date</span>() }); <span class="comment">// Date → string</span>
+
+<span class="comment">// ✅ Deep clone methods</span>
+<span class="comment">// 1. structuredClone (best — handles Map, Set, Date)</span>
+<span class="keyword">const</span> deep = structuredClone({ nested: { a: <span class="number">1</span> } });
+
+<span class="comment">// 2. JSON trick (old — loses functions, Date, etc.)</span>
+<span class="keyword">const</span> jsonClone = <span class="type">JSON</span>.parse(<span class="type">JSON</span>.stringify(obj));
+
+<span class="comment">// ✅ API data handling pattern</span>
+<span class="keyword">async function</span> <span class="function">fetchUsers</span>() {
+    <span class="keyword">const</span> res = <span class="keyword">await</span> fetch(<span class="string">"/api/users"</span>);
+    <span class="keyword">const</span> data = <span class="keyword">await</span> res.json(); <span class="comment">// Auto JSON.parse</span>
+    <span class="keyword">return</span> data;
+}</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Method</th><th>Direction</th><th>Use case</th></tr></thead>
+            <tbody>
+              <tr><td><code>JSON.parse(str)</code></td><td>String → Object</td><td>API response, localStorage</td></tr>
+              <tr><td><code>JSON.stringify(obj)</code></td><td>Object → String</td><td>Send to API, localStorage</td></tr>
+              <tr><td><code>JSON.stringify(obj, null, 2)</code></td><td>Object → Pretty string</td><td>Debugging, logging</td></tr>
+              <tr><td><code>structuredClone(obj)</code></td><td>Object → Deep copy</td><td>Immutable state</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Array Methods Cheat Sheet (Mutating vs Non-Mutating)</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Mutating ⚠️</th><th>Non-Mutating ✅</th></tr></thead>
+          <tbody>
+            <tr><td><code>push/pop/shift/unshift</code></td><td><code>map, filter, reduce</code></td></tr>
+            <tr><td><code>splice</code></td><td><code>toSpliced</code> (ES2023)</td></tr>
+            <tr><td><code>sort</code></td><td><code>toSorted</code> (ES2023)</td></tr>
+            <tr><td><code>reverse</code></td><td><code>toReversed</code> (ES2023)</td></tr>
+            <tr><td><code>fill</code></td><td><code>slice, concat</code></td></tr>
+            <tr><td><code>copyWithin</code></td><td><code>flat, flatMap</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="quick-ref">
+      <div class="qr-title">📋 Object Methods Cheat Sheet</div>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Method</th><th>Returns</th><th>Use case</th></tr></thead>
+          <tbody>
+            <tr><td><code>Object.keys(obj)</code></td><td>Array of keys</td><td>Iterate properties</td></tr>
+            <tr><td><code>Object.values(obj)</code></td><td>Array of values</td><td>Extract values</td></tr>
+            <tr><td><code>Object.entries(obj)</code></td><td>Array of [k,v]</td><td>for...of iteration</td></tr>
+            <tr><td><code>Object.fromEntries()</code></td><td>Object</td><td>Entries → object</td></tr>
+            <tr><td><code>Object.assign()</code></td><td>Target object</td><td>Merge/copy</td></tr>
+            <tr><td><code>Object.freeze()</code></td><td>Frozen object</td><td>Immutable config</td></tr>
+            <tr><td><code>Object.hasOwn()</code></td><td>boolean</td><td>Check own property</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="practice-box">
+      <div class="practice-title">✏️ Practice Exercises — Part 3</div>
+      <ol>
+        <li>Create an array of 10 products. Use <code>filter</code> → <code>map</code> → <code>reduce</code> to get total discounted price of in-stock items.</li>
+        <li>Use <code>toSorted()</code> to sort products by price without mutating, then verify the original array is unchanged.</li>
+        <li>Destructure a nested API response: <code>{ data: { users: [{ name, address: { city } }] } }</code>.</li>
+        <li>Write a function that merges two config objects using spread, with the second overriding the first.</li>
+        <li>Demonstrate the shallow copy trap: mutate a nested property in a spread copy and show the original changes.</li>
+        <li>Use <code>Object.entries()</code> + <code>reduce</code> to invert an object's keys and values.</li>
+        <li>Parse a JSON string with a reviver that converts date strings to <code>Date</code> objects, then stringify with pretty formatting.</li>
+      </ol>
+    </div>
+
+    <div class="handbook-nav">
+      <a href="part2.html" class="nav-btn prev"><i class="fa-solid fa-arrow-left"></i><div><div class="nav-btn-label">Previous</div><div class="nav-btn-title">Part 2: Control Flow & Functions</div></div></a>
+      <a href="part4.html" class="nav-btn next"><div><div class="nav-btn-label">Next</div><div class="nav-btn-title">Part 4: Object-Oriented JavaScript →</div></div><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+
+  </div>
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2026 Code With Yuvraj. Made with ❤️ by Yuvraj Aargade | All rights reserved.</p></div></div></footer>
+  <script src="../../../js/main.js"></script>
+  <script>
+    (() => {
+      document.querySelectorAll('.code-block').forEach((block) => { const pre = block.querySelector('.code-body pre'), header = block.querySelector('.code-header'); if (!pre || !header) return; let actions = header.querySelector('.code-actions'); if (!actions) { actions = document.createElement('div'); actions.className = 'code-actions'; header.appendChild(actions); } const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'code-copy-btn'; btn.textContent = 'Copy'; btn.addEventListener('click', async () => { try { await navigator.clipboard.writeText(pre.innerText.replace(/\u00A0/g, ' ')); btn.textContent = 'Copied'; } catch { btn.textContent = 'Failed'; } finally { setTimeout(() => (btn.textContent = 'Copy'), 1200); } }); actions.prepend(btn); });
+      const fill = document.querySelector('.hb-progress-fill'), label = document.querySelector('.hb-progress-label');
+      if (fill && label) { const update = () => { const h = document.documentElement, d = (h.scrollHeight - h.clientHeight) || 1, p = Math.max(0, Math.min(1, h.scrollTop / d)); fill.style.width = (p*100).toFixed(0)+'%'; label.textContent = (p*100).toFixed(0)+'%'; }; document.addEventListener('scroll', update, { passive: true }); update(); }
+    })();
+  </script>
+</body>
+</html>
