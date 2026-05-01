@@ -31,10 +31,10 @@
       <div class="chapter-part-label">📖 Part 4 — Arrays, Strings & Pointers</div>
       <h1 class="chapter-title">The <span class="gradient-text">Power of C</span></h1>
       <p class="chapter-subtitle">Pointers are what make C powerful — and dangerous. Master them and you master C itself.</p>
-      <div class="chapter-meta"><span>📄 Modules 4.1 – 4.7</span><span>⏱️ 100–150 min read</span><span>💻 65+ Examples</span></div>
+      <div class="chapter-meta"><span>📄 Modules 4.1 – 4.7</span><span>⏱️ 150–200 min read</span><span>💻 90+ Examples</span><span>📊 12+ Diagrams</span></div>
     </div>
 
-    <div class="callout callout-tip"><strong>How to study Part 4:</strong> Draw memory diagrams on paper for every pointer example. Visualize the addresses. Use <code>printf("%p", &amp;var)</code> to see real addresses. This part separates beginners from professionals.</div>
+    <div class="callout callout-tip"><strong>How to study Part 4:</strong> Draw memory diagrams on paper for every pointer example. Visualize the addresses. Use <code>printf("%p", (void *)&amp;var)</code> to see real addresses. Run with <code>-fsanitize=address</code> to catch every bounds error. This part separates beginners from professionals — take it slow, understand every diagram.</div>
 
     <div class="hb-mini-toc">
       <div class="hb-mini-title">📍 Part 4 Modules</div>
@@ -51,21 +51,30 @@
 
     <div class="quick-ref">
       <div class="qr-title">🚀 Advanced Lens — Part 4</div>
-      <p class="explain-en">Pointers are the bridge between C code and hardware. Understanding memory addresses, pointer arithmetic, and how arrays decay to pointers is what makes you a systems programmer. Every OS, driver, and embedded system relies on this knowledge.</p>
-      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Pointers C code aur hardware ke beech ka bridge hain. Memory addresses, pointer arithmetic, aur array-to-pointer decay samajhna systems programmer banne ke liye zaroori hai.</div>
+      <p class="explain-en">
+        Pointers are the bridge between C code and hardware. Understanding <strong>memory addresses</strong>,
+        <strong>pointer arithmetic</strong> (which operates in units of the pointed-to type's size, not bytes),
+        and how <strong>arrays decay to pointers</strong> is what makes you a systems programmer.
+        Every OS kernel, device driver, network stack, and embedded firmware relies on this knowledge.
+        At the machine level, a pointer is just an integer — the CPU's <strong>virtual address</strong> — but
+        C's type system gives it structure and safety rules that you must understand deeply.
+      </p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Pointers C code aur hardware ke beech ka bridge hain. Memory addresses, pointer arithmetic (jo pointed-to type ki size me operate karta hai, bytes me nahi), aur array-to-pointer decay samajhna systems programmer banne ke liye zaroori hai. Machine level pe pointer sirf ek integer hai — CPU ka virtual address — lekin C ka type system use structure aur safety rules deta hai jo deeply samajhne chahiye.</div>
     </div>
 
     <div class="concept-block">
-      <h3>Pointers and memory checklist (Part 4)</h3>
-      <table>
-        <thead><tr><th>Risk area</th><th>Safe C practice</th></tr></thead>
+      <h3>Pointers and memory safety checklist (Part 4)</h3>
+      <div class="hb-table-wrap"><table class="hb-table">
+        <thead><tr><th>Risk area</th><th>Safe C practice</th><th>What goes wrong</th></tr></thead>
         <tbody>
-          <tr><td>Pointer validity</td><td>Initialize pointers and check NULL before dereference.</td></tr>
-          <tr><td>Bounds safety</td><td>Track array lengths explicitly and avoid out-of-range access.</td></tr>
-          <tr><td>Function pointers</td><td>Use clear typedefs for readability and signature safety.</td></tr>
-          <tr><td>Debugability</td><td>Verify addresses/offsets while testing critical pointer logic.</td></tr>
+          <tr><td>Uninitialized pointer</td><td>Always initialize: <code>int *p = NULL;</code></td><td>Dangling pointer → reads garbage → crash or security hole</td></tr>
+          <tr><td>NULL dereference</td><td>Check <code>if (ptr != NULL)</code> before <code>*ptr</code></td><td>Segmentation fault (SIGSEGV)</td></tr>
+          <tr><td>Out-of-bounds access</td><td>Track array length, validate indices</td><td>Buffer overflow → memory corruption → exploits (CVE-level)</td></tr>
+          <tr><td>Use after free</td><td>Set pointer to NULL after <code>free()</code></td><td>Reads freed memory → unpredictable behavior</td></tr>
+          <tr><td>Function pointer type</td><td>Use <code>typedef</code> for readability and signature safety</td><td>Wrong signature → stack corruption → crash</td></tr>
+          <tr><td>String safety</td><td>Use <code>strncpy</code>/<code>snprintf</code> with size limits</td><td>Buffer overflow → #1 source of security vulnerabilities</td></tr>
         </tbody>
-      </table>
+      </table></div>
     </div>
 
     <!-- MODULE 4.1 -->
@@ -188,14 +197,20 @@ arr[<span class="number">0</span>] = <span class="string">'J'</span>;           
 
     <!-- MODULE 4.3 -->
     <div class="module-section" id="m4-3">
-      <div class="module-header"><div class="module-number">4.3</div><h2 class="module-title">Pointer Fundamentals — Address-of, dereference, pointer types, NULL</h2></div>
+      <div class="module-header"><div class="module-number">4.3</div><h2 class="module-title">Pointer Fundamentals — Address-of, dereference, pointer types, NULL, void*, const variants</h2></div>
 
       <div class="concept-block">
-        <h3 class="concept-heading">What is a pointer?</h3>
-        <p class="explain-en">A pointer is a variable that <strong>stores a memory address</strong>. The <code>&amp;</code> operator gets the address of a variable. The <code>*</code> operator <strong>dereferences</strong> (accesses the value at that address). Pointers are the foundation of dynamic memory, data structures, and systems programming.</p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Pointer ek variable hai jo memory address store karta hai. <code>&amp;</code> operator variable ka address deta hai. <code>*</code> operator dereference karta hai (us address ki value access karta hai). Pointers dynamic memory, data structures, aur systems programming ki foundation hain.</div>
+        <h3 class="concept-heading">What is a pointer? — The hardware perspective</h3>
+        <p class="explain-en">
+          A pointer is a variable that <strong>stores a memory address</strong>. On a 64-bit system, every pointer is
+          <strong>8 bytes</strong> (holds a 64-bit virtual address). On 32-bit systems, it's <strong>4 bytes</strong>.
+          The <code>&amp;</code> operator gets the address of a variable. The <code>*</code> operator <strong>dereferences</strong>
+          (follows the address to access the value). The pointer's <strong>type</strong> determines how many bytes to
+          read/write when dereferencing and how pointer arithmetic behaves.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Pointer ek variable hai jo memory address store karta hai. 64-bit system pe har pointer 8 bytes hai (64-bit virtual address). <code>&amp;</code> operator variable ka address deta hai. <code>*</code> operator dereference karta hai (address follow karke value access karta hai). Pointer ka type decide karta hai dereference pe kitne bytes read/write hone hain aur pointer arithmetic kaise behave karegi.</div>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">💻 C — Pointer basics</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-header"><span class="code-lang">💻 C — Pointer basics with address visualization</span><div class="code-dots"><span></span><span></span><span></span></div></div>
           <div class="code-body"><pre><span class="type">int</span> x = <span class="number">42</span>;
 <span class="type">int</span> *ptr = &amp;x;    <span class="comment">/* ptr stores the ADDRESS of x */</span>
 
@@ -203,10 +218,17 @@ arr[<span class="number">0</span>] = <span class="string">'J'</span>;           
 <span class="function">printf</span>(<span class="string">"Address of x:  %p\n"</span>, (<span class="type">void</span>*)&amp;x); <span class="comment">/* 0x7ffd... */</span>
 <span class="function">printf</span>(<span class="string">"Value of ptr:  %p\n"</span>, (<span class="type">void</span>*)ptr); <span class="comment">/* Same address */</span>
 <span class="function">printf</span>(<span class="string">"Deref *ptr:    %d\n"</span>, *ptr);      <span class="comment">/* 42 */</span>
+<span class="function">printf</span>(<span class="string">"Size of ptr:   %zu\n"</span>, <span class="keyword">sizeof</span>(ptr)); <span class="comment">/* 8 on 64-bit, 4 on 32-bit */</span>
 
 <span class="comment">/* Modify value through pointer */</span>
 *ptr = <span class="number">100</span>;
-<span class="function">printf</span>(<span class="string">"x is now:      %d\n"</span>, x);   <span class="comment">/* 100! */</span></pre></div>
+<span class="function">printf</span>(<span class="string">"x is now:      %d\n"</span>, x);   <span class="comment">/* 100! */</span>
+
+<span class="comment">/* ═══ Pointer type matters for dereference ═══ */</span>
+<span class="type">char</span> *cp;    <span class="comment">/* Reads 1 byte  when dereferenced */</span>
+<span class="type">int</span> *ip;     <span class="comment">/* Reads 4 bytes when dereferenced */</span>
+<span class="type">double</span> *dp;  <span class="comment">/* Reads 8 bytes when dereferenced */</span>
+<span class="comment">/* ALL three are 8 bytes (on 64-bit) — only the TYPE differs */</span></pre></div>
         </div>
         <div class="diagram-box">
           <div class="diagram-title">📐 Pointer Memory Model</div>
@@ -219,29 +241,84 @@ arr[<span class="number">0</span>] = <span class="string">'J'</span>;           
       </div>
 
       <div class="concept-block">
-        <h3 class="concept-heading">Pointer arithmetic</h3>
-        <p class="explain-en">Adding 1 to a pointer moves it by <code>sizeof(type)</code> bytes, not 1 byte. This is how array traversal works with pointers. <code>ptr + 1</code> on an <code>int*</code> moves <strong>4 bytes</strong> forward.</p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Pointer me 1 add karne se <code>sizeof(type)</code> bytes aage jaata hai, 1 byte nahi. <code>int*</code> pe <code>ptr + 1</code> = 4 bytes aage. Isi se arrays pe pointers kaam karte hain.</div>
+        <h3 class="concept-heading">void* — the generic pointer</h3>
+        <p class="explain-en">
+          <code>void *</code> can point to <strong>any type</strong>. It's C's way of doing "generic" programming.
+          You <strong>cannot dereference</strong> a <code>void *</code> directly — you must cast it first.
+          <code>malloc()</code> returns <code>void *</code>, <code>qsort()</code> callbacks receive <code>void *</code>.
+          This is the foundation of type-generic C APIs.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>void *</code> kisi bhi type ko point kar sakta hai. Ye C ka "generic" programming ka tarika hai. Directly dereference nahi kar sakte — pehle cast karna padta hai. <code>malloc()</code> <code>void *</code> return karta hai, <code>qsort()</code> callbacks <code>void *</code> receive karte hain.</div>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">💻 C — Pointer arithmetic</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-header"><span class="code-lang">💻 C — void* generic pointer</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="type">int</span> x = <span class="number">42</span>;
+<span class="type">double</span> y = <span class="number">3.14</span>;
+
+<span class="type">void</span> *generic = &amp;x;    <span class="comment">/* Can point to int */</span>
+generic = &amp;y;           <span class="comment">/* Can also point to double */</span>
+
+<span class="comment">/* ❌ Cannot dereference directly */</span>
+<span class="comment">/* printf("%d", *generic);  ← ERROR: void* can't be dereferenced */</span>
+
+<span class="comment">/* ✅ Cast first, then dereference */</span>
+<span class="function">printf</span>(<span class="string">"%f\n"</span>, *(<span class="type">double</span> *)generic);  <span class="comment">/* 3.140000 */</span>
+
+<span class="comment">/* ═══ Generic swap using void* ═══ */</span>
+<span class="type">void</span> <span class="function">generic_swap</span>(<span class="type">void</span> *a, <span class="type">void</span> *b, <span class="type">size_t</span> size) {
+    <span class="type">char</span> temp[size];  <span class="comment">/* VLA — C99 */</span>
+    <span class="function">memcpy</span>(temp, a, size);
+    <span class="function">memcpy</span>(a, b, size);
+    <span class="function">memcpy</span>(b, temp, size);
+}</pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">const with pointers — three different meanings</h3>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Declaration</th><th>Read as</th><th>Can change pointer?</th><th>Can change data?</th><th>Use case</th></tr></thead>
+            <tbody>
+              <tr><td><code>const int *p</code></td><td>Pointer to const int</td><td>✅ Yes</td><td>❌ No</td><td>Read-only access to data</td></tr>
+              <tr><td><code>int *const p</code></td><td>Const pointer to int</td><td>❌ No</td><td>✅ Yes</td><td>Fixed destination, mutable data</td></tr>
+              <tr><td><code>const int *const p</code></td><td>Const pointer to const int</td><td>❌ No</td><td>❌ No</td><td>Fully immutable reference</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Reading rule:</strong> Read the declaration <strong>right to left</strong>. <code>const int *p</code> = "p is a pointer to int that is const." <code>int *const p</code> = "p is a const pointer to int."</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Pointer arithmetic — the key insight</h3>
+        <p class="explain-en">
+          Adding 1 to a pointer moves it by <code>sizeof(type)</code> bytes, not 1 byte. This is how array traversal works with pointers.
+          <code>ptr + 1</code> on an <code>int*</code> moves <strong>4 bytes</strong> forward; on a <code>double*</code>, <strong>8 bytes</strong>.
+          Pointer subtraction gives the <strong>distance in elements</strong> (not bytes). This is why the type matters.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Pointer me 1 add karne se <code>sizeof(type)</code> bytes aage jaata hai, 1 byte nahi. <code>int*</code> pe <code>ptr + 1</code> = 4 bytes aage; <code>double*</code> pe 8 bytes. Pointer subtraction elements me distance deta hai (bytes me nahi). Isliye type matter karta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Pointer arithmetic with address proof</span><div class="code-dots"><span></span><span></span><span></span></div></div>
           <div class="code-body"><pre><span class="type">int</span> arr[] = {<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>, <span class="number">50</span>};
 <span class="type">int</span> *p = arr;    <span class="comment">/* Points to arr[0] */</span>
 
 <span class="function">printf</span>(<span class="string">"%d\n"</span>, *p);       <span class="comment">/* 10  (arr[0]) */</span>
-<span class="function">printf</span>(<span class="string">"%d\n"</span>, *(p + <span class="number">1</span>)); <span class="comment">/* 20  (arr[1]) */</span>
-<span class="function">printf</span>(<span class="string">"%d\n"</span>, *(p + <span class="number">4</span>)); <span class="comment">/* 50  (arr[4]) */</span>
+<span class="function">printf</span>(<span class="string">"%d\n"</span>, *(p + <span class="number">1</span>)); <span class="comment">/* 20  (arr[1]) — moved 4 bytes */</span>
+<span class="function">printf</span>(<span class="string">"%d\n"</span>, *(p + <span class="number">4</span>)); <span class="comment">/* 50  (arr[4]) — moved 16 bytes */</span>
 
-<span class="comment">/* Traverse array with pointer */</span>
+<span class="comment">/* Address proof: */</span>
+<span class="function">printf</span>(<span class="string">"p:     %p\n"</span>, (<span class="type">void</span>*)p);       <span class="comment">/* 0x100 */</span>
+<span class="function">printf</span>(<span class="string">"p + 1: %p\n"</span>, (<span class="type">void</span>*)(p + <span class="number">1</span>)); <span class="comment">/* 0x104 (+4 bytes for int) */</span>
+<span class="function">printf</span>(<span class="string">"p + 2: %p\n"</span>, (<span class="type">void</span>*)(p + <span class="number">2</span>)); <span class="comment">/* 0x108 (+8 bytes) */</span>
+
+<span class="comment">/* Traverse array with pointer — idiomatic C */</span>
 <span class="keyword">for</span> (<span class="type">int</span> *q = arr; q &lt; arr + <span class="number">5</span>; q++) {
     <span class="function">printf</span>(<span class="string">"%d "</span>, *q);  <span class="comment">/* 10 20 30 40 50 */</span>
 }
 
 <span class="comment">/* Pointer subtraction = distance in elements */</span>
-<span class="type">int</span> *start = &amp;arr[<span class="number">0</span>];
-<span class="type">int</span> *end = &amp;arr[<span class="number">4</span>];
-<span class="function">printf</span>(<span class="string">"Distance: %td\n"</span>, end - start);  <span class="comment">/* 4 */</span></pre></div>
+<span class="type">ptrdiff_t</span> dist = &amp;arr[<span class="number">4</span>] - &amp;arr[<span class="number">0</span>];  <span class="comment">/* 4 (elements, not bytes!) */</span></pre></div>
         </div>
-        <div class="callout callout-warning"><strong>NULL pointer:</strong> Always initialize pointers to <code>NULL</code> if not assigning immediately. Dereferencing <code>NULL</code> crashes your program (segfault). Always check: <code>if (ptr != NULL)</code> before using.</div>
+        <div class="callout callout-warning"><strong>NULL pointer:</strong> Always initialize pointers to <code>NULL</code> if not assigning immediately. Dereferencing <code>NULL</code> crashes your program (segfault). Always check: <code>if (ptr != NULL)</code> before using. Use <code>-fsanitize=address</code> to catch NULL dereferences automatically during testing.</div>
       </div>
     </div>
 
@@ -419,72 +496,135 @@ matrix[<span class="number">1</span>][<span class="number">2</span>] = <span cla
 
     <!-- MODULE 4.7 -->
     <div class="module-section" id="m4-7">
-      <div class="module-header"><div class="module-number">4.7</div><h2 class="module-title">Common Pointer Pitfalls — Dangling, wild, memory leaks, buffer overflow</h2></div>
+      <div class="module-header"><div class="module-number">4.7</div><h2 class="module-title">Common Pointer Pitfalls — Dangling, wild, memory leaks, buffer overflow, and how to catch them</h2></div>
 
       <div class="concept-block">
-        <h3 class="concept-heading">The 5 deadly pointer bugs</h3>
-        <p class="explain-en">Pointer bugs are the most dangerous in C — they cause crashes, security vulnerabilities, and data corruption. Memorize these patterns and always check for them in code reviews.</p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Pointer bugs C ke sabse dangerous bugs hain — crashes, security vulnerabilities, aur data corruption karte hain. Ye patterns yaad karo aur code reviews me hamesha check karo.</div>
+        <h3 class="concept-heading">The 5 deadly pointer bugs — every C developer's nightmare</h3>
+        <p class="explain-en">
+          Pointer bugs are the most dangerous in C — they cause crashes, <strong>security vulnerabilities</strong>
+          (CVEs), and silent data corruption. Over 70% of serious security bugs in Chrome, Windows, and Linux
+          are memory safety issues. Memorize these patterns and always check for them in code reviews.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Pointer bugs C ke sabse dangerous bugs hain — crashes, security vulnerabilities (CVEs), aur silent data corruption karte hain. Chrome, Windows, aur Linux me 70%+ serious security bugs memory safety issues hain. Ye patterns yaad karo aur code reviews me hamesha check karo.</div>
         <div class="hb-table-wrap">
           <table class="hb-table">
-            <thead><tr><th>Bug</th><th>Cause</th><th>Prevention</th></tr></thead>
+            <thead><tr><th>Bug</th><th>Cause</th><th>Prevention</th><th>Severity</th></tr></thead>
             <tbody>
-              <tr><td><strong>Dangling pointer</strong></td><td>Using pointer after <code>free()</code></td><td>Set to <code>NULL</code> after free</td></tr>
-              <tr><td><strong>Wild pointer</strong></td><td>Uninitialized pointer</td><td>Always initialize to <code>NULL</code></td></tr>
-              <tr><td><strong>Memory leak</strong></td><td>Forgetting to <code>free()</code></td><td>Every <code>malloc</code> needs a <code>free</code></td></tr>
-              <tr><td><strong>Buffer overflow</strong></td><td>Writing past array bounds</td><td>Always check bounds</td></tr>
-              <tr><td><strong>Double free</strong></td><td>Calling <code>free()</code> twice</td><td>Set to <code>NULL</code> after free</td></tr>
+              <tr><td><strong>Dangling pointer</strong></td><td>Using pointer after <code>free()</code></td><td>Set to <code>NULL</code> after free</td><td>🔴 Critical — exploitable</td></tr>
+              <tr><td><strong>Wild pointer</strong></td><td>Uninitialized pointer</td><td>Always initialize to <code>NULL</code></td><td>🔴 Critical — unpredictable</td></tr>
+              <tr><td><strong>Memory leak</strong></td><td>Forgetting to <code>free()</code></td><td>Every <code>malloc</code> needs a <code>free</code></td><td>🟡 Medium — resource exhaustion</td></tr>
+              <tr><td><strong>Buffer overflow</strong></td><td>Writing past array bounds</td><td>Always check bounds, use <code>strn*</code></td><td>🔴 Critical — #1 exploit vector</td></tr>
+              <tr><td><strong>Double free</strong></td><td>Calling <code>free()</code> twice</td><td>Set to <code>NULL</code> after free</td><td>🔴 Critical — heap corruption</td></tr>
             </tbody>
           </table>
         </div>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">💻 C — Pointer pitfalls & fixes</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre><span class="comment">/* ❌ Dangling pointer */</span>
+          <div class="code-header"><span class="code-lang">💻 C — All 5 pitfalls with fixes</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* ═══ 1. DANGLING POINTER ═══ */</span>
 <span class="type">int</span> *p = <span class="function">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">int</span>));
 *p = <span class="number">42</span>;
 <span class="function">free</span>(p);
-<span class="comment">/* *p = 10;  ← CRASH! p still holds freed address */</span>
+<span class="comment">/* *p = 10;  ← UB! p still holds freed address */</span>
 
 <span class="comment">/* ✅ Fix: set to NULL after free */</span>
 <span class="function">free</span>(p);
-p = <span class="number">NULL</span>;  <span class="comment">/* Now dereferencing will segfault immediately (debuggable) */</span>
+p = <span class="number">NULL</span>;  <span class="comment">/* Now *p will segfault immediately (debuggable) */</span>
 
-<span class="comment">/* ❌ Wild pointer */</span>
+<span class="comment">/* ═══ 2. WILD POINTER ═══ */</span>
 <span class="type">int</span> *q;         <span class="comment">/* Points to RANDOM memory! */</span>
-<span class="comment">/* *q = 5;     ← CRASH or corruption */</span>
+<span class="comment">/* *q = 5;     ← CRASH or silent corruption */</span>
 
 <span class="comment">/* ✅ Fix: always initialize */</span>
-<span class="type">int</span> *q = <span class="number">NULL</span>;  <span class="comment">/* Safe — will segfault if used */</span>
+<span class="type">int</span> *q = <span class="number">NULL</span>;  <span class="comment">/* Safe — will segfault if used unset */</span>
 
-<span class="comment">/* ❌ Memory leak */</span>
+<span class="comment">/* ═══ 3. MEMORY LEAK ═══ */</span>
 <span class="type">void</span> <span class="function">leaky</span>(<span class="type">void</span>) {
     <span class="type">int</span> *data = <span class="function">malloc</span>(<span class="number">1000</span>);
     <span class="comment">/* ... use data ... */</span>
-    <span class="keyword">return</span>;  <span class="comment">/* ← Forgot free()! 1000 bytes leaked */</span>
+    <span class="keyword">return</span>;  <span class="comment">/* ← Forgot free()! 1000 bytes leaked forever */</span>
 }
 
-<span class="comment">/* ❌ Buffer overflow */</span>
+<span class="comment">/* ═══ 4. BUFFER OVERFLOW (most exploited bug in history) ═══ */</span>
 <span class="type">char</span> buf[<span class="number">10</span>];
 <span class="function">strcpy</span>(buf, <span class="string">"This string is way too long!"</span>);  <span class="comment">/* OVERFLOW! */</span>
 
 <span class="comment">/* ✅ Fix: use bounded functions */</span>
 <span class="function">strncpy</span>(buf, <span class="string">"This string is way too long!"</span>, <span class="number">9</span>);
-buf[<span class="number">9</span>] = <span class="string">'\0'</span>;  <span class="comment">/* Ensure null termination */</span></pre></div>
+buf[<span class="number">9</span>] = <span class="string">'\0'</span>;  <span class="comment">/* Ensure null termination */</span>
+
+<span class="comment">/* ═══ 5. DOUBLE FREE ═══ */</span>
+<span class="type">int</span> *r = <span class="function">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">int</span>));
+<span class="function">free</span>(r);
+<span class="comment">/* free(r);  ← HEAP CORRUPTION! Undefined behavior */</span>
+
+<span class="comment">/* ✅ Fix: NULL after free makes double-free safe */</span>
+<span class="function">free</span>(r);
+r = <span class="number">NULL</span>;
+<span class="function">free</span>(r);  <span class="comment">/* free(NULL) is defined as a no-op — safe! */</span></pre></div>
         </div>
-        <div class="callout callout-important"><strong>Industry tool:</strong> Use <strong>Valgrind</strong> (<code>valgrind ./program</code>) to detect memory leaks, use-after-free, and buffer overflows. Every professional C developer uses Valgrind or AddressSanitizer (<code>gcc -fsanitize=address</code>).</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Production pattern: SAFE_FREE macro</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Safe free macro (industry standard)</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* ═══ Define once in your project header ═══ */</span>
+<span class="preprocessor">#define</span> <span class="function">SAFE_FREE</span>(ptr) <span class="keyword">do</span> { \
+    <span class="function">free</span>(ptr);              \
+    (ptr) = <span class="number">NULL</span>;           \
+} <span class="keyword">while</span> (<span class="number">0</span>)
+
+<span class="comment">/* Usage — prevents dangling pointer AND double-free */</span>
+<span class="type">int</span> *data = <span class="function">malloc</span>(<span class="number">100</span> * <span class="keyword">sizeof</span>(<span class="type">int</span>));
+<span class="comment">/* ... use data ... */</span>
+<span class="function">SAFE_FREE</span>(data);  <span class="comment">/* data is now NULL */</span>
+<span class="function">SAFE_FREE</span>(data);  <span class="comment">/* safe — free(NULL) is no-op */</span></pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Catching bugs: Valgrind & AddressSanitizer</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Terminal — Memory debugging tools</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># AddressSanitizer (ASan) — compile-time instrumentation</span>
+<span class="comment"># Catches: buffer overflow, use-after-free, double free, leaks</span>
+gcc -Wall -Wextra -fsanitize=address -g program.c -o program
+./program    <span class="comment"># Crashes with detailed error report on any violation</span>
+
+<span class="comment"># Valgrind — runtime analysis (Linux/macOS)</span>
+gcc -Wall -g program.c -o program
+valgrind --leak-check=full ./program
+<span class="comment"># Reports: "definitely lost: 1000 bytes in 1 blocks"</span>
+
+<span class="comment"># UndefinedBehaviorSanitizer — catches UB at runtime</span>
+gcc -fsanitize=undefined -g program.c -o program</pre></div>
+        </div>
+        <div class="callout callout-important"><strong>Professional workflow:</strong> Always compile with <code>-fsanitize=address -g</code> during development and testing. It catches 90%+ of memory bugs <strong>instantly</strong> with exact line numbers. Only remove sanitizers for final production builds. Every major tech company (Google, Microsoft, Apple) uses ASan in their CI/CD pipelines.</div>
       </div>
     </div>
 
     <div class="practice-box">
-      <div class="practice-title">✏️ Practice Exercises — Part 4</div>
+      <div class="practice-title">✏️ Practice Exercises — Part 4 (Difficulty Graded)</div>
+      <h4>🟢 Easy (Do these first)</h4>
       <ol>
-        <li>Create an array of 10 integers, fill it with random numbers, then print using both subscript <code>arr[i]</code> and pointer <code>*(arr+i)</code> notation.</li>
-        <li>Write a function that reverses a string <strong>in place</strong> using pointer arithmetic (no array indexing).</li>
-        <li>Implement your own <code>strlen</code>, <code>strcpy</code>, and <code>strcmp</code> using pointers only.</li>
-        <li>Create a <code>qsort</code> comparator to sort an array of strings alphabetically.</li>
-        <li>Build a dynamic 2D matrix using double pointers, fill with values, print it, and free all memory with zero leaks.</li>
-        <li>Write a program with an intentional dangling pointer, wild pointer, and memory leak. Then fix each one. Test with Valgrind.</li>
-        <li>Create a dispatch table (array of function pointers) for a calculator with 4 operations.</li>
+        <li>Create an array of 10 integers, fill with random numbers. Print using both <code>arr[i]</code> and <code>*(arr+i)</code> notation. Print the address of each element to verify 4-byte spacing.</li>
+        <li>Write a function that takes a <code>const char *</code> string and returns its length — using only pointer arithmetic (no <code>[]</code> indexing).</li>
+        <li>Demonstrate <code>char *ptr = "Hello"</code> vs <code>char arr[] = "Hello"</code>. Show that <code>arr[0] = 'J'</code> works but <code>ptr[0] = 'J'</code> crashes.</li>
+        <li>Write <code>swap(int *a, int *b)</code> using pointer dereference. Verify it works from <code>main()</code>.</li>
+      </ol>
+      <h4>🟡 Medium (Apply your knowledge)</h4>
+      <ol start="5">
+        <li>Implement your own <code>my_strlen</code>, <code>my_strcpy</code>, and <code>my_strcmp</code> using pointers only. Test against the standard library versions.</li>
+        <li>Write a <strong>reverse string in-place</strong> function using two pointers (start/end) converging toward the center. No extra memory allowed.</li>
+        <li>Create a <code>qsort</code> comparator to sort an array of <code>const char *</code> strings alphabetically. Sort 10 names and print the result.</li>
+        <li>Build a <strong>dispatch table</strong> (array of function pointers) for a calculator: <code>add</code>, <code>sub</code>, <code>mul</code>, <code>div</code>. Use <code>typedef</code> for the function pointer type.</li>
+      </ol>
+      <h4>🔴 Hard (Challenge yourself)</h4>
+      <ol start="9">
+        <li>Build a <strong>dynamic 2D matrix</strong> using <code>int **</code>: allocate with <code>malloc</code>, fill with values, transpose it, print, and free with zero leaks. Verify with <code>-fsanitize=address</code>.</li>
+        <li>Implement a <strong>generic swap</strong> using <code>void *</code> and <code>memcpy</code> that works for <code>int</code>, <code>double</code>, and <code>struct</code>. Test all three types.</li>
+        <li>Write a program demonstrating all 5 pointer pitfalls (dangling, wild, leak, overflow, double-free). Compile with <code>-fsanitize=address</code> and show the exact error output for each. Then fix all 5.</li>
+        <li>Implement a <strong>dynamic array</strong> (like C++ <code>vector</code>): <code>create()</code>, <code>push()</code>, <code>get()</code>, <code>destroy()</code> using <code>realloc</code>. Start with capacity 4, double when full. Track size vs capacity.</li>
       </ol>
     </div>
 

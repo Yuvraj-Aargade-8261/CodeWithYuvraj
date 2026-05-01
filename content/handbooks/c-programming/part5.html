@@ -31,10 +31,10 @@
       <div class="chapter-part-label">📖 Part 5 — Structures, Unions & Advanced Types</div>
       <h1 class="chapter-title">Build <span class="gradient-text">Custom Data</span></h1>
       <p class="chapter-subtitle">Structures are the foundation of object-oriented thinking in C — model real-world data with precision.</p>
-      <div class="chapter-meta"><span>📄 Modules 5.1 – 5.7</span><span>⏱️ 90–130 min read</span><span>💻 55+ Examples</span></div>
+      <div class="chapter-meta"><span>📄 Modules 5.1 – 5.7</span><span>⏱️ 120–170 min read</span><span>💻 75+ Examples</span><span>📊 10+ Diagrams</span></div>
     </div>
 
-    <div class="callout callout-tip"><strong>How to study Part 5:</strong> For every struct, draw its memory layout on paper — including padding bytes. Use <code>sizeof</code> and <code>offsetof</code> to verify your diagrams. Understanding memory layout is essential for embedded and network programming.</div>
+    <div class="callout callout-tip"><strong>How to study Part 5:</strong> For every struct, draw its memory layout on paper — including padding bytes. Use <code>sizeof</code> and <code>offsetof</code> to verify your diagrams. Understanding memory layout is essential for embedded systems, network protocols, and any code that crosses process or machine boundaries.</div>
 
     <div class="hb-mini-toc">
       <div class="hb-mini-title">📍 Part 5 Modules</div>
@@ -51,21 +51,28 @@
 
     <div class="quick-ref">
       <div class="qr-title">🚀 Advanced Lens — Part 5</div>
-      <p class="explain-en">Structures in C are used to build everything from network packet parsers to database records to linked list nodes. Understanding padding, alignment, and how to use structs with pointers is what separates a student from a professional C developer.</p>
-      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>C me structures se network packets, database records, linked list nodes — sab bante hain. Padding, alignment, aur structs with pointers samajhna professional C developer banne ke liye zaroori hai.</div>
+      <p class="explain-en">
+        Structures are C's mechanism for <strong>abstract data types</strong> — they're used to build everything from
+        network packet parsers to database records to linked list nodes. Understanding <strong>padding and alignment</strong>
+        (which affects performance by 10-30% on modern CPUs), <strong>struct layout rules</strong> (which determine ABI compatibility),
+        and the <strong>vtable pattern</strong> (which enables OOP in C) is what separates a student from a professional.
+        The Linux kernel alone has 50,000+ struct definitions — this is where C's real power lives.
+      </p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Structures C ke abstract data types hain — network packets, database records, linked list nodes — sab structures se bante hain. Padding aur alignment samajhna (jo modern CPUs pe 10-30% performance affect karta hai), struct layout rules (jo ABI compatibility decide karte hain), aur vtable pattern (jo C me OOP enable karta hai) — yehi farak hai student aur professional me. Linux kernel me 50,000+ struct definitions hain.</div>
     </div>
 
     <div class="concept-block">
       <h3>Advanced types checklist (Part 5)</h3>
-      <table>
-        <thead><tr><th>Design area</th><th>Industry expectation</th></tr></thead>
+      <div class="hb-table-wrap"><table class="hb-table">
+        <thead><tr><th>Design area</th><th>Industry expectation</th><th>Why it matters</th></tr></thead>
         <tbody>
-          <tr><td>Memory layout</td><td>Measure `sizeof` and alignment, not assumptions, for portability.</td></tr>
-          <tr><td>Union usage</td><td>Use unions deliberately with clear active-member rules.</td></tr>
-          <tr><td>Type aliases</td><td>Use typedefs to simplify complex signatures and improve readability.</td></tr>
-          <tr><td>Bit fields</td><td>Restrict bit-field usage to controlled ABI/hardware contexts.</td></tr>
+          <tr><td>Memory layout</td><td>Measure <code>sizeof</code> and <code>offsetof</code>, never assume sizes</td><td>Portability across 32/64-bit, ARM/x86</td></tr>
+          <tr><td>Member ordering</td><td>Order members largest-to-smallest to minimize padding</td><td>Saves memory in arrays of millions of structs</td></tr>
+          <tr><td>Union usage</td><td>Always use tagged unions with an enum discriminant</td><td>Prevents reading wrong member (UB)</td></tr>
+          <tr><td>Type aliases</td><td>Use typedef for structs, function pointers, platform types</td><td>Readability and cross-platform portability</td></tr>
+          <tr><td>Bit fields</td><td>Only use for single-platform embedded/hardware register mapping</td><td>Layout is implementation-defined — not portable</td></tr>
         </tbody>
-      </table>
+      </table></div>
     </div>
 
     <!-- MODULE 5.1 -->
@@ -543,15 +550,27 @@ pkt-&gt;length = <span class="number">1024</span>;
     </div>
 
     <div class="practice-box">
-      <div class="practice-title">✏️ Practice Exercises — Part 5</div>
+      <div class="practice-title">✏️ Practice Exercises — Part 5 (Difficulty Graded)</div>
+      <h4>🟢 Easy (Do these first)</h4>
       <ol>
-        <li>Create a <code>Student</code> struct with name, age, GPA. Make an array of 5 students, fill them, and print the one with highest GPA.</li>
-        <li>Build a 3-node linked list using self-referential structs. Traverse and print all values.</li>
-        <li>Create two versions of a struct — one with poor member ordering (max padding) and one optimized. Compare <code>sizeof</code> results.</li>
-        <li>Implement a tagged union <code>Value</code> that can hold int, float, or string. Write a <code>print_value</code> function.</li>
-        <li>Create a state machine using enums for a traffic light (RED → GREEN → YELLOW → RED).</li>
-        <li>Use typedef to create clean types: <code>Point</code>, <code>Color</code>, <code>Comparator</code>. Build a program using all three.</li>
-        <li>Design a bit field struct for file permissions (rwx for owner, group, others — 9 bits total). Print the sizeof.</li>
+        <li>Create a <code>Student</code> struct with name, age, GPA. Make an array of 5 students, fill them, and print the one with the highest GPA using a loop.</li>
+        <li>Build a 3-node linked list using self-referential structs. Traverse and print all values. Draw the memory diagram on paper first.</li>
+        <li>Create an enum <code>Day</code> for days of the week. Write a function that takes a <code>Day</code> and returns a string name using switch-case.</li>
+        <li>Use <code>typedef</code> to create <code>Point</code>, <code>Color</code>, and <code>Comparator</code> types. Write a program that uses all three.</li>
+      </ol>
+      <h4>🟡 Medium (Apply your knowledge)</h4>
+      <ol start="5">
+        <li>Create two versions of a struct — one with poor member ordering (char/int/char → 12 bytes) and one optimized (int/char/char → 8 bytes). Use <code>sizeof</code> and <code>offsetof</code> to prove the difference.</li>
+        <li>Implement a <strong>tagged union</strong> <code>Value</code> that can hold int, float, or string. Write <code>print_value()</code> and <code>value_to_string()</code> functions that handle all types safely.</li>
+        <li>Create a <strong>state machine</strong> for a traffic light using enums: RED → GREEN → YELLOW → RED. Add a timer that transitions every 3 seconds using <code>sleep()</code>.</li>
+        <li>Design a bit field struct for <strong>Unix file permissions</strong> (rwx for owner, group, others — 9 bits total). Write functions to set/clear/check individual permissions.</li>
+      </ol>
+      <h4>🔴 Hard (Challenge yourself)</h4>
+      <ol start="9">
+        <li>Implement the <strong>constructor/destructor pattern</strong>: create <code>String</code> struct with <code>string_new()</code>, <code>string_append()</code>, <code>string_free()</code>. Handle reallocation when capacity is exceeded.</li>
+        <li>Build a <strong>dynamic linked list</strong> on the heap: <code>list_push()</code>, <code>list_pop()</code>, <code>list_print()</code>, <code>list_free()</code>. Verify zero memory leaks with <code>-fsanitize=address</code>.</li>
+        <li>Implement the <strong>vtable pattern</strong> (OOP in C): create a <code>Shape</code> base with <code>Circle</code> and <code>Rectangle</code> variants. Each should have <code>area()</code> and <code>perimeter()</code> via function pointers in a vtable.</li>
+        <li>Create a <strong>packed struct</strong> for an IP packet header (RFC 791). Calculate the <code>sizeof</code> with and without packing. Parse a raw byte buffer into your struct using <code>memcpy</code>.</li>
       </ol>
     </div>
 

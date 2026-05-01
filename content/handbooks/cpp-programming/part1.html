@@ -31,10 +31,10 @@
       <div class="chapter-part-label">📖 Part 1 — C++ Foundations & Environment Setup</div>
       <h1 class="chapter-title">Enter the <span class="gradient-text">C++ World</span></h1>
       <p class="chapter-subtitle">C++ is C with superpowers — classes, templates, RAII, and zero-cost abstractions that power the world's most critical software.</p>
-      <div class="chapter-meta"><span>📄 Modules 1.1 – 1.7</span><span>⏱️ 60–90 min read</span><span>💻 50+ Examples</span></div>
+      <div class="chapter-meta"><span>📄 Modules 1.1 – 1.7</span><span>⏱️ 90–140 min read</span><span>💻 65+ Examples</span><span>📊 10+ Diagrams</span></div>
     </div>
 
-    <div class="callout callout-tip"><strong>How to study Part 1:</strong> If you know C already, focus on what C++ ADDS — namespaces, <code>auto</code>, references, <code>cout</code>/<code>cin</code>, and <code>constexpr</code>. If you're new, every module is self-contained. Type every example. Compile with <code>g++ -std=c++17 -Wall</code>.</div>
+    <div class="callout callout-tip"><strong>How to study Part 1:</strong> If you know C already, focus on what C++ ADDS — namespaces, <code>auto</code>, references, <code>cout</code>/<code>cin</code>, and <code>constexpr</code>. If you're new, every module is self-contained. Type every example. Compile with <code>g++ -std=c++17 -Wall -Wextra -fsanitize=address</code>.</div>
 
     <div class="hb-mini-toc">
       <div class="hb-mini-title">📍 Part 1 Modules</div>
@@ -51,8 +51,14 @@
 
     <div class="quick-ref">
       <div class="qr-title">🚀 Advanced Lens — Part 1</div>
-      <p class="explain-en">C++ is used to build: game engines (Unreal), browsers (Chrome, Firefox), operating systems (Windows), databases (MySQL, MongoDB), compilers (Clang), financial trading systems, embedded firmware, and AI frameworks (TensorFlow, PyTorch backends). It offers the unique combination of <strong>high-level abstractions</strong> with <strong>low-level hardware control</strong> — "you don't pay for what you don't use."</p>
-      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>C++ se bante hain: game engines (Unreal), browsers (Chrome, Firefox), OS (Windows), databases (MySQL, MongoDB), compilers (Clang), trading systems, embedded firmware. C++ ka unique combination hai: high-level abstractions + low-level hardware control — "jo use nahi karte uske liye pay nahi karte."</div>
+      <p class="explain-en">
+        C++ is used to build: game engines (Unreal), browsers (Chrome, Firefox), operating systems (Windows), databases (MySQL, MongoDB),
+        compilers (Clang), financial trading systems, embedded firmware, and AI frameworks (TensorFlow, PyTorch backends).
+        The key philosophy is <strong>"zero-cost abstractions"</strong> — you don't pay runtime cost for features you don't use.
+        Unlike C, C++ gives you <strong>RAII</strong> (automatic resource cleanup via destructors), <strong>type-safe generics</strong> (templates),
+        and <strong>value semantics with move</strong> — making it both safer and faster than manual C patterns.
+      </p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>C++ se bante hain: game engines (Unreal), browsers (Chrome), OS (Windows), databases (MySQL), compilers (Clang), trading systems. Key philosophy hai <strong>"zero-cost abstractions"</strong> — jo feature use nahi karte uska runtime cost nahi. C se different, C++ me <strong>RAII</strong> (destructors se automatic cleanup), <strong>type-safe generics</strong> (templates), aur <strong>move semantics</strong> milte hain — safer aur faster dono.</div>
     </div>
 
     <!-- MODULE 1.1 -->
@@ -407,15 +413,27 @@ std::cout &lt;&lt; name.length() &lt;&lt; <span class="string">"\n"</span>;     
     </div>
 
     <div class="practice-box">
-      <div class="practice-title">✏️ Practice Exercises — Part 1</div>
+      <div class="practice-title">✏️ Practice Exercises — Part 1 (Difficulty Graded)</div>
+      <h4>🟢 Easy (Do these first)</h4>
       <ol>
-        <li>Write a C++ program that prints "Hello, C++ World!" using <code>std::cout</code>. Compile with <code>g++ -std=c++17</code>.</li>
-        <li>Create a program that reads a name and age from the user, then prints a greeting using string concatenation.</li>
-        <li>Compare C vs C++ I/O: write the same program using both <code>printf</code> and <code>std::cout</code>.</li>
-        <li>Create a multi-file project (main.cpp, utils.h, utils.cpp). Compile and link them separately.</li>
-        <li>Use <code>&lt;iomanip&gt;</code> to print a table of numbers with aligned columns, 2 decimal places.</li>
-        <li>Declare variables using <code>auto</code>, <code>const</code>, and <code>constexpr</code>. Print their types using <code>typeid(x).name()</code>.</li>
-        <li>Write a <code>constexpr</code> function that calculates factorial. Verify it works as an array size.</li>
+        <li>Write a C++ program that prints "Hello, C++ World!" using <code>std::cout</code>. Compile with <code>g++ -std=c++17 -Wall -Wextra</code>.</li>
+        <li>Create a program that reads a name and age from the user using <code>std::cin</code>, then prints a greeting using <code>std::string</code> concatenation.</li>
+        <li>Compare C vs C++ I/O: write the same program using both <code>printf</code>/<code>scanf</code> and <code>std::cout</code>/<code>std::cin</code>. Note the type-safety difference.</li>
+        <li>Declare variables using <code>auto</code>, <code>const</code>, and <code>constexpr</code>. Print their types using <code>typeid(x).name()</code>. Explain why <code>auto c = "hello"</code> is <code>const char*</code> not <code>std::string</code>.</li>
+      </ol>
+      <h4>🟡 Medium (Apply your knowledge)</h4>
+      <ol start="5">
+        <li>Create a <strong>multi-file project</strong> (<code>main.cpp</code>, <code>utils.h</code>, <code>utils.cpp</code>). Use <code>#pragma once</code>. Compile and link them separately with <code>g++</code>.</li>
+        <li>Use <code>&lt;iomanip&gt;</code> to print a multiplication table (1–12) with aligned columns using <code>std::setw</code>.</li>
+        <li>Write a <code>constexpr</code> function that calculates factorial. Verify it works as an array size at compile time. Compare with a non-constexpr version.</li>
+        <li>Demonstrate <strong>uniform initialization</strong>: show how <code>int x{3.14}</code> prevents narrowing while <code>int x = 3.14</code> silently truncates.</li>
+      </ol>
+      <h4>🔴 Hard (Challenge yourself)</h4>
+      <ol start="9">
+        <li>Write a program that uses <strong>all 4 C++ initialization syntaxes</strong> (copy, direct, uniform, list). Explain when each is preferred and which prevents narrowing.</li>
+        <li>Create a custom namespace (<code>mylib</code>) with 3 utility functions. Use both <code>mylib::func()</code> and <code>using mylib::func</code> patterns. Explain why <code>using namespace</code> in headers is dangerous.</li>
+        <li>Benchmark <code>std::endl</code> vs <code>"\n"</code>: print 1 million lines to a file with each. Measure time with <code>std::chrono</code>. Calculate the performance difference.</li>
+        <li>Write a program that demonstrates the <strong>C++ compilation pipeline</strong>: use <code>g++ -E</code>, <code>g++ -S</code>, <code>g++ -c</code>, and <code>g++</code> to see preprocessed, assembly, object, and final output for a simple file.</li>
       </ol>
     </div>
 

@@ -19,8 +19,10 @@
       <div class="chapter-part-label">📖 Part 7 — Memory Management & Smart Pointers</div>
       <h1 class="chapter-title">Own Your <span class="gradient-text">Memory</span></h1>
       <p class="chapter-subtitle">Stack vs heap, raw pointers vs smart pointers, unique_ptr, shared_ptr, weak_ptr — master memory ownership and never leak again.</p>
-      <div class="chapter-meta"><span>📄 Modules 7.1 – 7.7</span><span>⏱️ 80–110 min read</span><span>💻 55+ Examples</span></div>
+      <div class="chapter-meta"><span>📄 Modules 7.1 – 7.7</span><span>⏱️ 120–160 min read</span><span>💻 70+ Examples</span><span>📊 14+ Reference Tables</span></div>
     </div>
+
+    <div class="callout callout-tip"><strong>How to study Part 7:</strong> Memory management is the #1 differentiator between C++ and garbage-collected languages. <strong>Default to <code>unique_ptr</code></strong>, use <code>shared_ptr</code> only when you need shared ownership, and always compile with <code>-fsanitize=address</code> to catch leaks and use-after-free.</div>
 
     <div class="hb-mini-toc"><div class="hb-mini-title">📍 Part 7 Modules</div><div class="hb-mini-links"><a href="#m7-1">7.1 Stack/Heap</a><a href="#m7-2">7.2 unique_ptr</a><a href="#m7-3">7.3 shared_ptr</a><a href="#m7-4">7.4 weak_ptr</a><a href="#m7-5">7.5 Ownership</a><a href="#m7-6">7.6 Leaks</a><a href="#m7-7">7.7 Allocators</a></div></div>
 
@@ -540,15 +542,27 @@ g++ -std=c++20 -O2 -DNDEBUG -Wall -Wextra src/*.cpp -o app
     </div>
 
     <div class="practice-box">
-      <div class="practice-title">✏️ Practice Exercises — Part 7</div>
+      <div class="practice-title">✏️ Practice Exercises — Part 7 (Difficulty Graded)</div>
+      <h4>🟢 Easy (Do these first)</h4>
       <ol>
-        <li>Create a <code>unique_ptr&lt;Dog&gt;</code>, call methods, then transfer ownership to another unique_ptr.</li>
-        <li>Create 3 <code>shared_ptr&lt;int&gt;</code> pointing to the same object. Print <code>use_count()</code> after each copy.</li>
-        <li>Demonstrate the circular reference problem with shared_ptr. Fix it with weak_ptr.</li>
-        <li>Write a factory function returning <code>unique_ptr&lt;Shape&gt;</code> for different shape types.</li>
-        <li>Use <code>weak_ptr::lock()</code> to safely access an object that may have been destroyed.</li>
-        <li>Compile with <code>-fsanitize=address</code> and trigger a use-after-free to see ASan output.</li>
-        <li>Write a simple arena/pool allocator that allocates from a pre-allocated buffer.</li>
+        <li>Create a <code>unique_ptr&lt;Dog&gt;</code>, call methods, then transfer ownership to another <code>unique_ptr</code> with <code>std::move</code>. Verify the original is nullptr.</li>
+        <li>Create 3 <code>shared_ptr&lt;int&gt;</code> pointing to the same object. Print <code>use_count()</code> after each copy and after each <code>reset()</code>.</li>
+        <li>Write a factory function returning <code>unique_ptr&lt;Shape&gt;</code> for Circle, Rectangle, Triangle types.</li>
+        <li>Use <code>weak_ptr::lock()</code> to safely access an object that may have been destroyed. Handle the expired case.</li>
+      </ol>
+      <h4>🟡 Medium (Apply your knowledge)</h4>
+      <ol start="5">
+        <li>Demonstrate the <strong>circular reference leak</strong> with <code>shared_ptr</code> (two nodes pointing to each other). Fix with <code>weak_ptr</code>. Verify destructors run.</li>
+        <li>Compile with <code>-fsanitize=address</code> and <strong>intentionally trigger</strong> a use-after-free, double-free, and memory leak. Read the ASan output.</li>
+        <li>Implement an <strong>ownership transfer chain</strong>: <code>createWidget() → processWidget() → storeWidget()</code> using <code>unique_ptr</code> throughout.</li>
+        <li>Write a <code>unique_ptr</code> with a <strong>custom deleter</strong> that closes a <code>FILE*</code> handle. Verify the file is closed on scope exit.</li>
+      </ol>
+      <h4>🔴 Hard (Challenge yourself)</h4>
+      <ol start="9">
+        <li>Implement a <strong>simple arena allocator</strong> that pre-allocates a buffer and bumps a pointer for each allocation. Add a <code>reset()</code> method.</li>
+        <li>Build an <strong>object pool</strong> using <code>unique_ptr</code> with custom deleters that return objects to the pool instead of freeing them.</li>
+        <li>Use <strong>PMR</strong> (<code>std::pmr::monotonic_buffer_resource</code>) with a <code>pmr::vector</code>. Compare allocation speed vs default allocator using <code>std::chrono</code>.</li>
+        <li>Create a <strong>shared_ptr cache system</strong>: use <code>weak_ptr</code> in a <code>map</code> to cache objects. Return existing <code>shared_ptr</code> if still alive, create new one otherwise.</li>
       </ol>
     </div>
 

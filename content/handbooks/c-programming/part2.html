@@ -33,7 +33,7 @@
       <div class="chapter-part-label">📖 Part 2 — Operators & Control Flow</div>
       <h1 class="chapter-title">Master <span class="gradient-text">Logic Building</span></h1>
       <p class="chapter-subtitle">Every algorithm starts with operators and control flow — the brain of your C programs.</p>
-      <div class="chapter-meta"><span>📄 Modules 2.1 – 2.7</span><span>⏱️ 90–130 min read</span><span>💻 60+ Examples</span></div>
+      <div class="chapter-meta"><span>📄 Modules 2.1 – 2.7</span><span>⏱️ 120–180 min read</span><span>💻 90+ Examples</span><span>📊 10+ Diagrams</span></div>
     </div>
 
     <div class="callout callout-tip">
@@ -64,7 +64,7 @@
 
     <div class="concept-block">
       <h3>Control-flow checklist (Part 2)</h3>
-      <table>
+      <div class="hb-table-wrap"><table class="hb-table">
         <thead><tr><th>Signal</th><th>Industry expectation</th></tr></thead>
         <tbody>
           <tr><td>Expression safety</td><td>Avoid ambiguous precedence; use parentheses for intent clarity.</td></tr>
@@ -72,200 +72,356 @@
           <tr><td>Loop control</td><td>Guarantee termination and protect against boundary overrun.</td></tr>
           <tr><td>State correctness</td><td>Use storage classes deliberately with clear lifetime assumptions.</td></tr>
         </tbody>
-      </table>
+      </table></div>
     </div>
 
     <!-- MODULE 2.1 -->
     <div class="module-section" id="m2-1">
-      <div class="module-header"><div class="module-number">2.1</div><h2 class="module-title">Arithmetic & Assignment Operators — +, -, *, /, %, compound assignment</h2></div>
+      <div class="module-header"><div class="module-number">2.1</div><h2 class="module-title">Arithmetic & Assignment Operators — +, -, *, /, %, compound assignment, overflow, type promotion</h2></div>
 
       <div class="concept-block">
-        <h3 class="concept-heading">Arithmetic operators</h3>
+        <h3 class="concept-heading">Arithmetic operators — what the CPU actually does</h3>
         <p class="explain-en">
-          Arithmetic operators perform mathematical calculations. The key gotcha in C: <strong>integer division truncates</strong> — <code>7 / 2</code> gives <code>3</code>, not <code>3.5</code>.
-          The modulo operator <code>%</code> gives the remainder and only works with integers.
+          Arithmetic operators perform mathematical calculations, but in C they behave differently from regular math in critical ways.
+          The most important gotcha: <strong>integer division truncates toward zero</strong> — <code>7 / 2</code> gives <code>3</code>, not <code>3.5</code>.
+          The fractional part is silently discarded. The modulo operator <code>%</code> gives the remainder and <strong>only works with integers</strong>.
+          Understanding how the CPU handles these operations at the hardware level — particularly <strong>overflow</strong>,
+          <strong>division by zero</strong>, and <strong>implicit type promotion</strong> — separates beginners from professionals.
         </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Arithmetic operators math calculations karte hain. C ka important gotcha: integer division truncate hota hai — <code>7 / 2 = 3</code>, 3.5 nahi. Modulo <code>%</code> remainder deta hai aur sirf integers pe kaam karta hai.</div>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Arithmetic operators math calculations karte hain, lekin C me ye regular math se alag behave karte hain. Sabse important gotcha: integer division zero ki taraf truncate hota hai — <code>7 / 2 = 3</code>, 3.5 nahi. Fractional part silently discard ho jaata hai. Modulo <code>%</code> remainder deta hai aur sirf integers pe kaam karta hai. CPU in operations ko hardware level pe kaise handle karta hai — especially overflow, division by zero, aur implicit type promotion — ye samajhna beginners aur professionals me farak karta hai.</div>
         <div class="hb-table-wrap">
           <table class="hb-table">
-            <thead><tr><th>Operator</th><th>Name</th><th>Example</th><th>Result</th><th>Note</th></tr></thead>
+            <thead><tr><th>Operator</th><th>Name</th><th>Example</th><th>Result</th><th>Critical Notes</th></tr></thead>
             <tbody>
-              <tr><td><code>+</code></td><td>Addition</td><td><code>5 + 3</code></td><td>8</td><td></td></tr>
-              <tr><td><code>-</code></td><td>Subtraction</td><td><code>5 - 3</code></td><td>2</td><td></td></tr>
-              <tr><td><code>*</code></td><td>Multiplication</td><td><code>5 * 3</code></td><td>15</td><td></td></tr>
-              <tr><td><code>/</code></td><td>Division</td><td><code>7 / 2</code></td><td>3</td><td>⚠️ Truncates for ints!</td></tr>
-              <tr><td><code>/</code></td><td>Float division</td><td><code>7.0 / 2</code></td><td>3.5</td><td>One operand must be float</td></tr>
-              <tr><td><code>%</code></td><td>Modulo</td><td><code>7 % 2</code></td><td>1</td><td>Integers only</td></tr>
-              <tr><td><code>++</code></td><td>Increment</td><td><code>x++</code></td><td>x + 1</td><td>Post vs pre: <code>x++</code> vs <code>++x</code></td></tr>
-              <tr><td><code>--</code></td><td>Decrement</td><td><code>x--</code></td><td>x - 1</td><td>Post vs pre: <code>x--</code> vs <code>--x</code></td></tr>
+              <tr><td><code>+</code></td><td>Addition</td><td><code>5 + 3</code></td><td>8</td><td>Can overflow: <code>INT_MAX + 1</code> = UB!</td></tr>
+              <tr><td><code>-</code></td><td>Subtraction</td><td><code>5 - 3</code></td><td>2</td><td>Unsigned underflow wraps: <code>0U - 1</code> = <code>UINT_MAX</code></td></tr>
+              <tr><td><code>*</code></td><td>Multiplication</td><td><code>5 * 3</code></td><td>15</td><td>Overflow risk: <code>50000 * 50000</code> overflows <code>int</code></td></tr>
+              <tr><td><code>/</code></td><td>Int Division</td><td><code>7 / 2</code></td><td><strong>3</strong></td><td>⚠️ Truncates! <code>-7 / 2 = -3</code> (toward zero, C99+)</td></tr>
+              <tr><td><code>/</code></td><td>Float Division</td><td><code>7.0 / 2</code></td><td>3.5</td><td>If either operand is float/double → float division</td></tr>
+              <tr><td><code>%</code></td><td>Modulo</td><td><code>7 % 2</code></td><td>1</td><td>Integers ONLY. <code>-7 % 2 = -1</code> (sign matches dividend)</td></tr>
+              <tr><td><code>++</code></td><td>Increment</td><td><code>x++</code> / <code>++x</code></td><td>x + 1</td><td>Post: use then increment. Pre: increment then use</td></tr>
+              <tr><td><code>--</code></td><td>Decrement</td><td><code>x--</code> / <code>--x</code></td><td>x - 1</td><td>Same post/pre rules as <code>++</code></td></tr>
             </tbody>
           </table>
         </div>
       </div>
 
       <div class="concept-block">
-        <h3 class="concept-heading">Pre-increment vs post-increment</h3>
+        <h3 class="concept-heading">Pre vs post increment — a deep dive</h3>
+        <p class="explain-en">
+          The difference between <code>++x</code> and <code>x++</code> matters when the result is used in an expression.
+          <strong>Pre-increment</strong> (<code>++x</code>): increments first, then returns the new value.
+          <strong>Post-increment</strong> (<code>x++</code>): returns the current value, then increments.
+          In standalone statements (<code>x++;</code> vs <code>++x;</code>), there's no difference. The distinction only matters
+          inside expressions like assignments, function arguments, or conditions.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>++x</code> aur <code>x++</code> ka farak tab matter karta hai jab result kisi expression me use ho. Pre-increment (<code>++x</code>): pehle increment, phir naya value return. Post-increment (<code>x++</code>): pehle current value return, phir increment. Akele statement me (<code>x++;</code> vs <code>++x;</code>) koi farak nahi. Farak sirf expressions ke andar dikhta hai — assignments, function arguments, ya conditions me.</div>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">💻 C — ++ and --</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-header"><span class="code-lang">💻 C — Pre vs Post increment explained</span><div class="code-dots"><span></span><span></span><span></span></div></div>
           <div class="code-body"><pre><span class="type">int</span> a = <span class="number">5</span>;
 
-<span class="comment">/* Post-increment: use THEN increment */</span>
+<span class="comment">/* Post-increment: use current value (5), THEN increment a to 6 */</span>
 <span class="type">int</span> b = a++;   <span class="comment">/* b = 5, a = 6 */</span>
 
-<span class="comment">/* Pre-increment: increment THEN use */</span>
+<span class="comment">/* Pre-increment: increment a to 7 FIRST, then use new value (7) */</span>
 <span class="type">int</span> c = ++a;   <span class="comment">/* a = 7, c = 7 */</span>
 
 <span class="function">printf</span>(<span class="string">"a=%d b=%d c=%d\n"</span>, a, b, c);
-<span class="comment">/* Output: a=7 b=5 c=7 */</span></pre></div>
+<span class="comment">/* Output: a=7 b=5 c=7 */</span>
+
+<span class="comment">/* ═══ Common use case: loop iteration ═══ */</span>
+<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i < <span class="number">10</span>; i++) { }   <span class="comment">/* Post: standard, most common */</span>
+<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i < <span class="number">10</span>; ++i) { }   <span class="comment">/* Pre: identical here — no difference */</span>
+
+<span class="comment">/* ═══ Where it MATTERS: array indexing ═══ */</span>
+<span class="type">int</span> arr[<span class="number">5</span>] = {<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>, <span class="number">50</span>};
+<span class="type">int</span> idx = <span class="number">0</span>;
+<span class="type">int</span> val1 = arr[idx++];  <span class="comment">/* val1 = arr[0] = 10, then idx becomes 1 */</span>
+<span class="type">int</span> val2 = arr[++idx];  <span class="comment">/* idx becomes 2, then val2 = arr[2] = 30 */</span></pre></div>
         </div>
-        <div class="callout callout-warning"><strong>Interview trap:</strong> Never use <code>++</code> on the same variable multiple times in one expression like <code>x = x++ + ++x</code>. This is <strong>undefined behavior</strong> — the result varies across compilers.</div>
+        <div class="callout callout-warning"><strong>Undefined Behavior alert:</strong> Never use <code>++</code> on the same variable twice in one expression: <code>x = x++ + ++x</code> is <strong>UB</strong> — the result varies across compilers (GCC, Clang, MSVC may all give different results). The C standard says modifying a variable more than once between sequence points is undefined.</div>
       </div>
 
       <div class="concept-block">
-        <h3 class="concept-heading">Assignment & compound assignment</h3>
+        <h3 class="concept-heading">Integer overflow — the silent killer</h3>
+        <p class="explain-en">
+          <strong>Signed integer overflow is undefined behavior</strong> in C. When <code>INT_MAX + 1</code> happens, the compiler
+          is allowed to do <em>anything</em> — it might wrap around, crash, or even optimize away your overflow checks.
+          <strong>Unsigned integer overflow is well-defined</strong> — it wraps around modulo 2^N (e.g., <code>UINT_MAX + 1 = 0</code>).
+          This distinction is critical for writing safe, portable code.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Signed integer overflow C me undefined behavior hai. Jab <code>INT_MAX + 1</code> hota hai, compiler kuch bhi kar sakta hai — wrap around, crash, ya overflow checks ko optimize karke hata de. Unsigned integer overflow well-defined hai — ye modulo 2^N wrap around karta hai (e.g., <code>UINT_MAX + 1 = 0</code>). Ye farak safe, portable code likhne ke liye critical hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Safe overflow checking pattern</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="preprocessor">#include</span> <span class="string">&lt;stdio.h&gt;</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;limits.h&gt;</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;stdbool.h&gt;</span>
+
+<span class="comment">/* ❌ DANGEROUS: overflow check AFTER the operation */</span>
+<span class="comment">/* The compiler may OPTIMIZE THIS AWAY because signed overflow is UB */</span>
+<span class="type">int</span> bad_result = a + b;
+<span class="keyword">if</span> (bad_result < a) { <span class="comment">/* Too late! UB already happened */</span> }
+
+<span class="comment">/* ✅ SAFE: check BEFORE the operation */</span>
+<span class="keyword">static</span> <span class="keyword">inline</span> <span class="type">bool</span> <span class="function">safe_add</span>(<span class="type">int</span> a, <span class="type">int</span> b, <span class="type">int</span> *result) {
+    <span class="keyword">if</span> (b > <span class="number">0</span> && a > INT_MAX - b) <span class="keyword">return</span> <span class="keyword">false</span>;  <span class="comment">/* Would overflow */</span>
+    <span class="keyword">if</span> (b < <span class="number">0</span> && a < INT_MIN - b) <span class="keyword">return</span> <span class="keyword">false</span>;  <span class="comment">/* Would underflow */</span>
+    *result = a + b;
+    <span class="keyword">return</span> <span class="keyword">true</span>;
+}
+
+<span class="comment">/* ✅ ALSO SAFE: use GCC built-in overflow detection */</span>
+<span class="type">int</span> result;
+<span class="keyword">if</span> (__builtin_add_overflow(a, b, &result)) {
+    <span class="function">fprintf</span>(stderr, <span class="string">"Overflow detected!\n"</span>);
+}</pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Assignment & compound assignment operators</h3>
+        <p class="explain-en">
+          Compound assignment operators combine an arithmetic/bitwise operation with assignment in a single step.
+          They're not just shorthand — <code>x += 5</code> evaluates <code>x</code> only once, while <code>x = x + 5</code>
+          evaluates it twice. This matters when <code>x</code> is a complex expression like <code>arr[i++]</code>.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Compound assignment operators ek arithmetic/bitwise operation aur assignment ko ek step me combine karte hain. Ye sirf shorthand nahi — <code>x += 5</code> me <code>x</code> sirf ek baar evaluate hota hai, jabki <code>x = x + 5</code> me do baar. Ye tab matter karta hai jab <code>x</code> complex expression ho jaise <code>arr[i++]</code>.</div>
         <div class="hb-table-wrap">
           <table class="hb-table">
-            <thead><tr><th>Operator</th><th>Example</th><th>Equivalent to</th></tr></thead>
+            <thead><tr><th>Operator</th><th>Example</th><th>Equivalent to</th><th>Use case</th></tr></thead>
             <tbody>
-              <tr><td><code>=</code></td><td><code>x = 10</code></td><td>Assign 10 to x</td></tr>
-              <tr><td><code>+=</code></td><td><code>x += 5</code></td><td><code>x = x + 5</code></td></tr>
-              <tr><td><code>-=</code></td><td><code>x -= 3</code></td><td><code>x = x - 3</code></td></tr>
-              <tr><td><code>*=</code></td><td><code>x *= 2</code></td><td><code>x = x * 2</code></td></tr>
-              <tr><td><code>/=</code></td><td><code>x /= 4</code></td><td><code>x = x / 4</code></td></tr>
-              <tr><td><code>%=</code></td><td><code>x %= 3</code></td><td><code>x = x % 3</code></td></tr>
-              <tr><td><code>&amp;=</code></td><td><code>x &amp;= 0xFF</code></td><td><code>x = x &amp; 0xFF</code></td></tr>
-              <tr><td><code>|=</code></td><td><code>x |= 0x01</code></td><td><code>x = x | 0x01</code></td></tr>
-              <tr><td><code>^=</code></td><td><code>x ^= mask</code></td><td><code>x = x ^ mask</code></td></tr>
-              <tr><td><code>&lt;&lt;=</code></td><td><code>x &lt;&lt;= 2</code></td><td><code>x = x &lt;&lt; 2</code></td></tr>
-              <tr><td><code>&gt;&gt;=</code></td><td><code>x &gt;&gt;= 1</code></td><td><code>x = x &gt;&gt; 1</code></td></tr>
+              <tr><td><code>=</code></td><td><code>x = 10</code></td><td>Assign 10 to x</td><td>Basic assignment</td></tr>
+              <tr><td><code>+=</code></td><td><code>x += 5</code></td><td><code>x = x + 5</code></td><td>Accumulation, running totals</td></tr>
+              <tr><td><code>-=</code></td><td><code>x -= 3</code></td><td><code>x = x - 3</code></td><td>Countdown, decrement</td></tr>
+              <tr><td><code>*=</code></td><td><code>x *= 2</code></td><td><code>x = x * 2</code></td><td>Scaling, doubling</td></tr>
+              <tr><td><code>/=</code></td><td><code>x /= 4</code></td><td><code>x = x / 4</code></td><td>Averaging, halving</td></tr>
+              <tr><td><code>%=</code></td><td><code>x %= 3</code></td><td><code>x = x % 3</code></td><td>Wrap-around (circular buffers)</td></tr>
+              <tr><td><code>&amp;=</code></td><td><code>x &amp;= 0xFF</code></td><td><code>x = x &amp; 0xFF</code></td><td>Masking — extract lower 8 bits</td></tr>
+              <tr><td><code>|=</code></td><td><code>x |= 0x01</code></td><td><code>x = x | 0x01</code></td><td>Set specific bits (flags)</td></tr>
+              <tr><td><code>^=</code></td><td><code>x ^= mask</code></td><td><code>x = x ^ mask</code></td><td>Toggle bits</td></tr>
+              <tr><td><code>&lt;&lt;=</code></td><td><code>x &lt;&lt;= 2</code></td><td><code>x = x &lt;&lt; 2</code></td><td>Multiply by 4 (fast shift)</td></tr>
+              <tr><td><code>&gt;&gt;=</code></td><td><code>x &gt;&gt;= 1</code></td><td><code>x = x &gt;&gt; 1</code></td><td>Divide by 2 (fast shift)</td></tr>
             </tbody>
           </table>
         </div>
+        <div class="callout callout-tip"><strong>Performance insight:</strong> <code>x *= 2</code> and <code>x <<= 1</code> produce identical machine code — modern compilers automatically convert multiplications/divisions by powers of 2 into shift operations. Write the clearer version (<code>x *= 2</code>) and let the compiler optimize.</div>
       </div>
     </div>
 
     <!-- MODULE 2.2 -->
     <div class="module-section" id="m2-2">
-      <div class="module-header"><div class="module-number">2.2</div><h2 class="module-title">Relational & Logical Operators — Comparison, boolean logic, short-circuit</h2></div>
+      <div class="module-header"><div class="module-number">2.2</div><h2 class="module-title">Relational & Logical Operators — Comparison, boolean logic, short-circuit evaluation, truthiness</h2></div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">C's truthiness model — everything is an integer</h3>
+        <p class="explain-en">
+          C has <strong>no native boolean type</strong> in C89. Instead, it uses a simple rule: <strong>0 is false, everything else is true</strong>.
+          This applies to all integer types, pointers (NULL = 0 = false), and floating-point values (0.0 = false).
+          C99 added <code>&lt;stdbool.h&gt;</code> with <code>bool</code>, <code>true</code>, <code>false</code> — but these are just
+          <code>_Bool</code>, <code>1</code>, <code>0</code> under the hood. Relational operators always return exactly <code>1</code> or <code>0</code>.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>C89 me native boolean type nahi tha. Simple rule hai: 0 false hai, baaki sab kuch true hai. Ye sab integer types, pointers (NULL = 0 = false), aur floating-point values (0.0 = false) pe apply hota hai. C99 ne <code>&lt;stdbool.h&gt;</code> diya jisme <code>bool</code>, <code>true</code>, <code>false</code> hai — lekin ye internally <code>_Bool</code>, <code>1</code>, <code>0</code> hi hain. Relational operators hamesha exactly <code>1</code> ya <code>0</code> return karte hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Truthiness in action</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* In C, ALL of these are "true" in boolean context: */</span>
+<span class="keyword">if</span> (<span class="number">1</span>)     { }  <span class="comment">/* true — non-zero integer */</span>
+<span class="keyword">if</span> (-<span class="number">1</span>)    { }  <span class="comment">/* true — negative is still non-zero! */</span>
+<span class="keyword">if</span> (<span class="number">42</span>)    { }  <span class="comment">/* true — any non-zero value */</span>
+<span class="keyword">if</span> (<span class="number">3.14</span>)  { }  <span class="comment">/* true — non-zero float */</span>
+<span class="keyword">if</span> (ptr)   { }  <span class="comment">/* true — non-NULL pointer (idiomatic C) */</span>
+<span class="keyword">if</span> (<span class="string">"hello"</span>) { }  <span class="comment">/* true — string literal = non-NULL pointer */</span>
+
+<span class="comment">/* Only these are "false": */</span>
+<span class="keyword">if</span> (<span class="number">0</span>)       { }  <span class="comment">/* false */</span>
+<span class="keyword">if</span> (<span class="number">0.0</span>)     { }  <span class="comment">/* false */</span>
+<span class="keyword">if</span> (NULL)    { }  <span class="comment">/* false — NULL pointer */</span>
+<span class="keyword">if</span> (<span class="string">'\0'</span>)   { }  <span class="comment">/* false — null character = 0 */</span></pre></div>
+        </div>
+      </div>
 
       <div class="concept-block">
         <h3 class="concept-heading">Relational operators (comparison)</h3>
         <p class="explain-en">
-          Relational operators compare two values and return <code>1</code> (true) or <code>0</code> (false). C has no built-in <code>bool</code> type in C89 —
-          it uses integers. C99 added <code>&lt;stdbool.h&gt;</code> with <code>true</code>/<code>false</code>.
+          Relational operators compare two values and return <code>1</code> (true) or <code>0</code> (false).
+          The most dangerous bug in C history: <code>if (x = 5)</code> — this is <strong>assignment</strong> (always true, and changes x!),
+          not comparison. The compiler may warn with <code>-Wall</code>, but many beginners miss this.
         </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Relational operators do values compare karte hain aur 1 (true) ya 0 (false) return karte hain. C89 me built-in bool nahi tha — integers use hote the. C99 me stdbool.h aaya.</div>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Relational operators do values compare karte hain aur 1 (true) ya 0 (false) return karte hain. C ki sabse khatarnak bug: <code>if (x = 5)</code> — ye assignment hai (hamesha true, aur x change ho jaata hai!), comparison nahi. Compiler <code>-Wall</code> se warn karta hai, lekin beginners miss karte hain.</div>
         <div class="hb-table-wrap">
           <table class="hb-table">
-            <thead><tr><th>Operator</th><th>Meaning</th><th>Example</th><th>Result</th></tr></thead>
+            <thead><tr><th>Operator</th><th>Meaning</th><th>Example</th><th>Result</th><th>Common pitfall</th></tr></thead>
             <tbody>
-              <tr><td><code>==</code></td><td>Equal to</td><td><code>5 == 5</code></td><td>1 (true)</td></tr>
-              <tr><td><code>!=</code></td><td>Not equal</td><td><code>5 != 3</code></td><td>1 (true)</td></tr>
-              <tr><td><code>&lt;</code></td><td>Less than</td><td><code>3 &lt; 5</code></td><td>1 (true)</td></tr>
-              <tr><td><code>&gt;</code></td><td>Greater than</td><td><code>3 &gt; 5</code></td><td>0 (false)</td></tr>
-              <tr><td><code>&lt;=</code></td><td>Less or equal</td><td><code>5 &lt;= 5</code></td><td>1 (true)</td></tr>
-              <tr><td><code>&gt;=</code></td><td>Greater or equal</td><td><code>3 &gt;= 5</code></td><td>0 (false)</td></tr>
+              <tr><td><code>==</code></td><td>Equal to</td><td><code>5 == 5</code></td><td>1 (true)</td><td>⚠️ Don't confuse with <code>=</code> (assignment)</td></tr>
+              <tr><td><code>!=</code></td><td>Not equal</td><td><code>5 != 3</code></td><td>1 (true)</td><td></td></tr>
+              <tr><td><code>&lt;</code></td><td>Less than</td><td><code>3 &lt; 5</code></td><td>1 (true)</td><td></td></tr>
+              <tr><td><code>&gt;</code></td><td>Greater than</td><td><code>3 &gt; 5</code></td><td>0 (false)</td><td></td></tr>
+              <tr><td><code>&lt;=</code></td><td>Less or equal</td><td><code>5 &lt;= 5</code></td><td>1 (true)</td><td>Off-by-one with arrays: <code>i <= n</code> vs <code>i < n</code></td></tr>
+              <tr><td><code>&gt;=</code></td><td>Greater or equal</td><td><code>3 &gt;= 5</code></td><td>0 (false)</td><td></td></tr>
             </tbody>
           </table>
         </div>
-        <div class="callout callout-warning"><strong>Classic bug:</strong> <code>if (x = 5)</code> is ASSIGNMENT (always true), not comparison! Use <code>if (x == 5)</code>. Pro tip: write <code>if (5 == x)</code> — the compiler catches <code>5 = x</code> as an error.</div>
+        <div class="callout callout-warning"><strong>The #1 C bug — <code>=</code> vs <code>==</code>:</strong> <code>if (x = 5)</code> assigns 5 to x and evaluates to 5 (truthy) — always enters the if-block AND corrupts x! Defensive technique (Yoda conditions): write <code>if (5 == x)</code> instead — the compiler catches <code>5 = x</code> as an error. Modern approach: use <code>-Wall -Wextra</code> which warns about assignment in conditions.</div>
       </div>
 
       <div class="concept-block">
         <h3 class="concept-heading">Logical operators & short-circuit evaluation</h3>
         <p class="explain-en">
-          Logical operators combine boolean conditions. <strong>Short-circuit evaluation</strong> means C stops evaluating as soon as the result is determined:
-          in <code>A &amp;&amp; B</code>, if A is false, B is never evaluated. This is used for <strong>null-pointer safety</strong>.
+          Logical operators combine boolean conditions. The critical feature is <strong>short-circuit evaluation</strong> —
+          C <em>guarantees</em> left-to-right evaluation and stops as soon as the result is determined. In <code>A && B</code>,
+          if A is false, B is <strong>never evaluated</strong>. In <code>A || B</code>, if A is true, B is never evaluated.
+          This isn't just an optimization — it's a <strong>safety mechanism</strong>. You rely on it for null-pointer checks,
+          bounds checking, and resource validation. Without short-circuit, half of C's idiomatic patterns would crash.
         </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Logical operators boolean conditions combine karte hain. Short-circuit evaluation me C jaldi result decide kar leta hai: <code>A &amp;&amp; B</code> me agar A false hai toh B evaluate hi nahi hota. Ye null-pointer safety ke liye use hota hai.</div>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Logical operators boolean conditions combine karte hain. Critical feature hai short-circuit evaluation — C left-to-right evaluate karne ki guarantee deta hai aur jaldi result decide kar leta hai. <code>A && B</code> me agar A false hai toh B evaluate hi nahi hota. <code>A || B</code> me agar A true hai toh B nahi evaluate hota. Ye sirf optimization nahi — ye safety mechanism hai. Null-pointer checks, bounds checking, resource validation — ye sab short-circuit pe depend karte hain. Iske bina aadhe C idioms crash karenge.</div>
         <div class="hb-table-wrap">
           <table class="hb-table">
-            <thead><tr><th>Operator</th><th>Meaning</th><th>Short-circuit?</th><th>Example</th></tr></thead>
+            <thead><tr><th>Operator</th><th>Name</th><th>Short-circuit rule</th><th>Example</th><th>Practical use</th></tr></thead>
             <tbody>
-              <tr><td><code>&amp;&amp;</code></td><td>Logical AND</td><td>✅ Stops if left is false</td><td><code>x &gt; 0 &amp;&amp; x &lt; 100</code></td></tr>
-              <tr><td><code>||</code></td><td>Logical OR</td><td>✅ Stops if left is true</td><td><code>x == 0 || x == 1</code></td></tr>
-              <tr><td><code>!</code></td><td>Logical NOT</td><td>N/A</td><td><code>!done</code></td></tr>
+              <tr><td><code>&&</code></td><td>AND</td><td>Stops if left is <strong>false</strong> (0)</td><td><code>ptr && *ptr > 0</code></td><td>Null-check before dereference</td></tr>
+              <tr><td><code>||</code></td><td>OR</td><td>Stops if left is <strong>true</strong> (≠0)</td><td><code>cached || fetch()</code></td><td>Default/fallback values</td></tr>
+              <tr><td><code>!</code></td><td>NOT</td><td>N/A (unary)</td><td><code>!done</code></td><td>Boolean inversion</td></tr>
             </tbody>
           </table>
         </div>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">💻 C — Short-circuit for safety</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre><span class="comment">/* Short-circuit prevents null pointer crash */</span>
+          <div class="code-header"><span class="code-lang">💻 C — Short-circuit patterns (industry standard)</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* ═══ Pattern 1: Null-pointer guard (most common in C) ═══ */</span>
 <span class="type">int</span> *ptr = <span class="function">get_data</span>();
-
-<span class="comment">/* If ptr is NULL, *ptr is NEVER accessed ✅ */</span>
-<span class="keyword">if</span> (ptr != <span class="number">NULL</span> &amp;&amp; *ptr &gt; <span class="number">0</span>) {
+<span class="keyword">if</span> (ptr != <span class="number">NULL</span> && *ptr > <span class="number">0</span>) {  <span class="comment">/* Safe: *ptr only if ptr is valid */</span>
     <span class="function">printf</span>(<span class="string">"Value: %d\n"</span>, *ptr);
 }
 
-<span class="comment">/* Without short-circuit — this would CRASH if ptr is NULL ❌ */</span></pre></div>
+<span class="comment">/* ═══ Pattern 2: Bounds check before array access ═══ */</span>
+<span class="keyword">if</span> (idx >= <span class="number">0</span> && idx < size && arr[idx] != <span class="number">0</span>) {
+    <span class="comment">/* arr[idx] is only accessed if idx is in bounds */</span>
+}
+
+<span class="comment">/* ═══ Pattern 3: Divisor validation ═══ */</span>
+<span class="keyword">if</span> (divisor != <span class="number">0</span> && dividend / divisor > threshold) {
+    <span class="comment">/* Division only happens if divisor is non-zero */</span>
+}
+
+<span class="comment">/* ═══ Pattern 4: Lazy resource initialization ═══ */</span>
+<span class="keyword">if</span> (!initialized || <span class="function">needs_refresh</span>()) {
+    <span class="function">initialize</span>();  <span class="comment">/* Only calls needs_refresh() if initialized is true */</span>
+}
+
+<span class="comment">/* ═══ DANGER: Side effects in short-circuit ═══ */</span>
+<span class="type">int</span> x = <span class="number">0</span>;
+<span class="keyword">if</span> (<span class="number">0</span> && (x = <span class="number">42</span>)) { }  <span class="comment">/* x is STILL 0! The (x = 42) was never reached */</span></pre></div>
         </div>
+        <div class="callout callout-important"><strong>Interview question:</strong> "What's the output of <code>int x = 0; if (1 || (x = 5)) printf("%d", x);</code>?" Answer: <code>0</code> — because <code>||</code> short-circuits when the left side is true (1), so <code>x = 5</code> never executes.</div>
       </div>
     </div>
 
     <!-- MODULE 2.3 -->
     <div class="module-section" id="m2-3">
-      <div class="module-header"><div class="module-number">2.3</div><h2 class="module-title">Bitwise Operators — &amp;, |, ^, ~, &lt;&lt;, &gt;&gt; — hardware-level control</h2></div>
+      <div class="module-header"><div class="module-number">2.3</div><h2 class="module-title">Bitwise Operators — &amp;, |, ^, ~, &lt;&lt;, &gt;&gt; — hardware-level control, bitmask patterns</h2></div>
 
       <div class="concept-block">
-        <h3 class="concept-heading">Why bitwise matters</h3>
+        <h3 class="concept-heading">Why bitwise matters — it's how hardware works</h3>
         <p class="explain-en">
-          Bitwise operators work on individual <strong>bits</strong> of integers. They're essential for: <strong>embedded systems</strong> (controlling hardware registers),
-          <strong>network protocols</strong> (parsing packet headers), <strong>graphics</strong> (color manipulation), and <strong>performance optimization</strong> (faster than multiplication/division).
+          Bitwise operators manipulate individual <strong>bits</strong> of integers. Every hardware register, network packet header,
+          file permission, and graphics pixel is controlled through bit manipulation. In embedded C, you'll use these operators
+          in <strong>every single function</strong>. In systems programming, bitmask flags are the standard pattern for combining
+          multiple options into a single integer (like <code>open(path, O_RDONLY | O_CREAT, 0644)</code>).
         </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Bitwise operators individual bits pe kaam karte hain. Embedded systems (hardware registers), network protocols (packet headers), graphics (color manipulation), aur performance optimization ke liye zaroori hain.</div>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Bitwise operators integers ke individual bits pe kaam karte hain. Har hardware register, network packet header, file permission, aur graphics pixel bit manipulation se control hota hai. Embedded C me ye operators har function me use hote hain. Systems programming me bitmask flags standard pattern hai multiple options ko ek integer me combine karne ke liye.</div>
         <div class="hb-table-wrap">
           <table class="hb-table">
-            <thead><tr><th>Operator</th><th>Name</th><th>Example (binary)</th><th>Result</th></tr></thead>
+            <thead><tr><th>Operator</th><th>Name</th><th>Example (4-bit)</th><th>Result</th><th>Real-world use</th></tr></thead>
             <tbody>
-              <tr><td><code>&amp;</code></td><td>AND</td><td><code>1100 &amp; 1010</code></td><td><code>1000</code></td></tr>
-              <tr><td><code>|</code></td><td>OR</td><td><code>1100 | 1010</code></td><td><code>1110</code></td></tr>
-              <tr><td><code>^</code></td><td>XOR</td><td><code>1100 ^ 1010</code></td><td><code>0110</code></td></tr>
-              <tr><td><code>~</code></td><td>NOT (complement)</td><td><code>~1100</code></td><td><code>0011</code></td></tr>
-              <tr><td><code>&lt;&lt;</code></td><td>Left shift</td><td><code>0001 &lt;&lt; 2</code></td><td><code>0100</code> (×4)</td></tr>
-              <tr><td><code>&gt;&gt;</code></td><td>Right shift</td><td><code>1000 &gt;&gt; 2</code></td><td><code>0010</code> (÷4)</td></tr>
+              <tr><td><code>&amp;</code></td><td>AND</td><td><code>1100 &amp; 1010</code></td><td><code>1000</code></td><td>Masking — extract specific bits</td></tr>
+              <tr><td><code>|</code></td><td>OR</td><td><code>1100 | 1010</code></td><td><code>1110</code></td><td>Setting — turn bits ON</td></tr>
+              <tr><td><code>^</code></td><td>XOR</td><td><code>1100 ^ 1010</code></td><td><code>0110</code></td><td>Toggling — flip specific bits</td></tr>
+              <tr><td><code>~</code></td><td>NOT</td><td><code>~1100</code></td><td><code>0011</code></td><td>Inverting — create clear masks</td></tr>
+              <tr><td><code>&lt;&lt;</code></td><td>Left shift</td><td><code>0001 &lt;&lt; 2</code></td><td><code>0100</code> (×4)</td><td>Multiply by powers of 2</td></tr>
+              <tr><td><code>&gt;&gt;</code></td><td>Right shift</td><td><code>1000 &gt;&gt; 2</code></td><td><code>0010</code> (÷4)</td><td>Divide by powers of 2</td></tr>
             </tbody>
           </table>
         </div>
       </div>
 
       <div class="concept-block">
-        <h3 class="concept-heading">Bit manipulation patterns (interview essentials)</h3>
+        <h3 class="concept-heading">The 4 essential bit manipulation patterns</h3>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">💻 C — Bit manipulation</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre><span class="type">unsigned int</span> reg = <span class="number">0b10110100</span>;
+          <div class="code-header"><span class="code-lang">💻 C — Bit manipulation patterns (must memorize)</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="type">uint8_t</span> reg = <span class="number">0b10110100</span>;  <span class="comment">/* 8-bit hardware register */</span>
 
-<span class="comment">/* SET a bit (turn ON bit 1) */</span>
-reg |= (<span class="number">1</span> &lt;&lt; <span class="number">1</span>);    <span class="comment">/* reg = 0b10110110 */</span>
+<span class="comment">/* ═══ 1. SET a bit (turn ON) — use OR ═══ */</span>
+reg |= (<span class="number">1</span> &lt;&lt; <span class="number">1</span>);    <span class="comment">/* Set bit 1:  reg = 0b10110110 */</span>
+<span class="comment">/* Pattern: reg |= (1 << bit_number) */</span>
 
-<span class="comment">/* CLEAR a bit (turn OFF bit 2) */</span>
-reg &amp;= ~(<span class="number">1</span> &lt;&lt; <span class="number">2</span>);   <span class="comment">/* reg = 0b10110010 */</span>
+<span class="comment">/* ═══ 2. CLEAR a bit (turn OFF) — use AND + NOT ═══ */</span>
+reg &amp;= ~(<span class="number">1</span> &lt;&lt; <span class="number">2</span>);   <span class="comment">/* Clear bit 2: reg = 0b10110010 */</span>
+<span class="comment">/* Pattern: reg &= ~(1 << bit_number) */</span>
 
-<span class="comment">/* TOGGLE a bit (flip bit 4) */</span>
-reg ^= (<span class="number">1</span> &lt;&lt; <span class="number">4</span>);    <span class="comment">/* reg = 0b10100010 */</span>
+<span class="comment">/* ═══ 3. TOGGLE a bit (flip) — use XOR ═══ */</span>
+reg ^= (<span class="number">1</span> &lt;&lt; <span class="number">4</span>);    <span class="comment">/* Toggle bit 4: reg = 0b10100010 */</span>
+<span class="comment">/* Pattern: reg ^= (1 << bit_number) */</span>
 
-<span class="comment">/* CHECK a bit (is bit 5 set?) */</span>
+<span class="comment">/* ═══ 4. CHECK a bit (read) — use AND ═══ */</span>
 <span class="keyword">if</span> (reg &amp; (<span class="number">1</span> &lt;&lt; <span class="number">5</span>)) {
     <span class="function">printf</span>(<span class="string">"Bit 5 is ON\n"</span>);
 }
-
-<span class="comment">/* Multiply by 2^n using left shift */</span>
-<span class="type">int</span> x = <span class="number">5</span>;
-<span class="type">int</span> y = x &lt;&lt; <span class="number">3</span>;     <span class="comment">/* y = 5 * 8 = 40 */</span>
-
-<span class="comment">/* Divide by 2^n using right shift */</span>
-<span class="type">int</span> z = <span class="number">40</span> &gt;&gt; <span class="number">2</span>;     <span class="comment">/* z = 40 / 4 = 10 */</span>
-
-<span class="comment">/* Swap two variables without temp (XOR trick) */</span>
-<span class="type">int</span> a = <span class="number">10</span>, b = <span class="number">20</span>;
-a ^= b; b ^= a; a ^= b;
-<span class="comment">/* Now a = 20, b = 10 */</span>
-
-<span class="comment">/* Check if number is even/odd */</span>
-<span class="keyword">if</span> (n &amp; <span class="number">1</span>) <span class="function">printf</span>(<span class="string">"Odd\n"</span>);
-<span class="keyword">else</span>       <span class="function">printf</span>(<span class="string">"Even\n"</span>);</pre></div>
+<span class="comment">/* Pattern: if (reg & (1 << bit_number)) */</span></pre></div>
         </div>
-        <div class="callout callout-important"><strong>Embedded C essential:</strong> Hardware registers are controlled entirely through bitwise operations. <code>REG |= (1 &lt;&lt; BIT)</code> to set, <code>REG &amp;= ~(1 &lt;&lt; BIT)</code> to clear. Memorize these patterns.</div>
+        <div class="diagram-box">
+          <div class="diagram-title">📐 Bit Manipulation Cheat Sheet</div>
+          <div class="diagram-flow">
+            <div class="diagram-node primary">SET bit<br><small>reg |= (1 &lt;&lt; n)</small></div>
+            <div class="diagram-arrow">→</div>
+            <div class="diagram-node secondary">CLEAR bit<br><small>reg &amp;= ~(1 &lt;&lt; n)</small></div>
+            <div class="diagram-arrow">→</div>
+            <div class="diagram-node accent">TOGGLE bit<br><small>reg ^= (1 &lt;&lt; n)</small></div>
+            <div class="diagram-arrow">→</div>
+            <div class="diagram-node success">CHECK bit<br><small>reg &amp; (1 &lt;&lt; n)</small></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Bitmask flags — the systems programming pattern</h3>
+        <p class="explain-en">
+          Bitmask flags let you combine <strong>multiple options into a single integer</strong>. Each option is a power of 2
+          (one bit). You combine them with <code>|</code> and check them with <code>&amp;</code>. This is the pattern behind
+          <code>open()</code> flags, <code>fcntl()</code> options, <code>SDL_Init()</code>, and thousands of C APIs.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Bitmask flags se multiple options ko ek single integer me combine kar sakte ho. Har option ek power of 2 hai (ek bit). <code>|</code> se combine karo aur <code>&amp;</code> se check karo. Ye pattern <code>open()</code> flags, <code>fcntl()</code>, <code>SDL_Init()</code> aur hazaaron C APIs me use hota hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Bitmask flags (production pattern)</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Define flags as powers of 2 (each gets one bit) */</span>
+<span class="preprocessor">#define</span> <span class="function">PERM_READ</span>    (<span class="number">1</span> &lt;&lt; <span class="number">0</span>)   <span class="comment">/* 0b001 = 1 */</span>
+<span class="preprocessor">#define</span> <span class="function">PERM_WRITE</span>   (<span class="number">1</span> &lt;&lt; <span class="number">1</span>)   <span class="comment">/* 0b010 = 2 */</span>
+<span class="preprocessor">#define</span> <span class="function">PERM_EXECUTE</span> (<span class="number">1</span> &lt;&lt; <span class="number">2</span>)   <span class="comment">/* 0b100 = 4 */</span>
+
+<span class="comment">/* Combine flags with OR */</span>
+<span class="type">unsigned int</span> perms = PERM_READ | PERM_WRITE;  <span class="comment">/* 0b011 = 3 */</span>
+
+<span class="comment">/* Check flags with AND */</span>
+<span class="keyword">if</span> (perms &amp; PERM_READ)    <span class="function">printf</span>(<span class="string">"Can read\n"</span>);
+<span class="keyword">if</span> (perms &amp; PERM_WRITE)   <span class="function">printf</span>(<span class="string">"Can write\n"</span>);
+<span class="keyword">if</span> (perms &amp; PERM_EXECUTE) <span class="function">printf</span>(<span class="string">"Can execute\n"</span>);  <span class="comment">/* Not printed */</span>
+
+<span class="comment">/* Add a permission */</span>
+perms |= PERM_EXECUTE;  <span class="comment">/* Now 0b111 = 7 */</span>
+
+<span class="comment">/* Remove a permission */</span>
+perms &amp;= ~PERM_WRITE;   <span class="comment">/* Now 0b101 = 5 */</span>
+
+<span class="comment">/* ═══ Interview classic: bit tricks ═══ */</span>
+
+<span class="comment">/* Check even/odd (faster than %) */</span>
+<span class="keyword">if</span> (n &amp; <span class="number">1</span>) <span class="function">printf</span>(<span class="string">"Odd\n"</span>);
+<span class="keyword">else</span>       <span class="function">printf</span>(<span class="string">"Even\n"</span>);
+
+<span class="comment">/* Check if power of 2 */</span>
+<span class="keyword">if</span> (n &gt; <span class="number">0</span> &amp;&amp; (n &amp; (n - <span class="number">1</span>)) == <span class="number">0</span>) <span class="function">printf</span>(<span class="string">"Power of 2!\n"</span>);
+
+<span class="comment">/* Swap without temp variable (XOR trick) */</span>
+a ^= b; b ^= a; a ^= b;</pre></div>
+        </div>
+        <div class="callout callout-warning"><strong>Shift pitfalls:</strong> (1) <strong>Left-shifting into the sign bit</strong> of a signed integer is <strong>UB</strong>. Always use <code>unsigned</code> types for bit manipulation. (2) <strong>Right-shifting signed negative numbers</strong> is implementation-defined — it may fill with 0s (logical) or 1s (arithmetic). Use <code>unsigned</code> to guarantee logical shift.</div>
       </div>
     </div>
 
@@ -334,48 +490,64 @@ a ^= b; b ^= a; a ^= b;
 
     <!-- MODULE 2.5 -->
     <div class="module-section" id="m2-5">
-      <div class="module-header"><div class="module-number">2.5</div><h2 class="module-title">Conditional Statements — if, else-if, switch-case, ternary</h2></div>
+      <div class="module-header"><div class="module-number">2.5</div><h2 class="module-title">Conditional Statements — if, else-if, switch-case, ternary, dangling else, defensive patterns</h2></div>
 
       <div class="concept-block">
-        <h3 class="concept-heading">if, else-if, else</h3>
+        <h3 class="concept-heading">if, else-if, else — and the dangling else trap</h3>
         <p class="explain-en">
-          Conditionals let your program make decisions. <code>if</code> checks a condition; if true, the block executes.
-          <code>else if</code> adds alternative checks. <code>else</code> catches everything remaining. In C, any <strong>non-zero value is true</strong> and <strong>0 is false</strong>.
+          Conditionals let your program make decisions. <code>if</code> checks a condition; if true (non-zero), the block executes.
+          <code>else if</code> adds alternative checks. <code>else</code> catches everything remaining.
+          <strong>The dangling else trap:</strong> without braces, <code>else</code> binds to the <em>nearest</em> <code>if</code>.
+          <strong>Industry rule:</strong> always use braces <code>{}</code> even for single-line if bodies — this prevents bugs when adding new lines later.
         </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Conditionals se program decisions le sakta hai. <code>if</code> condition check karta hai; true ho toh block execute hota hai. C me koi bhi non-zero value true hai aur 0 false hai.</div>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Conditionals se program decisions le sakta hai. <code>if</code> condition check karta hai; true (non-zero) ho toh block execute hota hai. Dangling else trap: bina braces ke <code>else</code> nearest <code>if</code> se bind hota hai. Industry rule: hamesha braces <code>{}</code> lagao chahe ek line ka body ho — baad me naye lines add karne pe bugs prevent hote hain.</div>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">💻 C — if / else-if / else</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre><span class="type">int</span> score = <span class="number">85</span>;
+          <div class="code-header"><span class="code-lang">💻 C — if / else-if / else with defensive patterns</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* ═══ Standard grading system ═══ */</span>
+<span class="type">int</span> score = <span class="number">85</span>;
 
-<span class="keyword">if</span> (score &gt;= <span class="number">90</span>) {
+<span class="keyword">if</span> (score >= <span class="number">90</span>) {
     <span class="function">printf</span>(<span class="string">"Grade: A\n"</span>);
-} <span class="keyword">else if</span> (score &gt;= <span class="number">80</span>) {
+} <span class="keyword">else if</span> (score >= <span class="number">80</span>) {
     <span class="function">printf</span>(<span class="string">"Grade: B\n"</span>);
-} <span class="keyword">else if</span> (score &gt;= <span class="number">70</span>) {
+} <span class="keyword">else if</span> (score >= <span class="number">70</span>) {
     <span class="function">printf</span>(<span class="string">"Grade: C\n"</span>);
 } <span class="keyword">else</span> {
     <span class="function">printf</span>(<span class="string">"Grade: F\n"</span>);
 }
 
-<span class="comment">/* C truth values: 0 = false, anything else = true */</span>
-<span class="type">int</span> x = <span class="number">42</span>;
-<span class="keyword">if</span> (x) <span class="function">printf</span>(<span class="string">"This prints! (42 is truthy)\n"</span>);
+<span class="comment">/* ═══ DANGLING ELSE BUG ═══ */</span>
+<span class="comment">/* This does NOT do what it looks like: */</span>
+<span class="keyword">if</span> (a > <span class="number">0</span>)
+    <span class="keyword">if</span> (b > <span class="number">0</span>)
+        <span class="function">printf</span>(<span class="string">"Both positive\n"</span>);
+<span class="keyword">else</span>                   <span class="comment">/* ⚠️ THIS else binds to inner if, not outer! */</span>
+    <span class="function">printf</span>(<span class="string">"a is not positive?\n"</span>);  <span class="comment">/* WRONG — prints when a>0 and b<=0 */</span>
 
-<span class="type">int</span> y = <span class="number">0</span>;
-<span class="keyword">if</span> (y) <span class="function">printf</span>(<span class="string">"This does NOT print (0 is falsy)\n"</span>);</pre></div>
+<span class="comment">/* ✅ FIX: Always use braces */</span>
+<span class="keyword">if</span> (a > <span class="number">0</span>) {
+    <span class="keyword">if</span> (b > <span class="number">0</span>) {
+        <span class="function">printf</span>(<span class="string">"Both positive\n"</span>);
+    }
+} <span class="keyword">else</span> {
+    <span class="function">printf</span>(<span class="string">"a is not positive\n"</span>);  <span class="comment">/* Now correct ✅ */</span>
+}</pre></div>
         </div>
       </div>
 
       <div class="concept-block">
-        <h3 class="concept-heading">switch-case</h3>
+        <h3 class="concept-heading">switch-case — rules, fall-through, and restrictions</h3>
         <p class="explain-en">
-          <code>switch</code> compares one value against multiple constants. It's cleaner than long else-if chains for <strong>discrete values</strong>.
-          Always include <code>break</code> to prevent <strong>fall-through</strong> (executing the next case too) and a <code>default</code> case.
+          <code>switch</code> compares one value against multiple <strong>compile-time integer constants</strong>.
+          Key rules: (1) expression must be <strong>integer type</strong> — no floats, no strings. (2) <code>case</code> labels must be
+          <strong>constant expressions</strong> (not variables). (3) Without <code>break</code>, execution <strong>falls through</strong>
+          to the next case — this is sometimes intentional! (4) Always include <code>default</code> for robustness.
         </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>switch</code> ek value ko multiple constants se compare karta hai. Discrete values ke liye long else-if se clean hai. <code>break</code> hamesha lagao warna fall-through hota hai.</div>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>switch</code> ek value ko multiple compile-time integer constants se compare karta hai. Rules: (1) expression integer type hona chahiye — floats, strings nahi. (2) <code>case</code> labels constant expressions hone chahiye. (3) <code>break</code> ke bina execution next case me fall through karta hai — kabhi kabhi ye intentional hota hai! (4) Hamesha <code>default</code> include karo.</div>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">💻 C — switch-case</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre><span class="type">char</span> op = <span class="string">'+'</span>;
+          <div class="code-header"><span class="code-lang">💻 C — switch-case with fall-through patterns</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* ═══ Standard switch with break ═══ */</span>
+<span class="type">char</span> op = <span class="string">'+'</span>;
 <span class="type">int</span> a = <span class="number">10</span>, b = <span class="number">3</span>;
 
 <span class="keyword">switch</span> (op) {
@@ -387,29 +559,54 @@ a ^= b; b ^= a; a ^= b;
         <span class="keyword">else</span> <span class="function">printf</span>(<span class="string">"Division by zero!\n"</span>);
         <span class="keyword">break</span>;
     <span class="keyword">default</span>:
-        <span class="function">printf</span>(<span class="string">"Unknown operator\n"</span>);
+        <span class="function">printf</span>(<span class="string">"Unknown operator: '%c'\n"</span>, op);
+}
+
+<span class="comment">/* ═══ INTENTIONAL fall-through (grouping cases) ═══ */</span>
+<span class="keyword">switch</span> (grade) {
+    <span class="keyword">case</span> <span class="string">'A'</span>:
+    <span class="keyword">case</span> <span class="string">'B'</span>:
+        <span class="function">printf</span>(<span class="string">"Excellent!\n"</span>);  <span class="comment">/* Handles both A and B */</span>
+        <span class="keyword">break</span>;
+    <span class="keyword">case</span> <span class="string">'C'</span>:
+        <span class="function">printf</span>(<span class="string">"Good\n"</span>);
+        <span class="keyword">break</span>;
+    <span class="keyword">case</span> <span class="string">'F'</span>:
+        <span class="function">printf</span>(<span class="string">"Failed\n"</span>);
+        <span class="keyword">break</span>;
+    <span class="keyword">default</span>:
+        <span class="function">printf</span>(<span class="string">"Invalid grade\n"</span>);
 }</pre></div>
         </div>
+        <div class="callout callout-warning"><strong>Fall-through bug:</strong> Forgetting <code>break</code> is the #1 switch-case bug. GCC's <code>-Wimplicit-fallthrough</code> flag warns about accidental fall-through. If you intentionally fall through, add a comment <code>/* fall through */</code> to suppress the warning (GCC recognizes this comment).</div>
       </div>
 
       <div class="concept-block">
-        <h3 class="concept-heading">Ternary operator</h3>
+        <h3 class="concept-heading">Ternary operator — when to use and when NOT to</h3>
         <p class="explain-en">
-          The ternary operator <code>condition ? value_if_true : value_if_false</code> is a compact if-else for simple assignments. Don't nest them — it becomes unreadable.
+          The ternary operator <code>condition ? value_if_true : value_if_false</code> is a compact if-else for <strong>simple value selection</strong>.
+          Use it for assignments and return values. <strong>Never nest them</strong> — it becomes unreadable. If you need more than
+          one ternary, use <code>if-else</code> instead.
         </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Ternary operator <code>condition ? true_value : false_value</code> simple if-else ka compact version hai. Nest mat karo — unreadable ho jaata hai.</div>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Ternary operator <code>condition ? true_value : false_value</code> simple value selection ke liye compact if-else hai. Assignments aur return values ke liye use karo. Kabhi nest mat karo — unreadable ho jaata hai. Agar ek se zyada ternary chahiye toh <code>if-else</code> use karo.</div>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">💻 C — Ternary</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-header"><span class="code-lang">💻 C — Ternary (good vs bad usage)</span><div class="code-dots"><span></span><span></span><span></span></div></div>
           <div class="code-body"><pre><span class="type">int</span> age = <span class="number">18</span>;
 
-<span class="comment">/* ✅ Good: simple assignment */</span>
-<span class="type">char</span> *status = (age &gt;= <span class="number">18</span>) ? <span class="string">"Adult"</span> : <span class="string">"Minor"</span>;
+<span class="comment">/* ✅ Good: simple value selection */</span>
+<span class="type">const char</span> *status = (age >= <span class="number">18</span>) ? <span class="string">"Adult"</span> : <span class="string">"Minor"</span>;
 
-<span class="comment">/* ✅ Good: inline in printf */</span>
-<span class="function">printf</span>(<span class="string">"Max: %d\n"</span>, (a &gt; b) ? a : b);
+<span class="comment">/* ✅ Good: inline in printf or return */</span>
+<span class="function">printf</span>(<span class="string">"Max: %d\n"</span>, (a > b) ? a : b);
+<span class="keyword">return</span> (err == <span class="number">0</span>) ? EXIT_SUCCESS : EXIT_FAILURE;
 
-<span class="comment">/* ❌ Bad: nested ternary (unreadable) */</span>
-<span class="type">int</span> result = (x &gt; <span class="number">0</span>) ? ((x &gt; <span class="number">100</span>) ? <span class="number">100</span> : x) : <span class="number">0</span>;</pre></div>
+<span class="comment">/* ❌ Bad: nested ternary — use if-else instead */</span>
+<span class="type">int</span> result = (x > <span class="number">0</span>) ? ((x > <span class="number">100</span>) ? <span class="number">100</span> : x) : <span class="number">0</span>;
+<span class="comment">/* ✅ Rewrite as: */</span>
+<span class="type">int</span> result;
+<span class="keyword">if</span> (x <= <span class="number">0</span>)        result = <span class="number">0</span>;
+<span class="keyword">else if</span> (x > <span class="number">100</span>)  result = <span class="number">100</span>;
+<span class="keyword">else</span>               result = x;</pre></div>
         </div>
       </div>
     </div>
@@ -534,53 +731,117 @@ error_file:
       </div>
 
       <div class="concept-block">
-        <h3 class="concept-heading">Storage classes</h3>
+        <h3 class="concept-heading">Storage classes — lifetime, scope, and linkage</h3>
         <p class="explain-en">
-          Storage classes determine a variable's <strong>lifetime</strong> (how long it exists), <strong>scope</strong> (where it's accessible),
-          and <strong>linkage</strong> (whether other files can see it). Understanding these is essential for multi-file C projects.
+          Storage classes determine three properties of every variable: <strong>lifetime</strong> (how long it exists in memory),
+          <strong>scope</strong> (where in code it's accessible), and <strong>linkage</strong> (whether other translation units can reference it).
+          Mastering these is <strong>essential for multi-file C projects</strong> — getting them wrong causes linker errors,
+          name collisions, and subtle bugs that only appear in large codebases.
         </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Storage classes variable ki lifetime (kitni der exist kare), scope (kahan accessible ho), aur linkage (doosri files dekh sake ya nahi) decide karte hain.</div>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Storage classes har variable ki teen properties decide karte hain: lifetime (kitni der memory me rahega), scope (code me kahan accessible hoga), aur linkage (doosre translation units reference kar sakte hain ya nahi). Multi-file C projects ke liye ye essential hai — galat karne se linker errors, name collisions, aur subtle bugs aate hain jo sirf bade codebases me dikhte hain.</div>
         <div class="hb-table-wrap">
           <table class="hb-table">
-            <thead><tr><th>Class</th><th>Lifetime</th><th>Scope</th><th>Default value</th><th>Use case</th></tr></thead>
+            <thead><tr><th>Class</th><th>Lifetime</th><th>Scope</th><th>Default value</th><th>Linkage</th><th>Use case</th></tr></thead>
             <tbody>
-              <tr><td><code>auto</code></td><td>Block</td><td>Local</td><td>Garbage</td><td>Default for local vars (rarely written)</td></tr>
-              <tr><td><code>static</code> (local)</td><td>Program</td><td>Local</td><td>0</td><td>Persist value between function calls</td></tr>
-              <tr><td><code>static</code> (global)</td><td>Program</td><td>File only</td><td>0</td><td>Private to this .c file</td></tr>
-              <tr><td><code>extern</code></td><td>Program</td><td>Global</td><td>0</td><td>Share variable across files</td></tr>
-              <tr><td><code>register</code></td><td>Block</td><td>Local</td><td>Garbage</td><td>Hint: store in CPU register (rarely used)</td></tr>
+              <tr><td><code>auto</code></td><td>Block</td><td>Local</td><td>⚠️ Garbage</td><td>None</td><td>Default for local vars (keyword rarely written)</td></tr>
+              <tr><td><code>static</code> (local)</td><td>Program</td><td>Local</td><td>0</td><td>None</td><td>Persist value between function calls</td></tr>
+              <tr><td><code>static</code> (global)</td><td>Program</td><td>File only</td><td>0</td><td>Internal</td><td>Private to this .c file (encapsulation)</td></tr>
+              <tr><td><code>extern</code></td><td>Program</td><td>Global</td><td>0</td><td>External</td><td>Share variable/function across .c files</td></tr>
+              <tr><td><code>register</code></td><td>Block</td><td>Local</td><td>⚠️ Garbage</td><td>None</td><td>Hint: use CPU register (ignored by modern compilers)</td></tr>
+              <tr><td><code>volatile</code></td><td>Varies</td><td>Varies</td><td>Varies</td><td>Varies</td><td>Hardware registers, signal handlers (don't optimize away)</td></tr>
             </tbody>
           </table>
         </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">static — the three meanings (interview favorite)</h3>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">💻 C — static local variable</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre><span class="type">void</span> <span class="function">counter</span>(<span class="type">void</span>) {
-    <span class="keyword">static</span> <span class="type">int</span> count = <span class="number">0</span>;  <span class="comment">/* Initialized ONCE, persists */</span>
-    count++;
+          <div class="code-header"><span class="code-lang">💻 C — static: three different meanings</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* ═══ Meaning 1: PERSISTENT local variable ═══ */</span>
+<span class="type">void</span> <span class="function">counter</span>(<span class="type">void</span>) {
+    <span class="keyword">static</span> <span class="type">int</span> count = <span class="number">0</span>;  <span class="comment">/* Initialized ONCE at program start */</span>
+    count++;                  <span class="comment">/* Retains value between calls */</span>
     <span class="function">printf</span>(<span class="string">"Called %d times\n"</span>, count);
 }
+<span class="comment">/* counter() → 1, counter() → 2, counter() → 3 */</span>
+
+<span class="comment">/* ═══ Meaning 2: FILE-PRIVATE global variable ═══ */</span>
+<span class="keyword">static</span> <span class="type">int</span> internal_state = <span class="number">0</span>;  <span class="comment">/* Only visible in THIS .c file */</span>
+<span class="comment">/* Other .c files CANNOT access this — linker won't find it */</span>
+
+<span class="comment">/* ═══ Meaning 3: FILE-PRIVATE function ═══ */</span>
+<span class="keyword">static</span> <span class="type">void</span> <span class="function">helper</span>(<span class="type">void</span>) {  <span class="comment">/* Only callable from THIS .c file */</span>
+    <span class="comment">/* Like "private" in OOP — encapsulation in C */</span>
+}</pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">extern — sharing across files (multi-file projects)</h3>
+        <p class="explain-en">
+          <code>extern</code> declares that a variable or function <strong>exists in another file</strong>. It doesn't allocate storage —
+          it tells the compiler "trust me, this symbol exists somewhere, the linker will find it."
+          The standard pattern: <strong>define in one .c file, declare <code>extern</code> in a .h header</strong>.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>extern</code> declare karta hai ki variable ya function doosri file me exist karta hai. Ye storage allocate nahi karta — compiler ko bolta hai "bharosa karo, ye symbol kahi hai, linker dhundh lega." Standard pattern: ek .c file me define karo, .h header me <code>extern</code> declare karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Multi-file extern pattern</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* ═══ config.h (header — shared declarations) ═══ */</span>
+<span class="preprocessor">#ifndef</span> CONFIG_H
+<span class="preprocessor">#define</span> CONFIG_H
+
+<span class="keyword">extern</span> <span class="type">int</span> debug_level;            <span class="comment">/* Declaration only (no storage) */</span>
+<span class="keyword">extern</span> <span class="keyword">const</span> <span class="type">char</span> *app_version;   <span class="comment">/* Declaration only */</span>
+<span class="type">void</span> <span class="function">init_config</span>(<span class="type">void</span>);            <span class="comment">/* Function declaration (extern implicit) */</span>
+
+<span class="preprocessor">#endif</span>
+
+<span class="comment">/* ═══ config.c (source — actual definitions) ═══ */</span>
+<span class="preprocessor">#include</span> <span class="string">"config.h"</span>
+
+<span class="type">int</span> debug_level = <span class="number">0</span>;                <span class="comment">/* Definition (allocates storage) */</span>
+<span class="keyword">const</span> <span class="type">char</span> *app_version = <span class="string">"2.1.0"</span>; <span class="comment">/* Definition */</span>
+
+<span class="type">void</span> <span class="function">init_config</span>(<span class="type">void</span>) {
+    debug_level = <span class="number">1</span>;
+}
+
+<span class="comment">/* ═══ main.c (uses the shared variables) ═══ */</span>
+<span class="preprocessor">#include</span> <span class="string">"config.h"</span>
 
 <span class="type">int</span> <span class="function">main</span>(<span class="type">void</span>) {
-    <span class="function">counter</span>();  <span class="comment">/* Called 1 times */</span>
-    <span class="function">counter</span>();  <span class="comment">/* Called 2 times */</span>
-    <span class="function">counter</span>();  <span class="comment">/* Called 3 times */</span>
+    <span class="function">init_config</span>();
+    <span class="function">printf</span>(<span class="string">"Version: %s, Debug: %d\n"</span>, app_version, debug_level);
     <span class="keyword">return</span> <span class="number">0</span>;
 }</pre></div>
         </div>
-        <div class="callout callout-important"><strong>Interview favorite:</strong> "What does <code>static</code> do?" — It has THREE meanings: (1) local variable that persists, (2) global variable private to file, (3) function private to file. Know all three.</div>
+        <div class="callout callout-important"><strong>The three meanings of <code>static</code></strong> (interview must-know): (1) <strong>Local variable</strong> → persists between function calls, initialized once. (2) <strong>Global variable</strong> → private to this .c file (internal linkage). (3) <strong>Function</strong> → private to this .c file. All three are different! Know them all.</div>
       </div>
     </div>
 
     <div class="practice-box">
-      <div class="practice-title">✏️ Practice Exercises — Part 2</div>
+      <div class="practice-title">✏️ Practice Exercises — Part 2 (Difficulty Graded)</div>
+      <h4>🟢 Easy (Do these first)</h4>
       <ol>
-        <li>Write a program that checks if a number is even/odd using <strong>bitwise AND</strong> (not modulo).</li>
-        <li>Create a calculator using <code>switch-case</code> that handles +, -, *, / and division-by-zero.</li>
-        <li>Print a multiplication table (1-10) using nested <code>for</code> loops with formatted columns.</li>
-        <li>Write a program that reads numbers until -1 is entered, then prints the sum, average, min, and max.</li>
-        <li>Implement the XOR swap trick. Verify it works with printf before and after.</li>
-        <li>Create a function with a <code>static</code> local counter. Call it 5 times and observe the output.</li>
-        <li>Write a bit manipulation program that sets bit 3, clears bit 5, and toggles bit 7 of a number. Print in binary.</li>
+        <li>Write a program that checks if a number is even/odd using <strong>bitwise AND</strong> (not modulo). Print the result.</li>
+        <li>Create a calculator using <code>switch-case</code> that handles +, -, *, / with division-by-zero protection.</li>
+        <li>Print a multiplication table (1-10) using nested <code>for</code> loops with formatted columns (<code>%4d</code>).</li>
+        <li>Write an input validation loop using <code>do-while</code> that keeps asking until the user enters a number between 1-100.</li>
+      </ol>
+      <h4>🟡 Medium (Apply your knowledge)</h4>
+      <ol start="5">
+        <li>Write a program that reads numbers until -1 is entered, then prints the sum, count, average, min, and max. Use appropriate loop type.</li>
+        <li>Implement a <strong>bitmask permission system</strong>: define READ/WRITE/EXECUTE flags, combine them with <code>|</code>, check with <code>&amp;</code>, and toggle individual permissions.</li>
+        <li>Create a function with a <code>static</code> local counter. Call it 10 times and verify the counter persists. Then make a file-private <code>static</code> global — confirm another <code>.c</code> file can't access it.</li>
+        <li>Write a program that demonstrates <strong>short-circuit evaluation</strong>: use <code>&amp;&amp;</code> to safely dereference a potentially-NULL pointer. Show what happens without the guard (use AddressSanitizer).</li>
+      </ol>
+      <h4>🔴 Hard (Challenge yourself)</h4>
+      <ol start="9">
+        <li>Implement <code>safe_add()</code>, <code>safe_mul()</code> functions that detect signed integer overflow <strong>before</strong> it happens. Test with <code>INT_MAX</code> values.</li>
+        <li>Write a program that prints any integer in binary using bitwise right-shift and AND. Format: <code>0b00000000_00000000_00000000_00101010</code>.</li>
+        <li>Implement the <strong>power-of-2 check</strong> (<code>n & (n-1) == 0</code>), <strong>count set bits</strong> (Brian Kernighan's algorithm), and <strong>XOR swap</strong>. Explain why each works.</li>
+        <li>Create a <strong>goto-based error cleanup</strong> function that opens a file, allocates memory, and processes data — with proper cleanup on any failure. Compare with the non-goto alternative.</li>
       </ol>
     </div>
 

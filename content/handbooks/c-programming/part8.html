@@ -31,10 +31,10 @@
       <div class="chapter-part-label">📖 Part 8 — Systems Programming & Industry Practices</div>
       <h1 class="chapter-title">Engineer Like a <span class="gradient-text">Professional</span></h1>
       <p class="chapter-subtitle">The final piece — master the tools and techniques that turn C students into production-ready engineers.</p>
-      <div class="chapter-meta"><span>📄 Modules 8.1 – 8.7</span><span>⏱️ 100–150 min read</span><span>💻 50+ Examples</span></div>
+      <div class="chapter-meta"><span>📄 Modules 8.1 – 8.7 + Bonus</span><span>⏱️ 140–190 min read</span><span>💻 75+ Examples</span><span>📊 12+ Reference Tables</span></div>
     </div>
 
-    <div class="callout callout-tip"><strong>How to study Part 8:</strong> These topics tie everything together. Build a real multi-file project with a Makefile. Use <code>-Wall -Wextra -Werror</code> flags. Write portable code. This is what employers look for.</div>
+    <div class="callout callout-tip"><strong>How to study Part 8:</strong> These topics tie everything together. Build a real multi-file project with a Makefile. Use <code>-Wall -Wextra -Werror</code> flags. Debug a crash with GDB. Write portable code. This is what employers look for — not toy single-file programs.</div>
 
     <div class="hb-mini-toc">
       <div class="hb-mini-title">📍 Part 8 Modules</div>
@@ -51,8 +51,14 @@
 
     <div class="quick-ref">
       <div class="qr-title">🚀 Advanced Lens — Part 8</div>
-      <p class="explain-en">The preprocessor, build systems, and advanced keywords are what separate toy programs from production software. Understanding conditional compilation enables cross-platform code. Makefiles automate builds. Multithreading unlocks modern hardware. These are essential skills for any systems programmer.</p>
-      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Preprocessor, build systems, aur advanced keywords toy programs ko production software se alag karte hain. Conditional compilation se cross-platform code banta hai. Makefiles build workflow automate karte hain. Multithreading modern hardware unlock karta hai.</div>
+      <p class="explain-en">
+        The preprocessor, build systems, and advanced keywords are what separate toy programs from production software.
+        Understanding the <strong>compilation pipeline</strong> (<code>cpp</code> → <code>cc1</code> → <code>as</code> → <code>ld</code>)
+        reveals why include guards exist, why link order matters, and how separate compilation enables million-line codebases.
+        Conditional compilation enables cross-platform code. Makefiles automate reproducible builds.
+        Multithreading unlocks modern multi-core hardware. GDB and sanitizers are your <strong>daily debugging weapons</strong>.
+      </p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Preprocessor, build systems, aur advanced keywords toy programs ko production software se alag karte hain. Compilation pipeline (<code>cpp</code> → <code>cc1</code> → <code>as</code> → <code>ld</code>) samajhna batata hai include guards kyu hain, link order kyu matter karta hai, aur separate compilation se million-line codebases kaise bante hain. GDB aur sanitizers tumhare daily debugging weapons hain.</div>
     </div>
 
     <!-- MODULE 8.1 -->
@@ -596,20 +602,32 @@ gcc -std=c17 -Wall -Wextra -O2 -DNDEBUG src/*.c -o app
     </div>
 
     <div class="practice-box">
-      <div class="practice-title">✏️ Practice Exercises — Part 8</div>
+      <div class="practice-title">✏️ Practice Exercises — Part 8 (Difficulty Graded)</div>
+      <h4>🟢 Easy (Do these first)</h4>
       <ol>
-        <li>Create a header file with an include guard. Define 3 macros: a constant, a function-like macro, and a variadic debug macro.</li>
-        <li>Write a program that uses <code>#ifdef</code> to print different messages on Windows vs Linux vs Mac.</li>
-        <li>Create a multi-file project (main.c, math_utils.c, math_utils.h) and write a Makefile to build it.</li>
-        <li>Write a multithreaded program: 4 threads each increment a shared counter 100,000 times. Compare results with and without mutex.</li>
-        <li>Use <code>_Generic</code> to create a <code>print_val</code> macro that auto-selects the right printf format for int, float, double, char*.</li>
-        <li>Use <code>_Static_assert</code> to verify that <code>sizeof(int)</code> is 4 and <code>sizeof(pointer)</code> is 8 on your platform.</li>
-        <li>Write a complete Makefile with <code>all</code>, <code>clean</code>, <code>debug</code>, and <code>test</code> targets. Include automatic dependency tracking.</li>
+        <li>Create a header file with an include guard. Define 3 macros: a constant (<code>PI</code>), a function-like macro (<code>SQUARE</code>), and a variadic debug macro (<code>DEBUG</code>).</li>
+        <li>Write a program that uses <code>#ifdef</code> to print different OS names on Windows vs Linux vs Mac. Test with <code>-D_WIN32</code> and <code>-D__linux__</code>.</li>
+        <li>Use <code>_Static_assert</code> to verify that <code>sizeof(int)</code> is 4 and <code>sizeof(void*)</code> is 8 on your platform. Observe the compile error on failure.</li>
+        <li>Write a program that prints <code>__FILE__</code>, <code>__LINE__</code>, <code>__DATE__</code>, <code>__TIME__</code>, and <code>__STDC_VERSION__</code>.</li>
+      </ol>
+      <h4>🟡 Medium (Apply your knowledge)</h4>
+      <ol start="5">
+        <li>Create a <strong>multi-file project</strong> (<code>main.c</code>, <code>math_utils.c</code>, <code>math_utils.h</code>, <code>string_utils.c</code>, <code>string_utils.h</code>) and write a Makefile with <code>all</code>, <code>clean</code>, <code>debug</code> targets.</li>
+        <li>Write a multithreaded program: 4 threads each increment a shared counter 100,000 times. Run with and without mutex. Print final counter and explain the difference.</li>
+        <li>Use <code>_Generic</code> to create a <code>print_val</code> macro that auto-selects the right <code>printf</code> format for <code>int</code>, <code>float</code>, <code>double</code>, and <code>char*</code>.</li>
+        <li>Demonstrate the <strong>macro double-evaluation bug</strong>: write <code>MAX(i++, j++)</code> and show how it increments twice. Then fix it with <code>static inline</code>.</li>
+      </ol>
+      <h4>🔴 Hard (Challenge yourself)</h4>
+      <ol start="9">
+        <li>Write a complete Makefile with <code>all</code>, <code>clean</code>, <code>debug</code>, <code>release</code>, and <code>test</code> targets. Include automatic <strong>dependency tracking</strong> with <code>gcc -MMD</code> and <code>-include</code>.</li>
+        <li>Build a <strong>thread-safe counter</strong> using <code>_Atomic</code> (no mutex). Benchmark it against the mutex version — measure with <code>clock()</code>. Which is faster? Why?</li>
+        <li>Create a <strong>debug logging library</strong> (<code>log.h</code>/<code>log.c</code>) with severity levels (DEBUG, INFO, WARN, ERROR), file/line info, timestamps, and conditional compilation (<code>-DLOG_LEVEL=2</code>).</li>
+        <li>🏆 <strong>Capstone:</strong> Build a complete <strong>student records CLI application</strong> — multi-file, Makefile, binary file storage, search/sort, error handling, clean ASan report. This is your portfolio project.</li>
       </ol>
     </div>
 
     <div class="callout callout-tip" style="text-align:center;font-size:1.1em;padding:2em;">
-      🎉 <strong>Congratulations!</strong> You've completed the entire C Programming Handbook — 8 parts, 56 modules, 400+ examples. You now have the foundation to build operating systems, embedded firmware, compilers, and high-performance applications. Keep coding. Keep building. Keep learning. <strong>— Yuvraj Aargade</strong>
+      🎉 <strong>Congratulations!</strong> You've completed the entire C Programming Handbook — 8 parts, 56 modules, 500+ examples, 96 difficulty-graded exercises. You now have the foundation to build operating systems, embedded firmware, compilers, and high-performance applications. Keep coding. Keep building. Keep learning. <strong>— Yuvraj Aargade</strong>
     </div>
 
     <div class="handbook-nav">

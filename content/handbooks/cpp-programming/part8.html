@@ -19,8 +19,10 @@
       <div class="chapter-part-label">📖 Part 8 — Concurrency & Modern C++</div>
       <h1 class="chapter-title">Parallel <span class="gradient-text">Power</span></h1>
       <p class="chapter-subtitle">Threads, mutexes, async/future, atomics, coroutines, modules — harness modern hardware with modern C++20/23 features.</p>
-      <div class="chapter-meta"><span>📄 Modules 8.1 – 8.7</span><span>⏱️ 90–120 min read</span><span>💻 50+ Examples</span></div>
+      <div class="chapter-meta"><span>📄 Modules 8.1 – 8.7</span><span>⏱️ 140–200 min read</span><span>💻 65+ Examples</span><span>📊 14+ Reference Tables</span></div>
     </div>
+
+    <div class="callout callout-tip"><strong>How to study Part 8:</strong> Concurrency bugs are the hardest to find. <strong>Always compile with <code>-fsanitize=thread</code></strong> when writing multithreaded code. Start with <code>std::async</code> (simplest), then learn <code>std::thread</code> + <code>mutex</code>, and progress to lock-free atomics only when you can prove correctness.</div>
 
     <div class="hb-mini-toc"><div class="hb-mini-title">📍 Part 8 Modules</div><div class="hb-mini-links"><a href="#m8-1">8.1 Threads</a><a href="#m8-2">8.2 Mutex</a><a href="#m8-3">8.3 Async</a><a href="#m8-4">8.4 Atomics</a><a href="#m8-5">8.5 Coroutines</a><a href="#m8-6">8.6 Modules</a><a href="#m8-7">8.7 C++23</a></div></div>
 
@@ -515,15 +517,27 @@ gdb ./app-debug core
     </div>
 
     <div class="practice-box">
-      <div class="practice-title">✏️ Practice Exercises — Part 8</div>
+      <div class="practice-title">✏️ Practice Exercises — Part 8 (Difficulty Graded)</div>
+      <h4>🟢 Easy (Do these first)</h4>
       <ol>
-        <li>Create 4 threads that each increment a shared counter 100,000 times. Use <code>std::mutex</code>.</li>
-        <li>Redo the above with <code>std::atomic&lt;int&gt;</code> instead of mutex. Compare performance.</li>
-        <li>Use <code>std::async</code> to compute factorial of 3 numbers in parallel, sum the results.</li>
-        <li>Write a producer-consumer pattern using <code>std::condition_variable</code>.</li>
-        <li>Create a simple coroutine generator that yields squares: 1, 4, 9, 16, ...</li>
-        <li>Create a C++20 module that exports math utilities (add, multiply, power).</li>
-        <li>Use <code>std::jthread</code> with a stop_token to create a cancellable background task.</li>
+        <li>Create 4 threads that each print their thread ID. Use <code>join()</code> on all of them. Print <code>hardware_concurrency()</code>.</li>
+        <li>Create 4 threads that increment a shared counter 100,000 times each. Use <code>std::mutex</code> + <code>lock_guard</code>. Verify final count is 400,000.</li>
+        <li>Use <code>std::async</code> to compute factorial of 3 numbers in parallel. Sum the results using <code>future.get()</code>.</li>
+        <li>Redo the counter exercise with <code>std::atomic&lt;int&gt;</code> instead of mutex. Compare performance using <code>std::chrono</code>.</li>
+      </ol>
+      <h4>🟡 Medium (Apply your knowledge)</h4>
+      <ol start="5">
+        <li>Write a <strong>producer-consumer</strong> pattern: one producer pushes integers to a queue, one consumer pops them. Use <code>std::condition_variable</code> and <code>std::mutex</code>.</li>
+        <li>Create a <code>std::jthread</code> with a <code>stop_token</code> that runs a background loop and gracefully stops when requested.</li>
+        <li>Create a C++20 <strong>module</strong> that exports math utilities (<code>add</code>, <code>multiply</code>, <code>power</code>). Import and use them from <code>main.cpp</code>.</li>
+        <li>Use <code>std::scoped_lock</code> to lock <strong>two mutexes simultaneously</strong> without deadlock. Demonstrate the transfer-between-accounts pattern.</li>
+      </ol>
+      <h4>🔴 Hard (Challenge yourself)</h4>
+      <ol start="9">
+        <li>Write a <strong>coroutine generator</strong> that yields an infinite sequence of squares: 1, 4, 9, 16, ... Use the <code>Generator&lt;T&gt;</code> pattern.</li>
+        <li>Implement a <strong>thread pool</strong>: pre-create N threads, accept tasks via a queue, and execute them. Use <code>condition_variable</code> for work notification.</li>
+        <li>Benchmark <strong>mutex vs atomic vs lock-free queue</strong>: measure throughput of 1M operations with 4 threads using each approach. Report results.</li>
+        <li>Build a <strong>parallel merge sort</strong>: split the array recursively, sort halves with <code>std::async</code>, merge results. Compare sequential vs parallel sort times on 10M integers.</li>
       </ol>
     </div>
 

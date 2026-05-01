@@ -19,8 +19,10 @@
       <div class="chapter-part-label">📖 Part 6 — STL: Containers, Iterators & Algorithms</div>
       <h1 class="chapter-title">The Standard <span class="gradient-text">Library</span></h1>
       <p class="chapter-subtitle">vector, map, set, algorithms, iterators, lambdas, and ranges — the tools every C++ developer uses daily. Don't reinvent what the STL already provides.</p>
-      <div class="chapter-meta"><span>📄 Modules 6.1 – 6.7</span><span>⏱️ 90–120 min read</span><span>💻 70+ Examples</span></div>
+      <div class="chapter-meta"><span>📄 Modules 6.1 – 6.7</span><span>⏱️ 130–180 min read</span><span>💻 85+ Examples</span><span>📊 12+ Reference Tables</span></div>
     </div>
+
+    <div class="callout callout-tip"><strong>How to study Part 6:</strong> The STL is your daily toolkit. <strong>Default to <code>std::vector</code></strong>, prefer algorithms over raw loops, and use <strong>ranges (C++20)</strong> for composable pipelines. Know the O(n) complexity of each container operation — it's asked in every C++ interview.</div>
 
     <div class="hb-mini-toc"><div class="hb-mini-title">📍 Part 6 Modules</div><div class="hb-mini-links"><a href="#m6-1">6.1 Sequence</a><a href="#m6-2">6.2 Associative</a><a href="#m6-3">6.3 Unordered</a><a href="#m6-4">6.4 Iterators</a><a href="#m6-5">6.5 Algorithms</a><a href="#m6-6">6.6 Lambdas</a><a href="#m6-7">6.7 Ranges</a></div></div>
 
@@ -502,15 +504,27 @@ events.emplace_back(<span class="string">"response.sent"</span>);
     </div>
 
     <div class="practice-box">
-      <div class="practice-title">✏️ Practice Exercises — Part 6</div>
+      <div class="practice-title">✏️ Practice Exercises — Part 6 (Difficulty Graded)</div>
+      <h4>🟢 Easy (Do these first)</h4>
       <ol>
-        <li>Create a <code>vector&lt;int&gt;</code>, populate with 10 random numbers, sort, and print.</li>
-        <li>Use <code>std::map</code> to count word frequencies in a paragraph (structured bindings to iterate).</li>
-        <li>Use <code>std::unordered_set</code> to find duplicate elements in a vector.</li>
-        <li>Write a lambda that captures a threshold and filters a vector to only elements above it.</li>
-        <li>Use <code>std::transform</code> + lambda to convert a <code>vector&lt;string&gt;</code> to uppercase.</li>
-        <li>Chain <code>std::views::filter</code>, <code>transform</code>, and <code>take</code> in a ranges pipeline.</li>
-        <li>Implement a simple "todo list" using <code>vector&lt;string&gt;</code> with add, remove, search, sort operations.</li>
+        <li>Create a <code>vector&lt;int&gt;</code>, populate with 10 random numbers, sort, reverse, and print. Use <code>reserve()</code>.</li>
+        <li>Use <code>std::map</code> to count word frequencies in a paragraph. Iterate with structured bindings.</li>
+        <li>Use <code>std::unordered_set</code> to find and print duplicate elements in a vector in O(n) time.</li>
+        <li>Write a lambda that captures a threshold by value and filters a vector to elements above it.</li>
+      </ol>
+      <h4>🟡 Medium (Apply your knowledge)</h4>
+      <ol start="5">
+        <li>Use <code>std::transform</code> + a generic lambda to convert a <code>vector&lt;string&gt;</code> to uppercase.</li>
+        <li>Chain <code>std::views::filter</code>, <code>transform</code>, and <code>take</code> in a C++20 ranges pipeline. Print the result.</li>
+        <li>Implement a simple <strong>todo list</strong> using <code>vector&lt;string&gt;</code> with add, remove, search (binary_search on sorted), and sort operations.</li>
+        <li>Compare <code>std::map</code> vs <code>std::unordered_map</code> performance: insert 100K random keys and measure lookup time with <code>std::chrono</code>.</li>
+      </ol>
+      <h4>🔴 Hard (Challenge yourself)</h4>
+      <ol start="9">
+        <li>Build a <strong>word frequency analyzer</strong>: read a text file, count words with <code>unordered_map</code>, sort by frequency using <code>std::sort</code> on a vector of pairs, print top 10.</li>
+        <li>Implement a <strong>mutable lambda counter</strong> that tracks call count and a <strong>move-capture lambda</strong> that takes ownership of a <code>unique_ptr</code>.</li>
+        <li>Write a C++20 <strong>ranges pipeline</strong> that generates Fibonacci numbers lazily using <code>views::iota</code> + <code>views::transform</code>, takes the first 20, and filters to only even ones.</li>
+        <li>Demonstrate <strong>iterator invalidation</strong>: show what happens when you <code>push_back</code> during a <code>vector</code> iteration, then fix it using the erase-remove idiom or index-based loop.</li>
       </ol>
     </div>
 

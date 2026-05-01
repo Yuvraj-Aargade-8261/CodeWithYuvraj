@@ -19,20 +19,27 @@
       <div class="chapter-part-label">📖 Part 3 — OOP — Classes & Objects</div>
       <h1 class="chapter-title">Object-Oriented <span class="gradient-text">Mastery</span></h1>
       <p class="chapter-subtitle">Classes are the heart of C++. Master constructors, destructors, copy/move semantics, operator overloading, and RAII — the idiom that makes C++ unique.</p>
-      <div class="chapter-meta"><span>📄 Modules 3.1 – 3.7</span><span>⏱️ 80–120 min read</span><span>💻 65+ Examples</span></div>
+      <div class="chapter-meta"><span>📄 Modules 3.1 – 3.7</span><span>⏱️ 120–170 min read</span><span>💻 80+ Examples</span><span>📊 12+ Reference Tables</span></div>
     </div>
+
+    <div class="callout callout-tip"><strong>How to study Part 3:</strong> OOP is where C++ diverges from C entirely. Master the <strong>Rule of 0/3/5</strong> — it's asked in every C++ interview. Compile all examples with <code>g++ -std=c++17 -Wall -Wextra -fsanitize=address</code> to catch object lifetime bugs.</div>
 
     <div class="hb-mini-toc"><div class="hb-mini-title">📍 Part 3 Modules</div><div class="hb-mini-links"><a href="#m3-1">3.1 Classes</a><a href="#m3-2">3.2 Access</a><a href="#m3-3">3.3 Operators</a><a href="#m3-4">3.4 Copy</a><a href="#m3-5">3.5 Move</a><a href="#m3-6">3.6 Static</a><a href="#m3-7">3.7 RAII</a></div></div>
 
     <div class="quick-ref">
       <div class="qr-title">🚀 Advanced Lens — Part 3</div>
-      <p class="explain-en">Enterprise-grade C++ object design is ownership-first: constructors establish invariants, copy/move rules are intentional, and RAII controls lifetime deterministically. Strong Part 3 design prevents leaks, dangling pointers, and costly refactors.</p>
-      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Advanced C++ OOP ka core ownership aur lifetime management hai. Agar constructors, copy/move rules, aur RAII sahi design hon, to memory bugs aur maintenance cost dono bahut kam hote hain.</div>
+      <p class="explain-en">
+        Enterprise-grade C++ object design is <strong>ownership-first</strong>: constructors establish invariants, copy/move rules
+        are intentional, and RAII controls lifetime deterministically. Under the hood, a class with virtual functions has a
+        <strong>vtable pointer</strong> (8 bytes overhead). Understanding object layout — data alignment, vtable, and the
+        <strong>copy-and-swap idiom</strong> — is what separates junior from senior C++ engineers.
+      </p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Advanced C++ OOP ka core <strong>ownership aur lifetime management</strong> hai. Virtual functions wali class me vtable pointer hota hai (8 bytes overhead). Object layout — data alignment, vtable, aur copy-and-swap idiom samajhna junior aur senior C++ engineers me farak karta hai.</div>
     </div>
 
     <div class="concept-block">
       <h3>Object design checklist (Part 3)</h3>
-      <table>
+      <div class="hb-table-wrap"><table class="hb-table">
         <thead><tr><th>Design point</th><th>Industry baseline</th></tr></thead>
         <tbody>
           <tr><td>Class invariants</td><td>Constructors establish valid state and prohibit partial objects.</td></tr>
@@ -40,7 +47,7 @@
           <tr><td>RAII usage</td><td>Bind resource lifetime to object lifetime, avoid manual cleanup.</td></tr>
           <tr><td>API clarity</td><td>Expose intent-focused methods and keep mutable state controlled.</td></tr>
         </tbody>
-      </table>
+      </table></div>
     </div>
 
     <!-- MODULE 3.1 -->
@@ -511,15 +518,27 @@ c = a;             <span class="comment">// Copy assign — c's old memory freed
     </div>
 
     <div class="practice-box">
-      <div class="practice-title">✏️ Practice Exercises — Part 3</div>
+      <div class="practice-title">✏️ Practice Exercises — Part 3 (Difficulty Graded)</div>
+      <h4>🟢 Easy (Do these first)</h4>
       <ol>
-        <li>Create a <code>Rectangle</code> class with width/height, getters, and an <code>area()</code> const method.</li>
-        <li>Overload <code>+</code> and <code>&lt;&lt;</code> operators for a <code>Vec3</code> class (x, y, z).</li>
-        <li>Implement a <code>DynamicArray</code> class with Rule of 5: constructor, destructor, copy ctor, copy assign, move ctor, move assign.</li>
-        <li>Create a <code>Counter</code> class with a static member tracking total instances. Verify count goes up/down.</li>
-        <li>Write an RAII wrapper for a database connection (simulate with cout messages in ctor/dtor).</li>
-        <li>Use <code>= delete</code> to make a class non-copyable. Try to copy it and observe the compiler error.</li>
-        <li>Demonstrate the copy-and-swap idiom for exception-safe assignment.</li>
+        <li>Create a <code>Rectangle</code> class with width/height, getters, setters, and an <code>area()</code> <code>const</code> method. Use member initializer list.</li>
+        <li>Create a <code>Counter</code> class with a <code>static</code> member tracking total instances. Verify count increments on construction and decrements on destruction.</li>
+        <li>Use <code>= delete</code> to make a <code>Socket</code> class non-copyable. Try to copy it and observe the compiler error.</li>
+        <li>Write a class that uses <code>mutable</code> to cache a computed value inside a <code>const</code> method.</li>
+      </ol>
+      <h4>🟡 Medium (Apply your knowledge)</h4>
+      <ol start="5">
+        <li>Overload <code>+</code>, <code>==</code>, <code>[]</code>, and <code>&lt;&lt;</code> operators for a <code>Vec3</code> class (x, y, z). Test with <code>std::cout &lt;&lt; (v1 + v2)</code>.</li>
+        <li>Implement a <code>DynamicArray</code> class with <strong>Rule of 5</strong>: constructor, destructor, copy ctor, copy assign, move ctor, move assign. Verify zero leaks with ASan.</li>
+        <li>Write an RAII wrapper (<code>FileGuard</code>) for <code>FILE*</code> that opens in constructor, closes in destructor. Delete copy, allow move.</li>
+        <li>Demonstrate the <strong>copy-and-swap idiom</strong> for exception-safe assignment. Show why it's preferred over manual self-assignment checks.</li>
+      </ol>
+      <h4>🔴 Hard (Challenge yourself)</h4>
+      <ol start="9">
+        <li>Build a <strong>String class from scratch</strong>: dynamic char buffer, all Rule of 5 functions, <code>operator+</code> for concatenation, <code>operator[]</code>, <code>operator&lt;&lt;</code>, and <code>.length()</code>.</li>
+        <li>Create a class that demonstrates <strong>shallow vs deep copy</strong> bug: show double-free with default copy, then fix with custom deep copy.</li>
+        <li>Implement a <strong>reference-counting smart pointer</strong> (<code>RefCounted&lt;T&gt;</code>) with copy constructor incrementing count and destructor decrementing/freeing.</li>
+        <li>Write a class hierarchy that demonstrates <strong>Rule of 0</strong>: use <code>std::vector</code> and <code>std::string</code> as members so the compiler generates all 5 special members correctly without you writing any.</li>
       </ol>
     </div>
 

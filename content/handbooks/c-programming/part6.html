@@ -31,10 +31,10 @@
       <div class="chapter-part-label">📖 Part 6 — Dynamic Memory & File I/O</div>
       <h1 class="chapter-title">Master <span class="gradient-text">Memory & Files</span></h1>
       <p class="chapter-subtitle">Dynamic memory management and file handling are what make C programs interact with the real world.</p>
-      <div class="chapter-meta"><span>📄 Modules 6.1 – 6.7</span><span>⏱️ 100–140 min read</span><span>💻 60+ Examples</span></div>
+      <div class="chapter-meta"><span>📄 Modules 6.1 – 6.7</span><span>⏱️ 140–180 min read</span><span>💻 80+ Examples</span><span>📊 8+ Diagrams</span></div>
     </div>
 
-    <div class="callout callout-tip"><strong>How to study Part 6:</strong> For every <code>malloc</code>, write a corresponding <code>free</code> IMMEDIATELY. Use Valgrind to check for leaks. For file I/O, always check return values. These habits define professional C developers.</div>
+    <div class="callout callout-tip"><strong>How to study Part 6:</strong> For every <code>malloc</code>, write a corresponding <code>free</code> IMMEDIATELY. Use <code>-fsanitize=address</code> on every compile during development. For file I/O, always check return values — <code>fopen</code> returning NULL is not optional to handle. These habits define professional C developers.</div>
 
     <div class="hb-mini-toc">
       <div class="hb-mini-title">📍 Part 6 Modules</div>
@@ -51,8 +51,15 @@
 
     <div class="quick-ref">
       <div class="qr-title">🚀 Advanced Lens — Part 6</div>
-      <p class="explain-en">In C, YOU are the memory manager. There's no garbage collector — every byte you allocate must be freed. Understanding the stack vs heap distinction, memory allocation patterns, and file I/O is what separates C from all other languages. These skills are critical for embedded systems, OS development, and high-performance computing.</p>
-      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>C me TUM memory manager ho. Koi garbage collector nahi — har byte jo allocate karo woh free karna padega. Stack vs heap, memory allocation patterns, aur file I/O samajhna C ko doosri languages se alag banata hai.</div>
+      <p class="explain-en">
+        In C, <strong>YOU are the memory manager</strong>. There's no garbage collector — every byte you allocate must be freed.
+        Understanding the stack vs heap distinction, <strong>ownership semantics</strong> (who is responsible for freeing),
+        <strong>heap fragmentation</strong> (why long-running programs slow down), and the init/destroy pattern
+        is what separates C from all other languages. At the OS level, <code>malloc</code> calls <code>brk()</code>/<code>sbrk()</code>
+        or <code>mmap()</code> — understanding this pipeline helps you debug memory-intensive applications.
+        File I/O via <code>stdio.h</code> uses <strong>buffered streams</strong> — data isn't written to disk until the buffer flushes.
+      </p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>C me TUM memory manager ho. Koi garbage collector nahi — har byte jo allocate karo woh free karna padega. Stack vs heap, ownership semantics (free kaun karega), heap fragmentation (long-running programs kyu slow hote hain), aur init/destroy pattern samajhna C ko doosri languages se alag banata hai. OS level pe <code>malloc</code> <code>brk()</code>/<code>mmap()</code> call karta hai. File I/O buffered streams use karta hai — data turant disk pe nahi jaata.</div>
     </div>
 
     <!-- MODULE 6.1 -->
@@ -506,15 +513,27 @@ err1: <span class="keyword">return</span> -<span class="number">1</span>;
     </div>
 
     <div class="practice-box">
-      <div class="practice-title">✏️ Practice Exercises — Part 6</div>
+      <div class="practice-title">✏️ Practice Exercises — Part 6 (Difficulty Graded)</div>
+      <h4>🟢 Easy (Do these first)</h4>
       <ol>
-        <li>Write a program that allocates an array with <code>malloc</code>, fills it, prints it, and frees it. Check for NULL.</li>
-        <li>Implement a <strong>dynamic int vector</strong> (init, push, get, destroy) using realloc with doubling capacity.</li>
-        <li>Compare <code>malloc</code> vs <code>calloc</code>: allocate 10 ints with each, print values before initialization.</li>
-        <li>Write a program that reads a text file line-by-line and counts: lines, words, and characters (like <code>wc</code>).</li>
-        <li>Create a student database: write 5 student records to a binary file, then read and display record #3 using <code>fseek</code>.</li>
-        <li>Write a file copy program: read from source, write to destination. Handle all errors with <code>perror</code>.</li>
-        <li>Build a program with intentional memory bugs. Use Valgrind or AddressSanitizer to detect and fix them.</li>
+        <li>Write a program that allocates an array of 100 ints with <code>malloc</code>, fills it with squares (i²), prints all values, and frees it. Always check for NULL.</li>
+        <li>Compare <code>malloc</code> vs <code>calloc</code>: allocate 10 ints with each, print values <strong>before initialization</strong>. Show that calloc gives zeros while malloc gives garbage.</li>
+        <li>Write a program that reads a text file line-by-line with <code>fgets</code> and counts: lines, words, and characters (like the <code>wc</code> command).</li>
+        <li>Write a file copy program: read from source, write to destination byte-by-byte with <code>fgetc</code>/<code>fputc</code>. Handle all errors with <code>perror</code>.</li>
+      </ol>
+      <h4>🟡 Medium (Apply your knowledge)</h4>
+      <ol start="5">
+        <li>Implement a <strong>dynamic int vector</strong> with <code>vec_init()</code>, <code>vec_push()</code>, <code>vec_get()</code>, <code>vec_destroy()</code> using realloc with doubling capacity. Track size vs capacity. Verify zero leaks with <code>-fsanitize=address</code>.</li>
+        <li>Create a student database: write 10 student records (struct with name, roll, GPA) to a <strong>binary file</strong>. Then read and display record #7 using <code>fseek</code> without reading records 1-6.</li>
+        <li>Write a function using the <strong>goto cleanup pattern</strong> that opens 3 files, allocates 2 buffers, processes data, and correctly frees everything on any error path.</li>
+        <li>Implement a <strong>safe realloc wrapper</strong> that handles NULL return without losing the original pointer. Test by triggering allocation failure.</li>
+      </ol>
+      <h4>🔴 Hard (Challenge yourself)</h4>
+      <ol start="9">
+        <li>Build a <strong>string builder</strong>: <code>sb_new()</code>, <code>sb_append()</code>, <code>sb_to_string()</code>, <code>sb_free()</code>. Use realloc with doubling. Concatenate 1000 strings and verify zero leaks.</li>
+        <li>Create a <strong>simple key-value store</strong> backed by a binary file. Support <code>put(key, value)</code>, <code>get(key)</code>, and <code>delete(key)</code> with <code>fseek</code>/<code>fwrite</code>/<code>fread</code>.</li>
+        <li>Write a program that intentionally creates a <strong>dangling pointer</strong>, <strong>memory leak</strong>, <strong>double free</strong>, and <strong>buffer overflow</strong>. Compile with <code>-fsanitize=address</code> and capture the exact ASan error output for each. Then fix all 4.</li>
+        <li>Implement a simple <strong>arena allocator</strong>: allocate a large block upfront with <code>malloc</code>, then hand out sub-allocations from it without individual <code>free</code> calls. Free the entire arena at once at the end.</li>
       </ol>
     </div>
 

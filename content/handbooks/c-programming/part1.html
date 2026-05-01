@@ -39,7 +39,7 @@
       <div class="chapter-part-label">📖 Part 1 — C Foundations</div>
       <h1 class="chapter-title">Your First <span class="gradient-text">C Program</span></h1>
       <p class="chapter-subtitle">Understand how C works under the hood — from compilation to execution — with industry-level thinking.</p>
-      <div class="chapter-meta"><span>📄 Modules 1.1 – 1.7</span><span>⏱️ 80–120 min read</span><span>💻 50+ Examples</span></div>
+      <div class="chapter-meta"><span>📄 Modules 1.1 – 1.7</span><span>⏱️ 120–180 min read</span><span>💻 80+ Examples</span><span>📊 15+ Diagrams</span></div>
     </div>
 
     <div class="callout callout-tip">
@@ -74,7 +74,7 @@
 
     <div class="concept-block">
       <h3>Foundation readiness checklist (Part 1)</h3>
-      <table>
+      <div class="hb-table-wrap"><table class="hb-table">
         <thead><tr><th>Area</th><th>Production baseline</th></tr></thead>
         <tbody>
           <tr><td>Compiler discipline</td><td>Build with strict warnings and treat warnings as errors.</td></tr>
@@ -82,7 +82,7 @@
           <tr><td>Type clarity</td><td>Choose explicit integer widths for hardware/protocol boundaries.</td></tr>
           <tr><td>I/O safety</td><td>Validate input and avoid unsafe legacy functions.</td></tr>
         </tbody>
-      </table>
+      </table></div>
     </div>
 
     <!-- MODULE 1.1 -->
@@ -90,450 +90,1060 @@
       <div class="module-header"><div class="module-number">1.1</div><h2 class="module-title">History & Why C Matters — C's role in OS, embedded systems, and modern computing</h2></div>
 
       <div class="concept-block">
-        <h3 class="concept-heading">The birth of C</h3>
+        <h3 class="concept-heading">The language genealogy — from BCPL to C</h3>
         <p class="explain-en">
-          C was created by <strong>Dennis Ritchie</strong> at Bell Labs in <strong>1972</strong> to rewrite the Unix operating system.
-          Before C, OS code was written in assembly — tied to specific hardware. C provided a <strong>portable, high-level language</strong>
-          that could still access hardware directly. This made Unix — and later Linux, Windows, and macOS — possible.
+          C didn't appear from nowhere — it evolved through a lineage of systems languages. In <strong>1966</strong>, Martin Richards created
+          <strong>BCPL</strong> (Basic Combined Programming Language) at Cambridge for writing compilers. In <strong>1969</strong>, Ken Thompson
+          at Bell Labs simplified BCPL into <strong>B</strong> to write utilities for the PDP-7 minicomputer. Then in <strong>1972</strong>,
+          <strong>Dennis Ritchie</strong> evolved B into <strong>C</strong> by adding data types (B was typeless!), structures, and a proper
+          type system — specifically to rewrite the <strong>Unix operating system</strong> from assembly into a portable language.
+          The key innovation was that C gave you <strong>high-level abstractions</strong> (functions, structs, loops) while preserving
+          <strong>low-level hardware access</strong> (pointers, bitwise operations, direct memory manipulation) — a combination no
+          language before it achieved. By 1973, Unix was rewritten in C, and the era of portable operating systems began.
         </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>C ko Dennis Ritchie ne 1972 me Bell Labs me banaya tha Unix OS likhne ke liye. Pehle OS assembly me likha jaata tha jo specific hardware pe hi chalta tha. C ne portable, high-level language di jo hardware ko directly access bhi kar sakti thi.</div>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>C ek dum se nahi aaya — ek language family tree se evolve hua. 1966 me BCPL bani (compilers likhne ke liye), 1969 me Ken Thompson ne isko simplify karke B banaya, aur phir 1972 me Dennis Ritchie ne B me data types aur structures add karke C banaya — specifically Unix OS ko assembly se portable language me rewrite karne ke liye. C ki khaas baat thi ki ye high-level features (functions, structs) aur low-level hardware access (pointers, bitwise ops) dono ek saath deta tha — koi bhi language pehle ye nahi kar paayi thi. 1973 tak Unix C me rewrite ho gaya aur portable OS ka zamana shuru hua.</div>
+        <div class="diagram-box">
+          <div class="diagram-title">📐 Language Evolution: BCPL → B → C</div>
+          <div class="diagram-flow">
+            <div class="diagram-node secondary">BCPL (1966)<br><small>Martin Richards</small></div>
+            <div class="diagram-arrow">→ simplified →</div>
+            <div class="diagram-node accent">B (1969)<br><small>Ken Thompson</small></div>
+            <div class="diagram-arrow">→ types added →</div>
+            <div class="diagram-node primary">C (1972)<br><small>Dennis Ritchie</small></div>
+            <div class="diagram-arrow">→ influenced →</div>
+            <div class="diagram-node success">C++, Java, C#, Go, Rust<br><small>Modern languages</small></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">The evolution of C standards — every version explained</h3>
+        <p class="explain-en">
+          C has evolved through <strong>6 major standards</strong> over 50+ years. Each version added critical features while maintaining
+          <strong>backward compatibility</strong> — code written in 1989 still compiles today. Understanding which standard you're targeting
+          matters because embedded systems often use C99/C11, while modern projects target C17/C23. The compiler flag
+          <code>-std=c17</code> or <code>-std=c23</code> controls which standard GCC/Clang enforces.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>C ke 50+ saal me 6 major standards aaye hain. Har version ne naye features add kiye lekin backward compatibility banayi rakhi — 1989 ka code aaj bhi compile hota hai. Embedded systems usually C99/C11 use karte hain, modern projects C17/C23. Compiler flag <code>-std=c17</code> se control hota hai kaunsa standard enforce ho.</div>
         <div class="hb-table-wrap">
           <table class="hb-table">
-            <thead><tr><th>Year</th><th>Milestone</th><th>Impact</th></tr></thead>
+            <thead><tr><th>Standard</th><th>Year</th><th>Key Features Added</th><th>Industry Impact</th></tr></thead>
             <tbody>
-              <tr><td>1972</td><td>C created by Dennis Ritchie</td><td>Unix rewritten in C</td></tr>
-              <tr><td>1978</td><td>"The C Programming Language" (K&R)</td><td>De facto standard</td></tr>
-              <tr><td>1989</td><td>ANSI C (C89/C90)</td><td>First official standard</td></tr>
-              <tr><td>1999</td><td>C99</td><td>Inline, VLA, // comments</td></tr>
-              <tr><td>2011</td><td>C11</td><td>Threads, atomics, _Generic</td></tr>
-              <tr><td>2018</td><td>C17</td><td>Bug fixes, clarifications</td></tr>
-              <tr><td>2024</td><td>C23</td><td>constexpr, #embed, typeof</td></tr>
+              <tr><td><strong>K&R C</strong></td><td>1978</td><td>Original book standard, implicit int, old-style declarations</td><td>De facto standard for 11 years</td></tr>
+              <tr><td><strong>ANSI C (C89/C90)</strong></td><td>1989</td><td>Function prototypes, <code>void</code>, <code>const</code>, <code>volatile</code>, standard library</td><td>First official ISO standard — portability achieved</td></tr>
+              <tr><td><strong>C99</strong></td><td>1999</td><td><code>//</code> comments, <code>inline</code>, VLA, <code>_Bool</code>, <code>&lt;stdint.h&gt;</code>, <code>restrict</code>, designated initializers, mixed declarations</td><td>Major modernization — still the baseline for most embedded code</td></tr>
+              <tr><td><strong>C11</strong></td><td>2011</td><td><code>_Thread_local</code>, <code>_Atomic</code>, <code>_Generic</code>, <code>_Static_assert</code>, anonymous structs/unions, <code>&lt;threads.h&gt;</code></td><td>Concurrency support — critical for multi-core era</td></tr>
+              <tr><td><strong>C17 (C18)</strong></td><td>2018</td><td>Bug fixes and clarifications only — no new features</td><td>Stabilization release — current production default</td></tr>
+              <tr><td><strong>C23</strong></td><td>2024</td><td><code>constexpr</code>, <code>typeof</code>, <code>#embed</code>, <code>nullptr</code>, <code>auto</code> type inference, binary literals, <code>_BitInt</code>, checked arithmetic</td><td>Biggest update since C99 — modern safety features</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Terminal — Compiling with different standards</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># Compile with C99 (embedded systems common)</span>
+gcc -std=c99 -Wall -Wextra main.c -o main
+
+<span class="comment"># Compile with C17 (current production default)</span>
+gcc -std=c17 -Wall -Wextra -pedantic main.c -o main
+
+<span class="comment"># Compile with C23 (latest features)</span>
+gcc -std=c2x -Wall -Wextra main.c -o main
+
+<span class="comment"># Check what standard your compiler defaults to</span>
+gcc -dM -E - &lt; /dev/null | grep __STDC_VERSION__
+<span class="comment"># Output: #define __STDC_VERSION__ 201710L  (C17)</span></pre></div>
+        </div>
+        <div class="callout callout-tip"><strong>Which standard to use?</strong> For learning: use <code>-std=c17</code>. For embedded: <code>-std=c99</code> or <code>-std=c11</code>. For cutting-edge: <code>-std=c2x</code> (C23). Always add <code>-Wall -Wextra -pedantic</code> for maximum safety.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Why C still dominates in 2026</h3>
+        <p class="explain-en">
+          C is the <strong>#2 language on the TIOBE index</strong> and has held a top-3 position for over <strong>40 consecutive years</strong>.
+          It powers: the <strong>Linux kernel</strong> (28M+ lines of C), <strong>Windows NT kernel</strong>, <strong>macOS XNU kernel</strong>,
+          <strong>CPython</strong> (the Python interpreter you use daily is written in C), <strong>Git</strong>, <strong>PostgreSQL</strong>,
+          <strong>SQLite</strong> (the most deployed database in history — on every smartphone), <strong>Redis</strong>, <strong>nginx</strong>,
+          <strong>curl</strong>, and virtually every embedded device from <strong>car ECUs</strong> to <strong>Mars rovers</strong> to
+          <strong>pacemakers</strong>. Even languages that aim to "replace" C (Rust, Zig) still need to interoperate with C through its
+          <strong>ABI (Application Binary Interface)</strong> — the universal calling convention of systems programming.
+          Learning C means understanding how <strong>every computer actually works at the hardware level</strong>.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>C 40+ saal se TIOBE index me top-3 me hai. Linux kernel (28M+ lines), Windows kernel, macOS kernel, Python interpreter (CPython), Git, PostgreSQL, SQLite (duniya ka sabse zyada deployed database — har smartphone pe hai), Redis, nginx, curl — sab C me hain. Car ECUs se lekar Mars rovers tak, pacemakers tak sab C use karte hain. Jo languages C ko "replace" karna chahti hain (Rust, Zig) unhe bhi C ke ABI se interoperate karna padta hai. C sikhna = har computer ki actual working samajhna.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Domain</th><th>Major C Projects</th><th>Lines of C Code</th><th>Why C is Irreplaceable Here</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Operating Systems</strong></td><td>Linux, Windows, macOS, FreeBSD, Android (kernel)</td><td>28M+ (Linux alone)</td><td>Direct hardware access, zero runtime overhead, ABI stability</td></tr>
+              <tr><td><strong>Embedded & IoT</strong></td><td>Arduino, ESP32, STM32, automotive ECUs, medical devices</td><td>Billions of deployed devices</td><td>2 KB RAM targets, no OS required, deterministic timing</td></tr>
+              <tr><td><strong>Databases</strong></td><td>PostgreSQL, SQLite, MySQL, Redis, MongoDB (core)</td><td>1.5M+ (PostgreSQL)</td><td>Microsecond latency, memory-mapped I/O, zero-copy</td></tr>
+              <tr><td><strong>Language Runtimes</strong></td><td>CPython, Ruby (MRI), PHP (Zend), Lua, Perl</td><td>800K+ (CPython)</td><td>C ABI is the universal FFI, performance-critical inner loops</td></tr>
+              <tr><td><strong>Compilers & Tools</strong></td><td>GCC, Clang/LLVM (core), Git, Make, Vim</td><td>15M+ (GCC)</td><td>Self-hosting, bootstrapping, cross-platform toolchains</td></tr>
+              <tr><td><strong>Networking</strong></td><td>nginx, curl, OpenSSL, Linux TCP/IP stack, DNS servers</td><td>500K+ (nginx + curl)</td><td>Low-latency packet processing, kernel bypass, zero-copy I/O</td></tr>
+              <tr><td><strong>Gaming & Graphics</strong></td><td>OpenGL/Vulkan drivers, SDL, game engine cores</td><td>Varies</td><td>GPU driver interface, hardware-level rendering pipelines</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>Career reality:</strong> Systems programmers, embedded engineers, and kernel developers earn <strong>30–50% more</strong> than average software engineers. C mastery opens doors to roles at companies like Google (Android kernel), Apple (XNU/IOKit), NVIDIA (drivers), SpaceX (flight software), and Tesla (autopilot firmware) that no other language can.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">C's influence on modern languages</h3>
+        <p class="explain-en">
+          Nearly every popular language created after 1980 borrowed its <strong>syntax and semantics</strong> from C. The curly-brace
+          block syntax <code>{ }</code>, the <code>for/while/do-while</code> loops, the <code>switch-case</code> statement, the
+          <code>type name = value;</code> declaration pattern, and the <code>/**/</code> comment style — all originated in C. Understanding
+          C means you already know 60-70% of the syntax of C++, Java, C#, JavaScript, PHP, Go, Rust, and Swift.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>1980 ke baad bani lagbhag har popular language ne C se syntax aur semantics liye. Curly braces <code>{ }</code>, for/while loops, switch-case, <code>type name = value;</code> pattern — sab C se aaye. C samajhne ka matlab hai ki C++, Java, C#, JavaScript, PHP, Go, Rust, Swift ka 60-70% syntax tumhe pehle se aata hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Language</th><th>Year</th><th>What it borrowed from C</th><th>What it changed/added</th></tr></thead>
+            <tbody>
+              <tr><td><strong>C++</strong></td><td>1985</td><td>Entire C syntax, pointers, preprocessor, ABI</td><td>Classes, templates, RAII, exceptions, STL</td></tr>
+              <tr><td><strong>Java</strong></td><td>1995</td><td>Syntax, operators, control flow, type system concept</td><td>Garbage collection, OOP-only, JVM, no pointers</td></tr>
+              <tr><td><strong>C#</strong></td><td>2000</td><td>C-family syntax, operator set, expression rules</td><td>.NET runtime, properties, LINQ, async/await</td></tr>
+              <tr><td><strong>JavaScript</strong></td><td>1995</td><td>C-style syntax, operators, semicolons, blocks</td><td>Dynamic typing, prototypes, closures, event loop</td></tr>
+              <tr><td><strong>Go</strong></td><td>2009</td><td>C syntax (designed by C creators!), pointers, structs</td><td>Goroutines, garbage collection, interfaces, no classes</td></tr>
+              <tr><td><strong>Rust</strong></td><td>2015</td><td>C-level performance, systems focus, zero-cost abstractions</td><td>Ownership model, borrow checker, no null, no UB</td></tr>
+              <tr><td><strong>Swift</strong></td><td>2014</td><td>C interop, performance focus, ABI compatibility</td><td>Optionals, protocol-oriented, ARC, type inference</td></tr>
             </tbody>
           </table>
         </div>
       </div>
 
       <div class="concept-block">
-        <h3 class="concept-heading">Why C still matters in 2026</h3>
+        <h3 class="concept-heading">C vs modern alternatives — the 2026 perspective</h3>
         <p class="explain-en">
-          C is the <strong>#2 language on the TIOBE index</strong>. It powers: <strong>Linux kernel</strong> (28M+ lines of C),
-          <strong>Windows kernel</strong>, <strong>Python interpreter</strong> (CPython is written in C), <strong>Git</strong>,
-          <strong>PostgreSQL</strong>, and virtually every embedded device (cars, medical devices, satellites).
-          Learning C means understanding how computers actually work.
+          The most common question today is: <strong>"Should I learn C or Rust?"</strong> The answer is <strong>both serve different purposes</strong>.
+          C gives you <strong>maximum control</strong> with <strong>maximum responsibility</strong> — you manage memory, you handle errors, you prevent
+          undefined behavior yourself. Rust gives you <strong>compile-time safety guarantees</strong> but with a steeper learning curve and
+          larger binaries. For embedded systems with 2 KB RAM, Rust's runtime is too heavy — C is the only option. For new systems software
+          where safety is paramount, Rust is increasingly preferred. Understanding C makes learning Rust (or any systems language) <strong>10x easier</strong>.
         </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>C aaj bhi TIOBE index pe #2 hai. Linux kernel, Windows kernel, Python interpreter, Git — sab C me likhe hain. Har embedded device (cars, medical, satellites) C use karta hai. C sikhna = computer samajhna.</div>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Aaj ka sabse common sawaal: "C sikhun ya Rust?" Jawab: dono alag kaam ke liye hain. C me maximum control hai lekin maximum responsibility bhi — memory, errors, undefined behavior sab khud handle karo. Rust compile-time safety deta hai lekin learning curve steep hai aur binaries badi hoti hain. 2 KB RAM wale embedded systems me Rust ka runtime heavy hai — sirf C chalta hai. Naye systems software jahan safety zaroori hai, Rust preferred hai. C samajhne se Rust (ya koi bhi systems language) sikhna 10x aasan ho jaata hai.</div>
         <div class="hb-table-wrap">
           <table class="hb-table">
-            <thead><tr><th>C is used in</th><th>Examples</th><th>Why not another language?</th></tr></thead>
+            <thead><tr><th>Feature</th><th>C</th><th>C++</th><th>Rust</th><th>Go</th><th>Python</th><th>Java</th></tr></thead>
             <tbody>
-              <tr><td>Operating Systems</td><td>Linux, Windows, macOS</td><td>Direct hardware access needed</td></tr>
-              <tr><td>Embedded Systems</td><td>Arduino, ESP32, medical</td><td>Minimal memory/CPU resources</td></tr>
-              <tr><td>Databases</td><td>PostgreSQL, SQLite, Redis</td><td>Performance-critical</td></tr>
-              <tr><td>Language Runtimes</td><td>CPython, Ruby, PHP</td><td>Foundation layer speed</td></tr>
-              <tr><td>Compilers</td><td>GCC, Clang</td><td>Self-hosting requirement</td></tr>
-              <tr><td>Networking</td><td>nginx, curl</td><td>Low-latency needed</td></tr>
+              <tr><td><strong>Execution speed</strong></td><td>⚡ Fastest</td><td>⚡ Fastest</td><td>⚡ Fastest</td><td>🏃 Fast</td><td>🐢 Slow (100x)</td><td>🏃 Medium</td></tr>
+              <tr><td><strong>Memory control</strong></td><td>✅ Full manual</td><td>✅ Manual + RAII</td><td>✅ Ownership model</td><td>❌ GC</td><td>❌ GC</td><td>❌ GC</td></tr>
+              <tr><td><strong>Memory safety</strong></td><td>❌ Manual (UB risk)</td><td>⚠️ Partial (smart ptrs)</td><td>✅ Compile-time</td><td>✅ GC handles</td><td>✅ GC handles</td><td>✅ GC handles</td></tr>
+              <tr><td><strong>Binary size</strong></td><td>🔬 Tiny (8 KB)</td><td>📦 Small (100 KB+)</td><td>📦 Medium (300 KB+)</td><td>📦 Large (2 MB+)</td><td>N/A (interpreted)</td><td>N/A (JVM)</td></tr>
+              <tr><td><strong>Startup time</strong></td><td>⚡ Instant</td><td>⚡ Instant</td><td>⚡ Instant</td><td>⚡ Fast</td><td>🐢 Slow</td><td>🐢 JVM warmup</td></tr>
+              <tr><td><strong>Embedded viable</strong></td><td>✅ 2 KB RAM</td><td>⚠️ 32 KB+ RAM</td><td>⚠️ 64 KB+ RAM</td><td>❌ Too heavy</td><td>❌ Too heavy</td><td>❌ Too heavy</td></tr>
+              <tr><td><strong>Learning curve</strong></td><td>📈 Steep</td><td>📈 Very steep</td><td>📈 Very steep</td><td>📉 Easy</td><td>📉 Easiest</td><td>📊 Medium</td></tr>
+              <tr><td><strong>Ecosystem maturity</strong></td><td>50+ years</td><td>40+ years</td><td>10+ years</td><td>15+ years</td><td>30+ years</td><td>30+ years</td></tr>
             </tbody>
           </table>
         </div>
-        <div class="callout callout-important"><strong>Career reality:</strong> Systems programmers, embedded engineers, and kernel developers earn 30–50% more than average. C mastery opens doors that other languages can't.</div>
+        <div class="callout callout-tip"><strong>The pragmatic path:</strong> Learn C first → understand memory, pointers, and hardware. Then learn C++ for OOP/templates, or Rust for safe systems programming. C knowledge is the <strong>foundation that never becomes obsolete</strong>.</div>
       </div>
 
       <div class="concept-block">
-        <h3 class="concept-heading">C vs other languages</h3>
-        <div class="hb-table-wrap">
-          <table class="hb-table">
-            <thead><tr><th>Feature</th><th>C</th><th>C++</th><th>Python</th><th>Java</th></tr></thead>
-            <tbody>
-              <tr><td>Speed</td><td>⚡ Fastest</td><td>⚡ Fast</td><td>🐢 Slow</td><td>🏃 Medium</td></tr>
-              <tr><td>Memory control</td><td>✅ Manual</td><td>✅ Manual + RAII</td><td>❌ Garbage collected</td><td>❌ Garbage collected</td></tr>
-              <tr><td>Level</td><td>Low-level</td><td>Mid-level</td><td>High-level</td><td>High-level</td></tr>
-              <tr><td>Use case</td><td>OS, embedded</td><td>Games, apps</td><td>Scripting, AI</td><td>Enterprise</td></tr>
-              <tr><td>Learning curve</td><td>Steep (pointers)</td><td>Very steep</td><td>Easy</td><td>Medium</td></tr>
-              <tr><td>Binary size</td><td>Tiny (KB)</td><td>Small (MB)</td><td>N/A (interpreted)</td><td>Medium (JVM)</td></tr>
-            </tbody>
-          </table>
+        <h3 class="concept-heading">🎯 Interview corner — Module 1.1</h3>
+        <p class="explain-en">These questions are frequently asked in technical interviews for systems programming, embedded, and kernel roles:</p>
+        <div class="practice-box">
+          <div class="practice-title">💼 Common Interview Questions</div>
+          <ol>
+            <li><strong>"Why is C called a middle-level language?"</strong> — Because it combines high-level features (functions, loops, types) with low-level capabilities (pointer arithmetic, bitwise operations, direct memory access). It abstracts hardware enough for portability but not so much that you lose control.</li>
+            <li><strong>"Why can't we write an OS in Python or Java?"</strong> — Python/Java require a runtime (interpreter/JVM) that itself needs an OS to run. C compiles to native machine code with zero runtime dependencies — it can run on bare metal, directly on hardware with no OS underneath.</li>
+            <li><strong>"What is the difference between C89 and C99?"</strong> — C99 added: <code>//</code> single-line comments, variable declarations anywhere in blocks (not just top), <code>inline</code> functions, <code>_Bool</code> type, <code>&lt;stdint.h&gt;</code> fixed-width integers, VLAs, designated initializers, and <code>restrict</code> pointer qualifier.</li>
+            <li><strong>"Why is C still used when Rust exists?"</strong> — Existing codebase (billions of lines), embedded constraints (Rust needs more RAM), ecosystem maturity (50 years of libraries/tools), ABI stability, and industry inertia. The Linux kernel only started accepting Rust modules in 2022 — C remains its primary language.</li>
+          </ol>
         </div>
       </div>
     </div>
 
     <!-- MODULE 1.2 -->
     <div class="module-section" id="m1-2">
-      <div class="module-header"><div class="module-number">1.2</div><h2 class="module-title">Setting Up the Environment — GCC, VS Code, and your first compile</h2></div>
+      <div class="module-header"><div class="module-number">1.2</div><h2 class="module-title">Setting Up the Environment — GCC, Clang, VS Code, WSL2, and professional toolchain</h2></div>
 
       <div class="concept-block">
-        <h3 class="concept-heading">Installing GCC (the C compiler)</h3>
+        <h3 class="concept-heading">GCC vs Clang — choosing your C compiler</h3>
         <p class="explain-en">
-          <strong>GCC (GNU Compiler Collection)</strong> is the most widely used C compiler. On Windows, install it via <strong>MinGW-w64</strong> or <strong>MSYS2</strong>.
-          On macOS, install <strong>Xcode Command Line Tools</strong>. On Linux, GCC is usually pre-installed. After installation, verify with <code>gcc --version</code>.
+          Two compilers dominate C development: <strong>GCC (GNU Compiler Collection)</strong> — the industry standard since 1987, used to compile the
+          Linux kernel itself — and <strong>Clang/LLVM</strong> — a modern alternative with <strong>superior error messages</strong>, faster compilation,
+          and modular architecture. Both produce equally optimized binaries. GCC supports more architectures (ARM, RISC-V, MIPS, etc.) while Clang
+          integrates better with IDEs and static analyzers. <strong>For learning, use GCC</strong> — it's the standard in universities and most tutorials.
+          For production, many companies use both: GCC for release builds (slightly better optimization on some platforms) and Clang for development
+          (much better error messages and warnings).
         </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>GCC sabse popular C compiler hai. Windows pe MinGW-w64 ya MSYS2 se install karo. macOS pe Xcode Command Line Tools install karo. Linux pe pehle se installed hota hai. <code>gcc --version</code> se verify karo.</div>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang">💻 Terminal — Installation & verification</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre><span class="comment"># Windows (MSYS2 — recommended)</span>
-pacman -S mingw-w64-ucrt-x86_64-gcc
-
-<span class="comment"># macOS</span>
-xcode-select --install
-
-<span class="comment"># Ubuntu/Debian Linux</span>
-sudo apt update && sudo apt install build-essential
-
-<span class="comment"># Verify installation (all platforms)</span>
-gcc --version
-<span class="comment"># gcc (GCC) 13.2.0 ...</span></pre></div>
-        </div>
-      </div>
-
-      <div class="concept-block">
-        <h3 class="concept-heading">VS Code setup for C</h3>
-        <p class="explain-en">
-          Install <strong>VS Code</strong>, then add the <strong>C/C++ extension by Microsoft</strong> (ms-vscode.cpptools).
-          This gives you IntelliSense, debugging, and error highlighting. Configure your <code>tasks.json</code> to compile with gcc on save.
-        </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>VS Code install karo, phir Microsoft ka C/C++ extension add karo. IntelliSense, debugging, aur error highlighting mil jayegi.</div>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>C development me do compilers dominate karte hain: GCC (1987 se industry standard — Linux kernel isi se compile hota hai) aur Clang/LLVM (modern alternative — bahut achhe error messages, fast compilation). Dono equally optimized code banate hain. Learning ke liye GCC use karo — universities aur tutorials me standard hai. Production me bahut companies dono use karti hain: GCC release builds ke liye, Clang development ke liye (error messages bahut clear hote hain).</div>
         <div class="hb-table-wrap">
           <table class="hb-table">
-            <thead><tr><th>Tool</th><th>Purpose</th><th>Install command / action</th></tr></thead>
+            <thead><tr><th>Feature</th><th>GCC</th><th>Clang/LLVM</th></tr></thead>
             <tbody>
-              <tr><td><strong>GCC</strong></td><td>C compiler</td><td>See above per OS</td></tr>
-              <tr><td><strong>VS Code</strong></td><td>Code editor</td><td>code.visualstudio.com</td></tr>
-              <tr><td><strong>C/C++ Extension</strong></td><td>IntelliSense + debug</td><td>Extensions → search "C/C++"</td></tr>
-              <tr><td><strong>Code Runner</strong></td><td>Run with one click</td><td>Extensions → "Code Runner"</td></tr>
-              <tr><td><strong>Terminal</strong></td><td>Compile & run</td><td>Ctrl+` in VS Code</td></tr>
+              <tr><td><strong>Error messages</strong></td><td>Good (improved in v13+)</td><td>⭐ Excellent — color-coded, with fix suggestions</td></tr>
+              <tr><td><strong>Compilation speed</strong></td><td>Fast</td><td>⭐ Faster (especially large projects)</td></tr>
+              <tr><td><strong>Optimization quality</strong></td><td>⭐ Slightly better on some workloads</td><td>Excellent — comparable to GCC</td></tr>
+              <tr><td><strong>Platform support</strong></td><td>⭐ 50+ architectures</td><td>x86, ARM, RISC-V, WebAssembly</td></tr>
+              <tr><td><strong>Static analysis</strong></td><td>Basic (<code>-fanalyzer</code>)</td><td>⭐ Built-in (<code>scan-build</code>), AddressSanitizer</td></tr>
+              <tr><td><strong>License</strong></td><td>GPL v3</td><td>Apache 2.0 (more permissive)</td></tr>
+              <tr><td><strong>Default on</strong></td><td>Linux, most embedded</td><td>macOS (Apple Clang), FreeBSD, Android NDK</td></tr>
             </tbody>
           </table>
         </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Terminal — Error message comparison</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># GCC error (good but terse)</span>
+$ gcc broken.c
+broken.c:5:12: error: expected ';' before 'return'
+
+<span class="comment"># Clang error (excellent — shows EXACTLY where)</span>
+$ clang broken.c
+broken.c:5:12: error: expected ';' after expression
+    int x = 5
+              ^
+              ;
+<span class="comment"># Clang even suggests the fix with a caret!</span></pre></div>
+        </div>
       </div>
 
       <div class="concept-block">
-        <h3 class="concept-heading">Your first compile & run</h3>
+        <h3 class="concept-heading">Installation — every platform covered</h3>
+        <p class="explain-en">
+          Here's how to install a complete C development toolchain on every major operating system. <strong>Windows users</strong>: we strongly
+          recommend <strong>WSL2 (Windows Subsystem for Linux)</strong> — it gives you a real Linux environment inside Windows with native GCC,
+          Valgrind, GDB, and Make. This is what professional C developers on Windows actually use. MSYS2 is the alternative if you need native
+          Windows binaries.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Har OS pe C toolchain install karna sikho. Windows users ke liye WSL2 (Windows Subsystem for Linux) best hai — real Linux environment milta hai Windows ke andar with native GCC, Valgrind, GDB, Make. Professional C developers Windows pe yahi use karte hain. MSYS2 alternative hai agar native Windows binaries chahiye.</div>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">💻 C — hello.c</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre><span class="preprocessor">#include</span> <span class="string">&lt;stdio.h&gt;</span>
+          <div class="code-header"><span class="code-lang">💻 Terminal — Complete installation guide</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># ═══════════════════════════════════════════</span>
+<span class="comment"># WINDOWS — Option 1: WSL2 (RECOMMENDED)</span>
+<span class="comment"># ═══════════════════════════════════════════</span>
+<span class="comment"># Step 1: Enable WSL2 (run in PowerShell as Admin)</span>
+wsl --install
 
-<span class="type">int</span> <span class="function">main</span>(<span class="type">void</span>) {
-    <span class="function">printf</span>(<span class="string">"Hello, World!\n"</span>);
-    <span class="keyword">return</span> <span class="number">0</span>;
+<span class="comment"># Step 2: After reboot, open Ubuntu terminal and install</span>
+sudo apt update && sudo apt install -y build-essential gdb valgrind make cmake
+
+<span class="comment"># Step 3: In VS Code, install "WSL" extension to code inside WSL</span>
+
+<span class="comment"># ═══════════════════════════════════════════</span>
+<span class="comment"># WINDOWS — Option 2: MSYS2 (native Windows)</span>
+<span class="comment"># ═══════════════════════════════════════════</span>
+<span class="comment"># Download from msys2.org, then in MSYS2 terminal:</span>
+pacman -S mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-gdb make
+
+<span class="comment"># ═══════════════════════════════════════════</span>
+<span class="comment"># macOS</span>
+<span class="comment"># ═══════════════════════════════════════════</span>
+xcode-select --install
+<span class="comment"># This installs Apple Clang (compatible with GCC flags)</span>
+<span class="comment"># For real GCC: brew install gcc</span>
+
+<span class="comment"># ═══════════════════════════════════════════</span>
+<span class="comment"># Ubuntu / Debian Linux</span>
+<span class="comment"># ═══════════════════════════════════════════</span>
+sudo apt update
+sudo apt install -y build-essential gdb valgrind make cmake clang
+
+<span class="comment"># ═══════════════════════════════════════════</span>
+<span class="comment"># Verify everything works (all platforms)</span>
+<span class="comment"># ═══════════════════════════════════════════</span>
+gcc --version          <span class="comment"># GCC compiler</span>
+clang --version        <span class="comment"># Clang compiler (if installed)</span>
+gdb --version          <span class="comment"># GNU Debugger</span>
+make --version         <span class="comment"># Build automation</span>
+valgrind --version     <span class="comment"># Memory leak detector (Linux/WSL only)</span></pre></div>
+        </div>
+        <div class="callout callout-important"><strong>Windows developers:</strong> If you're serious about C, use WSL2. Native Windows tools like MSYS2 work, but you'll miss <strong>Valgrind</strong> (memory leak detection), <strong>strace</strong> (system call tracing), and other Linux-only tools that are essential for professional C development.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">VS Code — professional C development setup</h3>
+        <p class="explain-en">
+          VS Code is the most popular editor for C development. Install these extensions and configure <code>tasks.json</code> for
+          one-click compilation with all warnings enabled, and <code>launch.json</code> for integrated GDB debugging.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>VS Code C development ke liye sabse popular editor hai. Neeche diye extensions install karo aur <code>tasks.json</code> configure karo one-click compilation ke liye, <code>launch.json</code> GDB debugging ke liye.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Extension</th><th>ID</th><th>Purpose</th><th>Priority</th></tr></thead>
+            <tbody>
+              <tr><td><strong>C/C++</strong></td><td>ms-vscode.cpptools</td><td>IntelliSense, debugging, code navigation</td><td>🔴 Required</td></tr>
+              <tr><td><strong>C/C++ Extension Pack</strong></td><td>ms-vscode.cpptools-extension-pack</td><td>Themes, snippets, CMake support</td><td>🟡 Recommended</td></tr>
+              <tr><td><strong>Code Runner</strong></td><td>formulahendry.code-runner</td><td>Run code with one click (Ctrl+Alt+N)</td><td>🟡 Recommended</td></tr>
+              <tr><td><strong>WSL</strong></td><td>ms-vscode-remote.remote-wsl</td><td>Develop inside WSL from VS Code</td><td>🔴 Required (Windows)</td></tr>
+              <tr><td><strong>Error Lens</strong></td><td>usernamehw.errorlens</td><td>Show errors inline next to code</td><td>🟢 Nice to have</td></tr>
+              <tr><td><strong>Better Comments</strong></td><td>aaron-bond.better-comments</td><td>Color-coded comment annotations</td><td>🟢 Nice to have</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 JSON — .vscode/tasks.json (compile with Ctrl+Shift+B)</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre>{
+  <span class="string">"version"</span>: <span class="string">"2.0.0"</span>,
+  <span class="string">"tasks"</span>: [{
+    <span class="string">"label"</span>: <span class="string">"Build C (GCC)"</span>,
+    <span class="string">"type"</span>: <span class="string">"shell"</span>,
+    <span class="string">"command"</span>: <span class="string">"gcc"</span>,
+    <span class="string">"args"</span>: [
+      <span class="string">"-Wall"</span>, <span class="string">"-Wextra"</span>, <span class="string">"-Wpedantic"</span>,  <span class="comment">/* All warnings */</span>
+      <span class="string">"-std=c17"</span>,                          <span class="comment">/* C17 standard */</span>
+      <span class="string">"-g"</span>,                                 <span class="comment">/* Debug symbols for GDB */</span>
+      <span class="string">"${file}"</span>,                            <span class="comment">/* Current file */</span>
+      <span class="string">"-o"</span>, <span class="string">"${fileDirname}/${fileBasenameNoExtension}"</span>
+    ],
+    <span class="string">"group"</span>: { <span class="string">"kind"</span>: <span class="string">"build"</span>, <span class="string">"isDefault"</span>: <span class="keyword">true</span> },
+    <span class="string">"problemMatcher"</span>: [<span class="string">"$gcc"</span>]
+  }]
 }</pre></div>
         </div>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang">💻 Terminal — Compile & run</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre><span class="comment"># Compile</span>
-gcc hello.c -o hello
+      </div>
 
-<span class="comment"># Run</span>
-./hello
-<span class="comment"># Output: Hello, World!</span></pre></div>
+      <div class="concept-block">
+        <h3 class="concept-heading">Your first compile & run — line by line explained</h3>
+        <p class="explain-en">
+          Let's write, compile, and run a complete C program. Every line is explained — no magic, no hand-waving.
+          Understanding <strong>what each line does and why</strong> is the foundation of C mastery.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Ek complete C program likhte hain, compile karte hain, aur run karte hain. Har line explain ki jayegi — koi magic nahi, koi shortcut nahi. Har line ka "kya" aur "kyun" samajhna C mastery ki foundation hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — hello.c (every line explained)</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="preprocessor">#include</span> <span class="string">&lt;stdio.h&gt;</span>    <span class="comment">/* Line 1: Include Standard I/O library
+                           - Gives us printf(), scanf(), etc.
+                           - Without this, compiler doesn't know what printf is
+                           - &lt;stdio.h&gt; = system header (angle brackets)
+                           - "myfile.h" = your header (quotes) */</span>
+
+<span class="type">int</span> <span class="function">main</span>(<span class="type">void</span>) {       <span class="comment">/* Line 3: Entry point of EVERY C program
+                           - int = returns an integer (exit code)
+                           - main = special name — OS calls this first
+                           - void = takes no command-line arguments
+                           - { = start of function body */</span>
+
+    <span class="function">printf</span>(<span class="string">"Hello, World!\n"</span>);  <span class="comment">/* Line 5: Print text to terminal
+                                    - printf = "print formatted"
+                                    - \n = newline character (move to next line)
+                                    - Without \n, next output appears on same line */</span>
+
+    <span class="keyword">return</span> <span class="number">0</span>;              <span class="comment">/* Line 7: Tell OS "program succeeded"
+                                - return 0 = success (convention)
+                                - return 1 = generic error
+                                - OS uses this: echo $? shows it in bash */</span>
+}                          <span class="comment">/* Line 8: End of main() body */</span></pre></div>
         </div>
-        <div class="callout callout-tip"><strong>Pro tip:</strong> Always compile with warnings enabled: <code>gcc -Wall -Wextra -Werror hello.c -o hello</code>. This catches bugs before they reach production.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Terminal — Compile & run (with explanation)</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># Step 1: Compile with ALL warnings (industry standard)</span>
+gcc -Wall -Wextra -std=c17 -g hello.c -o hello
+<span class="comment">#  -Wall     = enable common warnings</span>
+<span class="comment">#  -Wextra   = enable extra warnings</span>
+<span class="comment">#  -std=c17  = use C17 standard</span>
+<span class="comment">#  -g        = include debug info (for GDB)</span>
+<span class="comment">#  hello.c   = input source file</span>
+<span class="comment">#  -o hello  = output executable name</span>
+
+<span class="comment"># Step 2: Run the program</span>
+./hello
+<span class="comment"># Output: Hello, World!</span>
+
+<span class="comment"># Step 3: Check exit code (0 = success)</span>
+echo $?
+<span class="comment"># Output: 0</span>
+
+<span class="comment"># Step 4: See the file size (C produces TINY binaries)</span>
+ls -lh hello
+<span class="comment"># Output: -rwxr-xr-x 1 user user 16K  hello</span>
+<span class="comment"># Compare: equivalent Python script needs 50MB+ runtime!</span></pre></div>
+        </div>
+        <div class="callout callout-warning"><strong>Never compile without warnings!</strong> The bare <code>gcc hello.c</code> command hides bugs. Always use: <code>gcc -Wall -Wextra -Wpedantic -std=c17 -g file.c -o file</code>. In professional teams, <code>-Werror</code> is added to treat warnings as errors — code with warnings cannot be merged.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Introduction to Makefiles — build automation</h3>
+        <p class="explain-en">
+          Typing long <code>gcc</code> commands every time is tedious. A <strong>Makefile</strong> automates your build process — just type
+          <code>make</code> and it compiles only the files that changed. Every real C project uses Make (or CMake for larger projects).
+          Understanding Makefiles is a <strong>required skill</strong> for any C developer.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Har baar lamba <code>gcc</code> command type karna boring hai. Makefile build process automate karta hai — sirf <code>make</code> type karo aur bas changed files compile hongi. Har real C project Make (ya CMake) use karta hai. Makefiles samajhna C developer ke liye required skill hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Makefile — Basic build automation</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># Makefile — save this as "Makefile" (no extension)</span>
+CC      = gcc
+CFLAGS  = -Wall -Wextra -Wpedantic -std=c17 -g
+TARGET  = hello
+
+<span class="comment"># Default target: compile the program</span>
+$(TARGET): hello.c
+	$(CC) $(CFLAGS) hello.c -o $(TARGET)
+
+<span class="comment"># Clean: remove compiled files</span>
+clean:
+	rm -f $(TARGET)
+
+<span class="comment"># Run: compile and execute</span>
+run: $(TARGET)
+	./$(TARGET)
+
+<span class="comment"># Usage:</span>
+<span class="comment">#   make        → compile</span>
+<span class="comment">#   make run    → compile + run</span>
+<span class="comment">#   make clean  → delete binary</span></pre></div>
+        </div>
+        <div class="callout callout-tip"><strong>Makefile gotcha:</strong> Indentation in Makefiles MUST use <strong>tabs</strong>, not spaces. If you get <code>*** missing separator. Stop.</code>, your editor converted tabs to spaces. In VS Code, click "Spaces: 4" at the bottom and switch to "Indent Using Tabs" for Makefiles.</div>
       </div>
     </div>
 
     <!-- MODULE 1.3 -->
     <div class="module-section" id="m1-3">
-      <div class="module-header"><div class="module-number">1.3</div><h2 class="module-title">Structure of a C Program — #include, main(), return, comments</h2></div>
+      <div class="module-header"><div class="module-number">1.3</div><h2 class="module-title">Structure of a C Program — #include, main(), return, comments, translation units</h2></div>
 
       <div class="concept-block">
-        <h3 class="concept-heading">Anatomy of a C program</h3>
+        <h3 class="concept-heading">Anatomy of a C program — the complete picture</h3>
         <p class="explain-en">
-          Every C program has a specific structure: <strong>preprocessor directives</strong> at the top, then <strong>function declarations</strong>,
-          then the <strong>main() function</strong> which is the entry point. The <code>return 0;</code> tells the OS the program exited successfully.
+          Every C program follows a strict structure that the compiler expects. Understanding this structure isn't just about syntax —
+          it's about understanding <strong>how the compiler processes your code</strong>. The preprocessor runs first (handling <code>#include</code>
+          and <code>#define</code>), then the compiler parses top-to-bottom, which is why <strong>forward declarations</strong> exist —
+          the compiler must know about a function <em>before</em> it's called. This top-down parsing model is fundamentally different from
+          languages like Python or JavaScript where you can call functions before defining them.
         </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Har C program ka ek structure hota hai: sabse upar preprocessor directives, phir function declarations, phir main() function jo entry point hai. <code>return 0;</code> OS ko bolta hai ki program successfully complete hua.</div>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Har C program ek strict structure follow karta hai. Ye sirf syntax nahi — ye samajhna hai ki compiler tumhara code kaise process karta hai. Pehle preprocessor chalta hai (#include aur #define handle karta hai), phir compiler upar se neeche parse karta hai — isliye forward declarations chahiye — compiler ko function ke baare me jaanna chahiye PEHLE usse call karne se. Ye Python/JavaScript se bilkul alag hai jahan function call se pehle define karna zaroori nahi.</div>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">💻 C — Complete program structure</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre><span class="comment">/* ===== 1. Preprocessor Directives ===== */</span>
-<span class="preprocessor">#include</span> <span class="string">&lt;stdio.h&gt;</span>    <span class="comment">/* Standard I/O library */</span>
-<span class="preprocessor">#include</span> <span class="string">&lt;stdlib.h&gt;</span>   <span class="comment">/* Standard utility library */</span>
-<span class="preprocessor">#define</span> <span class="function">MAX_SIZE</span> <span class="number">100</span> <span class="comment">/* Constant macro */</span>
+          <div class="code-header"><span class="code-lang">💻 C — Production-quality program structure</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* ═══════════════════════════════════════════════════════
+ * File:    calculator.c
+ * Author:  CodeWithYuvraj
+ * Date:    2026-04-30
+ * Desc:    Simple calculator demonstrating C program structure
+ * Compile: gcc -Wall -Wextra -std=c17 -g calculator.c -o calc
+ * ═══════════════════════════════════════════════════════ */</span>
 
-<span class="comment">/* ===== 2. Function Declarations ===== */</span>
-<span class="type">void</span> <span class="function">greet</span>(<span class="type">void</span>);     <span class="comment">/* Forward declaration */</span>
+<span class="comment">/* ===== Section 1: Preprocessor Directives ===== */</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;stdio.h&gt;</span>     <span class="comment">/* printf, scanf — Standard I/O */</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;stdlib.h&gt;</span>    <span class="comment">/* exit(), EXIT_SUCCESS, EXIT_FAILURE */</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;stdbool.h&gt;</span>  <span class="comment">/* bool, true, false (C99+) */</span>
 
-<span class="comment">/* ===== 3. Main Function (Entry Point) ===== */</span>
+<span class="preprocessor">#define</span> <span class="function">VERSION</span> <span class="string">"1.0"</span>  <span class="comment">/* Compile-time constant (text replacement) */</span>
+<span class="preprocessor">#define</span> <span class="function">MAX_INPUT</span> <span class="number">256</span>  <span class="comment">/* Buffer size for user input */</span>
+
+<span class="comment">/* ===== Section 2: Type Definitions ===== */</span>
+<span class="keyword">typedef</span> <span class="keyword">enum</span> { ADD, SUB, MUL, DIV } Operation;
+
+<span class="comment">/* ===== Section 3: Function Prototypes (Forward Declarations) ===== */</span>
+<span class="type">double</span> <span class="function">calculate</span>(<span class="type">double</span> a, <span class="type">double</span> b, Operation op);
+<span class="type">void</span> <span class="function">print_banner</span>(<span class="type">void</span>);
+<span class="keyword">static</span> <span class="type">bool</span> <span class="function">validate_input</span>(<span class="type">double</span> b, Operation op);
+
+<span class="comment">/* ===== Section 4: Global Constants ===== */</span>
+<span class="keyword">static</span> <span class="keyword">const</span> <span class="type">char</span> *<span class="keyword">const</span> OP_NAMES[] = {"+", "-", "*", "/"};
+
+<span class="comment">/* ===== Section 5: Main Function (Entry Point) ===== */</span>
 <span class="type">int</span> <span class="function">main</span>(<span class="type">void</span>) {
-    <span class="function">greet</span>();
-    <span class="keyword">return</span> <span class="number">0</span>;          <span class="comment">/* 0 = success, non-zero = error */</span>
+    <span class="function">print_banner</span>();
+    <span class="type">double</span> result = <span class="function">calculate</span>(<span class="number">10.0</span>, <span class="number">3.0</span>, DIV);
+    <span class="function">printf</span>(<span class="string">"Result: %.4f\n"</span>, result);
+    <span class="keyword">return</span> EXIT_SUCCESS;  <span class="comment">/* 0 — prefer EXIT_SUCCESS over magic number */</span>
 }
 
-<span class="comment">/* ===== 4. Function Definitions ===== */</span>
-<span class="type">void</span> <span class="function">greet</span>(<span class="type">void</span>) {
-    <span class="function">printf</span>(<span class="string">"Welcome to C!\n"</span>);
+<span class="comment">/* ===== Section 6: Function Definitions ===== */</span>
+<span class="type">double</span> <span class="function">calculate</span>(<span class="type">double</span> a, <span class="type">double</span> b, Operation op) {
+    <span class="keyword">if</span> (!<span class="function">validate_input</span>(b, op)) <span class="keyword">return</span> <span class="number">0.0</span>;
+    <span class="keyword">switch</span> (op) {
+        <span class="keyword">case</span> ADD: <span class="keyword">return</span> a + b;
+        <span class="keyword">case</span> SUB: <span class="keyword">return</span> a - b;
+        <span class="keyword">case</span> MUL: <span class="keyword">return</span> a * b;
+        <span class="keyword">case</span> DIV: <span class="keyword">return</span> a / b;
+        <span class="keyword">default</span>:  <span class="keyword">return</span> <span class="number">0.0</span>;
+    }
+}
+
+<span class="type">void</span> <span class="function">print_banner</span>(<span class="type">void</span>) {
+    <span class="function">printf</span>(<span class="string">"Calculator v%s\n"</span>, VERSION);
+}
+
+<span class="keyword">static</span> <span class="type">bool</span> <span class="function">validate_input</span>(<span class="type">double</span> b, Operation op) {
+    <span class="keyword">if</span> (op == DIV && b == <span class="number">0.0</span>) {
+        <span class="function">fprintf</span>(stderr, <span class="string">"Error: division by zero\n"</span>);
+        <span class="keyword">return</span> <span class="keyword">false</span>;
+    }
+    <span class="keyword">return</span> <span class="keyword">true</span>;
 }</pre></div>
         </div>
         <div class="diagram-box">
-          <div class="diagram-title">📐 C Program Structure</div>
+          <div class="diagram-title">📐 C Program Structure (6 Sections)</div>
           <div class="diagram-flow">
-            <div class="diagram-node primary">Preprocessor<br><small>#include, #define</small></div>
+            <div class="diagram-node primary">1. Preprocessor<br><small>#include, #define</small></div>
             <div class="diagram-arrow">→</div>
-            <div class="diagram-node secondary">Declarations<br><small>Function prototypes</small></div>
+            <div class="diagram-node secondary">2. Types<br><small>typedef, enum, struct</small></div>
             <div class="diagram-arrow">→</div>
-            <div class="diagram-node success">main()<br><small>Entry point</small></div>
+            <div class="diagram-node accent">3. Prototypes<br><small>Forward declarations</small></div>
             <div class="diagram-arrow">→</div>
-            <div class="diagram-node accent">Definitions<br><small>Function bodies</small></div>
+            <div class="diagram-node success">4. main()<br><small>Entry point</small></div>
+            <div class="diagram-arrow">→</div>
+            <div class="diagram-node primary">5. Definitions<br><small>Function bodies</small></div>
           </div>
         </div>
       </div>
 
       <div class="concept-block">
-        <h3 class="concept-heading">Comments in C</h3>
+        <h3 class="concept-heading">What happens BEFORE main() — the hidden startup</h3>
         <p class="explain-en">
-          Comments are ignored by the compiler. Use <code>/* */</code> for multi-line and <code>//</code> for single-line (C99+).
-          Good comments explain <strong>why</strong>, not <strong>what</strong>. The code should be clear enough to show what it does.
+          <code>main()</code> is NOT the first thing that runs! When you execute a C program, the OS loads the binary and jumps to
+          <code>_start</code> (provided by the C runtime — <strong>crt0.o</strong>). This startup code: (1) sets up the <strong>stack</strong>,
+          (2) initializes <strong>global/static variables</strong>, (3) sets up <strong>argc/argv</strong> from the command line,
+          (4) calls <strong>constructors</strong> (<code>__attribute__((constructor))</code> in GCC), and finally (5) calls <strong>main()</strong>.
+          When <code>main()</code> returns, the runtime calls <code>exit()</code>, runs <code>atexit()</code> handlers, flushes <code>stdio</code>
+          buffers, and returns the exit code to the OS. Understanding this explains why global variables start at 0 and why
+          <code>printf</code> output sometimes doesn't appear before a crash (buffering!).
         </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Comments compiler ignore karta hai. <code>/* */</code> multi-line ke liye aur <code>//</code> single-line ke liye (C99+). Achhe comments "why" explain karte hain, "what" nahi — code khud clear hona chahiye.</div>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>main()</code> sabse pehle nahi chalta! Jab program execute hota hai, OS binary load karta hai aur <code>_start</code> pe jump karta hai (C runtime — crt0.o provide karta hai). Ye startup code: (1) stack setup karta hai, (2) global/static variables initialize karta hai, (3) argc/argv command line se set karta hai, (4) constructors call karta hai, aur finally (5) main() call karta hai. Jab main() return karta hai, runtime exit() call karta hai, atexit() handlers chalata hai, stdio buffers flush karta hai. Isliye global variables 0 se start hote hain aur kabhi kabhi printf output crash se pehle nahi dikhta (buffering ki wajah se!).</div>
+        <div class="diagram-box">
+          <div class="diagram-title">📐 Program Execution Flow (What REALLY happens)</div>
+          <div class="diagram-flow">
+            <div class="diagram-node secondary">OS Loader<br><small>loads ELF binary</small></div>
+            <div class="diagram-arrow">→</div>
+            <div class="diagram-node accent">_start (crt0)<br><small>stack + init</small></div>
+            <div class="diagram-arrow">→</div>
+            <div class="diagram-node primary">__libc_start_main<br><small>argc/argv setup</small></div>
+            <div class="diagram-arrow">→</div>
+            <div class="diagram-node success">main()<br><small>YOUR code</small></div>
+            <div class="diagram-arrow">→</div>
+            <div class="diagram-node secondary">exit()<br><small>cleanup + return</small></div>
+          </div>
+        </div>
+        <div class="callout callout-tip"><strong>Debug insight:</strong> You can see the startup code by setting a GDB breakpoint before main: <code>gdb ./program</code> then <code>break _start</code> then <code>run</code>. You'll see the hidden startup before your code executes!</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Comments — professional documentation standards</h3>
+        <p class="explain-en">
+          Comments are ignored by the compiler but are <strong>critical for code maintainability</strong>. C supports two styles:
+          <code>/* block */</code> (C89+) and <code>// line</code> (C99+). Professional C projects use <strong>Doxygen</strong>-style
+          comments for API documentation that can be automatically extracted into HTML/PDF docs. The golden rule: comments should explain
+          <strong>WHY</strong>, not <strong>WHAT</strong>. The code itself should be clear enough to show what it does. Comments that restate
+          the code are worse than no comments — they rot and become misleading when code changes but comments don't.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Comments compiler ignore karta hai lekin code maintainability ke liye bahut zaroori hain. C me do styles hain: <code>/* block */</code> (C89+) aur <code>// line</code> (C99+). Professional projects me Doxygen-style comments use hote hain jo automatically HTML/PDF docs ban jaate hain. Golden rule: comments me "WHY" likho, "WHAT" nahi. Code khud itna clear hona chahiye ki "what" samajh aaye. Jo comments code repeat karte hain wo kaam se bhi bure hain — code change hota hai lekin comments nahi, toh misleading ho jaate hain.</div>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">💻 C — Comments</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre><span class="comment">/* Multi-line comment
-   Used for documentation blocks
-   and file headers */</span>
+          <div class="code-header"><span class="code-lang">💻 C — Professional commenting styles</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* ═══ Block comment (C89+) — for documentation headers ═══ */</span>
 
-<span class="comment">// Single-line comment (C99+)</span>
+<span class="comment">// Line comment (C99+) — for inline notes</span>
 
-<span class="comment">// ❌ BAD: tells you WHAT (obvious from code)</span>
+<span class="comment">// ❌ BAD: restates the code (will rot when code changes)</span>
 <span class="type">int</span> x = <span class="number">5</span>; <span class="comment">// set x to 5</span>
 
-<span class="comment">// ✅ GOOD: tells you WHY</span>
-<span class="type">int</span> retries = <span class="number">5</span>; <span class="comment">// Max retries before timeout (per RFC 2616)</span></pre></div>
+<span class="comment">// ✅ GOOD: explains the reasoning (stays relevant)</span>
+<span class="type">int</span> retries = <span class="number">5</span>; <span class="comment">// Max retries per RFC 2616 §8.1.4 keep-alive</span>
+
+<span class="comment">// ✅ GOOD: explains non-obvious business logic</span>
+<span class="keyword">if</span> (age >= <span class="number">21</span>) {  <span class="comment">// US legal drinking age (not 18 like most countries)</span>
+
+<span class="comment">/* ═══ Doxygen-style comment (industry standard for APIs) ═══
+ * @brief  Calculates the area of a circle
+ * @param  radius  The radius in meters (must be > 0)
+ * @return Area in square meters, or -1.0 on invalid input
+ * @note   Uses M_PI from math.h (link with -lm)
+ */</span>
+<span class="type">double</span> <span class="function">circle_area</span>(<span class="type">double</span> radius) {
+    <span class="keyword">if</span> (radius <= <span class="number">0.0</span>) <span class="keyword">return</span> -<span class="number">1.0</span>;
+    <span class="keyword">return</span> M_PI * radius * radius;
+}
+
+<span class="comment">/* TODO: implement error logging (tracked in JIRA-1234) */</span>
+<span class="comment">/* FIXME: integer overflow when input > INT_MAX/2 */</span>
+<span class="comment">/* HACK: temporary workaround for kernel bug #5678 */</span></pre></div>
         </div>
       </div>
 
       <div class="concept-block">
-        <h3 class="concept-heading">The main() function — entry point</h3>
+        <h3 class="concept-heading">The main() function — deep dive</h3>
         <p class="explain-en">
-          <code>main()</code> is where execution begins. It must return <code>int</code>. Return <code>0</code> for success,
-          non-zero for error. There are two valid signatures:
+          <code>main()</code> is where execution begins. The C standard defines exactly <strong>two valid signatures</strong>.
+          The return value is the <strong>exit code</strong> — 0 means success, non-zero means error. Scripts and CI/CD systems
+          use this exit code to decide whether to continue. In bash, <code>$?</code> holds the exit code of the last command.
+          You can also use <code>EXIT_SUCCESS</code> and <code>EXIT_FAILURE</code> from <code>&lt;stdlib.h&gt;</code> for portability.
         </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>main()</code> se execution shuru hota hai. Ye <code>int</code> return karta hai. 0 success hai, non-zero error hai.</div>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>main()</code> se execution shuru hota hai. C standard me exactly do valid signatures defined hain. Return value exit code hai — 0 matlab success, non-zero matlab error. Scripts aur CI/CD systems ye exit code check karte hain aur decide karte hain aage badhna hai ya nahi. Bash me <code>$?</code> last command ka exit code dikhata hai. Portability ke liye <code>EXIT_SUCCESS</code> aur <code>EXIT_FAILURE</code> use karo.</div>
         <div class="hb-table-wrap">
           <table class="hb-table">
-            <thead><tr><th>Signature</th><th>When to use</th><th>Example</th></tr></thead>
+            <thead><tr><th>Signature</th><th>When to use</th><th>Example use case</th><th>Standard</th></tr></thead>
             <tbody>
-              <tr><td><code>int main(void)</code></td><td>No command-line args</td><td>Simple programs</td></tr>
-              <tr><td><code>int main(int argc, char *argv[])</code></td><td>With command-line args</td><td>CLI tools</td></tr>
+              <tr><td><code>int main(void)</code></td><td>No command-line args needed</td><td>Simple programs, utilities</td><td>C89+</td></tr>
+              <tr><td><code>int main(int argc, char *argv[])</code></td><td>Need command-line arguments</td><td>CLI tools: <code>gcc -Wall file.c</code></td><td>C89+</td></tr>
+              <tr><td><code>int main(int argc, char **argv)</code></td><td>Equivalent to above</td><td>Same — <code>char *argv[]</code> = <code>char **argv</code></td><td>C89+</td></tr>
             </tbody>
           </table>
         </div>
-        <div class="callout callout-warning"><strong>Never use:</strong> <code>void main()</code> — this is NOT valid C. It may compile on some systems but is undefined behavior per the C standard.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Exit Code</th><th>Meaning</th><th>Constant</th><th>Checked by</th></tr></thead>
+            <tbody>
+              <tr><td><code>0</code></td><td>Success</td><td><code>EXIT_SUCCESS</code></td><td><code>echo $?</code>, shell scripts, CI/CD</td></tr>
+              <tr><td><code>1</code></td><td>Generic error</td><td><code>EXIT_FAILURE</code></td><td>Parent process checks</td></tr>
+              <tr><td><code>2</code></td><td>Misuse (convention)</td><td>—</td><td>Bash convention for wrong args</td></tr>
+              <tr><td><code>126</code></td><td>Permission denied</td><td>—</td><td>Shell: file not executable</td></tr>
+              <tr><td><code>127</code></td><td>Command not found</td><td>—</td><td>Shell: binary doesn't exist</td></tr>
+              <tr><td><code>128+N</code></td><td>Killed by signal N</td><td>—</td><td><code>128+11=139</code> = segfault (SIGSEGV)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>Never use:</strong> <code>void main()</code> — this is <strong>NOT valid C</strong> per the ISO standard. It may compile on some systems (MSVC allows it) but is undefined behavior. Some compilers will warn; others silently generate broken code. Always use <code>int main(void)</code> or <code>int main(int argc, char *argv[])</code>.</div>
       </div>
     </div>
 
     <!-- MODULE 1.4 -->
     <div class="module-section" id="m1-4">
-      <div class="module-header"><div class="module-number">1.4</div><h2 class="module-title">Compilation Pipeline — Preprocessing, Compilation, Assembly, Linking</h2></div>
+      <div class="module-header"><div class="module-number">1.4</div><h2 class="module-title">Compilation Pipeline — Preprocessing, Compilation, Assembly, Linking — the complete deep dive</h2></div>
 
       <div class="concept-block">
-        <h3 class="concept-heading">The 4 stages of C compilation</h3>
+        <h3 class="concept-heading">The 4 stages of C compilation — what REALLY happens</h3>
         <p class="explain-en">
-          When you run <code>gcc hello.c -o hello</code>, four separate stages happen behind the scenes. Understanding this pipeline is
-          essential for debugging linker errors, understanding #include, and working with build systems like Make.
+          When you run <code>gcc hello.c -o hello</code>, <strong>four completely separate programs</strong> execute in sequence.
+          GCC is actually a <strong>driver program</strong> that orchestrates these tools — it's not a single monolithic compiler.
+          Understanding this pipeline is essential for debugging <strong>linker errors</strong> (the #1 confusion for C beginners),
+          understanding why <code>#include</code> works, how libraries get connected, and why the same code can produce different
+          binaries on different platforms. Each stage transforms your code into a progressively lower-level representation until
+          it becomes raw machine instructions the CPU can execute.
         </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Jab <code>gcc hello.c -o hello</code> chalate ho, peeche 4 stages hoti hain. Ye pipeline samajhna zaroori hai — linker errors debug karne, #include samajhne, aur Make jaise build systems ke liye.</div>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Jab <code>gcc hello.c -o hello</code> chalate ho, actually 4 alag programs ek ke baad ek chalte hain. GCC ek "driver program" hai jo in tools ko orchestrate karta hai — ye ek single compiler nahi hai. Ye pipeline samajhna zaroori hai linker errors debug karne ke liye (beginners ki #1 confusion), #include kaise kaam karta hai samajhne ke liye, libraries kaise connect hoti hain, aur kyun same code alag platforms pe alag binary banata hai. Har stage tumhara code ko lower-level representation me convert karta hai jab tak CPU ke raw machine instructions na ban jayein.</div>
         <div class="diagram-box">
-          <div class="diagram-title">🔧 C Compilation Pipeline</div>
+          <div class="diagram-title">🔧 C Compilation Pipeline — 4 Stages</div>
           <div class="diagram-flow">
             <div class="diagram-node primary">hello.c<br><small>Source code</small></div>
             <div class="diagram-arrow">→ cpp →</div>
-            <div class="diagram-node secondary">hello.i<br><small>Preprocessed</small></div>
+            <div class="diagram-node secondary">hello.i<br><small>Preprocessed (~800 lines)</small></div>
             <div class="diagram-arrow">→ cc1 →</div>
-            <div class="diagram-node success">hello.s<br><small>Assembly</small></div>
+            <div class="diagram-node success">hello.s<br><small>Assembly (x86-64)</small></div>
             <div class="diagram-arrow">→ as →</div>
-            <div class="diagram-node accent">hello.o<br><small>Object file</small></div>
+            <div class="diagram-node accent">hello.o<br><small>Object file (ELF)</small></div>
             <div class="diagram-arrow">→ ld →</div>
-            <div class="diagram-node primary">hello<br><small>Executable</small></div>
+            <div class="diagram-node primary">hello<br><small>Executable (16 KB)</small></div>
           </div>
         </div>
         <div class="hb-table-wrap">
           <table class="hb-table">
-            <thead><tr><th>Stage</th><th>Tool</th><th>Input → Output</th><th>What happens</th></tr></thead>
+            <thead><tr><th>Stage</th><th>Tool</th><th>GCC Flag</th><th>Input → Output</th><th>What happens (detailed)</th></tr></thead>
             <tbody>
-              <tr><td><strong>1. Preprocessing</strong></td><td>cpp</td><td>.c → .i</td><td>#include expanded, #define replaced, comments removed</td></tr>
-              <tr><td><strong>2. Compilation</strong></td><td>cc1</td><td>.i → .s</td><td>C code → assembly language (human-readable)</td></tr>
-              <tr><td><strong>3. Assembly</strong></td><td>as</td><td>.s → .o</td><td>Assembly → machine code (binary object file)</td></tr>
-              <tr><td><strong>4. Linking</strong></td><td>ld</td><td>.o → executable</td><td>Object files + libraries → final binary</td></tr>
+              <tr><td><strong>1. Preprocessing</strong></td><td>cpp</td><td><code>-E</code></td><td>.c → .i</td><td>#include headers pasted in (stdio.h = ~800 lines), #define macros expanded, comments stripped, conditional compilation (#ifdef) resolved</td></tr>
+              <tr><td><strong>2. Compilation</strong></td><td>cc1</td><td><code>-S</code></td><td>.i → .s</td><td>Lexer → Parser → AST → IR → Optimizer → Assembly. Syntax/type errors caught HERE. Output is human-readable assembly (x86-64, ARM, etc.)</td></tr>
+              <tr><td><strong>3. Assembly</strong></td><td>as</td><td><code>-c</code></td><td>.s → .o</td><td>Assembly mnemonics → binary machine code. Creates ELF object file with symbol table, relocation entries, and sections (.text, .data, .bss)</td></tr>
+              <tr><td><strong>4. Linking</strong></td><td>ld</td><td>(default)</td><td>.o + libs → executable</td><td>Resolves external symbols (e.g., printf → libc), merges object files, adds startup code (crt0), creates final executable with entry point</td></tr>
             </tbody>
           </table>
         </div>
       </div>
 
       <div class="concept-block">
-        <h3 class="concept-heading">Seeing each stage with gcc</h3>
+        <h3 class="concept-heading">Seeing each stage — hands-on exploration</h3>
+        <p class="explain-en">
+          You can stop GCC at any stage to inspect the intermediate output. This is <strong>the single best way</strong> to
+          understand what the compiler does. Professional C developers use these flags regularly for debugging and optimization analysis.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>GCC ko kisi bhi stage pe rok ke intermediate output dekh sakte ho. Ye compiler ko samajhne ka sabse achha tarika hai. Professional C developers ye flags regularly use karte hain debugging aur optimization analysis ke liye.</div>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">💻 Terminal — Compilation stages</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre><span class="comment"># Stage 1: Preprocessing only (-E)</span>
+          <div class="code-header"><span class="code-lang">💻 Terminal — Exploring each compilation stage</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># ═══ Stage 1: Preprocessing (-E) ═══</span>
+<span class="comment"># Expands #include, #define — output is pure C (no directives)</span>
 gcc -E hello.c -o hello.i
+wc -l hello.i         <span class="comment"># ~800 lines! stdio.h alone adds ~700 lines</span>
+head -20 hello.i      <span class="comment"># See the expanded system headers</span>
 
-<span class="comment"># Stage 2: Compile to assembly (-S)</span>
-gcc -S hello.c -o hello.s
+<span class="comment"># ═══ Stage 2: Compilation to Assembly (-S) ═══</span>
+<span class="comment"># C code → human-readable assembly for your CPU architecture</span>
+gcc -S -O0 hello.c -o hello.s     <span class="comment"># No optimization (easier to read)</span>
+cat hello.s           <span class="comment"># See actual x86-64 assembly instructions</span>
 
-<span class="comment"># Stage 3: Assemble to object file (-c)</span>
+<span class="comment"># ═══ Stage 3: Assembly to Object File (-c) ═══</span>
+<span class="comment"># Assembly → binary machine code (not yet executable)</span>
 gcc -c hello.c -o hello.o
+file hello.o          <span class="comment"># "ELF 64-bit LSB relocatable" — not executable yet!</span>
 
-<span class="comment"># Stage 4: Link to executable (default)</span>
+<span class="comment"># Inspect the object file's symbol table</span>
+nm hello.o            <span class="comment"># Shows symbols: "T main" (defined), "U printf" (undefined)</span>
+<span class="comment">#                 T = defined in this file</span>
+<span class="comment">#                 U = undefined (needs to be resolved by linker)</span>
+
+<span class="comment"># Disassemble the object file (see actual machine code)</span>
+objdump -d hello.o    <span class="comment"># Shows hex opcodes + assembly instructions</span>
+
+<span class="comment"># ═══ Stage 4: Linking ═══</span>
+<span class="comment"># Resolves "U printf" → connects to libc.so (C standard library)</span>
 gcc hello.o -o hello
+file hello            <span class="comment"># "ELF 64-bit LSB executable" — NOW it can run!</span>
 
-<span class="comment"># All at once (most common)</span>
-gcc hello.c -o hello</pre></div>
+<span class="comment"># See what libraries are linked</span>
+ldd hello             <span class="comment"># Shows: libc.so.6 → /lib/x86_64-linux-gnu/libc.so.6</span></pre></div>
         </div>
       </div>
 
       <div class="concept-block">
-        <h3 class="concept-heading">Essential GCC flags</h3>
+        <h3 class="concept-heading">Static vs dynamic linking — a critical distinction</h3>
+        <p class="explain-en">
+          When linking, there are two strategies: <strong>dynamic linking</strong> (default) — your executable references shared libraries
+          (<code>.so</code> on Linux, <code>.dll</code> on Windows, <code>.dylib</code> on macOS) that are loaded at runtime. This produces
+          <strong>smaller binaries</strong> (~16 KB) but requires the libraries to be present on the target system.
+          <strong>Static linking</strong> — library code is <em>copied into</em> your executable, producing a <strong>larger but self-contained
+          binary</strong> (~900 KB) that runs anywhere without dependencies. Embedded systems and containerized deployments often use static linking.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Linking ke do tarike hain: Dynamic linking (default) — executable shared libraries ko reference karta hai (.so Linux pe, .dll Windows pe) jo runtime pe load hoti hain. Chhoti binary (~16 KB) lekin target system pe libraries honi chahiye. Static linking — library ka code executable me COPY ho jaata hai, badi lekin self-contained binary (~900 KB) banti hai jo kahi bhi bina dependencies ke chal sakti hai. Embedded systems aur containers me static linking use hota hai.</div>
         <div class="hb-table-wrap">
           <table class="hb-table">
-            <thead><tr><th>Flag</th><th>Purpose</th><th>When to use</th></tr></thead>
+            <thead><tr><th>Feature</th><th>Dynamic Linking (default)</th><th>Static Linking (-static)</th></tr></thead>
             <tbody>
-              <tr><td><code>-o name</code></td><td>Set output filename</td><td>Always</td></tr>
-              <tr><td><code>-Wall</code></td><td>Enable all warnings</td><td>Always ✅</td></tr>
-              <tr><td><code>-Wextra</code></td><td>Extra warnings</td><td>Always ✅</td></tr>
-              <tr><td><code>-Werror</code></td><td>Treat warnings as errors</td><td>Production builds</td></tr>
-              <tr><td><code>-g</code></td><td>Debug info (for GDB)</td><td>During development</td></tr>
-              <tr><td><code>-O2</code></td><td>Optimization level 2</td><td>Release builds</td></tr>
-              <tr><td><code>-std=c17</code></td><td>Set C standard version</td><td>Modern projects</td></tr>
-              <tr><td><code>-lm</code></td><td>Link math library</td><td>When using math.h</td></tr>
+              <tr><td><strong>Binary size</strong></td><td>~16 KB (Hello World)</td><td>~900 KB (Hello World)</td></tr>
+              <tr><td><strong>Dependencies</strong></td><td>Needs .so/.dll at runtime</td><td>Self-contained, no deps</td></tr>
+              <tr><td><strong>Security updates</strong></td><td>Auto (library updates apply)</td><td>Must recompile to update</td></tr>
+              <tr><td><strong>Startup speed</strong></td><td>Slightly slower (dynamic resolution)</td><td>Faster (no runtime linking)</td></tr>
+              <tr><td><strong>Portability</strong></td><td>Tied to compatible library versions</td><td>Runs on any compatible OS</td></tr>
+              <tr><td><strong>Use case</strong></td><td>Desktop apps, servers</td><td>Embedded, Docker, single-binary tools</td></tr>
             </tbody>
           </table>
         </div>
-        <div class="callout callout-important"><strong>Industry standard compile command:</strong> <code>gcc -Wall -Wextra -std=c17 -g main.c -o main</code> — use this for every project during development.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Terminal — Static vs dynamic linking comparison</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># Dynamic linking (default)</span>
+gcc hello.c -o hello_dynamic
+ls -lh hello_dynamic   <span class="comment"># ~16 KB</span>
+ldd hello_dynamic      <span class="comment"># Shows libc.so dependency</span>
+
+<span class="comment"># Static linking (self-contained)</span>
+gcc -static hello.c -o hello_static
+ls -lh hello_static    <span class="comment"># ~900 KB (libc is INSIDE the binary)</span>
+ldd hello_static       <span class="comment"># "not a dynamic executable" — fully self-contained!</span></pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Optimization levels — what the compiler does for you</h3>
+        <p class="explain-en">
+          GCC's optimizer can dramatically transform your code for speed or size. The <code>-O</code> flag controls this.
+          At <code>-O0</code> (default), the compiler generates straightforward code that maps 1:1 to your source — easy to debug.
+          At <code>-O2</code>, the optimizer applies hundreds of transformations: <strong>dead code elimination</strong>,
+          <strong>loop unrolling</strong>, <strong>function inlining</strong>, <strong>constant folding</strong>,
+          <strong>instruction scheduling</strong>, and more. The output assembly can look completely different from your source code.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>GCC ka optimizer tumhare code ko speed ya size ke liye dramatically transform kar sakta hai. <code>-O0</code> (default) pe compiler seedha code banata hai jo source se 1:1 match karta hai — debug karna aasan. <code>-O2</code> pe optimizer saikadon transformations apply karta hai: dead code elimination, loop unrolling, function inlining, constant folding, instruction scheduling. Output assembly source code se bilkul alag dikh sakti hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Flag</th><th>Level</th><th>Optimizations</th><th>Use when</th></tr></thead>
+            <tbody>
+              <tr><td><code>-O0</code></td><td>None</td><td>No optimization — code maps directly to source</td><td>🔍 Debugging with GDB</td></tr>
+              <tr><td><code>-O1</code></td><td>Basic</td><td>Simple optimizations, fast compilation</td><td>Quick development builds</td></tr>
+              <tr><td><code>-O2</code></td><td>Standard</td><td>Most optimizations (inlining, unrolling, scheduling)</td><td>⚡ Production release builds</td></tr>
+              <tr><td><code>-O3</code></td><td>Aggressive</td><td>All -O2 + auto-vectorization, aggressive inlining</td><td>Performance-critical hotspots</td></tr>
+              <tr><td><code>-Os</code></td><td>Size</td><td>Optimize for smallest binary size</td><td>📦 Embedded systems with limited flash</td></tr>
+              <tr><td><code>-Og</code></td><td>Debug</td><td>Optimizations that don't hurt debugging</td><td>🔍 Best of both worlds</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>Development vs Production:</strong> During development, compile with <code>-O0 -g</code> (no optimization + debug info). For release, use <code>-O2</code> (or <code>-Os</code> for embedded). Never debug optimized code — the debugger will "jump around" because the optimizer rearranged your code.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Essential GCC flags — the complete reference</h3>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Flag</th><th>Purpose</th><th>When to use</th><th>Priority</th></tr></thead>
+            <tbody>
+              <tr><td><code>-o name</code></td><td>Set output filename</td><td>Always</td><td>🔴 Required</td></tr>
+              <tr><td><code>-Wall</code></td><td>Enable common warnings (doesn't mean ALL)</td><td>Always</td><td>🔴 Required</td></tr>
+              <tr><td><code>-Wextra</code></td><td>Extra warnings not in -Wall</td><td>Always</td><td>🔴 Required</td></tr>
+              <tr><td><code>-Wpedantic</code></td><td>Strict ISO C compliance warnings</td><td>Portable code</td><td>🟡 Recommended</td></tr>
+              <tr><td><code>-Werror</code></td><td>Treat ALL warnings as errors</td><td>CI/CD, production</td><td>🟡 Production</td></tr>
+              <tr><td><code>-g</code></td><td>Include debug symbols (for GDB/LLDB)</td><td>Development builds</td><td>🔴 Development</td></tr>
+              <tr><td><code>-std=c17</code></td><td>Set C standard version</td><td>Modern projects</td><td>🔴 Required</td></tr>
+              <tr><td><code>-O2</code></td><td>Production optimization</td><td>Release builds</td><td>🟡 Production</td></tr>
+              <tr><td><code>-fsanitize=address</code></td><td>AddressSanitizer (detect buffer overflows)</td><td>Testing/debugging</td><td>🟢 Debug</td></tr>
+              <tr><td><code>-fsanitize=undefined</code></td><td>Detect undefined behavior at runtime</td><td>Testing/debugging</td><td>🟢 Debug</td></tr>
+              <tr><td><code>-lm</code></td><td>Link math library</td><td>When using math.h functions</td><td>As needed</td></tr>
+              <tr><td><code>-lpthread</code></td><td>Link POSIX threads</td><td>Multi-threaded programs</td><td>As needed</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 Terminal — Recommended compilation commands</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># 🔍 Development build (debugging-friendly)</span>
+gcc -Wall -Wextra -Wpedantic -std=c17 -g -O0 main.c -o main
+
+<span class="comment"># 🧪 Testing build (catch memory bugs)</span>
+gcc -Wall -Wextra -std=c17 -g -fsanitize=address,undefined main.c -o main
+
+<span class="comment"># ⚡ Production release build</span>
+gcc -Wall -Wextra -Werror -std=c17 -O2 -DNDEBUG main.c -o main
+
+<span class="comment"># 📦 Embedded/size-optimized build</span>
+gcc -Wall -Wextra -std=c17 -Os -s main.c -o main   <span class="comment"># -s strips debug symbols</span></pre></div>
+        </div>
+        <div class="callout callout-tip"><strong>Pro tip:</strong> Create an alias in your shell: <code>alias ccc='gcc -Wall -Wextra -Wpedantic -std=c17 -g'</code>. Then just type <code>ccc main.c -o main</code> every time. Most professionals have this in their <code>.bashrc</code>.</div>
       </div>
     </div>
 
     <!-- MODULE 1.5 -->
     <div class="module-section" id="m1-5">
-      <div class="module-header"><div class="module-number">1.5</div><h2 class="module-title">Data Types & Variables — int, char, float, double, void, sizeof</h2></div>
+      <div class="module-header"><div class="module-number">1.5</div><h2 class="module-title">Data Types & Variables — int, char, float, double, void, sizeof, stdint.h, type promotion</h2></div>
 
       <div class="concept-block">
-        <h3 class="concept-heading">Primitive data types in C</h3>
+        <h3 class="concept-heading">Primitive data types — what the CPU actually sees</h3>
         <p class="explain-en">
           C is a <strong>statically typed</strong> language — every variable must have a type declared before use. The type determines
-          how much <strong>memory</strong> is allocated and how the <strong>bits are interpreted</strong>. Choosing the right type affects both memory efficiency and correctness.
+          <strong>two things</strong>: (1) how much memory is allocated, and (2) <strong>how the bits are interpreted</strong>. The same
+          4 bytes could be an <code>int</code> (interpreted as two's complement integer), a <code>float</code> (interpreted as IEEE 754
+          floating-point), or 4 <code>char</code>s. The type tells the CPU which interpretation to use. A critical caveat: <strong>type
+          sizes are platform-dependent</strong>. An <code>int</code> is 4 bytes on most modern systems but was 2 bytes on old 16-bit machines.
+          Use <code>&lt;stdint.h&gt;</code> for guaranteed sizes.
         </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>C statically typed hai — har variable ka type pehle se declare karna padta hai. Type decide karta hai kitni memory lagegi aur bits ka matlab kya hoga.</div>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>C statically typed hai — har variable ka type pehle se declare karna padta hai. Type do cheezein decide karta hai: (1) kitni memory lagegi, aur (2) bits ka matlab kya hoga. Same 4 bytes int ho sakti hain (two's complement integer), float (IEEE 754) ya 4 chars. Type CPU ko batata hai konsa interpretation use kare. Important: type sizes platform-dependent hain — int aaj 4 bytes hai lekin purane 16-bit machines pe 2 bytes tha. Guaranteed sizes ke liye <code>&lt;stdint.h&gt;</code> use karo.</div>
         <div class="hb-table-wrap">
           <table class="hb-table">
-            <thead><tr><th>Type</th><th>Size (typical)</th><th>Range</th><th>Use case</th></tr></thead>
+            <thead><tr><th>Type</th><th>Size (typical x86-64)</th><th>Range</th><th>Use case</th><th>Format specifier</th></tr></thead>
             <tbody>
-              <tr><td><code>char</code></td><td>1 byte</td><td>-128 to 127</td><td>Characters, small numbers</td></tr>
-              <tr><td><code>short</code></td><td>2 bytes</td><td>-32,768 to 32,767</td><td>Small integers</td></tr>
-              <tr><td><code>int</code></td><td>4 bytes</td><td>-2.1B to 2.1B</td><td>General integers ✅</td></tr>
-              <tr><td><code>long</code></td><td>4/8 bytes</td><td>Platform-dependent</td><td>Large integers</td></tr>
-              <tr><td><code>long long</code></td><td>8 bytes</td><td>±9.2 × 10¹⁸</td><td>Very large integers</td></tr>
-              <tr><td><code>float</code></td><td>4 bytes</td><td>±3.4 × 10³⁸ (6 digits)</td><td>Decimal (low precision)</td></tr>
-              <tr><td><code>double</code></td><td>8 bytes</td><td>±1.7 × 10³⁰⁸ (15 digits)</td><td>Decimal ✅ (standard)</td></tr>
-              <tr><td><code>void</code></td><td>0 bytes</td><td>N/A</td><td>No value / generic pointer</td></tr>
+              <tr><td><code>char</code></td><td>1 byte (always)</td><td>-128 to 127 (or 0-255 unsigned)</td><td>Characters, raw bytes</td><td><code>%c</code> / <code>%hhd</code></td></tr>
+              <tr><td><code>short</code></td><td>2 bytes</td><td>-32,768 to 32,767</td><td>Small integers, embedded sensors</td><td><code>%hd</code></td></tr>
+              <tr><td><code>int</code></td><td>4 bytes</td><td>-2,147,483,648 to 2,147,483,647</td><td>General integers ✅ (default choice)</td><td><code>%d</code></td></tr>
+              <tr><td><code>long</code></td><td>4 bytes (Win) / 8 bytes (Linux)</td><td>Platform-dependent ⚠️</td><td>Avoid — use <code>int64_t</code> instead</td><td><code>%ld</code></td></tr>
+              <tr><td><code>long long</code></td><td>8 bytes</td><td>±9.2 × 10¹⁸</td><td>Large counters, timestamps</td><td><code>%lld</code></td></tr>
+              <tr><td><code>float</code></td><td>4 bytes</td><td>±3.4 × 10³⁸ (6-7 digits precision)</td><td>Graphics, GPU, space-constrained</td><td><code>%f</code> / <code>%e</code></td></tr>
+              <tr><td><code>double</code></td><td>8 bytes</td><td>±1.7 × 10³⁰⁸ (15-16 digits)</td><td>Decimal math ✅ (default for floating)</td><td><code>%lf</code> / <code>%e</code></td></tr>
+              <tr><td><code>long double</code></td><td>8/12/16 bytes</td><td>Implementation-defined</td><td>High-precision scientific computing</td><td><code>%Lf</code></td></tr>
+              <tr><td><code>_Bool</code> / <code>bool</code></td><td>1 byte</td><td>0 or 1</td><td>Boolean flags (C99+, needs <code>&lt;stdbool.h&gt;</code>)</td><td><code>%d</code></td></tr>
+              <tr><td><code>void</code></td><td>0 bytes</td><td>N/A</td><td>No value, generic pointers (<code>void*</code>)</td><td>N/A</td></tr>
             </tbody>
           </table>
         </div>
       </div>
 
       <div class="concept-block">
-        <h3 class="concept-heading">Variable declaration & initialization</h3>
-        <div class="code-block">
-          <div class="code-header"><span class="code-lang">💻 C — Variables</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre><span class="comment">/* Declaration (allocates memory, value is garbage) */</span>
-<span class="type">int</span> age;
-<span class="type">char</span> grade;
-
-<span class="comment">/* Initialization (declaration + value) */</span>
-<span class="type">int</span> age = <span class="number">21</span>;
-<span class="type">char</span> grade = <span class="string">'A'</span>;
-<span class="type">float</span> gpa = <span class="number">3.85</span><span class="keyword">f</span>;      <span class="comment">/* 'f' suffix for float */</span>
-<span class="type">double</span> pi = <span class="number">3.14159265358979</span>;
-
-<span class="comment">/* Multiple declarations */</span>
-<span class="type">int</span> x = <span class="number">1</span>, y = <span class="number">2</span>, z = <span class="number">3</span>;
-
-<span class="comment">/* Type modifiers */</span>
-<span class="type">unsigned int</span> count = <span class="number">0</span>;     <span class="comment">/* Only positive: 0 to 4.2B */</span>
-<span class="type">signed int</span> temp = -<span class="number">15</span>;      <span class="comment">/* Positive & negative (default) */</span>
-<span class="type">long long int</span> big = <span class="number">9000000000LL</span>;</pre></div>
-        </div>
-        <div class="callout callout-warning"><strong>Common bug:</strong> Uninitialized variables contain <strong>garbage values</strong> (whatever was in that memory). Always initialize variables when declaring them.</div>
-      </div>
-
-      <div class="concept-block">
-        <h3 class="concept-heading">sizeof operator</h3>
+        <h3 class="concept-heading">Fixed-width types — <code>&lt;stdint.h&gt;</code> (C99+)</h3>
         <p class="explain-en">
-          <code>sizeof</code> returns the size in bytes of a type or variable. It's evaluated at <strong>compile time</strong>, not runtime — so it has zero performance cost.
+          Since <code>int</code> and <code>long</code> have <strong>different sizes on different platforms</strong>, C99 introduced
+          <code>&lt;stdint.h&gt;</code> with <strong>guaranteed-size types</strong>. In professional and embedded C code, these are
+          preferred over plain <code>int</code>/<code>long</code> because they're <strong>portable</strong> — the same code produces
+          identical behavior on 32-bit ARM, 64-bit x86, and 16-bit microcontrollers.
         </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>sizeof</code> type ya variable ka size bytes me batata hai. Ye compile time pe evaluate hota hai — runtime pe koi cost nahi.</div>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>int</code> aur <code>long</code> alag platforms pe alag size ke hote hain. C99 ne <code>&lt;stdint.h&gt;</code> diya jisme guaranteed-size types hain. Professional aur embedded C code me ye preferred hain kyunki ye portable hain — same code 32-bit ARM, 64-bit x86, aur 16-bit microcontrollers pe identical behavior deta hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Fixed-width type</th><th>Exact size</th><th>Equivalent</th><th>Format specifier</th><th>Use case</th></tr></thead>
+            <tbody>
+              <tr><td><code>int8_t</code> / <code>uint8_t</code></td><td>1 byte</td><td>signed/unsigned char</td><td><code>PRId8</code> / <code>PRIu8</code></td><td>Byte-level data, protocol fields</td></tr>
+              <tr><td><code>int16_t</code> / <code>uint16_t</code></td><td>2 bytes</td><td>short</td><td><code>PRId16</code> / <code>PRIu16</code></td><td>Sensor readings, embedded</td></tr>
+              <tr><td><code>int32_t</code> / <code>uint32_t</code></td><td>4 bytes</td><td>int (usually)</td><td><code>PRId32</code> / <code>PRIu32</code></td><td>General integers, IP addresses</td></tr>
+              <tr><td><code>int64_t</code> / <code>uint64_t</code></td><td>8 bytes</td><td>long long</td><td><code>PRId64</code> / <code>PRIu64</code></td><td>Timestamps, file sizes, crypto</td></tr>
+              <tr><td><code>size_t</code></td><td>4 or 8 bytes</td><td>Unsigned, pointer-sized</td><td><code>%zu</code></td><td>Array sizes, sizeof results</td></tr>
+              <tr><td><code>ptrdiff_t</code></td><td>4 or 8 bytes</td><td>Signed, pointer-sized</td><td><code>%td</code></td><td>Pointer arithmetic differences</td></tr>
+            </tbody>
+          </table>
+        </div>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">💻 C — sizeof</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-header"><span class="code-lang">💻 C — Using stdint.h types (recommended)</span><div class="code-dots"><span></span><span></span><span></span></div></div>
           <div class="code-body"><pre><span class="preprocessor">#include</span> <span class="string">&lt;stdio.h&gt;</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;stdint.h&gt;</span>     <span class="comment">/* Fixed-width integer types */</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;inttypes.h&gt;</span>   <span class="comment">/* PRId32, PRIu64, etc. format macros */</span>
 
 <span class="type">int</span> <span class="function">main</span>(<span class="type">void</span>) {
-    <span class="function">printf</span>(<span class="string">"char:      %zu bytes\n"</span>, <span class="keyword">sizeof</span>(<span class="type">char</span>));
-    <span class="function">printf</span>(<span class="string">"int:       %zu bytes\n"</span>, <span class="keyword">sizeof</span>(<span class="type">int</span>));
-    <span class="function">printf</span>(<span class="string">"float:     %zu bytes\n"</span>, <span class="keyword">sizeof</span>(<span class="type">float</span>));
-    <span class="function">printf</span>(<span class="string">"double:    %zu bytes\n"</span>, <span class="keyword">sizeof</span>(<span class="type">double</span>));
-    <span class="function">printf</span>(<span class="string">"long long: %zu bytes\n"</span>, <span class="keyword">sizeof</span>(<span class="type">long long</span>));
-    <span class="function">printf</span>(<span class="string">"pointer:   %zu bytes\n"</span>, <span class="keyword">sizeof</span>(<span class="type">int</span> *));
+    <span class="type">uint8_t</span>  sensor_byte = <span class="number">0xFF</span>;        <span class="comment">/* Exactly 1 byte, unsigned */</span>
+    <span class="type">int32_t</span>  temperature = -<span class="number">15</span>;         <span class="comment">/* Exactly 4 bytes, signed */</span>
+    <span class="type">uint64_t</span> timestamp = <span class="number">1714500000ULL</span>; <span class="comment">/* Exactly 8 bytes, unsigned */</span>
+
+    <span class="function">printf</span>(<span class="string">"Sensor: %"</span> PRIu8 <span class="string">"\n"</span>, sensor_byte);
+    <span class="function">printf</span>(<span class="string">"Temp:   %"</span> PRId32 <span class="string">"\n"</span>, temperature);
+    <span class="function">printf</span>(<span class="string">"Time:   %"</span> PRIu64 <span class="string">"\n"</span>, timestamp);
     <span class="keyword">return</span> <span class="number">0</span>;
 }</pre></div>
         </div>
+        <div class="callout callout-important"><strong>Industry rule:</strong> In embedded systems and cross-platform code, <strong>always use <code>&lt;stdint.h&gt;</code> types</strong>. A <code>long</code> is 4 bytes on Windows but 8 bytes on Linux — this causes real production bugs when porting code.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Variable declaration, initialization & common pitfalls</h3>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Variables deep dive</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="preprocessor">#include</span> <span class="string">&lt;stdio.h&gt;</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;limits.h&gt;</span>    <span class="comment">/* INT_MAX, INT_MIN, CHAR_BIT, etc. */</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;float.h&gt;</span>     <span class="comment">/* FLT_MAX, DBL_EPSILON, etc. */</span>
+
+<span class="type">int</span> <span class="function">main</span>(<span class="type">void</span>) {
+    <span class="comment">/* ═══ Declaration vs Initialization ═══ */</span>
+    <span class="type">int</span> x;            <span class="comment">/* ❌ DANGEROUS: x has GARBAGE value! */</span>
+    <span class="type">int</span> y = <span class="number">0</span>;        <span class="comment">/* ✅ SAFE: always initialize */</span>
+
+    <span class="comment">/* ═══ Type modifiers ═══ */</span>
+    <span class="type">unsigned int</span> count = <span class="number">0</span>;      <span class="comment">/* 0 to 4,294,967,295 (no negatives) */</span>
+    <span class="type">signed int</span> temp = -<span class="number">15</span>;       <span class="comment">/* Explicit signed (default anyway) */</span>
+    <span class="type">long long int</span> big = <span class="number">9000000000LL</span>; <span class="comment">/* LL suffix for long long literals */</span>
+
+    <span class="comment">/* ═══ Integer limits (from &lt;limits.h&gt;) ═══ */</span>
+    <span class="function">printf</span>(<span class="string">"INT_MAX:   %d\n"</span>, INT_MAX);     <span class="comment">/* 2,147,483,647 */</span>
+    <span class="function">printf</span>(<span class="string">"INT_MIN:   %d\n"</span>, INT_MIN);     <span class="comment">/* -2,147,483,648 */</span>
+    <span class="function">printf</span>(<span class="string">"UINT_MAX:  %u\n"</span>, UINT_MAX);    <span class="comment">/* 4,294,967,295 */</span>
+    <span class="function">printf</span>(<span class="string">"CHAR_BIT:  %d\n"</span>, CHAR_BIT);    <span class="comment">/* 8 (bits per byte) */</span>
+
+    <span class="comment">/* ═══ Float limits (from &lt;float.h&gt;) ═══ */</span>
+    <span class="function">printf</span>(<span class="string">"FLT_MAX:   %e\n"</span>, FLT_MAX);     <span class="comment">/* ~3.4 × 10³⁸ */</span>
+    <span class="function">printf</span>(<span class="string">"DBL_EPSILON: %e\n"</span>, DBL_EPSILON); <span class="comment">/* ~2.2 × 10⁻¹⁶ */</span>
+
+    <span class="comment">/* ═══ INTEGER OVERFLOW (Undefined Behavior!) ═══ */</span>
+    <span class="type">int</span> overflow = INT_MAX + <span class="number">1</span>;  <span class="comment">/* ⚠️ UB! Might wrap, might crash */</span>
+    <span class="function">printf</span>(<span class="string">"Overflow: %d\n"</span>, overflow); <span class="comment">/* Often: -2,147,483,648 (wraps) */</span>
+
+    <span class="comment">/* ═══ FLOAT PRECISION TRAP ═══ */</span>
+    <span class="type">float</span> a = <span class="number">0.1f</span>;
+    <span class="type">float</span> b = <span class="number">0.2f</span>;
+    <span class="function">printf</span>(<span class="string">"0.1 + 0.2 = %.20f\n"</span>, a + b);
+    <span class="comment">/* Output: 0.30000001192092895508  (NOT 0.3!) */</span>
+    <span class="comment">/* Floating-point numbers are APPROXIMATIONS in binary */</span>
+
+    <span class="keyword">return</span> <span class="number">0</span>;
+}</pre></div>
+        </div>
+        <div class="callout callout-warning"><strong>Critical bugs to avoid:</strong> (1) <strong>Uninitialized variables</strong> — contain garbage, cause random behavior. (2) <strong>Integer overflow</strong> — signed overflow is <strong>undefined behavior</strong> (the compiler can do ANYTHING, including optimizing away your safety checks). (3) <strong>Float comparison</strong> — never use <code>==</code> with floats. Use <code>fabs(a - b) < epsilon</code> instead.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">sizeof operator & type sizes</h3>
+        <p class="explain-en">
+          <code>sizeof</code> returns the size in bytes of a type or variable. It's a <strong>compile-time operator</strong> (not a function!) —
+          the value is computed during compilation with <strong>zero runtime cost</strong>. Use <code>%zu</code> to print it (since it returns <code>size_t</code>).
+          Always use <code>sizeof</code> instead of hardcoded sizes — it makes your code portable across different architectures.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>sizeof</code> type ya variable ka size bytes me return karta hai. Ye compile-time operator hai (function nahi!) — value compilation ke dauran compute hoti hai, runtime pe zero cost. <code>%zu</code> se print karo (kyunki ye <code>size_t</code> return karta hai). Hardcoded sizes ki jagah hamesha sizeof use karo — alag architectures pe portable code banata hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — sizeof deep dive</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="preprocessor">#include</span> <span class="string">&lt;stdio.h&gt;</span>
+
+<span class="type">int</span> <span class="function">main</span>(<span class="type">void</span>) {
+    <span class="comment">/* sizeof with types */</span>
+    <span class="function">printf</span>(<span class="string">"char:        %zu bytes\n"</span>, <span class="keyword">sizeof</span>(<span class="type">char</span>));       <span class="comment">/* Always 1 */</span>
+    <span class="function">printf</span>(<span class="string">"short:       %zu bytes\n"</span>, <span class="keyword">sizeof</span>(<span class="type">short</span>));      <span class="comment">/* 2 */</span>
+    <span class="function">printf</span>(<span class="string">"int:         %zu bytes\n"</span>, <span class="keyword">sizeof</span>(<span class="type">int</span>));        <span class="comment">/* 4 */</span>
+    <span class="function">printf</span>(<span class="string">"long:        %zu bytes\n"</span>, <span class="keyword">sizeof</span>(<span class="type">long</span>));       <span class="comment">/* 4 or 8! */</span>
+    <span class="function">printf</span>(<span class="string">"long long:   %zu bytes\n"</span>, <span class="keyword">sizeof</span>(<span class="type">long long</span>));  <span class="comment">/* 8 */</span>
+    <span class="function">printf</span>(<span class="string">"float:       %zu bytes\n"</span>, <span class="keyword">sizeof</span>(<span class="type">float</span>));      <span class="comment">/* 4 */</span>
+    <span class="function">printf</span>(<span class="string">"double:      %zu bytes\n"</span>, <span class="keyword">sizeof</span>(<span class="type">double</span>));     <span class="comment">/* 8 */</span>
+    <span class="function">printf</span>(<span class="string">"pointer:     %zu bytes\n"</span>, <span class="keyword">sizeof</span>(<span class="type">void</span> *));    <span class="comment">/* 4 (32-bit) or 8 (64-bit) */</span>
+
+    <span class="comment">/* sizeof with variables (no parentheses needed!) */</span>
+    <span class="type">int</span> arr[<span class="number">10</span>];
+    <span class="function">printf</span>(<span class="string">"arr total:   %zu bytes\n"</span>, <span class="keyword">sizeof</span> arr);       <span class="comment">/* 40 (10 × 4) */</span>
+    <span class="function">printf</span>(<span class="string">"arr count:   %zu elements\n"</span>,
+           <span class="keyword">sizeof</span> arr / <span class="keyword">sizeof</span> arr[<span class="number">0</span>]);                     <span class="comment">/* 10 ← common pattern! */</span>
+
+    <span class="keyword">return</span> <span class="number">0</span>;
+}</pre></div>
+        </div>
+        <div class="callout callout-tip"><strong>Array size pattern:</strong> <code>sizeof(arr) / sizeof(arr[0])</code> gives the number of elements in a stack-allocated array. This is the most common <code>sizeof</code> idiom in C. Note: this does NOT work with pointers — only with actual arrays.</div>
       </div>
     </div>
 
     <!-- MODULE 1.6 -->
     <div class="module-section" id="m1-6">
-      <div class="module-header"><div class="module-number">1.6</div><h2 class="module-title">Constants & Literals — const, #define, escape sequences</h2></div>
+      <div class="module-header"><div class="module-number">1.6</div><h2 class="module-title">Constants & Literals — const, #define, enum, escape sequences, literal suffixes, number bases</h2></div>
 
       <div class="concept-block">
-        <h3 class="concept-heading">Constants — values that never change</h3>
+        <h3 class="concept-heading">Three ways to define constants — and when to use each</h3>
         <p class="explain-en">
-          Constants prevent accidental modification. Use <code>const</code> for type-safe constants and <code>#define</code> for compile-time macros.
-          <code>const</code> is preferred in modern C because the compiler can type-check it.
+          Constants are values that <strong>cannot change</strong> after being set. C provides three mechanisms, each with
+          different trade-offs. The key difference: <code>const</code> creates a <strong>real variable in memory</strong> that
+          the compiler can type-check. <code>#define</code> is a <strong>text replacement</strong> done by the preprocessor
+          <em>before</em> the compiler even sees the code — no type checking, no scope, no debugging visibility.
+          <code>enum</code> creates <strong>named integer constants</strong> that are type-safe and debugger-visible.
+          Modern C best practice: prefer <code>const</code> or <code>enum</code> over <code>#define</code> whenever possible.
         </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Constants woh values hain jo kabhi change nahi hoti. <code>const</code> type-safe hai aur <code>#define</code> compile-time macro hai. Modern C me <code>const</code> preferred hai kyunki compiler type-check kar sakta hai.</div>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Constants wo values hain jo set hone ke baad change nahi ho sakti. C me teen tarike hain. Key difference: <code>const</code> ek real variable banata hai memory me jise compiler type-check karta hai. <code>#define</code> ek text replacement hai jo preprocessor compile se pehle karta hai — koi type checking nahi, scope nahi, debugging me nahi dikhta. <code>enum</code> named integer constants banata hai jo type-safe aur debugger me visible hain. Modern C: jab bhi ho sake <code>const</code> ya <code>enum</code> use karo, <code>#define</code> nahi.</div>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">💻 C — Constants</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre><span class="comment">/* Method 1: const (preferred — type-safe) */</span>
+          <div class="code-header"><span class="code-lang">💻 C — Three constant methods compared</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* ═══ Method 1: const (PREFERRED — type-safe, debuggable) ═══ */</span>
 <span class="keyword">const</span> <span class="type">int</span> MAX_STUDENTS = <span class="number">100</span>;
 <span class="keyword">const</span> <span class="type">double</span> PI = <span class="number">3.14159265358979</span>;
-<span class="keyword">const</span> <span class="type">char</span> NEWLINE = <span class="string">'\n'</span>;
+<span class="keyword">const</span> <span class="type">char</span> *<span class="keyword">const</span> APP_NAME = <span class="string">"Calculator"</span>;  <span class="comment">/* const pointer to const string */</span>
 
-<span class="comment">/* Method 2: #define (preprocessor macro) */</span>
-<span class="preprocessor">#define</span> <span class="function">MAX_BUFFER</span> <span class="number">1024</span>
-<span class="preprocessor">#define</span> <span class="function">VERSION</span> <span class="string">"1.0.0"</span>
-<span class="preprocessor">#define</span> <span class="function">SQUARE</span>(x) ((x) * (x))
+<span class="comment">/* ═══ Method 2: #define (preprocessor — text replacement) ═══ */</span>
+<span class="preprocessor">#define</span> <span class="function">MAX_BUFFER</span>  <span class="number">1024</span>
+<span class="preprocessor">#define</span> <span class="function">VERSION</span>     <span class="string">"1.0.0"</span>
+<span class="preprocessor">#define</span> <span class="function">SQUARE</span>(x)   ((x) * (x))   <span class="comment">/* Macro function — see pitfalls below! */</span>
 
-<span class="comment">/* Method 3: enum (for related integer constants) */</span>
-<span class="keyword">enum</span> { RED = <span class="number">0</span>, GREEN = <span class="number">1</span>, BLUE = <span class="number">2</span> };</pre></div>
+<span class="comment">/* ═══ Method 3: enum (BEST for related integer sets) ═══ */</span>
+<span class="keyword">typedef</span> <span class="keyword">enum</span> {
+    COLOR_RED   = <span class="number">0</span>,
+    COLOR_GREEN = <span class="number">1</span>,
+    COLOR_BLUE  = <span class="number">2</span>,
+    COLOR_COUNT        <span class="comment">/* = 3, auto-incremented — useful for array sizing */</span>
+} Color;</pre></div>
         </div>
         <div class="hb-table-wrap">
           <table class="hb-table">
-            <thead><tr><th>Method</th><th>Type-safe?</th><th>Scope</th><th>Best for</th></tr></thead>
+            <thead><tr><th>Feature</th><th><code>const</code></th><th><code>#define</code></th><th><code>enum</code></th></tr></thead>
             <tbody>
-              <tr><td><code>const</code></td><td>✅ Yes</td><td>Block scope</td><td>Local/file constants</td></tr>
-              <tr><td><code>#define</code></td><td>❌ No (text replace)</td><td>Global</td><td>Macros, config values</td></tr>
-              <tr><td><code>enum</code></td><td>✅ Yes (int)</td><td>Block scope</td><td>Related integer sets</td></tr>
+              <tr><td><strong>Type-safe?</strong></td><td>✅ Yes — compiler checks types</td><td>❌ No — raw text replacement</td><td>✅ Yes (always <code>int</code>)</td></tr>
+              <tr><td><strong>Scope</strong></td><td>Block/file scope (respects <code>{}</code>)</td><td>Global (no scope!)</td><td>Block/file scope</td></tr>
+              <tr><td><strong>Visible in debugger?</strong></td><td>✅ Yes — has a name and address</td><td>❌ No — replaced before compile</td><td>✅ Yes — named constants</td></tr>
+              <tr><td><strong>Can be used in <code>switch</code>?</strong></td><td>❌ No (C89/C99 — not a constant expression)</td><td>✅ Yes</td><td>✅ Yes</td></tr>
+              <tr><td><strong>Can define functions?</strong></td><td>❌ No</td><td>✅ Yes (macro functions)</td><td>❌ No</td></tr>
+              <tr><td><strong>Multiple evaluation risk?</strong></td><td>No</td><td>⚠️ Yes — dangerous with side effects</td><td>No</td></tr>
+              <tr><td><strong>Best for</strong></td><td>Typed constants, strings</td><td>Config values, conditional compilation</td><td>State machines, flags, option sets</td></tr>
             </tbody>
           </table>
         </div>
+        <div class="callout callout-warning"><strong>#define macro pitfall:</strong> <code>#define SQUARE(x) ((x) * (x))</code> — calling <code>SQUARE(i++)</code> expands to <code>((i++) * (i++))</code> which increments <code>i</code> TWICE! This is <strong>undefined behavior</strong>. Always wrap macro parameters in parentheses and never pass expressions with side effects. Prefer <code>static inline</code> functions (C99+) over function-like macros.</div>
       </div>
 
       <div class="concept-block">
-        <h3 class="concept-heading">Escape sequences</h3>
+        <h3 class="concept-heading">Number literals — bases and suffixes</h3>
         <p class="explain-en">
-          Escape sequences represent special characters inside strings and character literals. They start with a backslash <code>\</code>.
+          C supports writing numbers in <strong>four bases</strong>: decimal (default), hexadecimal (<code>0x</code>),
+          octal (<code>0</code>), and binary (<code>0b</code>, GCC/C23). <strong>Suffixes</strong> tell the compiler
+          the exact type of a literal: <code>U</code> for unsigned, <code>L</code> for long, <code>LL</code> for long long,
+          <code>f</code> for float. Without a suffix, integer literals are <code>int</code> and floating literals are <code>double</code>.
         </p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Escape sequences special characters ko represent karte hain strings ke andar. Ye backslash <code>\</code> se shuru hote hain.</div>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>C me numbers chaar bases me likh sakte ho: decimal (default), hexadecimal (<code>0x</code>), octal (<code>0</code>), aur binary (<code>0b</code>, GCC/C23). Suffixes compiler ko literal ka exact type batate hain: <code>U</code> unsigned ke liye, <code>L</code> long ke liye, <code>LL</code> long long ke liye, <code>f</code> float ke liye. Bina suffix ke integer literals <code>int</code> hote hain aur floating literals <code>double</code>.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">💻 C — Number bases & suffixes</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* ═══ Number bases ═══ */</span>
+<span class="type">int</span> decimal     = <span class="number">255</span>;          <span class="comment">/* Base 10 (default) */</span>
+<span class="type">int</span> hexadecimal = <span class="number">0xFF</span>;         <span class="comment">/* Base 16 — common for colors, addresses */</span>
+<span class="type">int</span> octal       = <span class="number">0377</span>;         <span class="comment">/* Base 8 — used in Unix permissions */</span>
+<span class="type">int</span> binary      = <span class="number">0b11111111</span>;   <span class="comment">/* Base 2 — GCC extension / C23 */</span>
+<span class="comment">/* All four lines store the same value: 255 */</span>
+
+<span class="comment">/* ═══ Integer suffixes ═══ */</span>
+<span class="type">unsigned int</span> ui       = <span class="number">42U</span>;            <span class="comment">/* U = unsigned */</span>
+<span class="type">long</span> l                = <span class="number">42L</span>;            <span class="comment">/* L = long */</span>
+<span class="type">unsigned long</span> ul      = <span class="number">42UL</span>;           <span class="comment">/* UL = unsigned long */</span>
+<span class="type">long long</span> ll          = <span class="number">9000000000LL</span>;   <span class="comment">/* LL = long long */</span>
+<span class="type">unsigned long long</span> ull = <span class="number">42ULL</span>;         <span class="comment">/* ULL = unsigned long long */</span>
+
+<span class="comment">/* ═══ Float suffixes ═══ */</span>
+<span class="type">float</span> f       = <span class="number">3.14f</span>;         <span class="comment">/* f = float (without f, it's double!) */</span>
+<span class="type">double</span> d      = <span class="number">3.14</span>;          <span class="comment">/* no suffix = double (default) */</span>
+<span class="type">long double</span> ld = <span class="number">3.14L</span>;         <span class="comment">/* L = long double */</span>
+<span class="type">double</span> sci    = <span class="number">6.022e23</span>;      <span class="comment">/* Scientific notation: 6.022 × 10²³ */</span></pre></div>
+        </div>
+        <div class="callout callout-tip"><strong>Common mistake:</strong> Writing <code>float f = 3.14;</code> — the <code>3.14</code> is a <strong>double</strong> literal that gets truncated to float. GCC with <code>-Wconversion</code> warns about this. Always use the <code>f</code> suffix: <code>float f = 3.14f;</code></div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Escape sequences — complete reference</h3>
+        <p class="explain-en">
+          Escape sequences represent <strong>non-printable or special characters</strong> inside strings and char literals.
+          They start with backslash <code>\</code>. The most critical one is <code>\0</code> (null terminator) — it marks where
+          every C string <strong>ends</strong>. Without it, functions like <code>printf</code> would read past the string into random memory.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Escape sequences non-printable ya special characters represent karte hain strings ke andar. Backslash <code>\</code> se shuru hote hain. Sabse important hai <code>\0</code> (null terminator) — ye batata hai ki C string kahan KHATAM hoti hai. Iske bina <code>printf</code> string ke baad random memory padhta rahega.</div>
         <div class="hb-table-wrap">
           <table class="hb-table">
-            <thead><tr><th>Escape</th><th>Meaning</th><th>Example output</th></tr></thead>
+            <thead><tr><th>Escape</th><th>Name</th><th>ASCII Value</th><th>Use case</th></tr></thead>
             <tbody>
-              <tr><td><code>\n</code></td><td>Newline</td><td>Line break</td></tr>
-              <tr><td><code>\t</code></td><td>Tab</td><td>Horizontal tab</td></tr>
-              <tr><td><code>\\</code></td><td>Backslash</td><td>\</td></tr>
-              <tr><td><code>\"</code></td><td>Double quote</td><td>"</td></tr>
-              <tr><td><code>\'</code></td><td>Single quote</td><td>'</td></tr>
-              <tr><td><code>\0</code></td><td>Null character</td><td>String terminator</td></tr>
-              <tr><td><code>\r</code></td><td>Carriage return</td><td>Cursor to line start</td></tr>
-              <tr><td><code>\a</code></td><td>Alert (bell)</td><td>System beep</td></tr>
+              <tr><td><code>\n</code></td><td>Newline (Line Feed)</td><td>10 (0x0A)</td><td>Move to next line — most common</td></tr>
+              <tr><td><code>\t</code></td><td>Horizontal Tab</td><td>9 (0x09)</td><td>Align columns in output</td></tr>
+              <tr><td><code>\r</code></td><td>Carriage Return</td><td>13 (0x0D)</td><td>Return cursor to start of line (Windows: <code>\r\n</code>)</td></tr>
+              <tr><td><code>\0</code></td><td>Null Terminator</td><td>0 (0x00)</td><td>⚠️ String terminator — CRITICAL for safety</td></tr>
+              <tr><td><code>\\</code></td><td>Backslash</td><td>92 (0x5C)</td><td>Print literal backslash (file paths)</td></tr>
+              <tr><td><code>\"</code></td><td>Double Quote</td><td>34 (0x22)</td><td>Print literal quote inside strings</td></tr>
+              <tr><td><code>\'</code></td><td>Single Quote</td><td>39 (0x27)</td><td>Print literal quote in char literals</td></tr>
+              <tr><td><code>\a</code></td><td>Alert (Bell)</td><td>7 (0x07)</td><td>System beep — used in terminal alerts</td></tr>
+              <tr><td><code>\b</code></td><td>Backspace</td><td>8 (0x08)</td><td>Move cursor back one position</td></tr>
+              <tr><td><code>\xHH</code></td><td>Hex byte</td><td>Any</td><td><code>'\x41'</code> = 'A' — embed any byte value</td></tr>
+              <tr><td><code>\ooo</code></td><td>Octal byte</td><td>Any</td><td><code>'\101'</code> = 'A' — octal representation</td></tr>
             </tbody>
           </table>
         </div>
-        <div class="callout callout-tip"><strong>Critical:</strong> <code>\0</code> (null character) is how C knows where a string ends. Every string in C automatically has <code>\0</code> appended. Understanding this prevents buffer overflow bugs.</div>
+        <div class="callout callout-important"><strong>The \0 rule:</strong> Every C string is terminated by <code>\0</code> (null byte). <code>"Hello"</code> is actually 6 bytes: <code>H</code>, <code>e</code>, <code>l</code>, <code>l</code>, <code>o</code>, <code>\0</code>. If you manually build a string (char array), you MUST add <code>\0</code> at the end. Forgetting this causes <strong>buffer overread vulnerabilities</strong> — the same class of bug that caused the Heartbleed OpenSSL vulnerability.</div>
       </div>
     </div>
 
@@ -636,14 +1246,27 @@ gcc hello.c -o hello</pre></div>
     </div>
 
     <div class="practice-box">
-      <div class="practice-title">✏️ Practice Exercises — Part 1</div>
+      <div class="practice-title">✏️ Practice Exercises — Part 1 (Difficulty Graded)</div>
+      <h4>🟢 Easy (Do these first)</h4>
       <ol>
-        <li>Install GCC, write "Hello, World!", compile with <code>gcc -Wall</code>, and run it. Verify output.</li>
-        <li>Write a program that prints the sizeof every primitive data type (char, short, int, long, float, double, pointer).</li>
-        <li>Create a program with both <code>const</code> and <code>#define</code> constants. Try modifying the const — what error do you get?</li>
-        <li>Write a calculator that reads two numbers and an operator (+, -, *, /) using scanf, performs the operation, and prints the result with 2 decimal places.</li>
-        <li>Create a program that reads a full name using <code>fgets()</code> and prints a personalized greeting. Handle the trailing newline.</li>
-        <li>Use <code>gcc -E</code> to see preprocessed output, <code>gcc -S</code> for assembly. Compare the assembly of an optimized (-O2) vs unoptimized build.</li>
+        <li>Install GCC, write "Hello, World!", compile with <code>gcc -Wall -Wextra -std=c17 -g</code>, and run it. Check the exit code with <code>echo $?</code>.</li>
+        <li>Write a program that prints the <code>sizeof</code> every primitive type (<code>char</code>, <code>short</code>, <code>int</code>, <code>long</code>, <code>long long</code>, <code>float</code>, <code>double</code>, <code>void*</code>) using <code>%zu</code>.</li>
+        <li>Create a program using both <code>const</code> and <code>#define</code> constants. Try modifying the <code>const</code> variable — what error do you get?</li>
+        <li>Write a program that reads a name using <code>fgets()</code> and an age using <code>scanf()</code>, then prints a formatted greeting.</li>
+      </ol>
+      <h4>🟡 Medium (Apply your knowledge)</h4>
+      <ol start="5">
+        <li>Write a calculator that reads two numbers and an operator (+, -, *, /) from stdin, validates against division by zero, and prints the result with 4 decimal places. Use <code>EXIT_SUCCESS</code>/<code>EXIT_FAILURE</code>.</li>
+        <li>Use <code>gcc -E</code>, <code>gcc -S</code>, <code>gcc -c</code> to see each compilation stage output. Count the lines in the preprocessed file (<code>.i</code>). Inspect symbols with <code>nm</code>.</li>
+        <li>Write a program using <code>&lt;stdint.h&gt;</code> types (<code>uint8_t</code>, <code>int32_t</code>, <code>uint64_t</code>) and print them with <code>&lt;inttypes.h&gt;</code> format macros. Verify portability.</li>
+        <li>Create a Makefile with targets: <code>all</code>, <code>clean</code>, <code>run</code>, <code>debug</code> (compiles with <code>-g -O0</code>), and <code>release</code> (compiles with <code>-O2</code>).</li>
+      </ol>
+      <h4>🔴 Hard (Challenge yourself)</h4>
+      <ol start="9">
+        <li>Demonstrate integer overflow: print <code>INT_MAX</code>, add 1, and show the result. Then compile with <code>-fsanitize=undefined</code> and run again. What does UBSan report?</li>
+        <li>Compare <code>0.1f + 0.2f</code> output with 20 decimal places for both <code>float</code> and <code>double</code>. Write a safe float comparison function using <code>DBL_EPSILON</code>.</li>
+        <li>Compile the same Hello World program with <code>-O0</code> and <code>-O2</code>, generate assembly (<code>-S</code>) for both, and compare the number of instructions. What did the optimizer remove?</li>
+        <li>Build both a dynamically and statically linked binary. Compare sizes with <code>ls -lh</code>, check dependencies with <code>ldd</code>, and verify the static one has no dynamic dependencies.</li>
       </ol>
     </div>
 

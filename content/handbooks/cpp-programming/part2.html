@@ -28,8 +28,10 @@
       <div class="chapter-part-label">📖 Part 2 — Control Flow, Functions & References</div>
       <h1 class="chapter-title">Think in <span class="gradient-text">Modern C++</span></h1>
       <p class="chapter-subtitle">Operators, range-based loops, function overloading, references, namespaces, and exception handling — the tools that make C++ expressive.</p>
-      <div class="chapter-meta"><span>📄 Modules 2.1 – 2.7</span><span>⏱️ 70–100 min read</span><span>💻 60+ Examples</span></div>
+      <div class="chapter-meta"><span>📄 Modules 2.1 – 2.7</span><span>⏱️ 100–150 min read</span><span>💻 75+ Examples</span><span>📊 8+ Reference Tables</span></div>
     </div>
+
+    <div class="callout callout-tip"><strong>How to study Part 2:</strong> Focus on <strong>references over pointers</strong>, <strong>range-for over index loops</strong>, and <strong>exceptions over error codes</strong>. These aren't just syntax sugar — they enforce safety contracts that prevent entire classes of bugs. Compile with <code>g++ -std=c++17 -Wall -Wextra</code>.</div>
 
     <div class="hb-mini-toc">
       <div class="hb-mini-title">📍 Part 2 Modules</div>
@@ -46,13 +48,18 @@
 
     <div class="quick-ref">
       <div class="qr-title">🚀 Advanced Lens — Part 2</div>
-      <p class="explain-en">Production C++ control-flow code optimizes for predictability: explicit branching, narrow scopes, reference-safe APIs, and exception boundaries. These choices reduce undefined behavior risks and improve debugging velocity in large codebases.</p>
-      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Industry C++ me Part 2 ka focus sirf syntax nahi hota, balki predictable branching, safe references, aur clear exception boundaries par hota hai taaki bugs fast diagnose ho sake.</div>
+      <p class="explain-en">
+        Production C++ control-flow code optimizes for predictability: explicit branching, narrow scopes, reference-safe APIs,
+        and exception boundaries. <strong>Function overloading</strong> uses name mangling (<code>_Z3addii</code> vs <code>_Z3adddd</code>)
+        so the linker can resolve the right version. <strong>References</strong> are implemented as pointers under the hood, but
+        the compiler enforces they're never null — a zero-cost safety guarantee.
+      </p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Industry C++ me Part 2 ka focus sirf syntax nahi, balki predictable branching, safe references, aur clear exception boundaries pe hota hai. <strong>Function overloading</strong> name mangling use karta hai. <strong>References</strong> internally pointers hain, par compiler guarantee karta hai ki null nahi honge — zero-cost safety.</div>
     </div>
 
     <div class="concept-block">
       <h3>Control-flow readiness checklist (Part 2)</h3>
-      <table>
+      <div class="hb-table-wrap"><table class="hb-table">
         <thead><tr><th>Area</th><th>Production expectation</th></tr></thead>
         <tbody>
           <tr><td>Branch design</td><td>Prefer guard clauses and avoid deeply nested logic trees.</td></tr>
@@ -60,7 +67,7 @@
           <tr><td>Exception boundaries</td><td>Throw at domain edges and convert to stable error contracts.</td></tr>
           <tr><td>Loop discipline</td><td>Use clear termination conditions and avoid hidden side effects.</td></tr>
         </tbody>
-      </table>
+      </table></div>
     </div>
 
     <!-- MODULE 2.1 -->
@@ -495,15 +502,27 @@ fs::path p = <span class="string">"/home/user"</span>;</pre></div>
     </div>
 
     <div class="practice-box">
-      <div class="practice-title">✏️ Practice Exercises — Part 2</div>
+      <div class="practice-title">✏️ Practice Exercises — Part 2 (Difficulty Graded)</div>
+      <h4>🟢 Easy (Do these first)</h4>
       <ol>
-        <li>Write three overloaded <code>print()</code> functions for int, double, and string. Call each.</li>
-        <li>Create a function that uses <code>const&amp;</code> to accept a vector and print its sum without copying.</li>
-        <li>Use <code>if constexpr</code> in a template function to handle int vs string differently.</li>
-        <li>Write a range-based for loop with structured bindings to iterate a <code>std::map</code>.</li>
-        <li>Create a namespace <code>geometry</code> with <code>area()</code> functions for circle and rectangle.</li>
-        <li>Write a function that throws <code>std::out_of_range</code> and catch it in main with a meaningful message.</li>
-        <li>Create a custom exception class <code>NetworkError</code> inheriting from <code>std::runtime_error</code>.</li>
+        <li>Write three overloaded <code>print()</code> functions for <code>int</code>, <code>double</code>, and <code>std::string</code>. Call each and verify the correct version is selected.</li>
+        <li>Create a function that uses <code>const&</code> to accept a <code>std::vector<int></code> and print its sum without copying the vector.</li>
+        <li>Write a range-based for loop with structured bindings to iterate a <code>std::map<std::string, int></code> and print all key-value pairs.</li>
+        <li>Write a function with <strong>default arguments</strong> and demonstrate calling it with and without the optional parameter.</li>
+      </ol>
+      <h4>🟡 Medium (Apply your knowledge)</h4>
+      <ol start="5">
+        <li>Use <code>if constexpr</code> in a template function to handle <code>int</code> vs <code>std::string</code> differently at compile time. Verify both branches compile correctly.</li>
+        <li>Create a namespace <code>geometry</code> with overloaded <code>area()</code> functions for circle, rectangle, and triangle. Use <code>constexpr</code> for pi.</li>
+        <li>Write a function that throws <code>std::out_of_range</code>. Catch it in main with a meaningful error message. Add a <code>catch (...)</code> fallback.</li>
+        <li>Demonstrate all 4 C++ cast operators: <code>static_cast</code>, <code>dynamic_cast</code>, <code>const_cast</code>, <code>reinterpret_cast</code>. Explain when each is appropriate.</li>
+      </ol>
+      <h4>🔴 Hard (Challenge yourself)</h4>
+      <ol start="9">
+        <li>Create a custom exception class <code>NetworkError</code> inheriting from <code>std::runtime_error</code> with HTTP status code and message. Throw and catch it.</li>
+        <li>Write a template function using <strong>trailing return type</strong> and <code>decltype</code> that works for mixed-type arithmetic (<code>add(int, double)</code> returns <code>double</code>).</li>
+        <li>Implement a <strong>safe array access</strong> function that returns <code>std::optional<T></code> (C++17) instead of throwing on out-of-bounds. Compare with <code>.at()</code> exception approach.</li>
+        <li>Write a program comparing <strong>lvalue vs rvalue references</strong>: create functions that accept <code>const T&</code>, <code>T&</code>, and <code>T&&</code>. Pass lvalues, const lvalues, and temporaries to see which overload is selected.</li>
       </ol>
     </div>
 

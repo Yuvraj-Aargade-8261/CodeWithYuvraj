@@ -19,20 +19,27 @@
       <div class="chapter-part-label">📖 Part 4 — Inheritance & Polymorphism</div>
       <h1 class="chapter-title">Design Through <span class="gradient-text">Polymorphism</span></h1>
       <p class="chapter-subtitle">Virtual functions, vtable mechanics, abstract interfaces, CRTP, and industry design patterns — the backbone of extensible C++ architectures.</p>
-      <div class="chapter-meta"><span>📄 Modules 4.1 – 4.7</span><span>⏱️ 80–110 min read</span><span>💻 60+ Examples</span></div>
+      <div class="chapter-meta"><span>📄 Modules 4.1 – 4.7</span><span>⏱️ 120–160 min read</span><span>💻 75+ Examples</span><span>📊 10+ Reference Tables</span></div>
     </div>
+
+    <div class="callout callout-tip"><strong>How to study Part 4:</strong> Polymorphism is a top C++ interview topic. Understand <strong>vtable mechanics</strong> (how virtual dispatch works at the assembly level), the <strong>diamond problem</strong>, and when to use CRTP for zero-cost compile-time polymorphism.</div>
 
     <div class="hb-mini-toc"><div class="hb-mini-title">📍 Part 4 Modules</div><div class="hb-mini-links"><a href="#m4-1">4.1 Inheritance</a><a href="#m4-2">4.2 Virtual</a><a href="#m4-3">4.3 Abstract</a><a href="#m4-4">4.4 Multiple</a><a href="#m4-5">4.5 CRTP</a><a href="#m4-6">4.6 RTTI</a><a href="#m4-7">4.7 Patterns</a></div></div>
 
     <div class="quick-ref">
       <div class="qr-title">🚀 Advanced Lens — Part 4</div>
-      <p class="explain-en">In large C++ systems, polymorphism strategy decides extensibility and runtime cost. Interface-centric design, correct virtual destructor usage, and controlled hierarchy depth improve ABI stability and reduce maintenance overhead.</p>
-      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Part 4 ka industry focus hota hai extensible architecture banana. Interfaces, virtual destructors, aur controlled inheritance depth se system stable, scalable aur maintainable rehta hai.</div>
+      <p class="explain-en">
+        In large C++ systems, polymorphism strategy decides extensibility and runtime cost. Each virtual call costs ~1ns
+        due to vtable pointer indirection. The <code>final</code> keyword enables <strong>devirtualization</strong> — the compiler
+        can inline the call when it proves the type. Interface-centric design (pure virtual base classes) with controlled
+        hierarchy depth improves <strong>ABI stability</strong> and reduces maintenance overhead in shared libraries.
+      </p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Part 4 ka industry focus hota hai extensible architecture banana. Har virtual call ~1ns ka overhead hai vtable pointer indirection ki wajah se. <code>final</code> keyword se compiler <strong>devirtualize</strong> kar sakta hai. Pure virtual base classes se ABI stability aur maintainability improve hoti hai.</div>
     </div>
 
     <div class="concept-block">
       <h3>Polymorphism strategy checklist (Part 4)</h3>
-      <table>
+      <div class="hb-table-wrap"><table class="hb-table">
         <thead><tr><th>Decision area</th><th>Preferred C++ practice</th></tr></thead>
         <tbody>
           <tr><td>Base class cleanup</td><td>Use virtual destructors for polymorphic base classes.</td></tr>
@@ -40,7 +47,7 @@
           <tr><td>Interface contracts</td><td>Design small, stable interfaces with explicit behavior guarantees.</td></tr>
           <tr><td>Runtime typing</td><td>Minimize RTTI dependence; prefer compile-time polymorphism where valid.</td></tr>
         </tbody>
-      </table>
+      </table></div>
     </div>
 
     <!-- MODULE 4.1 -->
@@ -487,15 +494,27 @@ s-&gt;<span class="function">draw</span>();  <span class="comment">// ●</span>
     </div>
 
     <div class="practice-box">
-      <div class="practice-title">✏️ Practice Exercises — Part 4</div>
+      <div class="practice-title">✏️ Practice Exercises — Part 4 (Difficulty Graded)</div>
+      <h4>🟢 Easy (Do these first)</h4>
       <ol>
-        <li>Create a <code>Shape</code> hierarchy (Circle, Rectangle, Triangle) with virtual <code>area()</code> and <code>perimeter()</code>.</li>
+        <li>Create a <code>Shape</code> hierarchy (Circle, Rectangle, Triangle) with virtual <code>area()</code> and <code>perimeter()</code>. Use <code>override</code> everywhere.</li>
         <li>Store shapes in a <code>vector&lt;unique_ptr&lt;Shape&gt;&gt;</code> and print all areas using polymorphism.</li>
-        <li>Implement the diamond problem with <code>Animal → Mammal/Bird → Bat</code>, solve with virtual inheritance.</li>
-        <li>Write a CRTP-based <code>Printable</code> base that auto-generates <code>operator&lt;&lt;</code> for derived classes.</li>
-        <li>Create a Factory that returns <code>unique_ptr&lt;Vehicle&gt;</code> for "car", "truck", "bike" strings.</li>
-        <li>Implement Meyer's Singleton for a <code>ConfigManager</code> class. Verify only one instance exists.</li>
-        <li>Use <code>dynamic_cast</code> to safely downcast and call a derived-only method. Handle the failure case.</li>
+        <li>Demonstrate why a <strong>non-virtual destructor</strong> in a base class causes a resource leak when deleting via base pointer.</li>
+        <li>Use <code>dynamic_cast</code> to safely downcast and call a derived-only method. Handle the nullptr failure case.</li>
+      </ol>
+      <h4>🟡 Medium (Apply your knowledge)</h4>
+      <ol start="5">
+        <li>Implement the diamond problem with <code>Animal → Mammal/Bird → Bat</code>. Solve with <code>virtual</code> inheritance. Verify only one <code>Animal</code> subobject exists.</li>
+        <li>Create a <strong>Factory</strong> that returns <code>unique_ptr&lt;Vehicle&gt;</code> for "car", "truck", "bike" strings. Add error handling for unknown types.</li>
+        <li>Implement <strong>Meyer's Singleton</strong> for a <code>ConfigManager</code> class. Delete copy/move. Verify only one instance exists across multiple calls.</li>
+        <li>Write a CRTP-based <code>Printable&lt;T&gt;</code> base that auto-generates <code>operator&lt;&lt;</code> by calling the derived class's <code>to_string()</code> method.</li>
+      </ol>
+      <h4>🔴 Hard (Challenge yourself)</h4>
+      <ol start="9">
+        <li>Implement an <strong>Observer pattern</strong>: <code>EventEmitter</code> class that stores <code>vector&lt;IObserver*&gt;</code>, with <code>subscribe()</code>, <code>unsubscribe()</code>, and <code>notify()</code>.</li>
+        <li>Create a <strong>Strategy pattern</strong> for sorting: define <code>ISortStrategy</code> interface, implement BubbleSort, QuickSort, MergeSort. Swap strategies at runtime.</li>
+        <li>Benchmark <strong>virtual dispatch vs CRTP</strong>: call a function 10 million times with each pattern. Measure the performance difference using <code>std::chrono</code>.</li>
+        <li>Implement a <strong>plugin system</strong>: define an abstract <code>IPlugin</code> interface, write 3 concrete plugins, load them into a <code>vector&lt;unique_ptr&lt;IPlugin&gt;&gt;</code>, and call <code>execute()</code> polymorphically.</li>
       </ol>
     </div>
 

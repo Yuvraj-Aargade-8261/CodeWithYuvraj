@@ -31,10 +31,10 @@
       <div class="chapter-part-label">📖 Part 3 — Functions & Modular Programming</div>
       <h1 class="chapter-title">Write <span class="gradient-text">Reusable Code</span></h1>
       <p class="chapter-subtitle">Functions are the building blocks of every C program — master them and you master modularity.</p>
-      <div class="chapter-meta"><span>📄 Modules 3.1 – 3.7</span><span>⏱️ 90–130 min read</span><span>💻 55+ Examples</span></div>
+      <div class="chapter-meta"><span>📄 Modules 3.1 – 3.7</span><span>⏱️ 120–180 min read</span><span>💻 80+ Examples</span><span>📊 8+ Diagrams</span></div>
     </div>
 
-    <div class="callout callout-tip"><strong>How to study Part 3:</strong> Write each function yourself, then test it with multiple inputs — including edge cases (0, negative, NULL). Functions are the most testable unit of code.</div>
+    <div class="callout callout-tip"><strong>How to study Part 3:</strong> Write each function yourself, then test it with multiple inputs — including edge cases (0, negative, NULL, empty arrays). Functions are the most testable unit of code — if you can't test a function in isolation, it's doing too much.</div>
 
     <div class="hb-mini-toc">
       <div class="hb-mini-title">📍 Part 3 Modules</div>
@@ -51,88 +51,124 @@
 
     <div class="quick-ref">
       <div class="qr-title">🚀 Advanced Lens — Part 3</div>
-      <p class="explain-en">In industry, functions are not just "reusable code blocks" — they're the unit of testing, documentation, and API design. Every function should do ONE thing, have a clear name, and handle edge cases. Think: "Could another developer call this function correctly just by reading its signature?"</p>
-      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Industry me functions sirf "reusable code" nahi — ye testing, documentation, aur API design ki unit hain. Har function EK kaam kare, clear naam ho, aur edge cases handle kare.</div>
+      <p class="explain-en">
+        In industry, functions are not just "reusable code blocks" — they're the <strong>unit of testing</strong>, <strong>documentation</strong>,
+        and <strong>API design</strong>. Every function should do ONE thing, have a clear name, handle edge cases, and follow the
+        <strong>Single Responsibility Principle</strong>. Understanding the <strong>call stack</strong>, <strong>calling conventions</strong>,
+        and <strong>ABI</strong> is what separates someone who writes C from someone who understands it.
+      </p>
+      <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Industry me functions sirf "reusable code" nahi — ye testing, documentation, aur API design ki unit hain. Har function EK kaam kare, clear naam ho, edge cases handle kare, aur Single Responsibility Principle follow kare. Call stack, calling conventions, aur ABI samajhna — yehi farak hai C likhne aur samajhne me.</div>
     </div>
 
     <div class="concept-block">
       <h3>Function design checklist (Part 3)</h3>
-      <table>
+      <div class="hb-table-wrap"><table class="hb-table">
         <thead><tr><th>Area</th><th>Production standard</th></tr></thead>
         <tbody>
-          <tr><td>Function scope</td><td>Keep functions small, focused, and single-responsibility.</td></tr>
-          <tr><td>Contracts</td><td>Document parameter ownership, NULL behavior, and return semantics.</td></tr>
+          <tr><td>Function scope</td><td>Keep functions small, focused, and single-responsibility. Aim for ≤50 lines.</td></tr>
+          <tr><td>Contracts</td><td>Document parameter ownership, NULL behavior, and return semantics with comments.</td></tr>
           <tr><td>Headers</td><td>Expose clean interfaces and hide implementation details in source files.</td></tr>
-          <tr><td>Error flow</td><td>Use consistent error-return conventions across module boundaries.</td></tr>
+          <tr><td>Error flow</td><td>Use consistent error-return conventions (0 = success, negative = error) across all modules.</td></tr>
+          <tr><td>Const correctness</td><td>Mark all read-only pointer parameters as <code>const</code> — it's a contract with the caller.</td></tr>
         </tbody>
-      </table>
+      </table></div>
     </div>
 
     <!-- MODULE 3.1 -->
     <div class="module-section" id="m3-1">
-      <div class="module-header"><div class="module-number">3.1</div><h2 class="module-title">Function Basics — Declaration, definition, calling, return types</h2></div>
+      <div class="module-header"><div class="module-number">3.1</div><h2 class="module-title">Function Basics — Declaration, definition, calling, return types, call stack</h2></div>
 
       <div class="concept-block">
-        <h3 class="concept-heading">What is a function?</h3>
-        <p class="explain-en">A <strong>function</strong> is a named block of code that performs a specific task. It takes <strong>inputs</strong> (parameters), processes them, and returns an <strong>output</strong> (return value). Functions enable <strong>code reuse</strong>, <strong>modularity</strong>, and <strong>readability</strong>.</p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Function ek named code block hai jo specific kaam karta hai. Input (parameters) leta hai, process karta hai, aur output (return value) deta hai. Functions se code reuse, modularity, aur readability milti hai.</div>
+        <h3 class="concept-heading">What is a function? — More than reusable code</h3>
+        <p class="explain-en">
+          A <strong>function</strong> is a named block of code that performs a specific task. It takes <strong>inputs</strong> (parameters),
+          processes them, and returns an <strong>output</strong> (return value). But at the hardware level, a function call does
+          much more: the CPU <strong>pushes arguments onto the stack</strong>, saves the return address, creates a new <strong>stack frame</strong>,
+          executes the body, then <strong>pops the frame</strong> and returns to the caller. Understanding this stack mechanics
+          explains why local variables disappear after a function returns, why recursion can overflow the stack, and why
+          returning pointers to local variables is a bug.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Function ek named code block hai jo specific kaam karta hai. Hardware level pe function call me CPU stack pe arguments push karta hai, return address save karta hai, naya stack frame banata hai, body execute karta hai, phir frame pop karke caller pe wapas aata hai. Ye samajhne se pata chalta hai kyun local variables function ke baad gayab ho jaate hain, kyun recursion stack overflow karti hai, aur kyun local variables ka pointer return karna bug hai.</div>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">💻 C — Function anatomy</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-header"><span class="code-lang">💻 C — Function anatomy (declaration → definition → call)</span><div class="code-dots"><span></span><span></span><span></span></div></div>
           <div class="code-body"><pre><span class="comment">/*  return_type  function_name(parameter_list) { body } */</span>
 
-<span class="comment">/* 1. Declaration (prototype) — tells compiler the signature */</span>
-<span class="type">int</span> <span class="function">add</span>(<span class="type">int</span> a, <span class="type">int</span> b);
+<span class="comment">/* 1. DECLARATION (prototype) — tells compiler the signature */</span>
+<span class="comment">/*    Usually placed in a header file (.h) or before main() */</span>
+<span class="type">int</span> <span class="function">add</span>(<span class="type">int</span> a, <span class="type">int</span> b);    <span class="comment">/* Parameter names are optional here */</span>
+<span class="type">int</span> <span class="function">add</span>(<span class="type">int</span>, <span class="type">int</span>);        <span class="comment">/* Also valid — names omitted */</span>
 
-<span class="comment">/* 2. Definition — the actual implementation */</span>
+<span class="comment">/* 2. DEFINITION — the actual implementation */</span>
 <span class="type">int</span> <span class="function">add</span>(<span class="type">int</span> a, <span class="type">int</span> b) {
-    <span class="keyword">return</span> a + b;
+    <span class="keyword">return</span> a + b;          <span class="comment">/* Return value goes into CPU register (eax/rax) */</span>
 }
 
-<span class="comment">/* 3. Calling — using the function */</span>
-<span class="type">int</span> result = <span class="function">add</span>(<span class="number">3</span>, <span class="number">7</span>);  <span class="comment">/* result = 10 */</span></pre></div>
+<span class="comment">/* 3. CALLING — pushes args, jumps to function, gets return */</span>
+<span class="type">int</span> result = <span class="function">add</span>(<span class="number">3</span>, <span class="number">7</span>);  <span class="comment">/* result = 10 */</span>
+
+<span class="comment">/* ⚠️ Without declaration, calling a function before its definition
+   causes "implicit declaration" warning (C89) or error (C99+) */</span></pre></div>
         </div>
         <div class="diagram-box">
-          <div class="diagram-title">📐 Function Flow</div>
+          <div class="diagram-title">📐 Function Call Stack</div>
           <div class="diagram-flow">
             <div class="diagram-node primary">Caller<br><small>main()</small></div>
-            <div class="diagram-arrow">→ args →</div>
-            <div class="diagram-node secondary">Function<br><small>add(a, b)</small></div>
-            <div class="diagram-arrow">→ return →</div>
+            <div class="diagram-arrow">→ push args →</div>
+            <div class="diagram-node secondary">Stack Frame<br><small>add(a, b)</small></div>
+            <div class="diagram-arrow">→ return val →</div>
             <div class="diagram-node success">Result<br><small>int value</small></div>
           </div>
         </div>
       </div>
 
       <div class="concept-block">
-        <h3 class="concept-heading">Return types & void functions</h3>
+        <h3 class="concept-heading">Return types, void functions, and error return patterns</h3>
+        <p class="explain-en">
+          Functions can return any type — integers, floats, pointers, structs (C99+). <code>void</code> means "no return value."
+          The <strong>industry-standard error pattern</strong>: return an <strong>int status code</strong> (0 = success, negative = error)
+          and pass the actual result through a <strong>pointer parameter</strong>. This is the pattern used in POSIX, Linux kernel,
+          and embedded C APIs. It allows the caller to always check for errors before using the result.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Functions koi bhi type return kar sakte hain. <code>void</code> ka matlab "koi return value nahi." Industry-standard error pattern: int status code return karo (0 = success, negative = error) aur actual result pointer parameter se pass karo. POSIX, Linux kernel, aur embedded C APIs me yehi pattern use hota hai.</div>
         <div class="hb-table-wrap">
           <table class="hb-table">
-            <thead><tr><th>Return type</th><th>Example</th><th>Use case</th></tr></thead>
+            <thead><tr><th>Return type</th><th>Example</th><th>Use case</th><th>Pattern name</th></tr></thead>
             <tbody>
-              <tr><td><code>int</code></td><td><code>int add(int a, int b)</code></td><td>Return a computed integer</td></tr>
-              <tr><td><code>double</code></td><td><code>double average(int *arr, int n)</code></td><td>Return a decimal value</td></tr>
-              <tr><td><code>char *</code></td><td><code>char *get_name(int id)</code></td><td>Return a string pointer</td></tr>
-              <tr><td><code>void</code></td><td><code>void print_hello(void)</code></td><td>No return value (side effects only)</td></tr>
-              <tr><td><code>int</code> (status)</td><td><code>int save_file(const char *path)</code></td><td>0 = success, -1 = error</td></tr>
+              <tr><td><code>int</code></td><td><code>int add(int a, int b)</code></td><td>Return a computed value</td><td>Value return</td></tr>
+              <tr><td><code>double</code></td><td><code>double avg(const int *a, int n)</code></td><td>Return a decimal value</td><td>Value return</td></tr>
+              <tr><td><code>char *</code></td><td><code>char *get_name(int id)</code></td><td>Return a string pointer</td><td>Pointer return</td></tr>
+              <tr><td><code>void</code></td><td><code>void print_hello(void)</code></td><td>Side effects only (print, write)</td><td>Action function</td></tr>
+              <tr><td><code>int</code> (status)</td><td><code>int save_file(const char *path)</code></td><td>0 = success, -1 = error</td><td>⭐ Error code pattern</td></tr>
+              <tr><td><code>bool</code></td><td><code>bool is_valid(int x)</code></td><td>Yes/no predicate</td><td>Predicate function</td></tr>
             </tbody>
           </table>
         </div>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">💻 C — void vs return</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre><span class="comment">/* void — no return value */</span>
-<span class="type">void</span> <span class="function">greet</span>(<span class="keyword">const</span> <span class="type">char</span> *name) {
-    <span class="function">printf</span>(<span class="string">"Hello, %s!\n"</span>, name);
-    <span class="comment">/* No return statement needed */</span>
-}
-
-<span class="comment">/* int — return status code (industry pattern) */</span>
+          <div class="code-header"><span class="code-lang">💻 C — Error code pattern (industry standard)</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* ═══ Industry pattern: error code + output pointer ═══ */</span>
 <span class="type">int</span> <span class="function">divide</span>(<span class="type">int</span> a, <span class="type">int</span> b, <span class="type">int</span> *result) {
-    <span class="keyword">if</span> (b == <span class="number">0</span>) <span class="keyword">return</span> -<span class="number">1</span>;  <span class="comment">/* Error */</span>
+    <span class="keyword">if</span> (b == <span class="number">0</span>) <span class="keyword">return</span> -<span class="number">1</span>;  <span class="comment">/* Error: division by zero */</span>
+    <span class="keyword">if</span> (result == NULL) <span class="keyword">return</span> -<span class="number">2</span>;  <span class="comment">/* Error: null pointer */</span>
     *result = a / b;
     <span class="keyword">return</span> <span class="number">0</span>;              <span class="comment">/* Success */</span>
+}
+
+<span class="comment">/* ═══ Caller always checks the return code ═══ */</span>
+<span class="type">int</span> quotient;
+<span class="type">int</span> err = <span class="function">divide</span>(<span class="number">10</span>, <span class="number">3</span>, &quotient);
+<span class="keyword">if</span> (err != <span class="number">0</span>) {
+    <span class="function">fprintf</span>(stderr, <span class="string">"divide() failed with error %d\n"</span>, err);
+    <span class="keyword">return</span> EXIT_FAILURE;
+}
+<span class="function">printf</span>(<span class="string">"Result: %d\n"</span>, quotient);
+
+<span class="comment">/* ═══ DANGER: never return pointer to local variable ═══ */</span>
+<span class="type">int</span> *<span class="function">bad_function</span>(<span class="type">void</span>) {
+    <span class="type">int</span> local = <span class="number">42</span>;
+    <span class="keyword">return</span> &local;  <span class="comment">/* ❌ UB! local is destroyed after return */</span>
 }</pre></div>
         </div>
-        <div class="callout callout-important"><strong>Industry pattern:</strong> Functions that can fail should return an <strong>error code</strong> (0 for success, negative for error) and pass the result through a pointer parameter. This is used in Linux kernel, POSIX APIs, and embedded systems.</div>
+        <div class="callout callout-important"><strong>Never return a pointer to a local variable!</strong> Local variables live on the stack and are destroyed when the function returns. The returned pointer becomes a <strong>dangling pointer</strong> — accessing it is undefined behavior. Use <code>malloc()</code> (caller must <code>free()</code>), <code>static</code> local, or pass a buffer from the caller.</div>
       </div>
     </div>
 
@@ -205,41 +241,65 @@
 
     <!-- MODULE 3.3 -->
     <div class="module-section" id="m3-3">
-      <div class="module-header"><div class="module-number">3.3</div><h2 class="module-title">Recursion — Base case, factorial, Fibonacci, Tower of Hanoi</h2></div>
+      <div class="module-header"><div class="module-number">3.3</div><h2 class="module-title">Recursion — Base case, tail recursion, memoization, stack depth, when NOT to recurse</h2></div>
 
       <div class="concept-block">
-        <h3 class="concept-heading">What is recursion?</h3>
-        <p class="explain-en">A function that <strong>calls itself</strong> is recursive. Every recursive function MUST have: (1) a <strong>base case</strong> that stops recursion, and (2) a <strong>recursive case</strong> that moves toward the base case. Without a base case → <strong>stack overflow</strong>.</p>
-        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Jo function khud ko call kare woh recursive hai. Har recursive function me chahiye: (1) base case jo recursion rok de, (2) recursive case jo base case ki taraf jaaye. Base case na ho → stack overflow crash.</div>
+        <h3 class="concept-heading">What is recursion? — The call stack perspective</h3>
+        <p class="explain-en">
+          A function that <strong>calls itself</strong> is recursive. Every recursive call <strong>creates a new stack frame</strong>
+          (typically 16-64 bytes per call). For <code>factorial(10000)</code>, that's ~640 KB of stack — enough to crash on
+          most systems (default stack: 1-8 MB). Every recursive function MUST have: (1) a <strong>base case</strong> that stops
+          recursion, and (2) a <strong>recursive case</strong> that moves toward the base case. Missing either → <strong>stack overflow</strong>.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Jo function khud ko call kare woh recursive hai. Har recursive call ek naya stack frame banata hai (typically 16-64 bytes per call). <code>factorial(10000)</code> ke liye ~640 KB stack lagega — most systems pe crash (default stack: 1-8 MB). Har recursive function me chahiye: (1) base case jo recursion rok de, (2) recursive case jo base case ki taraf jaaye. Koi bhi miss ho → stack overflow crash.</div>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">💻 C — Factorial (recursion)</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-header"><span class="code-lang">💻 C — Factorial with stack visualization</span><div class="code-dots"><span></span><span></span><span></span></div></div>
           <div class="code-body"><pre><span class="comment">/* Factorial: n! = n × (n-1)! */</span>
 <span class="type">long long</span> <span class="function">factorial</span>(<span class="type">int</span> n) {
-    <span class="keyword">if</span> (n &lt;= <span class="number">1</span>) <span class="keyword">return</span> <span class="number">1</span>;      <span class="comment">/* Base case */</span>
-    <span class="keyword">return</span> n * <span class="function">factorial</span>(n - <span class="number">1</span>); <span class="comment">/* Recursive case */</span>
+    <span class="keyword">if</span> (n &lt;= <span class="number">1</span>) <span class="keyword">return</span> <span class="number">1</span>;      <span class="comment">/* Base case — STOP here */</span>
+    <span class="keyword">return</span> n * <span class="function">factorial</span>(n - <span class="number">1</span>); <span class="comment">/* Recursive case — moves toward base */</span>
 }
 
-<span class="comment">/* How it unfolds:
-   factorial(4)
-   = 4 * factorial(3)
-   = 4 * 3 * factorial(2)
-   = 4 * 3 * 2 * factorial(1)
-   = 4 * 3 * 2 * 1
-   = 24 */</span></pre></div>
+<span class="comment">/* ═══ How the stack grows and unwinds ═══
+   CALL PHASE (stack grows ↓):
+   ┌─ factorial(4) ──── frame 1: n=4, waiting for factorial(3)
+   │ ┌─ factorial(3) ── frame 2: n=3, waiting for factorial(2)
+   │ │ ┌─ factorial(2)  frame 3: n=2, waiting for factorial(1)
+   │ │ │ ┌─ factorial(1) frame 4: n=1, returns 1 (BASE CASE)
+   
+   RETURN PHASE (stack shrinks ↑):
+   │ │ │ └─ returns 1
+   │ │ └─ returns 2 * 1 = 2
+   │ └─ returns 3 * 2 = 6
+   └─ returns 4 * 6 = 24
+   
+   Total stack frames: 4 (one per call)
+   Total memory: 4 × ~32 bytes = ~128 bytes */</span></pre></div>
         </div>
       </div>
 
       <div class="concept-block">
-        <h3 class="concept-heading">Fibonacci & Tower of Hanoi</h3>
+        <h3 class="concept-heading">Fibonacci — naive vs optimized (interview classic)</h3>
         <div class="code-block">
-          <div class="code-header"><span class="code-lang">💻 C — Fibonacci</span><div class="code-dots"><span></span><span></span><span></span></div></div>
-          <div class="code-body"><pre><span class="comment">/* ❌ Naive Fibonacci — O(2^n) exponential! */</span>
+          <div class="code-header"><span class="code-lang">💻 C — Three Fibonacci implementations compared</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* ❌ NAIVE — O(2^n) time, O(n) stack space */</span>
+<span class="comment">/* fib(40) makes ~330 million calls! */</span>
 <span class="type">int</span> <span class="function">fib_slow</span>(<span class="type">int</span> n) {
     <span class="keyword">if</span> (n &lt;= <span class="number">1</span>) <span class="keyword">return</span> n;
     <span class="keyword">return</span> <span class="function">fib_slow</span>(n - <span class="number">1</span>) + <span class="function">fib_slow</span>(n - <span class="number">2</span>);
 }
 
-<span class="comment">/* ✅ Iterative Fibonacci — O(n) linear */</span>
+<span class="comment">/* ✅ MEMOIZED — O(n) time, O(n) space */</span>
+<span class="comment">/* Cache results to avoid redundant computation */</span>
+<span class="type">int</span> cache[<span class="number">100</span>] = {<span class="number">0</span>};
+<span class="type">int</span> <span class="function">fib_memo</span>(<span class="type">int</span> n) {
+    <span class="keyword">if</span> (n &lt;= <span class="number">1</span>) <span class="keyword">return</span> n;
+    <span class="keyword">if</span> (cache[n] != <span class="number">0</span>) <span class="keyword">return</span> cache[n];  <span class="comment">/* Already computed? Return it */</span>
+    cache[n] = <span class="function">fib_memo</span>(n - <span class="number">1</span>) + <span class="function">fib_memo</span>(n - <span class="number">2</span>);
+    <span class="keyword">return</span> cache[n];
+}
+
+<span class="comment">/* ✅ ITERATIVE — O(n) time, O(1) space — BEST */</span>
 <span class="type">int</span> <span class="function">fib_fast</span>(<span class="type">int</span> n) {
     <span class="keyword">if</span> (n &lt;= <span class="number">1</span>) <span class="keyword">return</span> n;
     <span class="type">int</span> prev = <span class="number">0</span>, curr = <span class="number">1</span>;
@@ -251,6 +311,21 @@
     <span class="keyword">return</span> curr;
 }</pre></div>
         </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Approach</th><th>Time</th><th>Space</th><th>fib(40) calls</th><th>When to use</th></tr></thead>
+            <tbody>
+              <tr><td>❌ Naive recursive</td><td>O(2ⁿ)</td><td>O(n) stack</td><td>~330 million</td><td>Never in production</td></tr>
+              <tr><td>✅ Memoized</td><td>O(n)</td><td>O(n) cache</td><td>~80</td><td>Tree/graph problems</td></tr>
+              <tr><td>⭐ Iterative</td><td>O(n)</td><td>O(1)</td><td>N/A (loop)</td><td>Simple sequences — preferred</td></tr>
+              <tr><td>Tail recursive</td><td>O(n)</td><td>O(1) if optimized</td><td>40</td><td>When compiler supports TCO</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Tower of Hanoi & when recursion IS the right tool</h3>
         <div class="code-block">
           <div class="code-header"><span class="code-lang">💻 C — Tower of Hanoi</span><div class="code-dots"><span></span><span></span><span></span></div></div>
           <div class="code-body"><pre><span class="type">void</span> <span class="function">hanoi</span>(<span class="type">int</span> n, <span class="type">char</span> from, <span class="type">char</span> to, <span class="type">char</span> aux) {
@@ -263,19 +338,9 @@
     <span class="function">hanoi</span>(n - <span class="number">1</span>, aux, to, from);
 }
 
-<span class="comment">/* hanoi(3, 'A', 'C', 'B'); → 7 moves */</span></pre></div>
+<span class="comment">/* hanoi(3, 'A', 'C', 'B'); → 7 moves (2^n - 1) */</span></pre></div>
         </div>
-        <div class="hb-table-wrap">
-          <table class="hb-table">
-            <thead><tr><th>Approach</th><th>When to use</th><th>Risk</th></tr></thead>
-            <tbody>
-              <tr><td><strong>Recursion</strong></td><td>Tree traversals, divide & conquer</td><td>Stack overflow for deep calls</td></tr>
-              <tr><td><strong>Iteration</strong></td><td>Simple loops, performance-critical</td><td>Can be less readable</td></tr>
-              <tr><td><strong>Tail recursion</strong></td><td>Last action is recursive call</td><td>Some compilers optimize to loop</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="callout callout-warning"><strong>Stack overflow:</strong> Each recursive call uses stack memory. Too many calls (e.g., <code>factorial(100000)</code>) crashes the program. Default stack is ~1-8 MB. Always consider iterative alternatives for large inputs.</div>
+        <div class="callout callout-warning"><strong>When to use recursion vs iteration:</strong> Use recursion for <strong>tree traversals</strong>, <strong>divide & conquer</strong> (merge sort, quick sort), and problems with <strong>recursive structure</strong> (Hanoi, permutations). Use iteration for <strong>simple sequences</strong> (Fibonacci, factorial) and <strong>performance-critical loops</strong>. Rule: if the recursive depth could exceed ~10,000, convert to iteration or increase stack size with <code>ulimit -s</code>.</div>
       </div>
     </div>
 
@@ -490,19 +555,32 @@ gcc main.o math_utils.o -o program</pre></div>
           </table>
         </div>
         <div class="callout callout-tip"><strong>Real-world use:</strong> Variadic functions power logging systems (<code>log_debug("User %s logged in at %d", name, time)</code>), error handlers, and formatted output across every C codebase.</div>
+        <div class="callout callout-warning"><strong>Type safety warning:</strong> Variadic functions have <strong>NO type checking</strong> on the extra arguments. If you pass a <code>double</code> but <code>va_arg</code> reads an <code>int</code>, you get <strong>silent corruption</strong>. GCC's <code>__attribute__((format(printf, 1, 2)))</code> enables format-string checking for printf-like functions. Always use it for custom loggers.</div>
       </div>
     </div>
 
     <div class="practice-box">
-      <div class="practice-title">✏️ Practice Exercises — Part 3</div>
+      <div class="practice-title">✏️ Practice Exercises — Part 3 (Difficulty Graded)</div>
+      <h4>🟢 Easy (Do these first)</h4>
       <ol>
-        <li>Write a <code>swap(int *a, int *b)</code> function and test it — prove that pass-by-value doesn't work for swap.</li>
-        <li>Implement factorial both recursively and iteratively. Compare stack usage for <code>factorial(20)</code>.</li>
-        <li>Create a multi-file project: <code>utils.h</code>, <code>utils.c</code>, <code>main.c</code>. Compile with <code>gcc -Wall</code>.</li>
-        <li>Write a function that uses <code>const</code> parameters to safely compute the average of an array.</li>
-        <li>Implement Tower of Hanoi with 4 disks. Count and print the total number of moves.</li>
-        <li>Create a variadic <code>max(int count, ...)</code> function that returns the largest of N integers.</li>
-        <li>Write a program using 5 different standard library headers. Use at least 2 functions from each.</li>
+        <li>Write a <code>swap(int *a, int *b)</code> function and test it. Then write <code>swap_bad(int a, int b)</code> — prove that pass-by-value doesn't work for swap.</li>
+        <li>Write a function that takes a <code>const int *</code> array and returns the sum. Verify that trying to modify the array inside the function causes a compiler error.</li>
+        <li>Implement factorial both recursively and iteratively. Print both results for n=1 to 20.</li>
+        <li>Create a multi-file project: <code>math_utils.h</code>, <code>math_utils.c</code>, <code>main.c</code>. Add <code>add()</code>, <code>multiply()</code>, <code>power()</code>. Compile with <code>gcc -Wall -Wextra</code>.</li>
+      </ol>
+      <h4>🟡 Medium (Apply your knowledge)</h4>
+      <ol start="5">
+        <li>Implement three Fibonacci functions: naive recursive, memoized, and iterative. Time each for <code>fib(40)</code> using <code>clock()</code>. Which is fastest?</li>
+        <li>Write a <strong>safe division function</strong> using the error-code pattern: <code>int safe_div(int a, int b, int *result)</code>. Return 0 for success, -1 for div-by-zero, -2 for NULL result pointer. Test all error paths.</li>
+        <li>Create a variadic <code>max(int count, ...)</code> function that returns the largest of N integers. Test with 2, 5, and 10 arguments.</li>
+        <li>Write a <code>static</code> helper function in your utils.c — verify that main.c <strong>cannot</strong> call it. Explain why.</li>
+      </ol>
+      <h4>🔴 Hard (Challenge yourself)</h4>
+      <ol start="9">
+        <li>Implement Tower of Hanoi with a <strong>move counter</strong>. Verify the count equals 2ⁿ-1. Then add a <code>static</code> variable to track total moves across multiple calls.</li>
+        <li>Write a <code>my_printf(const char *fmt, ...)</code> that supports <code>%d</code>, <code>%s</code>, and <code>%c</code> format specifiers. Don't use <code>printf</code> inside — use <code>putchar()</code> and <code>puts()</code>.</li>
+        <li>Create a function that <strong>deliberately returns a pointer to a local variable</strong>. Compile with <code>-Wall</code> and observe the warning. Fix it using (a) <code>malloc</code>, (b) <code>static</code> local, and (c) caller-provided buffer.</li>
+        <li>Build a <strong>function pointer calculator</strong>: define an array of function pointers for <code>add</code>, <code>sub</code>, <code>mul</code>, <code>div</code> and dispatch based on user input.</li>
       </ol>
     </div>
 
