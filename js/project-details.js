@@ -237,15 +237,25 @@ function renderStandout(p) {
   </section>`;
 }
 
-/* ── Pages: Grouped by role as card columns ── */
+/* ── Pages: App-launcher icon grid with access legend ── */
 function renderPages(p) {
   if (!p.pages || !p.pages.length) return '';
 
-  const groups = [
-    { key: 'Public', label: 'Public Pages', icon: '🌐', color: '#22c55e', colorBg: 'rgba(34,197,94,0.08)', colorBd: 'rgba(34,197,94,0.2)' },
-    { key: 'Donor Only', label: 'Donor Pages', icon: '🩸', color: '#ef4444', colorBg: 'rgba(239,68,68,0.08)', colorBd: 'rgba(239,68,68,0.2)' },
-    { key: 'Requester Only', label: 'Requester Pages', icon: '🏥', color: '#3b82f6', colorBg: 'rgba(59,130,246,0.08)', colorBd: 'rgba(59,130,246,0.2)' }
-  ];
+  // Colour/icon map for known access types
+  const accessMeta = {
+    'Public':         { label: 'Public',     color: '#22c55e', bg: 'rgba(34,197,94,0.12)'  },
+    'Private':        { label: 'Private',    color: '#f59e0b', bg: 'rgba(245,158,11,0.12)' },
+    'Donor Only':     { label: 'Donor',      color: '#ef4444', bg: 'rgba(239,68,68,0.12)'  },
+    'Requester Only': { label: 'Requester',  color: '#3b82f6', bg: 'rgba(59,130,246,0.12)' },
+    'Admin':          { label: 'Admin',      color: '#a855f7', bg: 'rgba(168,85,247,0.12)' }
+  };
+  const fallback = { label: 'Other', color: '#64748b', bg: 'rgba(100,116,139,0.12)' };
+
+  // Build legend from unique access types
+  const uniqueAccess = [];
+  p.pages.forEach(pg => { if (!uniqueAccess.includes(pg.access)) uniqueAccess.push(pg.access); });
+
+  const getMeta = key => accessMeta[key] || fallback;
 
   return `
   <section class="pd-section pd-pages">
@@ -254,32 +264,29 @@ function renderPages(p) {
         <span class="pd-section-icon">🖥️</span>
         <h2>Pages Included <span class="pd-page-count">(${p.pages.length})</span></h2>
       </div>
-      <div class="pd-pages-columns">
-        ${groups.map(g => {
-          const items = p.pages.filter(pg => pg.access === g.key);
-          if (!items.length) return '';
+      <div class="pd-pg-legend reveal">
+        ${uniqueAccess.map(key => {
+          const m = getMeta(key);
+          return `<span class="pd-pg-legend-item" style="--lg-c:${m.color};--lg-bg:${m.bg};">
+            <span class="pd-pg-legend-dot"></span>${m.label}
+          </span>`;
+        }).join('')}
+      </div>
+      <div class="pd-pg-grid">
+        ${p.pages.map(pg => {
+          const m = getMeta(pg.access);
           return `
-            <div class="pd-pages-group reveal" style="--pg-color:${g.color};--pg-bg:${g.colorBg};--pg-bd:${g.colorBd};">
-              <div class="pd-pages-group-header">
-                <span class="pd-pages-group-icon">${g.icon}</span>
-                <span class="pd-pages-group-label">${g.label}</span>
-                <span class="pd-pages-group-count">${items.length}</span>
-              </div>
-              <div class="pd-pages-group-list">
-                ${items.map(pg => `
-                  <div class="pd-page-item">
-                    <span class="pd-page-item-icon">${pg.icon || '📄'}</span>
-                    <span class="pd-page-item-name">${pg.name}</span>
-                  </div>
-                `).join('')}
-              </div>
-            </div>
-          `;
+          <div class="pd-pg-card reveal" style="--pg-c:${m.color};--pg-bg:${m.bg};">
+            <div class="pd-pg-card-icon">${pg.icon || '📄'}</div>
+            <div class="pd-pg-card-name">${pg.name}</div>
+            <span class="pd-pg-card-badge">${m.label}</span>
+          </div>`;
         }).join('')}
       </div>
     </div>
   </section>`;
 }
+
 
 function renderCTA(p) {
   return `
