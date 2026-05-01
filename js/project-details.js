@@ -245,9 +245,12 @@ function renderPages(p) {
   const accessMeta = {
     'Public':         { label: 'Public',     color: '#22c55e', bg: 'rgba(34,197,94,0.12)'  },
     'Private':        { label: 'Private',    color: '#f59e0b', bg: 'rgba(245,158,11,0.12)' },
+    'Customer':       { label: 'Customer',   color: '#06b6d4', bg: 'rgba(6,182,212,0.12)'  },
+    'Student':        { label: 'Student',    color: '#14b8a6', bg: 'rgba(20,184,166,0.12)' },
     'Donor Only':     { label: 'Donor',      color: '#ef4444', bg: 'rgba(239,68,68,0.12)'  },
     'Requester Only': { label: 'Requester',  color: '#3b82f6', bg: 'rgba(59,130,246,0.12)' },
-    'Admin':          { label: 'Admin',      color: '#a855f7', bg: 'rgba(168,85,247,0.12)' }
+    'Admin':          { label: 'Admin',      color: '#a855f7', bg: 'rgba(168,85,247,0.12)' },
+    'Mentor':         { label: 'Mentor',     color: '#f97316', bg: 'rgba(249,115,22,0.12)' }
   };
   const fallback = { label: 'Other', color: '#64748b', bg: 'rgba(100,116,139,0.12)' };
 

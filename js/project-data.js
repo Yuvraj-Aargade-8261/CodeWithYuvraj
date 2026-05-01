@@ -416,6 +416,440 @@ const PROJECT_DATA = {
 
     // ── Footer tagline ──
     footerTagline: 'Built with ❤️ to fuel every rep, every meal, every goal.'
+  },
+
+  /* ═══════════════════════════════════════════════════════════════
+   *  MAHARAJA'S KITCHEN — Premium Restaurant Management System
+   * ═══════════════════════════════════════════════════════════════ */
+  'maharajas-kitchen': {
+    // ── Hero / Header ──
+    name: "Maharaja's Kitchen — Premium Restaurant Management System",
+    tagline: 'Full-Stack Web Application | Production-Ready | Live Deployed',
+    heroEmoji: '🍽️',
+    accentColor: '#d4a853',
+    accentGradient: 'linear-gradient(135deg, #d4a853, #b8912e)',
+    image: 'assets/images/maharajaskitchen.png',
+    price: { current: 1999, old: 3999, discount: '50% OFF' },
+    category: 'web',
+
+    // ── Overview ──
+    overview: `<strong>Maharaja's Kitchen</strong> is a full-stack restaurant management and online ordering platform that allows customers to browse menus, place orders, book tables, and track their dining history — while giving administrators a complete back-office suite to manage menus, orders, tables, reservations, billing, and analytics. The application features a three-part architecture: a <strong>public-facing marketing site</strong>, a <strong>private customer dashboard</strong>, and a <strong>secure admin panel</strong> — all wrapped in a premium "Royal Midnight" dark-theme UI with gold accent styling and polished animations.<br><br>This is <strong>not a template or starter project</strong> — it is a fully functional, production-deployed web application with real authentication, real-time database, interactive analytics, and a premium user experience ready for immediate use.`,
+
+    // ── Target Audience ──
+    audience: [
+      { icon: '🎓', title: 'College Students', desc: 'Final year project / Mini project submission with full documentation' },
+      { icon: '💼', title: 'Freelance Developers', desc: 'Client-ready restaurant management solution to deploy and customize' },
+      { icon: '🏢', title: 'Startups / Agencies', desc: 'Launch a premium restaurant & food ordering platform instantly' },
+      { icon: '📂', title: 'Portfolio Builders', desc: 'Showcase a real-world full-stack project in your portfolio' }
+    ],
+
+    // ── Key Features (concise, 8 cards) ──
+    features: [
+      {
+        icon: '🏗️',
+        title: 'Three-Part Architecture',
+        desc: '<strong>Public site</strong> (hero, menu, gallery, reservations, auth) + <strong>Customer dashboard</strong> (ordering, cart, order tracking) + <strong>Admin panel</strong> (menu CRUD, orders, tables, billing, analytics, settings).'
+      },
+      {
+        icon: '🔐',
+        title: 'Auth & Role-Based Access',
+        desc: 'Email/password registration, persistent sessions, <strong>3 user roles</strong> (Public, Customer, Admin) with role-gated routing, auth-aware dynamic sidebars, and error handling.'
+      },
+      {
+        icon: '🍛',
+        title: '32-Dish Menu System',
+        desc: '<strong>32 dishes</strong> across 7 categories (Starters, Tandoori, Curries, Biryani, Breads, Desserts, Beverages) with 12+ data fields each — dietary tags, calories, prep time, ratings, and images.'
+      },
+      {
+        icon: '🛒',
+        title: 'Cart & Checkout + Orders',
+        desc: 'Full e-commerce flow — add to cart, quantity controls, order type selection (Dine-in/Takeaway/Delivery), table selection, <strong>GST calculation</strong>, and 6-stage order lifecycle with real-time sync.'
+      },
+      {
+        icon: '🪑',
+        title: 'Table & Reservation System',
+        desc: '<strong>20 tables</strong> across 3 floors with visual grid, click-to-toggle status, 8 seating types, and a dual reservation interface — public booking form + admin management with 4-status workflow.'
+      },
+      {
+        icon: '💰',
+        title: 'Billing & Invoice Engine',
+        desc: 'Auto-create invoices from delivered orders, payment status tracking, pending alerts, print functionality, and 3 summary cards (Collected, Pending, Total).'
+      },
+      {
+        icon: '📊',
+        title: 'Reports & Admin Dashboard',
+        desc: 'Revenue stats, order status breakdown with progress bars, top-performing items, real-time activity feed, table overview grid, and quick action shortcuts.'
+      },
+      {
+        icon: '👤',
+        title: 'Customer Dashboard & Profile',
+        desc: 'Personalized welcome, order history, upcoming reservations, loyalty points, quick actions (Order Food, View Cart, Track Order, Book Table), and editable profile.'
+      }
+    ],
+
+    // ── Design & UX highlights (top 6) ──
+    designHighlights: [
+      { icon: '👑', text: '"Royal Midnight" dark theme with gold accent (#d4a853) on #1a1a2e' },
+      { icon: '🔤', text: 'Premium typography — Playfair Display + Inter' },
+      { icon: '🎠', text: 'Auto-rotating testimonial carousel with 6 reviews' },
+      { icon: '🎯', text: 'Color-coded status badges, dietary tags, and order states' },
+      { icon: '📱', text: 'Fully responsive — desktop, tablet, and mobile optimized' },
+      { icon: '🪑', text: 'Visual table grid with click-to-toggle status interaction' }
+    ],
+
+    // ── Menu Categories ──
+    locations: {
+      desc: '<strong>32 dishes</strong> across <strong>7 categories</strong> of Indian fine dining:',
+      cities: 'Starters • Tandoori • Curries • Biryani & Rice • Breads • Desserts • Beverages',
+      note: 'Every dish includes name, description, price, calories, prep time, star rating, and dietary tags. Additional dishes can be added via the admin panel.'
+    },
+
+    // ── Platform Stats ──
+    statsTable: [
+      { label: 'Total Screens', value: '22 pages/views' },
+      { label: 'User Roles', value: '3 (Public + Customer + Admin)' },
+      { label: 'Menu Items', value: '32 dishes' },
+      { label: 'Menu Categories', value: '7' },
+      { label: 'Tables', value: '20 across 3 floors' },
+      { label: 'Order Statuses', value: '6' },
+      { label: 'Order Types', value: '3 (Dine-in, Takeaway, Delivery)' },
+      { label: 'Seating Types', value: '8' }
+    ],
+
+    // ── What You Get (6 key items) ──
+    deliverables: [
+      'Complete source code with 22 pages + Royal Midnight theme',
+      'Real auth with 3 user roles & role-gated routing',
+      '32 menu items + full cart, checkout & order lifecycle',
+      '20 tables + reservation system + billing engine',
+      'Admin dashboard with analytics, reports & settings',
+      'Responsive, animated, premium UI — easy to customize'
+    ],
+
+    // ── What Makes It Stand Out (4) ──
+    standout: [
+      { title: 'Three-Part Architecture', desc: 'Public marketing site + Customer ordering dashboard + Full admin panel — not just a landing page.' },
+      { title: 'Complete Order Lifecycle', desc: '6-stage pipeline (Pending → Confirmed → Preparing → Ready → Delivered → Cancelled) with real-time sync between customer and admin.' },
+      { title: 'Visual Table Management', desc: '20 tables across 3 floors with interactive grid, color-coded statuses, click-to-toggle, and full CRUD operations.' },
+      { title: 'Premium "Royal Midnight" UI', desc: 'Gold accent dark theme, glassmorphism, Playfair Display typography, testimonial carousel, and animated stats — not a generic template.' }
+    ],
+
+    // ── Pages Included (grouped by access) ──
+    pages: [
+      { num: 1, name: 'Home (Landing Page)', access: 'Public', icon: '🏠' },
+      { num: 2, name: 'About Us (Story + Team)', access: 'Public', icon: 'ℹ️' },
+      { num: 3, name: 'Menu (Browse & Filter)', access: 'Public', icon: '🍛' },
+      { num: 4, name: 'Gallery', access: 'Public', icon: '🖼️' },
+      { num: 5, name: 'Contact', access: 'Public', icon: '📞' },
+      { num: 6, name: 'Reserve a Table', access: 'Public', icon: '📅' },
+      { num: 7, name: 'Login', access: 'Public', icon: '🔑' },
+      { num: 8, name: 'Register', access: 'Public', icon: '📝' },
+      { num: 9, name: 'Customer Dashboard', access: 'Customer', icon: '📊' },
+      { num: 10, name: 'Browse Menu (Add to Cart)', access: 'Customer', icon: '🛒' },
+      { num: 11, name: 'Cart & Checkout', access: 'Customer', icon: '💳' },
+      { num: 12, name: 'My Orders (History)', access: 'Customer', icon: '📋' },
+      { num: 13, name: 'My Reservations', access: 'Customer', icon: '📅' },
+      { num: 14, name: 'Profile', access: 'Customer', icon: '👤' },
+      { num: 15, name: 'Admin Dashboard', access: 'Admin', icon: '📈' },
+      { num: 16, name: 'Menu Management (CRUD)', access: 'Admin', icon: '🍽️' },
+      { num: 17, name: 'Order Management', access: 'Admin', icon: '📦' },
+      { num: 18, name: 'Table Management', access: 'Admin', icon: '🪑' },
+      { num: 19, name: 'Billing & Invoices', access: 'Admin', icon: '💰' },
+      { num: 20, name: 'Reservation Management', access: 'Admin', icon: '📅' },
+      { num: 21, name: 'Reports & Analytics', access: 'Admin', icon: '📊' },
+      { num: 22, name: 'Settings', access: 'Admin', icon: '⚙️' }
+    ],
+
+    // ── Footer tagline ──
+    footerTagline: "Built with ❤️ to serve every guest, every dish, every occasion."
+  },
+
+  /* ═══════════════════════════════════════════════════════════════
+   *  HORIZON HOSTEL — Premium Hostel Management System
+   * ═══════════════════════════════════════════════════════════════ */
+  'horizon-hostel': {
+    // ── Hero / Header ──
+    name: 'Horizon Hostel — Premium Hostel Management System',
+    tagline: 'Full-Stack Web Application | Production-Ready | Live Deployed',
+    heroEmoji: '🏨',
+    accentColor: '#3b82f6',
+    accentGradient: 'linear-gradient(135deg, #3b82f6, #2563eb)',
+    image: 'assets/images/hostelmanagement.png',
+    price: { current: 1999, old: 3999, discount: '50% OFF' },
+    category: 'fullstack',
+
+    // ── Overview ──
+    overview: `<strong>Horizon Hostel</strong> is a full-stack hostel management and student accommodation platform that allows students to browse rooms, register for hostel admission, manage their fees, and track their accommodation details — while giving administrators a complete back-office suite to manage students, rooms, fees, entry/exit logs, and analytics. The application features a three-part architecture: a <strong>public-facing marketing site</strong>, a <strong>private student dashboard</strong>, and a <strong>secure admin panel</strong> — all wrapped in a premium modern UI with blue accent styling and polished animations.<br><br>This is <strong>not a template or starter project</strong> — it is a fully functional, production-deployed web application with real Firebase authentication, real-time Firestore database, interactive Recharts analytics, and a premium user experience ready for immediate use.`,
+
+    // ── Target Audience ──
+    audience: [
+      { icon: '🎓', title: 'College Students', desc: 'Final year project / Mini project submission with full documentation' },
+      { icon: '💼', title: 'Freelance Developers', desc: 'Client-ready hostel management solution to deploy and customize' },
+      { icon: '🏢', title: 'Startups / Agencies', desc: 'Launch a premium hostel & student accommodation platform instantly' },
+      { icon: '📂', title: 'Portfolio Builders', desc: 'Showcase a real-world full-stack project in your portfolio' }
+    ],
+
+    // ── Key Features (concise, 8 cards) ──
+    features: [
+      {
+        icon: '🏗️',
+        title: 'Three-Part Architecture',
+        desc: '<strong>Public site</strong> (hero, rooms, facilities, gallery, rules, fees, auth) + <strong>Student dashboard</strong> (room booking, fees, profile) + <strong>Admin panel</strong> (students, rooms, fees, entry/exit, charts).'
+      },
+      {
+        icon: '🔐',
+        title: 'Auth & Role-Based Access',
+        desc: 'Email/password registration with <strong>22-field form</strong>, persistent sessions, 3 user roles (Public, Student, Admin), role-gated routing, and student/admin login toggle.'
+      },
+      {
+        icon: '🛏️',
+        title: '15-Room Management System',
+        desc: '<strong>15 rooms</strong> across 3 floors with 4 types (Single, Double, Triple, Dormitory), 8 amenities, occupancy bars, color-coded statuses, and full CRUD via admin panel.'
+      },
+      {
+        icon: '👨‍🎓',
+        title: 'Student Management + Assignment',
+        desc: '<strong>22 pre-configured students</strong> with 25+ data fields. <strong>3-step room assignment wizard</strong> (Select Room → Payment → Confirm) with auto-occupancy updates and progress stepper.'
+      },
+      {
+        icon: '💰',
+        title: 'Fee Generation & Collection',
+        desc: 'Bulk fee generation by month/type, one-click payment recording, per-student fee history, collection rate analytics, and auto fee-status sync across the platform.'
+      },
+      {
+        icon: '📊',
+        title: 'Dashboard & Recharts Analytics',
+        desc: 'Admin dashboard with <strong>bar charts</strong> (room status), <strong>donut charts</strong> (room types), occupancy stats, fee overview, recent students, and quick action shortcuts.'
+      },
+      {
+        icon: '📋',
+        title: 'Public Content Pages',
+        desc: '12 hostel facilities with icons, 12 rules across 6 categories, 8-item fines table, complete fee structure (9 items × 3 cycles), photo gallery with 5 filters, and contact page.'
+      },
+      {
+        icon: '🚪',
+        title: 'Entry/Exit Monitoring',
+        desc: '20 pre-configured activity logs with student name, type badge (Entry/Exit), timestamps, notes, search & filter by type/date, and one-click CSV export.'
+      }
+    ],
+
+    // ── Design & UX highlights (top 6) ──
+    designHighlights: [
+      { icon: '💎', text: 'Clean blue-accent design with glassmorphism navbar and gradient hero' },
+      { icon: '📊', text: 'Interactive Recharts — bar charts, donut charts, occupancy bars' },
+      { icon: '🎨', text: 'Color-coded room types, status badges, and fee indicators' },
+      { icon: '🪄', text: '3-step room assignment wizard with visual progress stepper' },
+      { icon: '📱', text: 'Fully responsive — desktop, tablet, and mobile optimized' },
+      { icon: '🔔', text: 'Toast notifications for all CRUD operations — auto-dismissing' }
+    ],
+
+    // ── Room Configuration ──
+    locations: {
+      desc: '<strong>15 rooms</strong> across <strong>3 floors</strong> with 4 room types:',
+      cities: 'Single Room (₹8K–₹9K) • Double Sharing (₹6K–₹6.5K) • Triple Room (₹4.5K) • Dormitory (₹3K)',
+      note: 'Each room includes number, floor, type, capacity, pricing, 8 amenity options, and real-time status. Additional rooms can be added via the admin panel.'
+    },
+
+    // ── Platform Stats ──
+    statsTable: [
+      { label: 'Total Screens', value: '20 pages/views' },
+      { label: 'User Roles', value: '3 (Public + Student + Admin)' },
+      { label: 'Room Types', value: '4' },
+      { label: 'Pre-configured Rooms', value: '15 across 3 floors' },
+      { label: 'Pre-configured Students', value: '22 with full profiles' },
+      { label: 'Registration Fields', value: '22 across 6 sections' },
+      { label: 'Hostel Facilities', value: '12 with icons' },
+      { label: 'Rules & Fines', value: '12 rules + 8 fines' }
+    ],
+
+    // ── What You Get (6 key items) ──
+    deliverables: [
+      'Complete source code with 20 pages + blue-accent theme',
+      'Real Firebase auth with 3 roles & 22-field registration',
+      '15 rooms + 22 students + 3-step assignment wizard',
+      'Fee generation, collection & entry/exit monitoring',
+      'Admin dashboard with Recharts analytics & quick actions',
+      'Responsive, animated, premium UI — easy to customize'
+    ],
+
+    // ── What Makes It Stand Out (4) ──
+    standout: [
+      { title: 'Three-Part Architecture', desc: 'Public marketing site + Student dashboard with room booking & fees + Full admin panel with CRUD, analytics, and monitoring.' },
+      { title: '3-Step Room Assignment', desc: 'Professional wizard (Select Room → Payment → Confirm) with progress stepper, auto-occupancy updates, and fee sync.' },
+      { title: 'Visual Room Management', desc: '15 rooms across 3 floors with interactive card grid, occupancy progress bars, amenity tags, and color-coded statuses.' },
+      { title: 'Complete Fee Engine', desc: 'Bulk fee generation, per-student history, one-click payments, collection rate analytics, and auto fee-status sync.' }
+    ],
+
+    // ── Pages Included (grouped by access) ──
+    pages: [
+      { num: 1, name: 'Home (Landing Page)', access: 'Public', icon: '🏠' },
+      { num: 2, name: 'About Us', access: 'Public', icon: 'ℹ️' },
+      { num: 3, name: 'Facilities (12 Amenities)', access: 'Public', icon: '🏢' },
+      { num: 4, name: 'Gallery (5 Categories)', access: 'Public', icon: '🖼️' },
+      { num: 5, name: 'Hostel Rules & Fines', access: 'Public', icon: '📋' },
+      { num: 6, name: 'Fee Structure', access: 'Public', icon: '💵' },
+      { num: 7, name: 'Contact', access: 'Public', icon: '📞' },
+      { num: 8, name: 'Login (Student/Admin)', access: 'Public', icon: '🔑' },
+      { num: 9, name: 'Register (22-Field Form)', access: 'Public', icon: '📝' },
+      { num: 10, name: 'Student Dashboard', access: 'Student', icon: '📊' },
+      { num: 11, name: 'Find & Book Room', access: 'Student', icon: '🔍' },
+      { num: 12, name: 'My Room', access: 'Student', icon: '🛏️' },
+      { num: 13, name: 'Fees & Payments', access: 'Student', icon: '💰' },
+      { num: 14, name: 'Entry/Exit Logs', access: 'Student', icon: '🚪' },
+      { num: 15, name: 'Profile', access: 'Student', icon: '👤' },
+      { num: 16, name: 'Admin Dashboard (Charts)', access: 'Admin', icon: '📈' },
+      { num: 17, name: 'Student Management (CRUD)', access: 'Admin', icon: '👨‍🎓' },
+      { num: 18, name: 'Room Management (CRUD)', access: 'Admin', icon: '🛏️' },
+      { num: 19, name: 'Fee Management', access: 'Admin', icon: '💰' },
+      { num: 20, name: 'Entry/Exit Monitoring', access: 'Admin', icon: '🚪' }
+    ],
+
+    // ── Footer tagline ──
+    footerTagline: 'Built with ❤️ to provide every student a home away from home.'
+  },
+
+  /* ═══════════════════════════════════════════════════════════════
+   *  HABITFORGE — Gamified Health & Routine Tracker
+   * ═══════════════════════════════════════════════════════════════ */
+  'habitforge': {
+    // ── Hero / Header ──
+    name: 'HabitForge — Gamified Health & Routine Tracker',
+    tagline: 'Full-Stack Web Application | AI-Powered | Production-Ready | Live Deployed',
+    heroEmoji: '🔥',
+    accentColor: '#10B981',
+    accentGradient: 'linear-gradient(135deg, #10B981, #059669)',
+    image: 'assets/images/habitforge.png',
+    price: { current: 1999, old: 3999, discount: '50% OFF' },
+    category: 'fullstack',
+
+    // ── Overview ──
+    overview: `<strong>HabitForge</strong> is a full-stack gamified health and routine tracking platform that allows students to create habits, log daily progress, track streaks, earn XP & badges, join challenges, build daily routines, and receive AI-powered insights — all within a seamless, data-driven workflow powered by real-time Firestore sync. The application features a three-part architecture: a <strong>public-facing marketing site</strong> for visitors, a <strong>private student dashboard</strong> for registered users, and a <strong>role-based admin/mentor panel</strong> for supervisors — all wrapped in a premium modern UI with emerald accent styling and polished Framer Motion animations.<br><br>This is <strong>not a template or starter project</strong> — it is a fully functional, production-deployed web application with real Firebase authentication, real-time Firestore database, Gemini AI integration, push notifications (FCM), interactive Recharts analytics, and a premium user experience ready for immediate use.`,
+
+    // ── Target Audience ──
+    audience: [
+      { icon: '🎓', title: 'College Students', desc: 'Final year project / Mini project submission with full documentation & AI features' },
+      { icon: '💼', title: 'Freelance Developers', desc: 'Client-ready habit tracking & wellness solution to deploy and customize' },
+      { icon: '🏢', title: 'Startups / EdTech', desc: 'Launch a premium student wellness & gamified productivity platform instantly' },
+      { icon: '📂', title: 'Portfolio Builders', desc: 'Showcase a real-world full-stack AI-integrated project in your portfolio' }
+    ],
+
+    // ── Key Features (concise, 8 cards) ──
+    features: [
+      {
+        icon: '🏗️',
+        title: 'Three-Part Architecture',
+        desc: '<strong>Public site</strong> (hero, features, about, contact, auth) + <strong>Student dashboard</strong> (habits, tracking, insights, challenges, routines, profile, settings) + <strong>Admin/Mentor panel</strong> (student monitoring, progress tracking) — each with role-gated navigation.'
+      },
+      {
+        icon: '🔐',
+        title: 'Auth & Role-Based Access',
+        desc: 'Email/password + <strong>Google OAuth</strong> registration with Zod validation, persistent sessions, <strong>3 user roles</strong> (Student, Mentor, Admin), role-gated routing, profile completion flow, and friendly error formatting.'
+      },
+      {
+        icon: '🎮',
+        title: 'Full Gamification Engine',
+        desc: '<strong>10 XP per completion</strong> with streak bonuses (5-day: +20 XP, 7-day: +50 XP). Level system (200 XP/level), <strong>12 earnable badges</strong> across 4 rarity tiers (Common → Legendary), confetti celebrations, and real-time progress bars.',
+        callout: '🏆 <strong>Badge Rarity:</strong> Common • Rare • Epic • Legendary — with animated unlock celebrations.'
+      },
+      {
+        icon: '🧠',
+        title: 'AI-Powered Insights (Gemini)',
+        desc: 'Gemini AI generates <strong>weekly performance analysis</strong> with strengths, improvements, actionable tips, and motivational quotes. AI <strong>Mood Correlation</strong> reveals patterns. <strong>Goal-to-Challenge</strong> converts natural language goals into structured challenges + auto-generated habits.'
+      },
+      {
+        icon: '📊',
+        title: 'Recharts Analytics Dashboard',
+        desc: 'Interactive <strong>Area charts</strong> (weekly progress, 14-day trends), <strong>Pie charts</strong> (mood distribution), <strong>burnout risk gauge</strong> with animated progress bar, and pattern-based insight cards — all from real Firestore data.',
+        callout: '📈 <strong>Real Data:</strong> All charts pull live data from Firestore — not static images.'
+      },
+      {
+        icon: '🗓️',
+        title: 'Calendar & Routine Builder',
+        desc: 'Full <strong>heat-map calendar</strong> with day-by-day completion tracking, retroactive editing (3-day window), monthly stats, and a <strong>drag-and-drop routine builder</strong> with 4 time blocks (Morning, Afternoon, Evening, Night).'
+      },
+      {
+        icon: '🏆',
+        title: 'Social Challenges & Leaderboard',
+        desc: 'Create or join <strong>team-based challenges</strong> with custom XP rewards, date ranges, category tags, linked habits, progress tracking, participant management, and a competitive leaderboard with rank badges.'
+      },
+      {
+        icon: '🤖',
+        title: 'Forge AI Coach (Chatbot)',
+        desc: 'Floating AI chatbot powered by <strong>Gemini</strong> with context-aware conversations. Quick prompts (\"Motivate me\", \"Analyze my habits\"), chat history, typing indicators, and personalized responses based on user data.'
+      }
+    ],
+
+    // ── Design & UX highlights (top 6) ──
+    designHighlights: [
+      { icon: '💎', text: 'Clean white + emerald accent design with dark mode toggle (#10B981)' },
+      { icon: '🔤', text: 'Premium typography — Poppins (headings) + Inter (body)' },
+      { icon: '📊', text: 'Interactive Recharts — area charts, pie charts, burnout gauges' },
+      { icon: '🎬', text: 'Framer Motion page transitions, card animations, and confetti effects' },
+      { icon: '📱', text: 'Fully responsive — desktop, tablet, and mobile optimized' },
+      { icon: '🔔', text: 'FCM push notifications with quiet hours, streak alerts, and challenge updates' }
+    ],
+
+    // ── Habit Templates ──
+    locations: {
+      desc: 'Pre-configured with <strong>4 habit template packs</strong> and <strong>4 routine time blocks</strong>:',
+      cities: '💪 Fitness Pack • 📚 Study Pack • 🧘 Wellness Pack • 🚫 Break Bad Habits Pack',
+      note: 'Each pack includes 3–4 curated habits with icons, categories, and frequency goals. Routines are organized into Morning (6–12 PM), Afternoon (12–5 PM), Evening (5–9 PM), and Night (9 PM–6 AM) time blocks.'
+    },
+
+    // ── Platform Stats ──
+    statsTable: [
+      { label: 'Total Screens', value: '18 pages/views' },
+      { label: 'User Roles', value: '3 (Student + Mentor + Admin)' },
+      { label: 'Habit Categories', value: '8 categories' },
+      { label: 'Habit Templates', value: '4 packs (14 habits)' },
+      { label: 'Earnable Badges', value: '12 across 4 rarities' },
+      { label: 'AI Features', value: '4 (Insights, Coach, Mood, Goals)' },
+      { label: 'Chart Types', value: '4 interactive (Recharts)' },
+      { label: 'Routine Time Blocks', value: '4 (Morning → Night)' }
+    ],
+
+    // ── What You Get (6 key items) ──
+    deliverables: [
+      'Complete Next.js 16 source code with 18 pages + dark mode',
+      'Real Firebase auth (Email + Google) with 3 roles & Zod validation',
+      'Full gamification engine — XP, levels, 12 badges, confetti',
+      'Gemini AI integration — insights, chatbot, mood correlation, goal-to-challenge',
+      'Recharts analytics + heat-map calendar + drag-and-drop routines',
+      'FCM push notifications, data export, responsive Framer Motion UI'
+    ],
+
+    // ── What Makes It Stand Out (4) ──
+    standout: [
+      { title: 'Three-Part Architecture', desc: 'Complete public marketing site + Student dashboard with 7 modules + Admin/Mentor panel with student monitoring — not just a landing page.' },
+      { title: 'Full Gamification Engine', desc: '10 XP per habit, streak bonuses, 200 XP/level system, 12 badges (Common → Legendary), confetti celebrations, and animated progress tracking.' },
+      { title: 'Gemini AI Integration', desc: 'AI weekly analysis, floating chatbot coach, mood-habit correlation, and natural-language goal-to-challenge conversion — real AI, not mock data.' },
+      { title: 'Premium Modern UI', desc: 'Emerald accent, Framer Motion animations, Poppins/Inter typography, heat-map calendar, drag-and-drop routines, and dark mode — not a generic template.' }
+    ],
+
+    // ── Pages Included (grouped by access) ──
+    pages: [
+      { num: 1, name: 'Home (Landing Page)', access: 'Public', icon: '🏠' },
+      { num: 2, name: 'Features', access: 'Public', icon: '✨' },
+      { num: 3, name: 'About Us', access: 'Public', icon: 'ℹ️' },
+      { num: 4, name: 'Contact', access: 'Public', icon: '📞' },
+      { num: 5, name: 'Login (Email + Google)', access: 'Public', icon: '🔑' },
+      { num: 6, name: 'Register (Multi-Section)', access: 'Public', icon: '📝' },
+      { num: 7, name: 'Student Dashboard', access: 'Student', icon: '📊' },
+      { num: 8, name: 'Track Habits (Calendar)', access: 'Student', icon: '📅' },
+      { num: 9, name: 'Insights & Analytics', access: 'Student', icon: '🧠' },
+      { num: 10, name: 'Challenges & Leaderboard', access: 'Student', icon: '🏆' },
+      { num: 11, name: 'Daily Routines (Drag & Drop)', access: 'Student', icon: '🕐' },
+      { num: 12, name: 'Profile & Badge Collection', access: 'Student', icon: '👤' },
+      { num: 13, name: 'Settings (Theme, Notifications)', access: 'Student', icon: '⚙️' },
+      { num: 14, name: 'AI Chatbot (Forge Coach)', access: 'Student', icon: '🤖' },
+      { num: 15, name: 'Complete Profile', access: 'Student', icon: '📋' },
+      { num: 16, name: 'Mentor Dashboard', access: 'Mentor', icon: '📈' },
+      { num: 17, name: 'Student Progress Monitoring', access: 'Mentor', icon: '👨‍🏫' },
+      { num: 18, name: 'Admin User Management', access: 'Admin', icon: '🛡️' }
+    ],
+
+    // ── Footer tagline ──
+    footerTagline: 'Built with ❤️ to forge better habits, one day at a time.'
   }
 
   // ── Add more projects here ──
