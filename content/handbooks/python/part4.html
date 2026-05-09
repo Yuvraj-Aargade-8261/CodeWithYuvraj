@@ -31,16 +31,19 @@
     </div>
 
     <div class="concept-block">
-      <h3>Function/module quality checklist (Part 4)</h3>
-      <table>
-        <thead><tr><th>Focus</th><th>Production standard</th></tr></thead>
-        <tbody>
-          <tr><td>Function signatures</td><td>Use explicit arguments and predictable return contracts.</td></tr>
-          <tr><td>Side effects</td><td>Keep side effects isolated and clearly documented.</td></tr>
-          <tr><td>Module boundaries</td><td>Split by responsibility, avoid circular imports.</td></tr>
-          <tr><td>Environment parity</td><td>Use reproducible virtual environments for all contributors.</td></tr>
-        </tbody>
-      </table>
+      <h3 class="concept-heading">Function/module quality checklist (Part 4)</h3>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Focus</th><th>Production standard</th><th>Why it matters</th></tr></thead>
+          <tbody>
+            <tr><td>Function signatures</td><td>Use explicit arguments, type hints, and predictable return contracts</td><td>Self-documenting APIs reduce bugs and enable IDE autocomplete</td></tr>
+            <tr><td>Side effects</td><td>Keep side effects isolated and clearly documented in docstrings</td><td>Pure functions are testable, cacheable, and parallelizable</td></tr>
+            <tr><td>Module boundaries</td><td>Split by responsibility, avoid circular imports</td><td>Circular imports cause <code>ImportError</code> at startup in production</td></tr>
+            <tr><td>Environment parity</td><td>Use reproducible virtual environments with pinned versions</td><td>"Works on my machine" is the #1 deployment failure cause</td></tr>
+            <tr><td>Function size</td><td>Keep under 30 lines; extract helpers for complex logic</td><td>Short functions are easier to name, test, and debug</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <!-- MODULE 4.1 -->
@@ -83,6 +86,26 @@ fn(<span class="number">5</span>)                  <span class="comment"># 25</s
 ops = [square, <span class="function">abs</span>]   <span class="comment"># Store in list</span></pre></div>
         </div>
         <div class="callout callout-tip"><strong>Type hints are documentation, not enforcement.</strong> Use <code>mypy</code> for static type checking: <code>pip install mypy && mypy script.py</code></div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Function object internals — what Python stores</h3>
+        <p class="explain-en">Every Python function is an object with hidden attributes. Understanding these helps with debugging, introspection, and building decorators.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Har Python function ek object hai jisme hidden attributes hain. Inhe samajhna debugging, introspection, aur decorators banane me help karta hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Attribute</th><th>Contains</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td><code>__name__</code></td><td>Function name</td><td><code>greet.__name__</code> → <code>"greet"</code></td></tr>
+              <tr><td><code>__doc__</code></td><td>Docstring</td><td><code>greet.__doc__</code> → <code>"Greet a person..."</code></td></tr>
+              <tr><td><code>__defaults__</code></td><td>Default argument values</td><td><code>greet.__defaults__</code> → <code>("Hello",)</code></td></tr>
+              <tr><td><code>__annotations__</code></td><td>Type hint dict</td><td><code>add.__annotations__</code> → <code>{"a": int, "return": int}</code></td></tr>
+              <tr><td><code>__code__</code></td><td>Compiled bytecode object</td><td><code>f.__code__.co_varnames</code> → local var names</td></tr>
+              <tr><td><code>__closure__</code></td><td>Captured closure variables</td><td><code>None</code> if no closure, else tuple of cells</td></tr>
+              <tr><td><code>__module__</code></td><td>Module where defined</td><td><code>greet.__module__</code> → <code>"__main__"</code></td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
@@ -182,6 +205,27 @@ product = reduce(<span class="keyword">lambda</span> a, b: a * b, nums)
 <span class="comment"># 24 (1 × 2 × 3 × 4)</span></pre></div>
         </div>
       </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Lambda limitations — when NOT to use them</h3>
+        <p class="explain-en">Lambdas are limited to single expressions. They can't contain statements, assignments, or type hints. If your lambda needs any of these, use a regular <code>def</code>.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Lambdas sirf single expressions tak limited hain. Inme statements, assignments, ya type hints nahi ho sakte. Agar ye chahiye toh regular <code>def</code> use karo.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Feature</th><th><code>lambda</code></th><th><code>def</code></th></tr></thead>
+            <tbody>
+              <tr><td>Multi-line body</td><td>❌ No</td><td>✅ Yes</td></tr>
+              <tr><td>Statements (<code>if</code>/<code>for</code>/<code>try</code>)</td><td>❌ No</td><td>✅ Yes</td></tr>
+              <tr><td>Type hints</td><td>❌ No</td><td>✅ Yes</td></tr>
+              <tr><td>Docstring</td><td>❌ No</td><td>✅ Yes</td></tr>
+              <tr><td>Name in tracebacks</td><td><code>&lt;lambda&gt;</code></td><td>Function name</td></tr>
+              <tr><td>Debuggable</td><td>❌ Harder</td><td>✅ Easier</td></tr>
+              <tr><td>Best use</td><td>Sort keys, callbacks</td><td>Everything else</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>PEP 8 rule:</strong> Never assign a lambda to a variable (<code>f = lambda x: x+1</code>). Use <code>def f(x): return x+1</code> instead. Named lambdas lose the one advantage of anonymity.</div>
+      </div>
     </div>
 
     <!-- MODULE 4.4 -->
@@ -243,6 +287,24 @@ c()  <span class="comment"># 3 — closure remembers n!</span></pre></div>
             </tbody>
           </table>
         </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Closure mechanics — how Python captures variables</h3>
+        <p class="explain-en">A <strong>closure</strong> occurs when an inner function captures variables from its enclosing scope. Python stores these in <strong>cell objects</strong> accessible via <code>__closure__</code>. The variable is captured by <em>reference</em>, not by value — so changes in the enclosing scope affect the closure.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Closure</strong> tab hota hai jab inner function apne enclosing scope ke variables capture karta hai. Python inhe <strong>cell objects</strong> me store karta hai. Variable <em>reference</em> se capture hota hai, value se nahi — isliye enclosing scope me changes closure ko affect karte hain.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Concept</th><th>Behavior</th><th>Gotcha</th></tr></thead>
+            <tbody>
+              <tr><td>Variable capture</td><td>By reference, not by value</td><td>Late binding: <code>[lambda: i for i in range(3)]</code> all return 2</td></tr>
+              <tr><td><code>nonlocal</code></td><td>Allows mutation of enclosing variable</td><td>Must exist in enclosing scope (not global)</td></tr>
+              <tr><td><code>global</code></td><td>Accesses module-level variable</td><td>Creates coupling; avoid in library code</td></tr>
+              <tr><td>Cell objects</td><td>Stored in <code>f.__closure__</code></td><td>Each cell holds one captured reference</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Fix late binding:</strong> Use default arguments to capture by value: <code>[lambda i=i: i for i in range(3)]</code> → returns [0, 1, 2].</div>
       </div>
     </div>
 

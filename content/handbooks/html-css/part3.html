@@ -33,7 +33,7 @@
       <div class="chapter-part-label">📖 Part 3 — CSS Foundations</div>
       <h1 class="chapter-title">Master the Art of <span class="gradient-text">Styling</span></h1>
       <p class="chapter-subtitle">From raw HTML to beautiful interfaces — learn selectors, box model, colors, typography, and units.</p>
-      <div class="chapter-meta"><span>📄 Modules 3.1 – 3.7</span><span>⏱️ 80–120 min read</span><span>💻 45+ Examples</span></div>
+      <div class="chapter-meta"><span>📄 Modules 3.1 – 3.7</span><span>⏱️ 120–180 min</span><span>💻 65+ Examples</span><span>📊 20+ Reference Tables</span></div>
     </div>
 
     <div class="callout callout-tip">
@@ -56,13 +56,17 @@
     <div class="quick-ref">
       <div class="qr-title">🚀 Advanced Lens — Part 3</div>
       <p class="explain-en">
-        CSS is not just "making things pretty." At industry level, CSS is about building scalable design systems, understanding the rendering pipeline,
-        and writing maintainable styles that work across devices and team members. Every property has performance and accessibility implications.
+        The browser constructs the <strong>CSSOM</strong> (CSS Object Model) in parallel with the DOM. Specificity resolution happens during CSSOM construction —
+        the engine sorts every declaration by origin, specificity weight, and source order. <code>:where()</code> has zero specificity because it's excluded from the calculation.
+        Margin collapsing occurs during the <strong>block formatting context</strong> (BFC) layout phase. A new BFC (via <code>overflow: hidden</code>, <code>display: flow-root</code>,
+        or <code>display: flex</code>) prevents collapse. Font loading strategy matters for <strong>CLS</strong> — use <code>font-display: swap</code> and <code>size-adjust</code>
+        to minimize layout shift during web font loading.
       </p>
       <div class="explain-hi">
         <span class="hi-label">Hindi mein samjho</span>
-        CSS sirf "sundar banana" nahi hai. Industry level pe CSS ka matlab hai scalable design systems banana, rendering pipeline samajhna,
-        aur maintainable styles likhna jo sab devices pe kaam kare. Har property ka performance aur accessibility pe asar hota hai.
+        Browser CSSOM (CSS Object Model) DOM ke parallel banata hai. Specificity resolution CSSOM construction me hoti hai — engine har declaration ko origin, weight, aur order se sort karta hai.
+        Margin collapsing BFC layout phase me hota hai. <code>overflow: hidden</code> ya <code>display: flow-root</code> se naya BFC banta hai jo collapse rokta hai.
+        Font loading se CLS badhta hai — <code>font-display: swap</code> aur <code>size-adjust</code> use karo.
       </div>
     </div>
 
@@ -78,6 +82,20 @@
           making code cleaner and easier to maintain.
         </p>
         <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>CSS se HTML elements ki visual presentation control hoti hai — colors, layout, fonts, spacing sab. CSS ke bina har website plain text jaisi dikhegi. CSS content (HTML) ko presentation se alag rakhta hai.</div>
+
+        <div class="diagram-box">
+          <div class="diagram-title">🧠 How CSS Fits in the Web Stack</div>
+          <div class="diagram-flow">
+            <div class="diagram-node primary">HTML<br><small>Structure</small></div>
+            <div class="diagram-arrow">+</div>
+            <div class="diagram-node secondary">CSS<br><small>Presentation</small></div>
+            <div class="diagram-arrow">+</div>
+            <div class="diagram-node success">JavaScript<br><small>Behavior</small></div>
+            <div class="diagram-arrow">=</div>
+            <div class="diagram-node accent">Web Page<br><small>Complete</small></div>
+          </div>
+        </div>
+        <div class="callout callout-note"><strong>Analogy:</strong> Think of HTML as the skeleton (bones and structure), CSS as the skin and clothing (how things look), and JavaScript as the muscles and brain (movement and logic). Each has a separate job — never mix them.</div>
       </div>
 
       <div class="concept-block">
@@ -153,6 +171,107 @@
 <span class="comment">/* 5) Rare overrides */</span>
 <span class="selector">.theme-dark .card</span> { <span class="property">background</span>: <span class="value">#111827</span>; }</pre></div>
         </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">How the browser processes CSS (CSSOM pipeline)</h3>
+        <p class="explain-en">
+          When the browser downloads a CSS file, it doesn't just "apply" it. It goes through a precise pipeline:
+          <strong>1) Parse</strong> the CSS text into tokens, <strong>2) Build the CSSOM</strong> (CSS Object Model) — a tree of all style rules,
+          <strong>3) Cascade</strong> — resolve conflicts using origin, specificity, and order,
+          <strong>4) Compute</strong> final values (convert relative units, inherit values),
+          <strong>5) Apply</strong> computed styles to matching DOM nodes.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Browser CSS file download karke seedha apply nahi karta. Pipeline hai: 1) CSS text ko tokens me parse karo, 2) CSSOM (CSS Object Model) tree banao, 3) Cascade se conflicts resolve karo (origin, specificity, order), 4) Final values compute karo (relative units convert, values inherit), 5) Computed styles DOM nodes pe apply karo.</div>
+        <div class="diagram-box">
+          <div class="diagram-title">⚙️ CSS Processing Pipeline</div>
+          <div class="diagram-flow">
+            <div class="diagram-node primary">CSS Text<br><small>.css file</small></div>
+            <div class="diagram-arrow">→ Parse →</div>
+            <div class="diagram-node secondary">CSSOM<br><small>Style tree</small></div>
+            <div class="diagram-arrow">→ Cascade →</div>
+            <div class="diagram-node success">Computed<br><small>Final values</small></div>
+            <div class="diagram-arrow">→ Apply →</div>
+            <div class="diagram-node accent">Styled DOM<br><small>Render</small></div>
+          </div>
+        </div>
+        <div class="callout callout-important"><strong>Why this matters:</strong> CSS is <strong>render-blocking</strong> — the browser won't paint anything until the entire CSSOM is built. That's why external CSS should be loaded early (in <code>&lt;head&gt;</code>) and kept small. Critical CSS can be inlined for faster first paint.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">CSS Inheritance — which properties pass to children</h3>
+        <p class="explain-en">
+          Some CSS properties are <strong>inherited</strong> — their values automatically pass from parent to child elements.
+          Text-related properties (<code>color</code>, <code>font-size</code>, <code>line-height</code>) inherit by default.
+          Layout properties (<code>margin</code>, <code>padding</code>, <code>border</code>, <code>display</code>) do NOT inherit.
+          You can force inheritance with <code>inherit</code> keyword or reset with <code>initial</code>/<code>unset</code>.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Kuch CSS properties <strong>inherited</strong> hain — parent se child me automatically jaati hain. Text properties (color, font-size, line-height) inherit hoti hain. Layout properties (margin, padding, border, display) inherit nahi hoti. <code>inherit</code> keyword se force kar sakte ho, <code>initial</code>/<code>unset</code> se reset.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Category</th><th>Inherited? ✅/❌</th><th>Properties</th><th>Why?</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Text & Font</strong></td><td>✅ Yes</td><td><code>color</code>, <code>font-family</code>, <code>font-size</code>, <code>font-weight</code>, <code>line-height</code>, <code>letter-spacing</code>, <code>text-align</code>, <code>text-transform</code></td><td>Children should match parent text style by default</td></tr>
+              <tr><td><strong>List</strong></td><td>✅ Yes</td><td><code>list-style</code>, <code>list-style-type</code></td><td>All list items should share bullet style</td></tr>
+              <tr><td><strong>Visibility</strong></td><td>✅ Yes</td><td><code>visibility</code>, <code>cursor</code></td><td>Hiding parent should hide children</td></tr>
+              <tr><td><strong>Box Model</strong></td><td>❌ No</td><td><code>margin</code>, <code>padding</code>, <code>border</code>, <code>width</code>, <code>height</code></td><td>Each element needs its own box sizing</td></tr>
+              <tr><td><strong>Layout</strong></td><td>❌ No</td><td><code>display</code>, <code>position</code>, <code>float</code>, <code>flex</code>, <code>grid</code></td><td>Layout is element-specific</td></tr>
+              <tr><td><strong>Background</strong></td><td>❌ No</td><td><code>background</code>, <code>background-color</code>, <code>background-image</code></td><td>Background is per-element visual</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Inheritance in action</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Parent sets text styles — children inherit automatically */</span>
+<span class="selector">body</span> {
+  <span class="property">color</span>: <span class="value">#1e293b</span>;          <span class="comment">/* All text inherits this color */</span>
+  <span class="property">font-family</span>: <span class="string">'Inter'</span>, <span class="value">sans-serif</span>;
+  <span class="property">line-height</span>: <span class="number">1.7</span>;
+}
+
+<span class="comment">/* Override inheritance for specific elements */</span>
+<span class="selector">a</span> {
+  <span class="property">color</span>: <span class="value">#7c3aed</span>;          <span class="comment">/* Links get different color */</span>
+}
+
+<span class="comment">/* Force a non-inherited property to inherit */</span>
+<span class="selector">.card</span> {
+  <span class="property">border</span>: <span class="value">inherit</span>;           <span class="comment">/* Unusual — forces border from parent */</span>
+}
+
+<span class="comment">/* Reset keywords */</span>
+<span class="selector">.reset</span> {
+  <span class="property">color</span>: <span class="value">initial</span>;           <span class="comment">/* Revert to browser default (black) */</span>
+  <span class="property">all</span>: <span class="value">unset</span>;              <span class="comment">/* Reset ALL properties at once */</span>
+}</pre></div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> Setting <code>color</code> on <code>body</code> makes all text elements use that color automatically — you don't need to repeat it on every <code>p</code>, <code>h1</code>, <code>li</code>. Links override it because <code>a</code> has browser default styles. The <code>all: unset</code> shorthand resets every property on an element — powerful for creating custom components from scratch.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">The Cascade — how the browser decides which style wins</h3>
+        <p class="explain-en">
+          When multiple CSS rules target the same element and property, the <strong>cascade algorithm</strong> resolves the conflict.
+          It checks in this exact order: <strong>1) Origin</strong> (user-agent → user → author),
+          <strong>2) Specificity</strong> (inline → ID → class → element),
+          <strong>3) Source order</strong> (last declaration wins if specificity is equal).
+          Understanding this prevents 90% of "why isn't my CSS working?" frustrations.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Jab multiple CSS rules ek hi element aur property pe lage, cascade algorithm conflict resolve karta hai. Order: 1) Origin (browser → user → developer), 2) Specificity (inline → ID → class → element), 3) Source order (barabar specificity me last rule jeetti hai). Ye samajh lo to 90% CSS frustration khatam.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Priority</th><th>Rule</th><th>Example</th><th>Override power</th></tr></thead>
+            <tbody>
+              <tr><td>1 (Highest)</td><td><code>!important</code> on author style</td><td><code>color: red !important</code></td><td>⚠️ Overrides everything (avoid!)</td></tr>
+              <tr><td>2</td><td>Inline <code>style</code> attribute</td><td><code>style="color: red"</code></td><td>Beats all selectors</td></tr>
+              <tr><td>3</td><td>ID selector</td><td><code>#hero { color: red }</code></td><td>Very high — hard to override</td></tr>
+              <tr><td>4</td><td>Class / attribute / pseudo-class</td><td><code>.card { color: red }</code></td><td>✅ Recommended for most styling</td></tr>
+              <tr><td>5</td><td>Element / pseudo-element</td><td><code>p { color: red }</code></td><td>Low — for base/reset only</td></tr>
+              <tr><td>6 (Lowest)</td><td>Universal / inherited</td><td><code>* { color: red }</code></td><td>Lowest priority</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>Common mistake:</strong> Using IDs for styling creates specificity wars. A single <code>#hero .title</code> rule has specificity 1-1-0, requiring equally specific selectors to override. Stick to classes (0-1-0) for predictable, maintainable CSS.</div>
       </div>
     </div>
 
@@ -241,9 +360,66 @@
 <span class="selector">.nav__item:hover .nav__link</span> { <span class="property">color</span>: <span class="value">#7c3aed</span>; }</pre></div>
         </div>
       </div>
-    </div>
 
-    <!-- MODULE 3.3 -->
+      <div class="concept-block">
+        <h3 class="concept-heading">Complete CSS selectors reference</h3>
+        <p class="explain-en">
+          Here is every type of CSS selector organized by category, with specificity weight and real-world usage.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Ye table har type ke CSS selector ko category wise explain karti hai — specificity aur real usage ke saath.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Selector</th><th>Example</th><th>Matches</th><th>Specificity</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Universal</strong></td><td><code>*</code></td><td>All elements</td><td>0-0-0</td></tr>
+              <tr><td><strong>Element</strong></td><td><code>p</code></td><td>All <code>&lt;p&gt;</code> tags</td><td>0-0-1</td></tr>
+              <tr><td><strong>Class</strong></td><td><code>.card</code></td><td>Elements with class="card"</td><td>0-1-0</td></tr>
+              <tr><td><strong>ID</strong></td><td><code>#hero</code></td><td>Element with id="hero"</td><td>1-0-0</td></tr>
+              <tr><td><strong>Attribute</strong></td><td><code>[type="email"]</code></td><td>Elements with that attribute</td><td>0-1-0</td></tr>
+              <tr><td><strong>Attribute contains</strong></td><td><code>[class*="btn"]</code></td><td>Class contains "btn"</td><td>0-1-0</td></tr>
+              <tr><td><strong>Attribute starts</strong></td><td><code>[href^="https"]</code></td><td>href starts with "https"</td><td>0-1-0</td></tr>
+              <tr><td><strong>Attribute ends</strong></td><td><code>[href$=".pdf"]</code></td><td>href ends with ".pdf"</td><td>0-1-0</td></tr>
+              <tr><td><strong>Descendant</strong></td><td><code>.nav a</code></td><td>Any <code>&lt;a&gt;</code> inside .nav</td><td>0-1-1</td></tr>
+              <tr><td><strong>Child</strong></td><td><code>.nav &gt; li</code></td><td>Direct <code>&lt;li&gt;</code> children only</td><td>0-1-1</td></tr>
+              <tr><td><strong>Adjacent sibling</strong></td><td><code>h2 + p</code></td><td>First <code>&lt;p&gt;</code> after <code>&lt;h2&gt;</code></td><td>0-0-2</td></tr>
+              <tr><td><strong>General sibling</strong></td><td><code>h2 ~ p</code></td><td>All <code>&lt;p&gt;</code> after <code>&lt;h2&gt;</code></td><td>0-0-2</td></tr>
+              <tr><td><strong>Grouping</strong></td><td><code>h1, h2, h3</code></td><td>All listed elements</td><td>Each separately</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Pseudo-classes &amp; pseudo-elements reference</h3>
+        <p class="explain-en">
+          Pseudo-classes select elements based on <strong>state</strong> (hover, focus, nth-child). Pseudo-elements style <strong>parts</strong> of elements (::before, ::after, ::first-line).
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Pseudo-classes elements ko state (hover, focus) ke basis pe select karte hain. Pseudo-elements elements ke parts (::before, ::after) ko style karte hain.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Type</th><th>Selector</th><th>Purpose</th><th>Example use</th></tr></thead>
+            <tbody>
+              <tr><td rowspan="6"><strong>State</strong></td><td><code>:hover</code></td><td>Mouse over</td><td>Button hover effects</td></tr>
+              <tr><td><code>:focus</code></td><td>Keyboard/click focus</td><td>Input focus rings</td></tr>
+              <tr><td><code>:focus-visible</code></td><td>Keyboard focus only</td><td>A11y-friendly focus styles</td></tr>
+              <tr><td><code>:active</code></td><td>Being clicked</td><td>Button press effect</td></tr>
+              <tr><td><code>:visited</code></td><td>Already visited link</td><td>Link color change</td></tr>
+              <tr><td><code>:disabled</code></td><td>Disabled form element</td><td>Grayed-out inputs</td></tr>
+              <tr><td rowspan="5"><strong>Structural</strong></td><td><code>:first-child</code></td><td>First child element</td><td>Remove top margin from first item</td></tr>
+              <tr><td><code>:last-child</code></td><td>Last child element</td><td>Remove bottom border from last item</td></tr>
+              <tr><td><code>:nth-child(n)</code></td><td>Nth child (1-based)</td><td>Zebra striping: <code>:nth-child(even)</code></td></tr>
+              <tr><td><code>:not(selector)</code></td><td>Negation</td><td><code>:not(:last-child)</code> for all except last</td></tr>
+              <tr><td><code>:has(selector)</code></td><td>Parent selector (🆕)</td><td><code>.card:has(img)</code> — cards with images</td></tr>
+              <tr><td rowspan="4"><strong>Pseudo-elements</strong></td><td><code>::before</code></td><td>Insert content before</td><td>Icons, decorations</td></tr>
+              <tr><td><code>::after</code></td><td>Insert content after</td><td>Badges, tooltips</td></tr>
+              <tr><td><code>::placeholder</code></td><td>Placeholder text style</td><td>Input hint color</td></tr>
+              <tr><td><code>::selection</code></td><td>Selected text</td><td>Custom highlight color</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong><code>:has()</code> is a game-changer:</strong> It's the "parent selector" CSS never had. <code>.form:has(:invalid)</code> styles the form when any child is invalid. Supported in all modern browsers (2024+).</div>
+      </div>
+    </div>
     <div class="module-section" id="m3-3">
       <div class="module-header"><div class="module-number">3.3</div><h2 class="module-title">The Box Model — Content, padding, border, margin, box-sizing</h2></div>
 
@@ -294,6 +470,52 @@
 }</pre></div>
         </div>
         <div class="callout callout-important"><strong>Must-know:</strong> With <code>border-box</code>, a 300px card stays 300px even with padding. Without it, it becomes 300 + 40 (padding) + 4 (border) = 344px. Always use the reset.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">content-box vs border-box — visual comparison</h3>
+        <p class="explain-en">
+          The difference between the two box models is the #1 source of CSS sizing bugs.
+          With <code>content-box</code> (default), padding and border are <em>added</em> to the specified width.
+          With <code>border-box</code>, the specified width <em>includes</em> padding and border, so the content area shrinks.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>content-box</code> me width sirf content ki hoti hai — padding aur border upar se add hote hain. <code>border-box</code> me width me padding aur border include hai, content area chhota ho jaata hai. Ye CSS sizing bugs ka #1 source hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Property</th><th><code>content-box</code> (default)</th><th><code>border-box</code> (✅ recommended)</th></tr></thead>
+            <tbody>
+              <tr><td><code>width: 300px</code></td><td>Content = 300px</td><td>Content + padding + border = 300px</td></tr>
+              <tr><td><code>padding: 20px</code></td><td>Adds 40px total → 340px</td><td>Included → still 300px</td></tr>
+              <tr><td><code>border: 2px</code></td><td>Adds 4px total → 344px</td><td>Included → still 300px</td></tr>
+              <tr><td><strong>Total rendered width</strong></td><td><strong>344px</strong> ❌ Unexpected</td><td><strong>300px</strong> ✅ Predictable</td></tr>
+              <tr><td>Content area</td><td>300px (full specified width)</td><td>256px (300 - 40 - 4)</td></tr>
+              <tr><td>When to use</td><td>Almost never — legacy behavior</td><td>Always — set in universal reset</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>DevTools tip:</strong> Open Chrome DevTools → select any element → look at the <strong>Computed</strong> panel. You'll see the exact box model diagram with content, padding, border, and margin values rendered visually.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Margin collapse — complete rules</h3>
+        <p class="explain-en">
+          Margin collapse is one of CSS's most confusing behaviors. Here are the <strong>5 rules</strong> that determine when margins collapse and when they don't. Mastering these prevents unexpected spacing in every layout.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Margin collapse CSS ka sabse confusing behavior hai. Ye 5 rules samajh lo to har layout me spacing predictable hogi.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Scenario</th><th>Collapses?</th><th>Result</th><th>How to prevent</th></tr></thead>
+            <tbody>
+              <tr><td>Adjacent siblings (vertical)</td><td>✅ Yes</td><td>Larger margin wins</td><td>Use <code>gap</code> in flex/grid instead</td></tr>
+              <tr><td>Parent + first/last child</td><td>✅ Yes</td><td>Child margin "leaks" out of parent</td><td>Add <code>padding</code> or <code>border</code> to parent</td></tr>
+              <tr><td>Empty block element</td><td>✅ Yes</td><td>Top + bottom margins collapse</td><td>Add <code>min-height: 1px</code></td></tr>
+              <tr><td>Horizontal margins</td><td>❌ Never</td><td>Both margins apply</td><td>—</td></tr>
+              <tr><td>Flex/Grid children</td><td>❌ Never</td><td>Margins never collapse in flex/grid</td><td>Use flex/grid for predictable spacing</td></tr>
+              <tr><td>Elements with <code>overflow: hidden</code></td><td>❌ Prevented</td><td>Creates new BFC</td><td><code>display: flow-root</code> is cleaner</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>Pro tip:</strong> The easiest way to avoid margin collapse issues entirely is to use <strong>Flexbox or Grid with <code>gap</code></strong> instead of margins. <code>gap</code> never collapses and is far more predictable.</div>
       </div>
 
       <div class="concept-block">
@@ -363,9 +585,63 @@
         </div>
         <div class="callout callout-tip"><strong>Design tip:</strong> Use HSL for building color palettes — keep hue same, adjust saturation/lightness for variants. Example: <code>hsl(265, 82%, 58%)</code> → lighter: <code>hsl(265, 82%, 75%)</code>.</div>
       </div>
-    </div>
 
-    <!-- MODULE 3.5 -->
+      <div class="concept-block">
+        <h3 class="concept-heading">opacity vs rgba — critical difference</h3>
+        <p class="explain-en">
+          <code>opacity</code> affects the <strong>entire element and all its children</strong>. <code>rgba()</code> / <code>hsla()</code> only makes that <strong>one property</strong> transparent.
+          This distinction is critical — if you use <code>opacity: 0.5</code> on a card, all text inside becomes semi-transparent too.
+          Use <code>rgba()</code> for background transparency while keeping content fully visible.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>opacity</code> poore element aur uske saare children ko transparent banata hai. <code>rgba()</code> sirf ek property ko transparent karta hai. Card pe <code>opacity: 0.5</code> lagaoge to andar ka text bhi dhundla hoga. Background transparent chahiye to <code>rgba()</code> use karo.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Method</th><th>Affects children?</th><th>Animatable?</th><th>Best for</th></tr></thead>
+            <tbody>
+              <tr><td><code>opacity: 0.5</code></td><td>✅ Yes — everything becomes transparent</td><td>✅ Yes (smooth)</td><td>Fade-in/out entire elements</td></tr>
+              <tr><td><code>background: rgba(0,0,0,0.5)</code></td><td>❌ No — only background</td><td>✅ Yes</td><td>Overlays, cards with readable text</td></tr>
+              <tr><td><code>color: hsla(265,82%,58%,0.7)</code></td><td>❌ No — only text color</td><td>✅ Yes</td><td>Muted text, disabled states</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — opacity vs rgba</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* ❌ WRONG: opacity makes ALL content semi-transparent */</span>
+<span class="selector">.overlay-bad</span> {
+  <span class="property">background</span>: <span class="value">black</span>;
+  <span class="property">opacity</span>: <span class="number">0.6</span>;     <span class="comment">/* Text inside is also 60% transparent! */</span>
+}
+
+<span class="comment">/* ✅ CORRECT: only background is transparent */</span>
+<span class="selector">.overlay-good</span> {
+  <span class="property">background</span>: <span class="value">rgba(0, 0, 0, 0.6)</span>;  <span class="comment">/* Text stays fully visible */</span>
+}</pre></div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> The <code>.overlay-bad</code> approach makes everything inside the overlay semi-transparent, including headings and buttons. The <code>.overlay-good</code> approach only affects the background color, keeping all child content fully opaque and readable. Always use <code>rgba()</code>/<code>hsla()</code> for overlays.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">CSS color formats comparison</h3>
+        <p class="explain-en">
+          Each color format has different strengths. Understanding when to use each one helps you build better color systems.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Har color format ki alag strength hai. Sahi format choose karna better color systems banane me help karta hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Format</th><th>Syntax</th><th>Alpha</th><th>Best for</th><th>Industry use</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Named</strong></td><td><code>red</code>, <code>tomato</code></td><td>❌</td><td>Quick prototyping</td><td>⚠️ Avoid in production</td></tr>
+              <tr><td><strong>Hex</strong></td><td><code>#7c3aed</code></td><td>✅ 8-digit</td><td>Design tools export this</td><td>✅ Most common</td></tr>
+              <tr><td><strong>RGB</strong></td><td><code>rgb(124 58 237)</code></td><td>✅ <code>/ 0.8</code></td><td>Programmatic colors</td><td>✅ JS manipulation</td></tr>
+              <tr><td><strong>HSL</strong></td><td><code>hsl(265 82% 58%)</code></td><td>✅ <code>/ 0.8</code></td><td>Color palette creation</td><td>✅ Design systems</td></tr>
+              <tr><td><strong>OKLCH</strong></td><td><code>oklch(0.6 0.2 265)</code></td><td>✅ <code>/ 0.8</code></td><td>Perceptually uniform</td><td>🆕 Modern CSS</td></tr>
+              <tr><td><strong>currentColor</strong></td><td><code>currentColor</code></td><td>Inherits</td><td>Icons, borders match text</td><td>✅ SVG icons</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>Modern syntax:</strong> CSS now uses space-separated values: <code>rgb(124 58 237 / 0.8)</code> instead of <code>rgba(124, 58, 237, 0.8)</code>. The new syntax is shorter and works in all modern browsers.</div>
+      </div>
+    </div>
     <div class="module-section" id="m3-5">
       <div class="module-header"><div class="module-number">3.5</div><h2 class="module-title">Typography & Text Styling — font-family, size, weight, line-height, Google Fonts</h2></div>
 
@@ -412,6 +688,72 @@
         </div>
         <div class="callout callout-tip"><strong>Performance:</strong> Only load weights you actually use. Each extra weight adds ~20KB. Use <code>font-display: swap</code> to prevent invisible text during loading.</div>
       </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Font loading strategies — preventing invisible text</h3>
+        <p class="explain-en">
+          When using custom web fonts, the browser has 3 possible behaviors: <strong>FOIT</strong> (Flash of Invisible Text — text disappears while loading),
+          <strong>FOUT</strong> (Flash of Unstyled Text — system font shows first, then swaps), and <strong>FOFT</strong> (Flash of Faux Text — uses synthetic bold/italic temporarily).
+          The <code>font-display</code> property controls which strategy the browser uses.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Custom web fonts load hone me time lagta hai. Tab tak 3 behaviors ho sakte hain: FOIT (text invisible), FOUT (system font dikhta hai phir swap), FOFT (fake bold/italic temporarily). <code>font-display</code> property se control hota hai konsa behavior hoga.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th><code>font-display</code></th><th>Behavior</th><th>User experience</th><th>CLS impact</th><th>Recommended?</th></tr></thead>
+            <tbody>
+              <tr><td><code>auto</code></td><td>Browser decides (usually FOIT)</td><td>Text may disappear for 3s</td><td>Low</td><td>❌ Unpredictable</td></tr>
+              <tr><td><code>block</code></td><td>FOIT — invisible text for up to 3s</td><td>Blank page feeling</td><td>Low</td><td>❌ Poor UX</td></tr>
+              <tr><td><code>swap</code></td><td>FOUT — system font first, then swap</td><td>Quick display, slight flash</td><td>Medium</td><td>✅ Most popular</td></tr>
+              <tr><td><code>fallback</code></td><td>Short block (100ms), then system font</td><td>Quick display, may not swap</td><td>Low</td><td>✅ Good balance</td></tr>
+              <tr><td><code>optional</code></td><td>Shortest wait — may skip web font</td><td>No layout shift at all</td><td>✅ Zero</td><td>✅ Best for performance</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>Optimization stack:</strong> 1) Use <code>font-display: swap</code>, 2) Add <code>&lt;link rel="preconnect"&gt;</code> to fonts domain, 3) Self-host fonts for best performance, 4) Use <code>size-adjust</code> to match fallback font metrics and reduce layout shift (CLS).</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Complete text styling properties reference</h3>
+        <p class="explain-en">
+          Beyond basic font properties, CSS offers a rich set of text styling options. Here's every property you need for production typography.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Basic font properties ke alaawa CSS me text styling ke bahut saare options hain. Production typography ke liye ye saari properties jaanno.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Property</th><th>What it does</th><th>Common values</th><th>Example use</th></tr></thead>
+            <tbody>
+              <tr><td><code>text-align</code></td><td>Horizontal text alignment</td><td><code>left</code>, <code>center</code>, <code>right</code>, <code>justify</code></td><td>Center headings, justify body text</td></tr>
+              <tr><td><code>text-decoration</code></td><td>Line decorations</td><td><code>none</code>, <code>underline</code>, <code>line-through</code></td><td>Remove link underlines, strikethrough</td></tr>
+              <tr><td><code>text-transform</code></td><td>Letter case</td><td><code>uppercase</code>, <code>lowercase</code>, <code>capitalize</code></td><td>Button labels, headings</td></tr>
+              <tr><td><code>text-indent</code></td><td>First line indent</td><td><code>2em</code>, <code>40px</code></td><td>Article paragraphs</td></tr>
+              <tr><td><code>word-spacing</code></td><td>Space between words</td><td><code>2px</code>, <code>0.1em</code></td><td>Loose headline spacing</td></tr>
+              <tr><td><code>white-space</code></td><td>How whitespace is handled</td><td><code>nowrap</code>, <code>pre</code>, <code>pre-wrap</code></td><td>Prevent text wrapping, code blocks</td></tr>
+              <tr><td><code>text-overflow</code></td><td>Overflow behavior</td><td><code>ellipsis</code>, <code>clip</code></td><td>Truncate long titles with …</td></tr>
+              <tr><td><code>word-break</code></td><td>Word breaking rules</td><td><code>break-all</code>, <code>break-word</code></td><td>Long URLs, hashtags</td></tr>
+              <tr><td><code>hyphens</code></td><td>Auto-hyphenation</td><td><code>auto</code>, <code>none</code></td><td>Justified text in narrow columns</td></tr>
+              <tr><td><code>text-shadow</code></td><td>Text drop shadow</td><td><code>2px 2px 4px rgba(0,0,0,0.3)</code></td><td>Headings, text on images</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Text truncation pattern</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Single line truncation with ellipsis (...) */</span>
+<span class="selector">.truncate</span> {
+  <span class="property">white-space</span>: <span class="value">nowrap</span>;
+  <span class="property">overflow</span>: <span class="value">hidden</span>;
+  <span class="property">text-overflow</span>: <span class="value">ellipsis</span>;
+}
+
+<span class="comment">/* Multi-line truncation (2 lines max) */</span>
+<span class="selector">.truncate-multi</span> {
+  <span class="property">display</span>: <span class="value">-webkit-box</span>;
+  <span class="property">-webkit-line-clamp</span>: <span class="number">2</span>;
+  <span class="property">-webkit-box-orient</span>: <span class="value">vertical</span>;
+  <span class="property">overflow</span>: <span class="value">hidden</span>;
+}</pre></div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> The single-line truncation pattern uses 3 properties together: <code>nowrap</code> prevents wrapping, <code>overflow: hidden</code> clips excess content, and <code>text-overflow: ellipsis</code> adds "..." at the cut point. The multi-line version uses the WebKit line clamp — despite the vendor prefix, it works in all modern browsers.</div>
+      </div>
     </div>
 
     <!-- MODULE 3.6 -->
@@ -453,9 +795,35 @@
         </div>
         <div class="callout callout-important"><strong>Golden rule:</strong> <code>rem</code> for sizing, <code>px</code> for precision, <code>%</code>/<code>vw</code> for responsiveness. Never use <code>px</code> for font sizes — it breaks user zoom preferences.</div>
       </div>
-    </div>
 
-    <!-- MODULE 3.7 -->
+      <div class="concept-block">
+        <h3 class="concept-heading">Complete CSS units reference — including modern viewport units</h3>
+        <p class="explain-en">
+          CSS has many more units than just px and rem. Modern CSS added <strong>dynamic viewport units</strong> that handle mobile browser bars correctly.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>CSS me px aur rem ke alaawa bahut units hain. Modern CSS me dynamic viewport units aaye hain jo mobile browser bars ko sahi handle karte hain.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Unit</th><th>Relative to</th><th>Best for</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td><code>px</code></td><td>Viewport pixel</td><td>Borders, shadows, small details</td><td>⚠️ Don't use for font sizes</td></tr>
+              <tr><td><code>rem</code></td><td>Root font size (16px default)</td><td>Font sizes, padding, margins</td><td>✅ Respects user zoom</td></tr>
+              <tr><td><code>em</code></td><td>Parent element font size</td><td>Component-relative sizing</td><td>⚠️ Compounds when nested</td></tr>
+              <tr><td><code>%</code></td><td>Parent element dimension</td><td>Widths, responsive layouts</td><td>Context-dependent</td></tr>
+              <tr><td><code>vw</code></td><td>1% of viewport width</td><td>Full-width sections</td><td>⚠️ Ignores scrollbar</td></tr>
+              <tr><td><code>vh</code></td><td>1% of viewport height</td><td>Hero sections</td><td>⚠️ Broken on mobile (browser bar)</td></tr>
+              <tr><td><code>svh</code></td><td>Small viewport height</td><td>Minimum mobile height</td><td>🆕 Excludes browser bar</td></tr>
+              <tr><td><code>dvh</code></td><td>Dynamic viewport height</td><td>Actual visible height</td><td>🆕 Updates as bar shows/hides</td></tr>
+              <tr><td><code>lvh</code></td><td>Large viewport height</td><td>Maximum viewport height</td><td>🆕 Includes hidden bar area</td></tr>
+              <tr><td><code>ch</code></td><td>Width of character "0"</td><td>Line length limits</td><td><code>max-width: 65ch</code> for readability</td></tr>
+              <tr><td><code>ex</code></td><td>x-height of font</td><td>Vertical alignment fine-tuning</td><td>Rarely used</td></tr>
+              <tr><td><code>fr</code></td><td>Fraction of available space</td><td>CSS Grid tracks</td><td>Only works in <code>grid-template</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>Mobile fix:</strong> Replace <code>height: 100vh</code> with <code>height: 100dvh</code> on mobile. The old <code>vh</code> unit doesn't account for the browser address bar, causing content to be hidden.</div>
+      </div>
+    </div>
     <div class="module-section" id="m3-7">
       <div class="module-header"><div class="module-number">3.7</div><h2 class="module-title">Display & Visibility — block, inline, inline-block, none, visibility, overflow</h2></div>
 
@@ -507,16 +875,53 @@
         </div>
         <div class="callout callout-note"><strong>Accessibility note:</strong> <code>display: none</code> also hides from screen readers. For visually hidden but accessible content, use the <code>.sr-only</code> pattern instead.</div>
       </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Hiding methods comparison — which to use when</h3>
+        <p class="explain-en">
+          There are many ways to hide elements in CSS. Each behaves differently regarding layout, accessibility, and animation.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>CSS me elements chhupane ke bahut tarike hain. Har ek ka layout, accessibility, aur animation me alag behavior hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Method</th><th>Takes space?</th><th>Screen reader?</th><th>Animatable?</th><th>Use case</th></tr></thead>
+            <tbody>
+              <tr><td><code>display: none</code></td><td>❌ No</td><td>❌ Hidden</td><td>❌ No</td><td>Toggling panels, conditionals</td></tr>
+              <tr><td><code>visibility: hidden</code></td><td>✅ Yes</td><td>❌ Hidden</td><td>✅ Yes</td><td>Fade transitions</td></tr>
+              <tr><td><code>opacity: 0</code></td><td>✅ Yes</td><td>✅ Visible</td><td>✅ Yes</td><td>Fade-in/out animations</td></tr>
+              <tr><td><code>clip-path: inset(50%)</code></td><td>❌ No</td><td>❌ Hidden</td><td>✅ Yes</td><td>Creative reveal animations</td></tr>
+              <tr><td><code>.sr-only</code> pattern</td><td>❌ No</td><td>✅ Visible</td><td>❌ No</td><td>Screen reader only content</td></tr>
+              <tr><td><code>hidden</code> attribute</td><td>❌ No</td><td>❌ Hidden</td><td>❌ No</td><td>Semantic hiding (HTML attr)</td></tr>
+              <tr><td><code>aria-hidden="true"</code></td><td>✅ Yes</td><td>❌ Hidden</td><td>—</td><td>Decorative icons, duplicates</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>The .sr-only pattern:</strong> <code>position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0;</code> — visually hidden but screen readers can read it. Use for skip links and form labels.</div>
+      </div>
     </div>
 
     <div class="practice-box">
-      <div class="practice-title">✏️ Practice Exercises — Part 3</div>
+      <div class="practice-title">✏️ Practice Exercises — Part 3 (Difficulty Graded)</div>
+      <h4>🟢 Easy (Do these first)</h4>
       <ol>
-        <li>Style a page using only class selectors — no IDs, no element selectors. Calculate specificity for 5 selectors.</li>
-        <li>Create a card component with visible box model: colored border, padding, margin. Inspect in DevTools.</li>
-        <li>Build a hero section with a gradient background, semi-transparent overlay text, and Google Fonts.</li>
-        <li>Create a typography scale using <code>rem</code> units: h1 (2.5rem) → h6 (0.875rem) with proper line-heights.</li>
-        <li>Build a "show more/less" UI using <code>overflow: hidden</code> with <code>max-height</code> on a text container.</li>
+        <li>Style a page using only class selectors — no IDs, no element selectors. Write 5 selectors and calculate their specificity scores.</li>
+        <li>Create a card component with visible box model: colored border, padding, margin. Inspect in DevTools → Computed panel to verify values.</li>
+        <li>Build a color palette using HSL: create 5 shades of the same hue by varying saturation and lightness. Display as colored boxes.</li>
+        <li>Create a typography scale using <code>rem</code> units: h1 (2.5rem) → h6 (0.875rem) with proper <code>line-height</code> and <code>letter-spacing</code>.</li>
+      </ol>
+      <h4>🟡 Medium (Apply your knowledge)</h4>
+      <ol start="5">
+        <li>Build a <strong>hero section</strong> with gradient background, semi-transparent overlay, Google Fonts, and a call-to-action button styled with the box model.</li>
+        <li>Demonstrate <strong>margin collapse</strong>: create two boxes with vertical margins and show the collapse. Then fix it using <code>display: flow-root</code> on the parent.</li>
+        <li>Create a <strong>specificity battle</strong> demo: write 6 conflicting selectors targeting the same element and predict which wins. Verify in DevTools → Styles panel (crossed-out rules).</li>
+        <li>Build a <strong>"show more/less" UI</strong> using <code>overflow: hidden</code> + <code>max-height</code> transition. Clicking a button toggles the height.</li>
+      </ol>
+      <h4>🔴 Hard (Challenge yourself)</h4>
+      <ol start="9">
+        <li>Use <code>:where()</code> and <code>:is()</code> selectors to build a <strong>CSS reset</strong> with zero-specificity base styles. Verify that component classes can override without <code>!important</code>.</li>
+        <li>Build a complete <strong>design token stylesheet</strong>: CSS custom properties for colors (HSL), spacing scale (4px base), typography scale, border-radius, and shadows.</li>
+        <li>Optimize <strong>font loading</strong>: add <code>preconnect</code>, load Google Fonts with <code>font-display: swap</code>, and measure CLS before/after using Lighthouse. Document the improvement.</li>
+        <li>Create a <strong>CSS layered architecture</strong> file: reset → base → components → utilities → overrides. Style a multi-section page using only this architecture with no specificity conflicts.</li>
       </ol>
     </div>
 

@@ -31,16 +31,19 @@
     </div>
 
     <div class="concept-block">
-      <h3>Control-flow quality checklist (Part 2)</h3>
-      <table>
-        <thead><tr><th>Signal</th><th>Production expectation</th></tr></thead>
-        <tbody>
-          <tr><td>Branch clarity</td><td>Use guard clauses and avoid deeply nested if blocks.</td></tr>
-          <tr><td>Loop safety</td><td>Ensure explicit termination and avoid hidden mutable side effects.</td></tr>
-          <tr><td>Pattern matching</td><td>Use `match` where it improves readability over chained conditions.</td></tr>
-          <tr><td>Comprehensions</td><td>Prefer simple comprehensions; move complex logic to named functions.</td></tr>
-        </tbody>
-      </table>
+      <h3 class="concept-heading">Control-flow quality checklist (Part 2)</h3>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Signal</th><th>Production expectation</th><th>Why it matters</th></tr></thead>
+          <tbody>
+            <tr><td>Branch clarity</td><td>Use guard clauses, avoid deeply nested <code>if</code> blocks</td><td>Nested code is 3x harder to debug — flat is better than nested</td></tr>
+            <tr><td>Loop safety</td><td>Explicit termination, no hidden mutable side effects</td><td>Infinite loops crash servers; side effects cause race conditions</td></tr>
+            <tr><td>Pattern matching</td><td>Use <code>match</code> where it improves readability over chained <code>if/elif</code></td><td>Structural matching makes intent clearer for complex dispatching</td></tr>
+            <tr><td>Comprehensions</td><td>Keep simple; move complex logic to named functions</td><td>Unreadable one-liners hurt maintenance more than they save lines</td></tr>
+            <tr><td>Short-circuiting</td><td>Use <code>any()</code>/<code>all()</code> instead of manual loop+flag patterns</td><td>Built-ins are C-optimized and express intent clearly</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <!-- MODULE 2.1 -->
@@ -81,6 +84,24 @@ value = <span class="keyword">None</span>
     <span class="function">print</span>(<span class="string">"No value"</span>)</pre></div>
         </div>
         <div class="callout callout-warning"><strong>Use <code>is</code> for <code>None</code> checks!</strong> <code>x == None</code> works but <code>x is None</code> is faster, more Pythonic, and avoids issues with custom <code>__eq__</code>.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Guard clause pattern — flattening nested conditions</h3>
+        <p class="explain-en">A <strong>guard clause</strong> returns or raises early for invalid/edge cases, keeping the main logic un-indented. This is the #1 technique for readable conditionals in professional code.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Guard clause</strong> invalid/edge cases ke liye early return ya raise karta hai, jisse main logic un-indented rehti hai. Ye professional code me readable conditionals ka #1 technique hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Pattern</th><th>❌ Nested (bad)</th><th>✅ Guard clause (good)</th></tr></thead>
+            <tbody>
+              <tr><td>Null check</td><td><code>if x is not None: ...do work...</code></td><td><code>if x is None: return</code> then do work</td></tr>
+              <tr><td>Permission</td><td><code>if user.is_admin: ...do work...</code></td><td><code>if not user.is_admin: raise PermissionError</code></td></tr>
+              <tr><td>Validation</td><td><code>if len(data) > 0: if valid(data): ...</code></td><td><code>if not data: return []</code> then process</td></tr>
+              <tr><td>Range check</td><td><code>if 0 <= x <= 100: ...process...</code></td><td><code>if not (0 <= x <= 100): raise ValueError</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Rule of thumb:</strong> If your <code>if</code> block is more than 3 levels deep, refactor with guard clauses or extract into helper functions.</div>
       </div>
     </div>
 
@@ -127,6 +148,28 @@ point = (<span class="number">3</span>, <span class="number">4</span>)
         <span class="function">print</span>(<span class="string">"Adult"</span>)</pre></div>
         </div>
       </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Pattern matching types — complete reference (Python 3.10+)</h3>
+        <p class="explain-en"><code>match/case</code> supports 8 distinct pattern types. Understanding each unlocks the full power of structural pattern matching.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>match/case</code> 8 alag pattern types support karta hai. Har ek samajhne se structural pattern matching ki full power unlock hoti hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Pattern type</th><th>Syntax</th><th>What it matches</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Literal</strong></td><td><code>case 42:</code></td><td>Exact value</td><td><code>case "start":</code></td></tr>
+              <tr><td><strong>Capture</strong></td><td><code>case x:</code></td><td>Anything, binds to name</td><td><code>case name:</code> (binds value)</td></tr>
+              <tr><td><strong>Wildcard</strong></td><td><code>case _:</code></td><td>Anything, no binding</td><td>Default/fallback case</td></tr>
+              <tr><td><strong>Sequence</strong></td><td><code>case [a, b]:</code></td><td>List/tuple destructure</td><td><code>case [x, y, *rest]:</code></td></tr>
+              <tr><td><strong>Mapping</strong></td><td><code>case {"key": v}:</code></td><td>Dict with specific keys</td><td><code>case {"type": "error", "msg": m}:</code></td></tr>
+              <tr><td><strong>Class</strong></td><td><code>case Point(x, y):</code></td><td>Object type + attributes</td><td><code>case int():</code> (type check)</td></tr>
+              <tr><td><strong>OR</strong></td><td><code>case 1 | 2 | 3:</code></td><td>Multiple alternatives</td><td><code>case "y" | "yes":</code></td></tr>
+              <tr><td><strong>Guard</strong></td><td><code>case x if x &gt; 0:</code></td><td>Pattern + condition</td><td><code>case n if n % 2 == 0:</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>Gotcha:</strong> Variables in <code>case</code> are <strong>capture patterns</strong>, not comparisons! <code>case STATUS_OK:</code> captures into <code>STATUS_OK</code>, doesn't compare. Use <code>case 200:</code> for literal matching or guard clauses.</div>
+      </div>
     </div>
 
     <!-- MODULE 2.3 -->
@@ -168,6 +211,24 @@ scores = [<span class="number">95</span>, <span class="number">87</span>]
     <span class="function">print</span>(<span class="string">"Not found"</span>)</pre></div>
         </div>
       </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Iterator protocol — what Python's <code>for</code> loop actually does</h3>
+        <p class="explain-en">When you write <code>for x in obj</code>, Python calls <code>obj.__iter__()</code> to get an iterator, then repeatedly calls <code>iterator.__next__()</code> until <code>StopIteration</code> is raised. Understanding this protocol lets you create custom iterables.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Jab aap <code>for x in obj</code> likhte ho, Python <code>obj.__iter__()</code> call karta hai iterator lene ke liye, phir baar baar <code>iterator.__next__()</code> call karta hai jab tak <code>StopIteration</code> na aaye. Ye protocol samajhne se aap custom iterables bana sakte ho.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Step</th><th>What Python does</th><th>Dunder method</th></tr></thead>
+            <tbody>
+              <tr><td>1. Get iterator</td><td>Calls <code>iter(obj)</code></td><td><code>obj.__iter__()</code> → returns iterator</td></tr>
+              <tr><td>2. Get next value</td><td>Calls <code>next(iterator)</code></td><td><code>iterator.__next__()</code> → returns value</td></tr>
+              <tr><td>3. Repeat</td><td>Steps 2 again and again</td><td>Until <code>StopIteration</code> raised</td></tr>
+              <tr><td>4. Cleanup</td><td>Loop ends, iterator discarded</td><td><code>else</code> clause runs if no <code>break</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong><code>reversed()</code> vs <code>[::-1]</code>:</strong> <code>reversed()</code> returns a lazy iterator (no memory copy), while <code>[::-1]</code> creates a full copy of the list in memory. Use <code>reversed()</code> for large sequences.</div>
+      </div>
     </div>
 
     <!-- MODULE 2.4 -->
@@ -207,6 +268,24 @@ n = <span class="number">10</span>
 <span class="keyword">else</span>:
     <span class="function">print</span>(<span class="string">"Loop completed normally"</span>)  <span class="comment"># Won't run (break)</span></pre></div>
         </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Walrus operator <code>:=</code> — real-world use cases</h3>
+        <p class="explain-en">The walrus operator (Python 3.8+) assigns and returns a value in a single expression. It eliminates repeated function calls and reduces temporary variables.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Walrus operator (Python 3.8+) ek expression me value assign bhi karta hai aur return bhi. Repeated function calls eliminate karta hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Use case</th><th>❌ Without walrus</th><th>✅ With walrus</th></tr></thead>
+            <tbody>
+              <tr><td>Input loop</td><td><code>line = input(); while line != "q": process(line); line = input()</code></td><td><code>while (line := input()) != "q": process(line)</code></td></tr>
+              <tr><td>Length check</td><td><code>n = len(data); if n > 10: print(n)</code></td><td><code>if (n := len(data)) > 10: print(n)</code></td></tr>
+              <tr><td>Regex match</td><td><code>m = re.search(p, s); if m: print(m.group())</code></td><td><code>if (m := re.search(p, s)): print(m.group())</code></td></tr>
+              <tr><td>Comprehension filter</td><td>Two-pass (compute then filter)</td><td><code>[y for x in data if (y := f(x)) > 0]</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>Don't overuse it!</strong> The walrus operator should <em>simplify</em> code, not make it clever. If the expression is hard to read, use a regular assignment.</div>
       </div>
     </div>
 
@@ -260,6 +339,26 @@ total = <span class="function">sum</span>(x**<span class="number">2</span> <span
           </table>
         </div>
         <div class="callout callout-tip"><strong>Generator expressions</strong> use <code>()</code> instead of <code>[]</code> and produce values lazily — perfect for huge datasets that don't fit in memory.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Comprehension readability guide — when NOT to use them</h3>
+        <p class="explain-en">Comprehensions are powerful but can hurt readability when overused. Follow these rules to keep code maintainable.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Comprehensions powerful hain par overuse se readability kharab hoti hai. Code maintainable rakhne ke liye ye rules follow karo.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Complexity</th><th>Example</th><th>Recommendation</th></tr></thead>
+            <tbody>
+              <tr><td>Simple transform</td><td><code>[x.upper() for x in names]</code></td><td>✅ Use comprehension</td></tr>
+              <tr><td>Transform + filter</td><td><code>[x for x in data if x > 0]</code></td><td>✅ Use comprehension</td></tr>
+              <tr><td>Nested loop</td><td><code>[f(x,y) for x in a for y in b]</code></td><td>⚠️ OK if both are short</td></tr>
+              <tr><td>Nested + filter</td><td><code>[f(x) for x in a if g(x) for y in b if h(y)]</code></td><td>❌ Too complex — use loop</td></tr>
+              <tr><td>Side effects</td><td><code>[print(x) for x in data]</code></td><td>❌ Never — use <code>for</code> loop</td></tr>
+              <tr><td>Multi-line logic</td><td>Complex transformation per item</td><td>❌ Extract to named function</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>Performance:</strong> List comprehensions are ~30% faster than equivalent <code>for</code> loops because Python optimizes the bytecode. Generator expressions use O(1) memory vs O(n) for lists.</div>
       </div>
     </div>
 

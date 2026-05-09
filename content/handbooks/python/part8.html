@@ -128,6 +128,26 @@ now_ist = datetime.now(ist)</pre></div>
           </table>
         </div>
       </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Naive vs Aware — the #1 datetime production bug</h3>
+        <p class="explain-en">A <strong>naive</strong> datetime has no timezone info. An <strong>aware</strong> datetime knows its timezone. Mixing them causes <code>TypeError</code>. In production, <em>always</em> store UTC and convert to local time only for display.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Naive</strong> datetime me timezone info nahi hoti. <strong>Aware</strong> datetime apna timezone jaanta hai. Dono mix karne se <code>TypeError</code> aata hai. Production me <em>hamesha</em> UTC store karo aur display ke liye hi local time me convert karo.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Aspect</th><th>Naive</th><th>Aware (production)</th></tr></thead>
+            <tbody>
+              <tr><td>Timezone</td><td>None — assumes local</td><td>Explicit (<code>ZoneInfo</code>)</td></tr>
+              <tr><td>Comparison</td><td>Can't compare with aware</td><td>Safe cross-timezone comparison</td></tr>
+              <tr><td>Storage</td><td>❌ Ambiguous</td><td>✅ Always store as UTC</td></tr>
+              <tr><td>Display</td><td>—</td><td>Convert to user's timezone</td></tr>
+              <tr><td>DST handling</td><td>❌ Broken</td><td>✅ Automatic with <code>ZoneInfo</code></td></tr>
+              <tr><td>API/DB format</td><td>❌ Unsafe</td><td>✅ ISO 8601 with offset</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>Golden rule:</strong> <code>datetime.now()</code> is naive — use <code>datetime.now(ZoneInfo("UTC"))</code> instead. For databases, always store UTC and include timezone offset in ISO format.</div>
+      </div>
     </div>
 
     <!-- MODULE 8.3 -->
@@ -171,6 +191,25 @@ result = subprocess.run(
 <span class="comment"># ⚠️ NEVER do this with user input!</span>
 <span class="comment"># subprocess.run(user_input, shell=True)  # INJECTION RISK!</span></pre></div>
         </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Subprocess security — avoiding command injection</h3>
+        <p class="explain-en"><code>shell=True</code> passes the command through the system shell, enabling injection attacks. Always pass commands as a <strong>list of strings</strong> without <code>shell=True</code>. Validate and sanitize any user-provided input before passing to subprocess.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>shell=True</code> command ko system shell se pass karta hai, jisse injection attacks possible hote hain. Hamesha commands ko <strong>list of strings</strong> me pass karo bina <code>shell=True</code> ke. User input ko subprocess me dene se pehle validate aur sanitize karo.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Pattern</th><th>Code</th><th>Verdict</th></tr></thead>
+            <tbody>
+              <tr><td>List args (safe)</td><td><code>run(["git", "log", "-n", "5"])</code></td><td>✅ No shell, no injection</td></tr>
+              <tr><td>Shell string (risky)</td><td><code>run("git log -n 5", shell=True)</code></td><td>⚠️ OK for fixed commands</td></tr>
+              <tr><td>User input + shell</td><td><code>run(f"ls {user_input}", shell=True)</code></td><td>❌ CRITICAL — injection!</td></tr>
+              <tr><td>User input + list</td><td><code>run(["ls", user_input])</code></td><td>✅ Safe — no shell expansion</td></tr>
+              <tr><td>With timeout</td><td><code>run([...], timeout=30)</code></td><td>✅ Always set timeouts</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>Security checklist:</strong> 1) Never <code>shell=True</code> with user input. 2) Always use list args. 3) Set <code>timeout</code>. 4) Use <code>check=True</code> to catch failures. 5) Validate paths before passing.</div>
       </div>
     </div>
 

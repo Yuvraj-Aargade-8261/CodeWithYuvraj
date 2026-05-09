@@ -22,7 +22,7 @@
       <div class="chapter-part-label">📖 Part 8 — Architecture & Industry Practices</div>
       <h1 class="chapter-title">From Learner to <span class="gradient-text">Professional</span></h1>
       <p class="chapter-subtitle">Master scalable architecture, real project workflows, and deployment-ready frontend engineering.</p>
-      <div class="chapter-meta"><span>📄 Modules 8.1 – 8.7</span><span>⏱️ 90–150 min</span><span>💻 5 Complete Projects</span></div>
+      <div class="chapter-meta"><span>📄 Modules 8.1 – 8.7</span><span>⏱️ 120–180 min</span><span>💻 5 Complete Projects</span><span>📊 10+ Reference Tables</span></div>
     </div>
 
     <div class="callout callout-tip"><strong>How to study Part 8:</strong> This is the capstone. Build every project from scratch — don't copy-paste. Push to GitHub. Deploy on Netlify/Vercel. Add to your portfolio.</div>
@@ -35,13 +35,16 @@
     <div class="quick-ref">
       <div class="qr-title">🚀 Advanced Lens — Part 8</div>
       <p class="explain-en">
-        At this stage, success is measured by outcomes: shipped projects, public repos, live deployments, and repeatable engineering workflow.
-        Focus on reliability, code clarity, and communication — these are what hiring teams and clients evaluate.
+        Production CSS goes through a <strong>build pipeline</strong>: source → preprocessor (Sass/PostCSS) → autoprefixer → minifier → tree-shaker (PurgeCSS)
+        → output. <strong>Tree-shaking</strong> removes unused CSS rules — critical for utility frameworks where 90%+ of classes may be unused.
+        Modern CI/CD integrates <strong>Lighthouse CI</strong> to enforce performance budgets per commit. Design systems at scale use
+        <strong>design tokens</strong> (JSON → CSS variables) as the single source of truth shared between Figma, iOS, Android, and web platforms.
       </p>
       <div class="explain-hi">
         <span class="hi-label">Hindi mein samjho</span>
-        Ab success ka measure output hai: shipped projects, public GitHub repos, live deployments, aur repeatable workflow.
-        Recruiters aur clients code clarity, reliability, aur communication dekhte hain.
+        Production CSS ka build pipeline hota hai: source → preprocessor → autoprefixer → minifier → tree-shaker → output.
+        <strong>Tree-shaking</strong> unused CSS hatata hai. CI/CD me <strong>Lighthouse CI</strong> se har commit pe performance check hota hai.
+        Design systems me <strong>design tokens</strong> (JSON → CSS variables) Figma, iOS, Android, web sab share karte hain.
       </div>
     </div>
 
@@ -136,6 +139,58 @@ git merge feature/contact-form</pre></div>
           </table>
         </div>
       </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">VS Code — essential extensions and settings</h3>
+        <p class="explain-en">The right VS Code setup makes you 2-3x faster. These extensions and settings are used by professional front-end developers.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Sahi VS Code setup se 2-3x faster ho jaoge. Ye extensions aur settings professional front-end developers use karte hain.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Extension</th><th>Purpose</th><th>Priority</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Live Server</strong></td><td>Auto-reload browser on save</td><td>🔴 Must have</td></tr>
+              <tr><td><strong>Prettier</strong></td><td>Auto-format code on save</td><td>🔴 Must have</td></tr>
+              <tr><td><strong>ESLint</strong></td><td>JavaScript linting</td><td>🔴 Must have</td></tr>
+              <tr><td><strong>CSS Peek</strong></td><td>Ctrl+click to jump to CSS definition</td><td>🟡 Important</td></tr>
+              <tr><td><strong>Auto Rename Tag</strong></td><td>Rename paired HTML tags</td><td>🟡 Important</td></tr>
+              <tr><td><strong>Color Highlight</strong></td><td>Preview colors inline in CSS</td><td>🟢 Nice</td></tr>
+              <tr><td><strong>Emmet</strong></td><td>Built-in! Type abbreviations for HTML</td><td>🔴 Learn it</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">📝 VS Code — settings.json essentials</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre>{
+  <span class="string">"editor.formatOnSave"</span>: <span class="value">true</span>,
+  <span class="string">"editor.defaultFormatter"</span>: <span class="string">"esbenp.prettier-vscode"</span>,
+  <span class="string">"editor.tabSize"</span>: <span class="number">2</span>,
+  <span class="string">"editor.wordWrap"</span>: <span class="string">"on"</span>,
+  <span class="string">"emmet.includeLanguages"</span>: { <span class="string">"javascript"</span>: <span class="string">"html"</span> },
+  <span class="string">"css.lint.unknownAtRules"</span>: <span class="string">"ignore"</span>,
+  <span class="string">"liveServer.settings.donotShowInfoMsg"</span>: <span class="value">true</span>
+}</pre></div>
+        </div>
+        <div class="callout callout-tip"><strong>Emmet shortcuts:</strong> <code>div.card>h3+p+a.btn</code> + Tab instantly creates a full card HTML structure. Learn Emmet abbreviations — they save hours per week.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Git branching strategy for front-end projects</h3>
+        <p class="explain-en">Professional teams never commit directly to <code>main</code>. Use feature branches, pull requests, and a simple branching strategy.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Professional teams kabhi directly <code>main</code> pe commit nahi karte. Feature branches, pull requests, aur simple branching strategy use karo.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Branch</th><th>Purpose</th><th>Rules</th></tr></thead>
+            <tbody>
+              <tr><td><code>main</code></td><td>Production-ready code</td><td>Never commit directly; deploy from here</td></tr>
+              <tr><td><code>develop</code></td><td>Integration branch</td><td>Merge features here first (optional for solo)</td></tr>
+              <tr><td><code>feature/navbar</code></td><td>New feature work</td><td>Branch from main, merge via PR</td></tr>
+              <tr><td><code>fix/mobile-menu</code></td><td>Bug fix</td><td>Small, focused, descriptive name</td></tr>
+              <tr><td><code>hotfix/broken-link</code></td><td>Urgent production fix</td><td>Branch from main, merge back immediately</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>Even for solo projects:</strong> Use branches! It builds the habit, makes your GitHub profile look professional, and lets you experiment without breaking working code.</div>
+      </div>
     </div>
 
     <!-- MODULE 8.2 -->
@@ -188,6 +243,81 @@ git merge feature/contact-form</pre></div>
   <span class="property">background</span>: <span class="value">var(--primary)</span>;
   <span class="property">border-radius</span>: <span class="number">8</span><span class="unit">px</span>;
   <span class="property">transition</span>: <span class="value">all 0.3s ease</span>;
+}</pre></div>
+        </div>
+      </div>
+    </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Design tokens — the foundation of scalable design</h3>
+        <p class="explain-en">Design tokens are the atomic values of your design system: colors, spacing, typography stored as CSS variables. They ensure consistency and make theme changes instant.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Design tokens design system ki atomic values hain — sab CSS variables me store hote hain. Consistency ensure karte hain aur theme changes instant banate hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Design token system</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="selector">:root</span> {
+  <span class="comment">/* Colors (HSL for easy manipulation) */</span>
+  <span class="property">--primary</span>: <span class="value">hsl(263, 85%, 58%)</span>;
+  <span class="property">--primary-hover</span>: <span class="value">hsl(263, 85%, 48%)</span>;
+  <span class="property">--bg</span>: <span class="value">hsl(0, 0%, 100%)</span>;
+  <span class="property">--text</span>: <span class="value">hsl(222, 47%, 11%)</span>;
+  <span class="property">--text-muted</span>: <span class="value">hsl(215, 16%, 47%)</span>;
+  <span class="property">--border</span>: <span class="value">hsl(214, 32%, 91%)</span>;
+
+  <span class="comment">/* Spacing scale (4px base) */</span>
+  <span class="property">--space-1</span>: <span class="number">4</span><span class="unit">px</span>;   <span class="property">--space-2</span>: <span class="number">8</span><span class="unit">px</span>;
+  <span class="property">--space-4</span>: <span class="number">16</span><span class="unit">px</span>;  <span class="property">--space-6</span>: <span class="number">24</span><span class="unit">px</span>;
+  <span class="property">--space-8</span>: <span class="number">32</span><span class="unit">px</span>;
+
+  <span class="comment">/* Typography scale */</span>
+  <span class="property">--text-sm</span>: <span class="number">0.875</span><span class="unit">rem</span>;
+  <span class="property">--text-base</span>: <span class="number">1</span><span class="unit">rem</span>;
+  <span class="property">--text-xl</span>: <span class="value">clamp(1.25rem, 1rem + 1vw, 1.5rem)</span>;
+
+  <span class="comment">/* Shadows (elevation scale) */</span>
+  <span class="property">--shadow-sm</span>: <span class="value">0 1px 2px rgba(0,0,0,0.05)</span>;
+  <span class="property">--shadow-md</span>: <span class="value">0 4px 6px -1px rgba(0,0,0,0.1)</span>;
+  <span class="property">--shadow-lg</span>: <span class="value">0 20px 25px -5px rgba(0,0,0,0.1)</span>;
+
+  <span class="comment">/* Radii */</span>
+  <span class="property">--radius-sm</span>: <span class="number">4</span><span class="unit">px</span>;
+  <span class="property">--radius-md</span>: <span class="number">8</span><span class="unit">px</span>;
+  <span class="property">--radius-lg</span>: <span class="number">16</span><span class="unit">px</span>;
+  <span class="property">--radius-full</span>: <span class="number">9999</span><span class="unit">px</span>;
+}</pre></div>
+        </div>
+        <div class="callout callout-important"><strong>Why tokens matter:</strong> When a client says "make the purple slightly darker," you change ONE variable instead of searching 50+ files.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Project card component — production pattern</h3>
+        <p class="explain-en">Portfolio project cards need: image with hover overlay, title, tech stack badges, and live/GitHub links. Use BEM naming for maintainability.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Portfolio cards me chahiye: image + hover overlay, title, tech stack badges, aur live/GitHub links. BEM naming use karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Project card with hover</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="selector">.project-card</span> {
+  <span class="property">border-radius</span>: <span class="value">var(--radius-lg)</span>;
+  <span class="property">overflow</span>: <span class="value">hidden</span>;
+  <span class="property">border</span>: <span class="number">1</span><span class="unit">px</span> <span class="value">solid var(--border)</span>;
+  <span class="property">transition</span>: <span class="value">transform 0.3s, box-shadow 0.3s</span>;
+}
+<span class="selector">.project-card:hover</span> {
+  <span class="property">transform</span>: <span class="value">translateY(-4px)</span>;
+  <span class="property">box-shadow</span>: <span class="value">var(--shadow-lg)</span>;
+}
+<span class="selector">.project-card__image</span> {
+  <span class="property">aspect-ratio</span>: <span class="number">16</span> / <span class="number">9</span>;
+  <span class="property">object-fit</span>: <span class="value">cover</span>;
+  <span class="property">width</span>: <span class="number">100</span><span class="unit">%</span>;
+}
+<span class="selector">.project-card__tags</span> {
+  <span class="property">display</span>: <span class="value">flex</span>; <span class="property">gap</span>: <span class="number">6</span><span class="unit">px</span>; <span class="property">flex-wrap</span>: <span class="value">wrap</span>;
+}
+<span class="selector">.project-card__tag</span> {
+  <span class="property">font-size</span>: <span class="number">0.75</span><span class="unit">rem</span>;
+  <span class="property">padding</span>: <span class="number">2</span><span class="unit">px</span> <span class="number">8</span><span class="unit">px</span>;
+  <span class="property">border-radius</span>: <span class="value">var(--radius-full)</span>;
+  <span class="property">background</span>: <span class="value">hsl(263, 85%, 95%)</span>;
+  <span class="property">color</span>: <span class="value">var(--primary)</span>;
 }</pre></div>
         </div>
       </div>
@@ -249,6 +379,77 @@ git merge feature/contact-form</pre></div>
   <span class="property">position</span>: <span class="value">absolute</span>;
   <span class="property">top</span>: <span class="number">-10</span><span class="unit">px</span>; <span class="property">left</span>: <span class="number">12</span><span class="unit">px</span>;
 }</pre></div>
+        </div>
+      </div>
+    </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Conversion psychology — design patterns that sell</h3>
+        <p class="explain-en">Great landing pages use visual psychology to guide users toward conversion. These patterns are backed by A/B testing data from thousands of real campaigns.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Great landing pages visual psychology se users ko conversion ki taraf guide karti hain. Ye patterns hazaron real campaigns ke A/B testing data se proved hain.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Pattern</th><th>How it works</th><th>CSS implementation</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Visual hierarchy</strong></td><td>Large elements draw attention first</td><td><code>font-size</code> contrast between heading/body (3:1 ratio)</td></tr>
+              <tr><td><strong>F-pattern reading</strong></td><td>Users scan in F shape</td><td>Place CTA in top-right or after first paragraph</td></tr>
+              <tr><td><strong>Social proof</strong></td><td>People follow others' actions</td><td>Testimonials near CTA, star ratings visible</td></tr>
+              <tr><td><strong>Scarcity/urgency</strong></td><td>Limited offers drive action</td><td>Countdown timer, "3 spots left" badge</td></tr>
+              <tr><td><strong>Contrast CTA</strong></td><td>CTA button contrasts with page palette</td><td>Complementary color from page scheme</td></tr>
+              <tr><td><strong>White space</strong></td><td>Space around CTA draws focus</td><td><code>padding: 80px</code> around CTA section</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">CTA button design — what converts</h3>
+        <p class="explain-en">The CTA button is the single most important element on a landing page. Size, color, copy, and placement all affect conversion rates.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>CTA button landing page ka sabse important element hai. Size, color, copy, aur placement sab conversion rates ko affect karte hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — High-converting CTA button</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="selector">.cta-btn</span> {
+  <span class="property">display</span>: <span class="value">inline-flex</span>;
+  <span class="property">align-items</span>: <span class="value">center</span>;
+  <span class="property">gap</span>: <span class="number">8</span><span class="unit">px</span>;
+  <span class="property">padding</span>: <span class="number">16</span><span class="unit">px</span> <span class="number">32</span><span class="unit">px</span>;
+  <span class="property">font-size</span>: <span class="number">1.1</span><span class="unit">rem</span>;
+  <span class="property">font-weight</span>: <span class="number">600</span>;
+  <span class="property">color</span>: <span class="value">#fff</span>;
+  <span class="property">background</span>: <span class="value">var(--primary)</span>;
+  <span class="property">border</span>: <span class="value">none</span>;
+  <span class="property">border-radius</span>: <span class="number">8</span><span class="unit">px</span>;
+  <span class="property">cursor</span>: <span class="value">pointer</span>;
+  <span class="property">transition</span>: <span class="value">all 0.2s ease</span>;
+  <span class="property">box-shadow</span>: <span class="value">0 4px 14px rgba(124,58,237,0.4)</span>;
+}
+<span class="selector">.cta-btn:hover</span> {
+  <span class="property">transform</span>: <span class="value">translateY(-2px)</span>;
+  <span class="property">box-shadow</span>: <span class="value">0 6px 20px rgba(124,58,237,0.5)</span>;
+}
+<span class="selector">.cta-btn:active</span> {
+  <span class="property">transform</span>: <span class="value">translateY(0)</span>;
+}</pre></div>
+        </div>
+        <div class="callout callout-tip"><strong>Copy that converts:</strong> Use action verbs: "Start Free Trial" beats "Submit". "Get Started →" beats "Click Here". First-person works too: "Start My Free Trial" outperforms third-person in most A/B tests.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Responsive form design — mobile-first inputs</h3>
+        <p class="explain-en">Contact forms on landing pages and portfolios need to work perfectly on mobile. Use proper input types for mobile keyboards and CSS for clean styling.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Contact forms mobile pe perfectly kaam karne chahiye. Proper input types mobile keyboards ke liye aur CSS clean styling ke liye use karo.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Input type</th><th>Mobile keyboard</th><th>Why it matters</th></tr></thead>
+            <tbody>
+              <tr><td><code>type="email"</code></td><td>Shows @ symbol</td><td>Faster email entry</td></tr>
+              <tr><td><code>type="tel"</code></td><td>Number pad</td><td>Phone entry without switching</td></tr>
+              <tr><td><code>type="url"</code></td><td>Shows .com / /</td><td>Faster URL entry</td></tr>
+              <tr><td><code>type="number"</code></td><td>Number pad</td><td>Numeric-only entry</td></tr>
+              <tr><td><code>inputmode="numeric"</code></td><td>Number pad (no arrows)</td><td>PIN codes, zip codes</td></tr>
+              <tr><td><code>autocomplete="email"</code></td><td>Auto-fill from saved data</td><td>Reduces friction dramatically</td></tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -320,6 +521,67 @@ git merge feature/contact-form</pre></div>
       </div>
     </div>
 
+      <div class="concept-block">
+        <h3 class="concept-heading">Collapsible sidebar — professional navigation</h3>
+        <p class="explain-en">A production sidebar toggles between expanded (icons + labels) and collapsed (icons only) using CSS transitions. No JavaScript layout recalculation needed.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Production sidebar CSS transitions se expanded (icons + labels) aur collapsed (icons only) ke beech toggle hota hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Collapsible sidebar</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="selector">.sidebar</span> {
+  <span class="property">width</span>: <span class="number">260</span><span class="unit">px</span>;
+  <span class="property">transition</span>: <span class="value">width 0.3s ease</span>;
+  <span class="property">overflow</span>: <span class="value">hidden</span>;
+}
+<span class="selector">.sidebar.collapsed</span> {
+  <span class="property">width</span>: <span class="number">64</span><span class="unit">px</span>;
+}
+<span class="selector">.sidebar__label</span> {
+  <span class="property">opacity</span>: <span class="number">1</span>;
+  <span class="property">transition</span>: <span class="value">opacity 0.2s</span>;
+  <span class="property">white-space</span>: <span class="value">nowrap</span>;
+}
+<span class="selector">.sidebar.collapsed .sidebar__label</span> {
+  <span class="property">opacity</span>: <span class="number">0</span>;
+  <span class="property">width</span>: <span class="number">0</span>;
+  <span class="property">overflow</span>: <span class="value">hidden</span>;
+}</pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Dark mode — complete implementation pattern</h3>
+        <p class="explain-en">Production dark mode needs: CSS variables for all colors, <code>data-theme</code> toggle, <code>prefers-color-scheme</code> for system default, and <code>localStorage</code> to remember preference.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Production dark mode ke liye: CSS variables, data-theme toggle, system default detect, aur localStorage preference remember karne ke liye.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Dark mode system</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Light theme (default) */</span>
+<span class="selector">:root</span> {
+  <span class="property">--bg</span>: <span class="value">#ffffff</span>;
+  <span class="property">--bg-card</span>: <span class="value">#f8fafc</span>;
+  <span class="property">--text</span>: <span class="value">#1e293b</span>;
+  <span class="property">--border</span>: <span class="value">#e2e8f0</span>;
+}
+
+<span class="comment">/* Dark theme (manual toggle) */</span>
+<span class="selector">[data-theme="dark"]</span> {
+  <span class="property">--bg</span>: <span class="value">#0f0f1a</span>;
+  <span class="property">--bg-card</span>: <span class="value">#1a1a2e</span>;
+  <span class="property">--text</span>: <span class="value">#e2e8f0</span>;
+  <span class="property">--border</span>: <span class="value">#2d2d44</span>;
+}
+
+<span class="comment">/* System preference fallback */</span>
+<span class="keyword">@media</span> (<span class="property">prefers-color-scheme</span>: <span class="value">dark</span>) {
+  <span class="selector">:root:not([data-theme])</span> {
+    <span class="property">--bg</span>: <span class="value">#0f0f1a</span>;
+    <span class="property">--text</span>: <span class="value">#e2e8f0</span>;
+  }
+}</pre></div>
+        </div>
+        <div class="callout callout-tip"><strong>Pattern:</strong> <code>:root:not([data-theme])</code> means system preference only applies when the user hasn't manually chosen. Manual toggle always wins.</div>
+      </div>
+    </div>
+
     <!-- MODULE 8.5 -->
     <div class="module-section" id="m8-5">
       <div class="module-header"><div class="module-number">8.5</div><h2 class="module-title">CSS Methodologies & Preprocessors — BEM, SMACSS, Sass/SCSS, PostCSS, Tailwind overview</h2></div>
@@ -374,6 +636,90 @@ git merge feature/contact-form</pre></div>
   }
 }</pre></div>
         </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">CSS architecture decision guide — what to choose when</h3>
+        <p class="explain-en">Choosing the right CSS approach depends on project size, team size, and technology stack.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Sahi CSS approach project size, team size, aur tech stack pe depend karta hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Project type</th><th>Recommended approach</th><th>Why</th></tr></thead>
+            <tbody>
+              <tr><td>Solo portfolio / landing page</td><td>Vanilla CSS + CSS variables</td><td>No build step, simple</td></tr>
+              <tr><td>Small team (2-5)</td><td>BEM + SCSS + CSS variables</td><td>Clear naming, easy onboarding</td></tr>
+              <tr><td>React / Vue SPA</td><td>CSS Modules or Styled Components</td><td>Scoped styles, component co-location</td></tr>
+              <tr><td>Rapid prototyping</td><td>Tailwind CSS</td><td>Speed, consistency, design system</td></tr>
+              <tr><td>Large design system</td><td>Design tokens + @layer + SCSS</td><td>Multi-platform, scalable</td></tr>
+              <tr><td>Legacy maintenance</td><td>BEM refactor + PostCSS autoprefixer</td><td>Gradual improvement, browser compat</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Modern CSS vs preprocessors — what's native now</h3>
+        <p class="explain-en">Many features that required Sass/SCSS are now available in native CSS. Know what's built-in so you can reduce build complexity.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Bahut saari features jo Sass chahiye thi, ab native CSS me hain. Inhe jaano taaki build complexity kam ho.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Feature</th><th>Sass/SCSS</th><th>Native CSS (2024+)</th></tr></thead>
+            <tbody>
+              <tr><td>Variables</td><td><code>$primary: #7c3aed</code></td><td>✅ <code>--primary: #7c3aed</code></td></tr>
+              <tr><td>Nesting</td><td>Built-in</td><td>✅ <code>& .child { }</code> (native nesting)</td></tr>
+              <tr><td>Color functions</td><td><code>lighten()</code>, <code>darken()</code></td><td>✅ <code>oklch()</code>, <code>color-mix()</code></td></tr>
+              <tr><td>Mixins</td><td><code>@mixin</code> / <code>@include</code></td><td>❌ Not yet (use @layer + classes)</td></tr>
+              <tr><td>Math</td><td><code>$size * 2</code></td><td>✅ <code>calc()</code>, <code>clamp()</code></td></tr>
+              <tr><td>Imports</td><td><code>@import</code> partials</td><td>✅ <code>@layer</code> + bundler or <code>@import</code></td></tr>
+              <tr><td>Loops</td><td><code>@for</code>, <code>@each</code></td><td>❌ Not available natively</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>2026 trend:</strong> Many teams are moving from Sass to vanilla CSS with custom properties + @layer + native nesting. Fewer build tools = faster development.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">CSS build pipeline — from source to production</h3>
+        <p class="explain-en">Production CSS goes through a build pipeline. Understanding each step helps you choose the right tools and debug build issues.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Production CSS ek build pipeline se guzarta hai. Har step samajhne se sahi tools choose kar sakte ho aur build issues debug kar sakte ho.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Step</th><th>Tool</th><th>What it does</th><th>Input → Output</th></tr></thead>
+            <tbody>
+              <tr><td>1. Compile</td><td>Sass/PostCSS</td><td>Process variables, nesting, mixins</td><td>.scss → .css</td></tr>
+              <tr><td>2. Autoprefix</td><td>Autoprefixer</td><td>Add vendor prefixes (-webkit-, -moz-)</td><td>.css → .css</td></tr>
+              <tr><td>3. Minify</td><td>cssnano / lightningcss</td><td>Remove whitespace, shorten values</td><td>150KB → 40KB</td></tr>
+              <tr><td>4. Tree-shake</td><td>PurgeCSS / UnCSS</td><td>Remove unused CSS rules</td><td>40KB → 8KB</td></tr>
+              <tr><td>5. Hash</td><td>Bundler (Vite/Webpack)</td><td>Add content hash for cache busting</td><td>style.css → style.a3f2b.css</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-note"><strong>Modern shortcut:</strong> <code>lightningcss</code> (used by Vite) handles steps 2-3 in a single tool and is 100x faster than PostCSS + cssnano. In 2026, it's the recommended choice for new projects.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Design tokens — from Figma to code</h3>
+        <p class="explain-en">Large teams use design tokens (JSON) as the single source of truth. Designers define tokens in Figma, engineers export them to CSS/iOS/Android. This eliminates "design drift" where code and designs diverge.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Bade teams design tokens (JSON) ko single source of truth ki tarah use karte hain. Designers Figma me define karte hain, engineers CSS/iOS/Android me export karte hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">📝 JSON — Design token file</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre>{
+  <span class="string">"color"</span>: {
+    <span class="string">"primary"</span>: { <span class="string">"value"</span>: <span class="string">"#7c3aed"</span> },
+    <span class="string">"bg"</span>: { <span class="string">"value"</span>: <span class="string">"#ffffff"</span> },
+    <span class="string">"text"</span>: { <span class="string">"value"</span>: <span class="string">"#1e293b"</span> }
+  },
+  <span class="string">"spacing"</span>: {
+    <span class="string">"sm"</span>: { <span class="string">"value"</span>: <span class="string">"8px"</span> },
+    <span class="string">"md"</span>: { <span class="string">"value"</span>: <span class="string">"16px"</span> },
+    <span class="string">"lg"</span>: { <span class="string">"value"</span>: <span class="string">"32px"</span> }
+  }
+}
+
+<span class="comment">/* Generated CSS (via Style Dictionary or Tokens Studio) */</span>
+<span class="comment">/* :root { --color-primary: #7c3aed; ... } */</span></pre></div>
+        </div>
+        <div class="callout callout-tip"><strong>Tools:</strong> Use <strong>Tokens Studio</strong> (Figma plugin) to sync tokens. Use <strong>Style Dictionary</strong> (build tool) to convert JSON tokens to CSS variables, iOS Swift, and Android XML.</div>
       </div>
     </div>
 
@@ -433,6 +779,80 @@ git merge feature/contact-form</pre></div>
           </table>
         </div>
       </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Netlify deployment — step-by-step guide</h3>
+        <p class="explain-en">Netlify is the easiest way to deploy static sites. Connect your GitHub repo and every push automatically deploys.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Netlify se static sites deploy karna sabse easy hai. GitHub repo connect karo aur har push automatically deploy ho jayega.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Step</th><th>Action</th><th>Details</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>Push code to GitHub</td><td><code>git push origin main</code></td></tr>
+              <tr><td>2</td><td>Sign up at netlify.com</td><td>Use GitHub login (one click)</td></tr>
+              <tr><td>3</td><td>Click "Import from Git"</td><td>Select your repository</td></tr>
+              <tr><td>4</td><td>Set build settings</td><td>Build: (empty for static), Publish: <code>./</code></td></tr>
+              <tr><td>5</td><td>Click "Deploy site"</td><td>Live in ~30 seconds!</td></tr>
+              <tr><td>6</td><td>Add custom domain</td><td>Domain settings → Add custom domain</td></tr>
+              <tr><td>7</td><td>Enable HTTPS</td><td>Automatic Let's Encrypt SSL (free)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Auto-deploy:</strong> After setup, every <code>git push</code> to main triggers an automatic rebuild and deploy. No manual steps needed ever again.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">CI/CD with Lighthouse — automated quality gates</h3>
+        <p class="explain-en">Professional teams run Lighthouse in CI/CD to catch performance regressions before they reach production. If a commit makes LCP worse, the deploy is blocked.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Professional teams CI/CD me Lighthouse run karte hain taaki performance regressions production me na pahunche. Agar commit se LCP kharab ho toh deploy block ho jata hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">📝 YAML — GitHub Actions Lighthouse CI</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># .github/workflows/lighthouse.yml</span>
+name: Lighthouse CI
+on: [push]
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: treosh/lighthouse-ci-action@v12
+        with:
+          urls: |
+            https://yoursite.netlify.app/
+          budgetPath: ./budget.json
+          uploadArtifacts: true</pre></div>
+        </div>
+        <div class="callout callout-important"><strong>Budget file:</strong> Create <code>budget.json</code> with targets: <code>{ "performance": 90, "accessibility": 95 }</code>. The CI check fails if scores drop below these thresholds.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Netlify headers and redirects — production config</h3>
+        <p class="explain-en">Production sites need security headers, caching rules, and SPA routing. Netlify handles this via config files in your repo root.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Production sites ko security headers, caching rules, aur SPA routing chahiye. Netlify ye sab repo root me config files se handle karta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">📝 netlify.toml — Production config</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment"># netlify.toml</span>
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+<span class="comment"># Cache static assets for 1 year</span>
+[[headers]]
+  for = "/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+<span class="comment"># SPA fallback (for React/Vue apps)</span>
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200</pre></div>
+        </div>
+      </div>
     </div>
 
     <!-- MODULE 8.7 -->
@@ -455,6 +875,45 @@ git merge feature/contact-form</pre></div>
           </div>
         </div>
         <div class="callout callout-tip"><strong>Final advice:</strong> The best way to learn is to build. Build projects you care about. Share them publicly. Help others learn. The coding community rewards those who create and share.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">JavaScript learning path — what to learn first</h3>
+        <p class="explain-en">After HTML/CSS, JavaScript is your next step. Focus on these topics in order. Don't jump to React before mastering vanilla JS fundamentals.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>HTML/CSS ke baad JavaScript seekho. In topics ko order me seekho. Vanilla JS fundamentals master kiye bina React pe mat jaao.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Phase</th><th>Topics</th><th>Time</th><th>Project idea</th></tr></thead>
+            <tbody>
+              <tr><td><strong>1. Basics</strong></td><td>Variables, functions, loops, arrays, objects</td><td>2-3 weeks</td><td>Todo app (localStorage)</td></tr>
+              <tr><td><strong>2. DOM</strong></td><td>querySelector, events, classList, createElement</td><td>2 weeks</td><td>Interactive quiz</td></tr>
+              <tr><td><strong>3. Async</strong></td><td>Promises, async/await, fetch API</td><td>2 weeks</td><td>Weather app (API)</td></tr>
+              <tr><td><strong>4. ES6+</strong></td><td>Destructuring, spread, modules, template literals</td><td>1-2 weeks</td><td>Refactor previous projects</td></tr>
+              <tr><td><strong>5. Framework</strong></td><td>React OR Vue (pick one!)</td><td>4-6 weeks</td><td>Full CRUD app</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>Common mistake:</strong> Don't skip vanilla JavaScript. Developers who jump to React without understanding the DOM, closures, and async patterns struggle constantly. Foundation first!</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Freelancing with HTML/CSS — getting started</h3>
+        <p class="explain-en">You can start freelancing with just HTML & CSS! Small businesses, restaurants, and local shops need simple, fast websites. Here's how to find your first clients.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Sirf HTML & CSS se freelancing shuru kar sakte ho! Chhote businesses, restaurants, aur local shops ko simple websites chahiye.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Channel</th><th>How to approach</th><th>Typical price (India)</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Local businesses</strong></td><td>Walk in with a portfolio site on your phone</td><td>₹5,000-15,000 per site</td></tr>
+              <tr><td><strong>Fiverr/Upwork</strong></td><td>Start with low prices, build reviews</td><td>₹3,000-10,000 per project</td></tr>
+              <tr><td><strong>LinkedIn</strong></td><td>Post project screenshots, use #OpenToWork</td><td>Varies widely</td></tr>
+              <tr><td><strong>College peers</strong></td><td>Build portfolio sites for classmates</td><td>Free/barter (builds portfolio)</td></tr>
+              <tr><td><strong>Open source</strong></td><td>Contribute CSS fixes to popular repos</td><td>Free (builds reputation)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Portfolio tip:</strong> Your first 3 freelance projects should be free or very cheap. The goal is testimonials and portfolio pieces, not money. Money comes after you have proof of work.</div>
+      </div>
       </div>
 
       <div class="concept-block">
@@ -496,16 +955,69 @@ git merge feature/contact-form</pre></div>
           </table>
         </div>
       </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Interview answer examples — how to explain concepts</h3>
+        <p class="explain-en">In interviews, structure answers: <strong>What</strong> → <strong>Why</strong> → <strong>How</strong> → <strong>Example</strong>. Here are model answers for the most common CSS questions.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Interviews me jawab structure karo: Kya hai → Kyun important hai → Kaise use kare → Example do.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Question</th><th>Model answer (key points)</th></tr></thead>
+            <tbody>
+              <tr><td>"Explain the CSS box model"</td><td>Every element is a box: <strong>content</strong> → <strong>padding</strong> → <strong>border</strong> → <strong>margin</strong>. With <code>box-sizing: border-box</code>, width includes padding + border. Without it (content-box), width is content only.</td></tr>
+              <tr><td>"How does specificity work?"</td><td>Weight system: inline (1000) > ID (100) > class (10) > element (1). Equal specificity? Last rule wins. <code>!important</code> overrides all but should be avoided.</td></tr>
+              <tr><td>"Flexbox vs Grid?"</td><td>Flexbox = <strong>1D</strong> (row OR column). Grid = <strong>2D</strong> (rows AND columns). They're complementary — use both in one project.</td></tr>
+              <tr><td>"What is BEM?"</td><td><strong>Block__Element--Modifier</strong>. Block = component (.card). Element = part (.card__title). Modifier = variant (.card--featured). Prevents collisions at scale.</td></tr>
+              <tr><td>"Center a div?"</td><td>Modern: <code>display: grid; place-items: center</code> (3 lines). Or Flexbox: <code>display: flex; justify-content: center; align-items: center</code>.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Interview pro tip:</strong> After explaining, say "In my portfolio project, I used this for..." and give a real example. Connecting theory to practice proves you actually build things.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Resources for continuous learning</h3>
+        <p class="explain-en">The web evolves constantly. Stay updated with these trusted resources used by professional developers worldwide.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Web constantly evolve hota hai. In trusted resources se updated raho.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Resource</th><th>Type</th><th>Best for</th></tr></thead>
+            <tbody>
+              <tr><td><strong>MDN Web Docs</strong></td><td>Reference</td><td>🔴 The definitive CSS/HTML reference</td></tr>
+              <tr><td><strong>CSS-Tricks</strong></td><td>Tutorials</td><td>Practical guides (Flexbox, Grid)</td></tr>
+              <tr><td><strong>web.dev</strong></td><td>Google guides</td><td>Performance, Core Web Vitals</td></tr>
+              <tr><td><strong>Smashing Magazine</strong></td><td>Articles</td><td>In-depth front-end techniques</td></tr>
+              <tr><td><strong>Kevin Powell (YouTube)</strong></td><td>Video</td><td>CSS deep-dives, visual learners</td></tr>
+              <tr><td><strong>Can I Use</strong></td><td>Compatibility</td><td>Check browser support for any feature</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>Learning strategy:</strong> Spend 70% building projects, 20% reading docs/tutorials, 10% watching videos. Building is the only way to truly learn — passive consumption creates false confidence.</div>
+      </div>
     </div>
 
     <div class="practice-box">
-      <div class="practice-title">🏆 Final Capstone Projects — Part 8</div>
+      <div class="practice-title">🏆 Final Capstone Projects — Part 8 (Difficulty Graded)</div>
+      <h4>🟢 Easy (Foundation projects)</h4>
       <ol>
-        <li><strong>Portfolio Website:</strong> Build, deploy on Netlify, add custom domain. Score 90+ on Lighthouse.</li>
-        <li><strong>SaaS Landing Page:</strong> Hero, features, pricing, testimonials. Mobile-first, dark mode.</li>
-        <li><strong>Admin Dashboard:</strong> Grid layout, sidebar, stat cards, responsive. CSS variables theming.</li>
-        <li><strong>Clone Challenge:</strong> Recreate a real website (e.g., Stripe, Linear) using only HTML & CSS.</li>
-        <li><strong>Open Source:</strong> Contribute a CSS fix or component to a GitHub project.</li>
+        <li>Set up a <strong>professional project structure</strong>: organized folders, CSS reset, Git init, .gitignore, README.md. Push to GitHub.</li>
+        <li>Create a <strong>CSS design token file</strong>: colors (HSL), spacing scale, typography scale, border-radius, shadows — all as CSS custom properties on <code>:root</code>.</li>
+        <li>Build a <strong>component library page</strong>: buttons (primary/secondary/ghost), cards, badges, form inputs — all styled with BEM naming and design tokens.</li>
+        <li>Deploy a static site to <strong>Netlify or Vercel</strong> from GitHub. Add a custom domain and verify HTTPS, OG preview, and Lighthouse score.</li>
+      </ol>
+      <h4>🟡 Medium (Portfolio-ready projects)</h4>
+      <ol start="5">
+        <li><strong>Personal Portfolio Website:</strong> Hero with CTA, about section, project grid with hover effects, skills badges, contact form, dark mode toggle. Score 90+ on all Lighthouse categories.</li>
+        <li><strong>SaaS Landing Page:</strong> Hero, feature grid (auto-fit), pricing cards (featured card highlighted), testimonials with <code>::before</code> quote mark, final CTA. Mobile-first with 3 breakpoints.</li>
+        <li><strong>Admin Dashboard UI:</strong> Grid template areas (sidebar + topbar + content), stat cards, dark/light theme toggle via CSS variables, responsive collapse at 768px.</li>
+        <li><strong>Blog Layout:</strong> Article page with <code>max-width: 65ch</code>, sticky table of contents sidebar, responsive images with <code>srcset</code>, print stylesheet, and JSON-LD Article schema.</li>
+      </ol>
+      <h4>🔴 Hard (Industry-level challenges)</h4>
+      <ol start="9">
+        <li><strong>Clone Challenge:</strong> Recreate a real website (Stripe, Linear, or Vercel homepage) pixel-perfect using only HTML & CSS. Match typography, spacing, animations, and responsive behavior.</li>
+        <li><strong>Design System:</strong> Build a complete system with ITCSS architecture, design tokens (JSON → CSS variables), 10+ components, dark/light/high-contrast themes, and a living documentation page.</li>
+        <li><strong>Performance Optimization:</strong> Take an existing slow page, audit with Lighthouse, inline critical CSS, tree-shake unused styles, add <code>content-visibility</code>, optimize images. Document before/after Core Web Vitals.</li>
+        <li><strong>Open Source Contribution:</strong> Find a CSS-related issue on a public GitHub repo. Fork, fix (BEM refactor, accessibility fix, or responsive bug), and submit a pull request with a clear description and screenshots.</li>
       </ol>
     </div>
 

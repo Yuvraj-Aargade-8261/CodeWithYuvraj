@@ -22,7 +22,7 @@
       <div class="chapter-part-label">📖 Part 6 — Visual Effects & Animations</div>
       <h1 class="chapter-title">Bring Your UI to <span class="gradient-text">Life</span></h1>
       <p class="chapter-subtitle">Pseudo-elements, transforms, transitions, keyframe animations, and modern visual effects.</p>
-      <div class="chapter-meta"><span>📄 Modules 6.1 – 6.7</span><span>⏱️ 85–120 min</span><span>💻 45+ Examples</span></div>
+      <div class="chapter-meta"><span>📄 Modules 6.1 – 6.7</span><span>⏱️ 100–150 min</span><span>💻 55+ Examples</span><span>📊 8+ Reference Tables</span></div>
     </div>
 
     <div class="callout callout-tip"><strong>How to study Part 6:</strong> Animations are best learned visually. Code every example, tweak timing values, and watch how each change affects the feel.</div>
@@ -35,13 +35,17 @@
     <div class="quick-ref">
       <div class="qr-title">🚀 Advanced Lens — Part 6</div>
       <p class="explain-en">
-        Great motion design is subtle, purposeful, and performant. Every animation should communicate state or guide attention.
-        Prefer transform/opacity animations, respect reduced-motion preferences, and avoid decorative motion that harms readability.
+        Animations that only modify <code>transform</code> and <code>opacity</code> run on the <strong>compositor thread</strong> — they skip the main thread's
+        style-recalc/layout/paint pipeline entirely, achieving true 60fps. Animating <code>width</code>, <code>height</code>, or <code>margin</code> triggers
+        <strong>layout thrashing</strong> (reflow on every frame). <code>will-change: transform</code> promotes an element to its own compositor layer,
+        but overuse wastes GPU memory. Use Chrome DevTools → Rendering → <strong>Paint Flashing</strong> to identify unnecessary repaints.
+        <code>prefers-reduced-motion</code> is not optional — WCAG 2.1 SC 2.3.3 requires it for vestibular-disorder accessibility.
       </p>
       <div class="explain-hi">
         <span class="hi-label">Hindi mein samjho</span>
-        Acchi animation ka goal sirf “cool” lagna nahi hota. Motion ka purpose hona chahiye: state samjhana ya attention guide karna.
-        Transform/opacity prefer karo, reduced-motion users ka respect karo.
+        Sirf <code>transform</code> aur <code>opacity</code> animate karo — ye compositor thread pe chalte hain, 60fps milta hai. Width/height animate karna
+        <strong>layout thrashing</strong> karta hai. <code>will-change: transform</code> se element apna GPU layer paata hai, lekin zyada use mat karo.
+        DevTools → Paint Flashing se unnecessary repaints pakdo. <code>prefers-reduced-motion</code> WCAG requirement hai.
       </div>
     </div>
 
@@ -110,6 +114,54 @@
         </div>
         <div class="callout callout-important"><strong>Always style :focus!</strong> Removing focus outlines breaks keyboard navigation. Replace default outline with a custom styled one — never <code>outline: none</code> without replacement.</div>
       </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">:has() — the parent selector revolution</h3>
+        <p class="explain-en">
+          <code>:has()</code> is the most powerful CSS selector added in decades. It lets you style a <strong>parent based on its children</strong> — something previously impossible without JavaScript. It unlocks patterns that were only possible with JS.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>:has()</code> decades me add hua sabse powerful CSS selector hai. Isse parent ko children ke basis pe style kar sakte ho — ye pehle sirf JavaScript se possible tha.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Pattern</th><th>CSS</th><th>What it does</th></tr></thead>
+            <tbody>
+              <tr><td>Parent has image</td><td><code>.card:has(img)</code></td><td>Style card differently when it contains an image</td></tr>
+              <tr><td>Form with errors</td><td><code>.form:has(:invalid)</code></td><td>Red border on form when any field is invalid</td></tr>
+              <tr><td>Adjacent sibling</td><td><code>h2:has(+ p)</code></td><td>Style h2 only when followed by a paragraph</td></tr>
+              <tr><td>Dark mode check</td><td><code>body:has([data-theme="dark"])</code></td><td>Style body based on theme attribute</td></tr>
+              <tr><td>Empty state</td><td><code>.list:has(:not(li))</code></td><td>Show empty state when list has no items</td></tr>
+              <tr><td>Checkbox toggle</td><td><code>.card:has(input:checked)</code></td><td>CSS-only toggle without JS</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Browser support:</strong> <code>:has()</code> is supported in all modern browsers (Chrome 105+, Safari 15.4+, Firefox 121+). It's production-ready in 2026.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">:focus vs :focus-visible — the right way to style focus</h3>
+        <p class="explain-en">
+          <code>:focus</code> triggers on <em>every</em> focus event (click + keyboard). <code>:focus-visible</code> only triggers when the browser detects keyboard navigation. This means you can remove the ugly click-focus ring while keeping keyboard accessibility.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>:focus</code> har focus event pe trigger hota hai (click + keyboard). <code>:focus-visible</code> sirf keyboard navigation pe trigger hota hai. Isse click pe ugly ring hataa sakte ho aur keyboard accessibility rakh sakte ho.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Modern focus styling</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Remove default for mouse users */</span>
+<span class="selector">.btn:focus</span> { <span class="property">outline</span>: <span class="value">none</span>; }
+
+<span class="comment">/* Add custom ring for keyboard users only */</span>
+<span class="selector">.btn:focus-visible</span> {
+  <span class="property">outline</span>: <span class="number">2</span><span class="unit">px</span> <span class="value">solid</span> <span class="value">var(--primary)</span>;
+  <span class="property">outline-offset</span>: <span class="number">2</span><span class="unit">px</span>;
+}
+
+<span class="comment">/* Focus-within: parent glows when child is focused */</span>
+<span class="selector">.form-group:focus-within</span> {
+  <span class="property">border-color</span>: <span class="value">var(--primary)</span>;
+  <span class="property">box-shadow</span>: <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">3</span><span class="unit">px</span> <span class="value">rgba(124,58,237,0.15)</span>;
+}</pre></div>
+        </div>
+        <div class="callout callout-warning"><strong>Accessibility rule:</strong> Never remove focus styles without providing <code>:focus-visible</code> replacement. Screen reader and keyboard users depend on visible focus indicators. WCAG 2.4.7 requires it.</div>
+      </div>
     </div>
 
     <!-- MODULE 6.2 -->
@@ -171,6 +223,26 @@
         </div>
         <div class="callout callout-note"><strong>Pseudo vs pseudo:</strong> Single colon <code>:</code> = pseudo-class (state). Double colon <code>::</code> = pseudo-element (generated content). Some browsers accept both, but always use <code>::</code> for elements.</div>
       </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Pseudo-element rules and limitations</h3>
+        <p class="explain-en">Pseudo-elements have specific rules that trip up beginners. Understanding these prevents hours of debugging.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Pseudo-elements ke specific rules hain jo beginners ko confuse karte hain. Ye samajhna hours of debugging bachata hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Rule</th><th>Details</th><th>Common mistake</th></tr></thead>
+            <tbody>
+              <tr><td><code>content</code> is required</td><td><code>::before/::after</code> won't render without it</td><td>Forgetting <code>content: ""</code> for decorative elements</td></tr>
+              <tr><td>Inline by default</td><td>Set <code>display: block/inline-block</code> for width/height</td><td>Setting width on inline pseudo-element</td></tr>
+              <tr><td>Max 2 per element</td><td>One <code>::before</code> + one <code>::after</code></td><td>Trying to add multiple ::before</td></tr>
+              <tr><td>No child elements</td><td>Can't contain HTML children</td><td>Trying to put tags inside content</td></tr>
+              <tr><td>Not on void elements</td><td>Won't work on <code>&lt;img&gt;</code>, <code>&lt;input&gt;</code>, <code>&lt;br&gt;</code></td><td>Adding ::after to an img tag</td></tr>
+              <tr><td>Not in DOM</td><td>Can't be selected with JS querySelector</td><td>Trying to manipulate with JavaScript</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>Accessibility:</strong> Content added via <code>::before/::after</code> is read by some screen readers. Don't put meaningful text there — use it only for decorative purposes. For icons, use <code>aria-hidden="true"</code> on the parent.</div>
+      </div>
     </div>
 
     <!-- MODULE 6.3 -->
@@ -214,6 +286,57 @@
           </table>
         </div>
         <div class="callout callout-tip"><strong>Combine transforms:</strong> <code>transform: translateY(-4px) scale(1.02) rotate(1deg)</code> — multiple transforms in one property. Order matters! They apply right-to-left.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Individual transform properties (2024+)</h3>
+        <p class="explain-en">
+          Modern CSS lets you set <code>translate</code>, <code>rotate</code>, and <code>scale</code> as <strong>individual properties</strong> instead of combining them in one <code>transform</code>. This is cleaner and enables independent transitions.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Modern CSS me <code>translate</code>, <code>rotate</code>, <code>scale</code> ko individual properties ki tarah set kar sakte ho — ek <code>transform</code> me combine karne ki zaroorat nahi. Independent transitions bhi possible hain.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Old way</th><th>New way</th><th>Advantage</th></tr></thead>
+            <tbody>
+              <tr><td><code>transform: translateY(-4px)</code></td><td><code>translate: 0 -4px</code></td><td>Cleaner syntax</td></tr>
+              <tr><td><code>transform: rotate(45deg)</code></td><td><code>rotate: 45deg</code></td><td>Independent transitions</td></tr>
+              <tr><td><code>transform: scale(1.1)</code></td><td><code>scale: 1.1</code></td><td>Won't override other transforms</td></tr>
+              <tr><td><code>transform: translateY(-4px) scale(1.02)</code></td><td><code>translate: 0 -4px; scale: 1.02;</code></td><td>Each can transition independently</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Individual transforms</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Old: one transform overrides another */</span>
+<span class="selector">.card</span> { <span class="property">transform</span>: <span class="value">rotate(2deg)</span>; }
+<span class="selector">.card:hover</span> { <span class="property">transform</span>: <span class="value">translateY(-4px)</span>; } <span class="comment">/* Rotation lost! */</span>
+
+<span class="comment">/* New: independent, composable */</span>
+<span class="selector">.card</span> { <span class="property">rotate</span>: <span class="number">2</span><span class="unit">deg</span>; }
+<span class="selector">.card:hover</span> { <span class="property">translate</span>: <span class="number">0</span> <span class="number">-4</span><span class="unit">px</span>; } <span class="comment">/* Rotation preserved! */</span></pre></div>
+        </div>
+        <div class="callout callout-important"><strong>Key benefit:</strong> With individual transform properties, hovering to add <code>translate</code> doesn't remove the existing <code>rotate</code>. With the old <code>transform</code> shorthand, setting any transform on hover would override all previous transforms.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">transform-origin — controlling the pivot point</h3>
+        <p class="explain-en">
+          <code>transform-origin</code> sets the point around which transforms happen. Default is <code>center</code>. Changing it creates dramatically different effects for the same transform.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>transform-origin</code> wo point set karta hai jiske around transforms hote hain. Default center hai. Change karne se same transform ka effect dramatically alag hota hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Origin</th><th>Effect on <code>rotate(45deg)</code></th><th>Use case</th></tr></thead>
+            <tbody>
+              <tr><td><code>center</code> (default)</td><td>Spins around center</td><td>General rotation</td></tr>
+              <tr><td><code>top left</code></td><td>Rotates from top-left corner</td><td>Clock hands, opening doors</td></tr>
+              <tr><td><code>bottom center</code></td><td>Swings from bottom edge</td><td>Pendulum, dropdown menus</td></tr>
+              <tr><td><code>left center</code></td><td>Rotates from left edge</td><td>Page flip effect</td></tr>
+              <tr><td><code>50% 100%</code></td><td>Custom point (bottom center)</td><td>Custom pivot points</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> A dropdown menu with <code>transform-origin: top center</code> and <code>transform: scaleY(0)</code> will appear to unfold downward from the top when set to <code>scaleY(1)</code> — much more natural than appearing from the center.</div>
       </div>
     </div>
 
@@ -261,6 +384,24 @@
       </div>
 
       <div class="concept-block">
+        <h3 class="concept-heading">Animatable properties — performance tiers</h3>
+        <p class="explain-en">Not all CSS properties animate equally. Some run on the GPU compositor (smooth 60fps), others trigger expensive layout recalculation.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Sab CSS properties equally animate nahi hoti. Kuch GPU pe chalti hain (smooth), kuch expensive layout recalculation trigger karti hain.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Tier</th><th>Properties</th><th>What happens</th><th>Performance</th></tr></thead>
+            <tbody>
+              <tr><td>✅ <strong>Composite-only</strong></td><td><code>transform</code>, <code>opacity</code></td><td>GPU compositor thread</td><td>⚡ 60fps smooth</td></tr>
+              <tr><td>🟡 <strong>Paint-only</strong></td><td><code>color</code>, <code>background</code>, <code>box-shadow</code></td><td>Repaint pixels, skip layout</td><td>👍 Acceptable</td></tr>
+              <tr><td>🔴 <strong>Layout trigger</strong></td><td><code>width</code>, <code>height</code>, <code>margin</code>, <code>padding</code></td><td>Full reflow + repaint</td><td>❌ Janky, avoid!</td></tr>
+              <tr><td>🔴 <strong>Layout trigger</strong></td><td><code>top</code>, <code>left</code>, <code>right</code>, <code>bottom</code></td><td>Full reflow + repaint</td><td>❌ Use <code>translate</code> instead</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>Rule:</strong> Instead of <code>top: 10px</code>, use <code>transform: translateY(10px)</code>. Instead of <code>width</code> animation, use <code>transform: scaleX()</code>. These run on the GPU and never cause layout thrashing.</div>
+      </div>
+
+      <div class="concept-block">
         <h3 class="concept-heading">Motion tokens (consistent animation language)</h3>
         <p class="explain-en">
           Mature codebases treat animation timings like design tokens. Instead of random durations across components,
@@ -281,6 +422,48 @@
               background var(--motion-base) var(--ease-standard)</span>;
 }</pre></div>
         </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Transitions vs animations — when to use which</h3>
+        <p class="explain-en">Both transitions and animations create motion, but they're designed for different use cases. Using the wrong one leads to complicated code.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Transitions aur animations dono motion create karte hain, lekin alag use cases ke liye hain. Galat choice karne se code complicated hota hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Aspect</th><th>Transition</th><th>Animation (@keyframes)</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Steps</strong></td><td>A → B (two states only)</td><td>A → B → C → D (multiple stages)</td></tr>
+              <tr><td><strong>Trigger</strong></td><td>Needs state change (:hover, .active)</td><td>Runs automatically (or on class add)</td></tr>
+              <tr><td><strong>Repeat</strong></td><td>❌ Can't loop</td><td>✅ <code>infinite</code> loops possible</td></tr>
+              <tr><td><strong>Pause/Resume</strong></td><td>❌ Not possible</td><td>✅ <code>animation-play-state: paused</code></td></tr>
+              <tr><td><strong>Complexity</strong></td><td>Simple, 1 line</td><td>Requires @keyframes block</td></tr>
+              <tr><td><strong>Best for</strong></td><td>Hover effects, state changes</td><td>Spinners, entrance effects, attention</td></tr>
+              <tr><td><strong>Performance</strong></td><td>Identical (same GPU path)</td><td>Identical (same GPU path)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Rule of thumb:</strong> If you have 2 states and a trigger → use <code>transition</code>. If you need multiple steps, looping, or auto-play → use <code>@keyframes</code>.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">will-change — GPU layer promotion</h3>
+        <p class="explain-en">
+          <code>will-change</code> tells the browser to prepare for an upcoming animation by promoting the element to its own GPU layer. But overuse wastes GPU memory and can actually hurt performance.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>will-change</code> browser ko bolta hai ki animation aane wala hai — element ko GPU layer pe promote karo. Lekin zyada use GPU memory waste karta hai aur performance kharab kar sakta hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Usage</th><th>Code</th><th>Verdict</th></tr></thead>
+            <tbody>
+              <tr><td>✅ On hover intent</td><td><code>.parent:hover .child { will-change: transform }</code></td><td>Promotes just before animation</td></tr>
+              <tr><td>✅ Frequently animated</td><td><code>.spinner { will-change: transform }</code></td><td>Always animating, worth the layer</td></tr>
+              <tr><td>❌ On everything</td><td><code>* { will-change: transform }</code></td><td>Wastes massive GPU memory</td></tr>
+              <tr><td>❌ On static elements</td><td><code>.card { will-change: transform }</code></td><td>Element rarely animates — no benefit</td></tr>
+              <tr><td>❌ Multiple properties</td><td><code>will-change: transform, opacity, filter</code></td><td>Creates separate layers for each</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>Golden rule:</strong> Don't add <code>will-change</code> unless you've measured a performance problem with DevTools. The browser is already smart about GPU promotion. Only use it for elements that stutter during animation.</div>
       </div>
     </div>
 
@@ -365,6 +548,57 @@
 <span class="selector">.card:nth-child(4)</span> { <span class="property">animation-delay</span>: <span class="number">0.4</span><span class="unit">s</span>; }</pre></div>
         </div>
       </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">animation-fill-mode — what happens before and after</h3>
+        <p class="explain-en"><code>animation-fill-mode</code> controls what styles apply <em>before</em> the animation starts (during delay) and <em>after</em> it ends. Without it, elements snap back to their original styles.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>animation-fill-mode</code> control karta hai ki animation start hone se pehle aur khatam hone ke baad kya styles lagengi. Bina iske elements snap back karte hain.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Value</th><th>Before animation</th><th>After animation</th><th>Use case</th></tr></thead>
+            <tbody>
+              <tr><td><code>none</code> (default)</td><td>Original styles</td><td>Original styles (snaps back!)</td><td>Almost never</td></tr>
+              <tr><td><code>forwards</code></td><td>Original styles</td><td>✅ Keeps final keyframe</td><td>✅ Entrance animations</td></tr>
+              <tr><td><code>backwards</code></td><td>✅ Applies first keyframe during delay</td><td>Original styles</td><td>Delayed items starting invisible</td></tr>
+              <tr><td><code>both</code></td><td>✅ First keyframe during delay</td><td>✅ Keeps final keyframe</td><td>✅✅ Safest for delayed animations</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>Common bug:</strong> An element with <code>animation: fadeIn 0.5s ease-out</code> (no fill-mode) will appear, then snap back to invisible! Add <code>forwards</code> or <code>both</code> to keep the final state.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Modern easing: linear() function (2024+)</h3>
+        <p class="explain-en">The <code>linear()</code> easing function lets you define custom easing curves with any number of points — far more powerful than <code>cubic-bezier()</code>. You can create bounce, spring, and elastic effects purely in CSS.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>linear()</code> easing function se custom easing curves define kar sakte ho. Bounce, spring, aur elastic effects pure CSS me bana sakte ho.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Bounce with linear()</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Bounce easing — impossible with cubic-bezier! */</span>
+<span class="selector">.bounce</span> {
+  <span class="property">animation</span>: <span class="value">drop 0.8s</span>
+    <span class="value">linear(0, 0.36, 0.73, 0.98, 1.07, 1, 0.97, 1.01, 1)</span>
+    <span class="value">forwards</span>;
+}
+
+<span class="comment">/* Spring easing for UI interactions */</span>
+<span class="selector">.spring</span> {
+  <span class="property">transition</span>: <span class="value">transform 0.5s</span>
+    <span class="value">linear(0, 0.37, 0.84, 1.09, 1.02, 0.98, 1.01, 1)</span>;
+}</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Easing type</th><th>cubic-bezier()</th><th>linear()</th></tr></thead>
+            <tbody>
+              <tr><td>Simple ease-in/out</td><td>✅ Yes</td><td>✅ Yes (overkill)</td></tr>
+              <tr><td>Bounce effect</td><td>❌ Impossible</td><td>✅ Yes</td></tr>
+              <tr><td>Spring/elastic</td><td>❌ Impossible</td><td>✅ Yes</td></tr>
+              <tr><td>Multi-step easing</td><td>❌ Max 1 curve</td><td>✅ Any number of points</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Tool:</strong> Use linear-easing-generator.netlify.app to visually design <code>linear()</code> curves and copy the CSS values.</div>
+      </div>
     </div>
 
     <!-- MODULE 6.6 -->
@@ -431,6 +665,168 @@
         </div>
         <div class="callout callout-warning"><strong>Performance note:</strong> <code>filter</code> and <code>backdrop-filter</code> are GPU-intensive. Use sparingly and avoid on large areas or many elements simultaneously.</div>
       </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Box-shadow elevation system — Material Design approach</h3>
+        <p class="explain-en">
+          Professional design systems use a <strong>shadow scale</strong> that maps to elevation levels. Higher elevation = more prominent shadow = element feels closer to the user. This creates consistent visual hierarchy.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Professional design systems me shadow scale hota hai jo elevation levels se map hota hai. Higher elevation = zyada prominent shadow = element user ke closer feel hota hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Level</th><th>CSS Variable</th><th>Shadow Value</th><th>Use case</th></tr></thead>
+            <tbody>
+              <tr><td><strong>0</strong> (flat)</td><td><code>--shadow-none</code></td><td><code>none</code></td><td>Flat elements, borders only</td></tr>
+              <tr><td><strong>1</strong> (raised)</td><td><code>--shadow-sm</code></td><td><code>0 1px 2px rgba(0,0,0,0.05)</code></td><td>Cards at rest</td></tr>
+              <tr><td><strong>2</strong> (elevated)</td><td><code>--shadow-md</code></td><td><code>0 4px 12px rgba(0,0,0,0.08)</code></td><td>Card hover, dropdowns</td></tr>
+              <tr><td><strong>3</strong> (floating)</td><td><code>--shadow-lg</code></td><td><code>0 10px 30px rgba(0,0,0,0.12)</code></td><td>Modals, floating panels</td></tr>
+              <tr><td><strong>4</strong> (overlay)</td><td><code>--shadow-xl</code></td><td><code>0 20px 60px rgba(0,0,0,0.2)</code></td><td>Full-screen overlays</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Pro technique:</strong> Use <em>layered shadows</em> (multiple <code>box-shadow</code> values) for realistic depth. A sharp, tight shadow + a soft, spread shadow looks much more natural than a single shadow.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">filter vs backdrop-filter — what gets blurred</h3>
+        <p class="explain-en">
+          These two properties look similar but affect completely different things. <code>filter</code> blurs the element itself. <code>backdrop-filter</code> blurs what's <em>behind</em> the element (the background showing through).
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Ye dono similar lagte hain lekin completely alag cheezein affect karte hain. <code>filter</code> element ko khud blur karta hai. <code>backdrop-filter</code> element ke <em>peeche</em> ka content blur karta hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Aspect</th><th><code>filter</code></th><th><code>backdrop-filter</code></th></tr></thead>
+            <tbody>
+              <tr><td><strong>Affects</strong></td><td>The element + its children</td><td>Content behind the element</td></tr>
+              <tr><td><strong>Requirements</strong></td><td>None</td><td>Element must have semi-transparent background</td></tr>
+              <tr><td><strong>Creates stacking context?</strong></td><td>✅ Yes</td><td>✅ Yes</td></tr>
+              <tr><td><strong>Breaks fixed positioning?</strong></td><td>✅ Yes (on ancestors)</td><td>❌ No</td></tr>
+              <tr><td><strong>GPU cost</strong></td><td>Moderate</td><td>High (real-time compositing)</td></tr>
+              <tr><td><strong>Best for</strong></td><td>Image effects, disabled states</td><td>Glassmorphism, frosted glass navbars</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>Hidden gotcha:</strong> <code>filter</code> on a parent element creates a new containing block for <code>position: fixed</code> children. This means a fixed modal inside a filtered parent will stop being fixed relative to the viewport.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Gradient text — the modern hero technique</h3>
+        <p class="explain-en">
+          Gradient text is created by applying a gradient background, clipping it to the text shape, and hiding the original text color. This technique is used on virtually every modern SaaS landing page.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Gradient text banana: gradient background lagao, text shape pe clip karo, aur original text color chhupaao. Ye technique har modern SaaS landing page pe use hoti hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Gradient text</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="selector">.gradient-text</span> {
+  <span class="property">background</span>: <span class="value">linear-gradient(135deg, #7c3aed, #06b6d4)</span>;
+  <span class="property">-webkit-background-clip</span>: <span class="value">text</span>;
+  <span class="property">background-clip</span>: <span class="value">text</span>;
+  <span class="property">-webkit-text-fill-color</span>: <span class="value">transparent</span>;
+  <span class="property">color</span>: <span class="value">transparent</span>; <span class="comment">/* Fallback for non-webkit */</span>
+}
+
+<span class="comment">/* Animated gradient text */</span>
+<span class="selector">.animated-gradient</span> {
+  <span class="property">background</span>: <span class="value">linear-gradient(90deg, #7c3aed, #06b6d4, #7c3aed)</span>;
+  <span class="property">background-size</span>: <span class="number">200</span><span class="unit">%</span>;
+  <span class="property">-webkit-background-clip</span>: <span class="value">text</span>;
+  <span class="property">background-clip</span>: <span class="value">text</span>;
+  <span class="property">-webkit-text-fill-color</span>: <span class="value">transparent</span>;
+  <span class="property">animation</span>: <span class="value">gradient-shift 3s ease infinite</span>;
+}
+<span class="keyword">@keyframes</span> gradient-shift {
+  <span class="selector">0%, 100%</span> { <span class="property">background-position</span>: <span class="number">0</span><span class="unit">%</span> <span class="number">50</span><span class="unit">%</span>; }
+  <span class="selector">50%</span> { <span class="property">background-position</span>: <span class="number">100</span><span class="unit">%</span> <span class="number">50</span><span class="unit">%</span>; }
+}</pre></div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> <code>background-clip: text</code> makes the gradient visible only through the text shape. <code>-webkit-text-fill-color: transparent</code> hides the original text color. The animated version uses <code>background-size: 200%</code> and shifts the position for a shimmering effect.</div>
+      </div>
+      <div class="concept-block">
+        <h3 class="concept-heading">CSS gradient types — complete reference</h3>
+        <p class="explain-en">CSS supports four gradient types. Each creates different visual effects. Gradients are images, so they work with <code>background</code>, <code>background-image</code>, <code>border-image</code>, and <code>mask-image</code>.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>CSS me 4 gradient types hain. Gradients images hain, isliye <code>background</code>, <code>border-image</code>, aur <code>mask-image</code> me use hote hain.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Type</th><th>Syntax</th><th>Use case</th></tr></thead>
+            <tbody>
+              <tr><td><strong>linear-gradient</strong></td><td><code>linear-gradient(135deg, #a855f7, #3b82f6)</code></td><td>Backgrounds, buttons, hero sections</td></tr>
+              <tr><td><strong>radial-gradient</strong></td><td><code>radial-gradient(circle, #a855f7, transparent)</code></td><td>Spotlight effects, glows, orbs</td></tr>
+              <tr><td><strong>conic-gradient</strong></td><td><code>conic-gradient(from 0deg, red, blue, red)</code></td><td>Pie charts, color wheels, spinners</td></tr>
+              <tr><td><strong>repeating-linear</strong></td><td><code>repeating-linear-gradient(45deg, #000 0 10px, #fff 10px 20px)</code></td><td>Stripes, patterns, textures</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Gradient techniques</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Mesh-like gradient (multiple layers) */</span>
+<span class="selector">.hero</span> {
+  <span class="property">background</span>:
+    <span class="value">radial-gradient(at 20% 50%, #a855f780 0, transparent 50%)</span>,
+    <span class="value">radial-gradient(at 80% 20%, #3b82f680 0, transparent 50%)</span>,
+    <span class="value">radial-gradient(at 50% 80%, #f43f5e60 0, transparent 50%)</span>,
+    <span class="value">#0f0f1a</span>;
+}
+
+<span class="comment">/* Conic gradient loader */</span>
+<span class="selector">.loader</span> {
+  <span class="property">width</span>: <span class="number">48</span><span class="unit">px</span>; <span class="property">height</span>: <span class="number">48</span><span class="unit">px</span>;
+  <span class="property">border-radius</span>: <span class="number">50</span><span class="unit">%</span>;
+  <span class="property">background</span>: <span class="value">conic-gradient(#a855f7 25%, transparent 0)</span>;
+  <span class="property">mask</span>: <span class="value">radial-gradient(farthest-side, transparent 60%, #000 61%)</span>;
+  <span class="property">animation</span>: <span class="value">spin 1s linear infinite</span>;
+}</pre></div>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">mix-blend-mode — creative text and image effects</h3>
+        <p class="explain-en"><code>mix-blend-mode</code> controls how an element blends with the content behind it — like Photoshop blend modes in CSS. Use it for creative text overlays, duotone images, and artistic effects.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>mix-blend-mode</code> se element peeche ke content ke saath blend hota hai — jaise Photoshop ke blend modes. Creative text overlays aur artistic effects ke liye use hota hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Mode</th><th>Effect</th><th>Use case</th></tr></thead>
+            <tbody>
+              <tr><td><code>multiply</code></td><td>Darkens (black stays, white disappears)</td><td>Text over images, duotone</td></tr>
+              <tr><td><code>screen</code></td><td>Lightens (white stays, black disappears)</td><td>Light leaks, glow effects</td></tr>
+              <tr><td><code>overlay</code></td><td>Contrast boost (combines multiply + screen)</td><td>Image enhancement</td></tr>
+              <tr><td><code>difference</code></td><td>Inverts where layers overlap</td><td>Adaptive text color on any bg</td></tr>
+              <tr><td><code>exclusion</code></td><td>Softer difference</td><td>Artistic color shifts</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Adaptive text trick:</strong> Use <code>mix-blend-mode: difference</code> on white text to make it readable on any background — it automatically inverts against the background color.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">clip-path — non-rectangular shapes</h3>
+        <p class="explain-en"><code>clip-path</code> clips an element to any shape: circles, ellipses, polygons, or SVG paths. Use it for hero section diagonals, image masks, and creative layouts.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>clip-path</code> se element ko kisi bhi shape me clip kar sakte ho: circles, polygons, SVG paths. Hero diagonals aur creative layouts ke liye use hota hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — clip-path shapes</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Circle crop (profile images) */</span>
+<span class="selector">.avatar</span> { <span class="property">clip-path</span>: <span class="value">circle(50%)</span>; }
+
+<span class="comment">/* Diagonal hero section bottom */</span>
+<span class="selector">.hero</span> {
+  <span class="property">clip-path</span>: <span class="value">polygon(0 0, 100% 0, 100% 85%, 0 100%)</span>;
+}
+
+<span class="comment">/* Hexagon shape */</span>
+<span class="selector">.hex</span> {
+  <span class="property">clip-path</span>: <span class="value">polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)</span>;
+}
+
+<span class="comment">/* Animated clip-path reveal */</span>
+<span class="selector">.reveal</span> {
+  <span class="property">clip-path</span>: <span class="value">inset(0 100% 0 0)</span>;
+  <span class="property">transition</span>: <span class="value">clip-path 0.6s ease-out</span>;
+}
+<span class="selector">.reveal.visible</span> {
+  <span class="property">clip-path</span>: <span class="value">inset(0)</span>;
+}</pre></div>
+        </div>
+        <div class="callout callout-note"><strong>Tool:</strong> Use <a href="https://bennettfeely.com/clippy/" style="color: var(--primary)">bennettfeely.com/clippy</a> to visually create <code>clip-path</code> polygons and copy the CSS.</div>
+      </div>
     </div>
 
     <!-- MODULE 6.7 -->
@@ -491,16 +887,67 @@
 }</pre></div>
         </div>
       </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Scroll timeline types — scroll() vs view()</h3>
+        <p class="explain-en">CSS offers two types of scroll-driven timelines. <code>scroll()</code> maps to the overall scroll progress of a container. <code>view()</code> maps to an element's visibility within a scroll container.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>CSS me do types ke scroll-driven timelines hain. <code>scroll()</code> container ke overall scroll progress se map hota hai. <code>view()</code> element ki visibility se map hota hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Feature</th><th><code>scroll()</code></th><th><code>view()</code></th></tr></thead>
+            <tbody>
+              <tr><td><strong>Tracks</strong></td><td>Scroll position of container</td><td>Element visibility in viewport</td></tr>
+              <tr><td><strong>0%</strong></td><td>Top of scroll</td><td>Element just entering</td></tr>
+              <tr><td><strong>100%</strong></td><td>Bottom of scroll</td><td>Element fully passed</td></tr>
+              <tr><td><strong>Best for</strong></td><td>Progress bars, parallax</td><td>Entrance/exit animations</td></tr>
+              <tr><td><strong>Scope</strong></td><td>Entire page or container</td><td>Per-element</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> A scroll progress bar uses <code>scroll()</code> because it tracks the entire page. A card fade-in uses <code>view()</code> because each card needs to animate when <em>it</em> enters the viewport.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">animation-range — fine-tuning scroll-driven triggers</h3>
+        <p class="explain-en"><code>animation-range</code> controls exactly when the scroll-driven animation starts and ends. Use named ranges like <code>entry</code>, <code>exit</code>, <code>cover</code>, and <code>contain</code>.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>animation-range</code> se exactly control hota hai ki animation kab start aur kab end hogi. Named ranges: <code>entry</code>, <code>exit</code>, <code>cover</code>, <code>contain</code>.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Range</th><th>Starts when</th><th>Ends when</th><th>Use case</th></tr></thead>
+            <tbody>
+              <tr><td><code>entry</code></td><td>Element enters viewport</td><td>Element fully visible</td><td>✅ Entrance fade-in</td></tr>
+              <tr><td><code>exit</code></td><td>Element starts leaving</td><td>Element fully out</td><td>Exit animations</td></tr>
+              <tr><td><code>cover</code></td><td>Any part visible</td><td>Last part leaves</td><td>Parallax backgrounds</td></tr>
+              <tr><td><code>contain</code></td><td>Fully visible</td><td>Starts leaving</td><td>During full visibility</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Debug:</strong> Chrome DevTools has a dedicated Scroll Timeline inspector. Open Animations panel to see scroll-driven animations with their ranges visualized on a timeline.</div>
+      </div>
     </div>
 
     <div class="practice-box">
-      <div class="practice-title">✏️ Practice Exercises — Part 6</div>
+      <div class="practice-title">✏️ Practice Exercises — Part 6 (Difficulty Graded)</div>
+      <h4>🟢 Easy (Do these first)</h4>
       <ol>
-        <li>Create a button with hover (color change + lift), focus (ring outline), and active (press down) states.</li>
-        <li>Build a card with a ::before gradient overlay that appears on hover with transition.</li>
-        <li>Create a fadeInUp entrance animation using @keyframes for a section of cards.</li>
-        <li>Build a glassmorphism card with backdrop-filter, subtle border, and layered shadow.</li>
-        <li>Create a scroll-driven progress bar at the top of the page.</li>
+        <li>Create a button with 3 states: <code>:hover</code> (color change + <code>translateY(-2px)</code>), <code>:focus-visible</code> (ring outline), <code>:active</code> (<code>scale(0.97)</code>).</li>
+        <li>Style a table with <code>:nth-child(even)</code> striped rows and <code>::selection</code> custom highlight color.</li>
+        <li>Add a <code>::after</code> decorative line under all <code>h2</code> headings — 60px wide, 3px tall, colored with your brand variable.</li>
+        <li>Create a <strong>loading spinner</strong> using <code>@keyframes</code> with <code>rotate(360deg)</code> and <code>animation: spin 1s linear infinite</code>.</li>
+      </ol>
+      <h4>🟡 Medium (Apply your knowledge)</h4>
+      <ol start="5">
+        <li>Build a <strong>card hover effect</strong>: <code>::before</code> gradient overlay fades in on hover, card lifts with <code>translateY(-4px)</code> + shadow transition. Use motion tokens for timing.</li>
+        <li>Create <strong>staggered entrance animations</strong>: 4 cards fade in sequentially using <code>animation-delay</code> (0.1s increment). Add <code>prefers-reduced-motion</code> fallback.</li>
+        <li>Build a <strong>glassmorphism card</strong> with <code>backdrop-filter: blur(12px)</code>, semi-transparent background, subtle border, and layered <code>box-shadow</code>.</li>
+        <li>Use <code>:has()</code> to style a form container: red border when any child input is <code>:invalid</code>, green border when all are <code>:valid</code>.</li>
+      </ol>
+      <h4>🔴 Hard (Challenge yourself)</h4>
+      <ol start="9">
+        <li>Create a <strong>CSS-only scroll progress bar</strong> using <code>animation-timeline: scroll()</code>. Add <code>@supports</code> fallback for unsupported browsers.</li>
+        <li>Build a <strong>complete animation system</strong>: define motion tokens (<code>--motion-fast</code>, <code>--motion-base</code>, <code>--motion-slow</code>, <code>--ease-standard</code>), apply to 5+ components, and add <code>prefers-reduced-motion</code> blanket override.</li>
+        <li>Use DevTools → Rendering → <strong>Paint Flashing</strong> to audit a page. Identify elements causing unnecessary repaints. Fix by switching from <code>width/height</code> animation to <code>transform: scale()</code>. Document before/after.</li>
+        <li>Build a <strong>portfolio hero section</strong> with: gradient text (<code>background-clip: text</code>), parallax-like scroll animation (<code>animation-timeline: scroll()</code>), staggered element entrance, glassmorphism navbar, and neon glow hover effect. All must respect <code>prefers-reduced-motion</code>.</li>
       </ol>
     </div>
 

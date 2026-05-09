@@ -22,7 +22,7 @@
       <div class="chapter-part-label">📖 Part 7 — Accessibility, SEO & Performance</div>
       <h1 class="chapter-title">Build for <span class="gradient-text">Everyone</span></h1>
       <p class="chapter-subtitle">Accessible, discoverable, and lightning-fast — the three pillars of production-quality websites.</p>
-      <div class="chapter-meta"><span>📄 Modules 7.1 – 7.7</span><span>⏱️ 70–100 min</span><span>💻 35+ Examples</span></div>
+      <div class="chapter-meta"><span>📄 Modules 7.1 – 7.7</span><span>⏱️ 90–140 min</span><span>💻 45+ Examples</span><span>📊 12+ Reference Tables</span></div>
     </div>
 
     <div class="callout callout-tip"><strong>How to study Part 7:</strong> Install Lighthouse (Chrome DevTools → Lighthouse tab). Run audits on your own projects. Use a screen reader (NVDA on Windows, VoiceOver on Mac) for 10 minutes.</div>
@@ -35,13 +35,16 @@
     <div class="quick-ref">
       <div class="qr-title">🚀 Advanced Lens — Part 7</div>
       <p class="explain-en">
-        Production quality is measurable: accessibility via keyboard/screen reader audits, SEO via crawlability/metadata,
-        and performance via Core Web Vitals. Treat these as engineering requirements, not polish after launch.
+        The browser builds an <strong>accessibility tree</strong> alongside the DOM — screen readers consume this tree, not the visual rendering.
+        Every ARIA attribute modifies this tree. The <strong>Critical Rendering Path (CRP)</strong> is: HTML parse → DOM → CSSOM → Render Tree → Layout → Paint → Composite.
+        CSS is <strong>render-blocking</strong> by default; inlining critical CSS eliminates the CSSOM construction bottleneck for above-fold content.
+        <strong>INP</strong> (Interaction to Next Paint) replaced FID in 2024 as Google's responsiveness metric — it measures the worst interaction delay across the entire page session.
       </p>
       <div class="explain-hi">
         <span class="hi-label">Hindi mein samjho</span>
-        Real production quality measure hoti hai: keyboard/screen reader audit (A11y), crawl + metadata (SEO), Core Web Vitals (performance).
-        Inhe optional polish nahi, launch requirements samjho.
+        Browser DOM ke saath <strong>accessibility tree</strong> bhi banata hai — screen readers isi tree ko padhte hain. Har ARIA attribute is tree ko modify karta hai.
+        CRP: HTML → DOM → CSSOM → Render Tree → Layout → Paint → Composite. CSS render-blocking hai; critical CSS inline karne se above-fold speed badhti hai.
+        <strong>INP</strong> (2024) Google ka naya responsiveness metric hai — poore session ki sabse slow interaction measure karta hai.
       </div>
     </div>
 
@@ -75,6 +78,47 @@
           </table>
         </div>
         <div class="callout callout-important"><strong>The A11y checklist:</strong> Every page must have: alt text on images, labels on inputs, keyboard-navigable menus, 4.5:1 contrast, skip-nav link, proper heading order.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Writing effective alt text — the complete guide</h3>
+        <p class="explain-en">Alt text is the most common accessibility feature, yet most developers write it poorly. The key: describe the <strong>function</strong> of the image, not just its appearance.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Alt text sabse common accessibility feature hai, lekin zyada developers ise galat likhte hain. Key: image ka <strong>function</strong> describe karo, sirf appearance nahi.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Image type</th><th>Alt text rule</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Informative</strong></td><td>Describe content + purpose</td><td><code>alt="Bar chart showing 40% revenue growth in Q3"</code></td></tr>
+              <tr><td><strong>Decorative</strong></td><td>Empty alt: <code>alt=""</code></td><td>Background patterns, divider lines</td></tr>
+              <tr><td><strong>Functional</strong> (link/button)</td><td>Describe the action</td><td><code>alt="Search"</code> on a magnifying glass icon</td></tr>
+              <tr><td><strong>Complex</strong> (charts)</td><td>Brief alt + long description nearby</td><td><code>alt="Sales data"</code> + table below</td></tr>
+              <tr><td><strong>Text in image</strong></td><td>Include all visible text</td><td><code>alt="Sale: 50% off all items this weekend"</code></td></tr>
+              <tr><td><strong>Hero/banner</strong></td><td>Describe the mood/subject</td><td><code>alt="Team collaborating in modern office"</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>Common mistakes:</strong> Don't start with "Image of..." or "Picture of..." — screen readers already announce it's an image. Don't use filenames as alt text (<code>alt="IMG_3847.jpg"</code>). Don't repeat caption text in alt.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">The accessibility tree — how screen readers see your page</h3>
+        <p class="explain-en">The browser builds an <strong>accessibility tree</strong> alongside the DOM. Screen readers consume this tree, not the visual rendering. Every semantic element, ARIA attribute, and label modifies this tree. Understanding it is the key to fixing accessibility bugs.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Browser DOM ke saath ek <strong>accessibility tree</strong> bhi banata hai. Screen readers isi tree ko padhte hain, visual rendering nahi dekhte. Har semantic element aur ARIA attribute is tree ko modify karta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — What screen readers see</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">&lt;!-- Your HTML --&gt;</span>
+<span class="tag">&lt;button</span> <span class="attr">class</span>=<span class="value">"btn-primary"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;i</span> <span class="attr">class</span>=<span class="value">"fa-solid fa-cart"</span> <span class="attr">aria-hidden</span>=<span class="value">"true"</span><span class="tag">&gt;&lt;/i&gt;</span>
+  Add to Cart
+<span class="tag">&lt;/button&gt;</span>
+
+<span class="comment">&lt;!-- Accessibility tree sees: --&gt;</span>
+<span class="comment">  Role: button</span>
+<span class="comment">  Name: "Add to Cart"</span>
+<span class="comment">  State: focusable</span>
+<span class="comment">  (icon is hidden from tree via aria-hidden)</span></pre></div>
+        </div>
+        <div class="callout callout-tip"><strong>Debug tool:</strong> Chrome DevTools → Elements → Accessibility tab shows the computed accessibility tree for any element. Check Role, Name, and State to verify what screen readers will announce.</div>
       </div>
 
       <div class="concept-block">
@@ -117,6 +161,27 @@
           </table>
         </div>
       </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Accessibility testing tools — complete reference</h3>
+        <p class="explain-en">These are the industry-standard tools every front-end developer should use to test accessibility.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Ye industry-standard tools hain jo har developer ko accessibility testing ke liye use karne chahiye.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Tool</th><th>Type</th><th>Tests</th><th>Cost</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Lighthouse</strong></td><td>Chrome DevTools</td><td>Contrast, labels, ARIA, alt text</td><td>Free</td></tr>
+              <tr><td><strong>axe DevTools</strong></td><td>Browser extension</td><td>WCAG violations + fixes</td><td>Free tier</td></tr>
+              <tr><td><strong>WAVE</strong></td><td>Web tool / extension</td><td>Visual error highlighting</td><td>Free</td></tr>
+              <tr><td><strong>NVDA</strong></td><td>Screen reader (Windows)</td><td>Real screen reader testing</td><td>Free</td></tr>
+              <tr><td><strong>VoiceOver</strong></td><td>Screen reader (Mac/iOS)</td><td>Built into macOS / iPhone</td><td>Free</td></tr>
+              <tr><td><strong>Tab key</strong></td><td>Manual testing</td><td>Keyboard navigation</td><td>Free</td></tr>
+              <tr><td><strong>Contrast checker</strong></td><td>webaim.org/resources</td><td>Color contrast ratios</td><td>Free</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>Minimum testing:</strong> Run Lighthouse + Tab through every page + Test with axe DevTools. These three catch 80%+ of accessibility issues.</div>
+      </div>
     </div>
 
     <!-- MODULE 7.2 -->
@@ -157,6 +222,25 @@
       </div>
 
       <div class="concept-block">
+        <h3 class="concept-heading">The 5 rules of ARIA — avoid common mistakes</h3>
+        <p class="explain-en">ARIA is powerful but dangerous when misused. These five rules prevent the most common mistakes that actually make accessibility <em>worse</em>.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>ARIA powerful hai lekin galat use se accessibility <em>aur kharab</em> hoti hai. Ye 5 rules sabse common mistakes prevent karte hain.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>#</th><th>Rule</th><th>❌ Wrong</th><th>✅ Right</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>Use native HTML first</td><td><code>&lt;div role="button"&gt;</code></td><td><code>&lt;button&gt;</code></td></tr>
+              <tr><td>2</td><td>Don't change native semantics</td><td><code>&lt;h2 role="tab"&gt;</code></td><td><code>&lt;div role="tab"&gt;&lt;h2&gt;...&lt;/h2&gt;&lt;/div&gt;</code></td></tr>
+              <tr><td>3</td><td>All interactive ARIA must be keyboard-accessible</td><td><code>role="button"</code> without keydown</td><td>Add <code>tabindex="0"</code> + Enter/Space handler</td></tr>
+              <tr><td>4</td><td>Don't hide focusable elements</td><td><code>aria-hidden="true"</code> on a button</td><td>Remove from tab order too if hiding</td></tr>
+              <tr><td>5</td><td>All interactive elements need accessible names</td><td><code>&lt;button&gt;&lt;i class="icon"&gt;&lt;/button&gt;</code></td><td>Add <code>aria-label="Close"</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>Impact:</strong> Wrong ARIA is worse than no ARIA. A <code>&lt;div role="button"&gt;</code> without keyboard handling creates an element that <em>looks</em> accessible to screen readers but can't actually be activated. Users get stuck.</div>
+      </div>
+
+      <div class="concept-block">
         <h3 class="concept-heading">Accessible modal dialog pattern</h3>
         <p class="explain-en">Modals are one of the most common accessibility failures. The correct pattern: trap focus inside, return focus on close, announce with <code>role="dialog"</code>, and close on Escape key.</p>
         <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Modals sabse common accessibility failures me se ek hain. Sahi pattern: focus andar trap karo, close pe focus wapas bhejo, role="dialog" se announce karo, Escape key se close karo.</div>
@@ -176,6 +260,67 @@
         <div class="callout callout-tip"><strong>Use &lt;dialog&gt;!</strong> The native HTML <code>&lt;dialog&gt;</code> element handles focus trapping, Escape key closing, and backdrop automatically. No JavaScript library needed.</div>
       </div>
     </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">ARIA live regions — announcing dynamic content</h3>
+        <p class="explain-en">When content updates dynamically (cart count, toast notifications, form validation), screen readers don't know about it. ARIA live regions announce these changes automatically.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Jab content dynamically update hota hai (cart count, notifications), screen readers ko pata nahi chalta. ARIA live regions ye changes automatically announce karte hain.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Value</th><th>When announced</th><th>Use case</th></tr></thead>
+            <tbody>
+              <tr><td><code>aria-live="polite"</code></td><td>After user finishes current task</td><td>✅ Cart updates, status messages</td></tr>
+              <tr><td><code>aria-live="assertive"</code></td><td>Immediately (interrupts)</td><td>Error alerts, urgent warnings</td></tr>
+              <tr><td><code>aria-live="off"</code></td><td>Never (default)</td><td>Disable announcements</td></tr>
+              <tr><td><code>role="alert"</code></td><td>Immediately (shortcut for assertive)</td><td>Form errors, system alerts</td></tr>
+              <tr><td><code>role="status"</code></td><td>Politely (shortcut for polite)</td><td>Search results count, progress</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — Live region patterns</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">&lt;!-- Cart badge (announces count change) --&gt;</span>
+<span class="tag">&lt;span</span> <span class="attr">aria-live</span>=<span class="value">"polite"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="value">"sr-only"</span><span class="tag">&gt;</span>Cart items: <span class="tag">&lt;/span&gt;</span>
+  3
+<span class="tag">&lt;/span&gt;</span>
+
+<span class="comment">&lt;!-- Toast notification --&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">role</span>=<span class="value">"status"</span> <span class="attr">class</span>=<span class="value">"toast"</span><span class="tag">&gt;</span>
+  Settings saved successfully
+<span class="tag">&lt;/div&gt;</span>
+
+<span class="comment">&lt;!-- Search results count --&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">aria-live</span>=<span class="value">"polite"</span><span class="tag">&gt;</span>
+  Showing 42 results for "CSS Grid"
+<span class="tag">&lt;/div&gt;</span></pre></div>
+        </div>
+        <div class="callout callout-important"><strong>Key rule:</strong> The live region element must exist in the DOM <em>before</em> its content changes. If you inject the element dynamically, it won't be announced. Place the container in HTML first, then update its text content via JS.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Accessible accordion/disclosure pattern</h3>
+        <p class="explain-en">Accordions need ARIA to communicate their expand/collapse state to screen readers. Use <code>aria-expanded</code>, <code>aria-controls</code>, and proper keyboard handling.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Accordions ko ARIA chahiye expand/collapse state screen readers ko batane ke liye. <code>aria-expanded</code>, <code>aria-controls</code>, aur keyboard handling use karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — Accessible accordion</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">&lt;!-- Native disclosure (simplest) --&gt;</span>
+<span class="tag">&lt;details&gt;</span>
+  <span class="tag">&lt;summary&gt;</span>What is CSS Grid?<span class="tag">&lt;/summary&gt;</span>
+  <span class="tag">&lt;p&gt;</span>CSS Grid is a two-dimensional layout system...<span class="tag">&lt;/p&gt;</span>
+<span class="tag">&lt;/details&gt;</span>
+
+<span class="comment">&lt;!-- Custom accordion with ARIA --&gt;</span>
+<span class="tag">&lt;button</span> <span class="attr">aria-expanded</span>=<span class="value">"false"</span>
+  <span class="attr">aria-controls</span>=<span class="value">"panel-1"</span><span class="tag">&gt;</span>
+  What is Flexbox?
+<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">id</span>=<span class="value">"panel-1"</span> <span class="attr">hidden</span><span class="tag">&gt;</span>
+  Flexbox is a one-dimensional layout model...
+<span class="tag">&lt;/div&gt;</span></pre></div>
+        </div>
+        <div class="callout callout-tip"><strong>Simplest approach:</strong> Use native <code>&lt;details&gt;</code> / <code>&lt;summary&gt;</code> for FAQs. They handle accessibility, keyboard, and toggle behavior automatically — zero JavaScript needed.</div>
+      </div>
 
     <!-- MODULE 7.3 -->
     <div class="module-section" id="m7-3">
@@ -224,6 +369,46 @@
           </table>
         </div>
       </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">tabindex — controlling focus order</h3>
+        <p class="explain-en"><code>tabindex</code> controls whether and when an element receives keyboard focus. Misusing it breaks accessibility. Follow these strict rules.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>tabindex</code> se control hota hai ki element keyboard focus kab receive kare. Galat use se accessibility break hoti hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Value</th><th>Behavior</th><th>When to use</th></tr></thead>
+            <tbody>
+              <tr><td><code>tabindex="0"</code></td><td>Add to natural tab order</td><td>✅ Custom interactive elements (divs acting as buttons)</td></tr>
+              <tr><td><code>tabindex="-1"</code></td><td>Focusable via JS only, NOT in tab order</td><td>✅ Elements to focus programmatically (modal trap)</td></tr>
+              <tr><td><code>tabindex="1+"</code></td><td>Forced order (overrides DOM)</td><td>❌ NEVER use! Breaks natural reading order</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>Golden rule:</strong> If you need <code>tabindex="0"</code>, you probably need a <code>&lt;button&gt;</code> instead. Native elements already have focus built-in. Only use tabindex for genuinely custom widgets.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Accessible form patterns — error handling</h3>
+        <p class="explain-en">Form errors must be announced to screen readers, not just shown visually. Use <code>aria-describedby</code> to link error messages to inputs, and <code>aria-invalid</code> to mark invalid fields.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Form errors screen readers ko bhi announce hone chahiye, sirf visually dikhana enough nahi. <code>aria-describedby</code> se error messages inputs se link karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — Accessible form errors</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="value">"form-group"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;label</span> <span class="attr">for</span>=<span class="value">"email"</span><span class="tag">&gt;</span>Email<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="value">"email"</span>
+    <span class="attr">id</span>=<span class="value">"email"</span>
+    <span class="attr">aria-invalid</span>=<span class="value">"true"</span>
+    <span class="attr">aria-describedby</span>=<span class="value">"email-error"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;span</span> <span class="attr">id</span>=<span class="value">"email-error"</span>
+    <span class="attr">role</span>=<span class="value">"alert"</span>
+    <span class="attr">class</span>=<span class="value">"error"</span><span class="tag">&gt;</span>
+    Please enter a valid email address
+  <span class="tag">&lt;/span&gt;</span>
+<span class="tag">&lt;/div&gt;</span></pre></div>
+        </div>
+        <div class="callout callout-note"><strong>Key details:</strong> <code>role="alert"</code> causes screen readers to announce the error immediately. <code>aria-describedby</code> links the error to the input, so when the user focuses the input, they hear both the label and the error.</div>
+      </div>
     </div>
 
     <!-- MODULE 7.4 -->
@@ -253,6 +438,42 @@
   }
 }</pre></div>
         </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Color blindness types — designing for all users</h3>
+        <p class="explain-en">~8% of men and ~0.5% of women have color vision deficiency. Never convey information through color alone — always add icons, patterns, or text labels as secondary indicators.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>~8% mard aur ~0.5% auraton ko color vision deficiency hoti hai. Sirf color se information mat dikhao — hamesha icons, patterns, ya text labels bhi add karo.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Type</th><th>Affects</th><th>Population</th><th>Design impact</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Deuteranopia</strong></td><td>Red-green (no green)</td><td>~6% of males</td><td>Red/green status indicators invisible</td></tr>
+              <tr><td><strong>Protanopia</strong></td><td>Red-green (no red)</td><td>~2% of males</td><td>Red warnings look dark/brown</td></tr>
+              <tr><td><strong>Tritanopia</strong></td><td>Blue-yellow</td><td>~0.01%</td><td>Blue links hard to distinguish</td></tr>
+              <tr><td><strong>Achromatopsia</strong></td><td>No color (grayscale)</td><td>Very rare</td><td>All color info lost</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — User preference queries</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Dark mode preference */</span>
+<span class="keyword">@media</span> (<span class="property">prefers-color-scheme</span>: <span class="value">dark</span>) {
+  <span class="selector">:root</span> {
+    <span class="property">--bg</span>: <span class="value">#0f0f1a</span>;
+    <span class="property">--text</span>: <span class="value">#e2e8f0</span>;
+  }
+}
+
+<span class="comment">/* High contrast preference */</span>
+<span class="keyword">@media</span> (<span class="property">prefers-contrast</span>: <span class="value">more</span>) {
+  <span class="selector">:root</span> {
+    <span class="property">--border-color</span>: <span class="value">#000</span>;
+    <span class="property">--text</span>: <span class="value">#000</span>;
+  }
+}</pre></div>
+        </div>
+        <div class="callout callout-tip"><strong>Test:</strong> Chrome DevTools → Rendering → Emulate vision deficiencies. Simulate deuteranopia, protanopia, tritanopia, and achromatopsia to verify your design works without color.</div>
       </div>
     </div>
 
@@ -316,6 +537,128 @@
 <span class="tag">&lt;/script&gt;</span></pre></div>
         </div>
         <div class="callout callout-tip"><strong>Test your structured data:</strong> Use Google's Rich Results Test (search.google.com/test/rich-results) to validate your JSON-LD before deploying.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Complete HTML &lt;head&gt; meta tags reference</h3>
+        <p class="explain-en">A properly configured <code>&lt;head&gt;</code> is the foundation of SEO, social sharing, and browser behavior.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Sahi configured &lt;head&gt; SEO, social sharing, aur browser behavior ki foundation hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Meta Tag</th><th>Purpose</th><th>Required?</th></tr></thead>
+            <tbody>
+              <tr><td><code>&lt;title&gt;</code></td><td>Page title (browser tab + search results)</td><td>🔴 Critical</td></tr>
+              <tr><td><code>meta description</code></td><td>Search result snippet</td><td>🟡 Important</td></tr>
+              <tr><td><code>meta viewport</code></td><td>Mobile rendering</td><td>🔴 Critical</td></tr>
+              <tr><td><code>meta charset</code></td><td>Character encoding (UTF-8)</td><td>🔴 Critical</td></tr>
+              <tr><td><code>link rel="canonical"</code></td><td>Canonical URL (avoid duplicates)</td><td>🟡 Important</td></tr>
+              <tr><td><code>link rel="icon"</code></td><td>Favicon</td><td>🟢 Nice</td></tr>
+              <tr><td><code>og:title/description/image</code></td><td>Social sharing preview</td><td>🟡 Important</td></tr>
+              <tr><td><code>meta robots</code></td><td>Search engine directives</td><td>🟢 When needed</td></tr>
+              <tr><td><code>meta theme-color</code></td><td>Mobile browser chrome color</td><td>🟢 Nice</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">SEO heading hierarchy — the right way to structure content</h3>
+        <p class="explain-en">Search engines use heading hierarchy to understand page structure. A proper hierarchy helps both crawlers and screen readers navigate your content. Never skip heading levels.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Search engines heading hierarchy se page structure samajhte hain. Sahi hierarchy crawlers aur screen readers dono ko help karta hai. Heading levels skip mat karo.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Rule</th><th>❌ Wrong</th><th>✅ Right</th></tr></thead>
+            <tbody>
+              <tr><td>One h1 per page</td><td>Multiple <code>&lt;h1&gt;</code> tags</td><td>Single <code>&lt;h1&gt;</code> = page title</td></tr>
+              <tr><td>Don't skip levels</td><td>h1 → h3 (skipped h2)</td><td>h1 → h2 → h3 (sequential)</td></tr>
+              <tr><td>Don't use for styling</td><td><code>&lt;h3&gt;</code> for small text</td><td>Use CSS classes for visual size</td></tr>
+              <tr><td>Sections need headings</td><td><code>&lt;section&gt;</code> without heading</td><td><code>&lt;section&gt;&lt;h2&gt;...&lt;/h2&gt;...&lt;/section&gt;</code></td></tr>
+              <tr><td>Keep it descriptive</td><td><code>&lt;h2&gt;Read More&lt;/h2&gt;</code></td><td><code>&lt;h2&gt;Our Services&lt;/h2&gt;</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>SEO impact:</strong> Google uses headings to generate featured snippets. A clear h1 → h2 → h3 hierarchy increases your chances of appearing in rich results and "People also ask" boxes.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">SEO-friendly URL structure</h3>
+        <p class="explain-en">URLs are a ranking factor. Clean, descriptive URLs help both search engines and users understand page content before clicking.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>URLs ranking factor hain. Clean, descriptive URLs search engines aur users dono ko page content samajhne me help karte hain.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Pattern</th><th>❌ Bad</th><th>✅ Good</th></tr></thead>
+            <tbody>
+              <tr><td>Descriptive words</td><td><code>/page?id=47</code></td><td><code>/blog/css-grid-guide</code></td></tr>
+              <tr><td>Lowercase + hyphens</td><td><code>/CSS_Grid_Guide</code></td><td><code>/css-grid-guide</code></td></tr>
+              <tr><td>Short and focused</td><td><code>/blog/2024/01/15/my-latest-post-about-css</code></td><td><code>/blog/css-grid-guide</code></td></tr>
+              <tr><td>No file extensions</td><td><code>/about.html</code></td><td><code>/about</code> (use trailing slash or none)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Sitemap and robots.txt — helping crawlers</h3>
+        <p class="explain-en">A <code>sitemap.xml</code> lists all pages for search engines to crawl. <code>robots.txt</code> tells crawlers which pages to skip. Both go in your site root.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>sitemap.xml</code> search engines ko sab pages ki list deta hai. <code>robots.txt</code> crawlers ko batata hai kaunse pages skip karne hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">📝 XML — sitemap.xml example</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="tag">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="tag">&lt;urlset</span> <span class="attr">xmlns</span>=<span class="value">"http://www.sitemaps.org/schemas/sitemap/0.9"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;url&gt;</span>
+    <span class="tag">&lt;loc&gt;</span>https://yoursite.com/<span class="tag">&lt;/loc&gt;</span>
+    <span class="tag">&lt;lastmod&gt;</span>2024-01-15<span class="tag">&lt;/lastmod&gt;</span>
+    <span class="tag">&lt;priority&gt;</span>1.0<span class="tag">&lt;/priority&gt;</span>
+  <span class="tag">&lt;/url&gt;</span>
+  <span class="tag">&lt;url&gt;</span>
+    <span class="tag">&lt;loc&gt;</span>https://yoursite.com/about<span class="tag">&lt;/loc&gt;</span>
+    <span class="tag">&lt;priority&gt;</span>0.8<span class="tag">&lt;/priority&gt;</span>
+  <span class="tag">&lt;/url&gt;</span>
+<span class="tag">&lt;/urlset&gt;</span></pre></div>
+        </div>
+        <div class="callout callout-tip"><strong>Submit your sitemap:</strong> Go to Google Search Console → Sitemaps → Submit <code>https://yoursite.com/sitemap.xml</code>. This tells Google exactly which pages to index.</div>
+      </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Image optimization for SEO — lazy loading and formats</h3>
+        <p class="explain-en">Images are the #1 cause of slow pages. Use <code>loading="lazy"</code>, modern formats (WebP/AVIF), <code>srcset</code> for responsive images, and always specify <code>width</code>/<code>height</code> to prevent CLS.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Images slow pages ki #1 wajah hain. <code>loading="lazy"</code>, modern formats (WebP/AVIF), <code>srcset</code> responsive images ke liye, aur <code>width</code>/<code>height</code> hamesha specify karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — Optimized image patterns</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">&lt;!-- Lazy-loaded responsive image --&gt;</span>
+<span class="tag">&lt;img</span>
+  <span class="attr">src</span>=<span class="value">"hero-800.webp"</span>
+  <span class="attr">srcset</span>=<span class="value">"hero-400.webp 400w,
+         hero-800.webp 800w,
+         hero-1200.webp 1200w"</span>
+  <span class="attr">sizes</span>=<span class="value">"(max-width: 768px) 100vw, 50vw"</span>
+  <span class="attr">width</span>=<span class="value">"800"</span> <span class="attr">height</span>=<span class="value">"450"</span>
+  <span class="attr">loading</span>=<span class="value">"lazy"</span>
+  <span class="attr">decoding</span>=<span class="value">"async"</span>
+  <span class="attr">alt</span>=<span class="value">"Dashboard screenshot showing analytics"</span>
+<span class="tag">&gt;</span>
+
+<span class="comment">&lt;!-- Modern format with fallback --&gt;</span>
+<span class="tag">&lt;picture&gt;</span>
+  <span class="tag">&lt;source</span> <span class="attr">srcset</span>=<span class="value">"hero.avif"</span> <span class="attr">type</span>=<span class="value">"image/avif"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;source</span> <span class="attr">srcset</span>=<span class="value">"hero.webp"</span> <span class="attr">type</span>=<span class="value">"image/webp"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="value">"hero.jpg"</span> <span class="attr">alt</span>=<span class="value">"Hero image"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/picture&gt;</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Attribute</th><th>Purpose</th><th>SEO/Perf impact</th></tr></thead>
+            <tbody>
+              <tr><td><code>loading="lazy"</code></td><td>Defer off-screen images</td><td>✅ Reduces initial page weight by 40-60%</td></tr>
+              <tr><td><code>width</code>/<code>height</code></td><td>Reserve space before load</td><td>✅ Prevents CLS (layout shift)</td></tr>
+              <tr><td><code>srcset</code> + <code>sizes</code></td><td>Serve right size per viewport</td><td>✅ Mobile gets smaller files</td></tr>
+              <tr><td><code>decoding="async"</code></td><td>Non-blocking image decode</td><td>✅ Smoother scrolling</td></tr>
+              <tr><td>WebP/AVIF format</td><td>30-50% smaller than JPEG</td><td>✅ Faster LCP</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>Don't lazy-load the LCP image!</strong> The largest image above the fold (hero, banner) should NOT have <code>loading="lazy"</code>. Add <code>fetchpriority="high"</code> instead to load it faster.</div>
       </div>
     </div>
 
@@ -405,6 +748,62 @@
           </table>
         </div>
       </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">The Critical Rendering Path (CRP) — how browsers render</h3>
+        <p class="explain-en">Understanding the CRP explains <em>why</em> CSS is render-blocking. The browser must complete this pipeline before painting the first pixel.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>CRP samajhne se pata chalta hai <em>kyun</em> CSS render-blocking hai. Browser ko pehla pixel paint karne se pehle ye pipeline complete karna padta hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Step</th><th>What happens</th><th>Bottleneck</th><th>Fix</th></tr></thead>
+            <tbody>
+              <tr><td>1. HTML Parse</td><td>HTML → DOM tree</td><td>Large HTML</td><td>Minimize DOM nodes</td></tr>
+              <tr><td>2. CSS Parse</td><td>CSS → CSSOM</td><td>🔴 Render-blocking!</td><td>Inline critical CSS</td></tr>
+              <tr><td>3. Render Tree</td><td>DOM + CSSOM merged</td><td>Complex selectors</td><td>Simple flat selectors</td></tr>
+              <tr><td>4. Layout</td><td>Calculate positions</td><td>Layout thrashing</td><td>Avoid forced reflows</td></tr>
+              <tr><td>5. Paint</td><td>Fill pixels</td><td>Large paint areas</td><td><code>will-change</code> for layers</td></tr>
+              <tr><td>6. Composite</td><td>Layer compositing (GPU)</td><td>Too many layers</td><td>Limit <code>will-change</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-note"><strong>Key insight:</strong> CSS is render-blocking because the browser can't paint until CSSOM is built. Inlining critical CSS eliminates this bottleneck — CSSOM builds instantly without waiting for external files.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">CSS containment — isolating layout/paint costs</h3>
+        <p class="explain-en"><code>contain</code> tells the browser an element's internals won't affect the page. <code>content-visibility: auto</code> skips rendering for off-screen elements entirely.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>contain</code> browser ko batata hai ki element ke andar ka content page ko affect nahi karega. <code>content-visibility: auto</code> off-screen elements ki rendering skip karta hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Value</th><th>Isolates</th><th>Use case</th></tr></thead>
+            <tbody>
+              <tr><td><code>contain: layout</code></td><td>Layout calculations</td><td>Widgets not affecting siblings</td></tr>
+              <tr><td><code>contain: paint</code></td><td>Paint area (clips overflow)</td><td>Components with overflow</td></tr>
+              <tr><td><code>contain: content</code></td><td>Layout + paint (shorthand)</td><td>✅ Most common for components</td></tr>
+              <tr><td><code>content-visibility: auto</code></td><td>Skips rendering off-screen</td><td>✅✅ Huge perf win for long pages</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Quick win:</strong> Add <code>content-visibility: auto; contain-intrinsic-size: 0 500px;</code> to every below-fold section. This can reduce initial render time by 50%+ on long pages.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Font loading strategy — preventing layout shift</h3>
+        <p class="explain-en">Web fonts cause render-blocking (FOIT) and layout shift (FOUT). The correct strategy uses <code>font-display: swap</code> with <code>preload</code>.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Web fonts render-blocking (FOIT) aur layout shift (FOUT) create karte hain. Sahi strategy <code>font-display: swap</code> aur <code>preload</code> use karti hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th><code>font-display</code></th><th>Behavior</th><th>Best for</th></tr></thead>
+            <tbody>
+              <tr><td><code>swap</code></td><td>Show fallback immediately, swap when loaded</td><td>✅ Most websites</td></tr>
+              <tr><td><code>block</code></td><td>Hide text until font loads (3s max)</td><td>Icon fonts only</td></tr>
+              <tr><td><code>fallback</code></td><td>Brief blank (100ms), then fallback</td><td>Body text</td></tr>
+              <tr><td><code>optional</code></td><td>Use font only if cached</td><td>Best perf (may skip custom font)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>CLS fix:</strong> Use <code>size-adjust</code> in <code>@font-face</code> to match fallback metrics to web font metrics, eliminating layout shift on swap.</div>
+      </div>
     </div>
 
     <!-- MODULE 7.7 -->
@@ -462,16 +861,64 @@
 <span class="keyword">@import</span> <span class="string">"utilities/helpers.css"</span>;    <span class="comment">/* .sr-only, .flex */</span></pre></div>
         </div>
       </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">@layer — modern CSS architecture without specificity wars</h3>
+        <p class="explain-en"><code>@layer</code> lets you define explicit priority for groups of styles. Later layers always win, regardless of specificity. This eliminates <code>!important</code> hacks.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>@layer</code> se styles ke groups ki explicit priority define hoti hai. Later layers hamesha jeetke hain, chahe specificity kuch bhi ho.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — @layer architecture</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Define layer order (first = lowest priority) */</span>
+<span class="keyword">@layer</span> reset, base, components, utilities;
+
+<span class="keyword">@layer</span> reset {
+  <span class="selector">*</span> { <span class="property">margin</span>: <span class="number">0</span>; <span class="property">box-sizing</span>: <span class="value">border-box</span>; }
+}
+<span class="keyword">@layer</span> components {
+  <span class="selector">.card</span> { <span class="property">padding</span>: <span class="number">20</span><span class="unit">px</span>; }
+}
+<span class="keyword">@layer</span> utilities {
+  <span class="comment">/* Always wins over components */</span>
+  <span class="selector">.hidden</span> { <span class="property">display</span>: <span class="value">none</span>; }
+}</pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Approach</th><th>Specificity wars?</th><th>!important?</th><th>Scale</th></tr></thead>
+            <tbody>
+              <tr><td><strong>No architecture</strong></td><td>❌ Constant</td><td>Often</td><td>❌ Breaks at ~10 files</td></tr>
+              <tr><td><strong>BEM only</strong></td><td>⚠️ Reduced</td><td>Rarely</td><td>✅ Medium projects</td></tr>
+              <tr><td><strong>ITCSS</strong></td><td>⚠️ Convention-based</td><td>Rarely</td><td>✅ Large projects</td></tr>
+              <tr><td><strong>@layer</strong></td><td>✅ Eliminated</td><td>❌ Never</td><td>✅✅ Best for 2026+</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Modern recommendation:</strong> Use <code>@layer</code> for CSS architecture in 2026. Supported in all modern browsers. Combine with BEM naming for the most maintainable codebase.</div>
+      </div>
     </div>
 
     <div class="practice-box">
-      <div class="practice-title">✏️ Practice Exercises — Part 7</div>
+      <div class="practice-title">✏️ Practice Exercises — Part 7 (Difficulty Graded)</div>
+      <h4>🟢 Easy (Do these first)</h4>
       <ol>
-        <li>Run Lighthouse on your project — fix all accessibility issues until score reaches 90+.</li>
-        <li>Navigate your website using only keyboard (Tab/Shift+Tab). Fix any unreachable elements.</li>
-        <li>Add proper ARIA labels to all icon buttons and decorative elements.</li>
-        <li>Implement <code>prefers-reduced-motion</code> and <code>prefers-color-scheme</code> media queries.</li>
-        <li>Refactor a component's CSS to use BEM naming convention.</li>
+        <li>Run <strong>Lighthouse</strong> on your project. Fix all accessibility issues until the A11y score reaches 90+.</li>
+        <li>Navigate your website using <strong>keyboard only</strong> (Tab/Shift+Tab/Enter/Escape). Fix any unreachable or invisible-focus elements.</li>
+        <li>Add proper <code>aria-label</code> to all icon-only buttons and <code>aria-hidden="true"</code> to all decorative icons.</li>
+        <li>Check all text contrast ratios using DevTools → <strong>CSS Overview</strong>. Fix any below 4.5:1 for normal text.</li>
+      </ol>
+      <h4>🟡 Medium (Apply your knowledge)</h4>
+      <ol start="5">
+        <li>Add <strong>JSON-LD structured data</strong> (Person or Organization schema) to your portfolio. Validate with Google Rich Results Test.</li>
+        <li>Implement a production-ready <code>&lt;head&gt;</code>: title, meta description, OG tags, Twitter card, favicon, <code>preconnect</code> hints, and canonical URL.</li>
+        <li>Inline <strong>critical CSS</strong> for above-the-fold content and async-load the rest using <code>rel="preload"</code>. Measure LCP before/after.</li>
+        <li>Build an <strong>accessible modal</strong> using <code>&lt;dialog&gt;</code>: auto focus trap, Escape close, focus return to trigger. Test with a screen reader.</li>
+      </ol>
+      <h4>🔴 Hard (Challenge yourself)</h4>
+      <ol start="9">
+        <li>Run a <strong>full WCAG AA audit</strong> on a 5-page site: keyboard nav, contrast, ARIA, heading order, alt text. Document all failures in a report and fix them.</li>
+        <li>Optimize a page to pass all <strong>Core Web Vitals</strong>: LCP < 2.5s, INP < 200ms, CLS < 0.1. Use <code>content-visibility</code>, <code>will-change</code>, <code>font-display: swap</code>, and lazy loading.</li>
+        <li>Refactor a component library to use <strong>BEM naming</strong> + <strong>ITCSS architecture</strong> (Settings → Generic → Elements → Objects → Components → Utilities). No specificity conflicts.</li>
+        <li>Create a <strong>production deployment pipeline</strong>: Git repo → Netlify auto-deploy → custom domain → HTTPS → OG preview verified → Lighthouse CI check. Document the entire process in a README.</li>
       </ol>
     </div>
 

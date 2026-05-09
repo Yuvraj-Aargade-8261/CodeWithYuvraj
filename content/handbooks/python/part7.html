@@ -79,6 +79,25 @@ greet(<span class="string">"Yuvraj"</span>)  <span class="comment"># Prints 3 ti
         </div>
         <div class="callout callout-tip"><strong>Common built-in decorators:</strong> <code>@property</code>, <code>@staticmethod</code>, <code>@classmethod</code>, <code>@functools.lru_cache</code>, <code>@functools.wraps</code>, <code>@dataclass</code>.</div>
       </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Decorator execution flow — what happens under the hood</h3>
+        <p class="explain-en">When Python sees <code>@decorator</code>, it replaces the function with the wrapper. Without <code>@functools.wraps</code>, the original function's name, docstring, and module are lost — this breaks debugging, logging, and introspection.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Jab Python <code>@decorator</code> dekhta hai, function ko wrapper se replace kar deta hai. Bina <code>@functools.wraps</code> ke, original function ka name, docstring, aur module kho jaate hain — ye debugging, logging, aur introspection tod deta hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Step</th><th>What happens</th><th>Without <code>@wraps</code></th><th>With <code>@wraps</code></th></tr></thead>
+            <tbody>
+              <tr><td>1. Define</td><td><code>def greet(): ...</code></td><td>—</td><td>—</td></tr>
+              <tr><td>2. Decorate</td><td><code>greet = decorator(greet)</code></td><td><code>greet.__name__</code> → <code>"wrapper"</code></td><td><code>greet.__name__</code> → <code>"greet"</code></td></tr>
+              <tr><td>3. Call</td><td><code>greet()</code></td><td>Runs wrapper()</td><td>Runs wrapper()</td></tr>
+              <tr><td>4. Debug</td><td>Traceback shows</td><td><code>wrapper</code> (confusing)</td><td><code>greet</code> (clear)</td></tr>
+              <tr><td>5. Docs</td><td><code>help(greet)</code></td><td>Shows wrapper's docstring</td><td>Shows greet's docstring</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>Always use <code>@functools.wraps(func)</code></strong> in your decorator wrapper. Without it, <code>greet.__name__</code>, <code>greet.__doc__</code>, and <code>greet.__module__</code> all point to the wrapper instead of the original function.</div>
+      </div>
     </div>
 
     <!-- MODULE 7.2 -->
@@ -139,6 +158,24 @@ acc.send(<span class="number">10</span>)    <span class="comment"># 10</span>
 acc.send(<span class="number">20</span>)    <span class="comment"># 30</span></pre></div>
         </div>
       </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Generator state machine — lifecycle of <code>yield</code></h3>
+        <p class="explain-en">A generator is a state machine with 4 states. Each <code>next()</code> call resumes execution until the next <code>yield</code>. The generator's frame is frozen between yields, holding all local variables.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Generator ek state machine hai 4 states ke saath. Har <code>next()</code> call execution resume karta hai next <code>yield</code> tak. Generator ka frame yields ke beech frozen rehta hai, saari local variables ke saath.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>State</th><th>How to enter</th><th>What it means</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Created</strong></td><td><code>gen = func()</code></td><td>Generator object created, no code executed yet</td></tr>
+              <tr><td><strong>Suspended</strong></td><td><code>yield</code> reached</td><td>Frame frozen, value yielded to caller</td></tr>
+              <tr><td><strong>Running</strong></td><td><code>next(gen)</code> called</td><td>Executing code between yields</td></tr>
+              <tr><td><strong>Closed</strong></td><td><code>return</code> or <code>StopIteration</code></td><td>Frame discarded, can't resume</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Memory magic:</strong> A generator producing 1 billion items uses ~120 bytes (just the frame). A list would use ~8 GB. Always prefer generators for large data pipelines.</div>
+      </div>
     </div>
 
     <!-- MODULE 7.3 -->
@@ -196,6 +233,25 @@ asyncio.run(main_concurrent())
             </tbody>
           </table>
         </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Concurrency models — when to use what</h3>
+        <p class="explain-en">Python has 3 concurrency models. The right choice depends on whether your bottleneck is <strong>I/O</strong> (waiting for network/disk) or <strong>CPU</strong> (computation). Async and threading share the GIL; multiprocessing bypasses it.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Python me 3 concurrency models hain. Sahi choice depend karta hai bottleneck <strong>I/O</strong> hai (network/disk wait) ya <strong>CPU</strong> (computation). Async aur threading GIL share karte hain; multiprocessing usse bypass karta hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Question</th><th>Answer → Use</th></tr></thead>
+            <tbody>
+              <tr><td>Waiting for network/API calls?</td><td><code>asyncio</code> — best throughput for 1000s of connections</td></tr>
+              <tr><td>Waiting for disk/database?</td><td><code>threading</code> or <code>asyncio</code> — both work well</td></tr>
+              <tr><td>Heavy math/ML computation?</td><td><code>multiprocessing</code> — true parallelism, bypasses GIL</td></tr>
+              <tr><td>Simple parallel tasks?</td><td><code>concurrent.futures.ThreadPoolExecutor</code> — high-level API</td></tr>
+              <tr><td>Mixed I/O + CPU?</td><td><code>asyncio</code> + <code>run_in_executor()</code> for CPU parts</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>The GIL rule:</strong> CPython's Global Interpreter Lock means only one thread runs Python bytecode at a time. Threads help with I/O waits (GIL is released during I/O), but for CPU-bound work, you <em>must</em> use multiprocessing.</div>
       </div>
     </div>
 

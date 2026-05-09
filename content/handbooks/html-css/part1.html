@@ -39,7 +39,7 @@
       <div class="chapter-part-label">📖 Part 1 — HTML Foundations</div>
       <h1 class="chapter-title">Build Your First <span class="gradient-text">Web Pages</span></h1>
       <p class="chapter-subtitle">Understand how the web works and master HTML fundamentals with industry-style thinking.</p>
-      <div class="chapter-meta"><span>📄 Modules 1.1 – 1.7</span><span>⏱️ 70–100 min read</span><span>💻 35+ Examples</span></div>
+      <div class="chapter-meta"><span>📄 Modules 1.1 – 1.7</span><span>⏱️ 120–180 min</span><span>💻 65+ Examples</span><span>📊 25+ Reference Tables</span></div>
     </div>
 
     <div class="callout callout-tip">
@@ -62,13 +62,17 @@
     <div class="quick-ref">
       <div class="qr-title">🚀 Advanced Lens — Part 1</div>
       <p class="explain-en">
-        To master HTML at an industry level, go beyond tags. For each element, ask: what is its semantic meaning, how does a screen reader interpret it,
-        and how does it affect SEO? Think about document outline, accessibility tree, and how your HTML forms the foundation that CSS and JavaScript build upon.
+        The browser's HTML parser is a <strong>state-machine tokenizer</strong> that builds the DOM tree incrementally.
+        When it encounters <code>&lt;script&gt;</code> without <code>async</code>/<code>defer</code>, parsing <strong>blocks entirely</strong>.
+        <code>&lt;link rel="stylesheet"&gt;</code> blocks rendering (not parsing). Each HTML element maps to the <strong>accessibility tree</strong> —
+        <code>&lt;h1&gt;</code> becomes <code>role="heading" level=1</code>, <code>&lt;img alt&gt;</code> becomes <code>role="img"</code>,
+        <code>&lt;a href&gt;</code> becomes <code>role="link"</code>. Writing correct HTML means writing correct accessibility.
       </p>
       <div class="explain-hi">
         <span class="hi-label">Hindi mein samjho</span>
-        HTML sirf tags yaad karne se nahi aata. Har element ka semantic meaning samjho, screen reader kaise interpret karega socho,
-        aur SEO pe kya impact padega ye jaano. Yahi industry-level thinking hai.
+        Browser ka HTML parser ek state-machine tokenizer hai jo DOM tree incrementally banata hai. <code>&lt;script&gt;</code> bina <code>async</code>/<code>defer</code> ke parsing <strong>block</strong> karta hai.
+        Stylesheet rendering block karti hai. Har HTML element <strong>accessibility tree</strong> me map hota hai — <code>&lt;h1&gt;</code> ka role "heading" hota hai, <code>&lt;img alt&gt;</code> ka "img".
+        Sahi HTML likhna = sahi accessibility likhna.
       </div>
     </div>
 
@@ -184,6 +188,60 @@
           </table>
         </div>
       </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Global HTML Attributes — available on every element</h3>
+        <p class="explain-en">
+          Some attributes can be used on <strong>any HTML element</strong>. These are called <strong>global attributes</strong>.
+          Understanding them is essential — they control identity (<code>id</code>, <code>class</code>), behavior (<code>hidden</code>, <code>tabindex</code>),
+          accessibility (<code>lang</code>, <code>title</code>, <code>dir</code>), and extensibility (<code>data-*</code>).
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Kuch attributes <strong>har HTML element</strong> pe use ho sakte hain — inhe global attributes bolte hain. Ye identity (id, class), behavior (hidden, tabindex), accessibility (lang, title), aur custom data (data-*) control karte hain.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Attribute</th><th>Purpose</th><th>Example</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td><code>id</code></td><td>Unique identifier (one per page)</td><td><code>id="hero"</code></td><td>Used for CSS, JS, anchor links</td></tr>
+              <tr><td><code>class</code></td><td>CSS class name(s)</td><td><code>class="btn btn-primary"</code></td><td>Multiple classes separated by space</td></tr>
+              <tr><td><code>style</code></td><td>Inline CSS styles</td><td><code>style="color: red"</code></td><td>⚠️ Avoid — use external CSS</td></tr>
+              <tr><td><code>title</code></td><td>Tooltip text on hover</td><td><code>title="Click to submit"</code></td><td>Also used by screen readers</td></tr>
+              <tr><td><code>hidden</code></td><td>Hides element from rendering</td><td><code>hidden</code></td><td>Boolean attribute (no value needed)</td></tr>
+              <tr><td><code>tabindex</code></td><td>Controls keyboard tab order</td><td><code>tabindex="0"</code></td><td>0 = natural order, -1 = skip, avoid positive values</td></tr>
+              <tr><td><code>lang</code></td><td>Declares content language</td><td><code>lang="hi"</code></td><td>Critical for screen readers + SEO</td></tr>
+              <tr><td><code>dir</code></td><td>Text direction</td><td><code>dir="rtl"</code></td><td>ltr (default), rtl, auto</td></tr>
+              <tr><td><code>data-*</code></td><td>Custom data storage</td><td><code>data-user-id="42"</code></td><td>Accessed via JS: <code>el.dataset.userId</code></td></tr>
+              <tr><td><code>contenteditable</code></td><td>Makes element editable</td><td><code>contenteditable="true"</code></td><td>Used in rich text editors</td></tr>
+              <tr><td><code>draggable</code></td><td>Enables drag-and-drop</td><td><code>draggable="true"</code></td><td>Works with Drag & Drop API</td></tr>
+              <tr><td><code>spellcheck</code></td><td>Enable/disable spellcheck</td><td><code>spellcheck="false"</code></td><td>Useful for code input fields</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>Key rule:</strong> <code>id</code> must be unique per page. <code>class</code> can repeat. Never use <code>style</code> attribute in production — use external stylesheets.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Block vs Inline elements — understanding display behavior</h3>
+        <p class="explain-en">
+          Every HTML element has a default <strong>display type</strong>: <strong>block</strong> or <strong>inline</strong>.
+          Block elements take the full width, start on a new line, and can contain other blocks. Inline elements flow within text and only take the space of their content.
+          This distinction is fundamental to understanding CSS layout.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Har HTML element ka default display type hota hai: <strong>block</strong> (poori width leta hai, naye line pe shuru hota hai) ya <strong>inline</strong> (text ke saath flow karta hai, sirf content jitni width leta hai). CSS layout samajhne ke liye ye concept fundamental hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Feature</th><th>Block Elements</th><th>Inline Elements</th></tr></thead>
+            <tbody>
+              <tr><td>Width</td><td>Takes full available width</td><td>Only as wide as content</td></tr>
+              <tr><td>Line behavior</td><td>Starts on a new line</td><td>Flows within text</td></tr>
+              <tr><td>Can contain</td><td>Block + inline elements</td><td>Only inline elements + text</td></tr>
+              <tr><td>Width/height</td><td>✅ Can be set</td><td>❌ Ignored (use <code>inline-block</code>)</td></tr>
+              <tr><td>Margin/padding</td><td>✅ All sides work</td><td>⚠️ Only left/right margin works</td></tr>
+              <tr><td>Common tags</td><td><code>div, p, h1-h6, ul, ol, li, section, article, header, footer, main, form, table, blockquote, pre, hr, figure</code></td><td><code>span, a, strong, em, img, br, code, small, mark, abbr, cite, sub, sup, input, button, label, time</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>CSS can change display:</strong> Any element's display can be overridden with CSS: <code>display: block</code>, <code>display: inline</code>, <code>display: inline-block</code>, <code>display: flex</code>, <code>display: grid</code>.</div>
+      </div>
     </div>
 
     <!-- MODULE 1.2 -->
@@ -275,6 +333,37 @@
           </table>
         </div>
       </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Complete &lt;head&gt; elements reference</h3>
+        <p class="explain-en">
+          The <code>&lt;head&gt;</code> can contain many more elements than just title and charset. Here is every element allowed inside <code>&lt;head&gt;</code>,
+          with its purpose and priority level for production sites.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>&lt;head&gt;</code> me title aur charset ke alaawa bahut kuch aata hai. Ye table har allowed element ko explain karta hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Element</th><th>Purpose</th><th>Priority</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td><code>&lt;meta charset&gt;</code></td><td>Character encoding</td><td>🔴 Required</td><td><code>&lt;meta charset="UTF-8"&gt;</code></td></tr>
+              <tr><td><code>&lt;meta viewport&gt;</code></td><td>Mobile responsive scaling</td><td>🔴 Required</td><td><code>width=device-width, initial-scale=1.0</code></td></tr>
+              <tr><td><code>&lt;title&gt;</code></td><td>Browser tab + SEO title</td><td>🔴 Required</td><td>50-60 characters, unique per page</td></tr>
+              <tr><td><code>&lt;meta description&gt;</code></td><td>Search result snippet</td><td>🟡 Important</td><td>150-160 characters, compelling</td></tr>
+              <tr><td><code>&lt;link stylesheet&gt;</code></td><td>External CSS file</td><td>🟡 Important</td><td><code>rel="stylesheet" href="style.css"</code></td></tr>
+              <tr><td><code>&lt;link icon&gt;</code></td><td>Favicon</td><td>🟡 Important</td><td><code>rel="icon" href="favicon.png"</code></td></tr>
+              <tr><td><code>&lt;meta og:*&gt;</code></td><td>Social media preview</td><td>🟡 Important</td><td>og:title, og:description, og:image</td></tr>
+              <tr><td><code>&lt;meta robots&gt;</code></td><td>Search engine indexing</td><td>🟢 Optional</td><td><code>index, follow</code> (default)</td></tr>
+              <tr><td><code>&lt;link canonical&gt;</code></td><td>Preferred URL for SEO</td><td>🟢 Optional</td><td>Prevents duplicate content</td></tr>
+              <tr><td><code>&lt;link preconnect&gt;</code></td><td>Early connection to CDN</td><td>🟢 Performance</td><td><code>rel="preconnect" href="https://fonts.googleapis.com"</code></td></tr>
+              <tr><td><code>&lt;link preload&gt;</code></td><td>Preload critical resources</td><td>🟢 Performance</td><td><code>rel="preload" as="font"</code></td></tr>
+              <tr><td><code>&lt;script&gt;</code></td><td>JavaScript (use defer/async)</td><td>🟡 Important</td><td><code>&lt;script src="app.js" defer&gt;</code></td></tr>
+              <tr><td><code>&lt;style&gt;</code></td><td>Inline critical CSS</td><td>🟢 Performance</td><td>Above-fold styles only</td></tr>
+              <tr><td><code>&lt;base&gt;</code></td><td>Default URL for relative links</td><td>⚪ Rare</td><td><code>&lt;base href="/"&gt;</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>Script placement matters:</strong> <code>&lt;script&gt;</code> without <code>defer</code> or <code>async</code> blocks HTML parsing. Always use <code>defer</code> for scripts that need DOM, or place <code>&lt;script&gt;</code> at end of <code>&lt;body&gt;</code>.</div>
+      </div>
     </div>
 
     <!-- MODULE 1.3 -->
@@ -345,6 +434,78 @@ This line is in the same paragraph but on a new line.<span class="tag">&lt;/p&gt
 <span class="tag">&lt;p&gt;</span>Price: <span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="value">"price"</span><span class="tag">&gt;</span>₹1,999<span class="tag">&lt;/span&gt;</span><span class="tag">&lt;/p&gt;</span></pre></div>
         </div>
         <div class="callout callout-tip"><strong>Industry tip:</strong> Use <code>&lt;strong&gt;</code> and <code>&lt;em&gt;</code> for meaning, not just bold/italic. Screen readers announce them differently. Use CSS for purely visual styling.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Complete text & formatting tags reference</h3>
+        <p class="explain-en">
+          HTML provides many more text-level elements beyond <code>strong</code> and <code>em</code>. Each carries <strong>semantic meaning</strong> —
+          they tell browsers and screen readers <em>what kind of text</em> this is, not just how it should look.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>HTML me strong/em ke alaawa bahut saare text elements hain. Har ek ka <strong>semantic meaning</strong> hota hai — ye batate hain ki text ka type kya hai, sirf dikhne ke liye nahi.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Tag</th><th>Purpose</th><th>Visual default</th><th>When to use</th></tr></thead>
+            <tbody>
+              <tr><td><code>&lt;strong&gt;</code></td><td>Strong importance</td><td><strong>Bold</strong></td><td>Important content (screen readers emphasize)</td></tr>
+              <tr><td><code>&lt;em&gt;</code></td><td>Stress emphasis</td><td><em>Italic</em></td><td>Emphasis that changes meaning of sentence</td></tr>
+              <tr><td><code>&lt;b&gt;</code></td><td>Bring attention to</td><td><strong>Bold</strong></td><td>Keywords, product names (no extra importance)</td></tr>
+              <tr><td><code>&lt;i&gt;</code></td><td>Alternate voice/mood</td><td><em>Italic</em></td><td>Technical terms, foreign words, thoughts</td></tr>
+              <tr><td><code>&lt;u&gt;</code></td><td>Unarticulated annotation</td><td><u>Underline</u></td><td>Spelling errors, proper names (Chinese)</td></tr>
+              <tr><td><code>&lt;s&gt;</code></td><td>Strikethrough (no longer accurate)</td><td><s>Strikethrough</s></td><td>Old prices, outdated info</td></tr>
+              <tr><td><code>&lt;mark&gt;</code></td><td>Highlighted/marked text</td><td>Yellow highlight</td><td>Search results, key phrases</td></tr>
+              <tr><td><code>&lt;small&gt;</code></td><td>Side comments, fine print</td><td>Smaller text</td><td>Copyright, disclaimers, legal text</td></tr>
+              <tr><td><code>&lt;sub&gt;</code></td><td>Subscript</td><td>Lower baseline</td><td>Chemical formulas: H<sub>2</sub>O</td></tr>
+              <tr><td><code>&lt;sup&gt;</code></td><td>Superscript</td><td>Raised baseline</td><td>Footnotes, math: x<sup>2</sup></td></tr>
+              <tr><td><code>&lt;abbr&gt;</code></td><td>Abbreviation</td><td>Dotted underline</td><td><code>&lt;abbr title="HyperText Markup Language"&gt;HTML&lt;/abbr&gt;</code></td></tr>
+              <tr><td><code>&lt;cite&gt;</code></td><td>Title of a work</td><td><em>Italic</em></td><td>Book titles, article names, film titles</td></tr>
+              <tr><td><code>&lt;code&gt;</code></td><td>Inline code</td><td>Monospace font</td><td>Variable names, short code snippets</td></tr>
+              <tr><td><code>&lt;pre&gt;</code></td><td>Preformatted text (preserves spaces)</td><td>Monospace, whitespace preserved</td><td>Code blocks, ASCII art</td></tr>
+              <tr><td><code>&lt;kbd&gt;</code></td><td>Keyboard input</td><td>Monospace</td><td>"Press <kbd>Ctrl</kbd>+<kbd>S</kbd> to save"</td></tr>
+              <tr><td><code>&lt;samp&gt;</code></td><td>Sample output</td><td>Monospace</td><td>Terminal/program output examples</td></tr>
+              <tr><td><code>&lt;var&gt;</code></td><td>Variable name</td><td><em>Italic</em></td><td>Math variables, programming variables</td></tr>
+              <tr><td><code>&lt;time&gt;</code></td><td>Machine-readable date/time</td><td>No visual change</td><td><code>&lt;time datetime="2026-05-08"&gt;May 8&lt;/time&gt;</code></td></tr>
+              <tr><td><code>&lt;blockquote&gt;</code></td><td>Long quotation (block-level)</td><td>Indented</td><td>Quotes from external sources</td></tr>
+              <tr><td><code>&lt;q&gt;</code></td><td>Short inline quotation</td><td>Auto quotation marks</td><td>Brief quotes within sentences</td></tr>
+              <tr><td><code>&lt;address&gt;</code></td><td>Contact information</td><td><em>Italic</em></td><td>Author/organization contact details</td></tr>
+              <tr><td><code>&lt;wbr&gt;</code></td><td>Word break opportunity</td><td>No visual change</td><td>Long URLs or words: suggest break points</td></tr>
+              <tr><td><code>&lt;span&gt;</code></td><td>Generic inline container</td><td>No visual change</td><td>CSS styling hook (no semantic meaning)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>strong vs b, em vs i:</strong> <code>&lt;strong&gt;</code> = important content (screen readers emphasize it). <code>&lt;b&gt;</code> = visually bold, no extra importance. <code>&lt;em&gt;</code> = changes meaning. <code>&lt;i&gt;</code> = alternate voice. Always prefer semantic tags.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">HTML character entities — special characters in HTML</h3>
+        <p class="explain-en">
+          Some characters have special meaning in HTML (like <code>&lt;</code> and <code>&amp;</code>) and must be written as <strong>entities</strong>.
+          Entities also let you insert symbols that aren't on your keyboard. Format: <code>&amp;name;</code> or <code>&amp;#number;</code>.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>HTML me kuch characters special hain (jaise &lt; aur &amp;) — inhe directly nahi likh sakte. Entities use karo: <code>&amp;lt;</code> for &lt;, <code>&amp;amp;</code> for &amp;. Symbols ke liye bhi entities hain.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Character</th><th>Entity Name</th><th>Entity Number</th><th>Description</th></tr></thead>
+            <tbody>
+              <tr><td>&lt;</td><td><code>&amp;lt;</code></td><td><code>&amp;#60;</code></td><td>Less than (required in HTML)</td></tr>
+              <tr><td>&gt;</td><td><code>&amp;gt;</code></td><td><code>&amp;#62;</code></td><td>Greater than</td></tr>
+              <tr><td>&amp;</td><td><code>&amp;amp;</code></td><td><code>&amp;#38;</code></td><td>Ampersand (required in HTML)</td></tr>
+              <tr><td>"</td><td><code>&amp;quot;</code></td><td><code>&amp;#34;</code></td><td>Double quote (in attributes)</td></tr>
+              <tr><td>'</td><td><code>&amp;apos;</code></td><td><code>&amp;#39;</code></td><td>Single quote / apostrophe</td></tr>
+              <tr><td> </td><td><code>&amp;nbsp;</code></td><td><code>&amp;#160;</code></td><td>Non-breaking space</td></tr>
+              <tr><td>©</td><td><code>&amp;copy;</code></td><td><code>&amp;#169;</code></td><td>Copyright symbol</td></tr>
+              <tr><td>®</td><td><code>&amp;reg;</code></td><td><code>&amp;#174;</code></td><td>Registered trademark</td></tr>
+              <tr><td>™</td><td><code>&amp;trade;</code></td><td><code>&amp;#8482;</code></td><td>Trademark</td></tr>
+              <tr><td>—</td><td><code>&amp;mdash;</code></td><td><code>&amp;#8212;</code></td><td>Em dash (long dash)</td></tr>
+              <tr><td>–</td><td><code>&amp;ndash;</code></td><td><code>&amp;#8211;</code></td><td>En dash (medium dash)</td></tr>
+              <tr><td>→</td><td><code>&amp;rarr;</code></td><td><code>&amp;#8594;</code></td><td>Right arrow</td></tr>
+              <tr><td>←</td><td><code>&amp;larr;</code></td><td><code>&amp;#8592;</code></td><td>Left arrow</td></tr>
+              <tr><td>✓</td><td>—</td><td><code>&amp;#10003;</code></td><td>Checkmark</td></tr>
+              <tr><td>₹</td><td>—</td><td><code>&amp;#8377;</code></td><td>Indian Rupee</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>Must-escape characters:</strong> Always escape <code>&amp;lt;</code>, <code>&amp;gt;</code>, <code>&amp;amp;</code>, and <code>&amp;quot;</code> inside HTML. Failing to escape <code>&lt;</code> can break your page or create XSS vulnerabilities.</div>
       </div>
     </div>
 
@@ -418,9 +579,32 @@ This line is in the same paragraph but on a new line.<span class="tag">&lt;/p&gt
           </table>
         </div>
       </div>
-    </div>
 
-    <!-- MODULE 1.5 -->
+      <div class="concept-block">
+        <h3 class="concept-heading">Complete &lt;a&gt; attributes reference</h3>
+        <p class="explain-en">
+          The anchor element supports many attributes beyond <code>href</code> and <code>target</code>. Each controls a different aspect of link behavior,
+          security, and resource handling.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Anchor element me href aur target ke alaawa bahut saare attributes hain. Har ek link behavior, security, ya resource handling control karta hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Attribute</th><th>Purpose</th><th>Values</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td><code>href</code></td><td>Destination URL</td><td>URL, #fragment, mailto:, tel:</td><td><code>href="https://example.com"</code></td></tr>
+              <tr><td><code>target</code></td><td>Where to open link</td><td>_self, _blank, _parent, _top</td><td><code>target="_blank"</code></td></tr>
+              <tr><td><code>rel</code></td><td>Relationship to target</td><td>noopener, noreferrer, nofollow, external</td><td><code>rel="noopener noreferrer"</code></td></tr>
+              <tr><td><code>download</code></td><td>Download file instead of navigating</td><td>Optional filename</td><td><code>download="resume.pdf"</code></td></tr>
+              <tr><td><code>hreflang</code></td><td>Language of linked page</td><td>BCP 47 language tag</td><td><code>hreflang="hi"</code></td></tr>
+              <tr><td><code>type</code></td><td>MIME type of linked resource</td><td>MIME type string</td><td><code>type="application/pdf"</code></td></tr>
+              <tr><td><code>referrerpolicy</code></td><td>Controls referer header sent</td><td>no-referrer, origin, same-origin</td><td><code>referrerpolicy="no-referrer"</code></td></tr>
+              <tr><td><code>ping</code></td><td>URLs to notify on click (tracking)</td><td>Space-separated URLs</td><td><code>ping="/analytics"</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>Security rule:</strong> For any <code>target="_blank"</code> link, always add <code>rel="noopener noreferrer"</code>. Use <code>download</code> attribute for PDF/file links instead of relying on browser behavior.</div>
+      </div>
+    </div>
     <div class="module-section" id="m1-5">
       <div class="module-header"><div class="module-number">1.5</div><h2 class="module-title">Images & Media — img, alt, figure, video, audio, lazy loading</h2></div>
 
@@ -511,6 +695,54 @@ This line is in the same paragraph but on a new line.<span class="tag">&lt;/p&gt
         </div>
         <div class="callout callout-note"><strong>Example explained:</strong> Multiple <code>&lt;source&gt;</code> elements provide format fallbacks. The text inside is shown if the browser doesn't support the element.</div>
       </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Complete media attributes reference</h3>
+        <p class="explain-en">
+          The <code>&lt;video&gt;</code> and <code>&lt;audio&gt;</code> elements support many attributes for controlling playback behavior,
+          performance, and user experience.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Video aur audio elements me bahut saare attributes hain jo playback, performance, aur UX control karte hain.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Attribute</th><th>Applies to</th><th>Purpose</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td><code>controls</code></td><td>video, audio</td><td>Show play/pause/volume UI</td><td>Always add for user-controlled media</td></tr>
+              <tr><td><code>autoplay</code></td><td>video, audio</td><td>Start playing automatically</td><td>⚠️ Requires <code>muted</code> on most browsers</td></tr>
+              <tr><td><code>muted</code></td><td>video, audio</td><td>Start with sound off</td><td>Required for autoplay to work</td></tr>
+              <tr><td><code>loop</code></td><td>video, audio</td><td>Replay when finished</td><td>Good for background videos</td></tr>
+              <tr><td><code>poster</code></td><td>video</td><td>Thumbnail image before play</td><td>Improves perceived performance</td></tr>
+              <tr><td><code>preload</code></td><td>video, audio</td><td>Hint for preloading</td><td><code>none</code>, <code>metadata</code>, <code>auto</code></td></tr>
+              <tr><td><code>width</code> / <code>height</code></td><td>video</td><td>Display dimensions</td><td>Prevents CLS layout shift</td></tr>
+              <tr><td><code>playsinline</code></td><td>video</td><td>Play inline on mobile</td><td>Required for iOS inline playback</td></tr>
+              <tr><td><code>crossorigin</code></td><td>video, audio</td><td>CORS setting for external sources</td><td><code>anonymous</code>, <code>use-credentials</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Image format comparison — choosing the right format</h3>
+        <p class="explain-en">
+          Not all image formats are equal. Choosing the right format dramatically affects <strong>file size</strong>, <strong>quality</strong>,
+          and <strong>loading speed</strong>. Modern formats like WebP and AVIF offer 25-50% smaller files than JPEG.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Sahi image format choose karna bahut important hai. WebP aur AVIF modern formats hain jo JPEG se 25-50% chhote hain.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Format</th><th>Best for</th><th>Transparency</th><th>Animation</th><th>File size</th><th>Browser support</th></tr></thead>
+            <tbody>
+              <tr><td><strong>JPEG</strong></td><td>Photos, gradients</td><td>❌ No</td><td>❌ No</td><td>Medium</td><td>✅ All browsers</td></tr>
+              <tr><td><strong>PNG</strong></td><td>Icons, logos, screenshots</td><td>✅ Yes</td><td>❌ No</td><td>Large</td><td>✅ All browsers</td></tr>
+              <tr><td><strong>WebP</strong></td><td>Replaces JPEG/PNG</td><td>✅ Yes</td><td>✅ Yes</td><td>🟢 Small (25-35% &lt; JPEG)</td><td>✅ 95%+ browsers</td></tr>
+              <tr><td><strong>AVIF</strong></td><td>Next-gen (best compression)</td><td>✅ Yes</td><td>✅ Yes</td><td>🟢 Smallest (50% &lt; JPEG)</td><td>🟡 90%+ browsers</td></tr>
+              <tr><td><strong>SVG</strong></td><td>Icons, logos, illustrations</td><td>✅ Yes</td><td>✅ CSS/JS</td><td>🟢 Tiny (vector)</td><td>✅ All browsers</td></tr>
+              <tr><td><strong>GIF</strong></td><td>Simple animations</td><td>✅ 1-bit</td><td>✅ Yes</td><td>🔴 Very large</td><td>✅ All browsers</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Best practice:</strong> Use <code>&lt;picture&gt;</code> to serve AVIF → WebP → JPEG fallback. Use SVG for icons/logos. Never use GIF — use MP4 or animated WebP instead.</div>
+      </div>
     </div>
 
     <!-- MODULE 1.6 -->
@@ -578,6 +810,48 @@ This line is in the same paragraph but on a new line.<span class="tag">&lt;/p&gt
 <span class="tag">&lt;/div&gt;</span></pre></div>
         </div>
       </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">&lt;ol&gt; attributes — controlling ordered lists</h3>
+        <p class="explain-en">
+          Ordered lists have attributes that control numbering style, start value, and direction. These are often overlooked but powerful for real-world content.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Ordered lists me numbering style, start value, aur direction control karne ke attributes hote hain.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Attribute</th><th>Purpose</th><th>Values</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td><code>type</code></td><td>Numbering style</td><td><code>1</code> (default), <code>a</code>, <code>A</code>, <code>i</code>, <code>I</code></td><td><code>&lt;ol type="A"&gt;</code> → A, B, C</td></tr>
+              <tr><td><code>start</code></td><td>Starting number</td><td>Any integer</td><td><code>&lt;ol start="5"&gt;</code> → 5, 6, 7</td></tr>
+              <tr><td><code>reversed</code></td><td>Countdown order</td><td>Boolean</td><td><code>&lt;ol reversed&gt;</code> → 3, 2, 1</td></tr>
+              <tr><td><code>value</code> (on <code>&lt;li&gt;</code>)</td><td>Override item number</td><td>Integer</td><td><code>&lt;li value="10"&gt;</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">When to use which list — decision guide</h3>
+        <p class="explain-en">
+          Choosing the right list type is a common interview question and helps search engines understand your content structure.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Sahi list type choose karna interview me bhi poochha jaata hai. Search engines bhi content structure samajhne ke liye lists dekhte hain.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Use case</th><th>List type</th><th>Why</th></tr></thead>
+            <tbody>
+              <tr><td>Navigation menu</td><td><code>&lt;ul&gt;</code> inside <code>&lt;nav&gt;</code></td><td>Order doesn't matter for nav links</td></tr>
+              <tr><td>Step-by-step instructions</td><td><code>&lt;ol&gt;</code></td><td>Order is important</td></tr>
+              <tr><td>Feature list / skills</td><td><code>&lt;ul&gt;</code></td><td>Unordered collection</td></tr>
+              <tr><td>Glossary / FAQ</td><td><code>&lt;dl&gt;</code></td><td>Term + definition pairs</td></tr>
+              <tr><td>Top 10 ranking</td><td><code>&lt;ol&gt;</code></td><td>Ranked order matters</td></tr>
+              <tr><td>Breadcrumb navigation</td><td><code>&lt;ol&gt;</code> inside <code>&lt;nav&gt;</code></td><td>Sequential hierarchy</td></tr>
+              <tr><td>Social media links</td><td><code>&lt;ul&gt;</code></td><td>Unordered set of links</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>Accessibility:</strong> Screen readers announce list type and item count (e.g., "list, 5 items"). Using the correct list type gives users helpful context.</div>
+      </div>
     </div>
 
     <!-- MODULE 1.7 -->
@@ -625,16 +899,55 @@ This line is in the same paragraph but on a new line.<span class="tag">&lt;/p&gt
         </div>
         <div class="callout callout-tip"><strong>Pro habit:</strong> Run your HTML through the <a href="https://validator.w3.org/" target="_blank" rel="noopener noreferrer">W3C Validator</a> regularly. Zero errors = professional code.</div>
       </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Common HTML mistakes — what to avoid</h3>
+        <p class="explain-en">
+          Even experienced developers make these mistakes. Knowing them saves debugging time and prevents production failures.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Ye mistakes experienced developers bhi karte hain. Inhe jaanna debugging time bachata hai aur production me issues prevent karta hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>❌ Mistake</th><th>Why it's bad</th><th>✅ Correct approach</th></tr></thead>
+            <tbody>
+              <tr><td>Multiple <code>&lt;h1&gt;</code> on one page</td><td>Confuses SEO + screen readers</td><td>One <code>&lt;h1&gt;</code> per page, use <code>&lt;h2&gt;</code>+ for sub-sections</td></tr>
+              <tr><td>Skipping heading levels (h1→h3)</td><td>Breaks document outline</td><td>Always go h1→h2→h3 in order</td></tr>
+              <tr><td>Missing <code>alt</code> on images</td><td>Fails WCAG, bad SEO</td><td>Descriptive alt text on every <code>&lt;img&gt;</code></td></tr>
+              <tr><td>Using <code>&lt;br&gt;</code> for spacing</td><td>Fragile, inaccessible</td><td>Use CSS <code>margin</code>/<code>padding</code> for spacing</td></tr>
+              <tr><td>Using <code>&lt;div&gt;</code> for everything</td><td>No semantic meaning</td><td>Use <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;section&gt;</code>, <code>&lt;article&gt;</code></td></tr>
+              <tr><td><code>&lt;a&gt;</code> wrapping block elements (old habit)</td><td>Was invalid in HTML4</td><td>✅ Legal in HTML5 — but keep it logical</td></tr>
+              <tr><td>Inline styles everywhere</td><td>Unmaintainable, high specificity</td><td>External stylesheets with classes</td></tr>
+              <tr><td>Missing <code>&lt;meta viewport&gt;</code></td><td>Page won't be responsive on mobile</td><td>Always include viewport meta tag</td></tr>
+              <tr><td><code>target="_blank"</code> without <code>rel</code></td><td>Security vulnerability (window.opener)</td><td>Add <code>rel="noopener noreferrer"</code></td></tr>
+              <tr><td>Images without <code>width</code>/<code>height</code></td><td>Causes CLS layout shift</td><td>Always set dimensions for CLS prevention</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
 
     <div class="practice-box">
-      <div class="practice-title">✏️ Practice Exercises — Part 1</div>
+      <div class="practice-title">✏️ Practice Exercises — Part 1 (Difficulty Graded)</div>
+      <h4>🟢 Easy (Do these first)</h4>
       <ol>
-        <li>Create a complete HTML page with proper boilerplate, title, meta description, and viewport.</li>
-        <li>Build a personal profile page with your name (h1), bio (paragraphs), and a photo with alt text.</li>
-        <li>Create a navigation menu with 5 links — 3 internal pages, 1 external (with security), 1 email link.</li>
-        <li>Build a "My Skills" section using an unordered list with nested sub-items.</li>
-        <li>Add a video embed and an audio player with proper fallback text.</li>
+        <li>Create a complete HTML page with proper boilerplate: <code>DOCTYPE</code>, <code>lang</code>, <code>charset</code>, <code>viewport</code>, <code>title</code>, and <code>meta description</code>. Validate with the W3C Validator.</li>
+        <li>Build a personal profile page with your name (<code>h1</code>), a 3-paragraph bio, and a photo using <code>&lt;figure&gt;</code> + <code>&lt;figcaption&gt;</code> with descriptive <code>alt</code> text.</li>
+        <li>Create a "My Skills" section using a nested unordered list (Frontend → HTML, CSS, JS; Backend → Node, Python).</li>
+        <li>Add 5 different link types to a page: internal page, external (with <code>rel="noopener noreferrer"</code>), same-page anchor, <code>mailto:</code>, and <code>tel:</code>.</li>
+      </ol>
+      <h4>🟡 Medium (Apply your knowledge)</h4>
+      <ol start="5">
+        <li>Build a responsive image using <code>srcset</code> with 3 sizes (480w, 800w, 1200w) and proper <code>sizes</code> attribute. Test in DevTools device toolbar.</li>
+        <li>Create a <strong>FAQ page</strong> using a description list (<code>&lt;dl&gt;</code>, <code>&lt;dt&gt;</code>, <code>&lt;dd&gt;</code>) with at least 5 questions and answers.</li>
+        <li>Embed a <code>&lt;video&gt;</code> with two <code>&lt;source&gt;</code> formats (MP4 + WebM), <code>controls</code>, <code>poster</code> image, and fallback text. Add an <code>&lt;audio&gt;</code> player below it.</li>
+        <li>Open DevTools → Elements tab. Inspect your page's <strong>DOM tree</strong>. Take a screenshot of the accessibility tree (Accessibility pane) showing heading levels and landmarks.</li>
+      </ol>
+      <h4>🔴 Hard (Challenge yourself)</h4>
+      <ol start="9">
+        <li>Build a complete <strong>blog article page</strong> using only HTML (no CSS yet): proper heading hierarchy (h1→h2→h3), paragraphs, images with lazy loading, blockquotes, code blocks, and internal anchor links for a table of contents.</li>
+        <li>Create a <strong>multi-page mini-site</strong> (index, about, contact) with a consistent navigation bar. Use relative paths for all internal links. Verify all links work.</li>
+        <li>Inspect your page's <strong>network waterfall</strong> in DevTools. Identify which resources are render-blocking. Move <code>&lt;script&gt;</code> tags to use <code>defer</code>. Measure the difference in DOMContentLoaded time.</li>
+        <li>Run your page through <strong>Lighthouse</strong> (Accessibility + SEO audits). Fix every issue until you achieve 100/100 on both. Document what you changed and why.</li>
       </ol>
     </div>
 

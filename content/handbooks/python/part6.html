@@ -75,6 +75,27 @@ Path(<span class="string">"out.txt"</span>).write_text(<span class="string">"Hel
           </table>
         </div>
       </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading"><code>pathlib</code> vs <code>os.path</code> — modern file path handling</h3>
+        <p class="explain-en"><code>pathlib</code> (Python 3.4+) provides an object-oriented API for file paths. It's the modern replacement for <code>os.path</code> string manipulation. Paths are objects with methods, not strings you concatenate.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>pathlib</code> file paths ke liye object-oriented API provide karta hai. Ye <code>os.path</code> string manipulation ka modern replacement hai. Paths objects hain methods ke saath, strings nahi jo concatenate karni padein.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Task</th><th><code>os.path</code> (legacy)</th><th><code>pathlib</code> (modern)</th></tr></thead>
+            <tbody>
+              <tr><td>Join paths</td><td><code>os.path.join("a", "b")</code></td><td><code>Path("a") / "b"</code></td></tr>
+              <tr><td>Read file</td><td><code>open(path).read()</code></td><td><code>Path(path).read_text()</code></td></tr>
+              <tr><td>File exists?</td><td><code>os.path.exists(p)</code></td><td><code>Path(p).exists()</code></td></tr>
+              <tr><td>Extension</td><td><code>os.path.splitext(p)[1]</code></td><td><code>Path(p).suffix</code></td></tr>
+              <tr><td>Parent dir</td><td><code>os.path.dirname(p)</code></td><td><code>Path(p).parent</code></td></tr>
+              <tr><td>Glob files</td><td><code>glob.glob("*.py")</code></td><td><code>Path(".").glob("*.py")</code></td></tr>
+              <tr><td>Create dir</td><td><code>os.makedirs(p, exist_ok=True)</code></td><td><code>Path(p).mkdir(parents=True, exist_ok=True)</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>Always use <code>pathlib</code> in new code.</strong> <code>os.path</code> is not deprecated but <code>pathlib</code> is cleaner, safer (no string bugs), and composable with <code>/</code> operator.</div>
+      </div>
     </div>
 
     <!-- MODULE 6.2 -->
@@ -122,6 +143,24 @@ Path(<span class="string">"out.txt"</span>).write_text(<span class="string">"Hel
 <span class="keyword">with</span> managed_file(<span class="string">"test.txt"</span>) <span class="keyword">as</span> f:
     f.write(<span class="string">"Hello!"</span>)</pre></div>
         </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Context manager protocol — how <code>with</code> works internally</h3>
+        <p class="explain-en">The <code>with</code> statement calls <code>__enter__</code> on entry and <code>__exit__</code> on exit (even if an exception occurs). <code>__exit__</code> receives exception info and can suppress it by returning <code>True</code>.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>with</code> statement entry pe <code>__enter__</code> call karta hai aur exit pe <code>__exit__</code> (exception aaye tab bhi). <code>__exit__</code> ko exception info milti hai aur <code>True</code> return karke exception suppress kar sakta hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Step</th><th>What Python does</th><th>Your code</th></tr></thead>
+            <tbody>
+              <tr><td>1. Enter</td><td>Calls <code>mgr.__enter__()</code></td><td>Returns value bound to <code>as</code> variable</td></tr>
+              <tr><td>2. Body</td><td>Executes the <code>with</code> block</td><td>Your main logic runs here</td></tr>
+              <tr><td>3a. Normal exit</td><td>Calls <code>__exit__(None, None, None)</code></td><td>Cleanup runs, no exception info</td></tr>
+              <tr><td>3b. Exception</td><td>Calls <code>__exit__(exc_type, exc_val, exc_tb)</code></td><td>Return <code>True</code> to suppress exception</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Built-in context managers:</strong> <code>open()</code>, <code>threading.Lock()</code>, <code>sqlite3.connect()</code>, <code>tempfile.TemporaryFile()</code>, <code>decimal.localcontext()</code> — all support <code>with</code>.</div>
       </div>
     </div>
 
@@ -280,6 +319,24 @@ json.dumps({<span class="string">"ts"</span>: datetime.now()}, default=custom_en
             </tbody>
           </table>
         </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">EAFP vs LBYL — Python's exception philosophy</h3>
+        <p class="explain-en">Python favors <strong>EAFP</strong> ("Easier to Ask Forgiveness than Permission") over <strong>LBYL</strong> ("Look Before You Leap"). This means using <code>try/except</code> instead of pre-checking with <code>if</code>. EAFP is faster when the exception is rare, and avoids race conditions.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Python <strong>EAFP</strong> ("Maafi maango, permission mat lo") prefer karta hai <strong>LBYL</strong> ("Pehle check karo") ke upar. Matlab <code>if</code> se check karne ki jagah <code>try/except</code> use karo. EAFP faster hai jab exception rare ho, aur race conditions avoid karta hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Scenario</th><th>❌ LBYL (non-Pythonic)</th><th>✅ EAFP (Pythonic)</th></tr></thead>
+            <tbody>
+              <tr><td>Dict access</td><td><code>if "key" in d: val = d["key"]</code></td><td><code>try: val = d["key"] except KeyError: ...</code></td></tr>
+              <tr><td>File read</td><td><code>if os.path.exists(f): open(f)</code></td><td><code>try: open(f) except FileNotFoundError: ...</code></td></tr>
+              <tr><td>Type conversion</td><td><code>if s.isdigit(): int(s)</code></td><td><code>try: int(s) except ValueError: ...</code></td></tr>
+              <tr><td>Attribute access</td><td><code>if hasattr(obj, "x"): obj.x</code></td><td><code>try: obj.x except AttributeError: ...</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>LBYL has race conditions:</strong> The file could be deleted between your <code>os.path.exists()</code> check and the <code>open()</code> call. EAFP is atomic — you try and handle failure.</div>
       </div>
     </div>
 

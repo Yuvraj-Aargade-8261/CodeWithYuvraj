@@ -31,16 +31,19 @@
     </div>
 
     <div class="concept-block">
-      <h3>Foundation readiness checklist (Part 1)</h3>
-      <table>
-        <thead><tr><th>Area</th><th>Industry baseline</th></tr></thead>
-        <tbody>
-          <tr><td>Version policy</td><td>Pin one Python version for dev/CI/prod.</td></tr>
-          <tr><td>Environment setup</td><td>Use `venv`/`uv` and lock dependencies for reproducibility.</td></tr>
-          <tr><td>I/O safety</td><td>Use UTF-8 explicitly and validate external input.</td></tr>
-          <tr><td>Code style</td><td>Automate formatter + linter checks in CI pipeline.</td></tr>
-        </tbody>
-      </table>
+      <h3 class="concept-heading">Foundation readiness checklist (Part 1)</h3>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Area</th><th>Industry baseline</th><th>Why it matters</th></tr></thead>
+          <tbody>
+            <tr><td>Version policy</td><td>Pin one Python version (e.g., 3.12) for dev/CI/prod</td><td>Prevents "works on my machine" bugs from version differences</td></tr>
+            <tr><td>Environment setup</td><td>Use <code>venv</code>/<code>uv</code> and lock dependencies (<code>requirements.txt</code>)</td><td>Guarantees reproducible builds across team and deployment</td></tr>
+            <tr><td>I/O safety</td><td>Use <code>encoding="utf-8"</code> explicitly in <code>open()</code></td><td>Default encoding varies by OS — Windows uses <code>cp1252</code>, not UTF-8</td></tr>
+            <tr><td>Code style</td><td>Automate <code>ruff</code>/<code>black</code> formatter + linter in CI pipeline</td><td>Eliminates style debates in code reviews, ensures consistency</td></tr>
+            <tr><td>Type safety</td><td>Add type hints to function signatures from Day 1</td><td>Enables IDE autocomplete, catches bugs before runtime</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <!-- MODULE 1.1 -->
@@ -77,6 +80,46 @@
         </div>
         <div class="callout callout-tip"><strong>CPython</strong> is the default Python interpreter (written in C). <strong>PyPy</strong> is a faster alternative with JIT compilation (2–10x faster for some workloads).</div>
       </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Python version timeline — what each release added</h3>
+        <p class="explain-en">Python evolves with annual releases. Each version adds significant features. Always use the <strong>latest stable version</strong> (currently 3.12/3.13). Python 2 is dead since January 1, 2020.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Python har saal naya version release karta hai. Hamesha latest stable version use karo (currently 3.12/3.13). Python 2 January 1, 2020 se dead hai — kabhi use mat karo.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Version</th><th>Year</th><th>Key features added</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td><code>2.7</code></td><td>2010</td><td>Last Python 2 release</td><td>☠️ Dead (Jan 2020)</td></tr>
+              <tr><td><code>3.6</code></td><td>2016</td><td>f-strings, variable annotations, <code>secrets</code> module</td><td>⚠️ EOL</td></tr>
+              <tr><td><code>3.7</code></td><td>2018</td><td>Dataclasses, <code>breakpoint()</code>, dict ordering guaranteed</td><td>⚠️ EOL</td></tr>
+              <tr><td><code>3.8</code></td><td>2019</td><td>Walrus operator <code>:=</code>, positional-only params <code>/</code></td><td>⚠️ EOL</td></tr>
+              <tr><td><code>3.9</code></td><td>2020</td><td>Dict merge <code>|</code>, type hints <code>list[int]</code> (no import)</td><td>⚠️ EOL</td></tr>
+              <tr><td><code>3.10</code></td><td>2021</td><td><code>match/case</code> pattern matching, better errors</td><td>🟡 Security</td></tr>
+              <tr><td><code>3.11</code></td><td>2022</td><td>10-60% faster, <code>ExceptionGroup</code>, <code>tomllib</code></td><td>🟡 Security</td></tr>
+              <tr><td><code>3.12</code></td><td>2023</td><td>Better f-strings, type param syntax <code>[T]</code>, <code>@override</code></td><td>✅ Active</td></tr>
+              <tr><td><code>3.13</code></td><td>2024</td><td>Experimental free-threaded mode (no GIL), JIT compiler</td><td>✅ Active</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">How Python executes your code — CPython internals</h3>
+        <p class="explain-en">When you run <code>python script.py</code>, CPython follows a pipeline: <strong>source code → lexer → parser → AST → compiler → bytecode → PVM (Python Virtual Machine)</strong>. The bytecode (<code>.pyc</code> files in <code>__pycache__</code>) is cached for faster subsequent runs. Understanding this pipeline helps you debug and optimize.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Jab aap <code>python script.py</code> run karte ho, CPython ek pipeline follow karta hai: source code → lexer → parser → AST → compiler → bytecode → PVM (Python Virtual Machine). Bytecode <code>__pycache__</code> me cache hoti hai taaki next time faster chale.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Stage</th><th>What happens</th><th>Output</th></tr></thead>
+            <tbody>
+              <tr><td>1. Lexer (Tokenizer)</td><td>Breaks source into tokens (<code>def</code>, <code>=</code>, <code>42</code>)</td><td>Token stream</td></tr>
+              <tr><td>2. Parser</td><td>Builds syntax tree from tokens</td><td>AST (Abstract Syntax Tree)</td></tr>
+              <tr><td>3. Compiler</td><td>Converts AST to bytecode instructions</td><td><code>.pyc</code> bytecode file</td></tr>
+              <tr><td>4. PVM</td><td>Executes bytecode instruction-by-instruction</td><td>Program output</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>The GIL (Global Interpreter Lock):</strong> CPython's GIL allows only one thread to execute Python bytecode at a time. This means CPU-bound multi-threading doesn't speed up Python. Use <code>multiprocessing</code> for CPU parallelism, <code>asyncio</code> for I/O concurrency. Python 3.13 introduces experimental free-threaded mode to remove this limitation.</div>
+      </div>
     </div>
 
     <!-- MODULE 1.2 -->
@@ -109,6 +152,42 @@ pip install -r requirements.txt
 pip install jupyter
 jupyter notebook</pre></div>
         </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">IDE & tool comparison — choosing your setup</h3>
+        <p class="explain-en">Your development environment affects productivity. Here's a comparison of the most popular options for Python development.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Development environment aapki productivity affect karta hai. Python ke liye sabse popular options ka comparison dekho.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Tool</th><th>Type</th><th>Best for</th><th>Cost</th><th>Key features</th></tr></thead>
+            <tbody>
+              <tr><td><strong>VS Code</strong></td><td>Editor + extensions</td><td>All-purpose development</td><td>Free</td><td>Python extension, IntelliSense, debugger, Git, terminal</td></tr>
+              <tr><td><strong>PyCharm</strong></td><td>Full IDE</td><td>Large projects, refactoring</td><td>Free (Community) / Paid</td><td>Smart code analysis, database tools, Django support</td></tr>
+              <tr><td><strong>Jupyter Notebook</strong></td><td>Interactive notebook</td><td>Data science, ML, exploration</td><td>Free</td><td>Cell-by-cell execution, inline plots, Markdown</td></tr>
+              <tr><td><strong>Google Colab</strong></td><td>Cloud notebook</td><td>ML with free GPU</td><td>Free</td><td>No setup, free GPU/TPU, Google Drive integration</td></tr>
+              <tr><td><strong>IDLE</strong></td><td>Basic IDE</td><td>Absolute beginners</td><td>Free (bundled)</td><td>Comes with Python, simple REPL, basic editor</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Industry standard:</strong> Most professional Python developers use <strong>VS Code</strong> (65%+) with the Python, Pylance, and Ruff extensions. Install these three and you have a world-class Python IDE for free.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Package manager comparison — pip vs conda vs uv</h3>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Tool</th><th>Speed</th><th>Use case</th><th>Env management</th><th>Lock file</th></tr></thead>
+            <tbody>
+              <tr><td><code>pip</code> + <code>venv</code></td><td>Standard</td><td>General Python</td><td><code>python -m venv</code></td><td><code>requirements.txt</code></td></tr>
+              <tr><td><code>conda</code></td><td>Slower</td><td>Data science (C/Fortran libs)</td><td>Built-in</td><td><code>environment.yml</code></td></tr>
+              <tr><td><code>poetry</code></td><td>Medium</td><td>Library publishing</td><td>Built-in</td><td><code>poetry.lock</code></td></tr>
+              <tr><td><code>uv</code></td><td>⚡ 10-100x faster</td><td>Modern replacement for pip</td><td><code>uv venv</code></td><td><code>uv.lock</code></td></tr>
+              <tr><td><code>pipx</code></td><td>Standard</td><td>Installing CLI tools globally</td><td>Isolated per tool</td><td>N/A</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>2024+ trend:</strong> <code>uv</code> (by Astral, makers of Ruff) is replacing pip+venv in many teams. It's written in Rust and is 10-100x faster. Try: <code>pip install uv</code> then <code>uv pip install requests</code>.</div>
       </div>
     </div>
 
@@ -163,6 +242,47 @@ b.append(<span class="number">4</span>)
           </table>
         </div>
       </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Python memory model — how variables actually work</h3>
+        <p class="explain-en">In Python, <strong>variables are not boxes</strong> — they are <strong>name tags (references) pointing to objects in memory</strong>. Every Python value is a <code>PyObject</code> on the heap with a reference count and type pointer. When no references point to an object, the garbage collector frees it. This is why <code>a = b</code> doesn't copy data — it copies the reference.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Python me variables boxes nahi hain — ye <strong>name tags (references)</strong> hain jo memory me objects ko point karte hain. Har Python value ek <code>PyObject</code> hai jisme reference count aur type pointer hota hai. Jab koi reference nahi bachta, garbage collector object ko free kar deta hai. Isliye <code>a = b</code> data copy nahi karta — sirf reference copy karta hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Concept</th><th>What it means</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Reference</strong></td><td>Variable name points to object</td><td><code>x = 42</code> → x is a label on object <code>42</code></td></tr>
+              <tr><td><strong>Reference counting</strong></td><td>Each object tracks how many names point to it</td><td><code>sys.getrefcount(x)</code> shows count</td></tr>
+              <tr><td><strong>Garbage collection</strong></td><td>When refcount = 0, memory is freed</td><td><code>del x</code> removes reference, may trigger GC</td></tr>
+              <tr><td><strong>Integer interning</strong></td><td>Small ints (-5 to 256) are pre-cached singletons</td><td><code>a = 5; b = 5; a is b</code> → <code>True</code></td></tr>
+              <tr><td><strong>String interning</strong></td><td>Short identifier-like strings are cached</td><td><code>a = "hello"; b = "hello"; a is b</code> → <code>True</code></td></tr>
+              <tr><td><strong>Shallow copy</strong></td><td>New container, same element references</td><td><code>b = a.copy()</code> or <code>b = a[:]</code></td></tr>
+              <tr><td><strong>Deep copy</strong></td><td>New container AND new copies of all elements</td><td><code>import copy; b = copy.deepcopy(a)</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>Mutable default argument trap:</strong> Never use mutable objects (<code>[]</code>, <code>{}</code>) as default function arguments. They are shared across all calls! Use <code>None</code> and create inside the function: <code>def f(items=None): items = items or []</code></div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Mutable vs Immutable — the most important distinction</h3>
+        <p class="explain-en">Every Python type is either <strong>mutable</strong> (can be changed in-place) or <strong>immutable</strong> (cannot be changed — any modification creates a new object). This affects function arguments, dictionary keys, thread safety, and performance.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Har Python type ya toh <strong>mutable</strong> hai (in-place change ho sakta hai) ya <strong>immutable</strong> (change nahi hota — modification naya object banata hai). Ye function arguments, dict keys, thread safety, aur performance sab ko affect karta hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Immutable (can't change)</th><th>Mutable (can change in-place)</th></tr></thead>
+            <tbody>
+              <tr><td><code>int</code>, <code>float</code>, <code>complex</code></td><td><code>list</code></td></tr>
+              <tr><td><code>str</code></td><td><code>dict</code></td></tr>
+              <tr><td><code>tuple</code></td><td><code>set</code></td></tr>
+              <tr><td><code>frozenset</code></td><td><code>bytearray</code></td></tr>
+              <tr><td><code>bytes</code></td><td>Custom objects (by default)</td></tr>
+              <tr><td><code>bool</code>, <code>None</code></td><td><code>collections.deque</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>Rule:</strong> Only <strong>immutable</strong> objects can be dictionary keys or set members (because they need a stable <code>__hash__</code>). <code>list</code> can't be a dict key, but <code>tuple</code> can (if it contains only immutables).</div>
+      </div>
     </div>
 
     <!-- MODULE 1.4 -->
@@ -213,6 +333,58 @@ x <span class="keyword">in</span> [<span class="number">1</span>,<span class="nu
               <tr><td>Identity</td><td><code>is, is not</code></td><td><code>x is None</code></td></tr>
               <tr><td>Membership</td><td><code>in, not in</code></td><td><code>"a" in "abc"</code></td></tr>
               <tr><td>Walrus</td><td><code>:=</code></td><td><code>if (n := len(x)) > 0</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Operator precedence — complete 15-level hierarchy</h3>
+        <p class="explain-en">When multiple operators appear in one expression, Python follows a strict precedence order. Higher rows execute first. Use <strong>parentheses</strong> to override precedence and improve readability.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Jab ek expression me multiple operators hain, Python ek strict precedence order follow karta hai. Upar wali rows pehle execute hoti hain. Parentheses use karo precedence override karne ke liye.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Level</th><th>Operator</th><th>Description</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td>1 (highest)</td><td><code>()</code></td><td>Parentheses / grouping</td><td><code>(2 + 3) * 4</code></td></tr>
+              <tr><td>2</td><td><code>**</code></td><td>Exponentiation (right-to-left!)</td><td><code>2 ** 3 ** 2</code> → 512</td></tr>
+              <tr><td>3</td><td><code>+x</code> <code>-x</code> <code>~x</code></td><td>Unary plus, minus, bitwise NOT</td><td><code>-5</code>, <code>~0</code> → -1</td></tr>
+              <tr><td>4</td><td><code>*</code> <code>/</code> <code>//</code> <code>%</code></td><td>Multiplication, division, modulo</td><td><code>10 // 3</code> → 3</td></tr>
+              <tr><td>5</td><td><code>+</code> <code>-</code></td><td>Addition, subtraction</td><td><code>5 + 3</code></td></tr>
+              <tr><td>6</td><td><code>&lt;&lt;</code> <code>&gt;&gt;</code></td><td>Bitwise shifts</td><td><code>1 &lt;&lt; 3</code> → 8</td></tr>
+              <tr><td>7</td><td><code>&amp;</code></td><td>Bitwise AND</td><td><code>5 &amp; 3</code> → 1</td></tr>
+              <tr><td>8</td><td><code>^</code></td><td>Bitwise XOR</td><td><code>5 ^ 3</code> → 6</td></tr>
+              <tr><td>9</td><td><code>|</code></td><td>Bitwise OR</td><td><code>5 | 3</code> → 7</td></tr>
+              <tr><td>10</td><td><code>==</code> <code>!=</code> <code>&lt;</code> <code>&gt;</code> <code>&lt;=</code> <code>&gt;=</code> <code>is</code> <code>in</code></td><td>Comparisons, identity, membership</td><td><code>x is None</code></td></tr>
+              <tr><td>11</td><td><code>not</code></td><td>Logical NOT</td><td><code>not True</code></td></tr>
+              <tr><td>12</td><td><code>and</code></td><td>Logical AND (short-circuits)</td><td><code>a and b</code></td></tr>
+              <tr><td>13</td><td><code>or</code></td><td>Logical OR (short-circuits)</td><td><code>a or b</code></td></tr>
+              <tr><td>14</td><td><code>if else</code></td><td>Ternary conditional</td><td><code>x if cond else y</code></td></tr>
+              <tr><td>15 (lowest)</td><td><code>:=</code></td><td>Walrus operator</td><td><code>(n := len(x))</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>Gotcha:</strong> <code>**</code> is <strong>right-associative</strong>! <code>2 ** 3 ** 2</code> equals <code>2 ** 9</code> = 512, NOT <code>8 ** 2</code> = 64. Always use parentheses for clarity.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Operator → dunder method mapping</h3>
+        <p class="explain-en">Every operator in Python calls a corresponding <strong>dunder (magic) method</strong> on the object. This is how operator overloading works — define these methods in your class to make your objects support <code>+</code>, <code>==</code>, etc.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Python me har operator ek corresponding <strong>dunder (magic) method</strong> call karta hai. Ye operator overloading ka mechanism hai — apni class me ye methods define karo taaki objects <code>+</code>, <code>==</code>, etc. support karein.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Operator</th><th>Dunder method</th><th>Reverse</th></tr></thead>
+            <tbody>
+              <tr><td><code>+</code></td><td><code>__add__(self, other)</code></td><td><code>__radd__</code></td></tr>
+              <tr><td><code>-</code></td><td><code>__sub__(self, other)</code></td><td><code>__rsub__</code></td></tr>
+              <tr><td><code>*</code></td><td><code>__mul__(self, other)</code></td><td><code>__rmul__</code></td></tr>
+              <tr><td><code>==</code></td><td><code>__eq__(self, other)</code></td><td>—</td></tr>
+              <tr><td><code>&lt;</code></td><td><code>__lt__(self, other)</code></td><td><code>__gt__</code></td></tr>
+              <tr><td><code>[]</code></td><td><code>__getitem__(self, key)</code></td><td>—</td></tr>
+              <tr><td><code>len()</code></td><td><code>__len__(self)</code></td><td>—</td></tr>
+              <tr><td><code>str()</code></td><td><code>__str__(self)</code></td><td>—</td></tr>
+              <tr><td><code>repr()</code></td><td><code>__repr__(self)</code></td><td>—</td></tr>
+              <tr><td><code>bool()</code></td><td><code>__bool__(self)</code></td><td>—</td></tr>
             </tbody>
           </table>
         </div>
@@ -269,6 +441,42 @@ pi = <span class="number">3.14159</span>
           </table>
         </div>
       </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading"><code>print()</code> complete parameter reference</h3>
+        <p class="explain-en"><code>print()</code> is more powerful than most beginners realize. Understanding all its parameters lets you control output formatting without string concatenation.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>print()</code> bahut powerful hai. Iske sab parameters samajhne se aap output formatting control kar sakte ho bina string concatenation ke.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Parameter</th><th>Default</th><th>Purpose</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td><code>*objects</code></td><td>—</td><td>Values to print (any number)</td><td><code>print(1, 2, 3)</code></td></tr>
+              <tr><td><code>sep</code></td><td><code>" "</code></td><td>Separator between values</td><td><code>print(1, 2, sep="-")</code> → <code>1-2</code></td></tr>
+              <tr><td><code>end</code></td><td><code>"\n"</code></td><td>String appended after output</td><td><code>print("hi", end="")</code> → no newline</td></tr>
+              <tr><td><code>file</code></td><td><code>sys.stdout</code></td><td>Output destination</td><td><code>print("log", file=open("f.txt","w"))</code></td></tr>
+              <tr><td><code>flush</code></td><td><code>False</code></td><td>Force immediate write</td><td><code>print(".", flush=True)</code> for progress</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">String formatting methods — 4 ways compared</h3>
+        <p class="explain-en">Python has evolved through 4 string formatting approaches. <strong>f-strings are the modern standard</strong> — fastest, most readable, and most powerful.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Python me 4 string formatting approaches hain. <strong>f-strings modern standard hain</strong> — sabse fast, readable, aur powerful.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Method</th><th>Syntax</th><th>Version</th><th>Recommendation</th></tr></thead>
+            <tbody>
+              <tr><td><code>%</code> formatting</td><td><code>"Hello %s" % name</code></td><td>Python 2+</td><td>❌ Legacy — avoid</td></tr>
+              <tr><td><code>.format()</code></td><td><code>"Hello {}".format(name)</code></td><td>Python 2.6+</td><td>⚠️ OK, verbose</td></tr>
+              <tr><td><code>f-strings</code></td><td><code>f"Hello {name}"</code></td><td>Python 3.6+</td><td>✅ <strong>Use this!</strong></td></tr>
+              <tr><td><code>Template</code></td><td><code>Template("$name").substitute()</code></td><td>Python 2.4+</td><td>⚠️ Only for user input</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>Security:</strong> Never use f-strings or <code>.format()</code> with user-supplied format strings — they can access object attributes. Use <code>string.Template</code> for user-controlled templates.</div>
+      </div>
     </div>
 
     <!-- MODULE 1.6 -->
@@ -299,6 +507,49 @@ pi = <span class="number">3.14159</span>
 <span class="function">type</span>(<span class="number">42</span>).__name__              <span class="comment"># "int"</span></pre></div>
         </div>
         <div class="callout callout-tip"><strong>Prefer <code>isinstance()</code> over <code>type()</code></strong> — it respects inheritance. <code>isinstance(True, int)</code> is <code>True</code> because <code>bool</code> is a subclass of <code>int</code>.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Type conversion complete matrix</h3>
+        <p class="explain-en">Not all conversions are valid. This matrix shows which type conversions work and which raise errors.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Sab conversions valid nahi hain. Ye matrix dikhata hai ki kaunsi type conversions kaam karti hain aur kaunsi error deti hain.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>From → To</th><th><code>int()</code></th><th><code>float()</code></th><th><code>str()</code></th><th><code>bool()</code></th><th><code>list()</code></th></tr></thead>
+            <tbody>
+              <tr><td><code>int</code></td><td>—</td><td>✅ <code>3.0</code></td><td>✅ <code>"42"</code></td><td>✅ <code>True</code> (if ≠0)</td><td>❌ Error</td></tr>
+              <tr><td><code>float</code></td><td>✅ truncates</td><td>—</td><td>✅ <code>"3.14"</code></td><td>✅ <code>True</code> (if ≠0.0)</td><td>❌ Error</td></tr>
+              <tr><td><code>str</code></td><td>✅ if numeric</td><td>✅ if numeric</td><td>—</td><td>✅ <code>True</code> (if ≠"")</td><td>✅ chars list</td></tr>
+              <tr><td><code>bool</code></td><td>✅ 0 or 1</td><td>✅ 0.0 or 1.0</td><td>✅ "True"/"False"</td><td>—</td><td>❌ Error</td></tr>
+              <tr><td><code>list</code></td><td>❌ Error</td><td>❌ Error</td><td>✅ repr</td><td>✅ <code>True</code> (if non-empty)</td><td>—</td></tr>
+              <tr><td><code>None</code></td><td>❌ Error</td><td>❌ Error</td><td>✅ <code>"None"</code></td><td>✅ <code>False</code></td><td>❌ Error</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Falsy values — complete list with <code>__bool__</code> protocol</h3>
+        <p class="explain-en">Python's truthiness system is powered by the <code>__bool__</code> dunder method. When you write <code>if x:</code>, Python calls <code>x.__bool__()</code>. If <code>__bool__</code> is not defined, it falls back to <code>__len__()</code> (empty = falsy).</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Python ka truthiness system <code>__bool__</code> dunder method se power hota hai. Jab aap <code>if x:</code> likhte ho, Python <code>x.__bool__()</code> call karta hai. Agar <code>__bool__</code> nahi hai, toh <code>__len__()</code> use hota hai (empty = falsy).</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Falsy value</th><th>Type</th><th>Why it's falsy</th></tr></thead>
+            <tbody>
+              <tr><td><code>False</code></td><td><code>bool</code></td><td>Literal False</td></tr>
+              <tr><td><code>0</code>, <code>0.0</code>, <code>0j</code></td><td>numeric</td><td>Zero of any numeric type</td></tr>
+              <tr><td><code>""</code></td><td><code>str</code></td><td><code>__len__() == 0</code></td></tr>
+              <tr><td><code>[]</code></td><td><code>list</code></td><td><code>__len__() == 0</code></td></tr>
+              <tr><td><code>()</code></td><td><code>tuple</code></td><td><code>__len__() == 0</code></td></tr>
+              <tr><td><code>{}</code></td><td><code>dict</code></td><td><code>__len__() == 0</code></td></tr>
+              <tr><td><code>set()</code></td><td><code>set</code></td><td><code>__len__() == 0</code></td></tr>
+              <tr><td><code>None</code></td><td><code>NoneType</code></td><td>Always falsy</td></tr>
+              <tr><td><code>range(0)</code></td><td><code>range</code></td><td><code>__len__() == 0</code></td></tr>
+              <tr><td>Custom with <code>__bool__() → False</code></td><td>Any class</td><td>Your own falsy logic</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Financial math:</strong> Never use <code>float</code> for money! <code>0.1 + 0.2 == 0.30000000000000004</code>. Use <code>from decimal import Decimal</code> for exact decimal arithmetic.</div>
       </div>
     </div>
 
@@ -353,6 +604,42 @@ _private_var = <span class="number">10</span>         <span class="comment"># le
             </tbody>
           </table>
         </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Linting & formatting tools — automate code quality</h3>
+        <p class="explain-en">Professional Python teams automate code style with tools. The modern standard is <strong>Ruff</strong> (linting) + <strong>Black</strong> (formatting) — run them in your CI pipeline and pre-commit hooks.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Professional Python teams code style tools se automate karte hain. Modern standard hai <strong>Ruff</strong> (linting) + <strong>Black</strong> (formatting) — inhe CI pipeline aur pre-commit hooks me run karo.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Tool</th><th>Type</th><th>Speed</th><th>Config file</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Ruff</strong></td><td>Linter + formatter</td><td>⚡ 100x faster</td><td><code>pyproject.toml</code></td><td>Replaces flake8, isort, pyflakes. Written in Rust.</td></tr>
+              <tr><td><strong>Black</strong></td><td>Formatter</td><td>Fast</td><td><code>pyproject.toml</code></td><td>"Uncompromising" — one style, no config debates</td></tr>
+              <tr><td><strong>Flake8</strong></td><td>Linter</td><td>Standard</td><td><code>.flake8</code></td><td>Classic, being replaced by Ruff</td></tr>
+              <tr><td><strong>Pylint</strong></td><td>Linter (deep)</td><td>Slow</td><td><code>.pylintrc</code></td><td>Most thorough but very noisy</td></tr>
+              <tr><td><strong>mypy</strong></td><td>Type checker</td><td>Medium</td><td><code>pyproject.toml</code></td><td>Static type checking from type hints</td></tr>
+              <tr><td><strong>isort</strong></td><td>Import sorter</td><td>Fast</td><td><code>pyproject.toml</code></td><td>Sorts imports per PEP 8 (now in Ruff)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Docstring formats — industry standards</h3>
+        <p class="explain-en">Three docstring styles are used in the industry. Pick one for your project and be consistent. Most teams use <strong>Google style</strong> for readability.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Industry me teen docstring styles use hote hain. Apne project ke liye ek choose karo aur consistent raho. Zyada teams <strong>Google style</strong> use karti hain readability ke liye.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Style</th><th>Args format</th><th>Used by</th><th>Best for</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Google</strong></td><td><code>Args:\n    name: Description</code></td><td>Google, FastAPI</td><td>Most readable, recommended</td></tr>
+              <tr><td><strong>NumPy</strong></td><td><code>Parameters\n----------\nname : type</code></td><td>NumPy, SciPy, pandas</td><td>Data science libraries</td></tr>
+              <tr><td><strong>Sphinx (reST)</strong></td><td><code>:param name: Description</code></td><td>Django, CPython</td><td>Sphinx doc generation</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>Minimum viable setup (Day 1):</strong> Install <code>ruff</code> and add to VS Code settings: <code>"python.linting.enabled": true</code>. This single step catches 80% of style issues instantly.</div>
       </div>
     </div>
 

@@ -31,16 +31,19 @@
     </div>
 
     <div class="concept-block">
-      <h3>OOP readiness checklist (Part 5)</h3>
-      <table>
-        <thead><tr><th>Design area</th><th>Interview/client-grade expectation</th></tr></thead>
-        <tbody>
-          <tr><td>Encapsulation</td><td>Protect internal state and expose behavior via stable methods.</td></tr>
-          <tr><td>Inheritance use</td><td>Use inheritance only for true "is-a" relationships.</td></tr>
-          <tr><td>Dunder clarity</td><td>Implement magic methods only when behavior is domain-relevant.</td></tr>
-          <tr><td>Dataclass fit</td><td>Use dataclasses for value objects with clear data contracts.</td></tr>
-        </tbody>
-      </table>
+      <h3 class="concept-heading">OOP readiness checklist (Part 5)</h3>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Design area</th><th>Interview/client-grade expectation</th><th>Why it matters</th></tr></thead>
+          <tbody>
+            <tr><td>Encapsulation</td><td>Protect internal state, expose behavior via stable methods</td><td>Prevents fragile coupling — internal changes don't break callers</td></tr>
+            <tr><td>Inheritance use</td><td>Use inheritance only for true "is-a" relationships</td><td>Wrong inheritance creates the fragile base class problem</td></tr>
+            <tr><td>Dunder clarity</td><td>Implement magic methods only when behavior is domain-relevant</td><td>Unnecessary dunders confuse users and break standard expectations</td></tr>
+            <tr><td>Dataclass fit</td><td>Use dataclasses for value objects with clear data contracts</td><td>Eliminates 50+ lines of boilerplate per class</td></tr>
+            <tr><td>Composition</td><td>Favor "has-a" over "is-a" when relationship is ambiguous</td><td>GoF principle — composition gives runtime flexibility</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <!-- MODULE 5.1 -->
@@ -107,6 +110,23 @@ buddy = Dog(<span class="string">"Buddy"</span>, <span class="number">3</span>)
           </table>
         </div>
       </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Object creation lifecycle — <code>__new__</code> vs <code>__init__</code></h3>
+        <p class="explain-en">Object creation is a 2-step process: <code>__new__</code> allocates memory and creates the instance, then <code>__init__</code> initializes it. Most classes only need <code>__init__</code>. Override <code>__new__</code> only for immutable types, singletons, or metaclass magic.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Object creation 2-step process hai: <code>__new__</code> memory allocate karta hai aur instance banata hai, phir <code>__init__</code> usse initialize karta hai. Zyada classes ko sirf <code>__init__</code> chahiye. <code>__new__</code> sirf immutable types, singletons, ya metaclass magic ke liye override karo.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Step</th><th>Method</th><th>Receives</th><th>Returns</th><th>When to override</th></tr></thead>
+            <tbody>
+              <tr><td>1. Create</td><td><code>__new__(cls)</code></td><td>Class itself</td><td>New instance</td><td>Singletons, immutable types</td></tr>
+              <tr><td>2. Initialize</td><td><code>__init__(self)</code></td><td>Instance</td><td><code>None</code></td><td>Almost always — set attributes</td></tr>
+              <tr><td>3. Destroy</td><td><code>__del__(self)</code></td><td>Instance</td><td><code>None</code></td><td>Resource cleanup (prefer context managers)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>Don't use <code>__del__</code> for cleanup!</strong> It's called unpredictably by the garbage collector. Use <code>with</code> statements and <code>__enter__</code>/<code>__exit__</code> instead.</div>
+      </div>
     </div>
 
     <!-- MODULE 5.2 -->
@@ -152,6 +172,24 @@ acc.deposit(<span class="number">500</span>)
 <span class="comment"># acc.__balance       ❌ AttributeError</span>
 <span class="comment"># acc._BankAccount__balance  ✅ Name-mangled access</span></pre></div>
         </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Name mangling — how Python handles <code>__private</code></h3>
+        <p class="explain-en">Python doesn't have true private members. <code>__name</code> is "name-mangled" to <code>_ClassName__name</code> to avoid accidental overrides in subclasses. It's <em>not</em> security — it's a collision-prevention mechanism.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Python me true private members nahi hain. <code>__name</code> ko "name-mangled" karke <code>_ClassName__name</code> bana diya jaata hai subclasses me accidental overrides avoid karne ke liye. Ye security nahi hai — collision-prevention mechanism hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Convention</th><th>Access</th><th>Mangling</th><th>Use case</th></tr></thead>
+            <tbody>
+              <tr><td><code>name</code></td><td>Public</td><td>None</td><td>Normal attributes and methods</td></tr>
+              <tr><td><code>_name</code></td><td>Protected</td><td>None</td><td>"Internal use" signal — not enforced</td></tr>
+              <tr><td><code>__name</code></td><td>Private</td><td><code>_Class__name</code></td><td>Prevent subclass collision</td></tr>
+              <tr><td><code>__name__</code></td><td>Special</td><td>None (reserved)</td><td>Dunder/magic methods only</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Python philosophy:</strong> "We're all consenting adults here." Python trusts developers to respect naming conventions instead of enforcing access control through the language.</div>
       </div>
     </div>
 
@@ -208,6 +246,24 @@ donald.swim()   <span class="comment"># Swimming!</span>
 <span class="function">print</span>(Duck.__mro__)
 <span class="comment"># (Duck, Animal, Flyable, Swimmable, object)</span></pre></div>
         </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">MRO & <code>super()</code> — the C3 linearization algorithm</h3>
+        <p class="explain-en">When using multiple inheritance, Python computes the <strong>Method Resolution Order</strong> using C3 linearization. <code>super()</code> follows this MRO, not just the immediate parent. This ensures each class's method is called exactly once.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Multiple inheritance me Python <strong>MRO</strong> compute karta hai C3 linearization se. <code>super()</code> sirf immediate parent nahi, balki MRO follow karta hai. Ye ensure karta hai ki har class ka method exactly ek baar call ho.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Concept</th><th>Behavior</th><th>How to check</th></tr></thead>
+            <tbody>
+              <tr><td>MRO</td><td>Left-to-right, depth-first, then linearized</td><td><code>Class.__mro__</code> or <code>Class.mro()</code></td></tr>
+              <tr><td><code>super()</code></td><td>Calls next class in MRO (not parent!)</td><td>Always use for cooperative MI</td></tr>
+              <tr><td>Diamond problem</td><td>C3 ensures each base called once</td><td><code>D.__mro__</code> shows the resolved order</td></tr>
+              <tr><td>Mixin pattern</td><td>Small behavior classes with no <code>__init__</code></td><td>Place mixins before base in class declaration</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>Cooperative <code>super()</code>:</strong> In MI, ALL classes in the hierarchy should call <code>super().__init__()</code>. If any class breaks the chain, initialization of downstream classes is skipped silently.</div>
       </div>
     </div>
 

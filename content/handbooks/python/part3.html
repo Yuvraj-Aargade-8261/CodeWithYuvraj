@@ -31,16 +31,19 @@
     </div>
 
     <div class="concept-block">
-      <h3>Data-structure readiness checklist (Part 3)</h3>
-      <table>
-        <thead><tr><th>Area</th><th>Industry baseline</th></tr></thead>
-        <tbody>
-          <tr><td>Lookup profile</td><td>Use `dict`/`set` for frequent membership and keyed access.</td></tr>
-          <tr><td>Ordering needs</td><td>Use list when sequence order and indexing are primary.</td></tr>
-          <tr><td>Immutability</td><td>Use tuple/frozen types for stable records and hash safety.</td></tr>
-          <tr><td>Data contracts</td><td>Keep schema shape consistent across pipeline boundaries.</td></tr>
-        </tbody>
-      </table>
+      <h3 class="concept-heading">Data-structure readiness checklist (Part 3)</h3>
+      <div class="hb-table-wrap">
+        <table class="hb-table">
+          <thead><tr><th>Area</th><th>Industry baseline</th><th>Why it matters</th></tr></thead>
+          <tbody>
+            <tr><td>Lookup profile</td><td>Use <code>dict</code>/<code>set</code> for frequent membership/keyed access</td><td><code>in</code> on list is O(n); on set/dict is O(1) — 1000x faster at scale</td></tr>
+            <tr><td>Ordering needs</td><td>Use <code>list</code> when sequence order and indexing are primary</td><td>Sorted data enables binary search and efficient pagination</td></tr>
+            <tr><td>Immutability</td><td>Use <code>tuple</code>/<code>frozenset</code> for stable records and hash safety</td><td>Immutable objects are thread-safe and can be dict keys/set members</td></tr>
+            <tr><td>Data contracts</td><td>Keep schema shape consistent across pipeline boundaries</td><td>Inconsistent structures cause <code>KeyError</code> at runtime in production</td></tr>
+            <tr><td>Memory awareness</td><td>Profile with <code>sys.getsizeof()</code> for large datasets</td><td>A list of 1M ints uses ~8MB; a generator uses ~100 bytes</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <!-- MODULE 3.1 -->
@@ -100,6 +103,23 @@ s.isalpha()        <span class="comment"># False (has space, comma)</span>
           </table>
         </div>
       </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Unicode & encoding — <code>str</code> vs <code>bytes</code> internals</h3>
+        <p class="explain-en">Python 3 strings are <strong>Unicode by default</strong> (each char is a Unicode code point). Internally CPython uses 1, 2, or 4 bytes per character depending on content (Latin-1 / UCS-2 / UCS-4). When working with files or network, you must <strong>encode</strong> (str→bytes) and <strong>decode</strong> (bytes→str).</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Python 3 strings <strong>Unicode by default</strong> hain. Internally CPython 1, 2, ya 4 bytes per character use karta hai content ke according. Files ya network ke saath kaam karte waqt <strong>encode</strong> (str→bytes) aur <strong>decode</strong> (bytes→str) karna zaruri hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Type</th><th>Contains</th><th>Mutable?</th><th>Use case</th></tr></thead>
+            <tbody>
+              <tr><td><code>str</code></td><td>Unicode text</td><td>❌</td><td>All text processing</td></tr>
+              <tr><td><code>bytes</code></td><td>Raw byte data (0-255)</td><td>❌</td><td>Files, network, binary data</td></tr>
+              <tr><td><code>bytearray</code></td><td>Raw byte data (0-255)</td><td>✅</td><td>Mutable binary buffers</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>Always specify encoding:</strong> <code>open("file.txt", encoding="utf-8")</code>. On Windows the default is <code>cp1252</code>, not UTF-8. This causes silent data corruption with emoji or non-Latin characters.</div>
+      </div>
     </div>
 
     <!-- MODULE 3.2 -->
@@ -141,6 +161,27 @@ b = a.copy()       <span class="comment"># Shallow — nested lists still shared
 c = copy.deepcopy(a)  <span class="comment"># Deep — fully independent</span></pre></div>
         </div>
         <div class="callout callout-warning"><strong>Shallow copy trap!</strong> <code>list.copy()</code>, <code>list[:]</code>, and <code>list(original)</code> only copy the top level. Nested objects are still shared references. Use <code>copy.deepcopy()</code> for nested structures.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">CPython list internals — dynamic array architecture</h3>
+        <p class="explain-en">Under the hood, a Python <code>list</code> is a <strong>dynamic array of pointers</strong> (not values). CPython over-allocates memory so <code>append()</code> is usually O(1). When the array fills up, it grows by ~12.5%, causing an occasional O(n) resize.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Python <code>list</code> internally ek <strong>dynamic array of pointers</strong> hai (values nahi). CPython memory over-allocate karta hai taaki <code>append()</code> usually O(1) rahe. Jab array bhar jaata hai, ~12.5% grow hota hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Operation</th><th>Time</th><th>Why</th></tr></thead>
+            <tbody>
+              <tr><td><code>list[i]</code></td><td>O(1)</td><td>Direct pointer offset — array[i] = base + i×8</td></tr>
+              <tr><td><code>list.append(x)</code></td><td>O(1)*</td><td>Pre-allocated slots; rare resize is O(n)</td></tr>
+              <tr><td><code>list.insert(0, x)</code></td><td>O(n)</td><td>Must shift ALL elements right</td></tr>
+              <tr><td><code>list.pop()</code></td><td>O(1)</td><td>Just decrement length counter</td></tr>
+              <tr><td><code>list.pop(0)</code></td><td>O(n)</td><td>Must shift ALL elements left — use <code>deque</code></td></tr>
+              <tr><td><code>x in list</code></td><td>O(n)</td><td>Linear scan — use <code>set</code> for O(1)</td></tr>
+              <tr><td><code>list.sort()</code></td><td>O(n log n)</td><td>Timsort — hybrid merge+insertion sort</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Timsort:</strong> Python's built-in sort algorithm (invented by Tim Peters for Python). It finds naturally-occurring sorted runs and merges them efficiently. It's stable, adaptive, and has O(n) best case for nearly-sorted data.</div>
       </div>
     </div>
 
@@ -226,6 +267,24 @@ word_count = defaultdict(<span class="type">int</span>)
     word_count[word] += <span class="number">1</span>
 <span class="comment"># {'hello': 2, 'world': 1}</span></pre></div>
         </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Hash table internals — how dicts actually work</h3>
+        <p class="explain-en">Python dicts use a <strong>hash table</strong>: when you set <code>d[key] = val</code>, Python calls <code>hash(key)</code> to compute a bucket index, then stores the key-value pair. Collisions are resolved via <strong>open addressing</strong> (probing). The <code>__hash__</code>/<code>__eq__</code> contract is critical.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Python dicts <strong>hash table</strong> use karte hain: jab aap <code>d[key] = val</code> set karte ho, Python <code>hash(key)</code> call karke bucket index compute karta hai. Collisions <strong>open addressing</strong> (probing) se resolve hoti hain.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Step</th><th>What happens</th><th>Requirement</th></tr></thead>
+            <tbody>
+              <tr><td>1. Hash</td><td><code>hash(key)</code> computes integer hash</td><td>Key must be hashable (<code>__hash__</code> defined)</td></tr>
+              <tr><td>2. Index</td><td><code>hash % table_size</code> = bucket index</td><td>Table auto-resizes at 2/3 full</td></tr>
+              <tr><td>3. Probe</td><td>If bucket occupied, try next slots</td><td><code>__eq__</code> needed to resolve collisions</td></tr>
+              <tr><td>4. Store</td><td>Place (hash, key, value) in slot</td><td>Same key overwrites existing value</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>The hash/eq contract:</strong> If <code>a == b</code>, then <code>hash(a) == hash(b)</code> MUST be true. If you define <code>__eq__</code> in a class, you MUST also define <code>__hash__</code>, or instances become unhashable (can't be dict keys).</div>
       </div>
     </div>
 
@@ -372,30 +431,6 @@ config[<span class="string">"size"</span>]   <span class="comment"># 'M' (falls 
             <tr><td><code>.update(other)</code></td><td>Merge in-place</td><td>None</td></tr>
             <tr><td><code>.setdefault(k, v)</code></td><td>Get or set default</td><td>Value</td></tr>
             <tr><td><code>.fromkeys(keys, v)</code></td><td>Create from keys</td><td>New dict</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-
-    <div class="quick-ref">
-      <div class="qr-title">📋 Dict Methods — Complete Reference</div>
-      <div class="hb-table-wrap">
-        <table class="hb-table">
-          <thead><tr><th>Method</th><th>Purpose</th><th>Returns</th></tr></thead>
-          <tbody>
-            <tr><td><code>.get(key, default)</code></td><td>Get value or default</td><td>Value or default</td></tr>
-            <tr><td><code>.setdefault(k, v)</code></td><td>Get or set default</td><td>Value</td></tr>
-            <tr><td><code>.update(other)</code></td><td>Merge dict/pairs</td><td>None</td></tr>
-            <tr><td><code>.pop(key, default)</code></td><td>Remove &amp; return</td><td>Value</td></tr>
-            <tr><td><code>.popitem()</code></td><td>Remove last pair</td><td>(key, value)</td></tr>
-            <tr><td><code>.keys()</code></td><td>View of keys</td><td>dict_keys</td></tr>
-            <tr><td><code>.values()</code></td><td>View of values</td><td>dict_values</td></tr>
-            <tr><td><code>.items()</code></td><td>View of pairs</td><td>dict_items</td></tr>
-            <tr><td><code>.copy()</code></td><td>Shallow copy</td><td>New dict</td></tr>
-            <tr><td><code>.clear()</code></td><td>Remove all items</td><td>None</td></tr>
-            <tr><td><code>d1 | d2</code></td><td>Merge (3.9+)</td><td>New dict</td></tr>
-            <tr><td><code>d1 |= d2</code></td><td>Update in-place (3.9+)</td><td>None</td></tr>
           </tbody>
         </table>
       </div>

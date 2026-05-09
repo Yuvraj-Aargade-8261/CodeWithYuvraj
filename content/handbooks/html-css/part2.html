@@ -33,7 +33,7 @@
       <div class="chapter-part-label">📖 Part 2 — Semantic HTML & Forms</div>
       <h1 class="chapter-title">Structure, Meaning & <span class="gradient-text">User Input</span></h1>
       <p class="chapter-subtitle">Build meaningful, accessible pages and master HTML forms with industry-level validation.</p>
-      <div class="chapter-meta"><span>📄 Modules 2.1 – 2.7</span><span>⏱️ 75–110 min read</span><span>💻 40+ Examples</span></div>
+      <div class="chapter-meta"><span>📄 Modules 2.1 – 2.7</span><span>⏱️ 120–180 min</span><span>💻 60+ Examples</span><span>📊 20+ Reference Tables</span></div>
     </div>
 
     <div class="callout callout-tip">
@@ -56,13 +56,17 @@
     <div class="quick-ref">
       <div class="qr-title">🚀 Advanced Lens — Part 2</div>
       <p class="explain-en">
-        Semantic HTML is the difference between a website that "works" and one that is accessible, SEO-optimized, and maintainable.
-        Forms are the primary way users interact with web apps — getting validation, accessibility, and UX right is critical for production quality.
+        Every semantic element maps to an <strong>implicit ARIA role</strong> in the accessibility tree: <code>&lt;header&gt;</code> → <code>banner</code>,
+        <code>&lt;nav&gt;</code> → <code>navigation</code>, <code>&lt;main&gt;</code> → <code>main</code>, <code>&lt;footer&gt;</code> → <code>contentinfo</code>.
+        Forms use the <strong>Constraint Validation API</strong> internally — the browser checks <code>validity.valueMissing</code>, <code>validity.typeMismatch</code>,
+        and <code>validity.patternMismatch</code> on submit. Understanding this lets you build custom error UI without reinventing validation logic.
+        Always sanitize user input server-side to prevent XSS — never render raw <code>innerHTML</code> from form data.
       </p>
       <div class="explain-hi">
         <span class="hi-label">Hindi mein samjho</span>
-        Semantic HTML se website sirf "chalne" wali nahi, balki accessible, SEO-optimized, aur maintainable banti hai.
-        Forms se users web apps ke saath interact karte hain — validation aur UX sahi karna production quality ke liye zaroori hai.
+        Har semantic element ka ek implicit ARIA role hota hai: <code>&lt;header&gt;</code> → <code>banner</code>,
+        <code>&lt;nav&gt;</code> → <code>navigation</code>, <code>&lt;main&gt;</code> → <code>main</code>. Forms internally <strong>Constraint Validation API</strong> use karte hain —
+        browser <code>validity.valueMissing</code>, <code>typeMismatch</code> check karta hai. Server-side pe hamesha input sanitize karo — XSS prevent karne ke liye raw <code>innerHTML</code> kabhi use mat karo.
       </div>
     </div>
 
@@ -169,9 +173,82 @@
         </div>
         <div class="callout callout-tip"><strong>Audit tip:</strong> Test with keyboard only: press <code>Tab</code> on page load and verify skip link appears and works.</div>
       </div>
-    </div>
 
-    <!-- MODULE 2.2 -->
+      <div class="concept-block">
+        <h3 class="concept-heading">Complete semantic HTML5 elements reference</h3>
+        <p class="explain-en">
+          Here is every HTML5 semantic element with its purpose, ARIA role mapping, and usage rules.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Ye table har HTML5 semantic element ko explain karti hai — purpose, ARIA role, aur usage rules ke saath.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Element</th><th>Purpose</th><th>ARIA Role</th><th>Rules</th></tr></thead>
+            <tbody>
+              <tr><td><code>&lt;header&gt;</code></td><td>Page/section intro content</td><td>banner (if top-level)</td><td>Can appear multiple times (section headers)</td></tr>
+              <tr><td><code>&lt;nav&gt;</code></td><td>Navigation links</td><td>navigation</td><td>Use <code>aria-label</code> if multiple navs</td></tr>
+              <tr><td><code>&lt;main&gt;</code></td><td>Primary page content</td><td>main</td><td>⚠️ Only ONE per page</td></tr>
+              <tr><td><code>&lt;section&gt;</code></td><td>Thematic content group</td><td>region (if labelled)</td><td>Must have a heading (h2-h6)</td></tr>
+              <tr><td><code>&lt;article&gt;</code></td><td>Self-contained content</td><td>article</td><td>Should make sense standalone (blog, card)</td></tr>
+              <tr><td><code>&lt;aside&gt;</code></td><td>Supplementary content</td><td>complementary</td><td>Sidebars, related links, ads</td></tr>
+              <tr><td><code>&lt;footer&gt;</code></td><td>Bottom info (copyright, links)</td><td>contentinfo (if top-level)</td><td>Can appear in sections too</td></tr>
+              <tr><td><code>&lt;details&gt;</code></td><td>Expandable disclosure widget</td><td>group</td><td>Native toggle — no JS needed</td></tr>
+              <tr><td><code>&lt;summary&gt;</code></td><td>Click target for details</td><td>button</td><td>First child of <code>&lt;details&gt;</code></td></tr>
+              <tr><td><code>&lt;dialog&gt;</code></td><td>Modal/popup dialog</td><td>dialog</td><td>Use <code>.showModal()</code> for focus trap</td></tr>
+              <tr><td><code>&lt;figure&gt;</code></td><td>Image/chart with caption</td><td>figure</td><td>Wraps <code>&lt;img&gt;</code> + <code>&lt;figcaption&gt;</code></td></tr>
+              <tr><td><code>&lt;figcaption&gt;</code></td><td>Caption for figure</td><td>—</td><td>First or last child of <code>&lt;figure&gt;</code></td></tr>
+              <tr><td><code>&lt;time&gt;</code></td><td>Machine-readable date/time</td><td>time</td><td>Use <code>datetime</code> attribute for ISO format</td></tr>
+              <tr><td><code>&lt;address&gt;</code></td><td>Contact info for author/org</td><td>—</td><td>Not for postal addresses — for author contact</td></tr>
+              <tr><td><code>&lt;mark&gt;</code></td><td>Highlighted relevant text</td><td>—</td><td>Search results, key phrases</td></tr>
+              <tr><td><code>&lt;output&gt;</code></td><td>Result of calculation</td><td>status</td><td>Associated with form inputs via <code>for</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>Common mistakes:</strong> <code>&lt;section&gt;</code> is NOT a generic container (that's <code>&lt;div&gt;</code>). <code>&lt;article&gt;</code> is for independent content, not just any card. <code>&lt;address&gt;</code> is for contact info, not postal addresses.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">section vs article vs div — decision flowchart</h3>
+        <p class="explain-en">Choosing between these three is the most common semantic HTML confusion. Use this decision flow: Does the content make sense on its own (shareable)? → <code>&lt;article&gt;</code>. Is it a thematic group with a heading? → <code>&lt;section&gt;</code>. Is it purely for styling/layout? → <code>&lt;div&gt;</code>.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>In teen me se choose karna sabse common confusion hai. Decision flow: Content akele samajh aaye (shareable)? → article. Thematic group with heading? → section. Sirf styling/layout ke liye? → div.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Content type</th><th>Use</th><th>Why</th></tr></thead>
+            <tbody>
+              <tr><td>Blog post</td><td><code>&lt;article&gt;</code></td><td>Self-contained, can be syndicated</td></tr>
+              <tr><td>Product card</td><td><code>&lt;article&gt;</code></td><td>Independent, has its own meaning</td></tr>
+              <tr><td>"Our Services" section</td><td><code>&lt;section&gt;</code></td><td>Thematic group with a heading</td></tr>
+              <tr><td>FAQ section</td><td><code>&lt;section&gt;</code> + <code>&lt;details&gt;</code></td><td>Thematic group, each Q&A is a disclosure</td></tr>
+              <tr><td>Wrapper for CSS grid</td><td><code>&lt;div&gt;</code></td><td>No semantic meaning, purely layout</td></tr>
+              <tr><td>Card image container</td><td><code>&lt;div&gt;</code></td><td>Styling wrapper, no content meaning</td></tr>
+              <tr><td>Comment on a blog post</td><td>Nested <code>&lt;article&gt;</code></td><td>Self-contained content within an article</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Litmus test:</strong> If you can't give the element a meaningful heading (<code>&lt;h2&gt;</code>-<code>&lt;h6&gt;</code>), it's probably a <code>&lt;div&gt;</code>, not a <code>&lt;section&gt;</code>.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Inline semantic elements — text-level meaning</h3>
+        <p class="explain-en">Beyond page structure, HTML has inline semantic elements that add meaning to text. These are often confused with styling tags.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Page structure ke alawa, HTML me inline semantic elements bhi hain jo text ko meaning dete hain.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Element</th><th>Meaning</th><th>❌ Don't confuse with</th></tr></thead>
+            <tbody>
+              <tr><td><code>&lt;strong&gt;</code></td><td>Important text (strong importance)</td><td><code>&lt;b&gt;</code> (visual bold only)</td></tr>
+              <tr><td><code>&lt;em&gt;</code></td><td>Emphasized text (stress emphasis)</td><td><code>&lt;i&gt;</code> (visual italic only)</td></tr>
+              <tr><td><code>&lt;mark&gt;</code></td><td>Highlighted/relevant text</td><td>CSS <code>background-color</code></td></tr>
+              <tr><td><code>&lt;abbr&gt;</code></td><td>Abbreviation (shows tooltip)</td><td>Plain text with parenthetical</td></tr>
+              <tr><td><code>&lt;code&gt;</code></td><td>Inline code fragment</td><td>Monospace font styling</td></tr>
+              <tr><td><code>&lt;time&gt;</code></td><td>Machine-readable date/time</td><td>Plain date text</td></tr>
+              <tr><td><code>&lt;small&gt;</code></td><td>Side comments, legal text</td><td>Small font size</td></tr>
+              <tr><td><code>&lt;del&gt;</code> / <code>&lt;ins&gt;</code></td><td>Deleted/inserted content</td><td>Strikethrough styling</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-note"><strong>Key difference:</strong> <code>&lt;strong&gt;</code> says "this is important" to screen readers. <code>&lt;b&gt;</code> just makes text bold visually. Always prefer semantic elements for meaning.</div>
+      </div>
+    </div>
     <div class="module-section" id="m2-2">
       <div class="module-header"><div class="module-number">2.2</div><h2 class="module-title">Tables & Structured Data — thead, tbody, tfoot, colspan, rowspan</h2></div>
 
@@ -242,9 +319,72 @@
 <span class="tag">&lt;/table&gt;</span></pre></div>
         </div>
       </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Complete table elements &amp; attributes reference</h3>
+        <p class="explain-en">
+          Tables have many elements and attributes that control structure, accessibility, and cell spanning.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Tables me bahut saare elements aur attributes hain jo structure, accessibility, aur cell spanning control karte hain.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Element/Attr</th><th>Purpose</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td><code>&lt;table&gt;</code></td><td>Table container</td><td>Never use for page layout</td></tr>
+              <tr><td><code>&lt;caption&gt;</code></td><td>Table title/description</td><td>✅ Critical for accessibility</td></tr>
+              <tr><td><code>&lt;thead&gt;</code></td><td>Header row group</td><td>Contains <code>&lt;th&gt;</code> cells</td></tr>
+              <tr><td><code>&lt;tbody&gt;</code></td><td>Body row group</td><td>Auto-inserted by browser if omitted</td></tr>
+              <tr><td><code>&lt;tfoot&gt;</code></td><td>Footer row group</td><td>Totals, summaries</td></tr>
+              <tr><td><code>&lt;tr&gt;</code></td><td>Table row</td><td>Contains <code>&lt;th&gt;</code> or <code>&lt;td&gt;</code></td></tr>
+              <tr><td><code>&lt;th&gt;</code></td><td>Header cell</td><td>Bold + centered by default, announced by screen readers</td></tr>
+              <tr><td><code>&lt;td&gt;</code></td><td>Data cell</td><td>Regular content cell</td></tr>
+              <tr><td><code>colspan</code></td><td>Span multiple columns</td><td><code>colspan="3"</code> merges 3 columns</td></tr>
+              <tr><td><code>rowspan</code></td><td>Span multiple rows</td><td><code>rowspan="2"</code> merges 2 rows</td></tr>
+              <tr><td><code>scope</code></td><td>Associates header with row/col</td><td><code>scope="col"</code> or <code>scope="row"</code> — helps screen readers</td></tr>
+              <tr><td><code>&lt;colgroup&gt;</code></td><td>Group columns for styling</td><td>Style entire columns at once</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>Accessibility:</strong> Always use <code>&lt;th scope="col"&gt;</code> for column headers and <code>&lt;th scope="row"&gt;</code> for row headers. Screen readers use <code>scope</code> to announce cell context.</div>
+      </div>
     </div>
 
-    <!-- MODULE 2.3 -->
+      <div class="concept-block">
+        <h3 class="concept-heading">Accessible tables — scope and complex headers</h3>
+        <p class="explain-en">For complex tables with multi-level headers, use <code>scope</code> and <code>id</code>/<code>headers</code> attributes to explicitly associate data cells with header cells. Screen readers rely on these to announce context.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Complex tables me <code>scope</code> aur <code>headers</code> attributes se data cells ko header cells se explicitly link karo. Screen readers in associations par depend karte hain.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — Accessible complex table</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="tag">&lt;table&gt;</span>
+  <span class="tag">&lt;caption&gt;</span>Q1 Sales Report<span class="tag">&lt;/caption&gt;</span>
+  <span class="tag">&lt;thead&gt;</span>
+    <span class="tag">&lt;tr&gt;</span>
+      <span class="tag">&lt;th</span> <span class="attr">scope</span>=<span class="value">"col"</span><span class="tag">&gt;</span>Region<span class="tag">&lt;/th&gt;</span>
+      <span class="tag">&lt;th</span> <span class="attr">scope</span>=<span class="value">"col"</span><span class="tag">&gt;</span>Jan<span class="tag">&lt;/th&gt;</span>
+      <span class="tag">&lt;th</span> <span class="attr">scope</span>=<span class="value">"col"</span><span class="tag">&gt;</span>Feb<span class="tag">&lt;/th&gt;</span>
+      <span class="tag">&lt;th</span> <span class="attr">scope</span>=<span class="value">"col"</span><span class="tag">&gt;</span>Mar<span class="tag">&lt;/th&gt;</span>
+    <span class="tag">&lt;/tr&gt;</span>
+  <span class="tag">&lt;/thead&gt;</span>
+  <span class="tag">&lt;tbody&gt;</span>
+    <span class="tag">&lt;tr&gt;</span>
+      <span class="tag">&lt;th</span> <span class="attr">scope</span>=<span class="value">"row"</span><span class="tag">&gt;</span>North<span class="tag">&lt;/th&gt;</span>
+      <span class="tag">&lt;td&gt;</span>$12K<span class="tag">&lt;/td&gt;</span>
+      <span class="tag">&lt;td&gt;</span>$15K<span class="tag">&lt;/td&gt;</span>
+      <span class="tag">&lt;td&gt;</span>$18K<span class="tag">&lt;/td&gt;</span>
+    <span class="tag">&lt;/tr&gt;</span>
+  <span class="tag">&lt;/tbody&gt;</span>
+  <span class="tag">&lt;tfoot&gt;</span>
+    <span class="tag">&lt;tr&gt;</span>
+      <span class="tag">&lt;th</span> <span class="attr">scope</span>=<span class="value">"row"</span><span class="tag">&gt;</span>Total<span class="tag">&lt;/th&gt;</span>
+      <span class="tag">&lt;td&gt;</span>$45K<span class="tag">&lt;/td&gt;</span>
+      <span class="tag">&lt;td&gt;</span>$52K<span class="tag">&lt;/td&gt;</span>
+      <span class="tag">&lt;td&gt;</span>$61K<span class="tag">&lt;/td&gt;</span>
+    <span class="tag">&lt;/tr&gt;</span>
+  <span class="tag">&lt;/tfoot&gt;</span>
+<span class="tag">&lt;/table&gt;</span></pre></div>
+        </div>
+        <div class="callout callout-tip"><strong>Screen reader behavior:</strong> With <code>scope="row"</code>, when a user navigates to "$15K", the screen reader announces: "North, Feb, $15K". Without scope, it just says "$15K" with no context.</div>
+      </div>
     <div class="module-section" id="m2-3">
       <div class="module-header"><div class="module-number">2.3</div><h2 class="module-title">Forms — Basics — form, input, label, textarea, select, button</h2></div>
 
@@ -320,9 +460,29 @@
         </div>
         <div class="callout callout-note"><strong>Example explained:</strong> <code>type="button"</code> prevents form submission — use it for JavaScript-only actions. <code>type="submit"</code> is the default if not specified.</div>
       </div>
-    </div>
 
-    <!-- MODULE 2.4 -->
+      <div class="concept-block">
+        <h3 class="concept-heading">Complete &lt;form&gt; attributes reference</h3>
+        <p class="explain-en">
+          The <code>&lt;form&gt;</code> element supports several important attributes that control submission behavior, encoding, and validation.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Form element ke kaafi important attributes hain jo submission, encoding, aur validation control karte hain.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Attribute</th><th>Purpose</th><th>Values</th><th>When to use</th></tr></thead>
+            <tbody>
+              <tr><td><code>action</code></td><td>Submission URL</td><td>URL string</td><td>Where form data goes</td></tr>
+              <tr><td><code>method</code></td><td>HTTP method</td><td><code>GET</code>, <code>POST</code></td><td>GET for search, POST for data changes</td></tr>
+              <tr><td><code>enctype</code></td><td>Encoding type</td><td><code>application/x-www-form-urlencoded</code> (default), <code>multipart/form-data</code>, <code>text/plain</code></td><td>Use <code>multipart/form-data</code> for file uploads</td></tr>
+              <tr><td><code>novalidate</code></td><td>Skip browser validation</td><td>Boolean</td><td>When using custom JS validation</td></tr>
+              <tr><td><code>autocomplete</code></td><td>Browser autofill</td><td><code>on</code>, <code>off</code></td><td>Off for sensitive forms (login)</td></tr>
+              <tr><td><code>name</code></td><td>Form identifier</td><td>String</td><td>For JS: <code>document.forms.myForm</code></td></tr>
+              <tr><td><code>target</code></td><td>Where to show response</td><td><code>_self</code>, <code>_blank</code></td><td>Open result in new tab</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
     <div class="module-section" id="m2-4">
       <div class="module-header"><div class="module-number">2.4</div><h2 class="module-title">Forms — Input Types & Validation — text, email, password, number, date, checkbox, radio</h2></div>
 
@@ -420,9 +580,74 @@
         </div>
         <div class="callout callout-note"><strong>Example explained:</strong> Screen readers associate both hint and error text with the input, improving error recovery for all users.</div>
       </div>
-    </div>
 
-    <!-- MODULE 2.5 -->
+      <div class="concept-block">
+        <h3 class="concept-heading">Complete HTML5 input types — all 22 types</h3>
+        <p class="explain-en">
+          HTML5 defines <strong>22 input types</strong>. Using the correct type gives you free validation, optimized mobile keyboards, and better accessibility.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>HTML5 me 22 input types hain. Sahi type se free validation, mobile keyboard optimization, aur better accessibility milti hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Type</th><th>Purpose</th><th>Mobile keyboard</th><th>Built-in validation</th></tr></thead>
+            <tbody>
+              <tr><td><code>text</code></td><td>General text</td><td>Standard</td><td>❌ None</td></tr>
+              <tr><td><code>email</code></td><td>Email address</td><td>@ key visible</td><td>✅ Email format</td></tr>
+              <tr><td><code>password</code></td><td>Password</td><td>Standard</td><td>Characters hidden</td></tr>
+              <tr><td><code>number</code></td><td>Numeric value</td><td>Numeric pad</td><td>✅ min/max/step</td></tr>
+              <tr><td><code>tel</code></td><td>Phone number</td><td>Phone numpad</td><td>❌ Use pattern</td></tr>
+              <tr><td><code>url</code></td><td>Website URL</td><td>.com key visible</td><td>✅ URL format</td></tr>
+              <tr><td><code>search</code></td><td>Search field</td><td>Search key</td><td>Clear button</td></tr>
+              <tr><td><code>date</code></td><td>Date picker</td><td>Date UI</td><td>✅ Valid date</td></tr>
+              <tr><td><code>time</code></td><td>Time picker</td><td>Time UI</td><td>✅ Valid time</td></tr>
+              <tr><td><code>datetime-local</code></td><td>Date + time combined</td><td>DateTime UI</td><td>✅ Valid datetime</td></tr>
+              <tr><td><code>month</code></td><td>Month + year</td><td>Month picker</td><td>✅ Valid month</td></tr>
+              <tr><td><code>week</code></td><td>Week of year</td><td>Week picker</td><td>✅ Valid week</td></tr>
+              <tr><td><code>range</code></td><td>Slider control</td><td>—</td><td>min/max/step</td></tr>
+              <tr><td><code>color</code></td><td>Color picker</td><td>Color UI</td><td>✅ Hex value</td></tr>
+              <tr><td><code>checkbox</code></td><td>Multiple selections</td><td>—</td><td>Boolean checked</td></tr>
+              <tr><td><code>radio</code></td><td>Single selection (group)</td><td>—</td><td>Same <code>name</code> groups</td></tr>
+              <tr><td><code>file</code></td><td>File upload</td><td>—</td><td>Use <code>accept</code> to filter types</td></tr>
+              <tr><td><code>hidden</code></td><td>Hidden data field</td><td>—</td><td>Not visible, sent with form</td></tr>
+              <tr><td><code>submit</code></td><td>Submit button</td><td>—</td><td>Prefer <code>&lt;button&gt;</code></td></tr>
+              <tr><td><code>reset</code></td><td>Reset form to defaults</td><td>—</td><td>Clears all fields</td></tr>
+              <tr><td><code>button</code></td><td>Custom JS action</td><td>—</td><td>No form submission</td></tr>
+              <tr><td><code>image</code></td><td>Image as submit button</td><td>—</td><td>Sends click coordinates</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Complete input validation attributes</h3>
+        <p class="explain-en">
+          These attributes control what values are accepted, how they're displayed, and how validation works — all without JavaScript.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Ye attributes bina JavaScript ke input validation control karte hain — kya values accept hongi, kaise display hongi.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Attribute</th><th>Purpose</th><th>Applies to</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td><code>required</code></td><td>Field must be filled</td><td>All inputs</td><td><code>&lt;input required&gt;</code></td></tr>
+              <tr><td><code>pattern</code></td><td>Regex validation</td><td>text, tel, email, url, search, password</td><td><code>pattern="[A-Z]{3}"</code></td></tr>
+              <tr><td><code>min</code> / <code>max</code></td><td>Value range limits</td><td>number, date, range, time</td><td><code>min="1" max="100"</code></td></tr>
+              <tr><td><code>step</code></td><td>Value increment</td><td>number, range, date, time</td><td><code>step="0.01"</code> for currency</td></tr>
+              <tr><td><code>minlength</code> / <code>maxlength</code></td><td>Character count limits</td><td>text, textarea, password</td><td><code>maxlength="150"</code></td></tr>
+              <tr><td><code>placeholder</code></td><td>Hint text (disappears on focus)</td><td>text-based inputs</td><td>⚠️ Not a label replacement</td></tr>
+              <tr><td><code>readonly</code></td><td>Visible but not editable</td><td>All inputs</td><td>Value still submitted with form</td></tr>
+              <tr><td><code>disabled</code></td><td>Grayed out, not interactive</td><td>All inputs</td><td>Value NOT submitted with form</td></tr>
+              <tr><td><code>autofocus</code></td><td>Focus on page load</td><td>All inputs</td><td>⚠️ Max one per page</td></tr>
+              <tr><td><code>multiple</code></td><td>Allow multiple values</td><td>email, file</td><td>Multiple files or emails</td></tr>
+              <tr><td><code>accept</code></td><td>Filter file types</td><td>file</td><td><code>accept=".pdf,.doc,image/*"</code></td></tr>
+              <tr><td><code>autocomplete</code></td><td>Browser autofill hint</td><td>All inputs</td><td><code>autocomplete="email"</code></td></tr>
+              <tr><td><code>list</code></td><td>Connect to datalist</td><td>text-based inputs</td><td>Links to <code>&lt;datalist id&gt;</code></td></tr>
+              <tr><td><code>name</code></td><td>Form data key</td><td>All inputs</td><td>🔴 Required for data submission</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>readonly vs disabled:</strong> <code>readonly</code> values are still submitted with the form. <code>disabled</code> values are NOT submitted. <code>placeholder</code> is NOT a substitute for <code>&lt;label&gt;</code> — always use both.</div>
+      </div>
+    </div>
     <div class="module-section" id="m2-5">
       <div class="module-header"><div class="module-number">2.5</div><h2 class="module-title">Forms — Advanced — fieldset, legend, datalist, output, autocomplete</h2></div>
 
@@ -464,9 +689,58 @@
 <span class="tag">&lt;/datalist&gt;</span></pre></div>
         </div>
       </div>
-    </div>
 
-    <!-- MODULE 2.6 -->
+      <div class="concept-block">
+        <h3 class="concept-heading">Form elements comparison — choosing the right input control</h3>
+        <p class="explain-en">
+          Different form situations call for different input controls. Use this decision guide to pick the right element every time.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Alag-alag situations me alag input controls chahiye. Ye guide har baar sahi element choose karne me help karti hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Situation</th><th>Use this</th><th>Why not the alternative</th></tr></thead>
+            <tbody>
+              <tr><td>Free text (1 line)</td><td><code>&lt;input type="text"&gt;</code></td><td>—</td></tr>
+              <tr><td>Free text (multi-line)</td><td><code>&lt;textarea&gt;</code></td><td>Input can't do multi-line</td></tr>
+              <tr><td>Fixed options (3-7)</td><td><code>&lt;select&gt;</code></td><td>Radio buttons take more space</td></tr>
+              <tr><td>Fixed options (2-3, always visible)</td><td><code>&lt;input type="radio"&gt;</code></td><td>Select hides options behind click</td></tr>
+              <tr><td>Multiple selections allowed</td><td><code>&lt;input type="checkbox"&gt;</code></td><td><code>&lt;select multiple&gt;</code> is hard to use</td></tr>
+              <tr><td>Yes/No toggle</td><td><code>&lt;input type="checkbox"&gt;</code></td><td>Radio is overkill for boolean</td></tr>
+              <tr><td>Suggestions + free text</td><td><code>&lt;input&gt;</code> + <code>&lt;datalist&gt;</code></td><td>Select restricts to list only</td></tr>
+              <tr><td>File upload</td><td><code>&lt;input type="file"&gt;</code></td><td>Use <code>accept</code> to filter types</td></tr>
+              <tr><td>Submit action</td><td><code>&lt;button type="submit"&gt;</code></td><td><code>&lt;input type="submit"&gt;</code> can't contain HTML</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">File upload — complete pattern</h3>
+        <p class="explain-en">File uploads require <code>enctype="multipart/form-data"</code> on the form. Use <code>accept</code> to filter file types and <code>multiple</code> for multi-file upload.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>File upload ke liye form pe <code>enctype="multipart/form-data"</code> zaroori hai. <code>accept</code> se file types filter karo aur <code>multiple</code> se multiple files upload karo.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-html5"></i> HTML — File upload patterns</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">&lt;!-- Single image upload --&gt;</span>
+<span class="tag">&lt;form</span> <span class="attr">enctype</span>=<span class="value">"multipart/form-data"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;label</span> <span class="attr">for</span>=<span class="value">"avatar"</span><span class="tag">&gt;</span>Profile Photo:<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="value">"file"</span>
+    <span class="attr">id</span>=<span class="value">"avatar"</span>
+    <span class="attr">name</span>=<span class="value">"avatar"</span>
+    <span class="attr">accept</span>=<span class="value">"image/png, image/jpeg, image/webp"</span><span class="tag">&gt;</span>
+
+  <span class="comment">&lt;!-- Multiple document upload --&gt;</span>
+  <span class="tag">&lt;label</span> <span class="attr">for</span>=<span class="value">"docs"</span><span class="tag">&gt;</span>Documents:<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="value">"file"</span>
+    <span class="attr">id</span>=<span class="value">"docs"</span>
+    <span class="attr">name</span>=<span class="value">"docs"</span>
+    <span class="attr">accept</span>=<span class="value">".pdf,.doc,.docx"</span>
+    <span class="attr">multiple</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/form&gt;</span></pre></div>
+        </div>
+        <div class="callout callout-warning"><strong>Security:</strong> <code>accept</code> only filters the file picker dialog — it does NOT validate server-side. Always validate file types, sizes, and contents on the server to prevent malicious uploads.</div>
+      </div>
+    </div>
     <div class="module-section" id="m2-6">
       <div class="module-header"><div class="module-number">2.6</div><h2 class="module-title">HTML Entities & Special Characters — &amp;amp;, &amp;lt;, &amp;gt;, &amp;nbsp;, emoji</h2></div>
 
@@ -532,16 +806,57 @@
         </div>
         <div class="callout callout-important"><strong>SEO checklist:</strong> Unique <code>&lt;title&gt;</code> per page (50-60 chars), compelling <code>description</code> (150-160 chars), OG tags for social sharing, and favicon for branding.</div>
       </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Complete &lt;head&gt; tag reference</h3>
+        <p class="explain-en">Here is every element and meta tag you can use in <code>&lt;head&gt;</code>, organized by purpose.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Yahan <code>&lt;head&gt;</code> me use hone wale sab elements aur meta tags hain, purpose ke hisaab se organized.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Tag/Attribute</th><th>Purpose</th><th>Required?</th></tr></thead>
+            <tbody>
+              <tr><td><code>&lt;meta charset="UTF-8"&gt;</code></td><td>Character encoding</td><td>🔴 Must have (first tag)</td></tr>
+              <tr><td><code>&lt;meta name="viewport"&gt;</code></td><td>Mobile responsiveness</td><td>🔴 Must have</td></tr>
+              <tr><td><code>&lt;title&gt;</code></td><td>Browser tab + SEO title</td><td>🔴 Must have (unique/page)</td></tr>
+              <tr><td><code>&lt;meta name="description"&gt;</code></td><td>Search engine snippet</td><td>🔴 Must have</td></tr>
+              <tr><td><code>&lt;link rel="icon"&gt;</code></td><td>Favicon (browser tab icon)</td><td>🟡 Important</td></tr>
+              <tr><td><code>&lt;meta property="og:*"&gt;</code></td><td>Social media sharing preview</td><td>🟡 Important</td></tr>
+              <tr><td><code>&lt;meta name="twitter:card"&gt;</code></td><td>Twitter/X card preview</td><td>🟢 Nice to have</td></tr>
+              <tr><td><code>&lt;link rel="canonical"&gt;</code></td><td>Preferred URL (avoids duplicate)</td><td>🟡 Important for SEO</td></tr>
+              <tr><td><code>&lt;link rel="preconnect"&gt;</code></td><td>Early DNS/TLS for external domains</td><td>🟢 Performance boost</td></tr>
+              <tr><td><code>&lt;link rel="preload"&gt;</code></td><td>Preload critical fonts/CSS</td><td>🟢 Performance boost</td></tr>
+              <tr><td><code>&lt;meta name="robots"&gt;</code></td><td>Control crawling (index/noindex)</td><td>🟢 When needed</td></tr>
+              <tr><td><code>&lt;meta name="theme-color"&gt;</code></td><td>Mobile browser toolbar color</td><td>🟢 Nice to have</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Order matters:</strong> <code>&lt;meta charset&gt;</code> must be the very first tag in <code>&lt;head&gt;</code>. Then viewport, then title. CSS should come before JS. <code>preconnect</code> hints should come early for maximum effect.</div>
+      </div>
+      </div>
     </div>
 
     <div class="practice-box">
-      <div class="practice-title">✏️ Practice Exercises — Part 2</div>
+      <div class="practice-title">✏️ Practice Exercises — Part 2 (Difficulty Graded)</div>
+      <h4>🟢 Easy (Do these first)</h4>
       <ol>
-        <li>Rebuild a page using ONLY semantic elements — zero <code>&lt;div&gt;</code> for layout.</li>
-        <li>Create a comparison table with <code>thead</code>, <code>tbody</code>, <code>caption</code>, and <code>colspan</code>.</li>
-        <li>Build a complete contact form with name, email, phone (with pattern), message, and city dropdown.</li>
-        <li>Create a registration form with fieldsets for "Personal Info" and "Account Details" with proper validation.</li>
-        <li>Write a production-ready <code>&lt;head&gt;</code> with all meta tags, OG tags, favicon, and preconnect.</li>
+        <li>Rebuild a page using ONLY semantic elements — zero <code>&lt;div&gt;</code> for layout. Use <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;section&gt;</code>, <code>&lt;article&gt;</code>, <code>&lt;aside&gt;</code>, <code>&lt;footer&gt;</code>.</li>
+        <li>Create a comparison table with <code>thead</code>, <code>tbody</code>, <code>caption</code>, <code>colspan</code>, and at least 5 rows of data.</li>
+        <li>Build a contact form with <code>name</code>, <code>email</code>, <code>phone</code> (with <code>pattern</code>), <code>textarea</code> for message, and a city <code>&lt;select&gt;</code> dropdown.</li>
+        <li>Write a production-ready <code>&lt;head&gt;</code> with <code>title</code>, <code>meta description</code>, <code>OG tags</code>, <code>favicon</code>, and <code>preconnect</code> hints.</li>
+      </ol>
+      <h4>🟡 Medium (Apply your knowledge)</h4>
+      <ol start="5">
+        <li>Create a <strong>registration form</strong> with two <code>&lt;fieldset&gt;</code> groups ("Personal Info" + "Account Details") using <code>&lt;legend&gt;</code>, with <code>required</code>, <code>minlength</code>, <code>pattern</code>, and <code>type="email"</code>.</li>
+        <li>Build a form with a <code>&lt;datalist&gt;</code> for programming language autocomplete. Test that users can type freely OR select from suggestions.</li>
+        <li>Add a <strong>skip-to-content link</strong> to a page. Test with keyboard only: press <code>Tab</code> and verify the skip link appears first and jumps to <code>&lt;main&gt;</code>.</li>
+        <li>Create an <strong>accessible error form</strong>: use <code>aria-invalid</code>, <code>aria-describedby</code>, hint text, and field-specific error messages. Test with a screen reader.</li>
+      </ol>
+      <h4>🔴 Hard (Challenge yourself)</h4>
+      <ol start="9">
+        <li>Build a <strong>multi-step form</strong> (3 steps: Personal → Preferences → Review) using only HTML + CSS. Use <code>&lt;details&gt;</code>/<code>&lt;summary&gt;</code> or <code>:target</code> pseudo-class for step switching.</li>
+        <li>Inspect your semantic page in Chrome DevTools → <strong>Accessibility pane</strong>. Verify every landmark (<code>banner</code>, <code>navigation</code>, <code>main</code>, <code>contentinfo</code>) is correctly detected. Screenshot and annotate.</li>
+        <li>Build a <strong>data table</strong> with <code>scope="col"</code> / <code>scope="row"</code> headers, <code>tfoot</code> with totals, and <code>rowspan</code> for merged cells. Verify screen reader reads column headers for each cell.</li>
+        <li>Create a complete <strong>event registration page</strong>: semantic structure, multi-section form, validation, OG tags, structured data (<code>JSON-LD</code> for Event schema), and <code>aria-live</code> regions for dynamic form feedback.</li>
       </ol>
     </div>
 

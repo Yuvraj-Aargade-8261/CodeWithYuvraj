@@ -27,7 +27,7 @@
       <div class="chapter-part-label">📖 Part 4 — CSS Layout Systems</div>
       <h1 class="chapter-title">Master <span class="gradient-text">Layout</span> Like a Pro</h1>
       <p class="chapter-subtitle">Document flow, positioning, Flexbox, and CSS Grid — the four pillars of modern page layout.</p>
-      <div class="chapter-meta"><span>📄 Modules 4.1 – 4.7</span><span>⏱️ 90–130 min read</span><span>💻 50+ Examples</span></div>
+      <div class="chapter-meta"><span>📄 Modules 4.1 – 4.7</span><span>⏱️ 130–190 min</span><span>💻 70+ Examples</span><span>📊 20+ Reference Tables</span></div>
     </div>
 
     <div class="callout callout-tip"><strong>How to study Part 4:</strong> Layout is the hardest CSS topic. Build every example yourself. Use DevTools Flexbox/Grid inspectors (they visually show lines and areas). Practice > reading.</div>
@@ -43,13 +43,17 @@
     <div class="quick-ref">
       <div class="qr-title">🚀 Advanced Lens — Part 4</div>
       <p class="explain-en">
-        Professional layout work is about choosing the right tool quickly and predictably: use Flexbox for alignment and one-dimensional flow,
-        Grid for two-dimensional structure, and positioning only for overlays or anchored UI. Avoid “random trial-and-error CSS” by designing the layout model first.
+        Layout is driven by <strong>formatting contexts</strong>. Block elements create a <strong>Block Formatting Context (BFC)</strong>,
+        Flexbox creates a <strong>Flex Formatting Context</strong>, and Grid creates a <strong>Grid Formatting Context</strong>.
+        Each context has different rules for how children are sized and positioned. The <code>contain</code> property creates <strong>layout containment</strong> —
+        telling the browser that a subtree's layout cannot affect its siblings, enabling paint optimizations.
+        <strong>Subgrid</strong> (<code>grid-template-columns: subgrid</code>) lets nested grids inherit parent track lines, solving the long-standing alignment-across-cards problem.
       </p>
       <div class="explain-hi">
         <span class="hi-label">Hindi mein samjho</span>
-        Industry level layout me pehle layout model decide hota hai: Flexbox alignment/1D flow ke liye, Grid 2D structure ke liye,
-        aur positioning sirf overlays ke liye. Guesswork-based CSS se bugs badhte hain.
+        Layout <strong>formatting contexts</strong> se drive hota hai. Block elements BFC banate hain, Flexbox flex context, Grid grid context.
+        <code>contain</code> property se browser ko pata chalta hai ki subtree ka layout siblings ko affect nahi karega — isse paint optimization hota hai.
+        <strong>Subgrid</strong> se nested grid parent ke tracks inherit kar sakta hai — cards ke across alignment problem solve hota hai.
       </div>
     </div>
 
@@ -103,8 +107,57 @@
             </tbody>
           </table>
         </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> Block elements like <code>div</code>, <code>p</code>, <code>section</code> always start on a new line and take 100% width. Inline elements like <code>span</code>, <code>a</code>, <code>strong</code> flow within text and ignore width/height. <code>inline-block</code> combines both — it flows in text but accepts width/height and vertical margins.</div>
       </div>
-    </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Block Formatting Context (BFC) — the invisible layout boundary</h3>
+        <p class="explain-en">
+          A <strong>Block Formatting Context (BFC)</strong> is an invisible boundary that contains its children's layout.
+          When you create a BFC, floats are contained, margin collapse is prevented, and the element becomes self-contained.
+          Understanding BFC is the key to solving mysterious float, margin, and overflow bugs.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>BFC ek invisible boundary hai jo apne children ka layout contain karta hai. BFC banne se floats contain hote hain, margin collapse rukta hai, aur element self-contained ban jaata hai. BFC samajhna float, margin, aur overflow bugs solve karne ki key hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>How to create BFC</th><th>Property</th><th>Side effects</th><th>Recommended?</th></tr></thead>
+            <tbody>
+              <tr><td><code>display: flow-root</code></td><td>Creates BFC with no side effects</td><td>❌ None</td><td>✅ Best method</td></tr>
+              <tr><td><code>overflow: hidden</code></td><td>Creates BFC + clips content</td><td>Clips overflowing content</td><td>⚠️ Only if clipping is desired</td></tr>
+              <tr><td><code>overflow: auto</code></td><td>Creates BFC + adds scrollbar if needed</td><td>Potential scrollbar</td><td>⚠️ For scroll containers</td></tr>
+              <tr><td><code>display: flex</code></td><td>Flex formatting context (superset of BFC)</td><td>Changes child layout to flexbox</td><td>✅ When using flexbox</td></tr>
+              <tr><td><code>display: grid</code></td><td>Grid formatting context</td><td>Changes child layout to grid</td><td>✅ When using grid</td></tr>
+              <tr><td><code>float: left/right</code></td><td>Creates BFC on floated element</td><td>Removes from flow</td><td>❌ Legacy only</td></tr>
+              <tr><td><code>position: absolute/fixed</code></td><td>Creates BFC</td><td>Removes from flow</td><td>❌ For positioned elements only</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>When to use BFC:</strong> 1) Parent collapses when children are floated → add <code>display: flow-root</code>. 2) Child's margin leaks out of parent → BFC contains it. 3) Sidebar overlaps floated content → BFC on sidebar creates independent block.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">The containing block — what position is relative to</h3>
+        <p class="explain-en">
+          When you use <code>position: absolute</code>, the element is positioned relative to its <strong>containing block</strong>.
+          The containing block is the nearest ancestor with <code>position</code> set to anything other than <code>static</code>.
+          If no such ancestor exists, it falls back to the <strong>initial containing block</strong> (the viewport).
+          This is why you always need <code>position: relative</code> on the parent.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>position: absolute</code> se element apne <strong>containing block</strong> ke relative position hota hai. Containing block wo nearest ancestor hai jis pe position static nahi hai. Agar koi nahi milta to viewport (page) ke relative hota hai. Isliye parent pe hamesha <code>position: relative</code> lagana padta hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Child position</th><th>Containing block is</th><th>Common mistake</th></tr></thead>
+            <tbody>
+              <tr><td><code>static</code> (default)</td><td>Parent element (normal flow)</td><td>—</td></tr>
+              <tr><td><code>relative</code></td><td>Itself (shifts from original position)</td><td>Forgetting it's still in flow</td></tr>
+              <tr><td><code>absolute</code></td><td>Nearest positioned ancestor</td><td>No positioned parent → jumps to viewport</td></tr>
+              <tr><td><code>fixed</code></td><td>Viewport</td><td><code>transform</code> on ancestor breaks this!</td></tr>
+              <tr><td><code>sticky</code></td><td>Nearest scroll container</td><td>Parent with <code>overflow: hidden</code> breaks it</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>Hidden trap:</strong> A <code>transform</code>, <code>filter</code>, or <code>perspective</code> on any ancestor changes the containing block for <code>fixed</code> elements. This means a <code>fixed</code> modal can suddenly stop being fixed if a parent has <code>transform: translateZ(0)</code> for GPU acceleration.</div>
+      </div>
 
     <!-- MODULE 4.2 -->
     <div class="module-section" id="m4-2">
@@ -183,6 +236,97 @@
         </div>
         <div class="callout callout-note"><strong>Example explained:</strong> Even <code>9999</code> can appear behind another element if it is trapped inside a lower parent stacking context.</div>
       </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Stacking context triggers — complete list</h3>
+        <p class="explain-en">
+          Many CSS properties silently create new stacking contexts. Knowing all of them prevents frustrating z-index debugging.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Bahut saari CSS properties chupke se new stacking context banati hain. Inhe jaanna z-index debugging se bachata hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Property/Condition</th><th>Creates stacking context?</th><th>Common trap</th></tr></thead>
+            <tbody>
+              <tr><td><code>position: relative/absolute/fixed</code> + <code>z-index</code></td><td>✅ Yes</td><td>Most common trigger</td></tr>
+              <tr><td><code>position: sticky</code></td><td>✅ Always</td><td>Sticky nav traps child tooltips</td></tr>
+              <tr><td><code>opacity</code> &lt; 1</td><td>✅ Yes</td><td>Fade-in animations trap children</td></tr>
+              <tr><td><code>transform</code> (any value)</td><td>✅ Yes</td><td>Animated cards trap dropdowns</td></tr>
+              <tr><td><code>filter</code> (any value)</td><td>✅ Yes</td><td>Blur effects trap children</td></tr>
+              <tr><td><code>will-change</code> (transform, opacity)</td><td>✅ Yes</td><td>Performance hints have side effects</td></tr>
+              <tr><td><code>isolation: isolate</code></td><td>✅ Yes (intentional)</td><td>✅ Use this to create contexts deliberately</td></tr>
+              <tr><td><code>contain: layout/paint</code></td><td>✅ Yes</td><td>Performance containment</td></tr>
+              <tr><td><code>mix-blend-mode</code></td><td>✅ Yes</td><td>Blend effects trap children</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Debug tip:</strong> In Chrome DevTools, go to Layers panel (3-dot menu → More tools → Layers) to visualize all stacking contexts. Use <code>isolation: isolate</code> when you intentionally want a new context.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Position sticky — the scroll-triggered hybrid</h3>
+        <p class="explain-en">
+          <code>position: sticky</code> is a hybrid between <code>relative</code> and <code>fixed</code>. The element stays in normal flow until its scroll container reaches the <code>top</code> threshold, then it "sticks" like fixed. But sticky has <strong>strict requirements</strong> that often silently fail.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>position: sticky</code> relative aur fixed ka hybrid hai. Element normal flow me rehta hai jab tak scroll container <code>top</code> threshold pe nahi pahunchta, phir "stick" ho jaata hai. Lekin sticky ki strict requirements hain jo silently fail hoti hain.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Requirement</th><th>What it means</th><th>Why it breaks</th></tr></thead>
+            <tbody>
+              <tr><td>Must have <code>top</code>, <code>bottom</code>, <code>left</code>, or <code>right</code></td><td>Sticky needs a threshold to activate</td><td>Without it, sticky does nothing</td></tr>
+              <tr><td>Parent must have scrollable overflow</td><td>Parent must be taller than child</td><td>If parent has <code>overflow: hidden</code>, sticky breaks</td></tr>
+              <tr><td>Parent can't have <code>overflow: hidden/auto/scroll</code></td><td>Those create new scroll contexts</td><td>Sticky sticks to parent, not page</td></tr>
+              <tr><td>No ancestor with <code>overflow: hidden</code></td><td>Any ancestor clips the context</td><td>Most common silent failure!</td></tr>
+              <tr><td>Element must have room to scroll</td><td>Parent must be taller than sticky element</td><td>If parent wraps tightly, no room to stick</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Sticky patterns</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* ✅ Basic sticky header */</span>
+<span class="selector">.header</span> {
+  <span class="property">position</span>: <span class="value">sticky</span>;
+  <span class="property">top</span>: <span class="number">0</span>;
+  <span class="property">z-index</span>: <span class="number">100</span>;
+  <span class="property">background</span>: <span class="value">white</span>;  <span class="comment">/* Must have background! */</span>
+}
+
+<span class="comment">/* ✅ Sticky sidebar (only sticks within parent) */</span>
+<span class="selector">.sidebar</span> {
+  <span class="property">position</span>: <span class="value">sticky</span>;
+  <span class="property">top</span>: <span class="number">80</span><span class="unit">px</span>;  <span class="comment">/* Below the header */</span>
+  <span class="property">align-self</span>: <span class="value">flex-start</span>;  <span class="comment">/* Required in flex layout */</span>
+}
+
+<span class="comment">/* ❌ BROKEN: overflow on ancestor kills sticky */</span>
+<span class="selector">.wrapper</span> {
+  <span class="property">overflow</span>: <span class="value">hidden</span>;  <span class="comment">/* This kills ALL sticky children! */</span>
+}</pre></div>
+        </div>
+        <div class="callout callout-warning"><strong>Debug sticky:</strong> If sticky isn't working, check every ancestor for <code>overflow: hidden</code>, <code>overflow: auto</code>, or <code>overflow: scroll</code>. Any of these on any ancestor will trap the sticky context. Use DevTools → search for "overflow" in Computed styles.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">z-index management strategy — avoiding z-index wars</h3>
+        <p class="explain-en">
+          In real projects, arbitrary z-index values (999, 9999, 99999) create unmaintainable layering. A professional approach uses a <strong>z-index scale system</strong> with defined ranges for each component type.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Real projects me random z-index values (999, 9999) unmaintainable layering create karte hain. Professional approach me ek z-index scale system hota hai jisme har component type ke liye defined ranges hoti hain.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Layer</th><th>z-index range</th><th>Components</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Base</strong></td><td><code>0</code></td><td>Normal content, cards</td></tr>
+              <tr><td><strong>Raised</strong></td><td><code>1–10</code></td><td>Dropdown menus, tooltips</td></tr>
+              <tr><td><strong>Navigation</strong></td><td><code>100</code></td><td>Sticky headers, sidebars</td></tr>
+              <tr><td><strong>Overlay</strong></td><td><code>200</code></td><td>Modal backdrops</td></tr>
+              <tr><td><strong>Modal</strong></td><td><code>300</code></td><td>Modal content</td></tr>
+              <tr><td><strong>Toast</strong></td><td><code>400</code></td><td>Notification toasts</td></tr>
+              <tr><td><strong>Emergency</strong></td><td><code>9999</code></td><td>Cookie banners, critical alerts</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Best practice:</strong> Define z-index values as CSS custom properties: <code>--z-dropdown: 10; --z-header: 100; --z-modal: 300;</code>. This makes the entire z-index scale visible in one place and prevents random values.</div>
+      </div>
     </div>
 
     <!-- MODULE 4.3 -->
@@ -209,6 +353,27 @@
 }</pre></div>
         </div>
         <div class="callout callout-note"><strong>Modern alternative:</strong> The only valid use of float today is wrapping text around images. For all layout needs, use Flexbox (1D) or Grid (2D).</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Float clearing techniques — evolution from hack to standard</h3>
+        <p class="explain-en">
+          Floated elements collapse their parent's height (the parent has 0 height). Over the years, developers found increasingly better solutions. Here's the evolution from worst to best.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Floated elements parent ki height collapse kar dete hain (parent ki height 0 ho jaati hai). Time ke saath developers ne better solutions dhundhe. Ye evolution worst se best tak hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Era</th><th>Method</th><th>Code</th><th>Verdict</th></tr></thead>
+            <tbody>
+              <tr><td>2005</td><td>Empty div</td><td><code>&lt;div style="clear:both"&gt;&lt;/div&gt;</code></td><td>❌ Pollutes HTML</td></tr>
+              <tr><td>2008</td><td>Overflow hack</td><td><code>overflow: hidden</code> on parent</td><td>⚠️ Clips content</td></tr>
+              <tr><td>2010</td><td>Clearfix pseudo-element</td><td><code>::after { clear: both }</code></td><td>✅ Was the gold standard</td></tr>
+              <tr><td>2017+</td><td><code>display: flow-root</code></td><td><code>display: flow-root</code> on parent</td><td>✅ Modern, clean, no side effects</td></tr>
+              <tr><td>2020+</td><td>Don't use floats</td><td>Use Flexbox or Grid</td><td>✅✅ Best approach entirely</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>If you see floats in legacy code:</strong> Add <code>display: flow-root</code> to the parent to contain them. If refactoring, replace the entire float layout with Flexbox. For text wrapping around images, floats are still the correct tool.</div>
       </div>
     </div>
 
@@ -260,6 +425,35 @@
           </table>
         </div>
         <div class="callout callout-tip"><strong>Most used pattern:</strong> <code>display: flex; justify-content: center; align-items: center;</code> — this centers anything both horizontally and vertically.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Complete Flexbox properties — container + item</h3>
+        <p class="explain-en">
+          Here is every Flexbox property organized by container vs item, with defaults and common values.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Ye table har Flexbox property ko container vs item me organize karti hai — defaults aur common values ke saath.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Property</th><th>Applied to</th><th>Default</th><th>Values</th></tr></thead>
+            <tbody>
+              <tr><td><code>display</code></td><td>Container</td><td>—</td><td><code>flex</code>, <code>inline-flex</code></td></tr>
+              <tr><td><code>flex-direction</code></td><td>Container</td><td><code>row</code></td><td><code>row</code>, <code>column</code>, <code>row-reverse</code>, <code>column-reverse</code></td></tr>
+              <tr><td><code>flex-wrap</code></td><td>Container</td><td><code>nowrap</code></td><td><code>nowrap</code>, <code>wrap</code>, <code>wrap-reverse</code></td></tr>
+              <tr><td><code>flex-flow</code></td><td>Container</td><td><code>row nowrap</code></td><td>Shorthand for direction + wrap</td></tr>
+              <tr><td><code>justify-content</code></td><td>Container</td><td><code>flex-start</code></td><td><code>flex-start</code>, <code>center</code>, <code>flex-end</code>, <code>space-between</code>, <code>space-around</code>, <code>space-evenly</code></td></tr>
+              <tr><td><code>align-items</code></td><td>Container</td><td><code>stretch</code></td><td><code>stretch</code>, <code>center</code>, <code>flex-start</code>, <code>flex-end</code>, <code>baseline</code></td></tr>
+              <tr><td><code>align-content</code></td><td>Container</td><td><code>stretch</code></td><td>Same as justify-content (for wrapped lines)</td></tr>
+              <tr><td><code>gap</code></td><td>Container</td><td><code>0</code></td><td>Any length: <code>16px</code>, <code>1rem</code></td></tr>
+              <tr><td><code>flex-grow</code></td><td>Item</td><td><code>0</code></td><td>Number: <code>0</code> (no grow), <code>1</code> (fill)</td></tr>
+              <tr><td><code>flex-shrink</code></td><td>Item</td><td><code>1</code></td><td><code>0</code> (never shrink), <code>1</code> (allow)</td></tr>
+              <tr><td><code>flex-basis</code></td><td>Item</td><td><code>auto</code></td><td><code>auto</code>, <code>200px</code>, <code>30%</code>, <code>0</code></td></tr>
+              <tr><td><code>flex</code></td><td>Item</td><td><code>0 1 auto</code></td><td>Shorthand: <code>flex: 1</code> = <code>1 1 0</code></td></tr>
+              <tr><td><code>align-self</code></td><td>Item</td><td><code>auto</code></td><td>Overrides parent <code>align-items</code></td></tr>
+              <tr><td><code>order</code></td><td>Item</td><td><code>0</code></td><td>Integer: <code>-1</code> (first), <code>1</code> (last)</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <div class="concept-block">
@@ -348,6 +542,47 @@
       </div>
 
       <div class="concept-block">
+        <h3 class="concept-heading">How the Flexbox algorithm sizes items (step by step)</h3>
+        <p class="explain-en">
+          The flex sizing algorithm runs in 4 steps every time the browser lays out a flex container. Understanding this process explains <em>why</em> your items are the size they are.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Flex sizing algorithm 4 steps me chalta hai jab bhi browser flex container layout karta hai. Ye process samajhne se pata chalta hai items ki size kyun hai jo hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Step</th><th>What browser does</th><th>Example (container 600px, 2 items)</th></tr></thead>
+            <tbody>
+              <tr><td><strong>1. Base size</strong></td><td>Use <code>flex-basis</code> (or <code>width</code> if basis is <code>auto</code>)</td><td>Item A: 200px, Item B: 150px</td></tr>
+              <tr><td><strong>2. Calculate free space</strong></td><td>Container width - sum of base sizes</td><td>600 - 200 - 150 = <strong>250px free</strong></td></tr>
+              <tr><td><strong>3. Distribute (grow)</strong></td><td>Split free space proportional to <code>flex-grow</code></td><td>A grow:1, B grow:1 → +125px each</td></tr>
+              <tr><td><strong>4. Final size</strong></td><td>Base + grow share (or - shrink share)</td><td>A: 325px, B: 275px</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-note"><strong>Key insight:</strong> <code>flex-basis: 0</code> means "start from nothing" — all space is distributed by grow ratios. <code>flex-basis: auto</code> means "start from content size" — only <em>remaining</em> space is distributed. This is why <code>flex: 1</code> (basis 0) makes equal columns, but <code>flex-grow: 1</code> alone (basis auto) doesn't.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">flex-basis vs width — the critical difference</h3>
+        <p class="explain-en">
+          <code>flex-basis</code> and <code>width</code> seem similar but behave differently in a flex container. <code>flex-basis</code> respects the main axis (switches between width/height with <code>flex-direction</code>), while <code>width</code> always sets the horizontal dimension.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>flex-basis</code> aur <code>width</code> similar lagte hain lekin flex container me alag behave karte hain. <code>flex-basis</code> main axis ko respect karta hai (direction change hone pe width/height switch hota hai), <code>width</code> hamesha horizontal set karta hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Scenario</th><th><code>flex-basis</code></th><th><code>width</code></th></tr></thead>
+            <tbody>
+              <tr><td><code>flex-direction: row</code></td><td>Sets horizontal size ✅</td><td>Sets horizontal size ✅</td></tr>
+              <tr><td><code>flex-direction: column</code></td><td>Sets <strong>vertical</strong> size ✅</td><td>Still sets horizontal ❌</td></tr>
+              <tr><td>Both set (conflict)</td><td><strong><code>flex-basis</code> wins</strong></td><td>Ignored when basis is set</td></tr>
+              <tr><td>Respects <code>min-width</code>/<code>max-width</code>?</td><td>✅ Yes</td><td>✅ Yes</td></tr>
+              <tr><td>Participates in flex grow/shrink?</td><td>✅ Yes — it's the starting point</td><td>❌ No — acts as hard constraint</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Rule:</strong> Inside a flex container, always use <code>flex-basis</code> instead of <code>width</code>. Use the <code>flex</code> shorthand: <code>flex: 0 0 250px</code> is clearer than <code>width: 250px; flex-shrink: 0;</code>.</div>
+      </div>
+
+      <div class="concept-block">
         <h3 class="concept-heading">Flex item properties reference</h3>
         <div class="hb-table-wrap">
           <table class="hb-table">
@@ -413,6 +648,40 @@
       </div>
 
       <div class="concept-block">
+        <h3 class="concept-heading">Explicit vs Implicit Grid — what happens when items overflow</h3>
+        <p class="explain-en">
+          The <strong>explicit grid</strong> is what you define with <code>grid-template-columns/rows</code>.
+          When there are more items than the template can hold, the browser creates <strong>implicit</strong> rows/columns automatically.
+          You control implicit track sizes with <code>grid-auto-rows</code> and <code>grid-auto-columns</code>.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Explicit grid</strong> wo hai jo tum <code>grid-template</code> se define karte ho. Jab items zyada hain to browser automatically <strong>implicit</strong> rows/columns bana deta hai. Implicit tracks ki size <code>grid-auto-rows</code> aur <code>grid-auto-columns</code> se control hoti hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Aspect</th><th>Explicit Grid</th><th>Implicit Grid</th></tr></thead>
+            <tbody>
+              <tr><td>Defined by</td><td><code>grid-template-columns/rows</code></td><td>Browser auto-generates</td></tr>
+              <tr><td>When</td><td>Always present</td><td>When items exceed template</td></tr>
+              <tr><td>Size control</td><td>Exact sizes in template</td><td><code>grid-auto-rows/columns</code></td></tr>
+              <tr><td>Default size</td><td>As defined</td><td><code>auto</code> (content-sized)</td></tr>
+              <tr><td>Common fix</td><td>—</td><td><code>grid-auto-rows: minmax(100px, auto)</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Controlling implicit grid</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Only 2 rows defined, but 6 items exist */</span>
+<span class="selector">.grid</span> {
+  <span class="property">display</span>: <span class="value">grid</span>;
+  <span class="property">grid-template-columns</span>: <span class="value">repeat(3, 1fr)</span>;
+  <span class="property">grid-template-rows</span>: <span class="number">200</span><span class="unit">px</span> <span class="number">200</span><span class="unit">px</span>;       <span class="comment">/* Only 2 rows explicit */</span>
+  <span class="property">grid-auto-rows</span>: <span class="value">minmax(150px, auto)</span>;  <span class="comment">/* Extra rows get this size */</span>
+  <span class="property">gap</span>: <span class="number">16</span><span class="unit">px</span>;
+}</pre></div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> With 6 items in a 3-column grid, 2 rows are explicitly sized at 200px. The 3rd row (items 7-9, if they existed) would use <code>grid-auto-rows</code> sizing. Always set <code>grid-auto-rows</code> when your grid has dynamic content.</div>
+      </div>
+
+      <div class="concept-block">
         <h3 class="concept-heading">Grid properties reference</h3>
         <div class="hb-table-wrap">
           <table class="hb-table">
@@ -450,9 +719,33 @@
 }</pre></div>
         </div>
       </div>
-    </div>
 
-    <!-- MODULE 4.7 -->
+      <div class="concept-block">
+        <h3 class="concept-heading">Complete Grid properties + functions reference</h3>
+        <p class="explain-en">
+          Grid has powerful functions for defining tracks. Understanding <code>repeat()</code>, <code>minmax()</code>, <code>auto-fit</code> vs <code>auto-fill</code>,
+          and implicit grid properties is essential for production layouts.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Grid me track define karne ke liye powerful functions hain. repeat(), minmax(), auto-fit vs auto-fill, aur implicit grid properties production layouts ke liye zaroori hain.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Property/Function</th><th>Purpose</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td><code>repeat(n, size)</code></td><td>Repeat track pattern</td><td><code>repeat(3, 1fr)</code> = <code>1fr 1fr 1fr</code></td></tr>
+              <tr><td><code>minmax(min, max)</code></td><td>Flexible track with limits</td><td><code>minmax(200px, 1fr)</code></td></tr>
+              <tr><td><code>auto-fit</code></td><td>Fill available space, collapse empty tracks</td><td><code>repeat(auto-fit, minmax(250px, 1fr))</code></td></tr>
+              <tr><td><code>auto-fill</code></td><td>Fill space, keep empty tracks</td><td>Same syntax — keeps phantom columns</td></tr>
+              <tr><td><code>fit-content(max)</code></td><td>Content-sized with max limit</td><td><code>fit-content(200px)</code></td></tr>
+              <tr><td><code>grid-auto-rows</code></td><td>Size for implicit rows</td><td><code>grid-auto-rows: minmax(100px, auto)</code></td></tr>
+              <tr><td><code>grid-auto-columns</code></td><td>Size for implicit columns</td><td><code>grid-auto-columns: 1fr</code></td></tr>
+              <tr><td><code>grid-auto-flow</code></td><td>How items auto-place</td><td><code>row</code> (default), <code>column</code>, <code>dense</code></td></tr>
+              <tr><td><code>subgrid</code></td><td>Inherit parent grid tracks</td><td><code>grid-template-columns: subgrid</code> 🆕</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>auto-fit vs auto-fill:</strong> <code>auto-fit</code> collapses empty tracks (items stretch to fill). <code>auto-fill</code> keeps empty tracks (items don't stretch). Use <code>auto-fit</code> for most responsive grids.</div>
+      </div>
+    </div>
     <div class="module-section" id="m4-7">
       <div class="module-header"><div class="module-number">4.7</div><h2 class="module-title">CSS Grid — Advanced — grid-area, named lines, template areas, auto-flow</h2></div>
       <div class="concept-block">
@@ -529,16 +822,116 @@
         </div>
         <div class="callout callout-important"><strong>Rule of thumb:</strong> Flexbox = 1D (row OR column). Grid = 2D (rows AND columns). They complement each other — use both in the same project!</div>
       </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">CSS centering methods — complete comparison</h3>
+        <p class="explain-en">
+          Centering is the most common CSS task. Here's every method with when to use each one.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Centering CSS ka sabse common task hai. Ye table har method aur kab use karna hai batati hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Method</th><th>Horizontal</th><th>Vertical</th><th>Best for</th></tr></thead>
+            <tbody>
+              <tr><td><code>margin: 0 auto</code></td><td>✅</td><td>❌</td><td>Block elements with fixed width</td></tr>
+              <tr><td><code>text-align: center</code></td><td>✅</td><td>❌</td><td>Inline/inline-block children</td></tr>
+              <tr><td>Flexbox <code>justify + align</code></td><td>✅</td><td>✅</td><td>⭐ Most versatile — use by default</td></tr>
+              <tr><td>Grid <code>place-items: center</code></td><td>✅</td><td>✅</td><td>Single child centering (shortest code)</td></tr>
+              <tr><td><code>position: absolute</code> + <code>translate</code></td><td>✅</td><td>✅</td><td>Overlays, modals</td></tr>
+              <tr><td>Flex item <code>margin: auto</code></td><td>✅</td><td>✅</td><td>Single item in flex container</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>2026 shortcut:</strong> <code>display: grid; place-items: center;</code> is the shortest way to center anything. Only 2 lines of CSS!</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Subgrid — aligning content across cards</h3>
+        <p class="explain-en">
+          <strong>Subgrid</strong> lets a nested grid inherit its parent's track sizes. This solves the long-standing problem of aligning headings, images, and buttons across cards that have varying content lengths. Without subgrid, each card's internal layout is independent.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><strong>Subgrid</strong> se nested grid parent ke tracks inherit kar sakta hai. Ye wo purana problem solve karta hai jahan cards ke headings, images, aur buttons alag content length ki wajah se align nahi hote the. Bina subgrid ke har card ka internal layout independent hota hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Subgrid for card alignment</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Parent grid defines rows that cards share */</span>
+<span class="selector">.card-grid</span> {
+  <span class="property">display</span>: <span class="value">grid</span>;
+  <span class="property">grid-template-columns</span>: <span class="value">repeat(3, 1fr)</span>;
+  <span class="property">grid-template-rows</span>: <span class="value">subgrid</span>;  <span class="comment">/* Cards share row tracks */</span>
+  <span class="property">gap</span>: <span class="number">20</span><span class="unit">px</span>;
+}
+
+<span class="comment">/* Each card uses parent's row lines */</span>
+<span class="selector">.card</span> {
+  <span class="property">display</span>: <span class="value">grid</span>;
+  <span class="property">grid-row</span>: <span class="value">span 3</span>;           <span class="comment">/* Each card spans 3 parent rows */</span>
+  <span class="property">grid-template-rows</span>: <span class="value">subgrid</span>; <span class="comment">/* Inherit parent's row sizes */</span>
+}
+
+<span class="comment">/* Now headings, body, and buttons align across cards! */</span></pre></div>
+        </div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Feature</th><th>Without subgrid</th><th>With subgrid</th></tr></thead>
+            <tbody>
+              <tr><td>Card heading alignment</td><td>❌ Independent heights</td><td>✅ All headings on same line</td></tr>
+              <tr><td>Button alignment</td><td>❌ Depends on content</td><td>✅ All buttons on same row</td></tr>
+              <tr><td>Browser support (2026)</td><td>—</td><td>✅ All modern browsers</td></tr>
+              <tr><td>Fallback</td><td>—</td><td>Use <code>@supports (grid-template-rows: subgrid)</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>Key insight:</strong> Subgrid is the missing piece that makes CSS Grid complete. Before subgrid, aligning content across sibling cards required JavaScript or fixed heights. Now it's pure CSS.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Named grid lines — self-documenting layouts</h3>
+        <p class="explain-en">
+          Instead of using line numbers (<code>grid-column: 1 / 3</code>), you can name grid lines. This makes layouts self-documenting and easier to maintain when you add or remove columns.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Line numbers (<code>grid-column: 1 / 3</code>) ke bajaye grid lines ko naam de sakte ho. Isse layouts self-documenting ban jaate hain aur columns add/remove karne pe maintain karna easy hota hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Named grid lines</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="selector">.app</span> {
+  <span class="property">display</span>: <span class="value">grid</span>;
+  <span class="property">grid-template-columns</span>:
+    [sidebar-start] <span class="number">240</span><span class="unit">px</span> [sidebar-end main-start] <span class="number">1</span><span class="unit">fr</span> [main-end];
+}
+
+<span class="comment">/* Clear, readable placement */</span>
+<span class="selector">.sidebar</span> {
+  <span class="property">grid-column</span>: <span class="value">sidebar-start / sidebar-end</span>;
+}
+<span class="selector">.content</span> {
+  <span class="property">grid-column</span>: <span class="value">main-start / main-end</span>;
+}</pre></div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> Named lines make layout code read like English: "sidebar goes from sidebar-start to sidebar-end." When you add a new column later, the names still work correctly — unlike brittle line numbers that shift.</div>
+      </div>
     </div>
 
     <div class="practice-box">
-      <div class="practice-title">✏️ Practice Exercises — Part 4</div>
+      <div class="practice-title">✏️ Practice Exercises — Part 4 (Difficulty Graded)</div>
+      <h4>🟢 Easy (Do these first)</h4>
       <ol>
-        <li>Create a sticky navbar that stays on top during scroll with proper z-index.</li>
-        <li>Build a card with an absolute-positioned "NEW" badge in the top-right corner.</li>
-        <li>Create a Flexbox navbar: logo left, nav links center, CTA button right.</li>
-        <li>Build a responsive card grid using <code>repeat(auto-fit, minmax(280px, 1fr))</code> — no media queries.</li>
-        <li>Create a full dashboard layout using <code>grid-template-areas</code>: header, sidebar, main, footer.</li>
+        <li>Create a sticky navbar using <code>position: sticky; top: 0;</code> with proper <code>z-index</code>. Verify it stays on scroll.</li>
+        <li>Build a card with an absolute-positioned "NEW" badge in the top-right corner. Parent must have <code>position: relative</code>.</li>
+        <li>Create a Flexbox navbar: logo left, nav links center (<code>gap: 24px</code>), CTA button right using <code>margin-left: auto</code>.</li>
+        <li>Center a login form both horizontally and vertically in the viewport using <code>display: flex; justify-content: center; align-items: center; min-height: 100vh;</code>.</li>
+      </ol>
+      <h4>🟡 Medium (Apply your knowledge)</h4>
+      <ol start="5">
+        <li>Build a <strong>responsive card grid</strong> using <code>repeat(auto-fit, minmax(280px, 1fr))</code> — zero media queries. Add 6+ cards and resize browser to test.</li>
+        <li>Create a <strong>sticky footer layout</strong>: header at top, footer at bottom, main content fills the remaining space using <code>flex: 1</code> on <code>&lt;main&gt;</code>.</li>
+        <li>Build <strong>equal-height cards</strong> using Flexbox: each card body fills remaining space (<code>flex: 1</code>) and the footer always aligns at the bottom (<code>margin-top: auto</code>).</li>
+        <li>Create a <strong>stacking context demo</strong>: show how a tooltip with <code>z-index: 9999</code> can appear behind a modal with <code>z-index: 100</code> due to parent context.</li>
+      </ol>
+      <h4>🔴 Hard (Challenge yourself)</h4>
+      <ol start="9">
+        <li>Build a complete <strong>dashboard layout</strong> using <code>grid-template-areas</code>: header (full width), sidebar (240px), main content (1fr), footer (full width). Make it responsive with media query.</li>
+        <li>Create the <strong>Holy Grail layout</strong> (header, 3-column body, footer) using CSS Grid with named areas. All columns should be equal height regardless of content.</li>
+        <li>Build a <strong>sidebar + main + overlay</strong> app shell: Grid for the shell, Flexbox for the navbar, and absolute positioning for a modal overlay. Use DevTools Grid inspector to verify track lines.</li>
+        <li>Create a <strong>responsive portfolio page</strong>: Grid-based project gallery (<code>auto-fit</code>), Flexbox skill tags, sticky nav, and fixed "back to top" button. Test at 3 breakpoints (mobile/tablet/desktop).</li>
       </ol>
     </div>
 

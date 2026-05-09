@@ -22,7 +22,7 @@
       <div class="chapter-part-label">📖 Part 5 — Responsive Design & Modern CSS</div>
       <h1 class="chapter-title">Build for <span class="gradient-text">Every Screen</span></h1>
       <p class="chapter-subtitle">Mobile-first thinking, media queries, CSS variables, modern functions, and cutting-edge features.</p>
-      <div class="chapter-meta"><span>📄 Modules 5.1 – 5.7</span><span>⏱️ 80–120 min</span><span>💻 40+ Examples</span></div>
+      <div class="chapter-meta"><span>📄 Modules 5.1 – 5.7</span><span>⏱️ 100–150 min</span><span>💻 50+ Examples</span><span>📊 8+ Reference Tables</span></div>
     </div>
 
     <div class="callout callout-tip"><strong>How to study Part 5:</strong> Resize your browser constantly while testing. Use Chrome DevTools device toolbar (Ctrl+Shift+M) to simulate phones and tablets.</div>
@@ -35,13 +35,17 @@
     <div class="quick-ref">
       <div class="qr-title">🚀 Advanced Lens — Part 5</div>
       <p class="explain-en">
-        Responsive CSS at industry level is not “add a few breakpoints.” It is system design: fluid scales, tokenized spacing,
-        predictable breakpoints, accessibility preferences, and component-driven responsiveness. Think in constraints, not fixed screen sizes.
+        The browser resolves viewport units (<code>vw</code>, <code>vh</code>, <code>svh</code>, <code>dvh</code>, <code>lvh</code>) differently: <strong>svh</strong> uses the smallest viewport
+        (with browser chrome visible), <strong>lvh</strong> uses the largest (chrome hidden), and <strong>dvh</strong> dynamically adjusts.
+        Container queries require <strong>size containment</strong> (<code>container-type: inline-size</code>) which creates an independent formatting context —
+        the browser cannot use the container's children to determine its own inline size. <code>@layer</code> introduces a new level in the
+        <strong>cascade origin model</strong>: Author Layers sit between normal author styles and <code>!important</code> author styles, giving explicit priority control.
       </p>
       <div class="explain-hi">
         <span class="hi-label">Hindi mein samjho</span>
-        Real responsive design ka matlab sirf media query add karna nahi hai. Ye ek system hota hai: fluid sizes, design tokens, clear breakpoints,
-        accessibility preferences, aur component-level behavior. Fixed screen assumptions avoid karo.
+        Browser viewport units (<code>svh</code>, <code>dvh</code>, <code>lvh</code>) alag resolve karta hai: svh = smallest viewport, dvh = dynamic, lvh = largest.
+        Container queries me <strong>size containment</strong> zaroori hai — children se container ki size determine nahi hoti.
+        <code>@layer</code> cascade origin model me naya level add karta hai — normal styles aur !important ke beech.
       </div>
     </div>
 
@@ -128,6 +132,66 @@
   <span class="property">font-size</span>: <span class="value">clamp(1.8rem, 4vw + 1rem, 3.5rem)</span>;
 }</pre></div>
         </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> The <code>width: 90%</code> makes the container fluid — it adapts to any screen. <code>max-width: 1200px</code> prevents it from becoming too wide on large monitors. <code>clamp()</code> on font-size creates text that smoothly scales between a minimum and maximum — no media queries needed.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">CSS units — complete comparison for responsive design</h3>
+        <p class="explain-en">
+          Choosing the right CSS unit is critical for responsive design. Fixed units (<code>px</code>) don't scale. Relative units (<code>rem</code>, <code>em</code>, <code>%</code>, <code>vw</code>) adapt to context. Here's when to use each one.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Responsive design me sahi CSS unit choose karna critical hai. Fixed units (px) scale nahi hote. Relative units (rem, em, %, vw) context ke hisaab se adapt hote hain. Ye table batati hai kab konsa use karna hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Unit</th><th>Relative to</th><th>Best for</th><th>Scales with zoom?</th><th>Responsive?</th></tr></thead>
+            <tbody>
+              <tr><td><code>px</code></td><td>Nothing (absolute)</td><td>Borders, shadows, thin lines</td><td>❌ No</td><td>❌ No</td></tr>
+              <tr><td><code>rem</code></td><td>Root font-size (16px default)</td><td>✅ Font sizes, spacing, padding</td><td>✅ Yes</td><td>✅ Yes</td></tr>
+              <tr><td><code>em</code></td><td>Parent's font-size</td><td>Component-local scaling</td><td>✅ Yes</td><td>⚠️ Compounds (tricky)</td></tr>
+              <tr><td><code>%</code></td><td>Parent element</td><td>Widths, fluid containers</td><td>✅ Yes</td><td>✅ Yes</td></tr>
+              <tr><td><code>vw</code> / <code>vh</code></td><td>Viewport width/height</td><td>Full-screen sections, fluid text</td><td>❌ No</td><td>✅ Yes</td></tr>
+              <tr><td><code>dvh</code> / <code>svh</code> / <code>lvh</code></td><td>Dynamic/Small/Large viewport</td><td>Mobile full-height layouts</td><td>❌ No</td><td>✅ Yes (mobile-safe)</td></tr>
+              <tr><td><code>ch</code></td><td>Width of "0" character</td><td>Optimal reading width (60-80ch)</td><td>✅ Yes</td><td>✅ Yes</td></tr>
+              <tr><td><code>cqi</code></td><td>Container query inline size</td><td>Container-relative sizing</td><td>✅ Yes</td><td>✅ Yes</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>Industry rule:</strong> Use <code>rem</code> for font-size and spacing (accessibility — users can change root font-size). Use <code>px</code> only for borders and box-shadows. Use <code>%</code> or <code>fr</code> for widths. Use <code>dvh</code> instead of <code>vh</code> for mobile full-height layouts.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Viewport units on mobile — the 100vh problem</h3>
+        <p class="explain-en">
+          On mobile browsers, <code>100vh</code> includes the area behind the address bar — causing content to be hidden behind it.
+          New viewport units solve this: <code>dvh</code> (dynamic — changes as URL bar shows/hides), <code>svh</code> (small — minimum viewport), <code>lvh</code> (large — maximum viewport).
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Mobile browsers me <code>100vh</code> address bar ke peeche ka area bhi include karta hai — content chhup jaata hai. Naye viewport units ise solve karte hain: <code>dvh</code> (dynamic), <code>svh</code> (small), <code>lvh</code> (large).</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Unit</th><th>Behavior on mobile</th><th>When to use</th></tr></thead>
+            <tbody>
+              <tr><td><code>100vh</code> (legacy)</td><td>❌ Includes hidden area behind URL bar</td><td>Never on mobile full-height</td></tr>
+              <tr><td><code>100dvh</code></td><td>✅ Adjusts as URL bar appears/disappears</td><td>✅ Hero sections, full-screen layouts</td></tr>
+              <tr><td><code>100svh</code></td><td>Smallest possible viewport (URL bar visible)</td><td>Safe minimum height</td></tr>
+              <tr><td><code>100lvh</code></td><td>Largest possible viewport (URL bar hidden)</td><td>Maximum available space</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Mobile-safe full height</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* ❌ OLD: content hidden behind mobile URL bar */</span>
+<span class="selector">.hero</span> { <span class="property">min-height</span>: <span class="number">100</span><span class="unit">vh</span>; }
+
+<span class="comment">/* ✅ NEW: respects mobile browser chrome */</span>
+<span class="selector">.hero</span> { <span class="property">min-height</span>: <span class="number">100</span><span class="unit">dvh</span>; }
+
+<span class="comment">/* Fallback for older browsers */</span>
+<span class="selector">.hero</span> {
+  <span class="property">min-height</span>: <span class="number">100</span><span class="unit">vh</span>;   <span class="comment">/* fallback */</span>
+  <span class="property">min-height</span>: <span class="number">100</span><span class="unit">dvh</span>;  <span class="comment">/* modern override */</span>
+}</pre></div>
+        </div>
+        <div class="callout callout-warning"><strong>Always provide fallback:</strong> Set <code>min-height: 100vh</code> first, then <code>min-height: 100dvh</code> as override. Browsers that don't support <code>dvh</code> will ignore it and use the <code>vh</code> fallback.</div>
       </div>
     </div>
 
@@ -230,6 +294,71 @@
         </div>
         <div class="callout callout-tip"><strong>Pro tip:</strong> Always test with DevTools → Rendering → Emulate CSS media features. You can simulate dark mode, reduced motion, and print without changing OS settings.</div>
       </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Complete media query types reference</h3>
+        <p class="explain-en">CSS media queries go far beyond screen width. Here’s every type you should know.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>CSS media queries sirf screen width tak limited nahi hain. Ye sab types jaanna zaroori hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Media Feature</th><th>Values</th><th>Use case</th></tr></thead>
+            <tbody>
+              <tr><td><code>min-width</code> / <code>max-width</code></td><td>Length (px, em)</td><td>Responsive breakpoints</td></tr>
+              <tr><td><code>orientation</code></td><td><code>portrait</code>, <code>landscape</code></td><td>Tablet layout changes</td></tr>
+              <tr><td><code>prefers-color-scheme</code></td><td><code>light</code>, <code>dark</code></td><td>Auto dark mode</td></tr>
+              <tr><td><code>prefers-reduced-motion</code></td><td><code>reduce</code>, <code>no-preference</code></td><td>⚠️ Required for accessibility</td></tr>
+              <tr><td><code>prefers-contrast</code></td><td><code>more</code>, <code>less</code>, <code>custom</code></td><td>High contrast mode</td></tr>
+              <tr><td><code>prefers-reduced-transparency</code></td><td><code>reduce</code></td><td>Reduce glass/blur effects</td></tr>
+              <tr><td><code>hover</code></td><td><code>hover</code>, <code>none</code></td><td>Touch vs mouse detection</td></tr>
+              <tr><td><code>pointer</code></td><td><code>fine</code>, <code>coarse</code>, <code>none</code></td><td>Touch target sizing</td></tr>
+              <tr><td><code>print</code></td><td>—</td><td>Print-friendly styles</td></tr>
+              <tr><td><code>resolution</code></td><td><code>2dppx</code>, <code>300dpi</code></td><td>Retina/HiDPI images</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>Touch detection:</strong> Use <code>@media (hover: none)</code> to detect touch devices. Make tap targets at least 44×44px for touch users.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Modern media query range syntax (2024+)</h3>
+        <p class="explain-en">
+          CSS now supports <strong>range syntax</strong> for media queries — more readable than the traditional <code>min-width</code>/<code>max-width</code> approach. You can use <code>&lt;=</code>, <code>&gt;=</code>, <code>&lt;</code>, <code>&gt;</code> operators.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>CSS me ab media queries ke liye range syntax support hai — traditional <code>min-width</code>/<code>max-width</code> se zyada readable. <code>&lt;=</code>, <code>&gt;=</code> operators use kar sakte ho.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Traditional syntax</th><th>Modern range syntax</th><th>Meaning</th></tr></thead>
+            <tbody>
+              <tr><td><code>@media (min-width: 768px)</code></td><td><code>@media (width >= 768px)</code></td><td>768px and wider</td></tr>
+              <tr><td><code>@media (max-width: 767px)</code></td><td><code>@media (width < 768px)</code></td><td>Below 768px</td></tr>
+              <tr><td><code>@media (min-width: 768px) and (max-width: 1023px)</code></td><td><code>@media (768px <= width < 1024px)</code></td><td>Tablet only</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Recommendation:</strong> Use range syntax in new projects — it's more readable and eliminates the off-by-one confusion between <code>max-width: 767px</code> and <code>min-width: 768px</code>. All modern browsers support it (2024+).</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Responsive design testing checklist</h3>
+        <p class="explain-en">Before shipping any responsive layout, verify these critical checks at every breakpoint. Missing even one causes real-world bugs.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Koi bhi responsive layout ship karne se pehle ye checks har breakpoint pe verify karo. Ek bhi miss hua to real-world bugs aayenge.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Check</th><th>What to verify</th><th>Common failure</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Horizontal scroll</strong></td><td>No horizontal scrollbar appears</td><td>Image/element wider than viewport</td></tr>
+              <tr><td><strong>Text readability</strong></td><td>Line length is 45-80 characters</td><td>Text spans full width on desktop</td></tr>
+              <tr><td><strong>Touch targets</strong></td><td>Buttons/links ≥ 44×44px</td><td>Tiny links impossible to tap</td></tr>
+              <tr><td><strong>Font scaling</strong></td><td>Text readable at 200% browser zoom</td><td>Fixed px font-sizes don't scale</td></tr>
+              <tr><td><strong>Image sizing</strong></td><td>Images don't overflow containers</td><td>Missing <code>max-width: 100%</code></td></tr>
+              <tr><td><strong>Navigation</strong></td><td>Nav is usable on mobile</td><td>Desktop nav overflows on small screens</td></tr>
+              <tr><td><strong>Form inputs</strong></td><td>Inputs at least 16px font-size</td><td>iOS zooms in on inputs &lt; 16px!</td></tr>
+              <tr><td><strong>Orientation</strong></td><td>Works in both portrait and landscape</td><td>Layout breaks in landscape tablet</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-warning"><strong>iOS zoom trap:</strong> If <code>&lt;input&gt;</code> font-size is below 16px, iOS Safari auto-zooms when the user taps the input. Always set <code>font-size: 16px</code> or larger on form inputs to prevent this.</div>
+      </div>
     </div>
 
     <!-- MODULE 5.3 -->
@@ -297,6 +426,66 @@
           </table>
         </div>
         <div class="callout callout-important"><strong>Performance rule:</strong> Add <code>loading="lazy"</code> to all below-fold images. Add <code>width</code> and <code>height</code> attributes to prevent Cumulative Layout Shift (CLS).</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">Image format comparison — choosing the right format</h3>
+        <p class="explain-en">Using the right image format can reduce page weight by 50-80%. Modern formats like WebP and AVIF offer dramatically better compression than JPEG/PNG.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Sahi image format use karne se page weight 50-80% kam ho sakta hai. Modern formats (WebP, AVIF) purane JPEG/PNG se bahut better compression dete hain.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Format</th><th>Compression</th><th>Transparency</th><th>Animation</th><th>Best for</th><th>Browser support</th></tr></thead>
+            <tbody>
+              <tr><td><code>JPEG</code></td><td>Good (lossy)</td><td>❌ No</td><td>❌ No</td><td>Photos</td><td>✅ Universal</td></tr>
+              <tr><td><code>PNG</code></td><td>Large (lossless)</td><td>✅ Yes</td><td>❌ No</td><td>Icons, logos with transparency</td><td>✅ Universal</td></tr>
+              <tr><td><code>WebP</code></td><td>✅ 30% smaller than JPEG</td><td>✅ Yes</td><td>✅ Yes</td><td>✅ Default choice for web</td><td>✅ All modern</td></tr>
+              <tr><td><code>AVIF</code></td><td>✅✅ 50% smaller than JPEG</td><td>✅ Yes</td><td>✅ Yes</td><td>Best quality/size ratio</td><td>⚠️ Chrome, Firefox (Safari 16.4+)</td></tr>
+              <tr><td><code>SVG</code></td><td>Vector (scales infinitely)</td><td>✅ Yes</td><td>✅ CSS/JS</td><td>Icons, logos, illustrations</td><td>✅ Universal</td></tr>
+              <tr><td><code>GIF</code></td><td>Poor (256 colors max)</td><td>✅ Limited</td><td>✅ Yes</td><td>❌ Avoid — use WebP/video instead</td><td>✅ Universal</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>Modern image stack:</strong> Use <code>&lt;picture&gt;</code> with AVIF first, WebP fallback, JPEG last: <code>&lt;source type="image/avif"&gt;</code> → <code>&lt;source type="image/webp"&gt;</code> → <code>&lt;img src="fallback.jpg"&gt;</code>. This gives every browser the best format it supports.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">object-fit — how images fill their container</h3>
+        <p class="explain-en">
+          <code>object-fit</code> controls how an <code>&lt;img&gt;</code> or <code>&lt;video&gt;</code> fills its container — similar to <code>background-size</code> but for HTML elements.
+          Understanding each value prevents stretched or cropped images.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>object-fit</code> se control hota hai ki image apne container me kaise fit hogi — jaise <code>background-size</code> lekin HTML elements ke liye. Har value samajhne se stretched ya cropped images se bachoge.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th><code>object-fit</code></th><th>Behavior</th><th>Aspect ratio</th><th>Best for</th></tr></thead>
+            <tbody>
+              <tr><td><code>fill</code> (default)</td><td>Stretches to fill completely</td><td>❌ Distorted</td><td>Almost never — causes stretching</td></tr>
+              <tr><td><code>cover</code></td><td>Fills container, crops excess</td><td>✅ Preserved</td><td>✅ Thumbnails, hero images, avatars</td></tr>
+              <tr><td><code>contain</code></td><td>Fits entirely, may leave gaps</td><td>✅ Preserved</td><td>Product photos (show full image)</td></tr>
+              <tr><td><code>none</code></td><td>Original size, may overflow</td><td>✅ Preserved</td><td>Zoom effects, specific crops</td></tr>
+              <tr><td><code>scale-down</code></td><td>Like <code>none</code> or <code>contain</code> (whichever is smaller)</td><td>✅ Preserved</td><td>Icons that shouldn't upscale</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — object-fit patterns</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Avatar: always square, never stretched */</span>
+<span class="selector">.avatar</span> {
+  <span class="property">width</span>: <span class="number">48</span><span class="unit">px</span>;
+  <span class="property">height</span>: <span class="number">48</span><span class="unit">px</span>;
+  <span class="property">border-radius</span>: <span class="number">50</span><span class="unit">%</span>;
+  <span class="property">object-fit</span>: <span class="value">cover</span>;        <span class="comment">/* Crop to fill circle */</span>
+  <span class="property">object-position</span>: <span class="value">top</span>;    <span class="comment">/* Focus on face */</span>
+}
+
+<span class="comment">/* Card thumbnail: fixed aspect ratio */</span>
+<span class="selector">.card-img</span> {
+  <span class="property">width</span>: <span class="number">100</span><span class="unit">%</span>;
+  <span class="property">aspect-ratio</span>: <span class="number">16</span> / <span class="number">9</span>;
+  <span class="property">object-fit</span>: <span class="value">cover</span>;
+}</pre></div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> The avatar uses <code>object-fit: cover</code> with <code>object-position: top</code> so faces are visible even in small circles. The card image uses <code>aspect-ratio</code> to maintain 16:9 regardless of the original image dimensions. Both prevent the stretching that <code>fill</code> (default) would cause.</div>
       </div>
     </div>
 
@@ -369,9 +558,48 @@
 }</pre></div>
         </div>
       </div>
-    </div>
 
-    <!-- MODULE 5.5 -->
+      <div class="concept-block">
+        <h3 class="concept-heading">CSS variables vs preprocessor variables (Sass/SCSS)</h3>
+        <p class="explain-en">CSS custom properties are <strong>not the same</strong> as Sass variables. CSS variables are live in the browser — they cascade, can be changed at runtime with JS, and respond to media queries. Sass variables are compiled away at build time.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>CSS custom properties Sass variables se alag hain. CSS variables browser me live hain — cascade karte hain, JS se runtime pe change ho sakte hain. Sass variables build time pe compile ho jaate hain.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Feature</th><th>CSS Custom Properties</th><th>Sass Variables</th></tr></thead>
+            <tbody>
+              <tr><td>Available at runtime?</td><td>✅ Yes — live in browser</td><td>❌ No — compiled away</td></tr>
+              <tr><td>Cascade/inherit?</td><td>✅ Yes — follow cascade rules</td><td>❌ No — flat scope only</td></tr>
+              <tr><td>Change with JS?</td><td>✅ <code>el.style.setProperty('--x', val)</code></td><td>❌ Impossible</td></tr>
+              <tr><td>Media query override?</td><td>✅ Redefine inside <code>@media</code></td><td>❌ Can't change at breakpoints</td></tr>
+              <tr><td>Fallback values?</td><td>✅ <code>var(--x, fallback)</code></td><td>✅ <code>$x: default !default</code></td></tr>
+              <tr><td>Math operations?</td><td>⚠️ Need <code>calc()</code></td><td>✅ Direct: <code>$x * 2</code></td></tr>
+              <tr><td>Loops/conditionals?</td><td>❌ No</td><td>✅ <code>@each</code>, <code>@if</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-important"><strong>Industry trend:</strong> Use CSS custom properties for theming, dark mode, and any value that changes at runtime. Use Sass only for loops, mixins, and build-time utilities. Many teams are dropping Sass entirely in favor of native CSS.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">var() with fallback chains and computed values</h3>
+        <p class="explain-en"><code>var()</code> supports <strong>fallback values</strong> — if the variable is not defined, the fallback is used. You can chain multiple <code>var()</code> calls and combine them with <code>calc()</code> for dynamic computed values.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>var()</code> me fallback values hote hain — agar variable defined nahi to fallback use hota hai. Multiple <code>var()</code> chain aur <code>calc()</code> ke saath combine karke dynamic values bana sakte ho.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — var() advanced patterns</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Fallback chain */</span>
+<span class="selector">.card</span> {
+  <span class="property">color</span>: <span class="value">var(--card-text, var(--text, #1e293b))</span>;
+  <span class="comment">/* Try --card-text → then --text → then #1e293b */</span>
+}
+
+<span class="comment">/* Responsive variable override */</span>
+<span class="selector">:root</span> { <span class="property">--cols</span>: <span class="number">1</span>; }
+<span class="keyword">@media</span> (<span class="property">min-width</span>: <span class="number">768</span><span class="unit">px</span>) { <span class="selector">:root</span> { <span class="property">--cols</span>: <span class="number">2</span>; } }
+<span class="keyword">@media</span> (<span class="property">min-width</span>: <span class="number">1024</span><span class="unit">px</span>) { <span class="selector">:root</span> { <span class="property">--cols</span>: <span class="number">3</span>; } }
+<span class="selector">.grid</span> { <span class="property">grid-template-columns</span>: <span class="value">repeat(var(--cols), 1fr)</span>; }</pre></div>
+        </div>
+        <div class="callout callout-note"><strong>Example explained:</strong> The fallback chain tries component-specific variables first, then falls back to global tokens. The responsive override pattern lets you change a single variable at each breakpoint, and every element using that variable updates automatically.</div>
+      </div>
     <div class="module-section" id="m5-5">
       <div class="module-header"><div class="module-number">5.5</div><h2 class="module-title">Modern CSS Functions — clamp(), min(), max(), calc()</h2></div>
       <div class="concept-block">
@@ -417,9 +645,46 @@
           </table>
         </div>
       </div>
-    </div>
 
-    <!-- MODULE 5.6 -->
+      <div class="concept-block">
+        <h3 class="concept-heading">Complete fluid typography scale with clamp()</h3>
+        <p class="explain-en">A production typography scale should smoothly scale every heading level from mobile to desktop. Here's a ready-to-use system.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Production typography scale me har heading level mobile se desktop tak smoothly scale hona chahiye. Ye ek ready-to-use system hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Element</th><th>Mobile (min)</th><th>Desktop (max)</th><th><code>clamp()</code> value</th></tr></thead>
+            <tbody>
+              <tr><td><code>h1</code></td><td>2rem (32px)</td><td>3.5rem (56px)</td><td><code>clamp(2rem, 5vw + 1rem, 3.5rem)</code></td></tr>
+              <tr><td><code>h2</code></td><td>1.5rem (24px)</td><td>2.5rem (40px)</td><td><code>clamp(1.5rem, 3vw + 0.75rem, 2.5rem)</code></td></tr>
+              <tr><td><code>h3</code></td><td>1.25rem (20px)</td><td>1.875rem (30px)</td><td><code>clamp(1.25rem, 2vw + 0.75rem, 1.875rem)</code></td></tr>
+              <tr><td><code>h4</code></td><td>1.1rem</td><td>1.5rem (24px)</td><td><code>clamp(1.1rem, 1.5vw + 0.5rem, 1.5rem)</code></td></tr>
+              <tr><td><code>body</code></td><td>1rem (16px)</td><td>1.125rem (18px)</td><td><code>clamp(1rem, 0.5vw + 0.875rem, 1.125rem)</code></td></tr>
+              <tr><td><code>small</code></td><td>0.875rem</td><td>0.875rem</td><td><code>0.875rem</code> (fixed)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-tip"><strong>How clamp() formula works:</strong> <code>clamp(MIN, PREFERRED, MAX)</code>. The preferred value uses <code>vw + rem</code> so it scales with viewport but has a rem base. No media queries needed!</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">min() and max() — responsive constraints without breakpoints</h3>
+        <p class="explain-en"><code>min()</code> and <code>max()</code> pick the smallest or largest value. <code>width: min(90%, 1200px)</code> replaces both <code>width: 90%</code> and <code>max-width: 1200px</code> in a single declaration.</p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>min()</code> sabse chhoti value pick karta hai. <code>width: min(90%, 1200px)</code> ek line me <code>width: 90%</code> aur <code>max-width: 1200px</code> dono ka kaam karta hai.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — min() and max()</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Container: fluid with max constraint */</span>
+<span class="selector">.container</span> {
+  <span class="property">width</span>: <span class="value">min(90%, 1200px)</span>;  <span class="comment">/* Replaces width + max-width */</span>
+  <span class="property">margin-inline</span>: <span class="value">auto</span>;
+}
+
+<span class="comment">/* Ensure minimum touch target size */</span>
+<span class="selector">.btn</span> {
+  <span class="property">min-height</span>: <span class="value">max(44px, 2.75rem)</span>;  <span class="comment">/* At least 44px OR 2.75rem */</span>
+}</pre></div>
+        </div>
+        <div class="callout callout-note"><strong>Key insight:</strong> <code>min()</code> acts like a "max constraint" (picks smallest, prevents growing too large). <code>max()</code> acts like a "min constraint" (picks largest, prevents shrinking too small). The naming is counterintuitive!</div>
+      </div>
     <div class="module-section" id="m5-6">
       <div class="module-header"><div class="module-number">5.6</div><h2 class="module-title">Container Queries — @container, container-type, component-level responsiveness</h2></div>
       <div class="concept-block">
@@ -539,16 +804,93 @@
         </div>
         <div class="callout callout-tip"><strong>Modern CSS is powerful:</strong> With native nesting + cascade layers + CSS variables, you may not need Sass/SCSS anymore for many projects. Native CSS covers 90% of what preprocessors offered.</div>
       </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">CSS nesting rules and gotchas</h3>
+        <p class="explain-en">
+          Native CSS nesting has specific rules that differ from Sass. Understanding these prevents subtle bugs.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span>Native CSS nesting ke specific rules hain jo Sass se alag hain. Inhe samajhna subtle bugs se bachata hai.</div>
+        <div class="hb-table-wrap">
+          <table class="hb-table">
+            <thead><tr><th>Rule</th><th>CSS Nesting</th><th>Sass/SCSS</th></tr></thead>
+            <tbody>
+              <tr><td>Nesting child elements</td><td><code>& .child</code> or just <code>.child</code></td><td><code>.child</code> (implicit &amp;)</td></tr>
+              <tr><td>Pseudo-classes</td><td><code>&:hover</code> ✅</td><td><code>&:hover</code> ✅</td></tr>
+              <tr><td>Element selectors</td><td>Must start with <code>&</code> or use <code>:is()</code></td><td>Direct nesting allowed</td></tr>
+              <tr><td>Media queries inside</td><td><code>@media</code> inside rule ✅</td><td><code>@media</code> inside rule ✅</td></tr>
+              <tr><td>Nesting depth limit</td><td>No limit, but keep ≤ 3 levels</td><td>Same recommendation</td></tr>
+              <tr><td>Browser support</td><td>Chrome 120+, Firefox 117+, Safari 17.2+</td><td>All (compiled away)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — Nesting with media queries</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Component with nested states + responsive */</span>
+<span class="selector">.card</span> {
+  <span class="property">padding</span>: <span class="number">16</span><span class="unit">px</span>;
+  <span class="property">display</span>: <span class="value">block</span>;
+
+  <span class="selector">& .title</span> { <span class="property">font-size</span>: <span class="number">1.25</span><span class="unit">rem</span>; }
+  <span class="selector">&:hover</span> { <span class="property">box-shadow</span>: <span class="value">var(--shadow-lg)</span>; }
+  <span class="selector">&.featured</span> { <span class="property">border-color</span>: <span class="value">var(--primary)</span>; }
+
+  <span class="comment">/* Media query INSIDE the component — colocation! */</span>
+  <span class="keyword">@media</span> (<span class="property">min-width</span>: <span class="number">768</span><span class="unit">px</span>) {
+    <span class="property">display</span>: <span class="value">flex</span>;
+    <span class="property">gap</span>: <span class="number">20</span><span class="unit">px</span>;
+  }
+}</pre></div>
+        </div>
+        <div class="callout callout-important"><strong>Best practice:</strong> Nest media queries <em>inside</em> component rules (colocation). This keeps all card styles together instead of scattering responsive overrides across the file. Maximum nesting depth: 3 levels to maintain readability.</div>
+      </div>
+
+      <div class="concept-block">
+        <h3 class="concept-heading">@scope — component-scoped styles (2024+)</h3>
+        <p class="explain-en">
+          <code>@scope</code> limits CSS rules to a specific DOM subtree. Unlike BEM naming conventions, <code>@scope</code> provides <em>real</em> style isolation at the browser level. Styles inside a scope cannot leak out.
+        </p>
+        <div class="explain-hi"><span class="hi-label">Hindi mein samjho</span><code>@scope</code> CSS rules ko ek specific DOM subtree tak limit karta hai. BEM naming ke opposite, <code>@scope</code> browser level pe real style isolation deta hai. Scope ke andar ke styles bahar leak nahi hote.</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang"><i class="fa-brands fa-css3-alt"></i> CSS — @scope</span><div class="code-dots"><span></span><span></span><span></span></div></div>
+          <div class="code-body"><pre><span class="comment">/* Styles only apply inside .card */</span>
+<span class="keyword">@scope</span> (<span class="selector">.card</span>) {
+  <span class="selector">h2</span> { <span class="property">font-size</span>: <span class="number">1.5</span><span class="unit">rem</span>; }  <span class="comment">/* Only card h2, not global h2 */</span>
+  <span class="selector">p</span> { <span class="property">color</span>: <span class="value">var(--muted)</span>; }
+}
+
+<span class="comment">/* Scope with exclusion (donut scope) */</span>
+<span class="keyword">@scope</span> (<span class="selector">.card</span>) to (<span class="selector">.card-footer</span>) {
+  <span class="comment">/* Styles apply to .card content but NOT .card-footer */</span>
+  <span class="selector">a</span> { <span class="property">color</span>: <span class="value">var(--primary)</span>; }
+}</pre></div>
+        </div>
+        <div class="callout callout-tip"><strong>Game changer:</strong> <code>@scope</code> with the "donut scope" pattern (<code>to</code> keyword) lets you style a component's content while excluding nested sub-components. This prevents style leaking that has plagued CSS for decades.</div>
+      </div>
     </div>
 
     <div class="practice-box">
-      <div class="practice-title">✏️ Practice Exercises — Part 5</div>
+      <div class="practice-title">✏️ Practice Exercises — Part 5 (Difficulty Graded)</div>
+      <h4>🟢 Easy (Do these first)</h4>
       <ol>
-        <li>Convert a desktop-first layout to mobile-first using only <code>min-width</code> media queries.</li>
-        <li>Create a design system with CSS variables: colors, spacing, radius, shadows — with dark mode toggle.</li>
-        <li>Build fluid typography using <code>clamp()</code> — headings and body text that scale smoothly.</li>
-        <li>Create a card that changes layout using container queries when placed in sidebar vs main content.</li>
-        <li>Refactor a flat CSS file to use native nesting for at least 3 component blocks.</li>
+        <li>Convert a desktop-first layout to mobile-first using only <code>min-width</code> media queries at 3 breakpoints (640px, 768px, 1024px).</li>
+        <li>Create a <strong>design system</strong> with CSS variables on <code>:root</code>: 5 colors, 5 spacing tokens, 2 fonts, 3 border-radius values.</li>
+        <li>Build fluid typography using <code>clamp()</code> for <code>h1</code> through <code>h4</code> — no media queries needed.</li>
+        <li>Make all images responsive with <code>max-width: 100%; height: auto;</code> and add <code>loading="lazy"</code> to below-fold images.</li>
+      </ol>
+      <h4>🟡 Medium (Apply your knowledge)</h4>
+      <ol start="5">
+        <li>Implement a <strong>dark mode toggle</strong>: use <code>[data-theme="dark"]</code> to override CSS variables. Add a JS button that toggles the attribute and persists to <code>localStorage</code>.</li>
+        <li>Create a <strong>container query card</strong>: vertical layout when parent is narrow (≤400px), horizontal layout when wide (≥400px). Place the same card in a sidebar and main area to verify.</li>
+        <li>Build a responsive <strong>image gallery</strong> using <code>&lt;picture&gt;</code> with WebP + JPEG fallback and <code>srcset</code> with 3 sizes. Test in DevTools network panel.</li>
+        <li>Refactor a flat CSS file into <strong>native nesting</strong> for 3+ components. Verify specificity is identical using DevTools → Styles panel.</li>
+      </ol>
+      <h4>🔴 Hard (Challenge yourself)</h4>
+      <ol start="9">
+        <li>Build a complete <strong>CSS-only theme system</strong>: light + dark + high-contrast themes using CSS variables, <code>prefers-color-scheme</code>, <code>prefers-contrast</code>, and a manual toggle.</li>
+        <li>Architect a stylesheet using <strong>@layer</strong> (reset, base, components, utilities). Demonstrate that utility layer always wins regardless of specificity in component layer.</li>
+        <li>Create a <strong>fully fluid responsive page</strong> with zero media queries: use <code>clamp()</code> for spacing/fonts, <code>auto-fit</code> Grid for cards, <code>min()</code>/<code>max()</code> for widths. Test from 320px to 2560px.</li>
+        <li>Build a <strong>responsive dashboard</strong> combining Grid template areas, container queries for sidebar cards, fluid typography, CSS variables for theme, and <code>prefers-reduced-motion</code> support. Test on 3 devices.</li>
       </ol>
     </div>
 
